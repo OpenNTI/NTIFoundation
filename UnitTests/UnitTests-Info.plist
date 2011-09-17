@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.nextthought.sprints.20110519.${PRODUCT_NAME:rfc1034identifier}</string>
+	<string>com.nextthought.NTIFoundation.UnitTests</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
