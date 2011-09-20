@@ -26,11 +26,11 @@
 		40B6F3BA14285AF4007EDF1C /* WebSocket7Test.h in Headers */ = {isa = PBXBuildFile; fileRef = 40B6F3B814285AF4007EDF1C /* WebSocket7Test.h */; };
 		40B6F3D914285B38007EDF1C /* WebSocket7Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 40B6F3B914285AF4007EDF1C /* WebSocket7Test.m */; };
 		40B6F3FC14285D23007EDF1C /* NSString-JSONTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D42813E32A7600652DAC /* NSString-JSONTest.m */; };
-		40D754A914278E6900335BEF /* SocketIOPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 40D754A714278E6900335BEF /* SocketIOPacket.h */; };
+		40D754A914278E6900335BEF /* SocketIOPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 40D754A714278E6900335BEF /* SocketIOPacket.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40D754AA14278E6900335BEF /* SocketIOPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D754A814278E6900335BEF /* SocketIOPacket.m */; };
-		40D754AD142791AF00335BEF /* SocketIOSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 40D754AB142791AF00335BEF /* SocketIOSocket.h */; };
+		40D754AD142791AF00335BEF /* SocketIOSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 40D754AB142791AF00335BEF /* SocketIOSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40D754AE142791AF00335BEF /* SocketIOSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D754AC142791AF00335BEF /* SocketIOSocket.m */; };
-		40D754B1142791CE00335BEF /* SocketIOTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 40D754AF142791CD00335BEF /* SocketIOTransport.h */; };
+		40D754B1142791CE00335BEF /* SocketIOTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 40D754AF142791CD00335BEF /* SocketIOTransport.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40D754B2142791CE00335BEF /* SocketIOTransport.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D754B0142791CD00335BEF /* SocketIOTransport.m */; };
 		72C0D197142529E800D526D8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72CBA96B1385CF1F00E3D28D /* Foundation.framework */; };
 		72CB9A9C14253CD500CE4FAA /* NSArray-NTIJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 7216D72413CB9F7800509BDC /* NSArray-NTIJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };

@@ -124,14 +124,25 @@ static NSString* b64EncodeString(NSString* string)
 		return NO;
 	}
 	
-	NSData* data = [self->sendQueue firstObject];
+	id data = [self->sendQueue firstObject];
 	[self->sendQueue removeObjectAtIndex: 0];
 	
 	if( !data ){
 		return NO;
 	}
 	
-	uint8_t flag_and_opcode = 0x81;
+	uint8_t flag_and_opcode = 0x80;
+	if( ![data isKindOfClass: [NSData class]] ){
+		//We will go as string
+		flag_and_opcode = flag_and_opcode+1;
+		NSString* string = data;
+		if(![data isKindOfClass: [NSString class]]){
+			string = [NSString stringWithFormat: @"%@", data];
+		}
+		data = [(NSString*)string dataUsingEncoding: NSUTF8StringEncoding];
+	}
+	
+	
 	
 	BOOL isLong=NO;
 	uint8_t first = 0x00;
