@@ -67,14 +67,9 @@ static NSString* b64EncodeString(NSString* string)
 	[self shutdownStreams];
 }
 
--(void)readAndEnqueue
+-(void)readAndEnqueue: (BOOL)asString
 {
-	//Second nibble of first byte is opcode.  We require text?
-	uint8_t firstByte = 0x00;
-	[self->socketInputStream read: &firstByte maxLength: 1];
-	if( !(firstByte & 0x81) ){ //1000 0001
-		[self shutdownAsResultOfError: [NSString stringWithFormat: @"None text opcode recieved. First byte of frame=%d", firstByte]];
-	}
+	//Called after having read the first byte.
 	
 	//Next byte is our flag and opcode
 	uint8_t mask_and_len = 0x00;
@@ -115,7 +110,12 @@ static NSString* b64EncodeString(NSString* string)
 		byte = byte ^ mask[i%4];
 		[data appendBytes: &byte length: 1];
 	}
-	[self->recieveQueue addObject: data];
+	id toEnqueue = data;
+	if( asString ){
+		toEnqueue = [[[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding] autorelease];
+	}
+	NSLog(@"Enqueueing object %@", toEnqueue);
+	[self->recieveQueue addObject: toEnqueue];
 }
 
 -(BOOL)dequeueAndSend
@@ -240,97 +240,138 @@ static NSData* hashUsingSHA1(NSData* data)
 	return [encoded isEqualToString: acceptKey];
 }
 
+-(void)processHandshakeResponse
+{
+	//Read 4 bytes and make sure we are http
+	uint8_t buf[4];
+	[self->socketInputStream read: buf maxLength: 4];
+	
+	NSData* firstFourData = [NSData dataWithBytes: buf length: 4];
+	NSString* firstFourBytesString = [NSString stringWithData: firstFourData encoding: NSUTF8StringEncoding];
+	if(![firstFourBytesString isEqualToString: @"HTTP"]){
+		[self shutdownAsResultOfError: @"64 bit length frame not allowed"];
+	}
+	
+	NSMutableData* data = [NSMutableData dataWithBytes: buf length: 4];
+	
+	//We have an http response. must read byte by byte until we encounter 0d0a0d0a (\r\n)
+	uint8_t state = 0;  //1 is \r, 2 is \r\n, 3=\r\n\r, 4=\r\n\r\n
+	
+	//We are an http response so we can guarentee it will eventually come?
+	NSInteger maxSize = 1024;
+	NSInteger i = 0;
+	uint8_t currentByte = 0x00;
+	while(i<maxSize){
+		
+		[self->socketInputStream read: &currentByte maxLength: 1];
+		[data appendBytes: &currentByte length: 1];
+		
+		if( currentByte == 0x0d && (state == 0 || state == 2)){
+			state = state + 1;
+		}else if( currentByte == 0x0a && (state == 1 || state == 3)){
+			state = state + 1;
+		}else{
+			state = 0;
+		}
+		if(state == 4){
+			break;
+		}
+	}
+	
+	NSString* response = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+	NSLog(@"Handling handshake response %@", response);
+	//FIXME actually check the accept field
+	if ([self isSuccessfulHandshakeResponse: response]) {
+		//FIXM we completely ignore the accept key here
+		self->status = WebSocketStatusConnected;
+	} else {
+		[self shutdownAsResultOfError: [NSString stringWithFormat: @"Unexpected response for handshake. %@", response]];
+	}
+
+}
+
 -(void)handleInputStreamEvent: (NSStreamEvent)eventCode
 {
-	if( self->status == WebSocketStatusConnecting && eventCode == NSStreamEventHasBytesAvailable){
-		//FIXME how much to actually read here?
-		
-		//Read 4 bytes and make sure we are http
-		uint8_t buf[4];
-		[self->socketInputStream read: buf maxLength: 4];
-		
-		NSData* firstFourData = [NSData dataWithBytes: buf length: 4];
-		NSString* firstFourBytesString = [NSString stringWithData: firstFourData encoding: NSUTF8StringEncoding];
-		if(![firstFourBytesString isEqualToString: @"HTTP"]){
-			[self shutdownAsResultOfError: @"64 bit length frame not allowed"];
-		}
-		
-		NSMutableData* data = [NSMutableData dataWithBytes: buf length: 4];
-	
-		//We have an http response. must read byte by byte until we encounter 0d0a0d0a (\r\n)
-		uint8_t state = 0;  //1 is \r, 2 is \r\n, 3=\r\n\r, 4=\r\n\r\n
-
-		//We are an http response so we can guarentee it will eventually come?
-		NSInteger maxSize = 1024;
-		NSInteger i = 0;
-		uint8_t currentByte = 0x00;
-		while(i<maxSize){
-			
-			[self->socketInputStream read: &currentByte maxLength: 1];
-			[data appendBytes: &currentByte length: 1];
-			
-			if( currentByte == 0x0d && (state == 0 || state == 2)){
-				state = state + 1;
-			}else if( currentByte == 0x0a && (state == 1 || state == 3)){
-				state = state + 1;
-			}else{
-				state = 0;
-			}
-			NSLog(@"After reading %d state is %d", currentByte, state);
-			if(state == 4){
+	//Stream wants us to read something
+	if( eventCode == NSStreamEventHasBytesAvailable)
+	{
+		switch (self->status) {
+			case WebSocketStatusConnecting:
+				[self processHandshakeResponse];
+				break;
+			case WebSocketStatusConnected:{ //Todo handle opcodes here
+				
+				//Second nibble of first byte is opcode.
+				uint8_t firstByte = 0x00;
+				[self->socketInputStream read: &firstByte maxLength: 1];
+				
+				if( firstByte & 0x81 ){ //This is text
+					[self readAndEnqueue: YES];
+				}
+				else if( firstByte & 0x82 ){ //This is binary
+					[self readAndEnqueue: NO];
+				}
+				else if( firstByte & 0x88){ //This is a close
+					//Server initiated the disconnect
+					if(self->status != WebSocketStatusDisconnecting){
+						//send a shutdown echo
+						self->status = WebSocketStatusDisconnecting;
+						[self->socketOutputStream write: &firstByte maxLength: 1];
+					}
+					//Shut'em down
+					[self shutdownStreams];
+					self->status = WebSocketStatusDisconnected;
+					
+				}
+				else{ //1000 0001
+					[self shutdownAsResultOfError: [NSString stringWithFormat: @"Unknown opcode recieved. First byte of frame=%d", firstByte]];
+				}
 				break;
 			}
+			default:
+				NSLog(@"Unhandled stream event %@ for stream %@", eventCode, self->socketInputStream);
 		}
-		
-		NSString* response = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
-		NSLog(@"Handling handshake response %@", response);
-		//FIXME actually check the accept field
-		if ([self isSuccessfulHandshakeResponse: response]) {
-			//FIXM we completely ignore the accept key here
-            self->status = WebSocketStatusConnected;
-        } else {
-            [self shutdownAsResultOfError: [NSString stringWithFormat: @"Unexpected response for handshake. %@", response]];
-        }
-		return;
 	}
-	
-	if( self->status == WebSocketStatusConnected && eventCode == NSStreamEventHasBytesAvailable ){
-		[self readAndEnqueue];
-	}
-	
+}
+
+-(void)initiateHandshake
+{
+	NSString* getRequest = [NSString stringWithFormat:@"GET %@ HTTP/1.1\r\n"
+							"Upgrade: WebSocket\r\n"
+							"Connection: Upgrade\r\n"
+							"Host: %@\r\n"
+							"sec-websocket-origin: %@\r\n"
+							"Sec-WebSocket-Key: %@\r\n"
+							"Sec-WebSocket-Version: 7\r\n\r\n",
+							self->url.path ? self->url.path : @"/",self->url.host,
+							[NSString stringWithFormat: @"http://%@",self->url.host], self->key] ;
+	NSLog(@"Initiating handshake with %@", getRequest);
+	NSData* data = [getRequest dataUsingEncoding: NSUTF8StringEncoding];
+	[self->socketOutputStream write: [data bytes] maxLength: [data length]];
+	self->status = WebSocketStatusConnecting;
+	self->shouldForcePumpOutputStream = NO;
 }
 
 -(void)handleOutputStreamEvent: (NSStreamEvent)eventCode
 {
-	if( self->status == WebSocketStatusNew && eventCode == NSStreamEventHasSpaceAvailable){
-		//Initiate the handshake
-				
-		NSString* getRequest = [NSString stringWithFormat:@"GET %@ HTTP/1.1\r\n"
-								"Upgrade: WebSocket\r\n"
-								"Connection: Upgrade\r\n"
-								"Host: %@\r\n"
-								"sec-websocket-origin: %@\r\n"
-								"Sec-WebSocket-Key: %@\r\n"
-								"Sec-WebSocket-Version: 7\r\n\r\n",
-								self->url.path ? self->url.path : @"/",self->url.host,
-								[NSString stringWithFormat: @"http://%@",self->url.host], self->key] ;
-		NSLog(@"Initiating handshake with %@", getRequest);
-		NSData* data = [getRequest dataUsingEncoding: NSUTF8StringEncoding];
-		[self->socketOutputStream write: [data bytes] maxLength: [data length]];
-		self->status = WebSocketStatusConnecting;
-		self->shouldForcePumpOutputStream = NO;
-		return;
-	}
-	
-	if( self->status == WebSocketStatusConnecting && eventCode == NSStreamEventHasSpaceAvailable){
-		self->shouldForcePumpOutputStream = YES;
-		return;
-	}
-	
-	if( self->status == WebSocketStatusConnected && eventCode == NSStreamEventHasSpaceAvailable){
-		BOOL didSendData = [self dequeueAndSend];
-		self->shouldForcePumpOutputStream = !didSendData;
-		return;
+	//The stream wants us to write something
+	if(eventCode == NSStreamEventHasSpaceAvailable)
+	{
+		switch (self->status){
+			case WebSocketStatusNew:
+				[self initiateHandshake];
+				break;
+			case WebSocketStatusConnecting:
+				self->shouldForcePumpOutputStream = YES;
+				break;
+			case WebSocketStatusConnected:{
+				BOOL didSendData = [self dequeueAndSend];
+				self->shouldForcePumpOutputStream = !didSendData;
+				break;
+			}
+			default:
+				NSLog(@"Unhandled stream event %@ for stream %@", eventCode, self->socketOutputStream);
+		}
 	}
 }
 
@@ -372,11 +413,11 @@ static NSData* hashUsingSHA1(NSData* data)
 
 -(void)disconnect
 {
-	NSLog(@"Disconnecting");
+	NSLog(@"Client initiated disconnect");
 	//FIXME Send disconnect handshake.
 	self->status = WebSocketStatusDisconnecting;
-	[self shutdownStreams];
-	self->status = WebSocketStatusDisconnected;
+	uint8_t closeByte = 0x88;
+	[self->socketOutputStream write: &closeByte maxLength: 1];
 }
 
 
