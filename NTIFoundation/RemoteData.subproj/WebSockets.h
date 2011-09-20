@@ -19,6 +19,7 @@ typedef enum {
 
 @interface WebSocket7 : OFObject<NSStreamDelegate>{
 @private
+	NSString* key;
 	NSInputStream* socketInputStream;
 	NSOutputStream* socketOutputStream;
 	NSMutableArray* sendQueue;

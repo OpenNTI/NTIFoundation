@@ -7,9 +7,18 @@
 //
 
 #import "WebSockets.h"
+#import <CommonCrypto/CommonDigest.h>
+#import "OmniFoundation/NSDictionary-OFExtensions.h"
+#import "OmniFoundation/NSMutableDictionary-OFExtensions.h"
 
 @implementation WebSocket7
 @synthesize status;
+
+static NSString* b64EncodeString(NSString* string)
+{
+	return [[string dataUsingEncoding: NSUTF8StringEncoding] base64String];
+}
+
 -(id)initWithURLString:(NSString *)urlString
 {
 	self = [super init];
@@ -19,6 +28,23 @@
 	//Fixme we probably need to bound these.
 	self->sendQueue = [[NSMutableArray arrayWithCapacity: 10] retain];
 	self->recieveQueue = [[NSMutableArray arrayWithCapacity: 10] retain];
+	
+	
+
+	//Generate key.
+	//A "Sec-WebSocket-Key" header field with a base64-encoded (see
+	//Section 4 of [RFC4648]) value that, when decoded, is 16 bytes in
+	//length.
+	
+	NSMutableData* bytesToEncode = [NSMutableData data];
+	
+	for(NSInteger i = 0; i < 16; i++){
+		uint8_t byte = arc4random() % 256;
+		[bytesToEncode appendBytes: &byte length: 1];
+	}
+	NSString* k = [NSString stringWithData: bytesToEncode encoding: NSASCIIStringEncoding] ;
+	self->key = [b64EncodeString(k) retain];
+	
 	return self;
 }
 
@@ -34,8 +60,9 @@
 }
 
 
--(void)shutdownAsResultOfError
+-(void)shutdownAsResultOfError: (NSString*)error
 {
+	NSLog(@"Shutting down as a result of an error! %@", error ? error : @"");
 	self->status = WebSocketStatusError;
 	[self shutdownStreams];
 }
@@ -45,8 +72,8 @@
 	//Second nibble of first byte is opcode.  We require text?
 	uint8_t firstByte = 0x00;
 	[self->socketInputStream read: &firstByte maxLength: 1];
-	if( !(firstByte & 0x81) ){
-		[self shutdownAsResultOfError];
+	if( !(firstByte & 0x81) ){ //1000 0001
+		[self shutdownAsResultOfError: [NSString stringWithFormat: @"None text opcode recieved. First byte of frame=%d", firstByte]];
 	}
 	
 	//Next byte is our flag and opcode
@@ -64,7 +91,7 @@
 		client_len = b1 | b2;
 	}
 	else if(client_len == 127){
-		[NSException raise: @"Not Implemented" reason: @"Implement 64 bit lengths"];
+		[self shutdownAsResultOfError: [NSString stringWithFormat: @"64 bit length frame not allowed"]];
 	}
 	
 	//The server doesn't have to send a masking key
@@ -81,15 +108,14 @@
 	}
 	
 	//We must go byte by byte so we can apply the mask if necessary
-	NSMutableData* data = [NSMutableData dataWithLength: client_len];
+	NSMutableData* data = [NSMutableData data];
 	for(NSUInteger i=0; i<client_len; i++){
 		uint8_t byte;
 		[self->socketInputStream read: &byte maxLength: 1];
 		byte = byte ^ mask[i%4];
 		[data appendBytes: &byte length: 1];
 	}
-	
-	[self->recieveQueue addObject: [NSString stringWithData: data encoding: NSUTF8StringEncoding]];
+	[self->recieveQueue addObject: data];
 }
 
 -(BOOL)dequeueAndSend
@@ -98,14 +124,12 @@
 		return NO;
 	}
 	
-	NSString* message = [self->sendQueue firstObject];
+	NSData* data = [self->sendQueue firstObject];
 	[self->sendQueue removeObjectAtIndex: 0];
 	
-	if( !message ){
+	if( !data ){
 		return NO;
 	}
-	
-	NSData* data = [message dataUsingEncoding: NSUTF8StringEncoding];
 	
 	uint8_t flag_and_opcode = 0x81;
 	
@@ -114,17 +138,17 @@
 	uint8_t second = 0x00;
 	uint8_t third = 0x00;
 		
-	if( [message length] < 126 ){
-		first = [message length];
+	if( [data length] < 126 ){
+		first = [data length];
 	}
-	else if([message length] < 0xFFFF){
+	else if([data length] < 0xFFFF){
 		first = 126;
-		second = [message length] & 0xFF00 >> 8;
-		third = [message length] & 0xFF;
+		second = [data length] & 0xFF00 >> 8;
+		third = [data length] & 0xFF;
 		isLong = YES;
 	}
 	else{
-		[NSException raise: @"Not Implemented" reason: @"Implement 64 bit lengths"];
+		[self shutdownAsResultOfError: @"64 bit length frame not allowed"];
 	}
 	
 	//Client is always masked
@@ -155,21 +179,117 @@
 	return YES;
 }
 
+static NSArray* piecesFromString(NSString* data, NSString* regexString){
+	NSError* error = nil;
+	NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern: regexString 
+																		   options: 0 
+																			 error: &error];
+	
+	if (error) {
+		NSLog(@"%@", [error description]);
+		return nil;
+	}
+	
+	NSArray* results = [regex matchesInString: data options:0 range:NSMakeRange(0, [data length])];
+	NSMutableArray* parts = [NSMutableArray arrayWithCapacity: 5];
+	for (NSTextCheckingResult* result in results) {
+		
+		for(NSUInteger i = 1 ; i<=regex.numberOfCaptureGroups; i++ ){
+			NSRange range = [result rangeAtIndex: i];
+			if(range.location == NSNotFound){
+				[parts addObject: nil];
+			}else{
+				[parts addObject: [data substringWithRange: range]];
+			}
+		}
+		
+		//Only take the first match
+		break;
+	}
+	return parts;
+	
+}
+
+static NSData* hashUsingSHA1(NSData* data)
+{
+    unsigned char hashBytes[CC_SHA1_DIGEST_LENGTH];
+    CC_SHA1([data bytes], [data length], hashBytes);
+	
+    return [NSData dataWithBytes:hashBytes length:CC_SHA1_DIGEST_LENGTH];
+}
+
+-(BOOL)isSuccessfulHandshakeResponse: (NSString*)response
+{
+	NSArray* parts = piecesFromString( response, @"Sec-WebSocket-Accept:\\s+(.+?)\\s");
+	//We expect one part the accept key
+	if( [parts count] < 1  || ![parts firstObject]){
+		return NO;
+	}
+	
+	//return YES;
+	NSString* acceptKey = [parts firstObject];
+//	NSLog(@"Accept key %@", acceptKey);
+	//The accept key should be our key concated with the secret.  Sha-1 hashed and then base64 encoded
+	NSString* concatWithSecret = [NSString stringWithFormat: @"%@%@", self->key, @"258EAFA5-E914-47DA-95CA-C5AB0DC85B11", nil];
+//	NSLog(@"concat is %@", concatWithSecret);
+	NSData* hash=hashUsingSHA1([concatWithSecret dataUsingEncoding: NSUTF8StringEncoding]);
+//	NSLog(@"hash %@", hash);
+	NSString* encoded = [hash base64String];
+//	NSLog(@"encoded %@", encoded);
+	
+	return [encoded isEqualToString: acceptKey];
+}
 
 -(void)handleInputStreamEvent: (NSStreamEvent)eventCode
 {
 	if( self->status == WebSocketStatusConnecting && eventCode == NSStreamEventHasBytesAvailable){
 		//FIXME how much to actually read here?
-		uint8_t buffer[1024];
-		[self->socketInputStream read: buffer maxLength: 1024];
-		NSData* response = [NSData dataWithBytes: buffer length: 1024];
-		NSString* stringResponse = [NSString stringWithData: response encoding: NSUTF8StringEncoding];
 		
-		if ([stringResponse hasPrefix:@"HTTP/1.1 101 Web Socket Protocol Handshake\r\nUpgrade: WebSocket\r\nConnection: Upgrade\r\n"]) {
-			//FIXME we completely ignore the accept key here
+		//Read 4 bytes and make sure we are http
+		uint8_t buf[4];
+		[self->socketInputStream read: buf maxLength: 4];
+		
+		NSData* firstFourData = [NSData dataWithBytes: buf length: 4];
+		NSString* firstFourBytesString = [NSString stringWithData: firstFourData encoding: NSUTF8StringEncoding];
+		if(![firstFourBytesString isEqualToString: @"HTTP"]){
+			[self shutdownAsResultOfError: @"64 bit length frame not allowed"];
+		}
+		
+		NSMutableData* data = [NSMutableData dataWithBytes: buf length: 4];
+	
+		//We have an http response. must read byte by byte until we encounter 0d0a0d0a (\r\n)
+		uint8_t state = 0;  //1 is \r, 2 is \r\n, 3=\r\n\r, 4=\r\n\r\n
+
+		//We are an http response so we can guarentee it will eventually come?
+		NSInteger maxSize = 1024;
+		NSInteger i = 0;
+		uint8_t currentByte = 0x00;
+		while(i<maxSize){
+			
+			[self->socketInputStream read: &currentByte maxLength: 1];
+			[data appendBytes: &currentByte length: 1];
+			
+			if( currentByte == 0x0d && (state == 0 || state == 2)){
+				state = state + 1;
+			}else if( currentByte == 0x0a && (state == 1 || state == 3)){
+				state = state + 1;
+			}else{
+				state = 0;
+			}
+			NSLog(@"After reading %d state is %d", currentByte, state);
+			if(state == 4){
+				break;
+			}
+		}
+		
+		NSString* response = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+		NSLog(@"Handling handshake response %@", response);
+		//FIXME actually check the accept field
+		if ([self isSuccessfulHandshakeResponse: response]) {
+			//FIXM we completely ignore the accept key here
             self->status = WebSocketStatusConnected;
         } else {
-            [self shutdownAsResultOfError];
+            [self shutdownAsResultOfError: [NSString stringWithFormat: @"Unexpected response for handshake. %@", response]];
         }
 		return;
 	}
@@ -177,21 +297,24 @@
 	if( self->status == WebSocketStatusConnected && eventCode == NSStreamEventHasBytesAvailable ){
 		[self readAndEnqueue];
 	}
+	
 }
 
 -(void)handleOutputStreamEvent: (NSStreamEvent)eventCode
 {
 	if( self->status == WebSocketStatusNew && eventCode == NSStreamEventHasSpaceAvailable){
 		//Initiate the handshake
+				
 		NSString* getRequest = [NSString stringWithFormat:@"GET %@ HTTP/1.1\r\n"
 								"Upgrade: WebSocket\r\n"
 								"Connection: Upgrade\r\n"
 								"Host: %@\r\n"
-								"Origin: %@\r\n"
-								"\r\n",
-								self->url.path,url.host,
-								[NSString stringWithFormat: @"http://%@",url.host]];
-		
+								"sec-websocket-origin: %@\r\n"
+								"Sec-WebSocket-Key: %@\r\n"
+								"Sec-WebSocket-Version: 7\r\n\r\n",
+								self->url.path ? self->url.path : @"/",self->url.host,
+								[NSString stringWithFormat: @"http://%@",self->url.host], self->key] ;
+		NSLog(@"Initiating handshake with %@", getRequest);
 		NSData* data = [getRequest dataUsingEncoding: NSUTF8StringEncoding];
 		[self->socketOutputStream write: [data bytes] maxLength: [data length]];
 		self->status = WebSocketStatusConnecting;
@@ -215,8 +338,8 @@
 {
 	if( eventCode == NSStreamEventErrorOccurred){
 		NSError *theError = [aStream streamError];
-		NSLog(@"%@ Error: %@", aStream, [theError localizedDescription]);
-		[self shutdownAsResultOfError];
+		NSLog(@"%@ Error: %@ code=%d domain=%@", aStream, [theError localizedDescription], (int)theError.code, theError.domain);
+		[self shutdownAsResultOfError: [theError localizedDescription]];
 	}
 
 	if (aStream == self->socketInputStream){
@@ -235,7 +358,7 @@
 {
 	CFReadStreamRef readStream;
 	CFWriteStreamRef writeStream;
-	CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)[url host], (uint32_t)[url port], &readStream, &writeStream);
+	CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)[self->url host], [[self->url port] intValue], &readStream, &writeStream);
 	
 	self->socketInputStream = (NSInputStream *)readStream;
 	self->socketOutputStream = (NSOutputStream *)writeStream;
@@ -247,11 +370,10 @@
 	[self->socketOutputStream open];
 }
 
-
-
 -(void)disconnect
 {
-	//FIXME Send remaining data and Tear down handshake?
+	NSLog(@"Disconnecting");
+	//FIXME Send disconnect handshake.
 	self->status = WebSocketStatusDisconnecting;
 	[self shutdownStreams];
 	self->status = WebSocketStatusDisconnected;
@@ -261,182 +383,10 @@
 
 -(void)dealloc
 {
+	NTI_RELEASE(self->key);
 	NTI_RELEASE(self->sendQueue);
 	NTI_RELEASE(self->recieveQueue);
 	NTI_RELEASE(self->url);
 }
 
 @end
-//
-//-(BOOL)dequeueAndSend
-//{
-//	if( [self->sendQueue count] < 1){
-//		return NO;
-//	}
-//	
-//	NSString* message = [self->sendQueue firstObject];
-//	[self->sendQueue removeObjectAtIndex: 0];
-//	
-//	if( !message ){
-//		return NO;
-//	}
-//	
-//	NSData* data = [message dataUsingEncoding: NSUTF8StringEncoding];
-//	
-//	uint8_t flag_and_opcode = 0x81;
-//	
-//	BOOL isLong=NO;
-//	uint8_t first;
-//	uint8_t second;
-//	uint8_t third;
-//		
-//	if( [message length] < 126 ){
-//		first = [message length];
-//	}
-//	else if([message length] < 0xFFFF){
-//		first = 126;
-//		second = [message length] & 0xFF00 >> 8;
-//		third = [message length] & 0xFF;
-//		isLong = YES;
-//	}
-//	else{
-//		[NSException raise: @"Not Implemented" reason: @"Implement 64 bit lengths"];
-//	}
-//	
-//	[self->socketOutputStream write: &flag_and_opcode maxLength: 1];
-//
-//	[self->socketOutputStream write: &first maxLength: 1];
-//	if(isLong){
-//		[self->socketOutputStream write: &second maxLength: 1];
-//		[self->socketOutputStream write: &third maxLength: 1];
-//	}
-//	
-//	//Send a random 4 bytes that is the masking key
-//	for(NSInteger i = 0; i < 4; i++){
-//		uint8_t toSend = arc4random() % 128;
-//		[self->socketOutputStream write: &toSend maxLength: 1];
-//	}
-//
-//	
-//	uint8_t *readBytes = (uint8_t *)[data bytes];
-//	[self->socketOutputStream write:(const uint8_t *)readBytes maxLength: [data length]];
-//	
-//
-//	
-//	return YES;
-//}
-//
-//-(void)readAndEnqueue
-//{
-//	//Ignore the first byte of the frame
-//	uint8_t firstByte = 0x00;
-//	[self->socketInputStream read: &firstByte maxLength: 1];
-//	
-//	//Next byte is our flag and opcode
-//	uint8_t mask_and_len = 0x00;
-//	[self->socketInputStream read: &mask_and_len maxLength: 1];
-//	
-//	if( (mask_and_len & 0x80) != 0x80 ){
-//		[NSException raise: @"Read error" reason: @"Client sent unmasked data"];
-//	}
-//	
-//	uint8_t client_len = mask_and_len & 0x7F;
-//	
-//	uint8_t b1;
-//	uint8_t b2;
-//	if( client_len == 126 ){
-//		[self->socketInputStream read: &b1 maxLength: 1];
-//		b1 = b1 << 8;
-//		[self->socketInputStream read: &b2 maxLength: 1];
-//		client_len = b1 | b2;
-//	}
-//	else if(client_len == 127){
-//		[NSException raise: @"Not Implemented" reason: @"Implement 64 bit lengths"];
-//	}
-//	
-//	uint8_t mask[4];
-//	for(NSInteger i = 0; i<4; i++){
-//		[self->socketInputStream read: (uint8_t*)mask[i] maxLength: 1];
-//	}
-//	
-//	NSMutableData* data = [NSMutableData dataWithLength: client_len];
-//	uint8_t* readBytes[client_len];
-//	[self->socketInputStream read: (uint8_t*)readBytes maxLength: client_len];
-//	[data appendBytes: readBytes length: client_len];
-//	
-//	[self->recieveQueue addObject: [NSString stringWithData: data encoding: NSUTF8StringEncoding]];
-//	
-//	
-//}
-//
-//-(void)handleInputStreamEvent: (NSStreamEvent)eventCode
-//{
-//	//If we are connected and we have data read it
-//	if(self->connected && eventCode == NSStreamEventHasBytesAvailable){
-//		[self readAndEnqueue];
-//	}
-//	else if(!self->connected && self->connecting){
-//		//We got a handshake response
-//	}
-//}
-//
-//-(void)handleOutputStreamEvent: (NSStreamEvent)eventCode
-//{
-//	switch( eventCode ){
-//		case NSStreamEventHasSpaceAvailable:{
-//			BOOL didSend = [self dequeueAndSend];
-//			self->shouldForcePumpOutputStream = !didSend;
-//		}
-//		break;
-//	}
-//}
-//
-//-(void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode
-//{
-//	if( eventCode == NSStreamEventErrorOccurred){
-//		NSError *theError = [aStream streamError];
-//		NSLog(@"Error: %@",[theError localizedDescription]);
-//		return;
-//	}
-//
-//
-//	if (aStream == self->socketInputStream){
-//		[self handleInputStreamEvent: eventCode];
-//		return;
-//	}
-//	
-//	if(aStream == self->socketOutputStream){
-//		[self handleOutputStreamEvent: eventCode];
-//		return;
-//	}
-//	
-//}
-//
-//-(BOOL)forcePumpOutputStream
-//{
-//	if (!self->shouldForcePumpOutputStream){
-//		return NO;
-//	}
-//	BOOL didSend = [self dequeueAndSend];
-//	self->shouldForcePumpOutputStream = !didSend;
-//	return didSend;
-//}
-//
-//-(void)enqueueForTransmission: (NSString*)data
-//{
-//	[self->sendQueue addObject: data];
-//	if(self->shouldForcePumpOutputStream){
-//		[self forcePumpOutputStream];
-//	}
-//}
-//
-//-(void)dealloc
-//{
-//	NTI_RELEASE(self->socketInputStream);
-//	NTI_RELEASE(self->socketOutputStream);
-//	NTI_RELEASE(self->sendQueue);
-//	NTI_RELEASE(self->recieveQueue);
-//	[super dealloc];
-//}
-//
-//@end
