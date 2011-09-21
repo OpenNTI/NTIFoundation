@@ -17,6 +17,15 @@ typedef enum {
 	WebSocketStatusError
 } WebSocketStatus;
 
+@class WebSocket7;
+
+@protocol WebSocketDelegate <NSObject>
+-(void)websocket: (WebSocket7*)socket connectionStatusDidChange: (WebSocketStatus)status;
+-(void)websocket: (WebSocket7*)socket didEncounterError: (NSError*)error;
+-(void)websocketDidRecieveData: (WebSocket7*)socket;
+-(void)websocketIsReadyForData: (WebSocket7*)socket;
+@end
+
 @interface WebSocket7 : OFObject<NSStreamDelegate>{
 @private
 	NSString* key;
@@ -31,5 +40,7 @@ typedef enum {
 @property (nonatomic, readonly) WebSocketStatus status;
 -(id)initWithURLString: (NSString*)url;
 -(void)connect;
+-(void)enqueueData: (id)data; //It really does make sense that this just be data
+-(id)dequeueData;
 -(void)disconnect;
 @end

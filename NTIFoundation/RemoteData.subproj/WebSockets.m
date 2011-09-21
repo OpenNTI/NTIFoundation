@@ -131,6 +131,10 @@ static NSString* b64EncodeString(NSString* string)
 		return NO;
 	}
 	
+	if( !([data isKindOfClass: [NSData class]] || [data isKindOfClass: [NSString class]] )){
+		data = [NSString stringWithFormat: @"%@", data];
+	}
+	
 	uint8_t flag_and_opcode = 0x80;
 	if( ![data isKindOfClass: [NSData class]] ){
 		//We will go as string
@@ -189,6 +193,25 @@ static NSString* b64EncodeString(NSString* string)
 	
 	return YES;
 }
+
+-(void)enqueueData:(id)data
+{
+	[self->sendQueue addObject: data];
+	NSLog(@"Enqueueing object %@", data);
+	if(self->shouldForcePumpOutputStream){
+		self->shouldForcePumpOutputStream = NO;
+		[self dequeueAndSend];
+	}
+}
+
+-(id)dequeueData
+{
+	if([self->recieveQueue count] > 0){
+		return [self->recieveQueue firstObject];
+	}
+	return nil;
+}
+
 
 static NSArray* piecesFromString(NSString* data, NSString* regexString){
 	NSError* error = nil;
