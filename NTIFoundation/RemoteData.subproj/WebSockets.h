@@ -36,7 +36,9 @@ typedef enum {
 	BOOL shouldForcePumpOutputStream;
 	WebSocketStatus status;
 	NSURL* url;
+	id nr_delegate;
 }
+@property (nonatomic, retain) id nr_delegate;
 @property (nonatomic, readonly) WebSocketStatus status;
 -(id)initWithURLString: (NSString*)url;
 -(void)connect;

@@ -12,11 +12,26 @@
 #import "OmniFoundation/NSMutableDictionary-OFExtensions.h"
 
 @implementation WebSocket7
-@synthesize status;
+@synthesize status, nr_delegate;
 
 static NSString* b64EncodeString(NSString* string)
 {
 	return [[string dataUsingEncoding: NSUTF8StringEncoding] base64String];
+}
+
+static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
+{
+	NSDictionary* userData = [NSDictionary dictionaryWithObject: message forKey: NSLocalizedDescriptionKey];
+	
+	return [NSError errorWithDomain: @"WebSocketError" code: code userInfo: userData];
+}
+
+-(void)updateStatus: (WebSocketStatus)s
+{
+	self->status = s;
+	if([self->nr_delegate respondsToSelector:@selector(websocket:connectionStatusDidChange:)]){
+		[self->nr_delegate websocket: self connectionStatusDidChange: s];
+	}
 }
 
 -(id)initWithURLString:(NSString *)urlString
@@ -24,7 +39,7 @@ static NSString* b64EncodeString(NSString* string)
 	self = [super init];
 	self->url = [[NSURL URLWithString: urlString] retain];
 	self->shouldForcePumpOutputStream = NO;
-	self->status = WebSocketStatusNew;
+	[self updateStatus: WebSocketStatusNew];
 	//Fixme we probably need to bound these.
 	self->sendQueue = [[NSMutableArray arrayWithCapacity: 10] retain];
 	self->recieveQueue = [[NSMutableArray arrayWithCapacity: 10] retain];
@@ -60,10 +75,15 @@ static NSString* b64EncodeString(NSString* string)
 }
 
 
--(void)shutdownAsResultOfError: (NSString*)error
+-(void)shutdownAsResultOfError: (NSError*)error
 {
-	NSLog(@"Shutting down as a result of an error! %@", error ? error : @"");
-	self->status = WebSocketStatusError;
+	NSLog(@"Shutting down as a result of an error! %@", error ? [error localizedDescription] : @"");
+	[self updateStatus: WebSocketStatusError];
+	
+	if( [self->nr_delegate performSelector: @selector(websocket:didEncounterError:)] ){
+		[self->nr_delegate websocket: self didEncounterError: error];
+	}
+	
 	[self shutdownStreams];
 }
 
@@ -116,6 +136,9 @@ static NSString* b64EncodeString(NSString* string)
 	}
 	NSLog(@"Enqueueing object %@", toEnqueue);
 	[self->recieveQueue addObject: toEnqueue];
+	if( [self->nr_delegate respondsToSelector: @selector(websocketDidRecieveData:)] ){
+		[self->nr_delegate websocketDidRecieveData: self];
+	}
 }
 
 -(BOOL)dequeueAndSend
@@ -163,7 +186,7 @@ static NSString* b64EncodeString(NSString* string)
 		isLong = YES;
 	}
 	else{
-		[self shutdownAsResultOfError: @"64 bit length frame not allowed"];
+		[self shutdownAsResultOfError: errorWithCodeAndMessage(101, @"64 bit length frame not allowed")];
 	}
 	
 	//Client is always masked
@@ -283,7 +306,7 @@ static NSData* hashUsingSHA1(NSData* data)
 	NSData* firstFourData = [NSData dataWithBytes: buf length: 4];
 	NSString* firstFourBytesString = [NSString stringWithData: firstFourData encoding: NSUTF8StringEncoding];
 	if(![firstFourBytesString isEqualToString: @"HTTP"]){
-		[self shutdownAsResultOfError: @"64 bit length frame not allowed"];
+		[self shutdownAsResultOfError: errorWithCodeAndMessage(101, @"64 bit length frame not allowed")];
 	}
 	
 	NSMutableData* data = [NSMutableData dataWithBytes: buf length: 4];
@@ -317,7 +340,7 @@ static NSData* hashUsingSHA1(NSData* data)
 	//FIXME actually check the accept field
 	if ([self isSuccessfulHandshakeResponse: response]) {
 		//FIXM we completely ignore the accept key here
-		self->status = WebSocketStatusConnected;
+		[self updateStatus: WebSocketStatusConnected];
 	} else {
 		[self shutdownAsResultOfError: [NSString stringWithFormat: @"Unexpected response for handshake. %@", response]];
 	}
@@ -349,12 +372,12 @@ static NSData* hashUsingSHA1(NSData* data)
 					//Server initiated the disconnect
 					if(self->status != WebSocketStatusDisconnecting){
 						//send a shutdown echo
-						self->status = WebSocketStatusDisconnecting;
+						[self updateStatus: WebSocketStatusDisconnecting];
 						[self->socketOutputStream write: &firstByte maxLength: 1];
 					}
 					//Shut'em down
 					[self shutdownStreams];
-					self->status = WebSocketStatusDisconnected;
+					[self updateStatus: WebSocketStatusDisconnected];
 					
 				}
 				else{ //1000 0001
@@ -382,7 +405,7 @@ static NSData* hashUsingSHA1(NSData* data)
 	NSLog(@"Initiating handshake with %@", getRequest);
 	NSData* data = [getRequest dataUsingEncoding: NSUTF8StringEncoding];
 	[self->socketOutputStream write: [data bytes] maxLength: [data length]];
-	self->status = WebSocketStatusConnecting;
+	[self updateStatus: WebSocketStatusConnecting];
 	self->shouldForcePumpOutputStream = NO;
 }
 
@@ -399,6 +422,11 @@ static NSData* hashUsingSHA1(NSData* data)
 				self->shouldForcePumpOutputStream = YES;
 				break;
 			case WebSocketStatusConnected:{
+				
+				if( [self->nr_delegate respondsToSelector: @selector(websocketIsReadyForData:)] ){
+					[self->nr_delegate websocketIsReadyForData: self];
+				}
+				
 				BOOL didSendData = [self dequeueAndSend];
 				self->shouldForcePumpOutputStream = !didSendData;
 				break;
@@ -414,7 +442,7 @@ static NSData* hashUsingSHA1(NSData* data)
 	if( eventCode == NSStreamEventErrorOccurred){
 		NSError *theError = [aStream streamError];
 		NSLog(@"%@ Error: %@ code=%d domain=%@", aStream, [theError localizedDescription], (int)theError.code, theError.domain);
-		[self shutdownAsResultOfError: [theError localizedDescription]];
+		[self shutdownAsResultOfError: theError];
 	}
 
 	if (aStream == self->socketInputStream){
@@ -449,7 +477,7 @@ static NSData* hashUsingSHA1(NSData* data)
 {
 	NSLog(@"Client initiated disconnect");
 	//FIXME Send disconnect handshake.
-	self->status = WebSocketStatusDisconnecting;
+	[self updateStatus: WebSocketStatusDisconnecting];
 	uint8_t closeByte = 0x88;
 	[self->socketOutputStream write: &closeByte maxLength: 1];
 }
