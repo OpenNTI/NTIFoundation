@@ -7,14 +7,14 @@
 //
 
 #import <OmniFoundation/OmniFoundation.h>
+#import "SendRecieveQueue.h"
 
 typedef enum {
 	WebSocketStatusNew,
 	WebSocketStatusConnecting,
 	WebSocketStatusConnected,
 	WebSocketStatusDisconnecting,
-	WebSocketStatusDisconnected,
-	WebSocketStatusError
+	WebSocketStatusDisconnected
 } WebSocketStatus;
 
 @class WebSocket7;
@@ -26,23 +26,19 @@ typedef enum {
 -(void)websocketIsReadyForData: (WebSocket7*)socket;
 @end
 
-@interface WebSocket7 : OFObject<NSStreamDelegate>{
+@interface WebSocket7 : SendRecieveQueue<NSStreamDelegate>{
 @private
 	NSString* key;
 	NSInputStream* socketInputStream;
 	NSOutputStream* socketOutputStream;
-	NSMutableArray* sendQueue;
-	NSMutableArray* recieveQueue;
 	BOOL shouldForcePumpOutputStream;
 	WebSocketStatus status;
 	NSURL* url;
 	id nr_delegate;
 }
-@property (nonatomic, retain) id nr_delegate;
+@property (nonatomic, assign) id nr_delegate;
 @property (nonatomic, readonly) WebSocketStatus status;
 -(id)initWithURLString: (NSString*)url;
 -(void)connect;
--(void)enqueueData: (id)data; //It really does make sense that this just be data
--(id)dequeueData;
 -(void)disconnect;
 @end

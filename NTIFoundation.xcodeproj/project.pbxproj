@@ -21,6 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		40475AEB142A4940003323A9 /* SendRecieveQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 40475AE9142A493F003323A9 /* SendRecieveQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		40475AEC142A4940003323A9 /* SendRecieveQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 40475AEA142A4940003323A9 /* SendRecieveQueue.m */; };
 		408494B51427DF6C0038BD31 /* WebSockets.h in Headers */ = {isa = PBXBuildFile; fileRef = 408494B31427DF6C0038BD31 /* WebSockets.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		408494B61427DF6C0038BD31 /* WebSockets.m in Sources */ = {isa = PBXBuildFile; fileRef = 408494B41427DF6C0038BD31 /* WebSockets.m */; };
 		40B6F3BA14285AF4007EDF1C /* WebSocket7Test.h in Headers */ = {isa = PBXBuildFile; fileRef = 40B6F3B814285AF4007EDF1C /* WebSocket7Test.h */; };
@@ -314,6 +316,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		40475AE9142A493F003323A9 /* SendRecieveQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendRecieveQueue.h; sourceTree = "<group>"; };
+		40475AEA142A4940003323A9 /* SendRecieveQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendRecieveQueue.m; sourceTree = "<group>"; };
 		408494B31427DF6C0038BD31 /* WebSockets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSockets.h; sourceTree = "<group>"; };
 		408494B41427DF6C0038BD31 /* WebSockets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSockets.m; sourceTree = "<group>"; };
 		409951D213CFBD510039982D /* NSDictionary-NTIJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDictionary-NTIJSON.h"; path = "../NSDictionary-NTIJSON.h"; sourceTree = "<group>"; };
@@ -460,6 +464,8 @@
 		40D7548914278E4500335BEF /* socket.io */ = {
 			isa = PBXGroup;
 			children = (
+				40475AE9142A493F003323A9 /* SendRecieveQueue.h */,
+				40475AEA142A4940003323A9 /* SendRecieveQueue.m */,
 				408494B21427DF510038BD31 /* Web Sockets */,
 				40D754A714278E6900335BEF /* SocketIOPacket.h */,
 				40D754A814278E6900335BEF /* SocketIOPacket.m */,
@@ -800,6 +806,7 @@
 				40D754B1142791CE00335BEF /* SocketIOTransport.h in Headers */,
 				408494B51427DF6C0038BD31 /* WebSockets.h in Headers */,
 				40B6F3BA14285AF4007EDF1C /* WebSocket7Test.h in Headers */,
+				40475AEB142A4940003323A9 /* SendRecieveQueue.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1197,6 +1204,7 @@
 				40D754AE142791AF00335BEF /* SocketIOSocket.m in Sources */,
 				40D754B2142791CE00335BEF /* SocketIOTransport.m in Sources */,
 				408494B61427DF6C0038BD31 /* WebSockets.m in Sources */,
+				40475AEC142A4940003323A9 /* SendRecieveQueue.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

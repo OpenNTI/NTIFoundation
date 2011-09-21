@@ -52,11 +52,12 @@ typedef enum {
 @property (nonatomic, retain) NSString* reason;
 @property (nonatomic, retain) NSString* advice;
 @property (nonatomic, retain) NSString* ackId;
-@property (nonatomic, retain) NSArray* args;
+@property (nonatomic, copy) NSArray* args;
 @property (nonatomic, retain) NSString* qs;
 @property (nonatomic, retain) NSString* name;
-
-+(SocketIOPacket*)decodePacketData: (id)data;
++(SocketIOPacket*)packetForMessageWithData: (NSString*)data;
++(SocketIOPacket*)packetForEventWithName: (NSString*)name andArgs: (NSArray*)args;
++(SocketIOPacket*)decodePacketData: (NSString*)data;
 -(id)initWithType: (SocketIOPacketType)theType;
 -(NSString*)encode;
 +(NSString*)encodePayload: (NSArray*)payload;

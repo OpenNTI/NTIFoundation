@@ -28,6 +28,9 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 
 -(void)updateStatus: (WebSocketStatus)s
 {
+	if(self->status == s){
+		return;
+	}
 	self->status = s;
 	if([self->nr_delegate respondsToSelector:@selector(websocket:connectionStatusDidChange:)]){
 		[self->nr_delegate websocket: self connectionStatusDidChange: s];
@@ -40,11 +43,6 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	self->url = [[NSURL URLWithString: urlString] retain];
 	self->shouldForcePumpOutputStream = NO;
 	[self updateStatus: WebSocketStatusNew];
-	//Fixme we probably need to bound these.
-	self->sendQueue = [[NSMutableArray arrayWithCapacity: 10] retain];
-	self->recieveQueue = [[NSMutableArray arrayWithCapacity: 10] retain];
-	
-	
 
 	//Generate key.
 	//A "Sec-WebSocket-Key" header field with a base64-encoded (see
@@ -72,13 +70,14 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	[self->socketOutputStream removeFromRunLoop: [NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 	NTI_RELEASE(self->socketInputStream);
 	NTI_RELEASE(self->socketOutputStream);
+	[self updateStatus: WebSocketStatusDisconnected];
 }
 
 
 -(void)shutdownAsResultOfError: (NSError*)error
 {
 	NSLog(@"Shutting down as a result of an error! %@", error ? [error localizedDescription] : @"");
-	[self updateStatus: WebSocketStatusError];
+	[self updateStatus: WebSocketStatusDisconnecting];
 	
 	if( [self->nr_delegate performSelector: @selector(websocket:didEncounterError:)] ){
 		[self->nr_delegate websocket: self didEncounterError: error];
@@ -134,8 +133,7 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	if( asString ){
 		toEnqueue = [[[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding] autorelease];
 	}
-	NSLog(@"Enqueueing object %@", toEnqueue);
-	[self->recieveQueue addObject: toEnqueue];
+	[self enqueueRecievedData: toEnqueue];
 	if( [self->nr_delegate respondsToSelector: @selector(websocketDidRecieveData:)] ){
 		[self->nr_delegate websocketDidRecieveData: self];
 	}
@@ -143,12 +141,7 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 
 -(BOOL)dequeueAndSend
 {
-	if( [self->sendQueue count] < 1){
-		return NO;
-	}
-	
-	id data = [self->sendQueue firstObject];
-	[self->sendQueue removeObjectAtIndex: 0];
+	id data = [self dequeueDataForSending];
 	
 	if( !data ){
 		return NO;
@@ -166,7 +159,6 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 		if(![data isKindOfClass: [NSString class]]){
 			string = [NSString stringWithFormat: @"%@", data];
 		}
-		data = [(NSString*)string dataUsingEncoding: NSUTF8StringEncoding];
 	}
 	
 	
@@ -186,7 +178,7 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 		isLong = YES;
 	}
 	else{
-		[self shutdownAsResultOfError: errorWithCodeAndMessage(101, @"64 bit length frame not allowed")];
+		[self shutdownAsResultOfError: errorWithCodeAndMessage(301, @"64 bit length frame not allowed")];
 	}
 	
 	//Client is always masked
@@ -217,24 +209,14 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	return YES;
 }
 
--(void)enqueueData:(id)data
+-(void)enqueueDataForSending:(id)data
 {
-	[self->sendQueue addObject: data];
-	NSLog(@"Enqueueing object %@", data);
+	[super enqueueDataForSending: data];
 	if(self->shouldForcePumpOutputStream){
 		self->shouldForcePumpOutputStream = NO;
 		[self dequeueAndSend];
 	}
 }
-
--(id)dequeueData
-{
-	if([self->recieveQueue count] > 0){
-		return [self->recieveQueue firstObject];
-	}
-	return nil;
-}
-
 
 static NSArray* piecesFromString(NSString* data, NSString* regexString){
 	NSError* error = nil;
@@ -306,7 +288,7 @@ static NSData* hashUsingSHA1(NSData* data)
 	NSData* firstFourData = [NSData dataWithBytes: buf length: 4];
 	NSString* firstFourBytesString = [NSString stringWithData: firstFourData encoding: NSUTF8StringEncoding];
 	if(![firstFourBytesString isEqualToString: @"HTTP"]){
-		[self shutdownAsResultOfError: errorWithCodeAndMessage(101, @"64 bit length frame not allowed")];
+		[self shutdownAsResultOfError: errorWithCodeAndMessage(302, @"64 bit length frame not allowed")];
 	}
 	
 	NSMutableData* data = [NSMutableData dataWithBytes: buf length: 4];
@@ -377,7 +359,6 @@ static NSData* hashUsingSHA1(NSData* data)
 					}
 					//Shut'em down
 					[self shutdownStreams];
-					[self updateStatus: WebSocketStatusDisconnected];
 					
 				}
 				else{ //1000 0001
@@ -422,12 +403,14 @@ static NSData* hashUsingSHA1(NSData* data)
 				self->shouldForcePumpOutputStream = YES;
 				break;
 			case WebSocketStatusConnected:{
+				BOOL didSendData = [self dequeueAndSend];
 				
+				//if we just wrote data we have room for more, otherwise we were empty and we 
+				//have room for more.
 				if( [self->nr_delegate respondsToSelector: @selector(websocketIsReadyForData:)] ){
 					[self->nr_delegate websocketIsReadyForData: self];
 				}
 				
-				BOOL didSendData = [self dequeueAndSend];
 				self->shouldForcePumpOutputStream = !didSendData;
 				break;
 			}
@@ -487,8 +470,6 @@ static NSData* hashUsingSHA1(NSData* data)
 -(void)dealloc
 {
 	NTI_RELEASE(self->key);
-	NTI_RELEASE(self->sendQueue);
-	NTI_RELEASE(self->recieveQueue);
 	NTI_RELEASE(self->url);
 }
 

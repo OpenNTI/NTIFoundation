@@ -157,6 +157,22 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
 	
 }
 
+
++(SocketIOPacket*)packetForMessageWithData: (NSString*)data
+{
+	SocketIOPacket* packet = [[SocketIOPacket alloc] initWithType:SocketIOPacketTypeMessage];
+	packet.data = data;
+	return [packet autorelease];
+}
+
++(SocketIOPacket*)packetForEventWithName: (NSString*)name andArgs: (NSArray*)args
+{
+	SocketIOPacket* packet = [[SocketIOPacket alloc] initWithType:SocketIOPacketTypeMessage];
+	packet.name = name;
+	packet.args = args;
+	return [packet autorelease];
+}
+
 -(id)initWithType: (SocketIOPacketType)theType
 {
     self = [super init];
