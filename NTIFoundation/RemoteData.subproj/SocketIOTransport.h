@@ -24,11 +24,11 @@ typedef NSInteger SocketIOTransportStatus;
 @protocol SocketIOTransportDelegate <NSObject>
 -(void)transport: (SocketIOTransport*)socket connectionStatusDidChange: (SocketIOTransportStatus)status;
 -(void)transport: (SocketIOTransport*)socket didEncounterError: (NSError*)error;
--(void)transportDidRecieveData: (SocketIOTransport*)transport;
+-(void)transport: (SocketIOTransport*)socket didRecievePayload: (NSArray*)payload;
 -(void)transportIsReadyForData: (SocketIOTransport*)transport;
 @end
 
-@interface SocketIOTransport : SendRecieveQueue {
+@interface SocketIOTransport : OFObject {
 	@private
 	NSString* sessionId;
 	NSURL* rootURL;
@@ -38,15 +38,16 @@ typedef NSInteger SocketIOTransportStatus;
 @property (nonatomic, assign) id nr_delegate;
 +(NSString*)name;
 -(id)initWithRootURL: (NSURL*)url andSessionId: (NSString*)sessionId;
+-(void)sendPayload: (NSArray*)payload;
+-(void)sendPacket: (SocketIOPacket*)packet;
 -(void)connect;
 -(void)disconnect;
 -(NSURL*)urlForTransport;
 
 @end
 
-@interface SocketIOWSTransport : SocketIOTransport<WebSocketDelegate>{
+@interface SocketIOWSTransport : SocketIOTransport{
 	@private
-	BOOL shouldForcePumpOutputStream;
 	WebSocket7* socket;
 }
 @end

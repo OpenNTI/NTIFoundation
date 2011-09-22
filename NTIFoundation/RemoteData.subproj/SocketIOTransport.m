@@ -29,6 +29,16 @@
 
 }
 
+-(void)sendPayload:(NSArray*)payload
+{
+	
+}
+
+-(void)sendPacket:(SocketIOPacket *)packet
+{
+	
+}
+
 +(NSString*)name
 {
 	return @"unknown";
@@ -156,64 +166,46 @@
 	}
 	
 	//We have what should be a socket io serialized packet. Turn it into a packet object
-	SocketIOPacket* packet = [SocketIOPacket decodePacketData: dataString];
+	NSArray* payload = nil;
+	@try {
+		payload = [SocketIOPacket decodePayload: dataString];
+	}
+	@catch (NSException *exception) {
+	}
 	
 	//Do we do anything other than tell our delegate?  Do we even tell our delegate?
-	if(!packet)
+	if(!payload)
 	{
 		NSError* error = [self createErrorWithCode: 201 
 										andMessage: 
 						  [NSString stringWithFormat: 
 						   @"Unable to create socket.io packet from string %@", dataString]];
 		[self logAndRaiseError: error];
+		return;
 	}
 	
-	if(![self handlePacket: packet]){
-	
-		[self enqueueRecievedData: packet];
+	NSArray* toPassOn = [payload filteredArrayUsingPredicate: [NSPredicate predicateWithBlock: ^BOOL(id obj, NSDictionary* bindings){
+		return ![self handlePacket: obj];
+	}]];
 	
 		//Now we inform our delegate that we have data
-		if( [self.nr_delegate respondsToSelector: @selector(transportDidRecieveData:)] ){
-			[self.nr_delegate transportDidRecieveData: self];
-		}
+	if( [self.nr_delegate respondsToSelector: @selector(transport:didRecievePayload:)] ){
+		[self.nr_delegate transport: self didRecievePayload: toPassOn];
 	}
+	
 }
 
-//Dequeue a packet to send, serialize it, and pass it down to the socket
--(BOOL)dequeueAndSend
+//For the websocket implementation we just queue this bad boy up for the socket
+-(void)sendPayload:(NSArray*)payload
 {
-	SocketIOPacket* packet = [self dequeueDataForSending];
-	
-	//No data to send?
-	if(!packet)
-	{
-		return NO;
-	}
-	//Serialize this bad boy and pass it on
+	NSString* serializedPayload = [SocketIOPacket encodePayload: payload];
+	[self->socket enqueueDataForSending: serializedPayload];
+}
+
+-(void)sendPacket:(SocketIOPacket *)packet
+{
 	NSString* serializedPacket = [packet encode];
 	[self->socket enqueueDataForSending: serializedPacket];
-	
-	//We we have enqueued data down to the socket so we have room for more
-	if( [self.nr_delegate respondsToSelector: @selector(transportIsReadyForData:)] ){
-		[self.nr_delegate transportIsReadyForData: self];
-	}
-	return YES;
-}
-
-//This is annoying. We don't want to have to deal with this here.  Find a way to abstract it.
--(void)enqueueDataForSending:(id)data
-{
-	[super enqueueDataForSending: data];
-	if(self->shouldForcePumpOutputStream){
-		self->shouldForcePumpOutputStream = NO;
-		[self dequeueAndSend];
-	}
-}
-
--(void)websocketIsReadyForData: (WebSocket7*)socket
-{
-	BOOL didSend = [self dequeueAndSend];
-	self->shouldForcePumpOutputStream = !didSend;
 }
 
 

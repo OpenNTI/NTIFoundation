@@ -90,17 +90,8 @@ static NSArray* implementedTransportClasses()
 	NSLog(@"Recieved an error from the transport %@, %@", t, [error localizedDescription]);
 }
 
--(void)transportDidRecieveData: (SocketIOTransport*)transport
+-(void)handlePacket: (SocketIOPacket*)packet
 {
-	//When the transport has received data we grab the packet and inspect it.
-	//Some things like handshakes, connects, disconnects we will handle.  Others
-	//we shoot on to the delegate
-	SocketIOPacket* packet = [self->transport dequeueRecievedData];
-	if(!packet){
-		NSLog(@"Attempt to dequeueData in transportDidRecieveData resulted in nil object.");
-		return;
-	}
-	
 	switch(packet.type){
 		case SocketIOPacketTypeMessage:{
 			NSLog(@"Recieved message \"%@\"", packet.data);
@@ -122,10 +113,12 @@ static NSArray* implementedTransportClasses()
 	}
 }
 
--(void)transportIsReadyForData: (SocketIOTransport*)transport
+-(void)transport: (SocketIOTransport*)socket didRecievePayload: (NSArray*)payload;
 {
-	//We don't do anything here because we just stuff all the send packets down to
-	//the transport automatically
+	//payload may be an array
+	for(SocketIOPacket* packet in payload){
+		[self handlePacket: packet];
+	}
 }
 
 -(void)initiateHandshake
@@ -243,7 +236,7 @@ static NSArray* implementedTransportClasses()
 -(void)sendPacket: (SocketIOPacket*)packet
 {
 	//What to do if there is no transport
-	[self->transport enqueueDataForSending: packet];
+	[self->transport sendPacket: packet];
 }
 
 #pragma mark handshake downloader delegate

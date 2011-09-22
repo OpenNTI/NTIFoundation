@@ -42,7 +42,7 @@ typedef NSInteger SocketIOSocketStatus;
 @property (nonatomic, assign) id nr_delegate;
 @end
 
-@interface SocketIOSocket : OFObject<SocketIOTransportDelegate>{
+@interface SocketIOSocket : OFObject{
 @private
 	NSURL* url;
 	NSString* username;
