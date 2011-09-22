@@ -37,7 +37,7 @@ typedef NSInteger WebSocketStatus;
 	NSURL* url;
 	id nr_delegate;
 }
-@property (nonatomic, retain) id nr_delegate;
+@property (nonatomic, assign) id nr_delegate;
 @property (nonatomic, readonly) WebSocketStatus status;
 -(id)initWithURL: (NSURL*)url;
 -(void)connect;

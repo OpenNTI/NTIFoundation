@@ -41,7 +41,7 @@ typedef NSInteger SocketIOTransportStatus;
 	id nr_delegate;
 	BOOL shouldForcePumpOutputStream;
 }
-@property (nonatomic, retain) id nr_delegate;
+@property (nonatomic, assign) id nr_delegate;
 -(id)initWithRootURL: (NSURL*)url andSessionId: (NSString*)sessionId;
 -(void)connect;
 -(void)disconnect;

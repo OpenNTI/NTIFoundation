@@ -7,6 +7,28 @@
 //
 
 #import "SocketIOSocket.h"
+#import "NTIAbstractDownloader.h"
+
+@implementation SocketIOHandshakeDownloader
+@synthesize nr_delegate;
+
+-(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+{
+	[super connection: connection didFailWithError: error];
+	if( [self->nr_delegate respondsToSelector: @selector(connection:didFailWithError:)] ){
+		[self->nr_delegate connection: connection didFailWithError: error];
+	}
+}
+
+-(void)connectionDidFinishLoading:(NSURLConnection *)connection
+{
+	[super connectionDidFinishLoading: connection];
+	if( [self->nr_delegate respondsToSelector: @selector(connectionDidFinishLoading:)] ){
+		[self->nr_delegate connectionDidFinishLoading: connection];
+	}
+}
+
+@end
 
 NSString* const SocketIOResource = @"socket.io";
 NSString* const SocketIOProtocol = @"1";
@@ -105,10 +127,7 @@ NSString* const SocketIOProtocol = @"1";
 	//The handshake/negotiation begins with a POST to
 	//$BASEURL/Resource/Protocol/ to retrieve timeout info
 	//along with a session id and a list of supported transports
-	NSURL* handshakeURL = [self->url URLByAppendingPathComponent: 
-						   [NSString stringWithFormat: @"%@/%@/", SocketIOResource, SocketIOProtocol]];
-	
-	NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL: handshakeURL];
+	NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL: self->url];
 	[request setHTTPMethod: @"POST"];
 	
 	//While we use Basic auth, we can save ourselves a roundtrip to the
@@ -117,20 +136,73 @@ NSString* const SocketIOProtocol = @"1";
 					   dataUsingEncoding: NSUTF8StringEncoding] base64String];
 	[request setValue: [NSString stringWithFormat: @"Basic %@", auth] forHTTPHeaderField: @"Authorization"];
 	
+	
+	self->handshakeDownloader = [[SocketIOHandshakeDownloader alloc] 
+								 initWithUsername: self->username password: self->password];
+	self->handshakeDownloader.nr_delegate = self;
 	//Use timeout?
-	NSURLConnection* connection = [NSURLConnection connectionWithRequest: request delegate: self];
+	NSURLConnection* connection = [NSURLConnection connectionWithRequest: request delegate: self->handshakeDownloader];
 	[connection start];
-								   
 								   
 }
 
--(void)parseHandshakeResponse: (NSData*)responseBody
+-(NSError*)createErrorWithCode: (NSInteger)code andMessage: (NSString*)message
 {
-	NSString* responseString = [NSString stringWithData: responseBody encoding: NSUTF8StringEncoding];
-	NSArray* parts = [responseString componentsSeparatedByString: @":"];
+	NSDictionary* userData = [NSDictionary dictionaryWithObject: message forKey: NSLocalizedDescriptionKey];
+	
+	return [NSError errorWithDomain: @"Socket.IO" code: code userInfo: userData];
+}
+
+-(void)logAndRaiseError: (NSError*)error
+{
+	NSLog(@"%@", [error localizedDescription]);
+	if([self->nr_delegate respondsToSelector:@selector(socket:didEncounterError:)]){
+		[self->nr_delegate socket: self didEncounterError: error];
+	}
+}
+
+-(BOOL)transportSupported: (NSString*)transportName
+{
+	for(NSString* serverTrans in self->serverSupportedTransports){
+		if( [serverTrans isEqualToString: transportName] ){
+			return YES;
+		}
+	}
+	return NO;
+}
+
+-(void)findAndStartTransport
+{
+	//Need a registry for this
+	NSDictionary* ourTransports = [NSDictionary dictionaryWithObject: [SocketIOWSTransport class] forKey: @"websocket"];
+	
+	//We know what transport is best for us.
+	for(NSString* key in [ourTransports allKeys])
+	{
+		if( [self transportSupported: key] ){
+			NSLog(@"Will use transport %@", key);
+			[self->transport release];
+			self->transport = [[[ourTransports objectForKey: key] alloc] initWithRootURL: self->url andSessionId: self->sessionId];
+			self->transport.nr_delegate = self;
+			[self->transport connect];
+			return;
+		}
+	}
+	
+	NSError* error = [self createErrorWithCode: 103 
+									andMessage: [NSString stringWithFormat: @"Unable to find suitable transport.  Server supports %@. We support %@", self->serverSupportedTransports, [ourTransports allKeys]]];
+	[self logAndRaiseError: error];
+}
+
+-(void)parseHandshakeResponse: (NSString*)responseBody
+{
+	NSArray* parts = [responseBody componentsSeparatedByString: @":"];
 	
 	if( [parts count] != 4){
-		[NSException raise: @"Bad handshake" reason: [NSString stringWithFormat: @"Expected 4 parts in response but got %@", parts]];
+		NSError* error = [self createErrorWithCode: 100 
+										andMessage: [NSString stringWithFormat: @"Expected 4 parts but got %@", parts]];
+		[self logAndRaiseError: error];
+		[self updateStatus: SocketIOSocketStatusDisconnected];
 	}
 	
 	NSString* sessionID = [[parts firstObject] retain];
@@ -144,7 +216,8 @@ NSString* const SocketIOProtocol = @"1";
 	[self->serverSupportedTransports release];
 	self->serverSupportedTransports = transports;
 	
-	//Find a transport from the list that works for us and open it
+	//Find and start transport
+	[self findAndStartTransport];
 }
 
 -(void)sendPacket: (SocketIOPacket*)packet
@@ -153,17 +226,37 @@ NSString* const SocketIOProtocol = @"1";
 	[self->transport enqueueDataForSending: packet];
 }
 
+#pragma mark handshake downloader delegate
+-(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+{
+	if( [self->nr_delegate respondsToSelector: @selector(socket:didEncounterError:)] ){
+		[self->nr_delegate socket: self didEncounterError: error];
+	}
+	[self updateStatus: SocketIOSocketStatusDisconnected];
+	[self->handshakeDownloader release];
+}
+
+-(void)connectionDidFinishLoading:(NSURLConnection *)connection
+{
+	NSString* dataString = [self->handshakeDownloader stringFromData];
+	
+	if(!dataString){
+		NSError* error = [self createErrorWithCode: 101 
+										andMessage: @"No response data from handshake"];
+		[self logAndRaiseError: error];
+		[self updateStatus: SocketIOSocketStatusDisconnected];
+	}
+	[self parseHandshakeResponse: dataString];
+	[self->handshakeDownloader release];
+}
+
 -(void)connect
 {
 	if(self->transport){
 		return;
 	}
 	
-	self->transport = [[SocketIOWSTransport alloc] initWithRootURL: self->url 
-															andSessionId: @"609076794624"];
-	self->transport.nr_delegate = self;
-	[self->transport connect];
-	
+	[self initiateHandshake];
 }
 
 -(void)disconnect
@@ -173,6 +266,7 @@ NSString* const SocketIOProtocol = @"1";
 
 -(void)dealloc
 {
+	NTI_RELEASE(self->handshakeDownloader);
 	NTI_RELEASE(self->transport);
 	NTI_RELEASE(self->serverSupportedTransports);
 	NTI_RELEASE(self->username);

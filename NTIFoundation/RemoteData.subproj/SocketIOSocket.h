@@ -9,6 +9,7 @@
 #import <OmniFoundation/OmniFoundation.h>
 #import "SocketIOPacket.h"
 #import "SocketIOTransport.h"
+#import "NTIAbstractDownloader.h"
 
 extern NSString* const SocketIOResource;
 extern NSString* const SocketIOProtocol;
@@ -30,6 +31,13 @@ typedef NSInteger SocketIOSocketStatus;
 -(void)socket:(SocketIOSocket *)socket didRecieveEventNamed: (NSString *)name withArgs: (NSArray*)args;
 @end
 
+@interface SocketIOHandshakeDownloader : NTIBufferedDownloader {
+@private
+    id nr_delegate;
+}
+@property (nonatomic, assign) id nr_delegate;
+@end
+
 @interface SocketIOSocket : OFObject<SocketIOTransportDelegate>{
 @private
 	NSURL* url;
@@ -42,8 +50,9 @@ typedef NSInteger SocketIOSocketStatus;
 	SocketIOSocketStatus status;
 	SocketIOWSTransport* transport;
 	id nr_delegate;
+	SocketIOHandshakeDownloader* handshakeDownloader;
 }
-@property (nonatomic, retain) id nr_delegate;
+@property (nonatomic, assign) id nr_delegate;
 -(id)initWithURL: (NSURL *)url andName: (NSString*)name andPassword: (NSString*)pwd;
 -(void)connect;
 //Sends the packet via the selected transport or buffers it for transmission
