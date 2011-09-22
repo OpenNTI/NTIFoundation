@@ -18,16 +18,17 @@
 	
 	NSMutableString* json = [NSMutableString stringWithCapacity: 20];
 	[json appendString: @"["];
+	
+	NSMutableArray* serializedObjects = [NSMutableArray arrayWithCapacity: [self count]];
 	for( id friend in self ) {
 		if( [friend respondsToSelector: _cmd] ) {
-			//TODO: Escaping quotes, etc.
-			friend = [friend stringWithJsonRepresentation];
-			[json appendFormat: @" %@, ", friend];
+			[serializedObjects addObject: [friend stringWithJsonRepresentation]];
 		}
 		else {
-			[json appendFormat: @" \"%@\", ", friend];
+			[serializedObjects addObject: [NSString stringWithFormat:@"\"%@\"", friend]];
 		}
 	}
+	[json appendString: [serializedObjects componentsJoinedByComma]];
 	//JSON allows a trailing comma in arrays
 	[json appendString: @"]"];
 	return json;

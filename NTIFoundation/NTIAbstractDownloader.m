@@ -146,6 +146,11 @@
 	return result;
 }
 
+-(NSString*)stringFromData
+{
+	return [NSString stringWithData: dataBuffer encoding: NSUTF8StringEncoding];
+}
+
 -(void)dealloc
 {
 	[dataBuffer release];

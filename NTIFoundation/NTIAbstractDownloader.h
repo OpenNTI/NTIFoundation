@@ -65,6 +65,11 @@
  */
 -(id)objectFromData;
 
+/**
+ * After the download has completed this can retreive the databuffer as a string
+ * in utf-8 encoding
+ */
+-(NSString*)stringFromData;
 
 @end
 
