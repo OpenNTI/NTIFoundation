@@ -29,20 +29,24 @@ typedef NSInteger SocketIOTransportStatus;
 @end
 
 @interface SocketIOTransport : SendRecieveQueue {
+	@private
+	NSString* sessionId;
+	NSURL* rootURL;
+	SocketIOTransportStatus status;
+	id nr_delegate;
 }
+@property (nonatomic, assign) id nr_delegate;
++(NSString*)name;
+-(id)initWithRootURL: (NSURL*)url andSessionId: (NSString*)sessionId;
+-(void)connect;
+-(void)disconnect;
+-(NSURL*)urlForTransport;
+
 @end
 
 @interface SocketIOWSTransport : SocketIOTransport<WebSocketDelegate>{
 	@private
-	NSString* sessionid;
-	NSURL* rootURL;
-	SocketIOTransportStatus status;
-	WebSocket7* socket;
-	id nr_delegate;
 	BOOL shouldForcePumpOutputStream;
+	WebSocket7* socket;
 }
-@property (nonatomic, assign) id nr_delegate;
--(id)initWithRootURL: (NSURL*)url andSessionId: (NSString*)sessionId;
--(void)connect;
--(void)disconnect;
 @end

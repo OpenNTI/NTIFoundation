@@ -33,8 +33,13 @@
 NSString* const SocketIOResource = @"socket.io";
 NSString* const SocketIOProtocol = @"1";
 
+static NSArray* implementedTransportClasses()
+{
+	return [NSArray arrayWithObjects: [SocketIOWSTransport class], nil];
+}
+
 @implementation SocketIOSocket
-@synthesize nr_delegate;
+@synthesize nr_statusDelegate, nr_recieverDelegate;
 
 -(id)initWithURL: (NSURL *)u andName: (NSString*)name andPassword: (NSString*)pwd
 {
@@ -52,11 +57,12 @@ NSString* const SocketIOProtocol = @"1";
 	}
 	self->status = s;
 	
-	if([self->nr_delegate respondsToSelector:@selector(transport:connectionStatusDidChange:)]){
-		[self->nr_delegate socket: self connectionStatusDidChange: s];
+	if([self->nr_statusDelegate respondsToSelector:@selector(transport:connectionStatusDidChange:)]){
+		[self->nr_statusDelegate socket: self connectionStatusDidChange: s];
 	}
 	
-	//If we are now connected we go ahead and send our auth data
+	//If we are now connected we go ahead and send our auth data. We wont really do this but we don't have a socketiosocket delegate
+	//yet and this is a quick way to test.
 	if(self->status == SocketIOSocketStatusConnected){
 		[self sendPacket: [SocketIOPacket packetForEventWithName: @"message" 
 														 andArgs: [NSArray arrayWithObjects: self->username, self->password, nil]]];
@@ -98,15 +104,15 @@ NSString* const SocketIOProtocol = @"1";
 	switch(packet.type){
 		case SocketIOPacketTypeMessage:{
 			NSLog(@"Recieved message \"%@\"", packet.data);
-			if([self->nr_delegate respondsToSelector:@selector(socket:didRecieveMessage:)]){
-				[self->nr_delegate socket: self didRecieveMessage: packet.data];
+			if([self->nr_recieverDelegate respondsToSelector:@selector(socket:didRecieveMessage:)]){
+				[self->nr_recieverDelegate socket: self didRecieveMessage: packet.data];
 			}
 			break;
 		}
 		case SocketIOPacketTypeEvent:{
 			NSLog(@"Recieved event \"%@(%@)\"", packet.name, packet.args);
-			if([self->nr_delegate respondsToSelector:@selector(socket:didRecieveEventNamed:withArgs:)]){
-				[self->nr_delegate socket: self didRecieveEventNamed: packet.name withArgs: packet.args];
+			if([self->nr_recieverDelegate respondsToSelector:@selector(socket:didRecieveEventNamed:withArgs:)]){
+				[self->nr_recieverDelegate socket: self didRecieveEventNamed: packet.name withArgs: packet.args];
 			}
 			break;
 		}
@@ -156,8 +162,8 @@ NSString* const SocketIOProtocol = @"1";
 -(void)logAndRaiseError: (NSError*)error
 {
 	NSLog(@"%@", [error localizedDescription]);
-	if([self->nr_delegate respondsToSelector:@selector(socket:didEncounterError:)]){
-		[self->nr_delegate socket: self didEncounterError: error];
+	if([self->nr_statusDelegate respondsToSelector:@selector(socket:didEncounterError:)]){
+		[self->nr_statusDelegate socket: self didEncounterError: error];
 	}
 }
 
@@ -171,27 +177,40 @@ NSString* const SocketIOProtocol = @"1";
 	return NO;
 }
 
--(void)findAndStartTransport
+-(Class)findTransportExcluding: (NSArray*)toExcludeName
 {
-	//Need a registry for this
-	NSDictionary* ourTransports = [NSDictionary dictionaryWithObject: [SocketIOWSTransport class] forKey: @"websocket"];
-	
-	//We know what transport is best for us.
-	for(NSString* key in [ourTransports allKeys])
-	{
-		if( [self transportSupported: key] ){
-			NSLog(@"Will use transport %@", key);
-			[self->transport release];
-			self->transport = [[[ourTransports objectForKey: key] alloc] initWithRootURL: self->url andSessionId: self->sessionId];
-			self->transport.nr_delegate = self;
-			[self->transport connect];
-			return;
+	if(!toExcludeName){
+		toExcludeName = [NSArray array];
+	}
+	//Right now our hueristics is simple.  We awesome our list of
+	//implemented classes is in priority order.  we find the first one that is
+	//implemented by the server but not in our toExcludeName list
+	for(Class transportClass in implementedTransportClasses()){
+		NSString* tName = [transportClass name];
+		if( [self->serverSupportedTransports containsObject: tName] && ![toExcludeName containsObject: tName] ){
+			return transportClass;
 		}
 	}
+	return nil;
+}
+
+-(void)findAndStartTransport
+{
+	Class transportClass = [self findTransportExcluding: nil];
 	
-	NSError* error = [self createErrorWithCode: 103 
-									andMessage: [NSString stringWithFormat: @"Unable to find suitable transport.  Server supports %@. We support %@", self->serverSupportedTransports, [ourTransports allKeys]]];
-	[self logAndRaiseError: error];
+	if(!transportClass){
+		NSError* error = [self createErrorWithCode: 103 
+										andMessage: [NSString stringWithFormat: @"Unable to find suitable transport.  Server supports %@. Our options were %@", 
+													 self->serverSupportedTransports, implementedTransportClasses()]];
+		[self logAndRaiseError: error];
+		return;
+	}
+	
+	NSLog(@"Will use transport %@", [transportClass name]);
+	[self->transport release];
+	self->transport = [[transportClass alloc] initWithRootURL: self->url andSessionId: self->sessionId];
+	self->transport.nr_delegate = self;
+	[self->transport connect];
 }
 
 -(void)parseHandshakeResponse: (NSString*)responseBody
@@ -203,6 +222,7 @@ NSString* const SocketIOProtocol = @"1";
 										andMessage: [NSString stringWithFormat: @"Expected 4 parts but got %@", parts]];
 		[self logAndRaiseError: error];
 		[self updateStatus: SocketIOSocketStatusDisconnected];
+		return;
 	}
 	
 	NSString* sessionID = [[parts firstObject] retain];
@@ -229,8 +249,8 @@ NSString* const SocketIOProtocol = @"1";
 #pragma mark handshake downloader delegate
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
-	if( [self->nr_delegate respondsToSelector: @selector(socket:didEncounterError:)] ){
-		[self->nr_delegate socket: self didEncounterError: error];
+	if( [self->nr_statusDelegate respondsToSelector: @selector(socket:didEncounterError:)] ){
+		[self->nr_statusDelegate socket: self didEncounterError: error];
 	}
 	[self updateStatus: SocketIOSocketStatusDisconnected];
 	[self->handshakeDownloader release];

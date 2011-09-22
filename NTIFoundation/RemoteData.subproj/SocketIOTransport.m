@@ -9,37 +9,43 @@
 #import "SocketIOTransport.h"
 
 @implementation SocketIOTransport
-@end
-
-@implementation SocketIOWSTransport
 @synthesize nr_delegate;
 
 -(id)initWithRootURL: (NSURL*)u andSessionId: (NSString*)sid;
 {
 	self = [super init];
-	self->sessionid = [sid retain];
+	self->sessionId = [sid retain];
 	self->rootURL = [u retain];
 	return self;
 }
 
 -(void)connect
 {
-	if(self->socket)
-	{
-		return;
-	}
-	
-	NSURL* websocketURL = [self->rootURL URLByAppendingPathComponent: 
-						   [NSString stringWithFormat: @"websocket/%@", self->sessionid]];
-	
-	self->socket = [[WebSocket7 alloc] initWithURL: websocketURL];
-	self->socket.nr_delegate = self;
-	[self->socket connect];
+
 }
 
 -(void)disconnect
 {
-	[self->socket disconnect];
+
+}
+
++(NSString*)name
+{
+	return @"unknown";
+}
+
+-(NSURL*)urlForTransport
+{
+	return [self->rootURL URLByAppendingPathComponent: 
+			[NSString stringWithFormat: @"%@/%@", [[self class] name], self->sessionId]];
+}
+
+-(void)logAndRaiseError: (NSError*)error
+{
+	NSLog(@"%@", [error localizedDescription]);
+	if([self.nr_delegate respondsToSelector:@selector(transport:didEncounterError:)]){
+		[self.nr_delegate transport: self didEncounterError: error];
+	}
 }
 
 -(void)updateStatus: (SocketIOTransportStatus)s
@@ -48,6 +54,8 @@
 		return;
 	}
 	self->status = s;
+	
+	NSLog(@"Transport status updated to %ld", s);
 	
 	if([self->nr_delegate respondsToSelector:@selector(transport:connectionStatusDidChange:)]){
 		[self->nr_delegate transport: self connectionStatusDidChange: s];
@@ -61,20 +69,50 @@
 	}
 }
 
--(void)updateStatusFromSocketStatus: (WebSocketStatus)wss
+-(void)dealloc
 {
-	[self updateStatus: (int)wss];
+	NTI_RELEASE(self->sessionId);
+	NTI_RELEASE(self->rootURL);
+	[super dealloc];
+}
+
+@end
+
+@implementation SocketIOWSTransport
+
++(NSString*)name
+{
+	return @"websocket";
+}
+
+-(void)connect
+{
+	if(self->socket)
+	{
+		return;
+	}
+	
+	NSURL* websocketURL = [self urlForTransport];
+	
+	self->socket = [[WebSocket7 alloc] initWithURL: websocketURL];
+	self->socket.nr_delegate = self;
+	[self->socket connect];
+}
+
+-(void)disconnect
+{
+	[self->socket disconnect];
 }
  
 -(void)websocket: (WebSocket7*)socket connectionStatusDidChange: (WebSocketStatus)wss
 {
-	[self updateStatusFromSocketStatus: wss];
+	NSLog(@"Websocket status updated to %ld", wss);
 }
 
 -(void)websocket: (WebSocket7*)socket didEncounterError: (NSError*)error
 {
-	if([self->nr_delegate respondsToSelector:@selector(transport:didEncounterError:)]){
-		[self->nr_delegate transport: self didEncounterError: error];
+	if([self.nr_delegate respondsToSelector:@selector(transport:didEncounterError:)]){
+		[self.nr_delegate transport: self didEncounterError: error];
 	}
 }
 
@@ -85,11 +123,14 @@
 	return [NSError errorWithDomain: @"SocketIOWSTransport" code: code userInfo: userData];
 }
 
--(void)logAndRaiseError: (NSError*)error
+-(BOOL)handlePacket: (SocketIOPacket*)p
 {
-	NSLog(@"%@", [error localizedDescription]);
-	if([self->nr_delegate respondsToSelector:@selector(transport:didEncounterError:)]){
-		[self->nr_delegate transport: self didEncounterError: error];
+	switch(p.type){
+		case SocketIOPacketTypeConnect:
+			[self updateStatus: SocketIOTransportStatusConnected];
+			return YES;
+		default:
+			return NO;
 	}
 }
 
@@ -127,11 +168,14 @@
 		[self logAndRaiseError: error];
 	}
 	
-	[self enqueueRecievedData: packet];
+	if(![self handlePacket: packet]){
 	
-	//Now we inform our delegate that we have data
-	if( [self->nr_delegate respondsToSelector: @selector(transportDidRecieveData:)] ){
-		[self->nr_delegate transportDidRecieveData: self];
+		[self enqueueRecievedData: packet];
+	
+		//Now we inform our delegate that we have data
+		if( [self.nr_delegate respondsToSelector: @selector(transportDidRecieveData:)] ){
+			[self.nr_delegate transportDidRecieveData: self];
+		}
 	}
 }
 
@@ -150,8 +194,8 @@
 	[self->socket enqueueDataForSending: serializedPacket];
 	
 	//We we have enqueued data down to the socket so we have room for more
-	if( [self->nr_delegate respondsToSelector: @selector(transportIsReadyForData:)] ){
-		[self->nr_delegate transportIsReadyForData: self];
+	if( [self.nr_delegate respondsToSelector: @selector(transportIsReadyForData:)] ){
+		[self.nr_delegate transportIsReadyForData: self];
 	}
 	return YES;
 }
@@ -175,8 +219,6 @@
 
 -(void)dealloc
 {
-	NTI_RELEASE(self->sessionid);
-	NTI_RELEASE(self->rootURL);
 	NTI_RELEASE(self->socket);
 	[super dealloc];
 }

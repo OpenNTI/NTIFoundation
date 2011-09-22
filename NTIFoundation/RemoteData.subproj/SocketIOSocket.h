@@ -24,12 +24,16 @@ enum {
 typedef NSInteger SocketIOSocketStatus;
 
 @class SocketIOSocket;
-@protocol SocketIOSocketDelegate <NSObject>
+@protocol SocketIOSocketStatusDelegate <NSObject>
 -(void)socket: (SocketIOSocket*)socket connectionStatusDidChange: (SocketIOSocketStatus)status;
 -(void)socket: (SocketIOSocket*)socket didEncounterError: (NSError*)error;
+@end
+
+@protocol SocketIOSocketRecieverDelegate <NSObject>
 -(void)socket: (SocketIOSocket*)socket didRecieveMessage: (NSString*)message;
 -(void)socket:(SocketIOSocket *)socket didRecieveEventNamed: (NSString *)name withArgs: (NSArray*)args;
 @end
+
 
 @interface SocketIOHandshakeDownloader : NTIBufferedDownloader {
 @private
@@ -49,10 +53,12 @@ typedef NSInteger SocketIOSocketStatus;
 	NSInteger closeTimeout;
 	SocketIOSocketStatus status;
 	SocketIOWSTransport* transport;
-	id nr_delegate;
+	id nr_statusDelegate;
+	id nr_recieverDelegate;
 	SocketIOHandshakeDownloader* handshakeDownloader;
 }
-@property (nonatomic, assign) id nr_delegate;
+@property (nonatomic, assign) id nr_statusDelegate;
+@property (nonatomic, assign) id nr_recieverDelegate;
 -(id)initWithURL: (NSURL *)url andName: (NSString*)name andPassword: (NSString*)pwd;
 -(void)connect;
 //Sends the packet via the selected transport or buffers it for transmission

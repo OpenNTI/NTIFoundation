@@ -1,3 +1,4 @@
+
 //
 //  WebSockets.m
 //  NTIFoundation
@@ -101,15 +102,14 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	uint8_t mask_and_len = 0x00;
 	[self->socketInputStream read: &mask_and_len maxLength: 1];
 	
-	uint8_t client_len = mask_and_len & 0x7F;
+	int client_len = mask_and_len & 0x7F;
 	
 	uint8_t b1;
 	uint8_t b2;
 	if( client_len == 126 ){
 		[self->socketInputStream read: &b1 maxLength: 1];
-		b1 = b1 << 8;
 		[self->socketInputStream read: &b2 maxLength: 1];
-		client_len = b1 | b2;
+		client_len = (b1 << 8) | b2;
 	}
 	else if(client_len == 127){
 		[self shutdownAsResultOfError: errorWithCodeAndMessage(301, @"64 bit length frame not allowed")];
@@ -130,7 +130,7 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	
 	//We must go byte by byte so we can apply the mask if necessary
 	NSMutableData* data = [NSMutableData data];
-	for(NSUInteger i=0; i<client_len; i++){
+	for(NSInteger i=0; i<client_len; i++){
 		uint8_t byte;
 		[self->socketInputStream read: &byte maxLength: 1];
 		byte = byte ^ mask[i%4];
@@ -139,6 +139,7 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	id toEnqueue = data;
 	if( asString ){
 		toEnqueue = [[[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding] autorelease];
+		NSLog(@"Read from socket. %@", toEnqueue);
 	}
 	[self enqueueRecievedData: toEnqueue];
 	if( [self->nr_delegate respondsToSelector: @selector(websocketDidRecieveData:)] ){
@@ -182,14 +183,14 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	}
 	else if([data length] < 0xFFFF){
 		first = 126;
-		second = [data length] & 0xFF00 >> 8;
+		second = ([data length] & 0xFF00) >> 8;
 		third = [data length] & 0xFF;
 		isLong = YES;
 	}
 	else{
 		[self shutdownAsResultOfError: errorWithCodeAndMessage(301, @"64 bit length frame not allowed")];
 	}
-	
+	NSLog(@"About to send data length = %ld", [data length]);
 	//Client is always masked
 	first = first | 0x80;
 	
@@ -356,6 +357,7 @@ static NSData* hashUsingSHA1(NSData* data)
 				[self->socketInputStream read: &firstByte maxLength: 1];
 				
 				if( firstByte & 0x81 ){ //This is text
+					NSLog(@"Reading text frame");
 					[self readAndEnqueue: YES];
 				}
 				else if( firstByte & 0x82 ){ //This is binary
@@ -380,6 +382,12 @@ static NSData* hashUsingSHA1(NSData* data)
 			}
 			default:
 				NSLog(@"Unhandled stream event %@ for stream %@", eventCode, self->socketInputStream);
+		}
+	}
+	else if( eventCode == NSStreamEventEndEncountered ){
+		if(self->status != WebSocketStatusDisconnected){
+			NSLog(@"End of input stream encoutered");
+			[self shutdownStreams];
 		}
 	}
 }
@@ -427,6 +435,12 @@ static NSData* hashUsingSHA1(NSData* data)
 			}
 			default:
 				NSLog(@"Unhandled stream event %@ for stream %@", eventCode, self->socketOutputStream);
+		}
+	}
+	else if( eventCode == NSStreamEventEndEncountered ){
+		if(self->status != WebSocketStatusDisconnected){
+			NSLog(@"End of input stream encoutered");
+			[self shutdownStreams];
 		}
 	}
 }
