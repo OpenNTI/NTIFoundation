@@ -24,20 +24,23 @@
 
 -(id)dequeueDataFromQueue: (NSMutableArray*)queue
 {
-	if([queue count] > 0){
+	NSUInteger count = [queue count];
+	//NSString* queueName = self->sendQueue ? @"sendQueue" : @"revcQueue";
+	if(count > 0){
 		id data = [queue firstObject];
 		[queue removeObjectAtIndex: 0];
-		NSLog(@"Dequeued %@ from %@", data, queue == self->sendQueue ? @"sendQueue" : @"revcQueue");
+		//NSLog(@"%@ dequeued %@ from %@", self, data, queueName);
 		return data;
 	}
-	NSLog(@"No data to dequeue");
+	//NSLog(@"No data to dequeue");
 	return nil;
 }
 
 -(void)enqueueData: (id)data onQueue: (NSMutableArray*)queue
 {
-	NSLog(@"Adding %@ to queue %@", data, queue == self->sendQueue ? @"sendQueue" : @"revcQueue");
 	[queue addObject: data];
+	//NSString* queueName = self->sendQueue ? @"sendQueue" : @"revcQueue";
+	//NSLog(@"%@ Enqueued %@ on %@", self, data, queueName);
 }
 
 -(void)enqueueDataForSending: (id)data

@@ -9,13 +9,14 @@
 #import <OmniFoundation/OmniFoundation.h>
 #import "SendRecieveQueue.h"
 
-typedef enum {
+enum {
 	WebSocketStatusNew,
 	WebSocketStatusConnecting,
 	WebSocketStatusConnected,
 	WebSocketStatusDisconnecting,
 	WebSocketStatusDisconnected
-} WebSocketStatus;
+};
+typedef NSInteger WebSocketStatus;
 
 @class WebSocket7;
 
@@ -36,9 +37,9 @@ typedef enum {
 	NSURL* url;
 	id nr_delegate;
 }
-@property (nonatomic, assign) id nr_delegate;
+@property (nonatomic, retain) id nr_delegate;
 @property (nonatomic, readonly) WebSocketStatus status;
--(id)initWithURLString: (NSString*)url;
+-(id)initWithURL: (NSURL*)url;
 -(void)connect;
 -(void)disconnect;
 @end

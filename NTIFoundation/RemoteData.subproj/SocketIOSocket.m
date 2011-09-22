@@ -12,15 +12,92 @@ NSString* const SocketIOResource = @"socket.io";
 NSString* const SocketIOProtocol = @"1";
 
 @implementation SocketIOSocket
-@synthesize sessionId, heartbeatTimeout, closeTimeout, shouldBuffer;
+@synthesize nr_delegate;
 
--(id)initWithURLString:(NSString *)uStr andName: (NSString*)name andPassword: (NSString*)pwd
+-(id)initWithURL: (NSURL *)u andName: (NSString*)name andPassword: (NSString*)pwd
 {
 	self = [super init];
-	self->url = [[NSURL URLWithString: uStr] retain];
+	self->url = [u retain];
 	self->username = [name retain];
 	self->password = [pwd retain];
 	return self;
+}
+
+-(void)updateStatus: (SocketIOSocketStatus)s
+{
+	if(self->status == s){
+		return;
+	}
+	self->status = s;
+	
+	if([self->nr_delegate respondsToSelector:@selector(transport:connectionStatusDidChange:)]){
+		[self->nr_delegate socket: self connectionStatusDidChange: s];
+	}
+	
+	//If we are now connected we go ahead and send our auth data
+	if(self->status == SocketIOSocketStatusConnected){
+		[self sendPacket: [SocketIOPacket packetForEventWithName: @"message" 
+														 andArgs: [NSArray arrayWithObjects: self->username, self->password, nil]]];
+		[self sendPacket: [SocketIOPacket packetForEventWithName: @"message" 
+														 andArgs: [NSArray arrayWithObjects: @"plist", nil]]];
+		NSDictionary* args = [NSDictionary dictionaryWithObject: [NSArray arrayWithObject: @"chris.utz@nextthought.com"] forKey: @"Occupants"];
+		[self sendPacket: [SocketIOPacket packetForEventWithName: @"chat_enterRoom" andArgs: [NSArray arrayWithObject: args]]];
+	}
+}
+
+-(void)updateStatusFromTransportStatus: (SocketIOTransportStatus)wss
+{
+	[self updateStatus: (int)wss];
+}
+
+#pragma mark Transport delegate
+-(void)transport:(SocketIOTransport *)t connectionStatusDidChange:(SocketIOTransportStatus)s
+{
+	[self updateStatusFromTransportStatus: s];
+}
+
+-(void)transport: (SocketIOTransport*)t didEncounterError: (NSError*)error
+{
+	//We will handle most errors at this layer
+	NSLog(@"Recieved an error from the transport %@, %@", t, [error localizedDescription]);
+}
+
+-(void)transportDidRecieveData: (SocketIOTransport*)transport
+{
+	//When the transport has received data we grab the packet and inspect it.
+	//Some things like handshakes, connects, disconnects we will handle.  Others
+	//we shoot on to the delegate
+	SocketIOPacket* packet = [self->transport dequeueRecievedData];
+	if(!packet){
+		NSLog(@"Attempt to dequeueData in transportDidRecieveData resulted in nil object.");
+		return;
+	}
+	
+	switch(packet.type){
+		case SocketIOPacketTypeMessage:{
+			NSLog(@"Recieved message \"%@\"", packet.data);
+			if([self->nr_delegate respondsToSelector:@selector(socket:didRecieveMessage:)]){
+				[self->nr_delegate socket: self didRecieveMessage: packet.data];
+			}
+			break;
+		}
+		case SocketIOPacketTypeEvent:{
+			NSLog(@"Recieved event \"%@(%@)\"", packet.name, packet.args);
+			if([self->nr_delegate respondsToSelector:@selector(socket:didRecieveEventNamed:withArgs:)]){
+				[self->nr_delegate socket: self didRecieveEventNamed: packet.name withArgs: packet.args];
+			}
+			break;
+		}
+		default:
+			NSLog(@"Recieved an unhandled packet of type %ld with encoding %@", packet.type, [packet encode]);
+			break;
+	}
+}
+
+-(void)transportIsReadyForData: (SocketIOTransport*)transport
+{
+	//We don't do anything here because we just stuff all the send packets down to
+	//the transport automatically
 }
 
 -(void)initiateHandshake
@@ -70,35 +147,37 @@ NSString* const SocketIOProtocol = @"1";
 	//Find a transport from the list that works for us and open it
 }
 
+-(void)sendPacket: (SocketIOPacket*)packet
+{
+	//What to do if there is no transport
+	[self->transport enqueueDataForSending: packet];
+}
+
 -(void)connect
 {
+	if(self->transport){
+		return;
+	}
 	
+	self->transport = [[SocketIOWSTransport alloc] initWithRootURL: self->url 
+															andSessionId: @"609076794624"];
+	self->transport.nr_delegate = self;
+	[self->transport connect];
 	
 }
 
 -(void)disconnect
 {
-	
-}
-
--(void)sendPacket:(SocketIOPacket *)packet
-{
-	
-}
-
--(void)setShouldBuffer: (BOOL)willBuffer
-{
-	self->shouldBuffer = willBuffer;
+	[self->transport disconnect];
 }
 
 -(void)dealloc
 {
+	NTI_RELEASE(self->transport);
 	NTI_RELEASE(self->serverSupportedTransports);
 	NTI_RELEASE(self->username);
 	NTI_RELEASE(self->password);
 	NTI_RELEASE(self->url);
-	NTI_RELEASE(self->namespaces);
-	NTI_RELEASE(self->buffer);
 	NTI_RELEASE(self->sessionId);
 	[super dealloc];
 }

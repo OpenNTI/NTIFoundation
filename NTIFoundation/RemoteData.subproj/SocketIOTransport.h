@@ -10,13 +10,14 @@
 #import "WebSockets.h"
 #import "SocketIOPacket.h"
 
-typedef enum {
+enum {
 	SocketIOTransportStatusNew,
 	SocketIOTransportStatusConnecting,
 	SocketIOTransportStatusConnected,
 	SocketIOTransportStatusDisconnecting,
 	SocketIOTransportStatusDisconnected
-} SocketIOTransportStatus;
+}; 
+typedef NSInteger SocketIOTransportStatus;
 
 @class SocketIOTransport;
 
@@ -33,12 +34,15 @@ typedef enum {
 
 @interface SocketIOWSTransport : SocketIOTransport<WebSocketDelegate>{
 	@private
+	NSString* sessionid;
+	NSURL* rootURL;
 	SocketIOTransportStatus status;
 	WebSocket7* socket;
 	id nr_delegate;
 	BOOL shouldForcePumpOutputStream;
 }
-@property (nonatomic, assign) id nr_delegate;
-@property (nonatomic, readonly) NSString* name;
-
+@property (nonatomic, retain) id nr_delegate;
+-(id)initWithRootURL: (NSURL*)url andSessionId: (NSString*)sessionId;
+-(void)connect;
+-(void)disconnect;
 @end

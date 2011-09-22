@@ -8,45 +8,43 @@
 
 #import <OmniFoundation/OmniFoundation.h>
 #import "SocketIOPacket.h"
+#import "SocketIOTransport.h"
 
 extern NSString* const SocketIOResource;
 extern NSString* const SocketIOProtocol;
-extern NSArray* const SocketIOTransports;
 
-typedef enum {
+enum {
+	SocketIOSocketStatusNew,
 	SocketIOSocketStatusConnecting,
 	SocketIOSocketStatusConnected,
 	SocketIOSocketStatusDisconnecting,
 	SocketIOSocketStatusDisconnected
-} SocketIOSocketStatus;
+};
+typedef NSInteger SocketIOSocketStatus;
 
 @class SocketIOSocket;
 @protocol SocketIOSocketDelegate <NSObject>
 -(void)socket: (SocketIOSocket*)socket connectionStatusDidChange: (SocketIOSocketStatus)status;
 -(void)socket: (SocketIOSocket*)socket didEncounterError: (NSError*)error;
--(void)socketDidRecieveData: (SocketIOSocket*)socket;
--(void)socketIsReadyForData: (SocketIOSocket*)socket;
+-(void)socket: (SocketIOSocket*)socket didRecieveMessage: (NSString*)message;
+-(void)socket:(SocketIOSocket *)socket didRecieveEventNamed: (NSString *)name withArgs: (NSArray*)args;
 @end
 
-@interface SocketIOSocket : OFObject{
+@interface SocketIOSocket : OFObject<SocketIOTransportDelegate>{
 @private
 	NSURL* url;
 	NSString* username;
 	NSString* password;
 	NSString* sessionId;
 	NSInteger heartbeatTimeout;
-	NSInteger closeTimeout;
-	BOOL shouldBuffer;
-	NSMutableArray* buffer;
-	NSMutableDictionary* namespaces;
-	SocketIOSocketStatus status;
 	NSArray* serverSupportedTransports;
+	NSInteger closeTimeout;
+	SocketIOSocketStatus status;
+	SocketIOWSTransport* transport;
+	id nr_delegate;
 }
-@property (nonatomic, readonly) NSString* sessionId;
-@property (nonatomic, readonly) NSInteger heartbeatTimeout;
-@property (nonatomic, readonly) NSInteger closeTimeout;
-@property (nonatomic, assign) BOOL shouldBuffer;
--(id)initWithURLString:(NSString *)uStr andName: (NSString*)name andPassword: (NSString*)pwd;
+@property (nonatomic, retain) id nr_delegate;
+-(id)initWithURL: (NSURL *)url andName: (NSString*)name andPassword: (NSString*)pwd;
 -(void)connect;
 //Sends the packet via the selected transport or buffers it for transmission
 -(void)sendPacket: (SocketIOPacket*)packet;

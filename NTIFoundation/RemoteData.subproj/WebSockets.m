@@ -35,12 +35,19 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	if([self->nr_delegate respondsToSelector:@selector(websocket:connectionStatusDidChange:)]){
 		[self->nr_delegate websocket: self connectionStatusDidChange: s];
 	}
+	
+	if(self->status == WebSocketStatusConnected && self->shouldForcePumpOutputStream){
+		if( [self->nr_delegate respondsToSelector: @selector(websocketIsReadyForData:)] ){
+			[self->nr_delegate websocketIsReadyForData: self];
+		}
+	}
+	
 }
 
--(id)initWithURLString:(NSString *)urlString
+-(id)initWithURL: (NSURL *)u
 {
 	self = [super init];
-	self->url = [[NSURL URLWithString: urlString] retain];
+	self->url = [u retain];
 	self->shouldForcePumpOutputStream = NO;
 	[self updateStatus: WebSocketStatusNew];
 
@@ -105,7 +112,7 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 		client_len = b1 | b2;
 	}
 	else if(client_len == 127){
-		[self shutdownAsResultOfError: [NSString stringWithFormat: @"64 bit length frame not allowed"]];
+		[self shutdownAsResultOfError: errorWithCodeAndMessage(301, @"64 bit length frame not allowed")];
 	}
 	
 	//The server doesn't have to send a masking key
@@ -139,12 +146,13 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	}
 }
 
--(BOOL)dequeueAndSend
+-(void)dequeueAndSend
 {
 	id data = [self dequeueDataForSending];
 	
 	if( !data ){
-		return NO;
+		self->shouldForcePumpOutputStream = YES;
+		return;
 	}
 	
 	if( !([data isKindOfClass: [NSData class]] || [data isKindOfClass: [NSString class]] )){
@@ -155,12 +163,13 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	if( ![data isKindOfClass: [NSData class]] ){
 		//We will go as string
 		flag_and_opcode = flag_and_opcode+1;
-		NSString* string = data;
 		if(![data isKindOfClass: [NSString class]]){
-			string = [NSString stringWithFormat: @"%@", data];
+			data = [NSString stringWithFormat: @"%@", data];
 		}
+		data = [data dataUsingEncoding: NSUTF8StringEncoding];
 	}
 	
+	NSLog(@"About to send data %@", [NSString stringWithData: data encoding: NSUTF8StringEncoding]);
 	
 	
 	BOOL isLong=NO;
@@ -195,8 +204,9 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	uint8_t mask[4];
 	for(NSInteger i = 0; i < 4; i++){
 		mask[i] = arc4random() % 128;
-		[self->socketOutputStream write: (const uint8_t*)mask[i] maxLength: 1];
 	}
+	
+	[self->socketOutputStream write: (const uint8_t*)mask maxLength: 4];
 
 	//We must go byte by byte so we can apply the mask
 	for(NSUInteger i=0; i<[data length]; i++){
@@ -206,14 +216,13 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 		[self->socketOutputStream write: &byte maxLength: 1];
 	}
 	
-	return YES;
+	self->shouldForcePumpOutputStream = NO;
 }
 
 -(void)enqueueDataForSending:(id)data
 {
 	[super enqueueDataForSending: data];
 	if(self->shouldForcePumpOutputStream){
-		self->shouldForcePumpOutputStream = NO;
 		[self dequeueAndSend];
 	}
 }
@@ -324,7 +333,9 @@ static NSData* hashUsingSHA1(NSData* data)
 		//FIXM we completely ignore the accept key here
 		[self updateStatus: WebSocketStatusConnected];
 	} else {
-		[self shutdownAsResultOfError: [NSString stringWithFormat: @"Unexpected response for handshake. %@", response]];
+		[self shutdownAsResultOfError: errorWithCodeAndMessage(300, 
+															   [NSString stringWithFormat: 
+																@"Unexpected response for handshake. %@", response])];
 	}
 
 }
@@ -362,7 +373,8 @@ static NSData* hashUsingSHA1(NSData* data)
 					
 				}
 				else{ //1000 0001
-					[self shutdownAsResultOfError: [NSString stringWithFormat: @"Unknown opcode recieved. First byte of frame=%d", firstByte]];
+					[self shutdownAsResultOfError: errorWithCodeAndMessage(305, 
+																		   [NSString stringWithFormat: @"Unknown opcode recieved. First byte of frame=%d", firstByte])];
 				}
 				break;
 			}
@@ -403,7 +415,7 @@ static NSData* hashUsingSHA1(NSData* data)
 				self->shouldForcePumpOutputStream = YES;
 				break;
 			case WebSocketStatusConnected:{
-				BOOL didSendData = [self dequeueAndSend];
+				[self dequeueAndSend];
 				
 				//if we just wrote data we have room for more, otherwise we were empty and we 
 				//have room for more.
@@ -411,7 +423,6 @@ static NSData* hashUsingSHA1(NSData* data)
 					[self->nr_delegate websocketIsReadyForData: self];
 				}
 				
-				self->shouldForcePumpOutputStream = !didSendData;
 				break;
 			}
 			default:

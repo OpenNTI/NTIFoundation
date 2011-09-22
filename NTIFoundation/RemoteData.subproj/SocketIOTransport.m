@@ -14,19 +14,32 @@
 @implementation SocketIOWSTransport
 @synthesize nr_delegate;
 
-- (id)initWith
+-(id)initWithRootURL: (NSURL*)u andSessionId: (NSString*)sid;
 {
-    self = [super init];
-    if (self) {
-        // Initialization code here.
-    }
-    
-    return self;
+	self = [super init];
+	self->sessionid = [sid retain];
+	self->rootURL = [u retain];
+	return self;
 }
 
--(NSString*)name
+-(void)connect
 {
-	return @"websocket";
+	if(self->socket)
+	{
+		return;
+	}
+	
+	NSURL* websocketURL = [self->rootURL URLByAppendingPathComponent: 
+						   [NSString stringWithFormat: @"websocket/%@", self->sessionid]];
+	
+	self->socket = [[WebSocket7 alloc] initWithURL: websocketURL];
+	self->socket.nr_delegate = self;
+	[self->socket connect];
+}
+
+-(void)disconnect
+{
+	[self->socket disconnect];
 }
 
 -(void)updateStatus: (SocketIOTransportStatus)s
@@ -40,9 +53,11 @@
 		[self->nr_delegate transport: self connectionStatusDidChange: s];
 	}
 	
-	//When we move to connected we fire that we are ready for data
-	if([self->nr_delegate respondsToSelector:@selector(transportIsReadyForData:)]){
-		[self->nr_delegate transportIsReadyForData: self];
+	if(self->status == SocketIOTransportStatusConnected){
+		//When we move to connected we fire that we are ready for data
+		if([self->nr_delegate respondsToSelector:@selector(transportIsReadyForData:)]){
+			[self->nr_delegate transportIsReadyForData: self];
+		}
 	}
 }
 
@@ -130,7 +145,6 @@
 	{
 		return NO;
 	}
-	
 	//Serialize this bad boy and pass it on
 	NSString* serializedPacket = [packet encode];
 	[self->socket enqueueDataForSending: serializedPacket];
@@ -139,7 +153,6 @@
 	if( [self->nr_delegate respondsToSelector: @selector(transportIsReadyForData:)] ){
 		[self->nr_delegate transportIsReadyForData: self];
 	}
-
 	return YES;
 }
 
@@ -162,6 +175,9 @@
 
 -(void)dealloc
 {
+	NTI_RELEASE(self->sessionid);
+	NTI_RELEASE(self->rootURL);
+	NTI_RELEASE(self->socket);
 	[super dealloc];
 }
 

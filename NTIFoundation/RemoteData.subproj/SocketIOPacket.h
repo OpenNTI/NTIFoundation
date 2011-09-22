@@ -8,27 +8,30 @@
 
 #import <OmniFoundation/OmniFoundation.h>
 
-typedef enum {
+enum {
 	SocketIOPacketTypeDisconnect = 0,
 	SocketIOPacketTypeConnect = 1,
 	SocketIOPacketTypeHeartbeat = 2,
 	SocketIOPacketTypeMessage = 3,
-	SocketIOPacketTypeJSONMessage = 4,
+	SocketIOPacketTypeObjectMessage = 4,
 	SocketIOPacketTypeEvent = 5,
 	SocketIOPacketTypeAck = 6,
 	SocketIOPacketTypeError = 7,
 	SocketIOPacketTypeNoop = 8
-} SocketIOPacketType;
+};
+typedef NSInteger SocketIOPacketType;
 
-typedef enum {
+enum {
 	SocketIOErrorReasonTransportUnsupported,
 	SocketIOErrorReasonClientNotHandshaken,
 	SocketIOErrorReasonUnauthorized
-} SocketIOErrorReason;
+};
+typedef NSInteger SocketIOErrorReason;
 
-typedef enum {
+enum {
 	SocketIOErrorAdviceReconnect
-} SocketIOErrorAdvice;
+};
+typedef NSInteger SocketIOErrorAdvice;
 
 @interface SocketIOPacket : OFObject{
 	@private
@@ -44,7 +47,7 @@ typedef enum {
 	NSArray* args;
 	NSString* name;
 }
-@property (readonly, assign) SocketIOPacketType type;
+@property (nonatomic, readonly) SocketIOPacketType type;
 @property (nonatomic, retain) NSString* packetId;
 @property (nonatomic, retain) NSString* endpoint;
 @property (nonatomic, retain) NSString* ack;
