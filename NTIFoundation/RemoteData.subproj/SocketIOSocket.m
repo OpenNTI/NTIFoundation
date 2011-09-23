@@ -14,7 +14,7 @@ NSString* const SocketIOProtocol = @"1";
 
 static NSArray* implementedTransportClasses()
 {
-	return [NSArray arrayWithObjects: [SocketIOXHRPollingTransport class], [SocketIOWSTransport class], nil];
+	return [NSArray arrayWithObjects: [SocketIOWSTransport class], [SocketIOXHRPollingTransport class], nil];
 }
 
 @interface SocketIOSocket()
@@ -25,6 +25,23 @@ static NSArray* implementedTransportClasses()
 @implementation SocketIOSocket
 @synthesize nr_statusDelegate, nr_recieverDelegate, heartbeatTimeout;
 
+#pragma mark SocketDelegate
+//we are our own reciever delegate testing
+-(void)socket: (SocketIOSocket*)s didRecieveMessage: (NSString*)message
+{
+	NSLog(@"Recieved message \"%@\"", message);
+}
+
+-(void)chat_enteredRoom: (NSArray*)args
+{
+	NSLog(@"Recieved chat_enteredRoom event with args %@", args);
+}
+
+-(void)socket: (SocketIOSocket*)s didRecieveUnhandledEventNamed: (NSString *)name withArgs: (NSArray*)args
+{
+	NSLog(@"Recieved unhandled event \"%@(%@)\"", name, args);
+}
+
 -(id)initWithURL: (NSURL *)u andName: (NSString*)name andPassword: (NSString*)pwd
 {
 	self = [super init];
@@ -34,6 +51,8 @@ static NSArray* implementedTransportClasses()
 	self->reconnecting = NO;
 	self->buffer = [[NSMutableArray arrayWithCapacity: 5] retain];
 	self->attemptedTransports = [[NSMutableArray arrayWithCapacity: 3] retain];
+	self->status = SocketIOSocketStatusDisconnected;
+	self->nr_recieverDelegate = self;
 	return self;
 }
 
@@ -177,21 +196,33 @@ static NSArray* implementedTransportClasses()
 	NSLog(@"Recieved an error from the transport %@, %@", t, [error localizedDescription]);
 }
 
+-(void)passOnEvent: (SocketIOPacket*)packet
+{
+	//Generator a selector
+	NSString* selectorString = [NSString stringWithStrings: packet.name, @":", nil];
+	
+	SEL eventSel = NSSelectorFromString(selectorString);
+	if( [self->nr_recieverDelegate respondsToSelector: eventSel] ){
+		[self->nr_recieverDelegate performSelector: eventSel withObject: packet.args];
+		return;
+	}
+	
+	if([self->nr_recieverDelegate respondsToSelector: @selector(socket:didRecieveUnhandledEventNamed:withArgs:)]){
+		[self->nr_recieverDelegate socket: self didRecieveUnhandledEventNamed: packet.name withArgs: packet.args];
+	}
+}
+
 -(void)handlePacket: (SocketIOPacket*)packet
 {
 	switch(packet.type){
 		case SocketIOPacketTypeMessage:{
-			NSLog(@"Recieved message \"%@\"", packet.data);
 			if([self->nr_recieverDelegate respondsToSelector:@selector(socket:didRecieveMessage:)]){
 				[self->nr_recieverDelegate socket: self didRecieveMessage: packet.data];
 			}
 			break;
 		}
 		case SocketIOPacketTypeEvent:{
-			NSLog(@"Recieved event \"%@(%@)\"", packet.name, packet.args);
-			if([self->nr_recieverDelegate respondsToSelector:@selector(socket:didRecieveEventNamed:withArgs:)]){
-				[self->nr_recieverDelegate socket: self didRecieveEventNamed: packet.name withArgs: packet.args];
-			}
+			[self passOnEvent: packet];
 			break;
 		}
 		default:

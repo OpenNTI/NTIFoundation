@@ -15,13 +15,12 @@ extern NSString* const SocketIOResource;
 extern NSString* const SocketIOProtocol;
 
 enum {
-	SocketIOSocketStatusNew = 0,
 	SocketIOSocketStatusConnecting = 1,
 	SocketIOSocketStatusConnected = 2,
 	SocketIOSocketStatusDisconnecting = 3,
 	SocketIOSocketStatusDisconnected = 4,
 	SocketIOSocketStatusMax = SocketIOSocketStatusDisconnected,
-	SocketIOSocketStatusMin = SocketIOSocketStatusNew
+	SocketIOSocketStatusMin = SocketIOSocketStatusConnecting
 };
 typedef NSInteger SocketIOSocketStatus;
 
@@ -31,9 +30,12 @@ typedef NSInteger SocketIOSocketStatus;
 -(void)socket: (SocketIOSocket*)socket didEncounterError: (NSError*)error;
 @end
 
+//In addition to the below calls.  We will attempt to generate dynamic selectors for events.
+//For example for the event chat_EnteredRoom we would attempt to call chat_EnteredRoom: (NSArray*)args;
+//If the delegate does not perform the dynamic selector we will give it to didRecieveUnhandledEventNamed: name : args
 @protocol SocketIOSocketRecieverDelegate <NSObject>
--(void)socket: (SocketIOSocket*)socket didRecieveMessage: (NSString*)message;
--(void)socket:(SocketIOSocket *)socket didRecieveEventNamed: (NSString *)name withArgs: (NSArray*)args;
+-(void)socket: (SocketIOSocket*)p didRecieveMessage: (NSString*)message;
+-(void)socket:(SocketIOSocket*)p didRecieveUnhandledEventNamed: (NSString *)name withArgs: (NSArray*)args;
 @end
 
 @interface SocketIOSocket : OFObject{
