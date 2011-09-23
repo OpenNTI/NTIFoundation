@@ -79,6 +79,7 @@
 
 -(BOOL)handlePacket: (SocketIOPacket*)p
 {
+	NSLog(@"Handling packet %@", [p encode]);
 	switch(p.type){
 		case SocketIOPacketTypeConnect:
 			[self updateStatus: SocketIOTransportStatusOpen];
@@ -98,6 +99,7 @@
 -(BOOL)recievedData: (NSData*)data
 {
 	//We have what should be a socket io serialized packet. Turn it into a packet object
+	//NSLog(@"Recieved %@", data);
 	NSArray* payload = nil;
 	@try {
 		payload = [SocketIOPacket decodePayload: data];
@@ -310,7 +312,7 @@
 
 -(void)websocket: (WebSocket7*)socket didEncounterError: (NSError*)error
 {
-	[self. nr_socket transport: self didEncounterError: error];
+	[self.nr_socket transport: self didEncounterError: error];
 }
 
 

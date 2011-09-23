@@ -105,7 +105,7 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	NSLog(@"Shutting down as a result of an error! %@", error ? [error localizedDescription] : @"");
 	[self updateStatus: WebSocketStatusDisconnecting];
 	
-	if( [self->nr_delegate performSelector: @selector(websocket:didEncounterError:)] ){
+	if( [self->nr_delegate respondsToSelector: @selector(websocket:didEncounterError:)] ){
 		[self->nr_delegate websocket: self didEncounterError: error];
 	}
 	
@@ -459,7 +459,7 @@ static NSData* hashUsingSHA1(NSData* data)
 {
 	if( eventCode == NSStreamEventErrorOccurred){
 		NSError *theError = [aStream streamError];
-		NSLog(@"%@ Error: %@ code=%d domain=%@", aStream, [theError localizedDescription], (int)theError.code, theError.domain);
+		NSLog(@"%@ Error: %@ code=%ld domain=%@", aStream, [theError localizedDescription], theError.code, theError.domain);
 		[self shutdownAsResultOfError: theError];
 	}
 

@@ -287,12 +287,14 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
 		return [[payload firstObject] encode];
 	}
 	
-	uint8_t first = 0xff;
-	uint8_t second = 0xfd;
+	uint8_t first = 0xef;
+	uint8_t second = 0xbf;
+	uint8_t thrid = 0xbd;
 	for( SocketIOPacket* part in payload){
 		NSData* packetData = [part encode];
 		[data appendBytes: &first length: 1];
 		[data appendBytes: &second length: 1];
+		[data appendBytes: &thrid length: 1];
 		
 		NSString* lengthString = [NSString stringWithFormat: @"%d", [packetData length]];
 		NSData* lengthData = [lengthString dataUsingEncoding: NSUTF8StringEncoding];
@@ -300,6 +302,7 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
 		
 		[data appendBytes: &first length: 1];
 		[data appendBytes: &second length: 1];
+		[data appendBytes: &thrid length: 1];
 		
 		[data appendData: packetData];
 	}
@@ -309,25 +312,26 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
 
 +(NSArray*)decodePayload: (NSData*)payload
 {
-	
-	uint8_t separator[2];
-	separator[0]=0xff;
-	separator[1]=0xfd;
-	NSData* separatorData = [NSData dataWithBytes: separator length: 2];
+	uint8_t separtorLength = 3;
+	uint8_t separator[separtorLength];
+	separator[0]=0xef;
+	separator[1]=0xbf;
+	separator[2]=0xbd;
+	NSData* separatorData = [NSData dataWithBytes: separator length: separtorLength];
 	
 	//If our payload starts with 0xfffd then its a payload
 	NSUInteger payloadLength = [payload length];
 	
 	NSRange firstSeperator = [payload rangeOfData: separatorData 
 										  options: NSDataSearchAnchored 
-											range: NSMakeRange(0, 2)];
+											range: NSMakeRange(0, separtorLength)];
 	
 	if(firstSeperator.location == 0){
 		NSUInteger location=0;
 		NSMutableArray* packets = [NSMutableArray arrayWithCapacity: 3];
 		do{
 			//Move past the two bytes that are the separator
-			location = location + 2;
+			location = location + separtorLength;
 			
 			NSRange nextSepartor = [payload rangeOfData: separatorData 
 												options: (int)0 
@@ -348,7 +352,7 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
 			location = location + lengthOflengthStringBytes;
 			
 			//Move over the separator
-			location = location + 2;
+			location = location + separtorLength;
 			
 			uint8_t packetBytes[bytesForPayload];
 			[payload getBytes:packetBytes range: NSMakeRange(location, bytesForPayload)];

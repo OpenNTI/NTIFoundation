@@ -66,7 +66,9 @@ static NSArray* implementedTransportClasses()
 
 -(void)startCloseTimer
 {
-	[self clearCloseTimer];
+	if(self->closeTimeoutTimer){
+		return;
+	}
 	NSLog(@"Firing close timeout timer");
 	self->closeTimeoutTimer = [[NSTimer scheduledTimerWithTimeInterval: self->closeTimeout 
 																target: self 
@@ -150,15 +152,6 @@ static NSArray* implementedTransportClasses()
 {
 	NSLog(@"transport %@ changed connection status to  %ld", t, s);
 	
-	//If we are opening the transport and we get anything besided open we are in error.
-	//Fire the disconnect timer and run like hell to open another transport
-	if( self->openingTransport && s != SocketIOTransportStatusOpen ){
-		[self startCloseTimer];
-		[self findAndStartTransport];
-		return;
-	}
-	self->openingTransport = s == SocketIOTransportStatusOpening;
-	
 	if( s == SocketIOTransportStatusOpen ){
 		[self clearCloseTimer];
 		[self setShouldBuffer: NO];
@@ -170,8 +163,10 @@ static NSArray* implementedTransportClasses()
 	}
 	
 	if( s == SocketIOTransportStatusClosed ) {
-		//We really want to try and reconnect the timeout.
+		//If the transport closes we need to try and reconnect
+		//Fire the disconnect timer and run like hell to open another transport
 		[self startCloseTimer];
+		[self findAndStartTransport];
 	}
 		 
 }

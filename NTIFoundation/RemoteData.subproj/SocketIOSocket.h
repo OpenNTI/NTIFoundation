@@ -56,7 +56,6 @@ typedef NSInteger SocketIOSocketStatus;
 	NSTimer* closeTimeoutTimer;
 	NSUInteger reconnectAttempts;
 	NSMutableArray* attemptedTransports;
-	BOOL openingTransport;
 	BOOL forceDisconnect;
 }
 @property (nonatomic, readonly) NSInteger heartbeatTimeout;
