@@ -64,9 +64,9 @@
 		return;
 	}
 	self->status = s;
-	
+#ifdef DEBUG_SOCKETIO
 	NSLog(@"Transport status updated to %ld", s);
-
+#endif
 	[self->nr_socket transport: self connectionStatusDidChange: s];
 }
 
@@ -79,7 +79,9 @@
 
 -(BOOL)handlePacket: (SocketIOPacket*)p
 {
+#ifdef DEBUG_SOCKETIO
 	NSLog(@"Handling packet %@", [p encode]);
+#endif
 	switch(p.type){
 		case SocketIOPacketTypeConnect:
 			[self updateStatus: SocketIOTransportStatusOpen];
@@ -105,6 +107,7 @@
 		payload = [SocketIOPacket decodePayload: data];
 	}
 	@catch (NSException *exception) {
+		NSLog(@"Encountered issue when decoding data %@", exception);
 	}
 	
 	//Do we do anything other than tell our delegate?  Do we even tell our delegate?
@@ -176,7 +179,7 @@
 
 -(void)poll
 {
-	if(self->downloader){
+	if(self->downloader || self.status != SocketIOTransportStatusOpen){
 		return;
 	}
 	//Dequeue data from our buffer
@@ -191,7 +194,9 @@
 	if( [toSend count] > 0 ){
 		method = @"POST";
 		data = [SocketIOPacket encodePayload: toSend];
+#ifdef DEBUG_SOCKETIO
 		NSLog(@"Sending payload %@", data);
+#endif
 	}
 	
 	
@@ -220,6 +225,11 @@
 	NSData* dataBody = [downloader data];
 	[self->downloader release];
 	self->downloader=nil;
+	
+	//If we only poll if we are open.  If we are closed now just have to throw away the data
+	if( self.status == SocketIOTransportStatusClosed ){
+		return;
+	}
 	
 	BOOL opening = self.status == SocketIOTransportStatusOpening;
 	
@@ -302,12 +312,18 @@
 
 -(void)disconnect
 {
+	[self updateStatus: SocketIOTransportStatusClosing];
 	[self->socket disconnect];
 }
  
 -(void)websocket: (WebSocket7*)socket connectionStatusDidChange: (WebSocketStatus)wss
 {
+#ifdef DEBUG_SOCKETIO
 	NSLog(@"Websocket status updated to %ld", wss);
+#endif
+	if( wss == WebSocketStatusDisconnected ){
+		[self updateStatus: SocketIOTransportStatusClosed];
+	}
 }
 
 -(void)websocket: (WebSocket7*)socket didEncounterError: (NSError*)error

@@ -14,7 +14,7 @@ NSString* const SocketIOProtocol = @"1";
 
 static NSArray* implementedTransportClasses()
 {
-	return [NSArray arrayWithObjects: [SocketIOWSTransport class], [SocketIOXHRPollingTransport class], nil];
+	return [NSArray arrayWithObjects: [SocketIOXHRPollingTransport class], [SocketIOWSTransport class], nil];
 }
 
 @interface SocketIOSocket()
@@ -37,6 +37,12 @@ static NSArray* implementedTransportClasses()
 	NSLog(@"Recieved chat_enteredRoom event with args %@", args);
 }
 
+-(void)serverkill: (NSArray*)args
+{
+	NSLog(@"Server asked us to die with reason %@", args);
+	[self disconnect];
+}
+
 -(void)socket: (SocketIOSocket*)s didRecieveUnhandledEventNamed: (NSString *)name withArgs: (NSArray*)args
 {
 	NSLog(@"Recieved unhandled event \"%@(%@)\"", name, args);
@@ -53,6 +59,11 @@ static NSArray* implementedTransportClasses()
 	self->attemptedTransports = [[NSMutableArray arrayWithCapacity: 3] retain];
 	self->status = SocketIOSocketStatusDisconnected;
 	self->nr_recieverDelegate = self;
+	self.shouldBuffer = YES;
+	
+	self->handshakeDownloader = [[NTIDelegatingDownloader alloc] 
+								 initWithUsername: self->username password: self->password];
+	self->handshakeDownloader.nr_delegate = self;
 	return self;
 }
 
@@ -64,13 +75,16 @@ static NSArray* implementedTransportClasses()
 -(void)setShouldBuffer:(BOOL)sb
 {
 	self->shouldBuffer = sb;
-	
+#ifdef DEBUG_SOCKETIO
 	NSLog(@"Will buffer packets? %i", self->shouldBuffer);
+#endif
 	
 	if(!self->shouldBuffer && self->status == SocketIOSocketStatusConnected && 
 	   [self->buffer count] > 0)
 	{
-		NSLog(@"Emptying buffer to tranport");
+#ifdef DEBUG_SOCKETIO
+		NSLog(@"Emptying buffer to tranport %ld packets", [self->buffer count]);
+#endif
 		[self->transport sendPayload: [NSArray arrayWithArray: self->buffer]];
 		[self->buffer removeAllObjects];
 	}
@@ -88,7 +102,9 @@ static NSArray* implementedTransportClasses()
 	if(self->closeTimeoutTimer){
 		return;
 	}
-	NSLog(@"Firing close timeout timer");
+#ifdef DEBUG_SOCKETIO
+	NSLog(@"Scheduling close timeout timer");
+#endif
 	self->closeTimeoutTimer = [[NSTimer scheduledTimerWithTimeInterval: self->closeTimeout 
 																target: self 
 															  selector: @selector(closeTimeoutFired) 
@@ -97,12 +113,28 @@ static NSArray* implementedTransportClasses()
 
 -(void)onConnecting
 {
-	
+	if(self->reconnecting){
+		if( [self->nr_statusDelegate respondsToSelector:@selector(socketIsReconnecting:) ] ){
+			[self->nr_statusDelegate socketIsReconnecting: self];
+		}
+	}
 }
 
 -(void)onConnected
 {
+	if(self->reconnecting){
+		if( [self->nr_statusDelegate respondsToSelector:@selector(socketDidReconnect:) ] ){
+			[self->nr_statusDelegate socketDidReconnect: self];
+		}
+	}
+	else{
+		if( [self->nr_statusDelegate respondsToSelector:@selector(socketDidConnect:) ] ){
+			[self->nr_statusDelegate socketDidConnect: self];
+		}
+	}
+	
 	self->reconnectAttempts = 0;
+	self->reconnecting = NO;
 }
 
 -(void)onDisconnecting
@@ -112,9 +144,44 @@ static NSArray* implementedTransportClasses()
 
 -(void)onDisconnected
 {
+	[self->buffer removeAllObjects];
 	
+	//If we weren't asked to disconnect this was a disconnect
+	//due to a dead transport and a closeTimout.  Try to reconnect the
+	//whole socket if we need to.
+	//TODO a few arbitrary limits here need to be pulled out to options
+	if( !self->forceDisconnect && self->reconnectAttempts < 3 ){
+#ifdef DEBUG_SOCKETIO
+		NSLog(@"Scheduling reconnect timer.");
+#endif 
+		if( [self->nr_statusDelegate respondsToSelector:@selector(socketWillReconnect:) ] ){
+			[self->nr_statusDelegate socketWillReconnect: self];
+		}
+		//According to the docs this is retained by our run loop so we don't need to hold on to it
+		NSTimer* reconnectTimer = [NSTimer scheduledTimerWithTimeInterval: 3 
+																   target: self 
+																 selector: @selector(reconnect) 
+																 userInfo: nil 
+																  repeats: NO];
+		//Appease the compiler
+		[[reconnectTimer retain] release];
+	}
+	else{
+		if(self->forceDisconnect){
+			if( [self->nr_statusDelegate respondsToSelector:@selector(socketDidDisconnect:) ] ){
+				[self->nr_statusDelegate socketDidDisconnect: self];
+			}
+		}
+		else{
+#ifdef DEBUG_SOCKETIO
+			NSLog(@"Maximum number or reconnects exceeded.");
+#endif
+			if( [self->nr_statusDelegate respondsToSelector:@selector(socketDidDisconnectUnexpectedly:) ] ){
+				[self->nr_statusDelegate socketDidDisconnectUnexpectedly: self];
+			}
+		}
+	}
 }
-
 
 -(void)updateStatus: (SocketIOSocketStatus)s
 {
@@ -122,8 +189,9 @@ static NSArray* implementedTransportClasses()
 		return;
 	}
 	self->status = s;
-	
+#ifdef DEBUG_SOCKETIO
 	NSLog(@"Socket status updated to %ld", self->status);
+#endif
 	
 	switch(self->status){
 		case SocketIOSocketStatusConnecting:
@@ -142,10 +210,6 @@ static NSArray* implementedTransportClasses()
 			break;
 	}
 	
-	if([self->nr_statusDelegate respondsToSelector:@selector(transport:connectionStatusDidChange:)]){
-		[self->nr_statusDelegate socket: self connectionStatusDidChange: s];
-	}
-	
 	//If we are now connected we go ahead and send our auth data. We wont really do this but we don't have a socketiosocket delegate
 	//yet and this is a quick way to test.
 	if(self->status == SocketIOSocketStatusConnected){
@@ -162,15 +226,18 @@ static NSArray* implementedTransportClasses()
 
 -(void)closeTimeoutFired
 {
+#ifdef DEBUG_SOCKETIO
 	NSLog(@"Close timeout reached. Disconnecting.");
+#endif
 	[self updateStatus: SocketIOSocketStatusDisconnecting];
 }
 
 #pragma mark Transport delegate
 -(void)transport:(SocketIOTransport *)t connectionStatusDidChange:(SocketIOTransportStatus)s
 {
+#ifdef DEBUG_SOCKETIO
 	NSLog(@"transport %@ changed connection status to  %ld", t, s);
-	
+#endif
 	if( s == SocketIOTransportStatusOpen ){
 		[self clearCloseTimer];
 		[self setShouldBuffer: NO];
@@ -181,11 +248,20 @@ static NSArray* implementedTransportClasses()
 		[self setShouldBuffer: YES];
 	}
 	
+	
 	if( s == SocketIOTransportStatusClosed ) {
-		//If the transport closes we need to try and reconnect
-		//Fire the disconnect timer and run like hell to open another transport
-		[self startCloseTimer];
-		[self findAndStartTransport];
+		//If the transport closes because we are trying to disconnect we just move our self into disconnecting
+		if(self->forceDisconnect){
+			//If this is a force disconnect we will happily ablige.  This means if we try to connect
+			//in what would be the close timeout we will crete a new socketio session anyway
+			[self updateStatus: SocketIOSocketStatusDisconnecting];
+		}
+		else{
+			//If the transport closes but it wasn't from a force we try our hardest not to die.
+			//Fire the disconnect timer and run like hell to open another transport
+			[self startCloseTimer];
+			[self findAndStartTransport];
+		}
 	}
 		 
 }
@@ -225,8 +301,14 @@ static NSArray* implementedTransportClasses()
 			[self passOnEvent: packet];
 			break;
 		}
+		case SocketIOPacketTypeDisconnect:{
+			[self disconnect];
+			break;
+		}
 		default:
+#ifdef DEBUG_SOCKETIO
 			NSLog(@"Recieved an unhandled packet of type %ld with encoding %@", packet.type, [packet encode]);
+#endif
 			break;
 	}
 }
@@ -254,10 +336,6 @@ static NSArray* implementedTransportClasses()
 					   dataUsingEncoding: NSUTF8StringEncoding] base64String];
 	[request setValue: [NSString stringWithFormat: @"Basic %@", auth] forHTTPHeaderField: @"Authorization"];
 	
-	
-	self->handshakeDownloader = [[NTIDelegatingDownloader alloc] 
-								 initWithUsername: self->username password: self->password];
-	self->handshakeDownloader.nr_delegate = self;
 	//Use timeout?
 	NSURLConnection* connection = [NSURLConnection connectionWithRequest: request delegate: self->handshakeDownloader];
 	[connection start];
@@ -312,8 +390,9 @@ static NSArray* implementedTransportClasses()
 	if(self->status != SocketIOSocketStatusConnected){
 		return;
 	}
-	
+#ifdef DEBUG_SOCKETIO
 	NSLog(@"Looking for a transport");
+#endif
 	
 	Class transportClass = [self findTransportExcluding: self->attemptedTransports];
 	
@@ -325,9 +404,11 @@ static NSArray* implementedTransportClasses()
 		//in.
 		[self logAndRaiseError: error];
 		[self updateStatus: SocketIOSocketStatusDisconnecting];
+		return;
 	}
-	
+#ifdef DEBUG_SOCKETIO
 	NSLog(@"Will use transport %@", [transportClass name]);
+#endif
 	[self->attemptedTransports addObject: [transportClass name]];
 	[self->transport release];
 	self->transport = [[transportClass alloc] initWithRootURL: self->url andSessionId: self->sessionId];
@@ -366,8 +447,12 @@ static NSArray* implementedTransportClasses()
 
 -(void)sendPacket: (SocketIOPacket*)packet
 {
-	//What to do if there is no transport
-	if( self->shouldBuffer && self->status == SocketIOSocketStatusConnected){
+	//Do we actually want to buffer if we are connecting?
+	if( self->shouldBuffer && 
+	   (self->status == SocketIOSocketStatusConnected || self->status == SocketIOSocketStatusConnecting)){
+#ifdef DEBUG_SOCKETIO
+		NSLog(@"Buffering packet");
+#endif
 		[self->buffer addObject: packet];
 	}
 	else{
@@ -380,7 +465,6 @@ static NSArray* implementedTransportClasses()
 {
 	[self logAndRaiseError: error];
 	[self updateStatus: SocketIOSocketStatusDisconnected];
-	[self->handshakeDownloader release];
 }
 
 -(void)downloader: (NTIDelegatingDownloader *)d didFinishLoading:(NSURLConnection *)c
@@ -394,30 +478,54 @@ static NSArray* implementedTransportClasses()
 		[self updateStatus: SocketIOSocketStatusDisconnected];
 	}
 	[self parseHandshakeResponse: dataString];
-	[self->handshakeDownloader release];
 }
 
 -(void)connect
 {
-	[self setShouldBuffer: YES];
+#ifdef DEBUG_SOCKETIO
+	NSLog(@"SocketIOSocket initiating connect");
+#endif
+	//We can only connect if we are disconnected
+	if(self->status != SocketIOSocketStatusDisconnected){
+		return;
+	}
+	//We need to reset our forceDisconnect state
 	self->forceDisconnect = NO;
 	[self initiateHandshake];
 }
 
 -(void)disconnect
 {
+	if(self->status != SocketIOSocketStatusConnected){
+		return;
+	}
+	
+#ifdef DEBUG_SOCKETIO
+	NSLog(@"SocketIOSocket initiating disconnect");
+#endif
 	self->forceDisconnect = YES;
-	[self->transport disconnect];
+	
+	//If we have a transport disconnect it
+	if(self->transport){
+		[self->transport disconnect];
+	}
+	else{
+		[self updateStatus: SocketIOSocketStatusDisconnecting];
+	}
 }
 
 -(void)reconnect
 {
-	if(self->reconnectAttempts < 3)
-	{
-		[self connect];
+	if(self->status != SocketIOSocketStatusDisconnected){
+		return;
 	}
-	
+#ifdef DEBUG_SOCKETIO
+	NSLog(@"SocketIOSocket initiating reconnect");
+#endif
+	self->reconnecting = YES;
 	self->reconnectAttempts = self->reconnectAttempts + 1;
+	[self connect];	
+	
 }
 
 -(void)dealloc

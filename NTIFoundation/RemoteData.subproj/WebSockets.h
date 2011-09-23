@@ -54,4 +54,5 @@ typedef NSInteger WebSocketStatus;
 -(id)initWithURL: (NSURL*)url;
 -(void)connect;
 -(void)disconnect;
+-(void)kill;
 @end

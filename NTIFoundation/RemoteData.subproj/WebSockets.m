@@ -180,9 +180,9 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	}
 	
 	NSData* data = wsdata.data;
-	
+#ifdef DEBUG_SOCKETIO
 	NSLog(@"About to send data %@", wsdata);
-	
+#endif
 	
 	BOOL isLong=NO;
 	uint8_t first = 0x00;
@@ -201,7 +201,9 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	else{
 		[self shutdownAsResultOfError: errorWithCodeAndMessage(301, @"64 bit length frame not allowed")];
 	}
+#ifdef DEBUG_SOCKETIO
 	NSLog(@"About to send data length = %ld", [data length]);
+#endif
 	//Client is always masked
 	first = first | 0x80;
 	
@@ -339,7 +341,9 @@ static NSData* hashUsingSHA1(NSData* data)
 	}
 	
 	NSString* response = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+#ifdef DEBUG_SOCKETIO
 	NSLog(@"Handling handshake response %@", response);
+#endif
 	//FIXME actually check the accept field
 	if ([self isSuccessfulHandshakeResponse: response]) {
 		//FIXM we completely ignore the accept key here
@@ -375,12 +379,9 @@ static NSData* hashUsingSHA1(NSData* data)
 				}
 				else if( firstByte & 0x88){ //This is a close
 					//Server initiated the disconnect
-					if(self->status != WebSocketStatusDisconnecting){
-						//send a shutdown echo
-						[self updateStatus: WebSocketStatusDisconnecting];
-						[self->socketOutputStream write: &firstByte maxLength: 1];
-					}
 					//Shut'em down
+					[self updateStatus: WebSocketStatusDisconnecting];
+					[self->socketOutputStream write: &firstByte maxLength: 1];
 					[self shutdownStreams];
 					
 				}
@@ -390,8 +391,21 @@ static NSData* hashUsingSHA1(NSData* data)
 				}
 				break;
 			}
+			case WebSocketStatusDisconnecting:{
+				//Second nibble of first byte is opcode.
+				uint8_t firstByte = 0x00;
+				[self->socketInputStream read: &firstByte maxLength: 1];
+				//We sent a disconnect we are expecting an acknowledgement of that
+				if( firstByte & 0x88){ //This is a close
+					[self shutdownStreams];
+				}
+			}
 			default:
-				NSLog(@"Unhandled stream event %@ for stream %@", eventCode, self->socketInputStream);
+#ifdef DEBUG_SOCKETIO
+				NSLog(@"Unhandled stream event %ld for stream %@ status is %ld", 
+					  eventCode, self->socketInputStream, self->status);
+#endif
+				break;
 		}
 	}
 	else if( eventCode == NSStreamEventEndEncountered ){
@@ -413,7 +427,9 @@ static NSData* hashUsingSHA1(NSData* data)
 							"Sec-WebSocket-Version: 7\r\n\r\n",
 							self->url.path ? self->url.path : @"/",self->url.host,
 							[NSString stringWithFormat: @"http://%@",self->url.host], self->key] ;
+#ifdef DEBUG_SOCKETIO
 	NSLog(@"Initiating handshake with %@", getRequest);
+#endif
 	NSData* data = [getRequest dataUsingEncoding: NSUTF8StringEncoding];
 	[self->socketOutputStream write: [data bytes] maxLength: [data length]];
 	[self updateStatus: WebSocketStatusConnecting];
@@ -444,12 +460,17 @@ static NSData* hashUsingSHA1(NSData* data)
 				break;
 			}
 			default:
-				NSLog(@"Unhandled stream event %@ for stream %@", eventCode, self->socketOutputStream);
+#ifdef DEBUG_SOCKETIO
+				NSLog(@"Unhandled stream event %ld for stream %@", eventCode, self->socketOutputStream);
+#endif
+				break;
 		}
 	}
 	else if( eventCode == NSStreamEventEndEncountered ){
 		if(self->status != WebSocketStatusDisconnected){
-			NSLog(@"End of input stream encoutered");
+#ifdef DEBUG_SOCKETIO
+			NSLog(@"End of output stream encoutered");
+#endif
 			[self shutdownStreams];
 		}
 	}
@@ -497,18 +518,26 @@ static NSData* hashUsingSHA1(NSData* data)
 	{
 		return;
 	}
-	
+#ifdef DEBUG_SOCKETIO
 	NSLog(@"Client initiated disconnect");
+#endif
 	//FIXME Send disconnect handshake.
 	[self updateStatus: WebSocketStatusDisconnecting];
 	uint8_t closeByte = 0x88;
 	[self->socketOutputStream write: &closeByte maxLength: 1];
 }
 
+-(void)kill
+{
+	[self updateStatus: WebSocketStatusDisconnecting];
+	[self shutdownStreams];
+	[self updateStatus: WebSocketStatusDisconnected];
+}
 
 
 -(void)dealloc
 {
+	[self shutdownStreams];
 	NTI_RELEASE(self->key);
 	NTI_RELEASE(self->url);
 }

@@ -26,7 +26,12 @@ typedef NSInteger SocketIOSocketStatus;
 
 @class SocketIOSocket;
 @protocol SocketIOSocketStatusDelegate <NSObject>
--(void)socket: (SocketIOSocket*)socket connectionStatusDidChange: (SocketIOSocketStatus)status;
+-(void)socketDidConnect: (SocketIOSocket*)s;
+-(void)socketDidDisconnect: (SocketIOSocket*)s;
+-(void)socketDidDisconnectUnexpectedly: (SocketIOSocket*)s;
+-(void)socketWillReconnect: (SocketIOSocket*)s;
+-(void)socketIsReconnecting: (SocketIOSocket*)s;
+-(void)socketDidReconnect: (SocketIOSocket*)s;
 -(void)socket: (SocketIOSocket*)socket didEncounterError: (NSError*)error;
 @end
 
@@ -48,7 +53,7 @@ typedef NSInteger SocketIOSocketStatus;
 	NSArray* serverSupportedTransports;
 	NSInteger closeTimeout;
 	SocketIOSocketStatus status;
-	SocketIOWSTransport* transport;
+	SocketIOTransport* transport;
 	id nr_statusDelegate;
 	id nr_recieverDelegate;
 	NTIDelegatingDownloader* handshakeDownloader;

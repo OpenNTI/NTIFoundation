@@ -75,6 +75,13 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
 	NSString* dataString = [NSString stringWithData: data encoding: NSUTF8StringEncoding];
 	NSArray* pieces = piecesFromString(dataString, @"([^:]+):([0-9]+)?(\\+)?:([^:]+)?:?([\\s\\S]*)?");
 	if( !pieces || ![pieces count] > 0){
+		//The spec allows for a simple 0 to be passed back.
+		//FIXME special cased.
+		if( [dataString isEqualToString: @"0"] ){
+			SocketIOPacket* disconnect = [[SocketIOPacket alloc] initWithType: SocketIOPacketTypeDisconnect];
+			return [disconnect autorelease];
+		}
+		
 		//FIXME raise exception here
 		return nil;
 	}
