@@ -10,13 +10,25 @@
 #import "SendRecieveQueue.h"
 
 enum {
-	WebSocketStatusNew,
-	WebSocketStatusConnecting,
-	WebSocketStatusConnected,
-	WebSocketStatusDisconnecting,
-	WebSocketStatusDisconnected
+	WebSocketStatusNew = 0,
+	WebSocketStatusConnecting = 1,
+	WebSocketStatusConnected = 2,
+	WebSocketStatusDisconnecting = 3,
+	WebSocketStatusDisconnected = 4,
+	WebSocketStatusMax = WebSocketStatusDisconnected,
+	WebSocketStatusMin = WebSocketStatusNew
 };
 typedef NSInteger WebSocketStatus;
+
+@interface WebSocketData : OFObject {
+@private
+	NSData* data;
+	BOOL text;
+}
+-(id)initWithData: (NSData*)data isText: (BOOL)t;
+@property (nonatomic, retain) NSData* data;
+@property (nonatomic, assign) BOOL text;
+@end
 
 @class WebSocket7;
 

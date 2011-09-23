@@ -6,6 +6,7 @@
 //  Copyright 2011 NextThought. All rights reserved.
 //
 
+#import <OmniFoundation/OmniFoundation.h>
 #import "SocketIOPacket.h"
 #import "NTIJSON.h"
 #import "NSString-NTIJSON.h"
@@ -69,9 +70,10 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
 }
 
 
-+(SocketIOPacket*)decodePacketData: (NSString*)data;
++(SocketIOPacket*)decodePacketData: (NSData*)data;
 {
-	NSArray* pieces = piecesFromString(data, @"([^:]+):([0-9]+)?(\\+)?:([^:]+)?:?([\\s\\S]*)?");
+	NSString* dataString = [NSString stringWithData: data encoding: NSUTF8StringEncoding];
+	NSArray* pieces = piecesFromString(dataString, @"([^:]+):([0-9]+)?(\\+)?:([^:]+)?:?([\\s\\S]*)?");
 	if( !pieces || ![pieces count] > 0){
 		//FIXME raise exception here
 		return nil;
@@ -157,6 +159,11 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
 	
 }
 
++(SocketIOPacket*)packetForHeartbeat
+{
+	SocketIOPacket* packet = [[SocketIOPacket alloc] initWithType: SocketIOPacketTypeMessage];
+	return [packet autorelease];
+}
 
 +(SocketIOPacket*)packetForMessageWithData: (NSString*)data
 {
@@ -182,13 +189,13 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
     
     return self;
 }
+//
+//-(NSString*)description
+//{
+//	//return [self encode];
+//}
 
--(NSString*)description
-{
-	return [self encode];
-}
-
--(NSString*)encode
+-(NSData*)encode
 {
 	NSString* theId = self.packetId ? self.packetId : @"";
 	NSString* theEndpoint = self.endpoint ? self.endpoint : @"";
@@ -267,45 +274,96 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
 		[toEncode addObject: theData];
 	}
 	
-	return [toEncode componentsJoinedByString: @":"];
+	NSString* string = [toEncode componentsJoinedByString: @":"];
+	
+	return [string dataUsingEncoding: NSUTF8StringEncoding];
 }
 
-+(NSString*)encodePayload: (NSArray*)payload
++(NSData*)encodePayload: (NSArray*)payload
 {
-	NSMutableString* encoded = [NSMutableString stringWithCapacity: 10];
+	NSMutableData* data = [NSMutableData data];
 	
 	if([payload count] == 1){
 		return [[payload firstObject] encode];
 	}
 	
-	for( NSString* part in payload){
-		[encoded appendFormat: @"\ufffd%d\ufffd%@", [part length], part];
+	uint8_t first = 0xff;
+	uint8_t second = 0xfd;
+	for( SocketIOPacket* part in payload){
+		NSData* packetData = [part encode];
+		[data appendBytes: &first length: 1];
+		[data appendBytes: &second length: 1];
+		
+		NSString* lengthString = [NSString stringWithFormat: @"%d", [packetData length]];
+		NSData* lengthData = [lengthString dataUsingEncoding: NSUTF8StringEncoding];
+		[data appendData: lengthData];
+		
+		[data appendBytes: &first length: 1];
+		[data appendBytes: &second length: 1];
+		
+		[data appendData: packetData];
 	}
 	
-	return encoded;
+	return data;
 }
 
-+(NSArray*)decodePayload: (NSString*)payload
++(NSArray*)decodePayload: (NSData*)payload
 {
-	if( [payload characterAtIndex: 0] == '\ufffd'){
-		NSMutableArray* packets = [NSMutableArray arrayWithCapacity: 5];
-		NSMutableString* length = [NSMutableString string];
-		for(NSUInteger i=0; i < [payload length]; i++){
-			if( [payload characterAtIndex: 0] == '\ufffd' ){
-				NSInteger lengthInt = [length integerValue];
-				NSString* packetString = [[payload substringFromIndex: i+1] 
-										  substringToIndex: lengthInt];
-				[packets addObject: [SocketIOPacket decodePayload: packetString]];
-				i += lengthInt + 1;
-				[length setString: @""];
+	
+	uint8_t separator[2];
+	separator[0]=0xff;
+	separator[1]=0xfd;
+	NSData* separatorData = [NSData dataWithBytes: separator length: 2];
+	
+	//If our payload starts with 0xfffd then its a payload
+	NSUInteger payloadLength = [payload length];
+	
+	NSRange firstSeperator = [payload rangeOfData: separatorData 
+										  options: NSDataSearchAnchored 
+											range: NSMakeRange(0, 2)];
+	
+	if(firstSeperator.location == 0){
+		NSUInteger location=0;
+		NSMutableArray* packets = [NSMutableArray arrayWithCapacity: 3];
+		do{
+			//Move past the two bytes that are the separator
+			location = location + 2;
+			
+			NSRange nextSepartor = [payload rangeOfData: separatorData 
+												options: (int)0 
+												  range: NSMakeRange(location, payloadLength - location)];
+			if( nextSepartor.location == NSNotFound ){
+				//Uh oh
+				NSLog(@"Excpected another seperator but found none. Starting at%@ %@", 
+					  payload, location);
+				return nil;
 			}
-			else{
-				[length appendLongCharacter: [length characterAtIndex: i]];
-			}
-		}
-		return packets;
+			//We need to consume from our location to the next separator
+			NSUInteger lengthOflengthStringBytes = nextSepartor.location - location;
+			uint8_t lengthBytes[lengthOflengthStringBytes];
+			[payload getBytes: lengthBytes range: NSMakeRange(location, lengthOflengthStringBytes)];
+			
+			NSUInteger bytesForPayload = [[NSString stringWithData: [NSData dataWithBytes: lengthBytes length: lengthOflengthStringBytes] encoding: NSUTF8StringEncoding] integerValue];
+			
+			location = location + lengthOflengthStringBytes;
+			
+			//Move over the separator
+			location = location + 2;
+			
+			uint8_t packetBytes[bytesForPayload];
+			[payload getBytes:packetBytes range: NSMakeRange(location, bytesForPayload)];
+			
+			[packets addObject: [SocketIOPacket decodePacketData: [NSData dataWithBytes: 
+																   packetBytes length: bytesForPayload]]];
+			
+			location = location + bytesForPayload;
+			
+			
+		}while(location < payloadLength);
 		
-	}else{
+		return packets;
+	}
+	else{
 		return [NSArray arrayWithObject: [SocketIOPacket decodePacketData: payload]];
 	}
 }

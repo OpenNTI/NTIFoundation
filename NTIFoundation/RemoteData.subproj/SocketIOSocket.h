@@ -15,11 +15,13 @@ extern NSString* const SocketIOResource;
 extern NSString* const SocketIOProtocol;
 
 enum {
-	SocketIOSocketStatusNew,
-	SocketIOSocketStatusConnecting,
-	SocketIOSocketStatusConnected,
-	SocketIOSocketStatusDisconnecting,
-	SocketIOSocketStatusDisconnected
+	SocketIOSocketStatusNew = 0,
+	SocketIOSocketStatusConnecting = 1,
+	SocketIOSocketStatusConnected = 2,
+	SocketIOSocketStatusDisconnecting = 3,
+	SocketIOSocketStatusDisconnected = 4,
+	SocketIOSocketStatusMax = SocketIOSocketStatusDisconnected,
+	SocketIOSocketStatusMin = SocketIOSocketStatusNew
 };
 typedef NSInteger SocketIOSocketStatus;
 
@@ -32,14 +34,6 @@ typedef NSInteger SocketIOSocketStatus;
 @protocol SocketIOSocketRecieverDelegate <NSObject>
 -(void)socket: (SocketIOSocket*)socket didRecieveMessage: (NSString*)message;
 -(void)socket:(SocketIOSocket *)socket didRecieveEventNamed: (NSString *)name withArgs: (NSArray*)args;
-@end
-
-
-@interface SocketIOHandshakeDownloader : NTIBufferedDownloader {
-@private
-    id nr_delegate;
-}
-@property (nonatomic, assign) id nr_delegate;
 @end
 
 @interface SocketIOSocket : OFObject{
@@ -55,8 +49,18 @@ typedef NSInteger SocketIOSocketStatus;
 	SocketIOWSTransport* transport;
 	id nr_statusDelegate;
 	id nr_recieverDelegate;
-	SocketIOHandshakeDownloader* handshakeDownloader;
+	NTIDelegatingDownloader* handshakeDownloader;
+	BOOL shouldBuffer;
+	NSMutableArray* buffer;
+	BOOL reconnecting;
+	NSTimer* closeTimeoutTimer;
+	NSUInteger reconnectAttempts;
+	NSMutableArray* attemptedTransports;
+	BOOL openingTransport;
+	BOOL forceDisconnect;
 }
+@property (nonatomic, readonly) NSInteger heartbeatTimeout;
+@property (nonatomic, assign) BOOL shouldBuffer;
 @property (nonatomic, assign) id nr_statusDelegate;
 @property (nonatomic, assign) id nr_recieverDelegate;
 -(id)initWithURL: (NSURL *)url andName: (NSString*)name andPassword: (NSString*)pwd;
@@ -64,5 +68,8 @@ typedef NSInteger SocketIOSocketStatus;
 //Sends the packet via the selected transport or buffers it for transmission
 -(void)sendPacket: (SocketIOPacket*)packet;
 -(void)disconnect;
-
+//Bascially delegat emethods but the socket is the only delegate the transport will need.
+-(void)transport: (SocketIOTransport*)t connectionStatusDidChange: (SocketIOTransportStatus)status;
+-(void)transport: (SocketIOTransport*)t didEncounterError: (NSError*)error;
+-(void)transport: (SocketIOTransport*)t didRecievePayload: (NSArray*)payload;
 @end

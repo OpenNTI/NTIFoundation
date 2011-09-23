@@ -9,33 +9,31 @@
 #import <OmniFoundation/OmniFoundation.h>
 #import "WebSockets.h"
 #import "SocketIOPacket.h"
+#import "NTIAbstractDownloader.h"
+
 
 enum {
-	SocketIOTransportStatusNew,
-	SocketIOTransportStatusConnecting,
-	SocketIOTransportStatusConnected,
-	SocketIOTransportStatusDisconnecting,
-	SocketIOTransportStatusDisconnected
+	SocketIOTransportStatusNew = 0,
+	SocketIOTransportStatusOpening = 1,
+	SocketIOTransportStatusOpen = 2,
+	SocketIOTransportStatusClosing = 3,
+	SocketIOTransportStatusClosed = 4,
+	SocketIOTransportStatusMax = SocketIOTransportStatusClosed,
+	SocketIOTransportStatusMin = SocketIOTransportStatusNew
 }; 
 typedef NSInteger SocketIOTransportStatus;
 
-@class SocketIOTransport;
-
-@protocol SocketIOTransportDelegate <NSObject>
--(void)transport: (SocketIOTransport*)socket connectionStatusDidChange: (SocketIOTransportStatus)status;
--(void)transport: (SocketIOTransport*)socket didEncounterError: (NSError*)error;
--(void)transport: (SocketIOTransport*)socket didRecievePayload: (NSArray*)payload;
--(void)transportIsReadyForData: (SocketIOTransport*)transport;
-@end
+@class SocketIOSocket;
 
 @interface SocketIOTransport : OFObject {
 	@private
 	NSString* sessionId;
 	NSURL* rootURL;
 	SocketIOTransportStatus status;
-	id nr_delegate;
+	SocketIOSocket* nr_socket;
 }
-@property (nonatomic, assign) id nr_delegate;
+@property (nonatomic, assign) SocketIOSocket* nr_socket;
+@property (nonatomic, assign) SocketIOTransportStatus status;
 +(NSString*)name;
 -(id)initWithRootURL: (NSURL*)url andSessionId: (NSString*)sessionId;
 -(void)sendPayload: (NSArray*)payload;
@@ -49,5 +47,13 @@ typedef NSInteger SocketIOTransportStatus;
 @interface SocketIOWSTransport : SocketIOTransport{
 	@private
 	WebSocket7* socket;
+}
+@end
+
+@interface SocketIOXHRPollingTransport : SocketIOTransport{
+@private
+	NTIDelegatingDownloader* downloader;
+	NSTimer* timer;
+	NSMutableArray* sendBuffer;
 }
 @end

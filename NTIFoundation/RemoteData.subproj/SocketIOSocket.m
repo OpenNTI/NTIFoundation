@@ -9,37 +9,21 @@
 #import "SocketIOSocket.h"
 #import "NTIAbstractDownloader.h"
 
-@implementation SocketIOHandshakeDownloader
-@synthesize nr_delegate;
-
--(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
-{
-	[super connection: connection didFailWithError: error];
-	if( [self->nr_delegate respondsToSelector: @selector(connection:didFailWithError:)] ){
-		[self->nr_delegate connection: connection didFailWithError: error];
-	}
-}
-
--(void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
-	[super connectionDidFinishLoading: connection];
-	if( [self->nr_delegate respondsToSelector: @selector(connectionDidFinishLoading:)] ){
-		[self->nr_delegate connectionDidFinishLoading: connection];
-	}
-}
-
-@end
-
 NSString* const SocketIOResource = @"socket.io";
 NSString* const SocketIOProtocol = @"1";
 
 static NSArray* implementedTransportClasses()
 {
-	return [NSArray arrayWithObjects: [SocketIOWSTransport class], nil];
+	return [NSArray arrayWithObjects: [SocketIOXHRPollingTransport class], [SocketIOWSTransport class], nil];
 }
 
+@interface SocketIOSocket()
+-(void)findAndStartTransport;
+-(void)updateStatus: (SocketIOSocketStatus)s;
+@end
+
 @implementation SocketIOSocket
-@synthesize nr_statusDelegate, nr_recieverDelegate;
+@synthesize nr_statusDelegate, nr_recieverDelegate, heartbeatTimeout;
 
 -(id)initWithURL: (NSURL *)u andName: (NSString*)name andPassword: (NSString*)pwd
 {
@@ -47,8 +31,69 @@ static NSArray* implementedTransportClasses()
 	self->url = [u retain];
 	self->username = [name retain];
 	self->password = [pwd retain];
+	self->reconnecting = NO;
+	self->buffer = [[NSMutableArray arrayWithCapacity: 5] retain];
+	self->attemptedTransports = [[NSMutableArray arrayWithCapacity: 3] retain];
 	return self;
 }
+
+-(BOOL)shouldBuffer
+{
+	return self->shouldBuffer;
+}
+
+-(void)setShouldBuffer:(BOOL)sb
+{
+	self->shouldBuffer = sb;
+	
+	NSLog(@"Will buffer packets? %i", self->shouldBuffer);
+	
+	if(!self->shouldBuffer && self->status == SocketIOSocketStatusConnected && 
+	   [self->buffer count] > 0)
+	{
+		NSLog(@"Emptying buffer to tranport");
+		[self->transport sendPayload: [NSArray arrayWithArray: self->buffer]];
+		[self->buffer removeAllObjects];
+	}
+}
+
+-(void)clearCloseTimer
+{
+	[self->closeTimeoutTimer invalidate];
+	NTI_RELEASE(self->closeTimeoutTimer);
+	self->closeTimeoutTimer = nil;
+}
+
+-(void)startCloseTimer
+{
+	[self clearCloseTimer];
+	NSLog(@"Firing close timeout timer");
+	self->closeTimeoutTimer = [[NSTimer scheduledTimerWithTimeInterval: self->closeTimeout 
+																target: self 
+															  selector: @selector(closeTimeoutFired) 
+															  userInfo: nil repeats: NO] retain];
+}
+
+-(void)onConnecting
+{
+	
+}
+
+-(void)onConnected
+{
+	self->reconnectAttempts = 0;
+}
+
+-(void)onDisconnecting
+{
+	[self updateStatus: SocketIOSocketStatusDisconnected];
+}
+
+-(void)onDisconnected
+{
+	
+}
+
 
 -(void)updateStatus: (SocketIOSocketStatus)s
 {
@@ -56,6 +101,25 @@ static NSArray* implementedTransportClasses()
 		return;
 	}
 	self->status = s;
+	
+	NSLog(@"Socket status updated to %ld", self->status);
+	
+	switch(self->status){
+		case SocketIOSocketStatusConnecting:
+			[self onConnecting];
+			break;
+		case SocketIOSocketStatusConnected:
+			[self onConnected];
+			break;
+		case SocketIOSocketStatusDisconnecting:
+			[self onDisconnecting];
+			break;
+		case SocketIOSocketStatusDisconnected:
+			[self onDisconnected];
+			break;
+		default:
+			break;
+	}
 	
 	if([self->nr_statusDelegate respondsToSelector:@selector(transport:connectionStatusDidChange:)]){
 		[self->nr_statusDelegate socket: self connectionStatusDidChange: s];
@@ -70,18 +134,46 @@ static NSArray* implementedTransportClasses()
 														 andArgs: [NSArray arrayWithObjects: @"plist", nil]]];
 		NSDictionary* args = [NSDictionary dictionaryWithObject: [NSArray arrayWithObject: @"chris.utz@nextthought.com"] forKey: @"Occupants"];
 		[self sendPacket: [SocketIOPacket packetForEventWithName: @"chat_enterRoom" andArgs: [NSArray arrayWithObject: args]]];
+		[self sendPacket: [SocketIOPacket packetForEventWithName: @"chat_enterRoom" andArgs: [NSArray arrayWithObject: args]]];
+		[self sendPacket: [SocketIOPacket packetForEventWithName: @"chat_enterRoom" andArgs: [NSArray arrayWithObject: args]]];
 	}
 }
 
--(void)updateStatusFromTransportStatus: (SocketIOTransportStatus)wss
+-(void)closeTimeoutFired
 {
-	[self updateStatus: (int)wss];
+	NSLog(@"Close timeout reached. Disconnecting.");
+	[self updateStatus: SocketIOSocketStatusDisconnecting];
 }
 
 #pragma mark Transport delegate
 -(void)transport:(SocketIOTransport *)t connectionStatusDidChange:(SocketIOTransportStatus)s
 {
-	[self updateStatusFromTransportStatus: s];
+	NSLog(@"transport %@ changed connection status to  %ld", t, s);
+	
+	//If we are opening the transport and we get anything besided open we are in error.
+	//Fire the disconnect timer and run like hell to open another transport
+	if( self->openingTransport && s != SocketIOTransportStatusOpen ){
+		[self startCloseTimer];
+		[self findAndStartTransport];
+		return;
+	}
+	self->openingTransport = s == SocketIOTransportStatusOpening;
+	
+	if( s == SocketIOTransportStatusOpen ){
+		[self clearCloseTimer];
+		[self setShouldBuffer: NO];
+		[self->attemptedTransports removeAllObjects];
+	}
+	
+	if( s == SocketIOTransportStatusClosing || s == SocketIOTransportStatusClosed){
+		[self setShouldBuffer: YES];
+	}
+	
+	if( s == SocketIOTransportStatusClosed ) {
+		//We really want to try and reconnect the timeout.
+		[self startCloseTimer];
+	}
+		 
 }
 
 -(void)transport: (SocketIOTransport*)t didEncounterError: (NSError*)error
@@ -123,6 +215,7 @@ static NSArray* implementedTransportClasses()
 
 -(void)initiateHandshake
 {
+	[self updateStatus: SocketIOSocketStatusConnecting];
 	//The handshake/negotiation begins with a POST to
 	//$BASEURL/Resource/Protocol/ to retrieve timeout info
 	//along with a session id and a list of supported transports
@@ -136,7 +229,7 @@ static NSArray* implementedTransportClasses()
 	[request setValue: [NSString stringWithFormat: @"Basic %@", auth] forHTTPHeaderField: @"Authorization"];
 	
 	
-	self->handshakeDownloader = [[SocketIOHandshakeDownloader alloc] 
+	self->handshakeDownloader = [[NTIDelegatingDownloader alloc] 
 								 initWithUsername: self->username password: self->password];
 	self->handshakeDownloader.nr_delegate = self;
 	//Use timeout?
@@ -175,7 +268,7 @@ static NSArray* implementedTransportClasses()
 	if(!toExcludeName){
 		toExcludeName = [NSArray array];
 	}
-	//Right now our hueristics is simple.  We awesome our list of
+	//Right now our hueristics is simple.  We assume our list of
 	//implemented classes is in priority order.  we find the first one that is
 	//implemented by the server but not in our toExcludeName list
 	for(Class transportClass in implementedTransportClasses()){
@@ -189,20 +282,30 @@ static NSArray* implementedTransportClasses()
 
 -(void)findAndStartTransport
 {
-	Class transportClass = [self findTransportExcluding: nil];
+	//We can only open a transform in the connected state.
+	if(self->status != SocketIOSocketStatusConnected){
+		return;
+	}
+	
+	NSLog(@"Looking for a transport");
+	
+	Class transportClass = [self findTransportExcluding: self->attemptedTransports];
 	
 	if(!transportClass){
 		NSError* error = [self createErrorWithCode: 103 
 										andMessage: [NSString stringWithFormat: @"Unable to find suitable transport.  Server supports %@. Our options were %@", 
 													 self->serverSupportedTransports, implementedTransportClasses()]];
+		//We can't find any transports.  Nothing left to do but disconnect ourselves and let the socket level retry kick
+		//in.
 		[self logAndRaiseError: error];
-		return;
+		[self updateStatus: SocketIOSocketStatusDisconnecting];
 	}
 	
 	NSLog(@"Will use transport %@", [transportClass name]);
+	[self->attemptedTransports addObject: [transportClass name]];
 	[self->transport release];
 	self->transport = [[transportClass alloc] initWithRootURL: self->url andSessionId: self->sessionId];
-	self->transport.nr_delegate = self;
+	self->transport.nr_socket= self;
 	[self->transport connect];
 }
 
@@ -229,6 +332,8 @@ static NSArray* implementedTransportClasses()
 	[self->serverSupportedTransports release];
 	self->serverSupportedTransports = transports;
 	
+	[self updateStatus: SocketIOSocketStatusConnected];
+
 	//Find and start transport
 	[self findAndStartTransport];
 }
@@ -236,20 +341,23 @@ static NSArray* implementedTransportClasses()
 -(void)sendPacket: (SocketIOPacket*)packet
 {
 	//What to do if there is no transport
-	[self->transport sendPacket: packet];
+	if( self->shouldBuffer && self->status == SocketIOSocketStatusConnected){
+		[self->buffer addObject: packet];
+	}
+	else{
+		[self->transport sendPacket: packet];
+	}
 }
 
 #pragma mark handshake downloader delegate
--(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+-(void)downloader:(NTIDelegatingDownloader *)d connection: (NSURLConnection*)c didFailWithError:(NSError *)error
 {
-	if( [self->nr_statusDelegate respondsToSelector: @selector(socket:didEncounterError:)] ){
-		[self->nr_statusDelegate socket: self didEncounterError: error];
-	}
+	[self logAndRaiseError: error];
 	[self updateStatus: SocketIOSocketStatusDisconnected];
 	[self->handshakeDownloader release];
 }
 
--(void)connectionDidFinishLoading:(NSURLConnection *)connection
+-(void)downloader: (NTIDelegatingDownloader *)d didFinishLoading:(NSURLConnection *)c
 {
 	NSString* dataString = [self->handshakeDownloader stringFromData];
 	
@@ -265,20 +373,32 @@ static NSArray* implementedTransportClasses()
 
 -(void)connect
 {
-	if(self->transport){
-		return;
-	}
-	
+	[self setShouldBuffer: YES];
+	self->forceDisconnect = NO;
 	[self initiateHandshake];
 }
 
 -(void)disconnect
 {
+	self->forceDisconnect = YES;
 	[self->transport disconnect];
+}
+
+-(void)reconnect
+{
+	if(self->reconnectAttempts < 3)
+	{
+		[self connect];
+	}
+	
+	self->reconnectAttempts = self->reconnectAttempts + 1;
 }
 
 -(void)dealloc
 {
+	[self clearCloseTimer];
+	NTI_RELEASE(self->attemptedTransports);
+	NTI_RELEASE(self->buffer);
 	NTI_RELEASE(self->handshakeDownloader);
 	NTI_RELEASE(self->transport);
 	NTI_RELEASE(self->serverSupportedTransports);

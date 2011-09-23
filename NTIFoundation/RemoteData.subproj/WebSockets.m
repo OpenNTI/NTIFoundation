@@ -12,6 +12,24 @@
 #import "OmniFoundation/NSDictionary-OFExtensions.h"
 #import "OmniFoundation/NSMutableDictionary-OFExtensions.h"
 
+@implementation WebSocketData
+@synthesize data, text;
+
+-(id)initWithData:(NSData *)d isText:(BOOL)t
+{
+	self = [super init];
+	self->data = [d retain];
+	self->text = t;
+	return self;
+}
+
+-(void)dealloc
+{
+	NTI_RELEASE(self->data);
+}
+
+@end
+
 @implementation WebSocket7
 @synthesize status, nr_delegate;
 
@@ -136,12 +154,10 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 		byte = byte ^ mask[i%4];
 		[data appendBytes: &byte length: 1];
 	}
-	id toEnqueue = data;
-	if( asString ){
-		toEnqueue = [[[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding] autorelease];
-		NSLog(@"Read from socket. %@", toEnqueue);
-	}
-	[self enqueueRecievedData: toEnqueue];
+	
+	WebSocketData* wsdata = [[[WebSocketData alloc] initWithData: data
+														isText: asString] autorelease];
+	[self enqueueRecievedData: wsdata];
 	if( [self->nr_delegate respondsToSelector: @selector(websocketDidRecieveData:)] ){
 		[self->nr_delegate websocketDidRecieveData: self];
 	}
@@ -149,28 +165,23 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 
 -(void)dequeueAndSend
 {
-	id data = [self dequeueDataForSending];
+	WebSocketData* wsdata = [self dequeueDataForSending];
 	
-	if( !data ){
+	if( !wsdata ){
 		self->shouldForcePumpOutputStream = YES;
 		return;
 	}
 	
-	if( !([data isKindOfClass: [NSData class]] || [data isKindOfClass: [NSString class]] )){
-		data = [NSString stringWithFormat: @"%@", data];
-	}
-	
+		
 	uint8_t flag_and_opcode = 0x80;
-	if( ![data isKindOfClass: [NSData class]] ){
+	if( [wsdata text] ){
 		//We will go as string
 		flag_and_opcode = flag_and_opcode+1;
-		if(![data isKindOfClass: [NSString class]]){
-			data = [NSString stringWithFormat: @"%@", data];
-		}
-		data = [data dataUsingEncoding: NSUTF8StringEncoding];
 	}
 	
-	NSLog(@"About to send data %@", [NSString stringWithData: data encoding: NSUTF8StringEncoding]);
+	NSData* data = wsdata.data;
+	
+	NSLog(@"About to send data %@", wsdata);
 	
 	
 	BOOL isLong=NO;
@@ -357,7 +368,6 @@ static NSData* hashUsingSHA1(NSData* data)
 				[self->socketInputStream read: &firstByte maxLength: 1];
 				
 				if( firstByte & 0x81 ){ //This is text
-					NSLog(@"Reading text frame");
 					[self readAndEnqueue: YES];
 				}
 				else if( firstByte & 0x82 ){ //This is binary
@@ -483,6 +493,11 @@ static NSData* hashUsingSHA1(NSData* data)
 
 -(void)disconnect
 {
+	if(self->status == WebSocketStatusDisconnecting || self->status == WebSocketStatusDisconnected)
+	{
+		return;
+	}
+	
 	NSLog(@"Client initiated disconnect");
 	//FIXME Send disconnect handshake.
 	[self updateStatus: WebSocketStatusDisconnecting];

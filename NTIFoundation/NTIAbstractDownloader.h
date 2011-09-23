@@ -71,6 +71,24 @@
  */
 -(NSString*)stringFromData;
 
+-(NSData*)data;
+
+@end
+
+@class NTIDelegatingDownloader;
+@protocol NTIDownloaderDelegate <NSObject>
+
+-(void)downloader:(NTIDelegatingDownloader *)d connection: (NSURLConnection*) c didFailWithError:(NSError *)error;
+-(void)downloader:(NTIDelegatingDownloader *)d didFinishLoading:(NSURLConnection *)c;
+
+@end
+
+//A delegator that passes on the didFinish and didFail messages
+@interface NTIDelegatingDownloader : NTIBufferedDownloader {
+@private
+    id nr_delegate;
+}
+@property (nonatomic, assign) id nr_delegate;
 @end
 
 @interface NTIStreamDownloader : NTIBufferedDownloader<NSStreamDelegate> {

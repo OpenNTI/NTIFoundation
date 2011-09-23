@@ -151,12 +151,38 @@
 	return [NSString stringWithData: dataBuffer encoding: NSUTF8StringEncoding];
 }
 
+-(NSData*)data
+{
+	return [dataBuffer copy];	
+}
+
 -(void)dealloc
 {
 	[dataBuffer release];
 	dataBuffer = nil;
 	[super dealloc];
 }
+@end
+
+@implementation NTIDelegatingDownloader
+@synthesize nr_delegate;
+
+-(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+{
+	[super connection: connection didFailWithError: error];
+	if( [self->nr_delegate respondsToSelector: @selector(downloader:connection:didFailWithError:)] ){
+		[self->nr_delegate downloader: self connection: connection didFailWithError: error];
+	}
+}
+
+-(void)connectionDidFinishLoading:(NSURLConnection *)connection
+{
+	[super connectionDidFinishLoading: connection];
+	if( [self->nr_delegate respondsToSelector: @selector(downloader:didFinishLoading:)] ){
+		[self->nr_delegate downloader: self didFinishLoading: connection];
+	}
+}
+
 @end
 
 @implementation NTIStreamDownloader

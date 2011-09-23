@@ -17,7 +17,9 @@ enum {
 	SocketIOPacketTypeEvent = 5,
 	SocketIOPacketTypeAck = 6,
 	SocketIOPacketTypeError = 7,
-	SocketIOPacketTypeNoop = 8
+	SocketIOPacketTypeNoop = 8,
+	SocketIOPacketTypeMax = SocketIOPacketTypeNoop,
+	SocketIOPacketTypeMin = SocketIOPacketTypeDisconnect
 };
 typedef NSInteger SocketIOPacketType;
 
@@ -58,12 +60,13 @@ typedef NSInteger SocketIOErrorAdvice;
 @property (nonatomic, copy) NSArray* args;
 @property (nonatomic, retain) NSString* qs;
 @property (nonatomic, retain) NSString* name;
++(SocketIOPacket*)packetForHeartbeat;
 +(SocketIOPacket*)packetForMessageWithData: (NSString*)data;
 +(SocketIOPacket*)packetForEventWithName: (NSString*)name andArgs: (NSArray*)args;
-+(SocketIOPacket*)decodePacketData: (NSString*)data;
++(SocketIOPacket*)decodePacketData: (NSData*)data;
 -(id)initWithType: (SocketIOPacketType)theType;
--(NSString*)encode;
-+(NSString*)encodePayload: (NSArray*)payload;
-+(NSArray*)decodePayload: (NSString*)payload;
+-(NSData*)encode;
++(NSData*)encodePayload: (NSArray*)payload;
++(NSArray*)decodePayload: (NSData*)payload;
 
 @end
