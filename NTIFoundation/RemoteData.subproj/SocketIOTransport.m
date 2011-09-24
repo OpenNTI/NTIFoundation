@@ -143,12 +143,12 @@
 
 
 /**
- *The general idea is this.  After an intial post to connect us to the 
- * socket we do the following until we are told to disconnect, or we
- * encounter an error. We have a buffer with things that 
- *need to be sent.  When our timer fires if there are things to send
- *they are posted to the server and the response (packets) on the servers
- *buffer are processed.  If we have no data send we initiate a simple get
+ * We currently poll for new data as soon as we get data back 
+ * from the server.  This is the same implementation as the browser
+ * client however it is probably not ideal for the pad.  There are a number
+ * of different tradeoffs to consider on the pad, including battery life.
+ * We likely want some complicated hueristic that polls repeatedly when
+ * there are things going on and backs off to a timer based polling implementation.
  */
 @implementation SocketIOXHRPollingTransport
 
@@ -182,6 +182,9 @@
 	if(self->downloader || self.status != SocketIOTransportStatusOpen){
 		return;
 	}
+#ifdef DEBUG_SOCKETIO
+	NSLog(@"Sending XHR polling");
+#endif
 	//Dequeue data from our buffer
 	//To send
 	NSArray* toSend = [NSArray arrayWithArray: self->sendBuffer];
@@ -198,8 +201,7 @@
 		NSLog(@"Sending payload %@", data);
 #endif
 	}
-	
-	
+
 	self->downloader = [[NTIDelegatingDownloader alloc] initWithUsername: nil password: nil];
 	self->downloader.nr_delegate = self;
 	NSURLRequest* request = [self requestWithMethod: method andData: data];
@@ -226,7 +228,7 @@
 	[self->downloader release];
 	self->downloader=nil;
 	
-	//If we only poll if we are open.  If we are closed now just have to throw away the data
+	//We only poll if we are open.  If we are closed now just have to throw away the data
 	if( self.status == SocketIOTransportStatusClosed ){
 		return;
 	}
@@ -235,17 +237,11 @@
 	
 	BOOL goodData = [self recievedData: dataBody];
 	
-	if(opening){
-		if(goodData){
-			self->timer = [[NSTimer scheduledTimerWithTimeInterval: (self.nr_socket.heartbeatTimeout / 2)
-														target: self 
-													  selector: @selector(poll) 
-													  userInfo: nil 
-														   repeats: YES] retain];
-		}
-		else{
-			[self disconnect];
-		}
+	if(opening && !goodData){
+		[self disconnect];
+	}
+	else{
+		[self poll];
 	}
 }
 
@@ -263,8 +259,6 @@
 -(void)disconnect
 {
 	[self updateStatus: SocketIOTransportStatusClosing];
-	[self->timer invalidate];
-	[self->timer release];
 	[self updateStatus: SocketIOTransportStatusClosed];
 }
 
