@@ -153,7 +153,7 @@
 
 -(NSData*)data
 {
-	return [dataBuffer copy];	
+	return [[dataBuffer copy] autorelease];	
 }
 
 -(void)dealloc
