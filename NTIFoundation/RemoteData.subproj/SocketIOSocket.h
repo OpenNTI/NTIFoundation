@@ -32,13 +32,14 @@ typedef NSInteger SocketIOSocketStatus;
 -(void)socketWillReconnect: (SocketIOSocket*)s;
 -(void)socketIsReconnecting: (SocketIOSocket*)s;
 -(void)socketDidReconnect: (SocketIOSocket*)s;
--(void)socket: (SocketIOSocket*)socket didEncounterError: (NSError*)error;
+//If the error is not the result of a lower level transport error t may be null
+-(void)socket: (SocketIOSocket*)socket didEncounterError: (NSError*)error inTransport: (SocketIOTransport*)t;
 @end
 
 //In addition to the below calls.  We will attempt to generate dynamic selectors for events.
 //For example for the event chat_EnteredRoom we would attempt to call chat_EnteredRoom: (NSArray*)args;
 //If the delegate does not perform the dynamic selector we will give it to didRecieveUnhandledEventNamed: name : args
-@protocol SocketIOSocketRecieverDelegate <NSObject>
+@protocol SocketIOSocketEventDelegate <NSObject>
 -(void)socket: (SocketIOSocket*)p didRecieveMessage: (NSString*)message;
 -(void)socket:(SocketIOSocket*)p didRecieveUnhandledEventNamed: (NSString *)name withArgs: (NSArray*)args;
 @end
@@ -55,7 +56,7 @@ typedef NSInteger SocketIOSocketStatus;
 	SocketIOSocketStatus status;
 	SocketIOTransport* transport;
 	id nr_statusDelegate;
-	id nr_recieverDelegate;
+	NSMutableArray* eventDelegates;
 	NTIDelegatingDownloader* handshakeDownloader;
 	BOOL shouldBuffer;
 	NSMutableArray* buffer;
@@ -68,13 +69,14 @@ typedef NSInteger SocketIOSocketStatus;
 @property (nonatomic, readonly) NSInteger heartbeatTimeout;
 @property (nonatomic, assign) BOOL shouldBuffer;
 @property (nonatomic, assign) id nr_statusDelegate;
-@property (nonatomic, assign) id nr_recieverDelegate;
 -(id)initWithURL: (NSURL *)url andName: (NSString*)name andPassword: (NSString*)pwd;
+-(BOOL)addEventDelegate: (id)eventDelegate;
+-(BOOL)removeEventDelegate: (id)eventDelegate;
 -(void)connect;
 //Sends the packet via the selected transport or buffers it for transmission
 -(void)sendPacket: (SocketIOPacket*)packet;
 -(void)disconnect;
-//Bascially delegat emethods but the socket is the only delegate the transport will need.
+//Bascially delegate emethods but the socket is the only delegate the transport will need.
 -(void)transport: (SocketIOTransport*)t connectionStatusDidChange: (SocketIOTransportStatus)status;
 -(void)transport: (SocketIOTransport*)t didEncounterError: (NSError*)error;
 -(void)transport: (SocketIOTransport*)t didRecievePayload: (NSArray*)payload;

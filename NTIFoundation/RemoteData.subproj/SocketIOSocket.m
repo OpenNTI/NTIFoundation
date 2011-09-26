@@ -23,7 +23,7 @@ static NSArray* implementedTransportClasses()
 @end
 
 @implementation SocketIOSocket
-@synthesize nr_statusDelegate, nr_recieverDelegate, heartbeatTimeout;
+@synthesize nr_statusDelegate, heartbeatTimeout;
 
 #pragma mark SocketDelegate
 //we are our own reciever delegate testing
@@ -58,13 +58,39 @@ static NSArray* implementedTransportClasses()
 	self->buffer = [[NSMutableArray arrayWithCapacity: 5] retain];
 	self->attemptedTransports = [[NSMutableArray arrayWithCapacity: 3] retain];
 	self->status = SocketIOSocketStatusDisconnected;
-	self->nr_recieverDelegate = self;
-	self.shouldBuffer = YES;
-	
+	self.shouldBuffer = YES;	
 	self->handshakeDownloader = [[NTIDelegatingDownloader alloc] 
 								 initWithUsername: self->username password: self->password];
+	self->eventDelegates = [[NSMutableArray arrayWithCapacity: 3] retain];
+	[self addEventDelegate: self];
 	self->handshakeDownloader.nr_delegate = self;
 	return self;
+}
+
+//Add eventDelegate as an eventDelegate if it does not already exist.
+//Returns false if the delegate already existed. else false
+-(BOOL)addEventDelegate: (id)eventDelegate
+{
+	if( [self->eventDelegates containsObjectIdenticalTo: eventDelegate] ){
+		return NO;
+	}
+	
+	[self->eventDelegates addObject: eventDelegate];
+	
+	return YES;
+}
+
+//Remove eventDelegate from the eventsDelegate list
+//returns YES if it was removed else NO
+-(BOOL)removeEventDelegate: (id)eventDelegate
+{
+	if( [self->eventDelegates containsObjectIdenticalTo: eventDelegate] ){
+		return NO;
+	}
+	
+	[self->eventDelegates removeObjectIdenticalTo: eventDelegate];
+	
+	return YES;
 }
 
 -(BOOL)shouldBuffer
@@ -268,23 +294,43 @@ static NSArray* implementedTransportClasses()
 
 -(void)transport: (SocketIOTransport*)t didEncounterError: (NSError*)error
 {
-	//We will handle most errors at this layer
+	//We will handle most errors at this layer but for information purposes we pass them on.
 	NSLog(@"Recieved an error from the transport %@, %@", t, [error localizedDescription]);
+	
+	if([self->nr_statusDelegate respondsToSelector: @selector(socket:didEncounterError:inTransport:)]){
+		[self->nr_statusDelegate socket: self didEncounterError: error inTransport: t];
+	}
 }
 
--(void)passOnEvent: (SocketIOPacket*)packet
+-(void)passOnEvent: (SocketIOPacket*)packet toDelegate: (id)delegate
 {
 	//Generator a selector
 	NSString* selectorString = [NSString stringWithStrings: packet.name, @":", nil];
 	
 	SEL eventSel = NSSelectorFromString(selectorString);
-	if( [self->nr_recieverDelegate respondsToSelector: eventSel] ){
-		[self->nr_recieverDelegate performSelector: eventSel withObject: packet.args];
+	if( [delegate respondsToSelector: eventSel] ){
+		[delegate performSelector: eventSel withObject: packet.args];
 		return;
 	}
 	
-	if([self->nr_recieverDelegate respondsToSelector: @selector(socket:didRecieveUnhandledEventNamed:withArgs:)]){
-		[self->nr_recieverDelegate socket: self didRecieveUnhandledEventNamed: packet.name withArgs: packet.args];
+	if([delegate respondsToSelector: @selector(socket:didRecieveUnhandledEventNamed:withArgs:)]){
+		[delegate socket: self didRecieveUnhandledEventNamed: packet.name withArgs: packet.args];
+	}
+}
+
+-(void)passOnEvent: (SocketIOPacket*)packet
+{
+	for(id eventDelegate in self->eventDelegates){
+		[self passOnEvent: packet toDelegate: eventDelegate];
+	}
+}
+
+-(void)passOnMessage: (SocketIOPacket*)packet
+{
+	for(id eventDelegate in self->eventDelegates){
+		if([eventDelegate respondsToSelector:@selector(socket:didRecieveMessage:)]){
+			[eventDelegate socket: self didRecieveMessage: packet.data];
+		}
 	}
 }
 
@@ -292,9 +338,7 @@ static NSArray* implementedTransportClasses()
 {
 	switch(packet.type){
 		case SocketIOPacketTypeMessage:{
-			if([self->nr_recieverDelegate respondsToSelector:@selector(socket:didRecieveMessage:)]){
-				[self->nr_recieverDelegate socket: self didRecieveMessage: packet.data];
-			}
+			[self passOnMessage: packet];
 			break;
 		}
 		case SocketIOPacketTypeEvent:{
@@ -352,8 +396,8 @@ static NSArray* implementedTransportClasses()
 -(void)logAndRaiseError: (NSError*)error
 {
 	NSLog(@"%@", [error localizedDescription]);
-	if([self->nr_statusDelegate respondsToSelector:@selector(socket:didEncounterError:)]){
-		[self->nr_statusDelegate socket: self didEncounterError: error];
+	if([self->nr_statusDelegate respondsToSelector:@selector(socket:didEncounterError:inTransport:)]){
+		[self->nr_statusDelegate socket: self didEncounterError: error inTransport: nil];
 	}
 }
 
@@ -531,6 +575,7 @@ static NSArray* implementedTransportClasses()
 -(void)dealloc
 {
 	[self clearCloseTimer];
+	NTI_RELEASE(self->eventDelegates);
 	NTI_RELEASE(self->attemptedTransports);
 	NTI_RELEASE(self->buffer);
 	NTI_RELEASE(self->handshakeDownloader);
