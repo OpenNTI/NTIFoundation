@@ -23,11 +23,11 @@ typedef NSInteger WebSocketStatus;
 @interface WebSocketData : OFObject {
 @private
 	NSData* data;
-	BOOL text;
+	BOOL dataIsText;
 }
 -(id)initWithData: (NSData*)data isText: (BOOL)t;
 @property (nonatomic, retain) NSData* data;
-@property (nonatomic, assign) BOOL text;
+@property (nonatomic, assign) BOOL dataIsText;
 @end
 
 @class WebSocket7;

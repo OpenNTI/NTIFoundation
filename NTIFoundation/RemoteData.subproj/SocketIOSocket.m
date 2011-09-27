@@ -14,7 +14,7 @@ NSString* const SocketIOProtocol = @"1";
 
 static NSArray* implementedTransportClasses()
 {
-	return [NSArray arrayWithObjects: [SocketIOXHRPollingTransport class], [SocketIOWSTransport class], nil];
+	return [NSArray arrayWithObjects: [SocketIOWSTransport class], [SocketIOXHRPollingTransport class], nil];
 }
 
 @interface SocketIOSocket()
@@ -25,33 +25,35 @@ static NSArray* implementedTransportClasses()
 @implementation SocketIOSocket
 @synthesize nr_statusDelegate, heartbeatTimeout;
 
-#pragma mark SocketDelegate
-//we are our own reciever delegate testing
--(void)socket: (SocketIOSocket*)s didRecieveMessage: (NSString*)message
-{
-	NSLog(@"Recieved message \"%@\"", message);
-}
-
--(void)chat_enteredRoom: (NSArray*)args
-{
-	NSLog(@"Recieved chat_enteredRoom event with args %@", args);
-}
-
--(void)serverkill: (NSArray*)args
-{
-	NSLog(@"Server asked us to die with reason %@", args);
-	[self disconnect];
-}
-
--(void)socket: (SocketIOSocket*)s didRecieveUnhandledEventNamed: (NSString *)name withArgs: (NSArray*)args
-{
-	NSLog(@"Recieved unhandled event \"%@(%@)\"", name, args);
-}
+//#pragma mark SocketDelegate
+////we are our own reciever delegate testing
+//-(void)socket: (SocketIOSocket*)s didRecieveMessage: (NSString*)message
+//{
+//	NSLog(@"Recieved message \"%@\"", message);
+//}
+//
+//-(void)chat_enteredRoom: (NSArray*)args
+//{
+//	NSLog(@"Recieved chat_enteredRoom event with args %@", args);
+//}
+//
+//-(void)serverkill: (NSArray*)args
+//{
+//	NSLog(@"Server asked us to die with reason %@", args);
+//	[self disconnect];
+//}
+//
+//-(void)socket: (SocketIOSocket*)s didRecieveUnhandledEventNamed: (NSString *)name withArgs: (NSArray*)args
+//{
+//	NSLog(@"Recieved unhandled event \"%@(%@)\"", name, args);
+//}
 
 -(id)initWithURL: (NSURL *)u andName: (NSString*)name andPassword: (NSString*)pwd
 {
 	self = [super init];
-	self->url = [u retain];
+	//URLByAppendingPathComponent likes to add a second slash if the appended path component
+	//ends in a slash
+	self->url = [[NSURL URLWithString: [NSString stringWithFormat: @"%@/1/", u.relativeString] relativeToURL: u.baseURL] retain];
 	self->username = [name retain];
 	self->password = [pwd retain];
 	self->reconnecting = NO;
@@ -62,7 +64,7 @@ static NSArray* implementedTransportClasses()
 	self->handshakeDownloader = [[NTIDelegatingDownloader alloc] 
 								 initWithUsername: self->username password: self->password];
 	self->eventDelegates = [[NSMutableArray arrayWithCapacity: 3] retain];
-	[self addEventDelegate: self];
+	//[self addEventDelegate: self];
 	self->handshakeDownloader.nr_delegate = self;
 	return self;
 }
@@ -236,17 +238,12 @@ static NSArray* implementedTransportClasses()
 			break;
 	}
 	
-	//If we are now connected we go ahead and send our auth data. We wont really do this but we don't have a socketiosocket delegate
-	//yet and this is a quick way to test.
+	//If we are now connected we go ahead and send our auth data since we know it. 
 	if(self->status == SocketIOSocketStatusConnected){
 		[self sendPacket: [SocketIOPacket packetForEventWithName: @"message" 
 														 andArgs: [NSArray arrayWithObjects: self->username, self->password, nil]]];
 		[self sendPacket: [SocketIOPacket packetForEventWithName: @"message" 
 														 andArgs: [NSArray arrayWithObjects: @"plist", nil]]];
-		NSDictionary* args = [NSDictionary dictionaryWithObject: [NSArray arrayWithObject: @"chris.utz@nextthought.com"] forKey: @"Occupants"];
-		[self sendPacket: [SocketIOPacket packetForEventWithName: @"chat_enterRoom" andArgs: [NSArray arrayWithObject: args]]];
-		[self sendPacket: [SocketIOPacket packetForEventWithName: @"chat_enterRoom" andArgs: [NSArray arrayWithObject: args]]];
-		[self sendPacket: [SocketIOPacket packetForEventWithName: @"chat_enterRoom" andArgs: [NSArray arrayWithObject: args]]];
 	}
 }
 
@@ -527,7 +524,7 @@ static NSArray* implementedTransportClasses()
 -(void)connect
 {
 #ifdef DEBUG_SOCKETIO
-	NSLog(@"SocketIOSocket initiating connect");
+	NSLog(@"SocketIOSocket initiating connection to %@", self->url);
 #endif
 	//We can only connect if we are disconnected
 	if(self->status != SocketIOSocketStatusDisconnected){

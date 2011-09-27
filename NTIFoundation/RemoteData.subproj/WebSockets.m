@@ -13,13 +13,13 @@
 #import "OmniFoundation/NSMutableDictionary-OFExtensions.h"
 
 @implementation WebSocketData
-@synthesize data, text;
+@synthesize data, dataIsText;
 
 -(id)initWithData:(NSData *)d isText:(BOOL)t
 {
 	self = [super init];
 	self->data = [d retain];
-	self->text = t;
+	self->dataIsText = t;
 	return self;
 }
 
@@ -174,7 +174,7 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	
 		
 	uint8_t flag_and_opcode = 0x80;
-	if( [wsdata text] ){
+	if( [wsdata dataIsText] ){
 		//We will go as string
 		flag_and_opcode = flag_and_opcode+1;
 	}
