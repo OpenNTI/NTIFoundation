@@ -198,6 +198,10 @@ static NSArray* implementedTransportClasses()
 		}
 	}
 	
+	[self sendPacket: [SocketIOPacket packetForEventWithName: @"message" 
+													 andArgs: [NSArray arrayWithObjects: 
+															   self->username, self->password, nil]]];
+	
 	self->reconnectAttempts = 0;
 	self->reconnecting = NO;
 	self->currentReconnectTimeout = self->baseReconnectTimeout;
@@ -268,14 +272,6 @@ static NSArray* implementedTransportClasses()
 			break;
 		default:
 			break;
-	}
-	
-	//If we are now connected we go ahead and send our auth data since we know it. 
-	if(self->status == SocketIOSocketStatusConnected){
-		[self sendPacket: [SocketIOPacket packetForEventWithName: @"message" 
-														 andArgs: [NSArray arrayWithObjects: self->username, self->password, nil]]];
-		[self sendPacket: [SocketIOPacket packetForEventWithName: @"message" 
-														 andArgs: [NSArray arrayWithObjects: @"plist", nil]]];
 	}
 }
 
