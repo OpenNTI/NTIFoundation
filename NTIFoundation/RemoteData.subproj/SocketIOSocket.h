@@ -62,10 +62,18 @@ typedef NSInteger SocketIOSocketStatus;
 	NSMutableArray* buffer;
 	BOOL reconnecting;
 	NSTimer* closeTimeoutTimer;
+	NSTimer* reconnectTimer;
 	NSUInteger reconnectAttempts;
+	NSTimeInterval maxReconnectTimeout;
+	NSTimeInterval currentReconnectTimeout;
 	NSMutableArray* attemptedTransports;
 	BOOL forceDisconnect;
 }
+@property (nonatomic, assign) NSUInteger maxReconnectAttempts;
+@property (nonatomic, assign) NSTimeInterval baseReconnectTimeout;
+@property (nonatomic, assign) NSTimeInterval maxReconnectTimeout;
+@property (nonatomic, readonly) NSTimeInterval currentReconnectTimeout;
+@property (nonatomic, readonly) NSUInteger reconnectAttempts;
 @property (nonatomic, readonly) NSInteger heartbeatTimeout;
 @property (nonatomic, assign) BOOL shouldBuffer;
 @property (nonatomic, assign) id nr_statusDelegate;

@@ -23,7 +23,7 @@ static NSArray* implementedTransportClasses()
 @end
 
 @implementation SocketIOSocket
-@synthesize nr_statusDelegate, heartbeatTimeout;
+@synthesize nr_statusDelegate, heartbeatTimeout, baseReconnectTimeout, currentReconnectTimeout, reconnectAttempts, maxReconnectAttempts, maxReconnectTimeout;
 
 //#pragma mark SocketDelegate
 ////we are our own reciever delegate testing
@@ -64,6 +64,10 @@ static NSArray* implementedTransportClasses()
 	self->handshakeDownloader = [[NTIDelegatingDownloader alloc] 
 								 initWithUsername: self->username password: self->password];
 	self->eventDelegates = [[NSMutableArray arrayWithCapacity: 3] retain];
+	self->baseReconnectTimeout = 3;
+	self->maxReconnectAttempts = NSIntegerMax;
+	self->maxReconnectTimeout = 120; //2minutes
+	self->currentReconnectTimeout = self->baseReconnectTimeout;
 	//[self addEventDelegate: self];
 	self->handshakeDownloader.nr_delegate = self;
 	return self;
@@ -118,6 +122,39 @@ static NSArray* implementedTransportClasses()
 	}
 }
 
+-(void)clearReconnectTimer
+{
+	[self->reconnectTimer invalidate];
+	NTI_RELEASE(self->reconnectTimer);
+	self->reconnectTimer = nil;
+}
+
+//We try and reconnect the first 5 times fairly quickly
+//Then we start backing off.
+-(NSTimeInterval)nextReconnect
+{
+	if(self->reconnectAttempts < 5){
+		return self.currentReconnectTimeout;
+	}
+	return self.currentReconnectTimeout * 1.5;
+}
+
+-(void)startReconnectTimer
+{
+	if(self->reconnectTimer){
+		return;
+	}
+#ifdef DEBUG_SOCKETIO
+	NSLog(@"Scheduling reconnect timer for %f seconds", self->currentReconnectTimeout);
+#endif 
+	self->reconnectTimer = [[NSTimer scheduledTimerWithTimeInterval: self.currentReconnectTimeout 
+															   target: self 
+															 selector: @selector(reconnect) 
+															 userInfo: nil 
+															  repeats: NO] retain];
+	self->currentReconnectTimeout = [self nextReconnect];
+}
+
 -(void)clearCloseTimer
 {
 	[self->closeTimeoutTimer invalidate];
@@ -163,6 +200,8 @@ static NSArray* implementedTransportClasses()
 	
 	self->reconnectAttempts = 0;
 	self->reconnecting = NO;
+	self->currentReconnectTimeout = self->baseReconnectTimeout;
+	[self->attemptedTransports removeAllObjects];
 }
 
 -(void)onDisconnecting
@@ -172,27 +211,20 @@ static NSArray* implementedTransportClasses()
 
 -(void)onDisconnected
 {
+	//If we still have a closeTimer running make sure to cancel it
+	[self clearCloseTimer];
+	
 	[self->buffer removeAllObjects];
 	
 	//If we weren't asked to disconnect this was a disconnect
 	//due to a dead transport and a closeTimout.  Try to reconnect the
 	//whole socket if we need to.
 	//TODO a few arbitrary limits here need to be pulled out to options
-	if( !self->forceDisconnect && self->reconnectAttempts < 3 ){
-#ifdef DEBUG_SOCKETIO
-		NSLog(@"Scheduling reconnect timer.");
-#endif 
+	if( !self->forceDisconnect && self->reconnectAttempts < self.maxReconnectAttempts ){
 		if( [self->nr_statusDelegate respondsToSelector:@selector(socketWillReconnect:) ] ){
 			[self->nr_statusDelegate socketWillReconnect: self];
 		}
-		//According to the docs this is retained by our run loop so we don't need to hold on to it
-		NSTimer* reconnectTimer = [NSTimer scheduledTimerWithTimeInterval: 3 
-																   target: self 
-																 selector: @selector(reconnect) 
-																 userInfo: nil 
-																  repeats: NO];
-		//Appease the compiler
-		[[reconnectTimer retain] release];
+		[self startReconnectTimer];
 	}
 	else{
 		if(self->forceDisconnect){
@@ -537,6 +569,8 @@ static NSArray* implementedTransportClasses()
 
 -(void)disconnect
 {
+	[self clearReconnectTimer];
+	
 	if(self->status != SocketIOSocketStatusConnected){
 		return;
 	}
@@ -557,6 +591,8 @@ static NSArray* implementedTransportClasses()
 
 -(void)reconnect
 {
+	[self clearReconnectTimer];
+	
 	if(self->status != SocketIOSocketStatusDisconnected){
 		return;
 	}
@@ -571,6 +607,7 @@ static NSArray* implementedTransportClasses()
 
 -(void)dealloc
 {
+	[self clearReconnectTimer];
 	[self clearCloseTimer];
 	NTI_RELEASE(self->eventDelegates);
 	NTI_RELEASE(self->attemptedTransports);
