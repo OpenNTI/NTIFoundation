@@ -416,16 +416,22 @@ static NSData* hashUsingSHA1(NSData* data)
 	}
 }
 
+//See http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-17#page-7
 -(void)initiateHandshake
 {
+	//The spec indicates the origin header "may" be sent by non browser clients
+	//We go ahead and send it so we look as much like a browser client as possible (for firewall sake)
+	//and for an added layer of security should the server decide to use it.
+	
 	NSString* getRequest = [NSString stringWithFormat:@"GET %@ HTTP/1.1\r\n"
 							"Upgrade: WebSocket\r\n"
 							"Connection: Upgrade\r\n"
 							"Host: %@\r\n"
+							"Origin: %@\r\n"
 							"sec-websocket-origin: %@\r\n"
 							"Sec-WebSocket-Key: %@\r\n"
 							"Sec-WebSocket-Version: 7\r\n\r\n",
-							self->url.path ? self->url.path : @"/",self->url.host,
+							self->url.path ? self->url.path : @"/",self->url.host, kNTIWebSocket7Origin,
 							[NSString stringWithFormat: @"http://%@",self->url.host], self->key] ;
 #ifdef DEBUG_SOCKETIO
 	NSLog(@"Initiating handshake with %@", getRequest);

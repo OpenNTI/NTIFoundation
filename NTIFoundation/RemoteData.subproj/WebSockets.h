@@ -9,6 +9,8 @@
 #import <OmniFoundation/OmniFoundation.h>
 #import "SendRecieveQueue.h"
 
+#define kNTIWebSocket7Origin @"http://ipad.nextthought.com"
+
 enum {
 	WebSocketStatusNew = 0,
 	WebSocketStatusConnecting = 1,
@@ -39,6 +41,8 @@ typedef NSInteger WebSocketStatus;
 -(void)websocketIsReadyForData: (WebSocket7*)socket;
 @end
 
+//Our implementation of the websocket spec v7
+//http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-17
 @interface WebSocket7 : SendRecieveQueue<NSStreamDelegate>{
 @private
 	NSString* key;
