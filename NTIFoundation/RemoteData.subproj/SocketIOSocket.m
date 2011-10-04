@@ -133,10 +133,15 @@ static NSArray* implementedTransportClasses()
 //Then we start backing off.
 -(NSTimeInterval)nextReconnect
 {
-	if(self->reconnectAttempts < 5){
-		return self.currentReconnectTimeout;
+	NSTimeInterval timeout = self.currentReconnectTimeout;
+	if(self->reconnectAttempts >= 5 && timeout < self.maxReconnectTimeout){
+		timeout = self.currentReconnectTimeout * 1.5;
 	}
-	return self.currentReconnectTimeout * 1.5;
+
+	if(timeout > self->maxReconnectTimeout){
+		timeout = self->maxReconnectTimeout;
+	}
+	return timeout;
 }
 
 -(void)startReconnectTimer
