@@ -23,7 +23,10 @@ static NSArray* implementedTransportClasses()
 @end
 
 @implementation SocketIOSocket
-@synthesize nr_statusDelegate, heartbeatTimeout, baseReconnectTimeout, currentReconnectTimeout, reconnectAttempts, maxReconnectAttempts, maxReconnectTimeout;
+@synthesize nr_statusDelegate, heartbeatTimeout, 
+	baseReconnectTimeout, currentReconnectTimeout, 
+	reconnectAttempts, maxReconnectAttempts, 
+	maxReconnectTimeout, username, password, status;
 
 //#pragma mark SocketDelegate
 ////we are our own reciever delegate testing
@@ -310,7 +313,7 @@ static NSArray* implementedTransportClasses()
 		if(self->forceDisconnect){
 			//If this is a force disconnect we will happily ablige.  This means if we try to connect
 			//in what would be the close timeout we will crete a new socketio session anyway
-			[self updateStatus: SocketIOSocketStatusDisconnecting];
+			[self updateStatus: SocketIOSocketStatusDisconnected];
 		}
 		else{
 			//If the transport closes but it wasn't from a force we try our hardest not to die.
@@ -556,13 +559,13 @@ static NSArray* implementedTransportClasses()
 
 -(void)connect
 {
-#ifdef DEBUG_SOCKETIO
-	NSLog(@"SocketIOSocket initiating connection to %@", self->url);
-#endif
 	//We can only connect if we are disconnected
 	if(self->status != SocketIOSocketStatusDisconnected){
 		return;
 	}
+#ifdef DEBUG_SOCKETIO
+	NSLog(@"SocketIOSocket initiating connection to %@", self->url);
+#endif
 	//We need to reset our forceDisconnect state
 	self->forceDisconnect = NO;
 	[self initiateHandshake];

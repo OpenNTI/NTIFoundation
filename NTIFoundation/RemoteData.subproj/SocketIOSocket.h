@@ -69,6 +69,9 @@ typedef NSInteger SocketIOSocketStatus;
 	NSMutableArray* attemptedTransports;
 	BOOL forceDisconnect;
 }
+@property (nonatomic, readonly) SocketIOSocketStatus status;
+@property (nonatomic, retain) NSString* username;
+@property (nonatomic, retain) NSString* password;
 @property (nonatomic, assign) NSUInteger maxReconnectAttempts;
 @property (nonatomic, assign) NSTimeInterval baseReconnectTimeout;
 @property (nonatomic, assign) NSTimeInterval maxReconnectTimeout;
