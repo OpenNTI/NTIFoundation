@@ -40,6 +40,7 @@ typedef NSInteger SocketIOTransportStatus;
 -(void)sendPacket: (SocketIOPacket*)packet;
 -(void)connect;
 -(void)disconnect;
+-(void)forceKill;
 -(NSURL*)urlForTransport;
 
 @end

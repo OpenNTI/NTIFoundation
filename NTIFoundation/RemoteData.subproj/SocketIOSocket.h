@@ -87,6 +87,7 @@ typedef NSInteger SocketIOSocketStatus;
 //Sends the packet via the selected transport or buffers it for transmission
 -(void)sendPacket: (SocketIOPacket*)packet;
 -(void)disconnect;
+-(void)forceKill;
 //Bascially delegate emethods but the socket is the only delegate the transport will need.
 -(void)transport: (SocketIOTransport*)t connectionStatusDidChange: (SocketIOTransportStatus)status;
 -(void)transport: (SocketIOTransport*)t didEncounterError: (NSError*)error;

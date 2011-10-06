@@ -537,7 +537,6 @@ static NSData* hashUsingSHA1(NSData* data)
 {
 	[self updateStatus: WebSocketStatusDisconnecting];
 	[self shutdownStreams];
-	[self updateStatus: WebSocketStatusDisconnected];
 }
 
 

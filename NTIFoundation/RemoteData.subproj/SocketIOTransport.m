@@ -41,6 +41,11 @@
 	
 }
 
+-(void)forceKill
+{
+	
+}
+
 +(NSString*)name
 {
 	return @"unknown";
@@ -262,6 +267,11 @@
 	[self updateStatus: SocketIOTransportStatusClosed];
 }
 
+-(void)forceKill
+{
+	[self disconnect];
+}
+
 -(void)sendPayload:(NSArray*)payload
 {
 	[self->sendBuffer addObjectsFromArray: payload];
@@ -308,6 +318,13 @@
 {
 	[self updateStatus: SocketIOTransportStatusClosing];
 	[self->socket disconnect];
+}
+
+-(void)forceKill
+{
+	[self updateStatus: SocketIOTransportStatusClosing];
+	[self->socket kill];
+	[self updateStatus: SocketIOTransportStatusClosed];
 }
  
 -(void)websocket: (WebSocket7*)socket connectionStatusDidChange: (WebSocketStatus)wss

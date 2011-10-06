@@ -525,15 +525,16 @@ static NSArray* implementedTransportClasses()
 -(void)sendPacket: (SocketIOPacket*)packet
 {
 	//Do we actually want to buffer if we are connecting?
-	if( self->shouldBuffer && 
-	   (self->status == SocketIOSocketStatusConnected || self->status == SocketIOSocketStatusConnecting)){
+	if(self->status == SocketIOSocketStatusConnected || self->status == SocketIOSocketStatusConnecting){
+		if( self->shouldBuffer ){
 #ifdef DEBUG_SOCKETIO
-		NSLog(@"Buffering packet");
+			NSLog(@"Buffering packet");
 #endif
-		[self->buffer addObject: packet];
-	}
-	else{
-		[self->transport sendPacket: packet];
+			[self->buffer addObject: packet];
+		}
+		else{
+			[self->transport sendPacket: packet];
+		}
 	}
 }
 
@@ -589,7 +590,28 @@ static NSArray* implementedTransportClasses()
 		[self->transport disconnect];
 	}
 	else{
-		[self updateStatus: SocketIOSocketStatusDisconnecting];
+		[self updateStatus: SocketIOSocketStatusDisconnected];
+	}
+}
+
+-(void)forceKill
+{
+	[self clearReconnectTimer];
+	
+#ifdef DEBUG_SOCKETIO
+	NSLog(@"SocketIOSocket initiating forcekill");
+#endif
+	
+	self->forceDisconnect = YES;
+	
+	[self updateStatus: SocketIOSocketStatusDisconnecting];
+	
+	//If we have a transport disconnect it
+	if(self->transport){
+		[self->transport forceKill];
+	}
+	else{
+		[self updateStatus: SocketIOSocketStatusDisconnected];
 	}
 }
 
