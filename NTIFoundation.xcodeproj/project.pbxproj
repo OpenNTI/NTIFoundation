@@ -21,6 +21,13 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		403D0DC2143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 403D0DBC143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		403D0DC3143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D0DBD143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.m */; };
+		403D0DC4143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 403D0DBE143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		403D0DC5143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D0DBF143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.m */; };
+		403D0DC6143E193E0049A755 /* NTIRTFDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 403D0DC0143E193E0049A755 /* NTIRTFDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		403D0DC7143E193E0049A755 /* NTIRTFDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D0DC1143E193E0049A755 /* NTIRTFDocument.m */; };
+		403D0DD0143E3AE20049A755 /* NSAttributedString-HTMLReadingExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D0DCC143E38FD0049A755 /* NSAttributedString-HTMLReadingExtensionsTest.m */; };
 		40475AEB142A4940003323A9 /* SendRecieveQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 40475AE9142A493F003323A9 /* SendRecieveQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40475AEC142A4940003323A9 /* SendRecieveQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 40475AEA142A4940003323A9 /* SendRecieveQueue.m */; };
 		408494B51427DF6C0038BD31 /* WebSockets.h in Headers */ = {isa = PBXBuildFile; fileRef = 408494B31427DF6C0038BD31 /* WebSockets.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -316,6 +323,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		403D0DBC143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString-HTMLReadingExtensions.h"; sourceTree = "<group>"; };
+		403D0DBD143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString-HTMLReadingExtensions.m"; sourceTree = "<group>"; };
+		403D0DBE143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString-HTMLWritingExtensions.h"; sourceTree = "<group>"; };
+		403D0DBF143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString-HTMLWritingExtensions.m"; sourceTree = "<group>"; };
+		403D0DC0143E193E0049A755 /* NTIRTFDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIRTFDocument.h; sourceTree = "<group>"; };
+		403D0DC1143E193E0049A755 /* NTIRTFDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIRTFDocument.m; sourceTree = "<group>"; };
+		403D0DCB143E38FD0049A755 /* NSAttributedString-HTMLReadingExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString-HTMLReadingExtensionsTest.h"; sourceTree = "<group>"; };
+		403D0DCC143E38FD0049A755 /* NSAttributedString-HTMLReadingExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString-HTMLReadingExtensionsTest.m"; sourceTree = "<group>"; };
 		40475AE9142A493F003323A9 /* SendRecieveQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendRecieveQueue.h; sourceTree = "<group>"; };
 		40475AEA142A4940003323A9 /* SendRecieveQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendRecieveQueue.m; sourceTree = "<group>"; };
 		408494B31427DF6C0038BD31 /* WebSockets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSockets.h; sourceTree = "<group>"; };
@@ -452,6 +467,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		403D0D9E143E18B80049A755 /* RTFEditing */ = {
+			isa = PBXGroup;
+			children = (
+				403D0DBC143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h */,
+				403D0DBD143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.m */,
+				403D0DBE143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.h */,
+				403D0DBF143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.m */,
+				403D0DC0143E193E0049A755 /* NTIRTFDocument.h */,
+				403D0DC1143E193E0049A755 /* NTIRTFDocument.m */,
+			);
+			name = RTFEditing;
+			path = RTFEditing.subproj;
+			sourceTree = "<group>";
+		};
 		408494B21427DF510038BD31 /* Web Sockets */ = {
 			isa = PBXGroup;
 			children = (
@@ -526,6 +555,7 @@
 		72CBA96F1385CF1F00E3D28D /* NTIFoundation */ = {
 			isa = PBXGroup;
 			children = (
+				403D0D9E143E18B80049A755 /* RTFEditing */,
 				72E353B714253305001B345A /* JSON */,
 				72E353B4142532B9001B345A /* FoundationExtensions */,
 				72E353B5142532B9001B345A /* OUUnzipExtersions */,
@@ -710,6 +740,8 @@
 		72D8185D13955D8C00473994 /* UnitTests */ = {
 			isa = PBXGroup;
 			children = (
+				403D0DCB143E38FD0049A755 /* NSAttributedString-HTMLReadingExtensionsTest.h */,
+				403D0DCC143E38FD0049A755 /* NSAttributedString-HTMLReadingExtensionsTest.m */,
 				72D8185E13955D8C00473994 /* Supporting Files */,
 				72D7D42713E32A7600652DAC /* NSString-JSONTest.h */,
 				72D7D42813E32A7600652DAC /* NSString-JSONTest.m */,
@@ -807,6 +839,9 @@
 				408494B51427DF6C0038BD31 /* WebSockets.h in Headers */,
 				40B6F3BA14285AF4007EDF1C /* WebSocket7Test.h in Headers */,
 				40475AEB142A4940003323A9 /* SendRecieveQueue.h in Headers */,
+				403D0DC2143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h in Headers */,
+				403D0DC4143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.h in Headers */,
+				403D0DC6143E193E0049A755 /* NTIRTFDocument.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1205,6 +1240,9 @@
 				40D754B2142791CE00335BEF /* SocketIOTransport.m in Sources */,
 				408494B61427DF6C0038BD31 /* WebSockets.m in Sources */,
 				40475AEC142A4940003323A9 /* SendRecieveQueue.m in Sources */,
+				403D0DC3143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.m in Sources */,
+				403D0DC5143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.m in Sources */,
+				403D0DC7143E193E0049A755 /* NTIRTFDocument.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1223,6 +1261,7 @@
 				72D7D55713E3321800652DAC /* OUUnzipArchive-NTIExtensions.m in Sources */,
 				40B6F3D914285B38007EDF1C /* WebSocket7Test.m in Sources */,
 				40B6F3FC14285D23007EDF1C /* NSString-JSONTest.m in Sources */,
+				403D0DD0143E3AE20049A755 /* NSAttributedString-HTMLReadingExtensionsTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

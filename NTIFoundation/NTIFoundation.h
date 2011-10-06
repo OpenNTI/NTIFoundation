@@ -25,4 +25,6 @@
 
 #import "NTIFoundationOSCompat.h"
 
+#import "NTIRTFDocument.h"
+
 #endif
