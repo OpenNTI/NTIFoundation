@@ -218,7 +218,7 @@ static NSArray* implementedTransportClasses()
 
 -(void)onDisconnecting
 {
-	[self updateStatus: SocketIOSocketStatusDisconnected];
+
 }
 
 -(void)onDisconnected
@@ -289,6 +289,7 @@ static NSArray* implementedTransportClasses()
 	NSLog(@"Close timeout reached. Disconnecting.");
 #endif
 	[self updateStatus: SocketIOSocketStatusDisconnecting];
+	[self updateStatus: SocketIOSocketStatusDisconnected];
 }
 
 #pragma mark Transport delegate
@@ -481,6 +482,7 @@ static NSArray* implementedTransportClasses()
 		//in.
 		[self logAndRaiseError: error];
 		[self updateStatus: SocketIOSocketStatusDisconnecting];
+		[self updateStatus: SocketIOSocketStatusDisconnected];
 		return;
 	}
 #ifdef DEBUG_SOCKETIO
