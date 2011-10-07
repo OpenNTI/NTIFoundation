@@ -22,6 +22,9 @@
 #import <ImageIO/CGImageSource.h>
 #import <Foundation/NSXMLParser.h>
 
+#import <OmniQuartz/OQColor.h>
+#import "OQColor-NTIExtensions.h"
+
 static Class readerClass = nil;
 
 @implementation NTIHTMLReader
@@ -155,35 +158,33 @@ static void setCurrentFontDescriptor( NSMutableDictionary* dict,
 //Returns nil on unrecognized colors
 static CGColorRef parseColor( NSString* attribute )
 {
-	CGColorRef color = nil;
-	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+	OQColor* color = nil;
 	if( [@"black" isEqual: attribute] ) {
-		//TODO: Use OQColor constants
-		CGFloat components[4] = {0, 0, 0, 1};
-		color = CGColorCreate(colorSpace, components);
+		color = [OQColor blackColor];
 	}
 	else if( [attribute hasPrefix: @"rgb("] ) {
-		attribute = [attribute substringWithRange: NSMakeRange( 4, [attribute length] - 1 - 5)];
+		//TODO could go in the QQColor-Extensions category
+		//start after rgb( and end at before )
+		attribute = [attribute substringWithRange: NSMakeRange( 4, [attribute length] - 4 - 1)];
 		NSArray* parts = [attribute componentsSeparatedByString: @","];
-		CGFloat components[4] = {[[parts firstObject] floatValue] / 255.0f, 
-			[[parts secondObject] floatValue] / 255.0f,
-			[[parts lastObject] floatValue] / 255.0f, 1};
-		color = CGColorCreate(colorSpace, components);
+		color = [OQColor colorWithRed: [[parts firstObject] floatValue] / 255.0f
+								green: [[parts secondObject] floatValue] / 255.0f
+								 blue: [[parts lastObject] floatValue] / 255.0f
+								alpha: 1];
 	}
 	else if( [attribute hasPrefix: @"#"] && [attribute length] == 7 ) {
+		//TODO could go in the QQColor-Extensions category
 		//Hex encoding
 		NSString* r = [attribute substringWithRange: NSMakeRange( 1, 2 )];
 		NSString* g = [attribute substringWithRange: NSMakeRange( 3, 2 )];
 		NSString* b = [attribute substringWithRange: NSMakeRange( 5, 2 )];
-		
-		CGFloat components[4] = {[r hexValue] / 255.0f, 
-			[g hexValue] / 255.0f,
-			[b hexValue] / 255.0f, 1};
-		color = CGColorCreate(colorSpace, components);
+		color = [OQColor colorWithRed: [r hexValue] / 255.0f
+								green: [g hexValue] / 255.0f
+								 blue: [b hexValue] / 255.0f
+								alpha: 1];
 	}
 	
-	CGColorSpaceRelease(colorSpace);
-	return color;
+	return [color rgbaCGColorRef];
 }
 
 static OAMutableParagraphStyle* currentParagraphStyle( NSDictionary* dict )

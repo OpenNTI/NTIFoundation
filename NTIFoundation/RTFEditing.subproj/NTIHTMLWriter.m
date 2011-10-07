@@ -24,6 +24,9 @@
 #import <OmniFoundation/NSData-OFEncoding.h>
 #import "NSAttributedString-HTMLWritingExtensions.h"
 
+#import "OmniQuartz/OQColor.h"
+#import "OQColor-NTIExtensions.h"
+
 #ifdef DEBUG_jmadden
 #define DEBUG_RTF_WRITER
 #endif
@@ -550,15 +553,11 @@ static const struct {
 	self->registeredColors = [[NSMutableDictionary alloc] init];
 	
 	int colorIndex = 0;
-	//Default foreground color is black
-	CGColorSpaceRef rgb = CGColorSpaceCreateDeviceRGB();
-	CGFloat components[4] = {0, 0, 0, 1};
-	CGColorRef black = CGColorCreate(rgb, components);
-	CGColorSpaceRelease(rgb);
+	
+	OQColor* blackColor = [OQColor blackColor];
 	
 	NTIHTMLColorTableEntry* defaultColorEntry 
-	= [[NTIHTMLColorTableEntry alloc] initWithColor: (id)black];
-	CGColorRelease(black);
+	= [[NTIHTMLColorTableEntry alloc] initWithColor: (id)[blackColor rgbaCGColorRef]];
 	[self->registeredColors setObject: [NSNumber numberWithInt: colorIndex++]
 							   forKey: defaultColorEntry];
 	[defaultColorEntry release];
