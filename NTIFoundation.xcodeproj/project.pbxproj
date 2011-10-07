@@ -41,6 +41,10 @@
 		40D754AE142791AF00335BEF /* SocketIOSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D754AC142791AF00335BEF /* SocketIOSocket.m */; };
 		40D754B1142791CE00335BEF /* SocketIOTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 40D754AF142791CD00335BEF /* SocketIOTransport.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40D754B2142791CE00335BEF /* SocketIOTransport.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D754B0142791CD00335BEF /* SocketIOTransport.m */; };
+		40E045F3143F468D0091CE7C /* NTIHTMLWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 40E045F1143F468D0091CE7C /* NTIHTMLWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		40E045F4143F468D0091CE7C /* NTIHTMLWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E045F2143F468D0091CE7C /* NTIHTMLWriter.m */; };
+		40E04614143F47890091CE7C /* NTIHTMLReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 40E04612143F47890091CE7C /* NTIHTMLReader.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		40E04615143F47890091CE7C /* NTIHTMLReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E04613143F47890091CE7C /* NTIHTMLReader.m */; };
 		72C0D197142529E800D526D8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72CBA96B1385CF1F00E3D28D /* Foundation.framework */; };
 		72CB9A9C14253CD500CE4FAA /* NSArray-NTIJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 7216D72413CB9F7800509BDC /* NSArray-NTIJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		72CB9A9D14253CD500CE4FAA /* NSDictionary-NTIJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 409951D213CFBD510039982D /* NSDictionary-NTIJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -347,6 +351,10 @@
 		40D754AC142791AF00335BEF /* SocketIOSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketIOSocket.m; sourceTree = "<group>"; };
 		40D754AF142791CD00335BEF /* SocketIOTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketIOTransport.h; sourceTree = "<group>"; };
 		40D754B0142791CD00335BEF /* SocketIOTransport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketIOTransport.m; sourceTree = "<group>"; };
+		40E045F1143F468D0091CE7C /* NTIHTMLWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIHTMLWriter.h; sourceTree = "<group>"; };
+		40E045F2143F468D0091CE7C /* NTIHTMLWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIHTMLWriter.m; sourceTree = "<group>"; };
+		40E04612143F47890091CE7C /* NTIHTMLReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIHTMLReader.h; sourceTree = "<group>"; };
+		40E04613143F47890091CE7C /* NTIHTMLReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIHTMLReader.m; sourceTree = "<group>"; };
 		7215956A13CFE80600DCA72E /* NTIJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTIJSON.h; path = ../NTIJSON.h; sourceTree = "<group>"; };
 		7216D72413CB9F7800509BDC /* NSArray-NTIJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSArray-NTIJSON.h"; path = "../NSArray-NTIJSON.h"; sourceTree = "<group>"; };
 		7216D72513CB9F7800509BDC /* NSArray-NTIJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSArray-NTIJSON.m"; path = "../NSArray-NTIJSON.m"; sourceTree = "<group>"; };
@@ -476,6 +484,10 @@
 				403D0DBF143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.m */,
 				403D0DC0143E193E0049A755 /* NTIRTFDocument.h */,
 				403D0DC1143E193E0049A755 /* NTIRTFDocument.m */,
+				40E045F1143F468D0091CE7C /* NTIHTMLWriter.h */,
+				40E045F2143F468D0091CE7C /* NTIHTMLWriter.m */,
+				40E04612143F47890091CE7C /* NTIHTMLReader.h */,
+				40E04613143F47890091CE7C /* NTIHTMLReader.m */,
 			);
 			name = RTFEditing;
 			path = RTFEditing.subproj;
@@ -842,6 +854,8 @@
 				403D0DC2143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h in Headers */,
 				403D0DC4143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.h in Headers */,
 				403D0DC6143E193E0049A755 /* NTIRTFDocument.h in Headers */,
+				40E045F3143F468D0091CE7C /* NTIHTMLWriter.h in Headers */,
+				40E04614143F47890091CE7C /* NTIHTMLReader.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1243,6 +1257,8 @@
 				403D0DC3143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.m in Sources */,
 				403D0DC5143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.m in Sources */,
 				403D0DC7143E193E0049A755 /* NTIRTFDocument.m in Sources */,
+				40E045F4143F468D0091CE7C /* NTIHTMLWriter.m in Sources */,
+				40E04615143F47890091CE7C /* NTIHTMLReader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
