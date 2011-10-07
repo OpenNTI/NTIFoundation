@@ -13,8 +13,8 @@
 
 -(void)testWebSockets
 {
-	WebSocket7* webSocket = [[[WebSocket7 alloc] initWithURLString: @"http://localhost:8080"] autorelease];
-	[webSocket connect];
+//	WebSocket7* webSocket = [[[WebSocket7 alloc] initWithURLString: @"http://localhost:8080"] autorelease];
+//	[webSocket connect];
 }
 
 

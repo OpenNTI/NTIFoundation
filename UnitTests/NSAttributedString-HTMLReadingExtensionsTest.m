@@ -14,7 +14,8 @@
 -(void)testStyleAndDirect
 {
 	NSAttributedString* style =
-	[NSAttributedString stringFromHTML: @"<html><body><p><span style='font-style: italic'>The text</span></p></body></html>"];	NSAttributedString* direct =
+	[NSAttributedString stringFromHTML: @"<html><body><p><span style='font-style: italic'>The text</span></p></body></html>"];	
+	NSAttributedString* direct =
 	[NSAttributedString stringFromHTML: @"<html><body><p><i>The text</i></p></body></html>"];
 	
 	STAssertEqualObjects(

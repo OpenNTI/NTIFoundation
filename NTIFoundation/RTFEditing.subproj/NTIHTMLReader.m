@@ -156,7 +156,9 @@ static void setCurrentFontDescriptor( NSMutableDictionary* dict,
 }
 
 //Returns nil on unrecognized colors
-static CGColorRef parseColor( NSString* attribute )
+CGColorRef NTIHTMLReaderParseColor(NSString* attribute);
+
+CGColorRef NTIHTMLReaderParseColor( NSString* attribute )
 {
 	OQColor* color = nil;
 	if( [@"black" isEqual: attribute] ) {
@@ -234,7 +236,7 @@ static void setCurrentParagraphStyle( NSMutableDictionary* dict, OAMutableParagr
 	for( id styleName in fontAttrs ) {
 		id styleValue = [fontAttrs objectForKey: styleName];
 		if( OFISEQUAL( styleName,  @"color") ) {
-			[dict setObject: (id)parseColor( styleValue )
+			[dict setObject: (id)NTIHTMLReaderParseColor( styleValue )
 					 forKey: (id)kCTForegroundColorAttributeName];
 		}
 	}
@@ -291,11 +293,11 @@ static void setCurrentParagraphStyle( NSMutableDictionary* dict, OAMutableParagr
 		} EHV
 		//Colors
 		else HAS_VALUE("color") {
-			[dict setObject: (id)parseColor( styleAttribute )
+			[dict setObject: (id)NTIHTMLReaderParseColor( styleAttribute )
 					 forKey: (id)kCTForegroundColorAttributeName];
 		} EHV
 		else HAS_VALUE("background-color") {
-			[dict setObject: (id)parseColor( styleAttribute )
+			[dict setObject: (id)NTIHTMLReaderParseColor( styleAttribute )
 					 forKey: (id)OABackgroundColorAttributeName];
 		} EHV
 		//Paragraph style

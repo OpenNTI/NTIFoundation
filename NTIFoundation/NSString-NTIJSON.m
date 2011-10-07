@@ -46,18 +46,24 @@ static id wrap( id o )
 	while( *ix < self.length ) {
 		unichar theChar = [self characterAtIndex: *ix];
 		if( theChar == ']' ) {
-			id part = [buf jsonObjectValue];
-			[parts addObject: wrap(part)];
+			if( [buf length] > 0){
+				id part = [buf jsonObjectValue];
+				[parts addObject: wrap(part)];
+			}
+			[buf setString: @""];
 			break;
 		}
 		
 		if( theChar == '[' ) {
 			(*ix)++;
 			[parts addObject: wrap([self jsonObjectArrayStartingAt: ix])];
+			[buf setString: @""];
 		}
 		else if( theChar == ',' ) {
-			id part = [buf jsonObjectValue];
-			[parts addObject: wrap(part)];
+			if( [buf length] > 0 ){
+				id part = [buf jsonObjectValue];
+				[parts addObject: wrap(part)];
+			}
 			[buf setString: @""];
 		}
 		else {
