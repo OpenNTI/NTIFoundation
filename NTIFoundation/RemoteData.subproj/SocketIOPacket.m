@@ -141,8 +141,14 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
 			}
 			break;
 		}
-		case SocketIOPacketTypeEvent:{
-			NSDictionary* eventObj = [theData propertyList];
+		case SocketIOPacketTypeEvent: {
+			NSDictionary* eventObj = nil;
+			@try {
+				eventObj = [theData propertyList];
+			}
+			@catch( NSException* ex ) {
+				eventObj = [theData jsonObjectValue];
+			}
 			packet.name = [eventObj objectForKey: @"name"];
 			packet.args = [eventObj objectForKey: @"args"];
 			

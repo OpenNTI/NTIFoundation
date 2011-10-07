@@ -150,6 +150,7 @@ static CGColorRef parseColor( NSString* attribute )
 	CGColorRef color = nil;
 	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 	if( [@"black" isEqual: attribute] ) {
+		//TODO: Use OQColor constants
 		CGFloat components[4] = {0, 0, 0, 1};
 		color = CGColorCreate(colorSpace, components);
 	}

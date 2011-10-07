@@ -43,7 +43,8 @@ typedef struct {
 -(NSString*)htmlStringFromStringWrappedIn: (NSString*)element;
 @end
 
-@interface NSObject()
+@interface NSObject(NTIHTMLWriterExtensions)
+//TODO: This should be getting a sender argument.
 -(void)exportHTMLToDataBuffer: (OFDataBuffer*)buffer withSize: (CGSize)size;
 @end
 
@@ -58,6 +59,6 @@ typedef struct {
 	state_t* state;
 }
 
-+ (NSData*)htmlDataForAttributedString: (NSAttributedString*)attributedString;
++(NSData*)htmlDataForAttributedString: (NSAttributedString*)attributedString;
 
 @end
