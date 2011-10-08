@@ -111,13 +111,12 @@
 	@try {
 		payload = [SocketIOPacket decodePayload: data];
 	}
-	@catch (NSException *exception) {
+	@catch( NSException *exception ) {
 		NSLog(@"Encountered issue when decoding data %@", exception);
 	}
 	
 	//Do we do anything other than tell our delegate?  Do we even tell our delegate?
-	if(!payload)
-	{
+	if( !payload ) {
 		NSError* error = [self createErrorWithCode: 201 
 										andMessage: 
 						  [NSString stringWithFormat: 
@@ -218,8 +217,7 @@
 #pragma mark handshake downloader delegate
 -(void)downloader:(NTIDelegatingDownloader *)d connection: (NSURLConnection*)c didFailWithError:(NSError *)error
 {
-	[self->downloader release];
-	self->downloader=nil;
+	NTI_RELEASE( self->downloader );
 	//Regardless of when we encountered the error. raise and disconnect.
 	[self logAndRaiseError: error];
 	[self disconnect];
@@ -230,8 +228,8 @@
 {
 	//We got a response if it was from connecting we need to start our timer.
 	NSData* dataBody = [downloader data];
-	[self->downloader release];
-	self->downloader=nil;
+	NTI_RELEASE( self->downloader );
+
 	
 	//We only poll if we are open.  If we are closed now just have to throw away the data
 	if( self.status == SocketIOTransportStatusClosed ){

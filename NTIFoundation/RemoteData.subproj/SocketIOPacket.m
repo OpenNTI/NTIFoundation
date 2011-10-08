@@ -325,11 +325,13 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
 
 +(NSArray*)decodePayload: (NSData*)payload
 {
+	NSArray* result = nil;
+
 	uint8_t separtorLength = 3;
 	uint8_t separator[separtorLength];
-	separator[0]=0xef;
-	separator[1]=0xbf;
-	separator[2]=0xbd;
+	separator[0] = 0xef;
+	separator[1] = 0xbf;
+	separator[2] = 0xbd;
 	NSData* separatorData = [NSData dataWithBytes: separator length: separtorLength];
 	
 	//If our payload starts with 0xfffd then its a payload
@@ -339,10 +341,10 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
 										  options: NSDataSearchAnchored 
 											range: NSMakeRange(0, separtorLength)];
 	
-	if(firstSeperator.location == 0){
+	if( firstSeperator.location == 0 ) {
 		NSUInteger location=0;
 		NSMutableArray* packets = [NSMutableArray arrayWithCapacity: 3];
-		do{
+		do {
 			//Move past the two bytes that are the separator
 			location = location + separtorLength;
 			
@@ -358,9 +360,14 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
 			//We need to consume from our location to the next separator
 			NSUInteger lengthOflengthStringBytes = nextSepartor.location - location;
 			uint8_t lengthBytes[lengthOflengthStringBytes];
-			[payload getBytes: lengthBytes range: NSMakeRange(location, lengthOflengthStringBytes)];
+			[payload getBytes: lengthBytes 
+						range: NSMakeRange(location, lengthOflengthStringBytes)];
 			
-			NSUInteger bytesForPayload = [[NSString stringWithData: [NSData dataWithBytes: lengthBytes length: lengthOflengthStringBytes] encoding: NSUTF8StringEncoding] integerValue];
+			NSUInteger bytesForPayload 
+				= [[NSString stringWithData: [NSData dataWithBytes: lengthBytes 
+															length: lengthOflengthStringBytes] 
+								   encoding: NSUTF8StringEncoding] 
+				   integerValue];
 			
 			location = location + lengthOflengthStringBytes;
 			
@@ -369,20 +376,34 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
 			
 			uint8_t packetBytes[bytesForPayload];
 			[payload getBytes:packetBytes range: NSMakeRange(location, bytesForPayload)];
-			
-			[packets addObject: [SocketIOPacket decodePacketData: [NSData dataWithBytes: 
-																   packetBytes length: bytesForPayload]]];
+			id packet = [SocketIOPacket decodePacketData: [NSData dataWithBytes: packetBytes
+																		 length: bytesForPayload]];
+			if( packet ) {
+				[packets addObject: packet];
+			}
+			else {
+				NSLog( @"WARN: Unable to parse packet." );
+				//And stop trying. Return failure.
+				packets = nil;
+				break;
+			}
 			
 			location = location + bytesForPayload;
 			
 			
-		}while(location < payloadLength);
+		} while(location < payloadLength);
 		
-		return packets;
+		result = packets;
 	}
-	else{
-		return [NSArray arrayWithObject: [SocketIOPacket decodePacketData: payload]];
+	else {
+		id packet = [SocketIOPacket decodePacketData: payload];
+		if( packet ) {
+			result = [NSArray arrayWithObject: packet];
+		}
 	}
+	
+	return result;
+
 }
 
 -(void)dealloc
