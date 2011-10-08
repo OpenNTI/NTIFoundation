@@ -312,6 +312,7 @@ static NSData* hashUsingSHA1(NSData* data)
 	NSString* firstFourBytesString = [NSString stringWithData: firstFourData encoding: NSUTF8StringEncoding];
 	if(![firstFourBytesString isEqualToString: @"HTTP"]){
 		[self shutdownAsResultOfError: errorWithCodeAndMessage(302, @"64 bit length frame not allowed")];
+		return;
 	}
 	
 	NSMutableData* data = [NSMutableData dataWithBytes: buf length: 4];
@@ -323,16 +324,24 @@ static NSData* hashUsingSHA1(NSData* data)
 	NSInteger maxSize = 1024;
 	NSInteger i = 0;
 	uint8_t currentByte = 0x00;
-	while(i<maxSize){
+	while(i<maxSize && [self->socketInputStream hasBytesAvailable]){
 		
-		[self->socketInputStream read: &currentByte maxLength: 1];
+		NSInteger numBytesReturned = [self->socketInputStream read: &currentByte maxLength: 1];
+		
+		if(numBytesReturned < 1){
+			NSLog(@"Unable to read bytes when consuming handshake response.  Expect issues.");
+			break;
+		}
+		
 		[data appendBytes: &currentByte length: 1];
 		
 		if( currentByte == 0x0d && (state == 0 || state == 2)){
 			state = state + 1;
-		}else if( currentByte == 0x0a && (state == 1 || state == 3)){
+		}
+		else if( currentByte == 0x0a && (state == 1 || state == 3)){
 			state = state + 1;
-		}else{
+		}
+		else{
 			state = 0;
 		}
 		if(state == 4){
@@ -345,7 +354,7 @@ static NSData* hashUsingSHA1(NSData* data)
 	NSLog(@"Handling handshake response %@", response);
 #endif
 	//FIXME actually check the accept field
-	if ([self isSuccessfulHandshakeResponse: response]) {
+	if ( response && [self isSuccessfulHandshakeResponse: response] ) {
 		//FIXM we completely ignore the accept key here
 		[self updateStatus: WebSocketStatusConnected];
 	} else {
