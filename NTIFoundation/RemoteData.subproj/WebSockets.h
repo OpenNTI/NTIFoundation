@@ -41,6 +41,8 @@ typedef NSInteger WebSocketStatus;
 -(void)websocketIsReadyForData: (WebSocket7*)socket;
 @end
 
+@class HandshakeResponseBuffer;
+
 //Our implementation of the websocket spec v7
 //http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-17
 @interface WebSocket7 : SendRecieveQueue<NSStreamDelegate>{
@@ -52,6 +54,8 @@ typedef NSInteger WebSocketStatus;
 	WebSocketStatus status;
 	NSURL* url;
 	id nr_delegate;
+	
+	HandshakeResponseBuffer* handshakeResponseBuffer;
 }
 @property (nonatomic, assign) id nr_delegate;
 @property (nonatomic, readonly) WebSocketStatus status;

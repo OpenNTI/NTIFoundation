@@ -30,6 +30,112 @@
 
 @end
 
+@interface ResponseBuffer : OFObject{
+	@protected
+	NSMutableData* buffer;
+}
+@property (nonatomic, readonly) NSData* dataBuffer;
+//Appends the byte to the buffer and returns whether the buffer
+//contains a full response.  May through an exception if
+//the byte makes the buffer an invalid response.
+-(BOOL)appendByteToBuffer: (uint8_t*)byte;
+-(void)reset;
+//For subclasses
+-(BOOL)containsFullResponse;
+
+@end
+
+@implementation ResponseBuffer
+
+-(id)init
+{
+	self = [super init];
+	self->buffer = [[NSMutableData alloc] initWithCapacity: 1024];
+	return self;
+}
+
+-(void)reset
+{
+	[self->buffer setLength: 0];
+}
+
+-(BOOL)containsFullResponse
+{
+	return NO;
+}
+
+-(BOOL)appendByteToBuffer:(uint8_t *)byte
+{
+	[self->buffer appendBytes: byte length: 1];
+	return [self containsFullResponse];
+}
+
+-(NSData*)dataBuffer
+{
+	return [NSData dataWithData: self->buffer];
+}
+
+-(void)dealloc
+{
+	NTI_RELEASE(self->buffer);
+	[super dealloc];
+}
+
+@end
+
+@interface HandshakeResponseBuffer : ResponseBuffer {
+@private
+    uint8_t state;
+}
+@end
+
+@implementation HandshakeResponseBuffer
+
+-(id)init
+{
+	self = [super init];
+	self->state = 0;  //1 is \r, 2 is \r\n, 3=\r\n\r, 4=\r\n\r\n
+	return self;
+}
+
+-(BOOL)appendByteToBuffer:(uint8_t *)currentByte
+{	
+	//1 is \r, 2 is \r\n, 3=\r\n\r, 4=\r\n\r\n
+	if( *currentByte == 0x0d && (state == 0 || state == 2)){
+		state = state + 1;
+	}
+	else if( *currentByte == 0x0a && (state == 1 || state == 3)){
+		state = state + 1;
+	}
+	else{
+		state = 0;
+	}
+	
+	BOOL result = [super appendByteToBuffer: currentByte];
+	
+	//We expect an http response
+	if( [self->buffer length] == 4 ){
+		uint8_t buf[4];
+		[self->buffer getBytes: buf range: NSMakeRange(0, 4)];
+		NSData* firstFourData = [NSData dataWithBytes: buf length: 4];
+		NSString* firstFourBytesString = [NSString stringWithData: firstFourData encoding: NSUTF8StringEncoding];
+		if(![firstFourBytesString isEqualToString: @"HTTP"]){
+			[[NSException exceptionWithName: @"UnknownResponse" 
+									reason: @"Expected an http response to handshake" 
+								   userInfo: nil] raise];
+		}
+	}
+	
+	return result;
+}
+
+-(BOOL)containsFullResponse
+{
+	return self->state == 4;
+}
+
+@end
+
 @implementation WebSocket7
 @synthesize status, nr_delegate;
 
@@ -302,67 +408,74 @@ static NSData* hashUsingSHA1(NSData* data)
 	return [encoded isEqualToString: acceptKey];
 }
 
--(void)processHandshakeResponse
+-(void)processHandshakeResponse: (HandshakeResponseBuffer*)hrBuffer
 {
-	//Read 4 bytes and make sure we are http
-	uint8_t buf[4];
-	[self->socketInputStream read: buf maxLength: 4];
-	
-	NSData* firstFourData = [NSData dataWithBytes: buf length: 4];
-	NSString* firstFourBytesString = [NSString stringWithData: firstFourData encoding: NSUTF8StringEncoding];
-	if(![firstFourBytesString isEqualToString: @"HTTP"]){
-		[self shutdownAsResultOfError: errorWithCodeAndMessage(302, @"64 bit length frame not allowed")];
-		return;
-	}
-	
-	NSMutableData* data = [NSMutableData dataWithBytes: buf length: 4];
-	
-	//We have an http response. must read byte by byte until we encounter 0d0a0d0a (\r\n)
-	uint8_t state = 0;  //1 is \r, 2 is \r\n, 3=\r\n\r, 4=\r\n\r\n
-	
-	//We are an http response so we can guarentee it will eventually come?
-	NSInteger maxSize = 1024;
-	NSInteger i = 0;
-	uint8_t currentByte = 0x00;
-	while(i<maxSize && [self->socketInputStream hasBytesAvailable]){
-		
-		NSInteger numBytesReturned = [self->socketInputStream read: &currentByte maxLength: 1];
-		
-		if(numBytesReturned < 1){
-			NSLog(@"Unable to read bytes when consuming handshake response.  Expect issues.");
-			break;
-		}
-		
-		[data appendBytes: &currentByte length: 1];
-		
-		if( currentByte == 0x0d && (state == 0 || state == 2)){
-			state = state + 1;
-		}
-		else if( currentByte == 0x0a && (state == 1 || state == 3)){
-			state = state + 1;
-		}
-		else{
-			state = 0;
-		}
-		if(state == 4){
-			break;
-		}
-	}
-	
-	NSString* response = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+	NSString* response = [[[NSString alloc] initWithData: hrBuffer.dataBuffer 
+												encoding: NSUTF8StringEncoding] autorelease];
 #ifdef DEBUG_SOCKETIO
 	NSLog(@"Handling handshake response %@", response);
 #endif
 	//FIXME actually check the accept field
 	if ( response && [self isSuccessfulHandshakeResponse: response] ) {
-		//FIXM we completely ignore the accept key here
 		[self updateStatus: WebSocketStatusConnected];
 	} else {
 		[self shutdownAsResultOfError: errorWithCodeAndMessage(300, 
 															   [NSString stringWithFormat: 
 																@"Unexpected response for handshake. %@", response])];
 	}
+	//We don't need to hold onto this object anymore.
+	NTI_RELEASE(self->handshakeResponseBuffer);
+	self->handshakeResponseBuffer = nil;
 
+}
+
+-(void)readHandshakeResponse
+{
+	//If we haven't yet started the response start it now.
+	if(!self->handshakeResponseBuffer){
+		self->handshakeResponseBuffer = [[HandshakeResponseBuffer alloc] init];
+	}
+	
+	//When we are told to read we will read as much as we
+	//possibly can.
+	uint8_t currentByte = 0x00;
+	while( [self->socketInputStream hasBytesAvailable] ){
+		
+		//Read a byte off the input stream.  Be careful to inspect
+		//the return value
+		NSInteger readResult = -5;
+		readResult = [self->socketInputStream read: &currentByte maxLength: 1];
+		
+		//If we didn't read one byte its because we reached the end
+		//of the stream or the operation failed.  Either case is bad
+		if(readResult != 1){
+			[self shutdownAsResultOfError: 
+			 errorWithCodeAndMessage(300, 
+									 [NSString stringWithFormat: 
+											@"Unable to read handshake response.  Error code %ld", readResult])];
+			break;
+		}
+		
+		//Ok we have a byte from the stream.  Put it in our buffer.  Remember this may through an exception
+		BOOL completeResult = NO;
+		@try{
+			completeResult = [self->handshakeResponseBuffer appendByteToBuffer: &currentByte];
+		}
+		@catch (NSException* e) {
+			[self shutdownAsResultOfError: 
+			 errorWithCodeAndMessage(301, [NSString stringWithFormat: @"%@: %@", e.name, e.reason])];
+			break;
+		}
+		
+		//Ok we added the byte.  If we have a complete result we need to handle it.
+		if(completeResult){
+			[self processHandshakeResponse: self->handshakeResponseBuffer];
+			//When we are reading the response we know we wont have data after it.
+			//we haven't sent any socket data until we move to connected.  safe assumption?
+			break;
+		}
+	}
+	
 }
 
 -(void)handleInputStreamEvent: (NSStreamEvent)eventCode
@@ -372,7 +485,7 @@ static NSData* hashUsingSHA1(NSData* data)
 	{
 		switch (self->status) {
 			case WebSocketStatusConnecting:
-				[self processHandshakeResponse];
+				[self readHandshakeResponse];
 				break;
 			case WebSocketStatusConnected:{ //Todo handle opcodes here
 				
@@ -552,6 +665,7 @@ static NSData* hashUsingSHA1(NSData* data)
 -(void)dealloc
 {
 	[self shutdownStreams];
+	NTI_RELEASE(self->handshakeResponseBuffer);
 	NTI_RELEASE(self->key);
 	NTI_RELEASE(self->url);
 }
