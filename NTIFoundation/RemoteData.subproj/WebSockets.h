@@ -42,6 +42,7 @@ typedef NSInteger WebSocketStatus;
 @end
 
 @class HandshakeResponseBuffer;
+@class WebSocketResponseBuffer;
 
 //Our implementation of the websocket spec v7
 //http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-17
@@ -56,6 +57,7 @@ typedef NSInteger WebSocketStatus;
 	id nr_delegate;
 	
 	HandshakeResponseBuffer* handshakeResponseBuffer;
+	WebSocketResponseBuffer* socketRespsonseBuffer;
 }
 @property (nonatomic, assign) id nr_delegate;
 @property (nonatomic, readonly) WebSocketStatus status;

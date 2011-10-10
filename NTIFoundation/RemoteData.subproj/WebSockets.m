@@ -39,7 +39,6 @@
 //contains a full response.  May through an exception if
 //the byte makes the buffer an invalid response.
 -(BOOL)appendByteToBuffer: (uint8_t*)byte;
--(void)reset;
 //For subclasses
 -(BOOL)containsFullResponse;
 
@@ -52,11 +51,6 @@
 	self = [super init];
 	self->buffer = [[NSMutableData alloc] initWithCapacity: 1024];
 	return self;
-}
-
--(void)reset
-{
-	[self->buffer setLength: 0];
 }
 
 -(BOOL)containsFullResponse
@@ -120,7 +114,7 @@
 		NSData* firstFourData = [NSData dataWithBytes: buf length: 4];
 		NSString* firstFourBytesString = [NSString stringWithData: firstFourData encoding: NSUTF8StringEncoding];
 		if(![firstFourBytesString isEqualToString: @"HTTP"]){
-			[[NSException exceptionWithName: @"UnknownResponse" 
+			[[NSException exceptionWithName: @"UnexpectedResponse" 
 									reason: @"Expected an http response to handshake" 
 								   userInfo: nil] raise];
 		}
@@ -132,6 +126,236 @@
 -(BOOL)containsFullResponse
 {
 	return self->state == 4;
+}
+
+@end
+
+//Define some states to use
+#define WebSocketResponseTypeUnknown 0
+#define WebSocketResponseTypeClose 1
+#define WebSocketResponseTypeText 2
+#define WebSocketResponseTypeBinary 3
+
+#define WebSocketResponseSizeUnknown 0
+#define WebSocketResponseSize16bit 1
+#define WebSocketResponseSize32bit 2
+#define WebSocketResponseSize64bit 3
+
+#define WebSocketResponseReadingUnknown 0
+#define WebSocketResponseReadingMask 1
+#define WebSocketResponseReadingData 2
+#define WebSocketResponseReadingSizeAndMask 3
+#define WebSocketResponseReadingSizeBytes 4
+
+@interface WebSocketResponseBuffer : ResponseBuffer
+{
+	@private
+	NSUInteger dataBytesSoFar;
+	NSUInteger dataLength;
+	uint8_t readingPart;
+	uint8_t responseSize;
+	uint8_t responseType;
+	uint8_t mask[4];
+	uint8_t sizeBytes[2];
+	NSInteger dataPosition;
+	uint8_t sizeBytesRead;
+	uint8_t maskBytesRead;
+	BOOL masked;
+}
+-(WebSocketData*)websocketData;
+-(BOOL)isCloseResponse;
+@end
+
+@implementation WebSocketResponseBuffer
+
+-(id)init
+{
+	self = [super init];
+	
+	self->readingPart = WebSocketResponseReadingUnknown;
+	self->dataBytesSoFar = 0;
+	self->dataLength = -1;
+	self->responseSize = WebSocketResponseSizeUnknown;
+	self->responseType = WebSocketResponseTypeUnknown;
+	self->dataPosition = -1;
+	self->sizeBytesRead = 0;
+	self->maskBytesRead = 0;
+	
+	for(NSUInteger i = 0; i < 4 ; i++){
+		self->mask[i] = 0x00;
+	}
+	
+	for(NSUInteger i=0; i < 2 ; i++){
+		self->sizeBytes[i] = 0x00;
+	}
+	
+	return self;
+}
+
+-(BOOL)isCloseResponse
+{
+	return self->responseType == WebSocketResponseTypeClose;
+}
+
+-(BOOL)readFirstByte: (uint8_t*)byte
+{
+	if( *byte & 0x81 ){ //This is text
+		self->responseType = WebSocketResponseTypeText;
+	}
+	else if( *byte & 0x82 ){ //This is binary
+		self->responseType = WebSocketResponseTypeBinary;
+	}
+	else if( *byte & 0x88){ //This is a close
+		self->responseType = WebSocketResponseTypeClose;
+	}
+	else{ //1000 0001
+		[[NSException exceptionWithName: @"UnexpectedResponse" 
+								 reason: [NSString stringWithFormat: 
+										  @"Unknown opcode recieved. First byte of frame=%d", *byte]
+							   userInfo: nil] raise];
+	}
+
+	//Up next is the size and mask
+	self->readingPart = WebSocketResponseReadingSizeAndMask; 
+	
+	//Actually append the byte
+	return [super appendByteToBuffer: byte];
+
+}
+
+-(BOOL)readSizeAndMasked: (uint8_t*)byte
+{	
+	
+	//if we don't know our size yet this is the first attempt at reading size and masked
+	if(self->responseSize == WebSocketResponseSizeUnknown){		
+		//Save if we are masked
+		self->masked = (*byte & 0x80);
+		
+		//The first size byte will determine what response size we are
+		int client_len = *byte & 0x7F;
+		
+		//If we are less than 126 we are 16bit, 126 is 32 bit and we expect two more databytes, > 126 we don't support
+		if( client_len < 126){
+			self->responseSize = WebSocketResponseSize16bit;
+			self->dataLength = client_len;
+			//Next is the mask or the data
+			self->readingPart = self->masked ? WebSocketResponseReadingMask : WebSocketResponseReadingData;
+		}
+		else if( client_len == 126 ){
+			self->responseSize = WebSocketResponseSize32bit;
+		}
+		else{
+			self->responseSize = WebSocketResponseSize64bit;
+			[[NSException exceptionWithName: @"UnexpectedResponse" 
+									 reason: [NSString stringWithFormat: 
+											  @"Expected 32 bit size but had size state of %ld", self->responseSize]
+								   userInfo: nil] raise];
+		}
+	}
+	else{
+		//If we ever get to here we better be 32 bit response
+		if(self->responseSize != WebSocketResponseSize32bit){
+			[[NSException exceptionWithName: @"UnexpectedResponse" 
+									 reason: [NSString stringWithFormat: 
+											  @"Expected 32 bit size but had size state of %ld", self->responseSize]
+								   userInfo: nil] raise];
+		}
+		//We have size bytes to read
+		self->sizeBytes[self->sizeBytesRead++] = *byte;
+		
+		//If we have read two size bytes we have all we need to construct the lenght
+		if( self->sizeBytesRead == 2){
+			self->dataLength = (self->sizeBytes[0] << 8) | (self->sizeBytes[1]);
+			
+			//Next is the mask or the data
+			self->readingPart = self->masked ? WebSocketResponseReadingMask : WebSocketResponseReadingData;
+		}
+	}
+	
+	return [super appendByteToBuffer: byte];
+}
+
+-(BOOL)readMask: (uint8_t*)byte
+{
+	//Reading the mask is easy.  save off the mask so we have it for later
+	//append the byte and increment the maskCounter
+	self->mask[self->maskBytesRead++] = *byte;
+	
+	//If we have read four mask bytes it's time to move onto data
+	if(self->maskBytesRead == 4){
+		self->readingPart = WebSocketResponseReadingData;
+	}
+	
+	return [super appendByteToBuffer: byte];
+}
+
+-(BOOL)readData: (uint8_t*)byte
+{
+	//If this is the first data we have read we need to set the data position so it can
+	//be extracted later
+	if( self->dataPosition < 0 ){
+		self->dataPosition = [self->buffer length];
+	}
+	
+	//Reading data is easy we just increment the number of bytes read 
+	//and append the bytes
+	self->dataBytesSoFar++;
+	return [super appendByteToBuffer: byte];
+}
+
+-(BOOL)appendByteToBuffer:(uint8_t *)byte
+{
+	switch(self->readingPart){
+		case WebSocketResponseReadingUnknown:
+			return [self readFirstByte: byte];
+			break;
+		case WebSocketResponseReadingSizeAndMask:
+			return [self readSizeAndMasked: byte];
+			break;
+		case WebSocketResponseReadingSizeBytes:
+			return [self readSizeAndMasked: byte];
+			break;
+		case WebSocketResponseReadingMask:
+			return [self readMask: byte];
+			break;
+		case WebSocketResponseReadingData:
+			return [self readData: byte];
+		default:
+			[[NSException exceptionWithName: @"UnexpectedResponse" 
+									 reason: [NSString stringWithFormat: 
+											  @"Unknown buffer state readingpart = %ld", 
+											  self->readingPart]
+								   userInfo: nil] raise];
+			
+			//To shut the compiler up
+			return NO;
+	}
+}
+
+-(WebSocketData*)websocketData
+{
+	if(	  ![self containsFullResponse] 
+	   || self->responseType == WebSocketResponseTypeClose 
+	   || self->responseType == WebSocketResponseSizeUnknown ){
+		return nil;
+	}
+	NSMutableData* theData = [NSMutableData dataWithCapacity: self->dataLength];
+	
+	uint8_t currentByte = 0x00;
+	uint8_t offsetForMask = self->dataPosition % 4;
+	for(NSUInteger location = self->dataPosition; location < self->dataPosition + self->dataLength; location++){
+		[self->buffer getBytes: &currentByte range: NSMakeRange(location, 1)];
+		currentByte = currentByte ^ mask[(location - offsetForMask) % 4];
+		[theData appendBytes: &currentByte length: 1];
+	}
+	
+	return [[[WebSocketData alloc] initWithData: theData 
+										 isText: self->responseType == WebSocketResponseTypeText] autorelease];
+}
+
+-(BOOL)containsFullResponse
+{
+	return self->responseType == WebSocketResponseTypeClose || dataBytesSoFar == dataLength;
 }
 
 @end
@@ -218,55 +442,82 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	[self shutdownStreams];
 }
 
--(void)readAndEnqueue: (BOOL)asString
+-(void)processSocketResponse: (WebSocketResponseBuffer*)responseBuffer
 {
-	//Called after having read the first byte.
-	
-	//Next byte is our flag and opcode
-	uint8_t mask_and_len = 0x00;
-	[self->socketInputStream read: &mask_and_len maxLength: 1];
-	
-	int client_len = mask_and_len & 0x7F;
-	
-	uint8_t b1;
-	uint8_t b2;
-	if( client_len == 126 ){
-		[self->socketInputStream read: &b1 maxLength: 1];
-		[self->socketInputStream read: &b2 maxLength: 1];
-		client_len = (b1 << 8) | b2;
-	}
-	else if(client_len == 127){
-		[self shutdownAsResultOfError: errorWithCodeAndMessage(301, @"64 bit length frame not allowed")];
-	}
-	
-	//The server doesn't have to send a masking key
-	BOOL masked = (mask_and_len & 0x80);
-	
-	uint8_t mask[4];
-	for(NSInteger i = 0; i<4; i++){
-		if(masked){
-			[self->socketInputStream read: &mask[i] maxLength: 1];
+	//If we are a close we just need to shut things down
+	if( [responseBuffer isCloseResponse] ){
+		
+		//If we aren't already disconnecting send the disconnect packet
+		if( self->status != WebSocketStatusDisconnecting ){
+			uint8_t shutdownByte = 0x88;
+			[self updateStatus: WebSocketStatusDisconnecting];
+			//Does this need to be queued up for writing?  Is it possible this blocks?
+			[self->socketOutputStream write: &shutdownByte maxLength: 1];
 		}
-		else{
-			mask[i]=0x00;
+		[self shutdownStreams];
+		
+		
+	}
+	else{
+		WebSocketData* wsdata = [responseBuffer websocketData];
+		[self enqueueRecievedData: wsdata];
+		if( [self->nr_delegate respondsToSelector: @selector(websocketDidRecieveData:)] ){
+			[self->nr_delegate websocketDidRecieveData: self];
 		}
 	}
-	
-	//We must go byte by byte so we can apply the mask if necessary
-	NSMutableData* data = [NSMutableData data];
-	for(NSInteger i=0; i<client_len; i++){
-		uint8_t byte;
-		[self->socketInputStream read: &byte maxLength: 1];
-		byte = byte ^ mask[i%4];
-		[data appendBytes: &byte length: 1];
+}
+
+//FIXME This code is extremely similar to how we readResponseData for the handshake
+//generalize and abstract it away
+-(void)readSocketResponse
+{
+	//When we are told to read we will read as much as we
+	//possibly can.
+	uint8_t currentByte = 0x00;
+	while( [self->socketInputStream hasBytesAvailable] ){
+		
+		//If we haven't yet started the response start it now.
+		if(!self->socketRespsonseBuffer){
+			self->socketRespsonseBuffer = [[WebSocketResponseBuffer alloc] init];
+		}
+		
+		//Read a byte off the input stream.  Be careful to inspect
+		//the return value
+		NSInteger readResult = -5;
+		readResult = [self->socketInputStream read: &currentByte maxLength: 1];
+		
+		//If we didn't read one byte its because we reached the end
+		//of the stream or the operation failed.  Either case is bad
+		if(readResult != 1){
+			[self shutdownAsResultOfError: 
+			 errorWithCodeAndMessage(300, 
+									 [NSString stringWithFormat: 
+									  @"Unable to read socket response.  Error code %ld", readResult])];
+			break;
+		}
+		
+		//Ok we have a byte from the stream.  Put it in our buffer.  Remember this may throw an exception
+		BOOL completeResult = NO;
+		@try{
+			completeResult = [self->socketRespsonseBuffer appendByteToBuffer: &currentByte];
+		}
+		@catch (NSException* e) {
+			[self shutdownAsResultOfError: 
+			 errorWithCodeAndMessage(301, [NSString stringWithFormat: @"%@: %@", e.name, e.reason])];
+			break;
+		}
+		
+		//Ok we added the byte.  If we have a complete result we need to handle it.
+		if(completeResult){
+			[self processSocketResponse: self->socketRespsonseBuffer];
+			//Unlike with the handshake we may have more data that start new packets. 
+			//We clear our the socketResponseBuffer and keep reading if we can
+			NTI_RELEASE(self->socketRespsonseBuffer);
+			self->socketRespsonseBuffer = nil;
+			
+		}
 	}
 	
-	WebSocketData* wsdata = [[[WebSocketData alloc] initWithData: data
-														isText: asString] autorelease];
-	[self enqueueRecievedData: wsdata];
-	if( [self->nr_delegate respondsToSelector: @selector(websocketDidRecieveData:)] ){
-		[self->nr_delegate websocketDidRecieveData: self];
-	}
 }
 
 -(void)dequeueAndSend
@@ -488,39 +739,12 @@ static NSData* hashUsingSHA1(NSData* data)
 				[self readHandshakeResponse];
 				break;
 			case WebSocketStatusConnected:{ //Todo handle opcodes here
-				
-				//Second nibble of first byte is opcode.
-				uint8_t firstByte = 0x00;
-				[self->socketInputStream read: &firstByte maxLength: 1];
-				
-				if( firstByte & 0x81 ){ //This is text
-					[self readAndEnqueue: YES];
-				}
-				else if( firstByte & 0x82 ){ //This is binary
-					[self readAndEnqueue: NO];
-				}
-				else if( firstByte & 0x88){ //This is a close
-					//Server initiated the disconnect
-					//Shut'em down
-					[self updateStatus: WebSocketStatusDisconnecting];
-					[self->socketOutputStream write: &firstByte maxLength: 1];
-					[self shutdownStreams];
-					
-				}
-				else{ //1000 0001
-					[self shutdownAsResultOfError: errorWithCodeAndMessage(305, 
-																		   [NSString stringWithFormat: @"Unknown opcode recieved. First byte of frame=%d", firstByte])];
-				}
+				[self readSocketResponse];
 				break;
 			}
 			case WebSocketStatusDisconnecting:{
-				//Second nibble of first byte is opcode.
-				uint8_t firstByte = 0x00;
-				[self->socketInputStream read: &firstByte maxLength: 1];
-				//We sent a disconnect we are expecting an acknowledgement of that
-				if( firstByte & 0x88){ //This is a close
-					[self shutdownStreams];
-				}
+				[self readSocketResponse];
+				break;
 			}
 			default:
 #ifdef DEBUG_SOCKETIO
@@ -666,6 +890,7 @@ static NSData* hashUsingSHA1(NSData* data)
 {
 	[self shutdownStreams];
 	NTI_RELEASE(self->handshakeResponseBuffer);
+	NTI_RELEASE(self->socketRespsonseBuffer);
 	NTI_RELEASE(self->key);
 	NTI_RELEASE(self->url);
 }
