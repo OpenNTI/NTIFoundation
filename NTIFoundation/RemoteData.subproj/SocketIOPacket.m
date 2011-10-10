@@ -174,7 +174,7 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
 
 +(SocketIOPacket*)packetForHeartbeat
 {
-	SocketIOPacket* packet = [[SocketIOPacket alloc] initWithType: SocketIOPacketTypeMessage];
+	SocketIOPacket* packet = [[SocketIOPacket alloc] initWithType: SocketIOPacketTypeHeartbeat];
 	return [packet autorelease];
 }
 

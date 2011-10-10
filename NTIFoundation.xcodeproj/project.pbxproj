@@ -47,6 +47,13 @@
 		40B6F3BA14285AF4007EDF1C /* WebSocket7Test.h in Headers */ = {isa = PBXBuildFile; fileRef = 40B6F3B814285AF4007EDF1C /* WebSocket7Test.h */; };
 		40B6F3D914285B38007EDF1C /* WebSocket7Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 40B6F3B914285AF4007EDF1C /* WebSocket7Test.m */; };
 		40B6F3FC14285D23007EDF1C /* NSString-JSONTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D42813E32A7600652DAC /* NSString-JSONTest.m */; };
+		40C0E1031443AF9C00142406 /* SocketIOPacketTest.h in Headers */ = {isa = PBXBuildFile; fileRef = 40C0E1011443AF9C00142406 /* SocketIOPacketTest.h */; };
+		40C0E1051443AF9C00142406 /* SocketIOPacketTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40C0E1021443AF9C00142406 /* SocketIOPacketTest.m */; };
+		40C0E1061443AFA600142406 /* SendRecieveQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 40475AEA142A4940003323A9 /* SendRecieveQueue.m */; };
+		40C0E1071443AFAA00142406 /* WebSockets.m in Sources */ = {isa = PBXBuildFile; fileRef = 408494B41427DF6C0038BD31 /* WebSockets.m */; };
+		40C0E1081443AFAD00142406 /* SocketIOPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D754A814278E6900335BEF /* SocketIOPacket.m */; };
+		40C0E1091443AFB000142406 /* SocketIOSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D754AC142791AF00335BEF /* SocketIOSocket.m */; };
+		40C0E10A1443AFB300142406 /* SocketIOTransport.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D754B0142791CD00335BEF /* SocketIOTransport.m */; };
 		40D754A914278E6900335BEF /* SocketIOPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 40D754A714278E6900335BEF /* SocketIOPacket.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40D754AA14278E6900335BEF /* SocketIOPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D754A814278E6900335BEF /* SocketIOPacket.m */; };
 		40D754AD142791AF00335BEF /* SocketIOSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 40D754AB142791AF00335BEF /* SocketIOSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -376,6 +383,8 @@
 		40A63469141EAD5A0026CA3A /* NSNumber-NTIJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNumber-NTIJSON.m"; path = "../NSNumber-NTIJSON.m"; sourceTree = "<group>"; };
 		40B6F3B814285AF4007EDF1C /* WebSocket7Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSocket7Test.h; sourceTree = "<group>"; };
 		40B6F3B914285AF4007EDF1C /* WebSocket7Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSocket7Test.m; sourceTree = "<group>"; };
+		40C0E1011443AF9C00142406 /* SocketIOPacketTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketIOPacketTest.h; sourceTree = "<group>"; };
+		40C0E1021443AF9C00142406 /* SocketIOPacketTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketIOPacketTest.m; sourceTree = "<group>"; };
 		40D754A714278E6900335BEF /* SocketIOPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketIOPacket.h; sourceTree = "<group>"; };
 		40D754A814278E6900335BEF /* SocketIOPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketIOPacket.m; sourceTree = "<group>"; };
 		40D754AB142791AF00335BEF /* SocketIOSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketIOSocket.h; sourceTree = "<group>"; };
@@ -805,6 +814,8 @@
 		72D8185D13955D8C00473994 /* UnitTests */ = {
 			isa = PBXGroup;
 			children = (
+				40C0E1011443AF9C00142406 /* SocketIOPacketTest.h */,
+				40C0E1021443AF9C00142406 /* SocketIOPacketTest.m */,
 				403D0DCB143E38FD0049A755 /* NSAttributedString-HTMLReadingExtensionsTest.h */,
 				403D0DCC143E38FD0049A755 /* NSAttributedString-HTMLReadingExtensionsTest.m */,
 				72D8185E13955D8C00473994 /* Supporting Files */,
@@ -914,6 +925,7 @@
 				40E045F3143F468D0091CE7C /* NTIHTMLWriter.h in Headers */,
 				40E04614143F47890091CE7C /* NTIHTMLReader.h in Headers */,
 				40E04618143F50A60091CE7C /* OQColor-NTIExtensions.h in Headers */,
+				40C0E1031443AF9C00142406 /* SocketIOPacketTest.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1342,6 +1354,12 @@
 				408FBF16143F65C00095DD84 /* NSAttributedString-HTMLReadingExtensions.m in Sources */,
 				408FBF17143F65D70095DD84 /* NTIHTMLReader.m in Sources */,
 				408FBF1A143F6E5F0095DD84 /* OQColor-NTIExtensions.m in Sources */,
+				40C0E1051443AF9C00142406 /* SocketIOPacketTest.m in Sources */,
+				40C0E1061443AFA600142406 /* SendRecieveQueue.m in Sources */,
+				40C0E1071443AFAA00142406 /* WebSockets.m in Sources */,
+				40C0E1081443AFAD00142406 /* SocketIOPacket.m in Sources */,
+				40C0E1091443AFB000142406 /* SocketIOSocket.m in Sources */,
+				40C0E10A1443AFB300142406 /* SocketIOTransport.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
