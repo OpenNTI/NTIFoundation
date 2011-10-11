@@ -8,6 +8,7 @@
 
 #import "SocketIOPacketTest.h"
 #import "SocketIOPacket.h"
+#import "NSArray-NTIExtensions.h"
 
 @implementation SocketIOPacketTest
 
@@ -114,6 +115,59 @@
 	STAssertEqualObjects(serializedAndDecoded.name, eventPacket.name, nil);
 	STAssertEqualObjects(serializedAndDecoded.args, eventPacket.args, nil);
 	
+}
+
+-(void)testEncodePayload
+{
+	NSArray* packets = [NSArray arrayWithObjects: 
+						[self packetForString: @"2::"],
+						[self packetForString: @"3:::blahblahblah"],
+						[self packetForString: @"8::"], nil];
+	
+	NSData* encodedPackets = [SocketIOPacket encodePayload: packets];
+	
+	NSMutableData* expectedData = [NSMutableData dataWithCapacity: 50];
+	
+	uint8_t separator[3];
+	separator[0] = 0xef;
+	separator[1] = 0xbf;
+	separator[2] = 0xbd;
+	
+	for(SocketIOPacket* packet in packets){
+		
+		NSData* packetData = [packet encode];
+		
+		[expectedData appendBytes: separator length: 3];
+		NSString* lengthString = [NSString stringWithFormat: @"%d", [packetData length]];
+		NSData* lengthData = [lengthString dataUsingEncoding: NSUTF8StringEncoding];
+		[expectedData appendData: lengthData];
+		[expectedData appendBytes: separator length: 3];
+		[expectedData appendData: packetData];
+	}
+	
+	STAssertEqualObjects(encodedPackets, expectedData, nil);
+}
+
+-(void)testDecodePayload
+{
+	NSArray* packets = [NSArray arrayWithObjects: 
+						[self packetForString: @"2::"],
+						[self packetForString: @"3:::blahblahblah"],
+						[self packetForString: @"8::"], nil];
+	
+	NSData* encodedPackets = [SocketIOPacket encodePayload: packets];
+
+	NSArray* decodedPackets = [SocketIOPacket decodePayload: encodedPackets];
+	
+	SocketIOPacket* p = [decodedPackets firstObject];
+	STAssertPacketType(p, SocketIOPacketTypeHeartbeat);
+	
+	p = [decodedPackets secondObject];
+	STAssertPacketType(p, SocketIOPacketTypeMessage);
+	STAssertEqualObjects(p.data, @"blahblahblah", nil);
+	
+	p = [decodedPackets lastObject];
+	STAssertPacketType(p, SocketIOPacketTypeNoop);
 }
 
 @end
