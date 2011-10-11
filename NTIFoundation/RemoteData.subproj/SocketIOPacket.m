@@ -143,12 +143,24 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
 		}
 		case SocketIOPacketTypeEvent: {
 			NSDictionary* eventObj = nil;
+			NSString* parsedAs = @"plist";
 			@try {
 				eventObj = [theData propertyList];
 			}
 			@catch( NSException* ex ) {
+				//While this would be ideal our hacked together
+				//json support on IOS4 does not support dictionaries.
 				eventObj = [theData jsonObjectValue];
+				parsedAs = @"json";
 			}
+			
+			if(![eventObj respondsToSelector:@selector(objectForKey:)]){
+				[[NSException exceptionWithName: @"InvalidData" 
+										 reason: [NSString stringWithFormat: 
+												  @"Event packets expect data in the format of a dictionary but parsed as %@ data was %@", parsedAs, eventObj] 
+									   userInfo: nil] raise];
+			}
+			
 			packet.name = [eventObj objectForKey: @"name"];
 			packet.args = [eventObj objectForKey: @"args"];
 			
@@ -337,9 +349,19 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
 	//If our payload starts with 0xfffd then its a payload
 	NSUInteger payloadLength = [payload length];
 	
-	NSRange firstSeperator = [payload rangeOfData: separatorData 
-										  options: NSDataSearchAnchored 
-											range: NSMakeRange(0, separtorLength)];
+	NSRange firstSeperator = NSMakeRange(NSNotFound, 0);
+	
+	//This will throw a NSRangeException if separatorData is not within the 
+	//payloads range
+	@try{
+		firstSeperator = [payload rangeOfData: separatorData 
+									  options: NSDataSearchAnchored 
+										range: NSMakeRange(0, separtorLength)];
+	}
+	@catch (NSException* ex) {
+		//If it's not even big enough to hold a separator
+		//hopefully its a single packet
+	}
 	
 	if( firstSeperator.location == 0 ) {
 		NSUInteger location=0;
