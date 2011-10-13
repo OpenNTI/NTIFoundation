@@ -25,6 +25,16 @@ static BOOL stringMayBeFloat( NSString* trimmed )
 
 @implementation NSString (NTIJSON)
 
+-(NSString*)stringWithJsonRepresentation
+{
+	//use ios5 if possible.
+	NTI_RETURN_SELF_TO_JSON();
+	
+	NSString* escaped = [self stringByReplacingAllOccurrencesOfString: @"\n" withString: @"\\n"];
+	
+	return [NSString stringWithFormat: @"\"%@\"", escaped];
+}
+
 //For inclusion in a collection, must make nil into NSNull
 static id wrap( id o )
 {
