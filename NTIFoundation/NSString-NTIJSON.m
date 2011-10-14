@@ -23,7 +23,7 @@ static BOOL stringMayBeFloat( NSString* trimmed )
 	return [trimmed rangeOfCharacterFromSet: period].location != NSNotFound;
 }
 
-@implementation NSString (NTIJSON)
+@implementation NSString(NTIJSON)
 
 -(NSString*)stringWithJsonRepresentation
 {

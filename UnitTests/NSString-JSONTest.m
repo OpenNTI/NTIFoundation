@@ -8,6 +8,7 @@
 
 #import "NSString-JSONTest.h"
 #import "NSString-NTIJSON.h"
+#import "NTIJSON.h"
 
 @implementation NSString_JSONTest
 
@@ -22,6 +23,12 @@ static NSNumber* f(NSString* x )
 	return [NSDecimalNumber decimalNumberWithString: x];	
 }
 
+-(void)testEscapesNewLines
+{
+	NSString* string= @"Line1\nLine2";
+	
+	STAssertEqualObjects([string stringWithJsonRepresentation], @"\"Line1\\nLine2\"", nil);
+}
 
 -(void)testParseArrays
 {
