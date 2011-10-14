@@ -1434,7 +1434,6 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NTIFoundation/NTIFoundation-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					DEBUG_SOCKETIO,
 					"DEBUG=1",
 					"$(inherited)",
 				);
