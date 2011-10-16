@@ -12,8 +12,18 @@
 @class OAFontDescriptor;
 
 #import <OmniFoundation/OFDataBuffer.h>
-struct _state;
 
+
+@class NTIHTMLWriter;
+
+@interface NSObject(NTIHTMLWriterExtensions)
+-(void)htmlWriter: (NTIHTMLWriter*)writer exportHTMLToDataBuffer: (OFDataBuffer*)buffer 
+		 withSize: (CGSize)size;
+@end
+#if __has_feature(objc_arc)
+struct _the_struct;
+typedef struct _the_struct state_t;
+#else
 typedef struct {
 	struct {
 		unsigned int bold: 1;
@@ -33,13 +43,8 @@ typedef struct {
 	const char* closingTag;
 	BOOL inBlock;
 } state_t;
+#endif
 
-@class NTIHTMLWriter;
-
-@interface NSObject(NTIHTMLWriterExtensions)
--(void)htmlWriter: (NTIHTMLWriter*)writer exportHTMLToDataBuffer: (OFDataBuffer*)buffer 
-		 withSize: (CGSize)size;
-@end
 
 @interface NTIHTMLWriter : OFObject
 {
