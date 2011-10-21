@@ -67,6 +67,9 @@
 		40E04618143F50A60091CE7C /* OQColor-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 40E04616143F50A60091CE7C /* OQColor-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40E04619143F50A60091CE7C /* OQColor-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E04617143F50A60091CE7C /* OQColor-NTIExtensions.m */; };
 		40E0461C143F5F260091CE7C /* NTIHTMLReaderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E0461B143F5F260091CE7C /* NTIHTMLReaderTest.m */; };
+		7293CB291451AA7D00CD64B8 /* NTIEditableFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 7293CB271451AA7D00CD64B8 /* NTIEditableFrame.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7293CB2A1451AA7D00CD64B8 /* NTIEditableFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */; };
+		7293CB2B1451AAB700CD64B8 /* NTIEditableFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */; };
 		72C0D197142529E800D526D8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72CBA96B1385CF1F00E3D28D /* Foundation.framework */; };
 		72CB9A9C14253CD500CE4FAA /* NSArray-NTIJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 7216D72413CB9F7800509BDC /* NSArray-NTIJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		72CB9A9D14253CD500CE4FAA /* NSDictionary-NTIJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 409951D213CFBD510039982D /* NSDictionary-NTIJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -414,6 +417,8 @@
 		7271BBEC13B7DC6600241FEC /* FixStringsFile.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FixStringsFile.xcodeproj; path = ../OmniGroup/Tools/FixStringsFile/FixStringsFile.xcodeproj; sourceTree = "<group>"; };
 		728D18E613DA217600B6A332 /* NTIFoundationOSCompat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIFoundationOSCompat.h; sourceTree = "<group>"; };
 		728D18E713DA217600B6A332 /* NTIFoundationOSCompat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIFoundationOSCompat.m; sourceTree = "<group>"; };
+		7293CB271451AA7D00CD64B8 /* NTIEditableFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIEditableFrame.h; sourceTree = "<group>"; };
+		7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIEditableFrame.m; sourceTree = "<group>"; };
 		72C0D196142529E800D526D8 /* libNTIFoundation.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNTIFoundation.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		72CBA96B1385CF1F00E3D28D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		72CBA9711385CF1F00E3D28D /* NTIFoundation-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NTIFoundation-Info.plist"; sourceTree = "<group>"; };
@@ -531,6 +536,8 @@
 		403D0D9E143E18B80049A755 /* RTFEditing */ = {
 			isa = PBXGroup;
 			children = (
+				7293CB271451AA7D00CD64B8 /* NTIEditableFrame.h */,
+				7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */,
 				403D0DBC143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h */,
 				403D0DBD143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.m */,
 				403D0DBE143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.h */,
@@ -924,6 +931,7 @@
 				403D0DC6143E193E0049A755 /* NTIRTFDocument.h in Headers */,
 				40E045F3143F468D0091CE7C /* NTIHTMLWriter.h in Headers */,
 				40E04614143F47890091CE7C /* NTIHTMLReader.h in Headers */,
+				7293CB291451AA7D00CD64B8 /* NTIEditableFrame.h in Headers */,
 				40E04618143F50A60091CE7C /* OQColor-NTIExtensions.h in Headers */,
 				40C0E1031443AF9C00142406 /* SocketIOPacketTest.h in Headers */,
 			);
@@ -1331,6 +1339,7 @@
 				40E045F4143F468D0091CE7C /* NTIHTMLWriter.m in Sources */,
 				40E04615143F47890091CE7C /* NTIHTMLReader.m in Sources */,
 				40E04619143F50A60091CE7C /* OQColor-NTIExtensions.m in Sources */,
+				7293CB2A1451AA7D00CD64B8 /* NTIEditableFrame.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1338,6 +1347,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7293CB2B1451AAB700CD64B8 /* NTIEditableFrame.m in Sources */,
 				72D7D53D13E3321800652DAC /* NTIAbstractDownloader.m in Sources */,
 				72D7D54613E3321800652DAC /* NSArray-NTIJSON.m in Sources */,
 				72D7D54713E3321800652DAC /* NSDictionary-NTIJSON.m in Sources */,

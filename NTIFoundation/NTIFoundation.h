@@ -32,5 +32,6 @@
 #import "NTIHTMLWriter.h"
 #import "NTIHTMLReader.h"
 #import "OQColor-NTIExtensions.h"
+#import "NTIEditableFrame.h"
 
 #endif
