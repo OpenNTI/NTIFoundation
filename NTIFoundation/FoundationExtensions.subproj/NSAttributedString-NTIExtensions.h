@@ -10,5 +10,5 @@
 
 @interface NSAttributedString(NTIExtensions)
 +(NSAttributedString*)attributedStringFromAttributedStrings: (NSArray*)attrStrings;
-+(NSArray*)attributedStringsFromAttributedString: (NSAttributedString*)attrString;
+-(NSArray*)attributedStringsFromParts;
 @end

@@ -69,7 +69,7 @@
 	
 	NSAttributedString* joined = [NSAttributedString attributedStringFromAttributedStrings: parts];
 	
-	NSArray* splitParts = [NSAttributedString attributedStringsFromAttributedString: joined];
+	NSArray* splitParts = [joined attributedStringsFromParts];
 	
 	STAssertTrue([splitParts count] == [parts count], nil);
 	STAssertEqualObjects([[splitParts firstObject] string], @"I", nil);
