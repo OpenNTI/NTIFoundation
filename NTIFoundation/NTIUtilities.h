@@ -1,9 +1,15 @@
 //Miscelaneous utility functions and macros
 
-#define NTI_RELEASE(name) do {[name release]; name = nil;}while(0)
+
 
 #ifndef __has_feature      // Optional.
 #define __has_feature(x) 0 // Compatibility with non-clang compilers.
+#endif
+
+#if __has_feature(objc_arc)
+#define NTI_RELEASE(name) 
+#else
+#define NTI_RELEASE(name) do {[name release]; name = nil;}while(0)
 #endif
 
 #ifndef NS_CONSUMED

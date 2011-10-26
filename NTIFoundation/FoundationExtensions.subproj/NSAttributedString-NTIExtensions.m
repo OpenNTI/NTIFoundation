@@ -29,7 +29,7 @@
 		}
 	}
 	
-	return [result autorelease];
+	return result;
 }
 
 //We walk through the string looking for our special attachment character

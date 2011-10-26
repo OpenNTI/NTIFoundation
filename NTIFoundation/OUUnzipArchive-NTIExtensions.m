@@ -8,6 +8,9 @@
 #import "NTIFoundationOSCompat.h"
 #import "OUUnzipArchive-NTIExtensions.h"
 
+#import <OmniUnzip/OUUnzipEntry.h>
+
+
 NSString* pathFromUrl( NSURL* url )
 {
 	//TODO: I'm really not sure this is the right way to get a path from a URL
@@ -30,7 +33,6 @@ NSString* pathFromUrl( NSURL* url )
 		NSMutableArray* comps = [[[entry name] pathComponents] mutableCopy];
 		[comps replaceObjectAtIndex: 0 withObject: name];
 		dest = [libraryDir URLByAppendingPathComponent: [NSString pathWithComponents: comps]];
-		[comps release];
 	}
 	else {
 		dest = [[libraryDir URLByAppendingPathComponent: name] URLByAppendingPathComponent: [entry name]];
@@ -85,7 +87,6 @@ NSString* pathFromUrl( NSURL* url )
 	
 	//OUUnzipArchive has the terrible habit of releasing itself on unzip
 	//errors. Deal with that by keeping an extra retain
-	[archive retain];
 	BOOL result = YES;
 	NSArray* entries = [archive entries];
 	__block NSInteger worked = 0;
@@ -96,12 +97,12 @@ NSString* pathFromUrl( NSURL* url )
 			continue;
 		}
 		
-		OMNI_POOL_START
+
 			NSURL* dest = [self destinationFor: entry under: name within: libraryDir];
 			//Actually extract the entry
 			result = [archive extractEntry: entry to: dest error: outError];
 			progresscb( worked++, [entries count] );				
-		OMNI_POOL_ERROR_END;
+
 		
 		if( !result ) {
 			NSLog( @"WARNING: Failed to unzip %@", entry );
@@ -109,13 +110,11 @@ NSString* pathFromUrl( NSURL* url )
 		}
 
 	}
-	[archive release];
 	
 	NSURL* resultURL = nil;
 	if( result ) {
 		NSFileManager* fileManager = [NSFileManager defaultManager];
 		//The second release in the non-error case.
-		[archive release];
 		resultURL = [libraryDir URLByAppendingPathComponent: name isDirectory: YES];
 		//And match the timestamp
 		[fileManager setAttributes: [NSDictionary 

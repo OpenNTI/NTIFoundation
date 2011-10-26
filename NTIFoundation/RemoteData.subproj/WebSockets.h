@@ -28,7 +28,7 @@ typedef NSInteger WebSocketStatus;
 	BOOL dataIsText;
 }
 -(id)initWithData: (NSData*)data isText: (BOOL)t;
-@property (nonatomic, retain) NSData* data;
+@property (nonatomic, strong) NSData* data;
 @property (nonatomic, assign) BOOL dataIsText;
 @end
 
@@ -54,12 +54,12 @@ typedef NSInteger WebSocketStatus;
 	BOOL shouldForcePumpOutputStream;
 	WebSocketStatus status;
 	NSURL* url;
-	id nr_delegate;
+	id __weak nr_delegate;
 	
 	HandshakeResponseBuffer* handshakeResponseBuffer;
 	WebSocketResponseBuffer* socketRespsonseBuffer;
 }
-@property (nonatomic, assign) id nr_delegate;
+@property (nonatomic, weak) id nr_delegate;
 @property (nonatomic, readonly) WebSocketStatus status;
 -(id)initWithURL: (NSURL*)url;
 -(void)connect;

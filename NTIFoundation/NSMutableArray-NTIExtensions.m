@@ -12,9 +12,9 @@
 
 -(id)removeAndReturnLastObject
 {
-	id last = [[self lastObject] retain];
+	id last = [self lastObject];
 	[self removeLastObject]; //retain bc this releases
-	return [last autorelease];
+	return last;
 }
 
 -(id)pop

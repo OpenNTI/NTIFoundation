@@ -15,8 +15,8 @@
     self = [super init];
     if (self) {
 		//Fixme we probably need to bound these.
-		self->sendQueue = [[NSMutableArray arrayWithCapacity: 5] retain];
-		self->recieveQueue = [[NSMutableArray arrayWithCapacity: 5] retain];
+		self->sendQueue = [NSMutableArray arrayWithCapacity: 5];
+		self->recieveQueue = [NSMutableArray arrayWithCapacity: 5];
     }
     
     return self;
@@ -63,10 +63,5 @@
 	return [self dequeueDataFromQueue: self->sendQueue];
 }
 
--(void)dealloc
-{
-	NTI_RELEASE(self->sendQueue);
-	NTI_RELEASE(self->recieveQueue);
-}
 
 @end

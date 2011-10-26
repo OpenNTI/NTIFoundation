@@ -9,13 +9,13 @@
 }
 
 @property (nonatomic,copy) NSAttributedString* text;
-@property (nonatomic,readonly) NSString* rtfString;
-@property (nonatomic,readonly) NSString* htmlString;
-@property (nonatomic,readonly) NSString* plainString;
+@property (weak, nonatomic,readonly) NSString* rtfString;
+@property (weak, nonatomic,readonly) NSString* htmlString;
+@property (weak, nonatomic,readonly) NSString* plainString;
 /**
  * The preferred string for external storage. 
  */
-@property (nonatomic,readonly) NSString* externalString;
+@property (weak, nonatomic,readonly) NSString* externalString;
 
 /**
  * Parses HTML, RTF, or plain text.

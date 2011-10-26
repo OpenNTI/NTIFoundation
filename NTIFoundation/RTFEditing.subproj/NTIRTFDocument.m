@@ -35,16 +35,16 @@
 		//and we have to try to parse (should probably use some regex?)
 		result = [NSAttributedString stringFromHTML: rtfString];
 		if( !result ) {
-			result = [[[NSAttributedString alloc]
-					   initWithString: rtfString] autorelease];
+			result = [[NSAttributedString alloc]
+					   initWithString: rtfString];
 		}
 	}
 	else if( rtfString ) {
-		result = [[[NSAttributedString alloc]
-					 initWithString: rtfString] autorelease];
+		result = [[NSAttributedString alloc]
+					 initWithString: rtfString];
 	}
 	else {
-		result = [[[NSAttributedString alloc] init] autorelease];
+		result = [[NSAttributedString alloc] init];
 	}
 	return result;
 }
@@ -60,18 +60,12 @@
 	if( !string ) {
 		// TODO: Better handling
 		OBFinishPorting;
-		[self release];
 		return nil;
 	}
 	self->text = [string copy];
 	return self;
 }
 
-- (void)dealloc;
-{
-    NTI_RELEASE( self->text );
-    [super dealloc];
-}
 
 -(NSString*)plainString
 {
@@ -81,8 +75,8 @@
 -(NSString*)rtfString
 {
     NSData* data = [OUIRTFWriter rtfDataForAttributedString: self->text];
-	return [[[NSString alloc] initWithData: data 
-								 encoding: NSUTF8StringEncoding] autorelease];
+	return [[NSString alloc] initWithData: data 
+								 encoding: NSUTF8StringEncoding];
 }
 
 -(NSString*)htmlString

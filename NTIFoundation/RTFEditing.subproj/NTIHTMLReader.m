@@ -31,7 +31,7 @@ static Class readerClass = nil;
 
 +(void)registerReaderClass: (Class)c
 {
-	readerClass = [c retain];
+	readerClass = c;
 }
 
 +(Class)readerClass
@@ -41,8 +41,6 @@ static Class readerClass = nil;
 
 static void commonInit( NTIHTMLReader* self )
 {
-	NTI_RELEASE( self->attrBuffer );
-	NTI_RELEASE( self->nsattrStack );
 	self->inError = NO;
 	self->attrBuffer = [[NSMutableAttributedString alloc] init];
 	self->nsattrStack = [[NSMutableArray alloc] initWithCapacity: 3];
@@ -63,7 +61,6 @@ static void commonInit( NTIHTMLReader* self )
 						   [string dataUsingEncoding: [string fastestEncoding]]];
 	parser.delegate = self;
 	[parser parse];
-	[parser release];
 	if( self->inError ) {
 		//OK, we often get malformed XML fragments from the web app.
 		//Is that the case here? If so, retry
@@ -74,13 +71,11 @@ static void commonInit( NTIHTMLReader* self )
 					  [string dataUsingEncoding: [string fastestEncoding]]];
 			parser.delegate = self;
 			[parser parse];
-			[parser release];
 		}
 	}
 	
 	if( self->inError ) {
 		//Well nuts.
-		[self release];
 		self = nil;
 	}
 	
@@ -113,7 +108,7 @@ static void commonInit( NTIHTMLReader* self )
 
 -(NSAttributedString*) attributedString
 {
-	return [[self->attrBuffer copy] autorelease];
+	return [self->attrBuffer copy];
 }
 
 static NSString* stringFromStyle( NSString* styleAttribute, NSString* name )
@@ -125,14 +120,11 @@ static NSString* stringFromStyle( NSString* styleAttribute, NSString* name )
 			[NSCharacterSet characterSetWithCharactersInString: @"'\""]];
 }
 
-#define HAS_VALUE(prefix) if( [styleAttribute hasPrefix: @prefix] ) { \
-styleAttribute = stringFromStyle( styleAttribute, @prefix );
-#define EHV }
 
-static OAFontDescriptor* currentFontDescriptor( NSDictionary* dict )
+static OAFontDescriptor* newCurrentFontDescriptor( NSDictionary* dict )
 {
 	OAFontDescriptorPlatformFont newPlatformFont 
-	= (OAFontDescriptorPlatformFont)[dict objectForKey: 
+	= (__bridge OAFontDescriptorPlatformFont)[dict objectForKey: 
 									 (NSString*)kCTFontAttributeName];
 	OAFontDescriptor* newFontDescriptor;
 	if( newPlatformFont == nil ) {
@@ -142,7 +134,7 @@ static OAFontDescriptor* currentFontDescriptor( NSDictionary* dict )
 	else {
 		newFontDescriptor = [[OAFontDescriptor alloc] initWithFont: newPlatformFont];
 	}
-	return [newFontDescriptor autorelease];	
+	return newFontDescriptor;	
 }
 /**
  * @param desc A new descriptor, which will be released by this function.
@@ -152,7 +144,6 @@ static void setCurrentFontDescriptor( NSMutableDictionary* dict,
 {
 	[dict setObject: (id)[desc font]
 			 forKey: (id)kCTFontAttributeName];
-	[desc release];
 }
 
 //Returns nil on unrecognized colors
@@ -192,12 +183,12 @@ CGColorRef NTIHTMLReaderParseColor( NSString* attribute )
 static OAMutableParagraphStyle* currentParagraphStyle( NSDictionary* dict )
 {
 	CTParagraphStyleRef paraStyle 
-	= (CTParagraphStyleRef)[dict objectForKey: (id)kCTParagraphStyleAttributeName];
+	= (__bridge CTParagraphStyleRef)[dict objectForKey: (id)kCTParagraphStyleAttributeName];
 	OAMutableParagraphStyle* result = nil;
 	if( paraStyle ) {
 		result = [[OAMutableParagraphStyle alloc] initWithParagraphStyle: 
-				  [[[OAParagraphStyle alloc] 
-					initWithCTParagraphStyle: paraStyle] autorelease]];
+				  [[OAParagraphStyle alloc] 
+					initWithCTParagraphStyle: paraStyle]];
 	}
 	else {
 		result = (id)[OAMutableParagraphStyle defaultParagraphStyle];	
@@ -208,7 +199,7 @@ static OAMutableParagraphStyle* currentParagraphStyle( NSDictionary* dict )
 static void setCurrentParagraphStyle( NSMutableDictionary* dict, OAMutableParagraphStyle* style )
 {
 	CTParagraphStyleRef ref = [style copyCTParagraphStyle];
-	[dict setObject: (id)ref forKey: (id)kCTParagraphStyleAttributeName];
+	[dict setObject: (__bridge id)ref forKey: (id)kCTParagraphStyleAttributeName];
 	CFRelease( ref );
 }
 
@@ -236,12 +227,16 @@ static void setCurrentParagraphStyle( NSMutableDictionary* dict, OAMutableParagr
 	for( id styleName in fontAttrs ) {
 		id styleValue = [fontAttrs objectForKey: styleName];
 		if( OFISEQUAL( styleName,  @"color") ) {
-			[dict setObject: (id)NTIHTMLReaderParseColor( styleValue )
+			[dict setObject: (__bridge id)NTIHTMLReaderParseColor( styleValue )
 					 forKey: (id)kCTForegroundColorAttributeName];
 		}
 	}
 	return dict;
 }
+
+#define HAS_VALUE(prefix) if( [styleAttribute hasPrefix: @prefix] ) { \
+styleAttribute = stringFromStyle( styleAttribute, @prefix );
+#define EHV }
 
 -(NSDictionary*)coreTextAttrsForStyle: (NSString*)style
 {
@@ -252,7 +247,7 @@ static void setCurrentParagraphStyle( NSMutableDictionary* dict, OAMutableParagr
 	
 	NSMutableDictionary* dict = [self mutableDictionaryWithCurrentStyle];
 	
-	for( id styleAttribute in styleAttributes ) {
+	for( __strong id styleAttribute in styleAttributes ) {
 		styleAttribute = [styleAttribute stringByTrimmingCharactersInSet:
 						  [NSCharacterSet whitespaceAndNewlineCharacterSet]];	
 		//TODO: Data driven.
@@ -260,26 +255,26 @@ static void setCurrentParagraphStyle( NSMutableDictionary* dict, OAMutableParagr
 		HAS_VALUE("font-family") {
 			setCurrentFontDescriptor(
 									 dict,
-									 [currentFontDescriptor( dict ) 
+									 [newCurrentFontDescriptor( dict ) 
 									  newFontDescriptorWithFamily: styleAttribute] );
 		} EHV
 		else HAS_VALUE("font-size") {
 			setCurrentFontDescriptor( 
 									 dict,
-									 [currentFontDescriptor( dict ) 
+									 [newCurrentFontDescriptor( dict ) 
 									  newFontDescriptorWithSize: [styleAttribute intValue]] );
 			
 		} EHV
 		else HAS_VALUE("font-weight") {
 			setCurrentFontDescriptor( 
 									 dict,
-									 [currentFontDescriptor( dict ) 
+									 [newCurrentFontDescriptor( dict ) 
 									  newFontDescriptorWithBold: [styleAttribute isEqual: @"bold"]] );
 		} EHV
 		else HAS_VALUE("font-style") {
 			setCurrentFontDescriptor( 
 									 dict,
-									 [currentFontDescriptor( dict ) 
+									 [newCurrentFontDescriptor( dict ) 
 									  newFontDescriptorWithItalic: [styleAttribute isEqual: @"italic"]] );
 			
 		} EHV
@@ -293,11 +288,11 @@ static void setCurrentParagraphStyle( NSMutableDictionary* dict, OAMutableParagr
 		} EHV
 		//Colors
 		else HAS_VALUE("color") {
-			[dict setObject: (id)NTIHTMLReaderParseColor( styleAttribute )
+			[dict setObject: (__bridge id)NTIHTMLReaderParseColor( styleAttribute )
 					 forKey: (id)kCTForegroundColorAttributeName];
 		} EHV
 		else HAS_VALUE("background-color") {
-			[dict setObject: (id)NTIHTMLReaderParseColor( styleAttribute )
+			[dict setObject: (__bridge id)NTIHTMLReaderParseColor( styleAttribute )
 					 forKey: (id)OABackgroundColorAttributeName];
 		} EHV
 		//Paragraph style
@@ -343,7 +338,7 @@ static void setCurrentParagraphStyle( NSMutableDictionary* dict, OAMutableParagr
 #undef HAS_VALUE
 #undef EHV
 
--(CGImageRef)loadImage: (NSString*)url
+-(CGImageRef)newImageFromURL: (NSString*)url
 {
 	//Seriously cheating here
 	NSString* dataPfx = @"data:image/png;base64,";
@@ -358,7 +353,7 @@ static void setCurrentParagraphStyle( NSMutableDictionary* dict, OAMutableParagr
 	CGImageRef imageRef = nil;
 	
 	if( imgData ) {
-		CGDataProviderRef dataProvider = CGDataProviderCreateWithCFData( (CFDataRef)imgData );
+		CGDataProviderRef dataProvider = CGDataProviderCreateWithCFData( (__bridge CFDataRef)imgData );
 		if( !dataProvider ) {
 			OBASSERT_NOT_REACHED("Unable to create the data provider");
 			goto bad;
@@ -397,7 +392,6 @@ didStartElement: (NSString*)elementName
 	//Links only contain an image.
 	elementName = [elementName lowercaseString];
 	if( [@"a" isEqual: elementName] ) {
-		NTI_RELEASE( self->currentHref );
 		self->currentHref = [[attributeDict objectForKey: @"href"] copy];	
 	}
 	else if( [@"img" isEqual: elementName] ) {
@@ -405,7 +399,7 @@ didStartElement: (NSString*)elementName
 			CFRelease( self->currentImage );
 		}
 		NSString* src = [attributeDict objectForKey: @"src"];
-		self->currentImage = [self loadImage: src];
+		self->currentImage = [self newImageFromURL: src];
 	}
 	else if( [attributeDict objectForKey: @"style"] ) {
 		//p or a span with style info
@@ -423,7 +417,7 @@ didStartElement: (NSString*)elementName
 		NSMutableDictionary* coreAttrs = [self mutableDictionaryWithCurrentStyle];
 		setCurrentFontDescriptor( 
 								 coreAttrs,
-								 [currentFontDescriptor( coreAttrs ) 
+								 [newCurrentFontDescriptor( coreAttrs ) 
 								  newFontDescriptorWithItalic: YES] );
 		PUSH( coreAttrs );
 	}
@@ -438,7 +432,7 @@ didStartElement: (NSString*)elementName
 		NSMutableDictionary* coreAttrs = [self mutableDictionaryWithCurrentStyle];
 		setCurrentFontDescriptor( 
 								 coreAttrs,
-								 [currentFontDescriptor( coreAttrs ) 
+								 [newCurrentFontDescriptor( coreAttrs ) 
 								  newFontDescriptorWithBold: YES] );
 		PUSH( coreAttrs );
 	}
@@ -447,7 +441,7 @@ didStartElement: (NSString*)elementName
 		NSMutableDictionary* coreAttrs = [self mutableDictionaryWithCurrentStyle];
 		setCurrentFontDescriptor( 
 								 coreAttrs,
-								 [currentFontDescriptor( coreAttrs ) 
+								 [newCurrentFontDescriptor( coreAttrs ) 
 								  newFontDescriptorWithFamily: @"Courier"]);
 		PUSH( coreAttrs );
 	}
@@ -511,10 +505,6 @@ qualifiedName: (NSString*)qName
 	if(self->currentImage){
 		CFRelease( self->currentImage );
 	}
-	NTI_RELEASE( self->currentHref );
-	NTI_RELEASE( self->nsattrStack );
-	NTI_RELEASE( self->attrBuffer );
-	[super dealloc];
 }
 
 @end

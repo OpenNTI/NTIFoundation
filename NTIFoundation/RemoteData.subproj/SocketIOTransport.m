@@ -15,8 +15,8 @@
 -(id)initWithRootURL: (NSURL*)u andSessionId: (NSString*)sid;
 {
 	self = [super init];
-	self->sessionId = [sid retain];
-	self->rootURL = [u retain];
+	self->sessionId = sid;
+	self->rootURL = u;
 	self->status = SocketIOTransportStatusNew;
 	return self;
 }
@@ -134,12 +134,6 @@
 	return YES;
 }
 
--(void)dealloc
-{
-	NTI_RELEASE(self->sessionId);
-	NTI_RELEASE(self->rootURL);
-	[super dealloc];
-}
 
 @end
 
@@ -164,7 +158,7 @@
 -(id)initWithRootURL:(NSURL *)u andSessionId:(NSString *)s
 {
 	self = [super initWithRootURL: u andSessionId: s];
-	self->sendBuffer = [[NSMutableArray arrayWithCapacity: 5] retain];
+	self->sendBuffer = [NSMutableArray arrayWithCapacity: 5];
 	return self;
 }
 
@@ -217,7 +211,6 @@
 #pragma mark handshake downloader delegate
 -(void)downloader:(NTIDelegatingDownloader *)d connection: (NSURLConnection*)c didFailWithError:(NSError *)error
 {
-	NTI_RELEASE( self->downloader );
 	//Regardless of when we encountered the error. raise and disconnect.
 	[self logAndRaiseError: error];
 	[self disconnect];
@@ -228,7 +221,6 @@
 {
 	//We got a response if it was from connecting we need to start our timer.
 	NSData* dataBody = [downloader data];
-	NTI_RELEASE( self->downloader );
 
 	
 	//We only poll if we are open.  If we are closed now just have to throw away the data
@@ -280,12 +272,6 @@
 	[self->sendBuffer addObject: packet];
 }
 
--(void)dealloc
-{
-	NTI_RELEASE(self->sendBuffer);
-	NTI_RELEASE(self->downloader);
-	[super dealloc];
-}
 
 @end
 
@@ -372,16 +358,11 @@
 
 -(void)sendPacket:(SocketIOPacket *)packet
 {
-	WebSocketData* data = [[[WebSocketData alloc] initWithData: 
-							[packet encode] isText: YES] autorelease];
+	WebSocketData* data = [[WebSocketData alloc] initWithData: 
+							[packet encode] isText: YES];
 	[self->socket enqueueDataForSending: data];
 }
 
 
--(void)dealloc
-{
-	NTI_RELEASE(self->socket);
-	[super dealloc];
-}
 
 @end

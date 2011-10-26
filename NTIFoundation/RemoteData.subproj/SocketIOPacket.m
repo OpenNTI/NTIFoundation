@@ -79,7 +79,7 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
 		//FIXME special cased.
 		if( [dataString isEqualToString: @"0"] ){
 			SocketIOPacket* disconnect = [[SocketIOPacket alloc] initWithType: SocketIOPacketTypeDisconnect];
-			return [disconnect autorelease];
+			return disconnect;
 		}
 		
 		//FIXME raise exception here
@@ -180,21 +180,21 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
 			break;
 	}
 	
-	return [packet autorelease];
+	return packet;
 	
 }
 
 +(SocketIOPacket*)packetForHeartbeat
 {
 	SocketIOPacket* packet = [[SocketIOPacket alloc] initWithType: SocketIOPacketTypeHeartbeat];
-	return [packet autorelease];
+	return packet;
 }
 
 +(SocketIOPacket*)packetForMessageWithData: (NSString*)data
 {
 	SocketIOPacket* packet = [[SocketIOPacket alloc] initWithType: SocketIOPacketTypeMessage];
 	packet.data = data;
-	return [packet autorelease];
+	return packet;
 }
 
 +(SocketIOPacket*)packetForEventWithName: (NSString*)name andArgs: (NSArray*)args
@@ -202,7 +202,7 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
 	SocketIOPacket* packet = [[SocketIOPacket alloc] initWithType: SocketIOPacketTypeEvent];
 	packet.name = name;
 	packet.args = args;
-	return [packet autorelease];
+	return packet;
 }
 
 -(id)initWithType: (SocketIOPacketType)theType
@@ -291,7 +291,7 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
 	if( [theAck isEqualToString: @"data"] ){
 		theId = [theId stringByAppendingString: @"+"];
 	}
-	NSString* typeString = [[[NSString alloc] initWithFormat: @"%d", self.type] autorelease];
+	NSString* typeString = [[NSString alloc] initWithFormat: @"%d", self.type];
 	
 	NSMutableArray* toEncode = [NSMutableArray arrayWithObjects: typeString, theId, theEndpoint , nil];
 	
@@ -428,19 +428,5 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
 
 }
 
--(void)dealloc
-{
-	NTI_RELEASE(self->endpoint);
-	NTI_RELEASE(self->data);
-	NTI_RELEASE(self->packetId);
-	NTI_RELEASE(self->ack);
-	NTI_RELEASE(self->reason);
-	NTI_RELEASE(self->advice);
-	NTI_RELEASE(self->ackId);
-	NTI_RELEASE(self->args);
-	NTI_RELEASE(self->qs);
-	NTI_RELEASE(self->name);
-	[super dealloc];
-}
 
 @end

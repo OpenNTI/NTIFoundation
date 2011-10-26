@@ -18,15 +18,11 @@
 -(id)initWithData:(NSData *)d isText:(BOOL)t
 {
 	self = [super init];
-	self->data = [d retain];
+	self->data = d;
 	self->dataIsText = t;
 	return self;
 }
 
--(void)dealloc
-{
-	NTI_RELEASE(self->data);
-}
 
 @end
 
@@ -34,7 +30,7 @@
 	@protected
 	NSMutableData* buffer;
 }
-@property (nonatomic, readonly) NSData* dataBuffer;
+@property (strong, nonatomic, readonly) NSData* dataBuffer;
 //Appends the byte to the buffer and returns whether the buffer
 //contains a full response.  May through an exception if
 //the byte makes the buffer an invalid response.
@@ -69,11 +65,6 @@
 	return [NSData dataWithData: self->buffer];
 }
 
--(void)dealloc
-{
-	NTI_RELEASE(self->buffer);
-	[super dealloc];
-}
 
 @end
 
@@ -349,8 +340,8 @@
 		[theData appendBytes: &currentByte length: 1];
 	}
 	
-	return [[[WebSocketData alloc] initWithData: theData 
-										 isText: self->responseType == WebSocketResponseTypeText] autorelease];
+	return [[WebSocketData alloc] initWithData: theData 
+										 isText: self->responseType == WebSocketResponseTypeText];
 }
 
 -(BOOL)containsFullResponse
@@ -396,7 +387,7 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 -(id)initWithURL: (NSURL *)u
 {
 	self = [super init];
-	self->url = [u retain];
+	self->url = u;
 	self->shouldForcePumpOutputStream = NO;
 	[self updateStatus: WebSocketStatusNew];
 
@@ -412,7 +403,7 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 		[bytesToEncode appendBytes: &byte length: 1];
 	}
 	NSString* k = [NSString stringWithData: bytesToEncode encoding: NSASCIIStringEncoding] ;
-	self->key = [b64EncodeString(k) retain];
+	self->key = b64EncodeString(k);
 	
 	return self;
 }
@@ -424,8 +415,6 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	[self->socketInputStream close];
 	[self->socketInputStream removeFromRunLoop: [NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 	[self->socketOutputStream removeFromRunLoop: [NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-	NTI_RELEASE(self->socketInputStream);
-	NTI_RELEASE(self->socketOutputStream);
 	[self updateStatus: WebSocketStatusDisconnected];
 }
 
@@ -512,7 +501,6 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 			[self processSocketResponse: self->socketRespsonseBuffer];
 			//Unlike with the handshake we may have more data that start new packets. 
 			//We clear our the socketResponseBuffer and keep reading if we can
-			NTI_RELEASE(self->socketRespsonseBuffer);
 			self->socketRespsonseBuffer = nil;
 			
 		}
@@ -661,8 +649,8 @@ static NSData* hashUsingSHA1(NSData* data)
 
 -(void)processHandshakeResponse: (HandshakeResponseBuffer*)hrBuffer
 {
-	NSString* response = [[[NSString alloc] initWithData: hrBuffer.dataBuffer 
-												encoding: NSUTF8StringEncoding] autorelease];
+	NSString* response = [[NSString alloc] initWithData: hrBuffer.dataBuffer 
+												encoding: NSUTF8StringEncoding];
 #ifdef DEBUG_SOCKETIO
 	NSLog(@"Handling handshake response %@", response);
 #endif
@@ -675,7 +663,6 @@ static NSData* hashUsingSHA1(NSData* data)
 																@"Unexpected response for handshake. %@", response])];
 	}
 	//We don't need to hold onto this object anymore.
-	NTI_RELEASE(self->handshakeResponseBuffer);
 	self->handshakeResponseBuffer = nil;
 
 }
@@ -852,10 +839,10 @@ static NSData* hashUsingSHA1(NSData* data)
 {
 	CFReadStreamRef readStream;
 	CFWriteStreamRef writeStream;
-	CFStreamCreatePairWithSocketToHost(NULL, (CFStringRef)[self->url host], [[self->url port] intValue], &readStream, &writeStream);
+	CFStreamCreatePairWithSocketToHost(NULL, (__bridge CFStringRef)[self->url host], [[self->url port] intValue], &readStream, &writeStream);
 	
-	self->socketInputStream = (NSInputStream *)readStream;
-	self->socketOutputStream = (NSOutputStream *)writeStream;
+	self->socketInputStream = (__bridge NSInputStream *)readStream;
+	self->socketOutputStream = (__bridge NSOutputStream *)writeStream;
 	[self->socketInputStream setDelegate:self];
 	[self->socketOutputStream setDelegate:self];
 	[self->socketInputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
@@ -889,10 +876,6 @@ static NSData* hashUsingSHA1(NSData* data)
 -(void)dealloc
 {
 	[self shutdownStreams];
-	NTI_RELEASE(self->handshakeResponseBuffer);
-	NTI_RELEASE(self->socketRespsonseBuffer);
-	NTI_RELEASE(self->key);
-	NTI_RELEASE(self->url);
 }
 
 @end

@@ -22,14 +22,14 @@
 
 -(NSString*)htmlStringFromString
 {
-	return [[[NSString alloc] initWithData: [self htmlDataFromString]
-								  encoding: NSUTF8StringEncoding] autorelease];	
+	return [[NSString alloc] initWithData: [self htmlDataFromString]
+								  encoding: NSUTF8StringEncoding];	
 }
 
 -(NSString*)htmlStringFromStringWrappedIn: (NSString*)element
 {
-	return [[[NSString alloc] initWithData: [self htmlDataFromStringWrappedIn: element]
-								  encoding: NSUTF8StringEncoding] autorelease];	
+	return [[NSString alloc] initWithData: [self htmlDataFromStringWrappedIn: element]
+								  encoding: NSUTF8StringEncoding];	
 }
 
 @end

@@ -38,7 +38,7 @@
 				break;
 			}
 		}
-		self->lastModified = [[lastMod httpHeaderDateValue] retain];
+		self->lastModified = [lastMod httpHeaderDateValue];
 	}
 }
 
@@ -67,13 +67,6 @@
 {
 }
 
--(void)dealloc
-{
-	[lastModified release];
-	[username release];
-	[password release];	
-	[super dealloc];
-}
 @end
 
 @implementation NTIBufferedDownloader
@@ -87,7 +80,6 @@
 -(void)connection: (NSURLConnection*)connection didReceiveResponse: (id)response
 {
 	[super connection: connection didReceiveResponse: response];
-	[dataBuffer release];
 	dataBuffer = [[NSMutableData alloc] init];
 }
 
@@ -100,7 +92,6 @@
 {
 	//TODO: Somebody needs to present this to the user.
 	NSLog( @"Failed to download data: %@", error );
-	[dataBuffer release];
 	dataBuffer = nil;
 }
 
@@ -153,14 +144,12 @@
 
 -(NSData*)data
 {
-	return [[dataBuffer copy] autorelease];	
+	return [dataBuffer copy];	
 }
 
 -(void)dealloc
 {
-	[dataBuffer release];
 	dataBuffer = nil;
-	[super dealloc];
 }
 @end
 
@@ -194,7 +183,7 @@
 			  onError: (void(^)())error
 {
 	self = [super initWithUsername: user password: password];
-	self->outputStream = [stream retain];
+	self->outputStream = stream;
 	[stream setDelegate: self];
 	
 	self->onFinish = [finish copy];
@@ -208,7 +197,6 @@
 	[self->outputStream removeFromRunLoop: [NSRunLoop currentRunLoop] 
 								  forMode: NSDefaultRunLoopMode];
 	
-	[self->outputStream release];
 	self->outputStream = nil;
 }
 
@@ -248,7 +236,6 @@
 		//Write what we can, if we have something
 		if( [self->currentDataChunk length] == 0 ) {
 			//Zero byte chunk. Interesting.
-			NTI_RELEASE( self->currentDataChunk );
 		}
 		else {
 			uint8_t* bytes = [self->currentDataChunk mutableBytes];
@@ -259,7 +246,6 @@
 				currentOffset += written;
 				if( currentOffset >= [self->currentDataChunk length] ) {
 					//We've written it all, let go.
-					NTI_RELEASE( self->currentDataChunk );
 					currentOffset = 0;
 				}
 			}
@@ -305,7 +291,6 @@
 	NSMutableData* lastData = [super copyDataFinal];
 	if( self->currentDataChunk ) {
 		[self->currentDataChunk appendData: lastData];
-		[lastData release];
 		//If we wrote zero bytes in a stream callback, we
 		//stop getting space events until an explicit write. Therefore,
 		//in case that happened, we do an explicit write here.
@@ -322,10 +307,6 @@
 -(void)dealloc
 {
 	[self closeStream];
-	NTI_RELEASE( self->currentDataChunk );
-	[self->onFinish release];
-	[self->onError release];
-	[super dealloc];
 }
 
 @end

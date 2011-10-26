@@ -18,7 +18,7 @@
 	//Use iOS 5 if available.
 	NTI_RETURN_SELF_TO_JSON();
 	
-	NSMutableString* json = [[[NSMutableString alloc] initWithCapacity: 20] autorelease];
+	NSMutableString* json = [[NSMutableString alloc] initWithCapacity: 20];
 	
 	[json appendString: @"{ "];
 	

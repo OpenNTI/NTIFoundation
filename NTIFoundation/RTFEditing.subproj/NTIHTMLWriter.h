@@ -20,10 +20,7 @@
 -(void)htmlWriter: (NTIHTMLWriter*)writer exportHTMLToDataBuffer: (OFDataBuffer*)buffer 
 		 withSize: (CGSize)size;
 @end
-#if __has_feature(objc_arc)
-struct _the_struct;
-typedef struct _the_struct state_t;
-#else
+
 typedef struct {
 	struct {
 		unsigned int bold: 1;
@@ -35,7 +32,7 @@ typedef struct {
 	int foregroundColorIndex;
 	int backgroundColorIndex;
 	unsigned int underline;
-	OAFontDescriptor* fontDescriptor;
+	void* fontDescriptor; //OAFontDescriptor
 	int alignment;
 	int firstLineIndent;
 	int leftIndent;
@@ -43,7 +40,7 @@ typedef struct {
 	const char* closingTag;
 	BOOL inBlock;
 } state_t;
-#endif
+
 
 
 @interface NTIHTMLWriter : OFObject

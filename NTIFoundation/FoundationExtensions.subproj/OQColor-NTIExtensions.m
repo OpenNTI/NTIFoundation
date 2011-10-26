@@ -29,8 +29,8 @@
 	CGColorRef colorRef = CGColorCreate(rgb, components); 
 	
 	CGColorSpaceRelease(rgb);
-	
-	[(id)colorRef autorelease];
+	//id cr = (__bridge id)colorRef;
+	//[cr autorelease];
 	
 	return colorRef;
 }

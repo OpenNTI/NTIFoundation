@@ -129,6 +129,27 @@
 			remoteGlobalIDString = 72C0D195142529E800D526D8;
 			remoteInfo = NTIFoundation;
 		};
+		726214DC145891C300BC6DE5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72D3610113DB6B2A00257C73 /* OmniAppKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 3434791411923B54007D0CE5;
+			remoteInfo = OmniAppKitTouch;
+		};
+		726214DE145891C300BC6DE5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72D3610713DB6B2A00257C73 /* OmniUI.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC07D0554694100DB518D;
+			remoteInfo = OmniUITouch;
+		};
+		726214E0145891FB00BC6DE5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72D3610613DB6B2A00257C73 /* OmniQuartz.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 345613D31193197700E7D187;
+			remoteInfo = OmniQuartzTouch;
+		};
 		72CB9ADA142540F700CE4FAA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 72D3610813DB6B2A00257C73 /* OmniUnzip.xcodeproj */;
@@ -964,6 +985,9 @@
 			buildRules = (
 			);
 			dependencies = (
+				726214E1145891FB00BC6DE5 /* PBXTargetDependency */,
+				726214DD145891C300BC6DE5 /* PBXTargetDependency */,
+				726214DF145891C300BC6DE5 /* PBXTargetDependency */,
 				72CB9ADB142540F700CE4FAA /* PBXTargetDependency */,
 				72E3533B14252E56001B345A /* PBXTargetDependency */,
 				72E3533D14252E56001B345A /* PBXTargetDependency */,
@@ -1397,6 +1421,21 @@
 			target = 72C0D195142529E800D526D8 /* NTIFoundation */;
 			targetProxy = 408FBF04143F627A0095DD84 /* PBXContainerItemProxy */;
 		};
+		726214DD145891C300BC6DE5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OmniAppKitTouch;
+			targetProxy = 726214DC145891C300BC6DE5 /* PBXContainerItemProxy */;
+		};
+		726214DF145891C300BC6DE5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OmniUITouch;
+			targetProxy = 726214DE145891C300BC6DE5 /* PBXContainerItemProxy */;
+		};
+		726214E1145891FB00BC6DE5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OmniQuartzTouch;
+			targetProxy = 726214E0145891FB00BC6DE5 /* PBXContainerItemProxy */;
+		};
 		72CB9ADB142540F700CE4FAA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = OmniUnzipTouch;
@@ -1453,6 +1492,7 @@
 			baseConfigurationReference = 72D360CA13DB5DFF00257C73 /* Touch-Library-Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = NO;
 				DSTROOT = /tmp/NTIFoundation.dst;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1476,6 +1516,7 @@
 			baseConfigurationReference = 72D360CB13DB5DFF00257C73 /* Touch-Library-Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = YES;
 				DSTROOT = /tmp/NTIFoundation.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1506,7 +1547,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_PREFIX_HEADER = "NTIFoundation/NTIFoundation-Info.h";
 				INFOPLIST_PREPROCESS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PROVISIONING_PROFILE = "F300A192-2504-4E23-972A-E76EBDC2B7F0";
 				RUN_CLANG_STATIC_ANALYZER = NO;
@@ -1531,7 +1572,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_PREFIX_HEADER = "NTIFoundation/Prealgebra-Info.h";
 				INFOPLIST_PREPROCESS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "-ObjC";
 				PROVISIONING_PROFILE = "6BC9A561-9774-44C9-B6E1-1874EC8FFADC";

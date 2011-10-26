@@ -56,17 +56,17 @@ static NSArray* implementedTransportClasses()
 	self = [super init];
 	//URLByAppendingPathComponent likes to add a second slash if the appended path component
 	//ends in a slash
-	self->url = [[NSURL URLWithString: [NSString stringWithFormat: @"%@/1/", u.relativeString] relativeToURL: u.baseURL] retain];
-	self->username = [name retain];
-	self->password = [pwd retain];
+	self->url = [NSURL URLWithString: [NSString stringWithFormat: @"%@/1/", u.relativeString] relativeToURL: u.baseURL];
+	self->username = name;
+	self->password = pwd;
 	self->reconnecting = NO;
-	self->buffer = [[NSMutableArray arrayWithCapacity: 5] retain];
-	self->attemptedTransports = [[NSMutableArray arrayWithCapacity: 3] retain];
+	self->buffer = [NSMutableArray arrayWithCapacity: 5];
+	self->attemptedTransports = [NSMutableArray arrayWithCapacity: 3];
 	self->status = SocketIOSocketStatusDisconnected;
 	self.shouldBuffer = YES;	
 	self->handshakeDownloader = [[NTIDelegatingDownloader alloc] 
 								 initWithUsername: self->username password: self->password];
-	self->eventDelegates = [[NSMutableArray arrayWithCapacity: 3] retain];
+	self->eventDelegates = [NSMutableArray arrayWithCapacity: 3];
 	self->baseReconnectTimeout = 3;
 	self->maxReconnectAttempts = NSIntegerMax;
 	self->maxReconnectTimeout = 120; //2minutes
@@ -128,7 +128,6 @@ static NSArray* implementedTransportClasses()
 -(void)clearReconnectTimer
 {
 	[self->reconnectTimer invalidate];
-	NTI_RELEASE(self->reconnectTimer);
 	self->reconnectTimer = nil;
 }
 
@@ -155,18 +154,17 @@ static NSArray* implementedTransportClasses()
 #ifdef DEBUG_SOCKETIO
 	NSLog(@"Scheduling reconnect timer for %f seconds", self->currentReconnectTimeout);
 #endif 
-	self->reconnectTimer = [[NSTimer scheduledTimerWithTimeInterval: self.currentReconnectTimeout 
+	self->reconnectTimer = [NSTimer scheduledTimerWithTimeInterval: self.currentReconnectTimeout 
 															   target: self 
 															 selector: @selector(reconnect) 
 															 userInfo: nil 
-															  repeats: NO] retain];
+															  repeats: NO];
 	self->currentReconnectTimeout = [self nextReconnect];
 }
 
 -(void)clearCloseTimer
 {
 	[self->closeTimeoutTimer invalidate];
-	NTI_RELEASE(self->closeTimeoutTimer);
 	self->closeTimeoutTimer = nil;
 }
 
@@ -178,10 +176,10 @@ static NSArray* implementedTransportClasses()
 #ifdef DEBUG_SOCKETIO
 	NSLog(@"Scheduling close timeout timer");
 #endif
-	self->closeTimeoutTimer = [[NSTimer scheduledTimerWithTimeInterval: self->closeTimeout 
+	self->closeTimeoutTimer = [NSTimer scheduledTimerWithTimeInterval: self->closeTimeout 
 																target: self 
 															  selector: @selector(closeTimeoutFired) 
-															  userInfo: nil repeats: NO] retain];
+															  userInfo: nil repeats: NO];
 }
 
 -(void)onConnecting
@@ -342,8 +340,8 @@ static NSArray* implementedTransportClasses()
 	NSString* selectorString = [NSString stringWithStrings: packet.name, @":", nil];
 	
 	SEL eventSel = NSSelectorFromString(selectorString);
-	if( [delegate respondsToSelector: eventSel] ){
-		[delegate performSelector: eventSel withObject: packet.args];
+	if( [delegate respondsToSelector: eventSel] ) {
+		objc_msgSend( delegate, eventSel, packet.args );
 		return;
 	}
 	
@@ -489,7 +487,6 @@ static NSArray* implementedTransportClasses()
 	NSLog(@"Will use transport %@", [transportClass name]);
 #endif
 	[self->attemptedTransports addObject: [transportClass name]];
-	[self->transport release];
 	self->transport = [[transportClass alloc] initWithRootURL: self->url andSessionId: self->sessionId];
 	self->transport.nr_socket= self;
 	[self->transport connect];
@@ -507,15 +504,13 @@ static NSArray* implementedTransportClasses()
 		return;
 	}
 	
-	NSString* sessionID = [[parts firstObject] retain];
-	[self->sessionId release];
+	NSString* sessionID = [parts firstObject];
 	self->sessionId = sessionID;
 	
 	self->heartbeatTimeout = [[parts secondObject] integerValue];
 	self->closeTimeout = [[parts objectAtIndex: 2] integerValue];
 	
-	NSArray* transports = [[[parts objectAtIndex: 3] componentsSeparatedByString: @","] retain];
-	[self->serverSupportedTransports release];
+	NSArray* transports = [[parts objectAtIndex: 3] componentsSeparatedByString: @","];
 	self->serverSupportedTransports = transports;
 	
 	[self updateStatus: SocketIOSocketStatusConnected];
@@ -637,17 +632,6 @@ static NSArray* implementedTransportClasses()
 {
 	[self clearReconnectTimer];
 	[self clearCloseTimer];
-	NTI_RELEASE(self->eventDelegates);
-	NTI_RELEASE(self->attemptedTransports);
-	NTI_RELEASE(self->buffer);
-	NTI_RELEASE(self->handshakeDownloader);
-	NTI_RELEASE(self->transport);
-	NTI_RELEASE(self->serverSupportedTransports);
-	NTI_RELEASE(self->username);
-	NTI_RELEASE(self->password);
-	NTI_RELEASE(self->url);
-	NTI_RELEASE(self->sessionId);
-	[super dealloc];
 }
 
 @end

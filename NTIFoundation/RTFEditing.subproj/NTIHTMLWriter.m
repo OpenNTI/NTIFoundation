@@ -33,7 +33,7 @@
 
 @interface NTIHTMLWriter ()
 
-@property (readwrite, retain) NSAttributedString* attributedString;
+@property (readwrite, strong) NSAttributedString* attributedString;
 
 -(void)writeHTMLData: (OFDataBuffer*)dataBuffer
 			  before: (const char*)before
@@ -95,8 +95,7 @@ static OFCharacterSet* ReservedSet;
 								after: (NSString*)after
 {
 	CFDataRef rtfData = NULL;
-	
-	OMNI_POOL_START {
+	@autoreleasepool {
 		NTIHTMLWriter* rtfWriter = [[self alloc] init];
 		rtfWriter.attributedString = attributedString;
 		
@@ -108,10 +107,9 @@ static OFCharacterSet* ReservedSet;
 						   after: [after UTF8String]];
 		OFDataBufferRelease(&dataBuffer, kCFAllocatorDefault, &rtfData);
 		
-		[rtfWriter release];
-	} OMNI_POOL_END;
+	}
 	
-	return [NSMakeCollectable(rtfData) autorelease];
+	return (__bridge_transfer NSData*)rtfData;
 }
 
 +(NSData*)htmlDataForAttributedString: (NSAttributedString*)attributedString;
@@ -142,7 +140,7 @@ static OFCharacterSet* ReservedSet;
 
 -(void)pushCopyOfState
 {
-	state_t* newState = NSZoneCalloc( NSZoneFromPointer( self ), 1, sizeof(state_t) );
+	state_t* newState = NSZoneCalloc( NSZoneFromPointer( (__bridge void *)(self) ), 1, sizeof(state_t) );
 	NSCopyMemoryPages( self->state, newState, sizeof( state_t ) );
 	state_t* prev = self->state;
 	newState->prev = prev;
@@ -169,11 +167,7 @@ static OFCharacterSet* ReservedSet;
 {
 	OBPRECONDITION(self->dataBuffer == NULL); // Only set for the duration of -_writeRTFData:
 	
-	[self->attributedString release];
-	[self->registeredColors release];
-	[self->registeredFonts release];
 	
-	[super dealloc];
 }
 
 static inline void writeCharacter(OFDataBuffer* dataBuffer, unichar aCharacter)
@@ -232,7 +226,7 @@ static const struct {
 -(BOOL)writeFontAttributes: (NSDictionary*)newAttributes;
 {
 	OAFontDescriptorPlatformFont newPlatformFont 
-	= (OAFontDescriptorPlatformFont)[newAttributes objectForKey: 
+	= (__bridge OAFontDescriptorPlatformFont)[newAttributes objectForKey: 
 									 (NSString*)kCTFontAttributeName];
 	OAFontDescriptor* newFontDescriptor;
 	if( newPlatformFont == nil ) {
@@ -248,7 +242,6 @@ static const struct {
 	int newFontIndex = [newFontIndexValue intValue];
 	BOOL newFontBold = [newFontDescriptor bold];
 	BOOL newFontItalic = [newFontDescriptor italic];
-	[newFontDescriptor autorelease];
 	unsigned int newUnderline = [newAttributes unsignedIntForKey: (NSString*)kCTUnderlineStyleAttributeName 
 													defaultValue: kCTUnderlineStyleNone];
 	
@@ -347,7 +340,6 @@ static const struct {
 		OFDataBufferAppendCString( self->dataBuffer, ";" );
 		self->state->foregroundColorIndex = newColorIndex;
 	}
-	[colorTableEntry release];
 	
 	newColor = [newAttributes objectForKey: OABackgroundColorAttributeName];
 	colorTableEntry = [[NTIHTMLColorTableEntry alloc] initWithColor: newColor];
@@ -366,14 +358,13 @@ static const struct {
 		[colorTableEntry writeToDataBuffer: self->dataBuffer];
 		self->state->backgroundColorIndex = newColorIndex;
 	}
-	[colorTableEntry release];
 	
 	return open;
 }
 
 -(void)writeParagraphAttributes: (NSDictionary*)newAttributes;
 {
-	CTParagraphStyleRef paragraphStyle = (CTParagraphStyleRef)[newAttributes objectForKey:
+	CTParagraphStyleRef paragraphStyle = (__bridge CTParagraphStyleRef)[newAttributes objectForKey:
 															   (id)kCTParagraphStyleAttributeName];
 	CTTextAlignment alignment = kCTNaturalTextAlignment;
 	CGFloat firstLineHeadIndent = 0.0f;
@@ -504,7 +495,7 @@ static const struct {
 -(void)writeAttributes: (NSDictionary*)newAttributes 
   beginningOfParagraph: (BOOL)beginningOfParagraph;
 {
-	OMNI_POOL_START {
+	@autoreleasepool {
 		//Close the outstanding tags, if any, out to the block level
 		//Only if we're a new paragraph do we close that too.
 		while( self->state && self->state->prev ) {
@@ -544,7 +535,7 @@ static const struct {
 		
 		//The link manages its own anchor tag
 		[self writeLinkAttributes: newAttributes];
-	} OMNI_POOL_END;
+	}
 }
 
 
@@ -560,7 +551,6 @@ static const struct {
 	= [[NTIHTMLColorTableEntry alloc] initWithColor: (id)[blackColor rgbaCGColorRef]];
 	[self->registeredColors setObject: [NSNumber numberWithInt: colorIndex++]
 							   forKey: defaultColorEntry];
-	[defaultColorEntry release];
 	
 	NSUInteger stringLength = [self->attributedString length];
 	NSSet* textColors = [self->attributedString 
@@ -573,16 +563,13 @@ static const struct {
 		if( !color || [color isNull] ) {
 			continue;
 		}
-#ifdef DEBUG_RTF_WRITER
-		NSLog(@"Registering color: %@", [NTIHTMLWriter debugStringForColor:color]);
-#endif
+
 		NTIHTMLColorTableEntry* colorTableEntry = [[NTIHTMLColorTableEntry alloc] 
 												   initWithColor: color];
 		if( ![self->registeredColors objectForKey: colorTableEntry] ) {
 			[self->registeredColors setObject: [NSNumber numberWithInt: colorIndex++]
 									   forKey: colorTableEntry];
 		}
-		[colorTableEntry release];
 	}
 }
 
@@ -606,7 +593,7 @@ static const struct {
 	NSUInteger stringLength = [self->attributedString length];
 	for( NSUInteger textIndex = 0; textIndex < stringLength; textIndex = NSMaxRange(effectiveRange)) {
 		OAFontDescriptorPlatformFont platformFont 
-		= (OAFontDescriptorPlatformFont)[self->attributedString 
+		= (__bridge OAFontDescriptorPlatformFont)[self->attributedString 
 										 attribute: (NSString*)kCTFontAttributeName
 										 atIndex: textIndex
 										 effectiveRange: &effectiveRange];
@@ -614,7 +601,6 @@ static const struct {
 		if( platformFont != nil ) {
 			OAFontDescriptor* fontDescriptor = [[OAFontDescriptor alloc] initWithFont: platformFont];
 			fontName = [fontDescriptor fontName];
-			[fontDescriptor release];
 		} 
 		else {
 			fontName = @"Helvetica";
@@ -636,7 +622,7 @@ static const struct {
 	OBPRECONDITION(self->dataBuffer == NULL);
 	
 	self->dataBuffer = buffer;
-	self->state = NSZoneCalloc( NSZoneFromPointer( self), 1, sizeof(state_t) );
+	self->state = NSZoneCalloc( NSZoneFromPointer( (__bridge void *)(self)), 1, sizeof(state_t) );
 	[self clearState];
 	OFDataBufferAppendCString(self->dataBuffer, before );
 	
@@ -688,7 +674,6 @@ static const struct {
 		scannerSkipPeekedCharacter(scanner);
 		scanLocation++;
 	}
-	[scanner release];
 	
 	//Close the outstanding tags, if any.
 	while( self->state && self->state->prev ) {
@@ -720,9 +705,9 @@ static const struct {
 		return self;
 	}
 	
-	OBASSERT(CFGetTypeID(color) == CGColorGetTypeID());
+	//OBASSERT(CFGetTypeID(color) == CGColorGetTypeID());
 	
-	CGColorRef cgColor = (CGColorRef)color;
+	CGColorRef cgColor = (__bridge CGColorRef)color;
 	CGColorSpaceRef colorSpace = CGColorGetColorSpace(cgColor);
 	const CGFloat* components = CGColorGetComponents(cgColor);
 	switch (CGColorSpaceGetModel(colorSpace)) {
@@ -789,7 +774,7 @@ static const struct {
 -(id)copyWithZone: (NSZone*)zone;
 {
 	// We are immutable!
-	return [self retain];
+	return self;
 }
 
 @end

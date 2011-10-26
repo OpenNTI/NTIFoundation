@@ -30,9 +30,9 @@ typedef NSInteger SocketIOTransportStatus;
 	NSString* sessionId;
 	NSURL* rootURL;
 	SocketIOTransportStatus status;
-	SocketIOSocket* nr_socket;
+	SocketIOSocket* __weak nr_socket;
 }
-@property (nonatomic, assign) SocketIOSocket* nr_socket;
+@property (nonatomic, weak) SocketIOSocket* nr_socket;
 @property (nonatomic, assign) SocketIOTransportStatus status;
 +(NSString*)name;
 -(id)initWithRootURL: (NSURL*)url andSessionId: (NSString*)sessionId;

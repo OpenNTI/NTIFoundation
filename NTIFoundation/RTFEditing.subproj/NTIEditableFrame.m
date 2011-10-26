@@ -36,7 +36,7 @@ static void _setBaseWritingDirection_forRange(
 static void NTIEditableFramePerformPosing(void) __attribute__((constructor));
 static void NTIEditableFramePerformPosing(void)
 {
-	OMNI_POOL_START
+	@autoreleasepool {
 	if( [[[UIDevice currentDevice] systemVersion] hasPrefix: @"4"] ) {
 		//Not needed on ios4
 		return;
@@ -56,5 +56,5 @@ static void NTIEditableFramePerformPosing(void)
 				viewClass,
 				@selector(setBaseWritingDirection:forRange:),
 				(IMP)_setBaseWritingDirection_forRange);
-	OMNI_POOL_END;
+	}
 }

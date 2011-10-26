@@ -7,7 +7,6 @@
 {
 	NTIHTMLReader* r = [[[NTIHTMLReader readerClass] alloc] initWithHTML: htmlString];	
 	NSAttributedString* result = r.attributedString;
-	[r release];
 	return result;
 }
 @end

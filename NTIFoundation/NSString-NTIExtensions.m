@@ -26,7 +26,7 @@ static NSDateFormatter* rfc3339DateFormatter()
 	static NSDateFormatter* rfc3339DateFormatter = nil;
 	if( !rfc3339DateFormatter ) {
 		rfc3339DateFormatter = [[NSDateFormatter alloc] init];
-		NSLocale* enUSPOSIXLocale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease];
+		NSLocale* enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
 	
 		[rfc3339DateFormatter setLocale: enUSPOSIXLocale];
 		[rfc3339DateFormatter setDateFormat: @"EEE, dd MMM yyyy HH:mm:ss 'GMT'"];

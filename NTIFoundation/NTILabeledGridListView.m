@@ -71,7 +71,7 @@ static void commonInit( NTILabeledGridListView* self )
 	if( self->observing ) {
 		[self->toObserve removeObserver: self forKeyPath: self.keyPath];
 	}
-	NTI_RELEASE( self->toObserve );
+	[( self->toObserve ) release];
 	self->toObserve = nobs;
 	self->observing = NO;
 }
@@ -79,8 +79,8 @@ static void commonInit( NTILabeledGridListView* self )
 -(void)setKeyPath: (id)kp
 {
 	kp = [kp retain];
-	NTI_RELEASE( self->keyPath );
-	NTI_RELEASE( self->keyPathCount );
+	[( self->keyPath ) release];
+	[( self->keyPathCount ) release];
 
 	self->keyPath = kp;
 	self->keyPathCount = [[NSString alloc] initWithFormat: @"%@.@count", kp];
@@ -173,7 +173,7 @@ static void commonInit( NTILabeledGridListView* self )
 					  context: (void*)context
 {
 	//TODO: We could keep our model in sync instead of copying
-	NTI_RELEASE( self->observedValue );
+	[( self->observedValue ) release];
 	self->observedValue = [[self->toObserve valueForKeyPath: self->keyPath] retain];
 	
 	NSNumber* changeKindNumber = [change objectForKey: NSKeyValueChangeKindKey];
@@ -309,9 +309,9 @@ static void commonInit( NTILabeledGridListView* self )
 	self.longTapTarget = nil;
 	self.tapTarget = nil;
 	self.itemLabelColor = nil;
-	NTI_RELEASE( self->gridItemViews );
-	NTI_RELEASE( self->keyPathCount );
-	NTI_RELEASE( self->observedValue );
+	[( self->gridItemViews ) release];
+	[( self->keyPathCount ) release];
+	[( self->observedValue ) release];
 	[super dealloc];
 }
 

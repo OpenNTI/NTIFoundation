@@ -20,7 +20,7 @@
 	
 	NSInteger statusCode;
 	long long expectedContentLength;
-	NSDate* lastModified;
+	NSDate* __weak lastModified;
 }
 @property (readonly) NSDate* lastModified;
 @property (readonly) NSInteger statusCode;
@@ -86,9 +86,9 @@
 //A delegator that passes on the didFinish and didFail messages
 @interface NTIDelegatingDownloader : NTIBufferedDownloader {
 @private
-    id nr_delegate;
+    id __weak nr_delegate;
 }
-@property (nonatomic, assign) id nr_delegate;
+@property (nonatomic, weak) id nr_delegate;
 @end
 
 @interface NTIStreamDownloader : NTIBufferedDownloader<NSStreamDelegate> {

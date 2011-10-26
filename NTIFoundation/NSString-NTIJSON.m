@@ -18,7 +18,6 @@ static BOOL stringMayBeFloat( NSString* trimmed )
 	static NSCharacterSet* period = nil;
 	if( !period ) {
 		period = [NSCharacterSet characterSetWithCharactersInString: @"."];
-		[period retain];
 	}
 	return [trimmed rangeOfCharacterFromSet: period].location != NSNotFound;
 }
