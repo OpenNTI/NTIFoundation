@@ -28,6 +28,7 @@
 #import "SendRecieveQueue.h"
 #import "NSAttributedString-HTMLReadingExtensions.h"
 #import "NSAttributedString-HTMLWritingExtensions.h"
+#import "NSAttributedString-NTIExtensions.h"
 #import "NTIRTFDocument.h"
 #import "NTIHTMLWriter.h"
 #import "NTIHTMLReader.h"

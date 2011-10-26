@@ -21,6 +21,10 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		403C28E614576E160012CBAB /* NSAttributedString-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 403C28E414576E160012CBAB /* NSAttributedString-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		403C28E714576E160012CBAB /* NSAttributedString-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C28E514576E160012CBAB /* NSAttributedString-NTIExtensions.m */; };
+		403C290914577A340012CBAB /* NSAttributedString-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C290614577A260012CBAB /* NSAttributedString-NTIExtensionsTest.m */; };
+		403C290A14577C100012CBAB /* NSAttributedString-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C28E514576E160012CBAB /* NSAttributedString-NTIExtensions.m */; };
 		403D0DC2143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 403D0DBC143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		403D0DC3143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D0DBD143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.m */; };
 		403D0DC4143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 403D0DBE143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -359,6 +363,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		403C28E414576E160012CBAB /* NSAttributedString-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString-NTIExtensions.h"; sourceTree = "<group>"; };
+		403C28E514576E160012CBAB /* NSAttributedString-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString-NTIExtensions.m"; sourceTree = "<group>"; };
+		403C290514577A260012CBAB /* NSAttributedString-NTIExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString-NTIExtensionsTest.h"; sourceTree = "<group>"; };
+		403C290614577A260012CBAB /* NSAttributedString-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString-NTIExtensionsTest.m"; sourceTree = "<group>"; };
 		403D0DBC143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString-HTMLReadingExtensions.h"; sourceTree = "<group>"; };
 		403D0DBD143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString-HTMLReadingExtensions.m"; sourceTree = "<group>"; };
 		403D0DBE143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString-HTMLWritingExtensions.h"; sourceTree = "<group>"; };
@@ -832,6 +840,8 @@
 				40B6F3B914285AF4007EDF1C /* WebSocket7Test.m */,
 				40E0461A143F5F260091CE7C /* NTIHTMLReaderTest.h */,
 				40E0461B143F5F260091CE7C /* NTIHTMLReaderTest.m */,
+				403C290514577A260012CBAB /* NSAttributedString-NTIExtensionsTest.h */,
+				403C290614577A260012CBAB /* NSAttributedString-NTIExtensionsTest.m */,
 			);
 			path = UnitTests;
 			sourceTree = "<group>";
@@ -857,6 +867,8 @@
 				72FC5D7C13D10285006CBF28 /* NSMutableArray-NTIExtensions.m */,
 				72579DF313D8B24C005437A7 /* NSString-NTIExtensions.h */,
 				72579DF413D8B24C005437A7 /* NSString-NTIExtensions.m */,
+				403C28E414576E160012CBAB /* NSAttributedString-NTIExtensions.h */,
+				403C28E514576E160012CBAB /* NSAttributedString-NTIExtensions.m */,
 			);
 			name = FoundationExtensions;
 			path = FoundationExtensions.subproj;
@@ -934,6 +946,7 @@
 				7293CB291451AA7D00CD64B8 /* NTIEditableFrame.h in Headers */,
 				40E04618143F50A60091CE7C /* OQColor-NTIExtensions.h in Headers */,
 				40C0E1031443AF9C00142406 /* SocketIOPacketTest.h in Headers */,
+				403C28E614576E160012CBAB /* NSAttributedString-NTIExtensions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1340,6 +1353,7 @@
 				40E04615143F47890091CE7C /* NTIHTMLReader.m in Sources */,
 				40E04619143F50A60091CE7C /* OQColor-NTIExtensions.m in Sources */,
 				7293CB2A1451AA7D00CD64B8 /* NTIEditableFrame.m in Sources */,
+				403C28E714576E160012CBAB /* NSAttributedString-NTIExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1370,6 +1384,8 @@
 				40C0E1081443AFAD00142406 /* SocketIOPacket.m in Sources */,
 				40C0E1091443AFB000142406 /* SocketIOSocket.m in Sources */,
 				40C0E10A1443AFB300142406 /* SocketIOTransport.m in Sources */,
+				403C290914577A340012CBAB /* NSAttributedString-NTIExtensionsTest.m in Sources */,
+				403C290A14577C100012CBAB /* NSAttributedString-NTIExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
