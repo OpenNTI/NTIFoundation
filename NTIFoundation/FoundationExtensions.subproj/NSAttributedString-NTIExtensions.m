@@ -47,14 +47,14 @@
 													    length: 1];
 	NSRange searchResult;
 	NSUInteger partStartLocation = 0;
-	NSRange searchRange = NSMakeRange(partStartLocation, self.string.length);
+	NSRange searchRange = NSMakeRange(partStartLocation, self.length);
 	do{
 		searchResult = [self.string rangeOfString: separatorString options: 0 range:searchRange];
 		
 		//If its not found our part is from the search start to search end (end of string)
 		NSRange partRange = NSMakeRange(NSNotFound, 0);
 		if(searchResult.location == NSNotFound){
-			partRange = NSMakeRange(searchRange.location, searchRange.length);
+			partRange = NSMakeRange(partStartLocation, self.length - partStartLocation);
 		}
 		//We found a result.  Part range is from the search start to the searchresult location
 		else{
@@ -70,8 +70,8 @@
 			}
 			
 			//Update search range so next go around we look further on in the string
-			searchRange = NSMakeRange(searchResult.location+1, 
-									  MAX(0UL, self.string.length - (searchResult.location+1)));
+			searchRange = NSMakeRange(partStartLocation+ partRange.length + 1, 
+									  MAX(0UL, self.length - (searchResult.location+1)));
 		}
 		
 		if(partRange.location != NSNotFound){
@@ -83,7 +83,7 @@
 		}
 		
 	}while (   searchResult.location != NSNotFound 
-			&& NSMaxRange( searchRange ) <= self.string.length);	
+			&& NSMaxRange( searchRange ) <= self.length);	
 	
 	return [NSArray arrayWithArray: result];
 }
