@@ -33,9 +33,10 @@ static void appendChunkSeparator(NSMutableAttributedString* mAttrString)
 	NSMutableAttributedString* mutableAttrString = [[NSMutableAttributedString alloc] 
 													initWithAttributedString: self];
 	
-	//If the string isn't empty we need to insert 
-	//a chunk attribute before adding our chunk
-	if(mutableAttrString.length > 0){
+	//Do we need to start a new chunk?
+	if( self.length > 0 && ![self attribute: kNTIChunkSeparatorAttributeName 
+									atIndex: self.length - 1 
+							 effectiveRange: NULL] ){
 		appendChunkSeparator(mutableAttrString);
 	}
 	
@@ -43,9 +44,7 @@ static void appendChunkSeparator(NSMutableAttributedString* mAttrString)
 		NSAttributedString* attrString = [chunks objectAtIndex: i];
 		
 		[mutableAttrString appendAttributedString: attrString];
-		if(i < [chunks count] - 1){
-			appendChunkSeparator(mutableAttrString);
-		}
+		appendChunkSeparator(mutableAttrString);
 	}
 	
 	return [[NSAttributedString alloc] initWithAttributedString: mutableAttrString];
@@ -55,13 +54,17 @@ static void appendChunkSeparator(NSMutableAttributedString* mAttrString)
 {
 	NSMutableAttributedString* mutableAttrString = [[NSMutableAttributedString alloc] 
 													initWithAttributedString: self];
-	//If the string isn't empty we need to insert 
-	//a chunk attribute before adding our chunk
-	if(mutableAttrString.length > 0){
+	
+	//Do we need to start a new chunk?
+	if( self.length > 0 && ![self attribute: kNTIChunkSeparatorAttributeName 
+									atIndex: self.length - 1 
+							 effectiveRange: NULL] ){
 		appendChunkSeparator(mutableAttrString);
 	}
 	
 	[mutableAttrString appendAttributedString: chunk];
+	
+	appendChunkSeparator(mutableAttrString);
 	
 	return [[NSAttributedString alloc] initWithAttributedString: mutableAttrString];
 }
@@ -111,7 +114,7 @@ static void appendChunkSeparator(NSMutableAttributedString* mAttrString)
 		if(partRange.location != NSNotFound){
 			NSAttributedString* part = [self attributedSubstringFromRange: partRange];
 			partStartLocation += partRange.length + 1;
-			if(part){
+			if(part && part.length > 0){
 				[result addObject: part];
 			}
 		}
