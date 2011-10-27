@@ -236,6 +236,7 @@
 		//Write what we can, if we have something
 		if( [self->currentDataChunk length] == 0 ) {
 			//Zero byte chunk. Interesting.
+			self->currentDataChunk = nil;
 		}
 		else {
 			uint8_t* bytes = [self->currentDataChunk mutableBytes];
@@ -247,6 +248,7 @@
 				if( currentOffset >= [self->currentDataChunk length] ) {
 					//We've written it all, let go.
 					currentOffset = 0;
+					self->currentDataChunk = nil;
 				}
 			}
 			else {
