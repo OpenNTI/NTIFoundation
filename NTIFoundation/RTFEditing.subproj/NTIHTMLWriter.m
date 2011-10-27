@@ -109,7 +109,9 @@ static OFCharacterSet* ReservedSet;
 		
 	}
 	
-	return (__bridge_transfer NSData*)rtfData;
+	NSData* result = (__bridge_transfer NSData*)rtfData;
+	
+	return result;
 }
 
 +(NSData*)htmlDataForAttributedString: (NSAttributedString*)attributedString;

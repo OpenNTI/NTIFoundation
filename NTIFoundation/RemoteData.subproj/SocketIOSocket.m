@@ -486,8 +486,10 @@ static NSArray* implementedTransportClasses()
 #ifdef DEBUG_SOCKETIO
 	NSLog(@"Will use transport %@", [transportClass name]);
 #endif
+
 	[self->attemptedTransports addObject: [transportClass name]];
-	self->transport = [[transportClass alloc] initWithRootURL: self->url andSessionId: self->sessionId];
+	self->transport = [[transportClass alloc] initWithRootURL: self->url 
+												 andSessionId: self->sessionId];
 	self->transport.nr_socket= self;
 	[self->transport connect];
 }

@@ -17,7 +17,7 @@
 	CGImageRef currentImage;
 	BOOL inError;
 }
-@property(weak, nonatomic, readonly) NSAttributedString* attributedString;
+@property(nonatomic, readonly) NSAttributedString* attributedString;
 
 +(void)registerReaderClass: (Class)clazz;
 +(Class)readerClass;

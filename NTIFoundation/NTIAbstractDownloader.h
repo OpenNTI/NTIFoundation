@@ -20,7 +20,7 @@
 	
 	NSInteger statusCode;
 	long long expectedContentLength;
-	NSDate* __weak lastModified;
+	NSDate* lastModified;
 }
 @property (readonly) NSDate* lastModified;
 @property (readonly) NSInteger statusCode;
