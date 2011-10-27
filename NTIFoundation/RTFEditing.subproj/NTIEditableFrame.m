@@ -7,10 +7,27 @@
 //
 
 #import "NTIEditableFrame.h"
-
+#import "NTIFoundation.h"
 
 @implementation NTIEditableFrame
 
+-(NSDictionary*)typingAttributes
+{
+	NSMutableDictionary* attrs = [NSMutableDictionary dictionaryWithDictionary: [super typingAttributes]];
+	if( [attrs objectForKey: kNTIChunkSeparatorAttributeName] ){
+		[attrs removeObjectForKey: kNTIChunkSeparatorAttributeName];
+	}
+	return attrs;
+}
+
+-(void)setTypingAttributes:(NSDictionary *)typingAttributes
+{
+	NSMutableDictionary* attrs = [NSMutableDictionary dictionaryWithDictionary: typingAttributes];
+	if( [attrs objectForKey: kNTIChunkSeparatorAttributeName] ){
+		[attrs removeObjectForKey: kNTIChunkSeparatorAttributeName];
+	}
+	[super setTypingAttributes: attrs];
+}
 
 @end
 
