@@ -120,7 +120,6 @@ static NSString* stringFromStyle( NSString* styleAttribute, NSString* name )
 			[NSCharacterSet characterSetWithCharactersInString: @"'\""]];
 }
 
-
 static OAFontDescriptor* newCurrentFontDescriptor( NSDictionary* dict )
 {
 	OAFontDescriptorPlatformFont newPlatformFont 
@@ -140,16 +139,16 @@ static OAFontDescriptor* newCurrentFontDescriptor( NSDictionary* dict )
  * @param desc A new descriptor, which will be released by this function.
  */
 static void setCurrentFontDescriptor( NSMutableDictionary* dict, 
-									 OAFontDescriptor* desc NS_CONSUMED )
+									 OAFontDescriptor* desc )
 {
 	[dict setObject: (id)[desc font]
 			 forKey: (id)kCTFontAttributeName];
 }
 
 //Returns nil on unrecognized colors
-CGColorRef NTIHTMLReaderParseColor(NSString* attribute);
+CGColorRef NTIHTMLReaderParseCreateColor(NSString* attribute) NS_RETURNS_RETAINED;
 
-CGColorRef NTIHTMLReaderParseColor( NSString* attribute )
+NS_RETURNS_RETAINED CGColorRef NTIHTMLReaderParseCreateColor( NSString* attribute )
 {
 	OQColor* color = nil;
 	if( [@"black" isEqual: attribute] ) {
@@ -227,7 +226,7 @@ static void setCurrentParagraphStyle( NSMutableDictionary* dict, OAMutableParagr
 	for( id styleName in fontAttrs ) {
 		id styleValue = [fontAttrs objectForKey: styleName];
 		if( OFISEQUAL( styleName,  @"color") ) {
-			[dict setObject: (__bridge id)NTIHTMLReaderParseColor( styleValue )
+			[dict setObject: (__bridge_transfer id)NTIHTMLReaderParseCreateColor( styleValue )
 					 forKey: (id)kCTForegroundColorAttributeName];
 		}
 	}
@@ -288,11 +287,11 @@ styleAttribute = stringFromStyle( styleAttribute, @prefix );
 		} EHV
 		//Colors
 		else HAS_VALUE("color") {
-			[dict setObject: (__bridge id)NTIHTMLReaderParseColor( styleAttribute )
+			[dict setObject: (__bridge id)NTIHTMLReaderParseCreateColor( styleAttribute )
 					 forKey: (id)kCTForegroundColorAttributeName];
 		} EHV
 		else HAS_VALUE("background-color") {
-			[dict setObject: (__bridge id)NTIHTMLReaderParseColor( styleAttribute )
+			[dict setObject: (__bridge id)NTIHTMLReaderParseCreateColor( styleAttribute )
 					 forKey: (id)OABackgroundColorAttributeName];
 		} EHV
 		//Paragraph style

@@ -46,3 +46,9 @@
 
 //A procedure block takes an object, returns nothing.
 typedef void(^NTIObjectProcBlock)(id);
+
+#if __has_feature(objc_arc)
+#define NTI_METHOD_FAMILY_NEW __attribute__((objc_method_family(new)))
+#else
+#define NTI_METHOD_FAMILY_NEW
+#endif

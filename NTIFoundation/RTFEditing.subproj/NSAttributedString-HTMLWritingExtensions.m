@@ -9,12 +9,12 @@
 #import "NTIHTMLWriter.h"
 
 @implementation NSAttributedString(HTMLWritingExtensions)
--(NSData*)htmlDataFromString
+-(NSData*)newHTMLDataFromString
 {
 	return [NTIHTMLWriter htmlDataForAttributedString: self];
 }
 
--(NSData*)htmlDataFromStringWrappedIn: (NSString*)element
+-(NSData*)newHTMLDataFromStringWrappedIn: (NSString*)element
 {
 	return [NTIHTMLWriter htmlDataForAttributedString: self
 											wrappedIn: element];
@@ -22,13 +22,13 @@
 
 -(NSString*)htmlStringFromString
 {
-	return [[NSString alloc] initWithData: [self htmlDataFromString]
+	return [[NSString alloc] initWithData: [self newHTMLDataFromString]
 								  encoding: NSUTF8StringEncoding];	
 }
 
 -(NSString*)htmlStringFromStringWrappedIn: (NSString*)element
 {
-	return [[NSString alloc] initWithData: [self htmlDataFromStringWrappedIn: element]
+	return [[NSString alloc] initWithData: [self newHTMLDataFromStringWrappedIn: element]
 								  encoding: NSUTF8StringEncoding];	
 }
 

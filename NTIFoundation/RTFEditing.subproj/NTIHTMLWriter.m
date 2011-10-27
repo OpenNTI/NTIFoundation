@@ -38,7 +38,9 @@
 -(void)writeHTMLData: (OFDataBuffer*)dataBuffer
 			  before: (const char*)before
 			   after: (const char*)after;
-
++(NSData*)htmlDataForAttributedString: (NSAttributedString*)attributedString
+							   before: (NSString*)before
+								after: (NSString*)after;
 @end
 
 @interface NTIHTMLColorTableEntry : OFObject
@@ -47,7 +49,7 @@
 	int red, green, blue;
 }
 
--(id)initWithColor: (id)color;
+-(id)initWithColor: (CGColorRef)color;
 -(void)writeToDataBuffer: (OFDataBuffer*)dataBuffer;
 
 @end
@@ -90,31 +92,33 @@ static OFCharacterSet* ReservedSet;
 
 #endif
 
+static CFDataRef CFDataCreateFromOFDataBuffer( OFDataBuffer dataBuffer )
+{
+	CFDataRef data = NULL;
+	OFDataBufferRelease(&dataBuffer, kCFAllocatorDefault, (CFDataRef*)&data);
+	return data;
+}
+												
+
 +(NSData*)htmlDataForAttributedString: (NSAttributedString*)attributedString
 							   before: (NSString*)before
 								after: (NSString*)after
 {
-	CFDataRef rtfData = NULL;
-	@autoreleasepool {
-		NTIHTMLWriter* rtfWriter = [[self alloc] init];
-		rtfWriter.attributedString = attributedString;
+	NTIHTMLWriter* rtfWriter = [[self alloc] init];
+	rtfWriter.attributedString = attributedString;
 		
-		OFDataBuffer dataBuffer;
-		OFDataBufferInit(&dataBuffer);
+	OFDataBuffer dataBuffer;
+	OFDataBufferInit(&dataBuffer);
 		
-		[rtfWriter writeHTMLData: &dataBuffer
-						  before: [before UTF8String]
-						   after: [after UTF8String]];
-		OFDataBufferRelease(&dataBuffer, kCFAllocatorDefault, &rtfData);
-		
-	}
-	
-	NSData* result = (__bridge_transfer NSData*)rtfData;
+	[rtfWriter writeHTMLData: &dataBuffer
+					  before: [before UTF8String]
+					   after: [after UTF8String]];
+	id result = (__bridge_transfer id)CFDataCreateFromOFDataBuffer( dataBuffer );
 	
 	return result;
 }
 
-+(NSData*)htmlDataForAttributedString: (NSAttributedString*)attributedString;
++(NSData*)htmlDataForAttributedString: (NSAttributedString*)attributedString
 {
 	return [self htmlDataForAttributedString: attributedString
 									  before: @"<html><body>"
@@ -323,7 +327,7 @@ static const struct {
 {
 	id newColor = [newAttributes objectForKey: (NSString*)kCTForegroundColorAttributeName];
 	NTIHTMLColorTableEntry* colorTableEntry = [[NTIHTMLColorTableEntry alloc] 
-											   initWithColor: newColor];
+											   initWithColor: (__bridge CGColorRef)newColor];
 	NSNumber* newColorIndexValue = [self->registeredColors objectForKey: colorTableEntry];
 	
 	OBASSERT(newColorIndexValue != nil);
@@ -344,7 +348,7 @@ static const struct {
 	}
 	
 	newColor = [newAttributes objectForKey: OABackgroundColorAttributeName];
-	colorTableEntry = [[NTIHTMLColorTableEntry alloc] initWithColor: newColor];
+	colorTableEntry = [[NTIHTMLColorTableEntry alloc] initWithColor: (__bridge CGColorRef)newColor];
 	newColorIndexValue = [self->registeredColors objectForKey: colorTableEntry];
 	OBASSERT(newColorIndexValue != nil);
 	newColorIndex = [newColorIndexValue intValue];
@@ -548,9 +552,10 @@ static const struct {
 	int colorIndex = 0;
 	
 	OQColor* blackColor = [OQColor blackColor];
-	
-	NTIHTMLColorTableEntry* defaultColorEntry 
-	= [[NTIHTMLColorTableEntry alloc] initWithColor: (id)[blackColor rgbaCGColorRef]];
+	CGColorRef blackCGColor = [blackColor rgbaCGColorRef];
+	NTIHTMLColorTableEntry* defaultColorEntry = [[NTIHTMLColorTableEntry alloc] 
+												 initWithColor: blackCGColor];
+	CFRelease( blackCGColor );
 	[self->registeredColors setObject: [NSNumber numberWithInt: colorIndex++]
 							   forKey: defaultColorEntry];
 	
@@ -565,9 +570,9 @@ static const struct {
 		if( !color || [color isNull] ) {
 			continue;
 		}
-
+		CGColorRef cgColor = (__bridge CGColorRef)color;
 		NTIHTMLColorTableEntry* colorTableEntry = [[NTIHTMLColorTableEntry alloc] 
-												   initWithColor: color];
+												   initWithColor: cgColor];
 		if( ![self->registeredColors objectForKey: colorTableEntry] ) {
 			[self->registeredColors setObject: [NSNumber numberWithInt: colorIndex++]
 									   forKey: colorTableEntry];
@@ -697,19 +702,18 @@ static const struct {
 
 @implementation NTIHTMLColorTableEntry
 
--(id)initWithColor: (id)color;
+-(id)initWithColor: (CGColorRef)cgColor;
 {
 	if( !(self = [super init]) ) {
 		return nil;
 	}
 	
-	if( !color ) {
+	if( !cgColor ) {
 		return self;
 	}
 	
 	//OBASSERT(CFGetTypeID(color) == CGColorGetTypeID());
 	
-	CGColorRef cgColor = (__bridge CGColorRef)color;
 	CGColorSpaceRef colorSpace = CGColorGetColorSpace(cgColor);
 	const CGFloat* components = CGColorGetComponents(cgColor);
 	switch (CGColorSpaceGetModel(colorSpace)) {
@@ -728,8 +732,7 @@ static const struct {
 			break;
 		}
 		default: {
-			NSLog(@"color = %@ %@", color, cgColor);
-			NSLog(@"colorSpace %@", colorSpace);
+			NSLog(@"Unsupported color space colorSpace %@", colorSpace);
 			OBFinishPorting;
 		}
 	}

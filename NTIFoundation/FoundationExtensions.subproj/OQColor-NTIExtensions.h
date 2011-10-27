@@ -10,5 +10,8 @@
 
 @interface OQColor (NTIExtensions)
 @property (readonly,nonatomic) NSString* cssString;
-@property (nonatomic, readonly) CGColorRef rgbaCGColorRef;
+@property (readonly,nonatomic) CGColorRef rgbaCGColorRef;
+
+-(CGColorRef)rgbaCGColorRef NTI_METHOD_FAMILY_NEW;
+
 @end
