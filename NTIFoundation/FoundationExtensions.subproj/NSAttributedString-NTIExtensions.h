@@ -8,7 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+#define kNTIChunkSeparatorAttributeName @"NTIChunkSeparatorAttributeName"
+
 @interface NSAttributedString(NTIExtensions)
 +(NSAttributedString*)attributedStringFromAttributedStrings: (NSArray*)attrStrings;
 -(NSArray*)attributedStringsFromParts;
+-(NSAttributedString*)attributedStringByAppendingChunk: (NSAttributedString*)chunk;
+-(NSAttributedString*)attributedStringByAppendingChunks: (NSArray*)chunks;
 @end

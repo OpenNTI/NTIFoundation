@@ -14,22 +14,56 @@
 
 +(NSAttributedString*)attributedStringFromAttributedStrings: (NSArray*)attrStrings
 {
-	NSMutableAttributedString* result = [[NSMutableAttributedString alloc] init];
+	NSAttributedString* attrString = [[NSAttributedString alloc] init];
 	
-	for(NSUInteger i = 0 ; i < [attrStrings count]; i++){
-		NSAttributedString* attrString = [attrStrings objectAtIndex: i];
+	return [attrString attributedStringByAppendingChunks: attrStrings];
+}
+
+static void appendChunkSeparator(NSMutableAttributedString* mAttrString)
+{
+	unichar attachmentCharacter = OAAttachmentCharacter;
+	[mAttrString appendString: [NSString stringWithCharacters: &attachmentCharacter
+												  length: 1] 
+			  attributes: [NSDictionary dictionaryWithObject:  [[NSObject alloc] init]
+													  forKey: kNTIChunkSeparatorAttributeName]];
+}
+
+-(NSAttributedString*)attributedStringByAppendingChunks: (NSArray*)chunks
+{
+	NSMutableAttributedString* mutableAttrString = [[NSMutableAttributedString alloc] 
+													initWithAttributedString: self];
+	
+	//If the string isn't empty we need to insert 
+	//a chunk attribute before adding our chunk
+	if(mutableAttrString.length > 0){
+		appendChunkSeparator(mutableAttrString);
+	}
+	
+	for(NSUInteger i = 0 ; i < [chunks count]; i++){
+		NSAttributedString* attrString = [chunks objectAtIndex: i];
 		
-		[result appendAttributedString: attrString];
-		if(i < [attrStrings count] - 1){
-			unichar attachmentCharacter = OAAttachmentCharacter;
-			[result appendString: [NSString stringWithCharacters: &attachmentCharacter
-														  length: 1] 
-					  attributes: [NSDictionary dictionaryWithObject: [NSNumber numberWithInt: i] 
-															  forKey: @"NTIPartNumberAttributeName"]];
+		[mutableAttrString appendAttributedString: attrString];
+		if(i < [chunks count] - 1){
+			appendChunkSeparator(mutableAttrString);
 		}
 	}
 	
-	return result;
+	return [[NSAttributedString alloc] initWithAttributedString: mutableAttrString];
+}
+
+-(NSAttributedString*)attributedStringByAppendingChunk:(NSAttributedString *)chunk
+{
+	NSMutableAttributedString* mutableAttrString = [[NSMutableAttributedString alloc] 
+													initWithAttributedString: self];
+	//If the string isn't empty we need to insert 
+	//a chunk attribute before adding our chunk
+	if(mutableAttrString.length > 0){
+		appendChunkSeparator(mutableAttrString);
+	}
+	
+	[mutableAttrString appendAttributedString: chunk];
+	
+	return [[NSAttributedString alloc] initWithAttributedString: mutableAttrString];
 }
 
 //We walk through the string looking for our special attachment character
@@ -61,7 +95,7 @@
 			//There are two cases here.  We found our part separator or we found some other special
 			//attachment marker.  The former case means we snag this part and stuff it in the array
 			//In the latter case we have to keep looking
-			if( [self attribute: @"NTIPartNumberAttributeName" 
+			if( [self attribute: kNTIChunkSeparatorAttributeName 
 							  atIndex: searchResult.location 
 					   effectiveRange: NULL] ){
 				
@@ -70,7 +104,7 @@
 			}
 			
 			//Update search range so next go around we look further on in the string
-			searchRange = NSMakeRange(partStartLocation+ partRange.length + 1, 
+			searchRange = NSMakeRange(NSMaxRange(searchResult), 
 									  MAX(0UL, self.length - (searchResult.location+1)));
 		}
 		
