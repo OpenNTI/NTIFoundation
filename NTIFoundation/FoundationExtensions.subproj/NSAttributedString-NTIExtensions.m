@@ -194,53 +194,6 @@ static void appendChunkSeparator(NSMutableAttributedString* mAttrString)
 		
 	}while (   searchResult.location != NSNotFound 
 			&& NSMaxRange(searchRange) <= self.length );	
-
-	
-	
-//	NSMutableArray* result = [NSMutableArray arrayWithCapacity: 5];
-//	
-//	unichar attachmentCharacter = OAAttachmentCharacter;
-//	NSString* separatorString = [NSString stringWithCharacters: &attachmentCharacter
-//													    length: 1];
-//	NSRange searchResult;
-//	NSUInteger partStartLocation = 0;
-//	NSRange searchRange = NSMakeRange(partStartLocation, self.length);
-//	do{
-//		searchResult = [self.string rangeOfString: separatorString options: 0 range:searchRange];
-//		
-//		//If its not found our part is from the search start to search end (end of string)
-//		NSRange partRange = NSMakeRange(NSNotFound, 0);
-//		if(searchResult.location == NSNotFound){
-//			partRange = NSMakeRange(partStartLocation, self.length - partStartLocation);
-//		}
-//		//We found a result.  Part range is from the search start to the searchresult location
-//		else{
-//			//There are two cases here.  We found our part separator or we found some other special
-//			//attachment marker.  The former case means we snag this part and stuff it in the array
-//			//In the latter case we have to keep looking
-//			if( [self attribute: kNTIChunkSeparatorAttributeName 
-//							  atIndex: searchResult.location 
-//					   effectiveRange: NULL] ){
-//				
-//				//Remember the result of rangeOfString is w.r.t the whole string not the range you search
-//				partRange = NSMakeRange(partStartLocation, searchResult.location - partStartLocation);
-//			}
-//			
-//			//Update search range so next go around we look further on in the string
-//			searchRange = NSMakeRange(NSMaxRange(searchResult), 
-//									  MAX(0UL, self.length - (searchResult.location+1)));
-//		}
-//		
-//		if(partRange.location != NSNotFound){
-//			NSAttributedString* part = [self attributedSubstringFromRange: partRange];
-//			partStartLocation += partRange.length + 1;
-//			if(part && part.length > 0){
-//				[result addObject: part];
-//			}
-//		}
-//		
-//	}while (   searchResult.location != NSNotFound 
-//			&& NSMaxRange( searchRange ) <= self.length);	
 	
 	return [NSArray arrayWithArray: result];
 }

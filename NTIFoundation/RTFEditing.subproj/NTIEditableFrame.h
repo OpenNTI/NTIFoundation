@@ -8,14 +8,25 @@
 
 #import <UIKit/UIKit.h>
 #import "OmniUI/OUIEditableFrame.h"
+#import <OmniAppKit/OATextAttachmentCell.h>
+
+@class NTIEditableFrame;
+@interface NTIEditableFrameTextAttachmentCellDelegate
+-(BOOL)editableFrame: (NTIEditableFrame*)editableFrame 
+	  attachmentCell: (OATextAttachmentCell*) attachmentCell
+   wasTouchedAtPoint: (CGPoint)point;
+@end
 
 /**
  * Exists to workaround some bugs manifesting in iOS 5.0beta 6+, specifically
  * OUIEditableFrame breaks badly when asked to handle writing directions. We
  * "fix" this by hardcoding Left-to-Right.
  */
-@interface NTIEditableFrame : OUIEditableFrame
-
+@interface NTIEditableFrame : OUIEditableFrame{
+	@private
+	id __weak nr_attachmentDelegate;
+}
+@property (nonatomic, weak) id attachmentDelegate;
 @end
 
 //We also replace the base methods until such time as they are
