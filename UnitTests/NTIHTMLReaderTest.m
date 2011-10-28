@@ -10,7 +10,7 @@
 #import "NTIHTMLReader.h"
 #import "OQColor-NTIExtensions.h"
 
-CGColorRef NTIHTMLReaderParseColor(NSString* color);
+CGColorRef NTIHTMLReaderParseCreateColor(NSString* color);
 
 @implementation NTIHTMLReaderTest
 
@@ -18,14 +18,14 @@ CGColorRef NTIHTMLReaderParseColor(NSString* color);
 {
 	NSString* blackColor = @"black";
 	
-	CGColorRef parsedValue = NTIHTMLReaderParseColor(blackColor);
+	CGColorRef parsedValue = NTIHTMLReaderParseCreateColor(blackColor);
 	
 	STAssertTrue(CGColorEqualToColor(parsedValue,  [[OQColor blackColor] rgbaCGColorRef]),
 						 @"Should be same color");
 	
 	NSString* rgbColor = @"rgb(20, 70, 200)";
 	
-	parsedValue = NTIHTMLReaderParseColor(rgbColor);
+	parsedValue = NTIHTMLReaderParseCreateColor(rgbColor);
 	
 	STAssertTrue(CGColorEqualToColor(parsedValue,  [[OQColor colorWithRed: 20.0f/255.0f 
 																	green: 70.0f/255.0f 
@@ -36,7 +36,7 @@ CGColorRef NTIHTMLReaderParseColor(NSString* color);
 	
 	NSString* hexColor = @"#1446C8";
 	
-	parsedValue = NTIHTMLReaderParseColor(hexColor);
+	parsedValue = NTIHTMLReaderParseCreateColor(hexColor);
 	
 	STAssertTrue(CGColorEqualToColor(parsedValue,  [[OQColor colorWithRed: 20.0f/255.0f 
 																	green: 70.0f/255.0f 

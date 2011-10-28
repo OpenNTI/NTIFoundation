@@ -30,11 +30,11 @@
 	
 	NSAttributedString* joined = [NSAttributedString attributedStringFromAttributedStrings: parts];
 	
-	STAssertTrue(joined.string.length == 12, nil);
+	STAssertTrue(joined.string.length == 13, nil);
 	
 	STAssertTrue([joined.string characterAtIndex: 1] == OAAttachmentCharacter , nil);
 	STAssertTrue([joined.string characterAtIndex: 6] == OAAttachmentCharacter , nil);
-	STAssertTrue([joined.string characterAtIndex: joined.string.length -1 ] != OAAttachmentCharacter , nil);
+	STAssertTrue([joined.string characterAtIndex: joined.string.length -1 ] == OAAttachmentCharacter , nil);
 	
 	//What kind of pizza
 	NSString* kind = [joined attribute: @"Kind" atIndex: 9 effectiveRange: NULL];
@@ -45,10 +45,6 @@
 	STAssertTrue([amount intValue] == 11, nil);
 	
 	STAssertNil([joined attribute: @"Amount" atIndex: 0 effectiveRange: NULL], nil);
-	
-	[one release];
-	[two release];
-	[three release];
 }
 
 -(void)testAttributedStringsFromAttributedString
@@ -79,10 +75,6 @@
 	STAssertEqualObjects([splitParts firstObject], one, nil);
 	STAssertEqualObjects([splitParts secondObject], two, nil);
 	STAssertEqualObjects([splitParts lastObject], three, nil);
-	
-	[one release];
-	[two release];
-	[three release];
 
 }
 
