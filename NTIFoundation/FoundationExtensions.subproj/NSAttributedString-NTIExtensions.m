@@ -61,7 +61,9 @@ static void appendChunkSeparator(NSMutableAttributedString* mAttrString)
 		NSAttributedString* attrString = [chunks objectAtIndex: i];
 		
 		[mutableAttrString appendAttributedString: attrString];
-		appendChunkSeparator(mutableAttrString);
+		if( i < [chunks count]-1 ){
+			appendChunkSeparator(mutableAttrString);
+		}
 	}
 	
 	return [[NSAttributedString alloc] initWithAttributedString: mutableAttrString];
@@ -81,7 +83,7 @@ static void appendChunkSeparator(NSMutableAttributedString* mAttrString)
 	
 	[mutableAttrString appendAttributedString: chunk];
 	
-	appendChunkSeparator(mutableAttrString);
+	//appendChunkSeparator(mutableAttrString);
 	
 	return [[NSAttributedString alloc] initWithAttributedString: mutableAttrString];
 }
