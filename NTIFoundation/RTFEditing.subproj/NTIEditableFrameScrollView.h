@@ -10,12 +10,12 @@
 #import <OmniUI/OUIScalingScrollView.h>
 
 @class OUIEditableFrame;
-@class NTITextScrollViewDelegate;
-@interface TextScrollView : OUIScalingScrollView
+@class NTIEditableFrameScrollViewDelegate;
+@interface NTIEditableFrameScrollView : OUIScalingScrollView
 {
 @private
 	OUIEditableFrame *_textView;
-	NTITextScrollViewDelegate* _scrollDelegate;
+	NTIEditableFrameScrollViewDelegate* _scrollDelegate;
 }
 
 @property(strong,nonatomic) IBOutlet OUIEditableFrame *textView;

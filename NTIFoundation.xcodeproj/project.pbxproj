@@ -48,6 +48,8 @@
 		408FBF17143F65D70095DD84 /* NTIHTMLReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E04613143F47890091CE7C /* NTIHTMLReader.m */; };
 		408FBF19143F66A40095DD84 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408FBF18143F66A40095DD84 /* ImageIO.framework */; };
 		408FBF1A143F6E5F0095DD84 /* OQColor-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E04617143F50A60091CE7C /* OQColor-NTIExtensions.m */; };
+		40AEBDD8145A5A6700028750 /* NTIEditableFrameScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 40AEBDD6145A5A6700028750 /* NTIEditableFrameScrollView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		40AEBDD9145A5A6700028750 /* NTIEditableFrameScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40AEBDD7145A5A6700028750 /* NTIEditableFrameScrollView.m */; };
 		40B6F3BA14285AF4007EDF1C /* WebSocket7Test.h in Headers */ = {isa = PBXBuildFile; fileRef = 40B6F3B814285AF4007EDF1C /* WebSocket7Test.h */; };
 		40B6F3D914285B38007EDF1C /* WebSocket7Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 40B6F3B914285AF4007EDF1C /* WebSocket7Test.m */; };
 		40B6F3FC14285D23007EDF1C /* NSString-JSONTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D42813E32A7600652DAC /* NSString-JSONTest.m */; };
@@ -413,6 +415,8 @@
 		409951D313CFBD510039982D /* NSDictionary-NTIJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary-NTIJSON.m"; path = "../NSDictionary-NTIJSON.m"; sourceTree = "<group>"; };
 		40A63468141EAD590026CA3A /* NSNumber-NTIJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNumber-NTIJSON.h"; path = "../NSNumber-NTIJSON.h"; sourceTree = "<group>"; };
 		40A63469141EAD5A0026CA3A /* NSNumber-NTIJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNumber-NTIJSON.m"; path = "../NSNumber-NTIJSON.m"; sourceTree = "<group>"; };
+		40AEBDD6145A5A6700028750 /* NTIEditableFrameScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIEditableFrameScrollView.h; sourceTree = "<group>"; };
+		40AEBDD7145A5A6700028750 /* NTIEditableFrameScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIEditableFrameScrollView.m; sourceTree = "<group>"; };
 		40B6F3B814285AF4007EDF1C /* WebSocket7Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSocket7Test.h; sourceTree = "<group>"; };
 		40B6F3B914285AF4007EDF1C /* WebSocket7Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSocket7Test.m; sourceTree = "<group>"; };
 		40C0E1011443AF9C00142406 /* SocketIOPacketTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketIOPacketTest.h; sourceTree = "<group>"; };
@@ -565,6 +569,8 @@
 		403D0D9E143E18B80049A755 /* RTFEditing */ = {
 			isa = PBXGroup;
 			children = (
+				40AEBDD6145A5A6700028750 /* NTIEditableFrameScrollView.h */,
+				40AEBDD7145A5A6700028750 /* NTIEditableFrameScrollView.m */,
 				7293CB271451AA7D00CD64B8 /* NTIEditableFrame.h */,
 				7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */,
 				403D0DBC143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h */,
@@ -968,6 +974,7 @@
 				40E04618143F50A60091CE7C /* OQColor-NTIExtensions.h in Headers */,
 				40C0E1031443AF9C00142406 /* SocketIOPacketTest.h in Headers */,
 				403C28E614576E160012CBAB /* NSAttributedString-NTIExtensions.h in Headers */,
+				40AEBDD8145A5A6700028750 /* NTIEditableFrameScrollView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1378,6 +1385,7 @@
 				40E04619143F50A60091CE7C /* OQColor-NTIExtensions.m in Sources */,
 				7293CB2A1451AA7D00CD64B8 /* NTIEditableFrame.m in Sources */,
 				403C28E714576E160012CBAB /* NSAttributedString-NTIExtensions.m in Sources */,
+				40AEBDD9145A5A6700028750 /* NTIEditableFrameScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

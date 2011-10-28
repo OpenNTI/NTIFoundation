@@ -5,19 +5,19 @@
 // distributed with this project and can also be found at
 // <http://www.omnigroup.com/developer/sourcecode/sourcelicense/>.
 
-#import "TextScrollView.h"
+#import "NTIEditableFrameScrollView.h"
 
 #import <OmniUI/OUIEditableFrame.h>
 #import <OmniUI/OUIMinimalScrollNotifierImplementation.h>
 
-@interface NTITextScrollViewDelegate : OUIMinimalScrollNotifierImplementation<UIScrollViewDelegate>
+@interface NTIEditableFrameScrollViewDelegate : OUIMinimalScrollNotifierImplementation<UIScrollViewDelegate>
 {
 	id _textView;
 }
 -(id)initWithView: (id)view;
 @end
 
-@implementation NTITextScrollViewDelegate
+@implementation NTIEditableFrameScrollViewDelegate
 
 -(id)initWithView: (id)view
 {
@@ -33,7 +33,7 @@
 
 @end
 
-@implementation TextScrollView
+@implementation NTIEditableFrameScrollView
 
 @synthesize textView = _textView;
 
@@ -42,7 +42,7 @@
 	if( self.delegate == nil && self->_textView ) {
 		//If the delegate is missing, scroll offsets can be wrong.
 		if( self->_scrollDelegate == nil ) {
-			self->_scrollDelegate = [[NTITextScrollViewDelegate alloc] initWithView: self->_textView];
+			self->_scrollDelegate = [[NTIEditableFrameScrollViewDelegate alloc] initWithView: self->_textView];
 		}
 		self.delegate = self->_scrollDelegate;
 	}
@@ -61,7 +61,7 @@
 	if( !r && self->_textView ) {
 		//During the initialization process from a NIB, we need to fake one
 		//of these before we can actually install it.
-		r = [[NTITextScrollViewDelegate alloc] initWithView: self->_textView];
+		r = [[NTIEditableFrameScrollViewDelegate alloc] initWithView: self->_textView];
 	}
 	return r;
 }
