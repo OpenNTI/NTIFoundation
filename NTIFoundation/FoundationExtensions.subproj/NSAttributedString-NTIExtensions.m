@@ -28,6 +28,23 @@ static void appendChunkSeparator(NSMutableAttributedString* mAttrString)
 													  forKey: kNTIChunkSeparatorAttributeName]];
 }
 
+-(NSAttributedString*)attributedStringAsChunkWithLeadingSeparator: (BOOL)leading 
+											 andTrailingSeparator: (BOOL)trailing
+{
+	NSMutableAttributedString* mutableAttrString = [[NSMutableAttributedString alloc] init];
+	
+	//TODO Need to check that leading and trailing separators don't already exist?
+	if(leading){
+		appendChunkSeparator( mutableAttrString );
+	}
+	[mutableAttrString appendAttributedString: self];
+	if(trailing){
+		appendChunkSeparator( mutableAttrString );
+	}
+	
+	return [[NSAttributedString alloc] initWithAttributedString: mutableAttrString];
+}
+
 -(NSAttributedString*)attributedStringByAppendingChunks: (NSArray*)chunks
 {
 	NSMutableAttributedString* mutableAttrString = [[NSMutableAttributedString alloc] 

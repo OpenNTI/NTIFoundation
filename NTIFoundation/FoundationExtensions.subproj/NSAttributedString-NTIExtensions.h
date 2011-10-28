@@ -12,6 +12,8 @@
 
 @interface NSAttributedString(NTIExtensions)
 +(NSAttributedString*)attributedStringFromAttributedStrings: (NSArray*)attrStrings;
+-(NSAttributedString*)attributedStringAsChunkWithLeadingSeparator: (BOOL)leading 
+											 andTrailingSeparator: (BOOL)trailing;
 -(NSArray*)attributedStringsFromParts;
 -(NSAttributedString*)attributedStringByAppendingChunk: (NSAttributedString*)chunk;
 -(NSAttributedString*)attributedStringByAppendingChunks: (NSArray*)chunks;
