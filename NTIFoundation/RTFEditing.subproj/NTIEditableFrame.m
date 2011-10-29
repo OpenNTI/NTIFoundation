@@ -26,7 +26,7 @@
 	return attrs;
 }
 
--(void)setTypingAttributes:(NSDictionary *)typingAttributes
+-(void)setTypingAttributes: (NSDictionary*)typingAttributes
 {
 	NSMutableDictionary* attrs = [NSMutableDictionary dictionaryWithDictionary: typingAttributes];
 	if( [attrs objectForKey: kNTIChunkSeparatorAttributeName] ){
@@ -37,7 +37,7 @@
 
 //Highjack the single tap recognizer to test if an ouattachmentcell was touched.  if
 //so forward it onto our delegate
-- (void)_activeTap:(UITapGestureRecognizer *)r
+-(void)_activeTap: (UITapGestureRecognizer*)r
 {
 	//If we don't have a delegate that responds to attachmentCell:wasTouchedAtPoint
 	//there is no point in doing the work
@@ -70,52 +70,24 @@
 		}
 	}
 	[super _activeTap: r];
-	
+}
+
+#pragma mark - Writing Direction
+//Omni no longer crashes on these selectors, but they do log
+//large stacks, which are annoying and not helpful to us.
+//We override to stop that.
+
+-(UITextWritingDirection)baseWritingDirectionForPosition: (UITextPosition*)position
+											 inDirection: (UITextStorageDirection)direction
+{
+	OBFinishPortingLater( "Stop ignoring writing direction" );
+	return UITextWritingDirectionNatural;
+}
+
+-(void)setBaseWritingDirection: (UITextWritingDirection)writingDirection
+					  forRange: (UITextRange*)range
+{
+	OBFinishPortingLater( "Stop ignoring writing direction" );
 }
 
 @end
-
-
-static UITextWritingDirection (*_original_baseWritingDirectionForPosition_inDirection)(id self, SEL _cmd, UITextPosition* position, UITextStorageDirection dir) = NULL;
-static void (*_original_setBaseWritingDirection_forRange)(id self, SEL _cmd, UITextWritingDirection dir, UITextRange* range);
-
-static UITextWritingDirection _baseWritingDirectionForPosition_inDirection( 
-	id self, SEL _cmd,  UITextPosition* position,  UITextStorageDirection direction ) 
-{
-	return UITextWritingDirectionLeftToRight;
-}
-
-static void _setBaseWritingDirection_forRange( 
-	id self, SEL _cmd, UITextWritingDirection writingDirection, UITextRange* range )
-{
-	if( writingDirection != UITextWritingDirectionLeftToRight ) {
-		_original_setBaseWritingDirection_forRange( self, _cmd, writingDirection, range );
-	}
-}   
-
-
-static void NTIEditableFramePerformPosing(void) __attribute__((constructor));
-static void NTIEditableFramePerformPosing(void)
-{
-	@autoreleasepool {
-	if( [[[UIDevice currentDevice] systemVersion] hasPrefix: @"4"] ) {
-		//Not needed on ios4
-		return;
-	}
-	
-    Class viewClass = NSClassFromString(@"OUIEditableFrame");
-	_original_baseWritingDirectionForPosition_inDirection
-		 = (typeof(_original_baseWritingDirectionForPosition_inDirection))
-		 	OBReplaceMethodImplementation( 
-				viewClass,
-				@selector(baseWritingDirectionForPosition:inDirection:),
-				(IMP)_baseWritingDirectionForPosition_inDirection);
-				
-	_original_setBaseWritingDirection_forRange
-		= (typeof(_original_setBaseWritingDirection_forRange))
-			OBReplaceMethodImplementation(
-				viewClass,
-				@selector(setBaseWritingDirection:forRange:),
-				(IMP)_setBaseWritingDirection_forRange);
-	}
-}
