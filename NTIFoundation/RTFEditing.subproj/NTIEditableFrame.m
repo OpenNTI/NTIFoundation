@@ -8,6 +8,7 @@
 #import "OmniUI/OUIEditableFrame.h"
 #import <OmniAppKit/OATextAttachment.h>
 #import "NTIEditableFrame.h"
+#import "OmniUI/OUEFTextRange.h"
 #import "NTIFoundation.h"
 
 @interface OUIEditableFrame(NTIActiveTapExtensions)
@@ -33,6 +34,48 @@
 		[attrs removeObjectForKey: kNTIChunkSeparatorAttributeName];
 	}
 	[super setTypingAttributes: attrs];
+}
+
+-(void)replaceRange: (OUEFTextRange*)range withObject: (id)object
+{
+	UITextRange* textRange = (id)range;
+	
+	if( [object isKindOfClass: [NSString class]] ){
+		return [self replaceRange: textRange withText: object];
+	}
+	
+	NSAttributedString* attrString = nil;
+	
+	if( [object isKindOfClass: [NSAttributedString class]]){
+		attrString = object;
+	}
+	else if( [object respondsToSelector: @selector(attachmentCell)] ){
+		attrString = [NSAttributedString attributedStringFromObject: object];
+	}
+	
+	if(!attrString){
+		return;
+	}
+	
+	//We are going to replace the selectedRange so we need to know how to wrap our string.
+	//If we are at the start we have our string than a separator
+	BOOL leading = YES;
+	BOOL following = YES;
+	
+	leading = ![textRange.start isEqual: [self beginningOfDocument]];
+	following = ![textRange.end isEqual: [self endOfDocument] ];
+	
+	//Note:  We don't check to see if what we are replacing is immediatly proceeded or followed by
+	//a separator.  We assume we can handle the case of two separators in a row
+	attrString = [attrString attributedStringAsChunkWithLeadingSeparator: leading
+														  andTrailingSeparator: following];
+	
+	//TODO do we need to save off and restore typingAttributes here?
+	NSMutableAttributedString* fullString = [[NSMutableAttributedString alloc] 
+											 initWithAttributedString: [self attributedText]];
+	[fullString replaceCharactersInRange: range.range withAttributedString: attrString];
+	[self setAttributedText: fullString];
+
 }
 
 //Highjack the single tap recognizer to test if an ouattachmentcell was touched.  if

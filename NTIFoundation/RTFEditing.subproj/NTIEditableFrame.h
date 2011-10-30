@@ -27,6 +27,9 @@
 	id __weak nr_attachmentDelegate;
 }
 @property (nonatomic, weak) id attachmentDelegate;
+
+-(void)replaceRange: (UITextRange*)range withObject: (id)object;
+
 @end
 
 //We also replace the base methods until such time as they are

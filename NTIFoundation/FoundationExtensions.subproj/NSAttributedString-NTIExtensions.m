@@ -7,10 +7,72 @@
 //
 
 #import "NSAttributedString-NTIExtensions.h"
+#import "NTIRTFDocument.h"
+#import "NSAttributedString-HTMLWritingExtensions.h"
 #import <OmniAppKit/OATextAttachment.h>
 #import <OmniAppKit/OATextStorage.h>
+#import <OmniAppKit/OATextAttachmentCell.h>
 
 @implementation NSAttributedString(NTIExtensions)
+
++(NSAttributedString*)attributedStringFromObject:(id)object
+{
+	if( [object isKindOfClass: [NSArray class]] ){
+		return [NSAttributedString attributedStringFromObjects: object];
+	}
+	
+	//If we return an attachment cell make it so, else are we 
+	//a string or attributed string?  otherwise drop it
+	id attrString = nil;
+	
+	if( [object isKindOfClass: [NSAttributedString class]] ){
+		attrString = object;
+	}
+	else if( [object isKindOfClass: [NSString class] ] ){
+		attrString = [NTIRTFDocument attributedStringWithString: object];
+	}
+	else if( [object respondsToSelector: @selector(attachmentCell)] ){
+		OATextAttachment* attachment = [[OATextAttachment alloc]
+										initWithFileWrapper: nil];
+		OATextAttachmentCell* cell = [object attachmentCell];
+		attachment.attachmentCell = cell;
+		OBASSERT(cell.attachment == attachment); // sets the backpointer
+		
+		unichar attachmentCharacter = OAAttachmentCharacter;
+		
+		NSAttributedString* canvasAttrString = [[NSAttributedString alloc] 
+												initWithString: 
+												[NSString stringWithCharacters: &attachmentCharacter 
+																		length:1] 
+												attributeName: OAAttachmentAttributeName 
+												attributeValue: attachment];
+		attrString = canvasAttrString;
+	}
+	return attrString;
+}
+
++(NSAttributedString*)attributedStringFromObjects: (NSArray*)objects
+{
+	if(!objects || [objects count] == 0){
+		return [[NSAttributedString alloc] init];
+	}
+	
+	NSMutableArray* attrStrings = [[NSMutableArray alloc] initWithCapacity: [objects count]];
+	
+	for(id object in objects)
+	{
+		NSAttributedString* attrString = [NSAttributedString attributedStringFromObject: object];
+		
+		if(attrString){
+			[attrStrings addObject: attrString];
+		}
+		else{
+			NSLog(@"Waring: Unable to convert %@ to an attributed string", object);
+		}
+	}
+	
+	return [NSAttributedString attributedStringFromAttributedStrings: attrStrings];
+}
 
 +(NSAttributedString*)attributedStringFromAttributedStrings: (NSArray*)attrStrings
 {
@@ -26,6 +88,31 @@ static void appendChunkSeparator(NSMutableAttributedString* mAttrString)
 												  length: 1] 
 			  attributes: [NSDictionary dictionaryWithObject:  [[NSObject alloc] init]
 													  forKey: kNTIChunkSeparatorAttributeName]];
+}
+
+-(NSArray*)objectsFromAttributedString
+{
+	NSArray* attrStrings = [self attributedStringsFromParts];
+	
+	NSArray* externalParts = [attrStrings arrayByPerformingBlock:^id(id obj){
+		NSAttributedString* part = obj;
+		if(   part.length == 1 ){
+		    id attachment = [part attribute: OAAttachmentAttributeName
+									atIndex: 0
+							 effectiveRange: NULL];
+			
+			if(  [attachment respondsToSelector: @selector(attachmentCell)]
+			   &&[[attachment attachmentCell] respondsToSelector: @selector(object)] ){
+				id attachmentCell = [attachment attachmentCell];
+				return [attachmentCell object];
+			}
+		}
+		//Else we assume its an html string like we always have
+		return [part htmlStringFromString];
+		
+	}];
+	
+	return externalParts;
 }
 
 -(NSAttributedString*)attributedStringAsChunkWithLeadingSeparator: (BOOL)leading 

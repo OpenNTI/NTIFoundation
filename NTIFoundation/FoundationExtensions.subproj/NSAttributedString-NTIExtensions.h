@@ -11,10 +11,15 @@
 #define kNTIChunkSeparatorAttributeName @"NTIChunkSeparatorAttributeName"
 
 @interface NSAttributedString(NTIExtensions)
++(NSAttributedString*)attributedStringFromObject: (id)object;
++(NSAttributedString*)attributedStringFromObjects: (NSArray*)objects;
 +(NSAttributedString*)attributedStringFromAttributedStrings: (NSArray*)attrStrings;
+
+-(NSArray*)objectsFromAttributedString;
 -(NSAttributedString*)attributedStringAsChunkWithLeadingSeparator: (BOOL)leading 
 											 andTrailingSeparator: (BOOL)trailing;
 -(NSArray*)attributedStringsFromParts;
 -(NSAttributedString*)attributedStringByAppendingChunk: (NSAttributedString*)chunk;
 -(NSAttributedString*)attributedStringByAppendingChunks: (NSArray*)chunks;
+
 @end

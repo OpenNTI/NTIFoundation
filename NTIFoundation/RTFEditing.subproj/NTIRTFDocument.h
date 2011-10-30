@@ -15,7 +15,7 @@
 /**
  * The preferred string for external storage. 
  */
-@property (weak, nonatomic,readonly) NSString* externalString;
+@property (nonatomic,readonly) NSString* externalString;
 
 /**
  * Parses HTML, RTF, or plain text.
