@@ -29,6 +29,7 @@
 @property (nonatomic, weak) id attachmentDelegate;
 
 -(void)replaceRange: (UITextRange*)range withObject: (id)object;
+-(OATextAttachmentCell*)attachmentCellForPoint: (CGPoint)point fromView: (UIView*)view;
 
 @end
 

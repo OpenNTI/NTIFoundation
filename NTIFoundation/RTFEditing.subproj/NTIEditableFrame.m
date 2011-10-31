@@ -78,6 +78,28 @@
 
 }
 
+-(OATextAttachmentCell*)attachmentCellForPoint:(CGPoint)point fromView :(UIView *)view
+{
+	//Convert the provided point to our coordinate space
+	CGPoint convertedPoint = [self convertPoint: point fromView: view];
+	
+	UITextPosition* textPosition = [self tappedPositionForPoint: convertedPoint];
+	
+	if(textPosition){
+		id attributes = [self attribute: OAAttachmentAttributeName 
+							 atPosition: textPosition 
+						 effectiveRange: NULL];
+		OATextAttachment* attachment = [attributes objectForKey: OAAttachmentAttributeName];
+		if(attachment){
+			NSLog(@"OATextAttachment %@ was touched at point %@", attachment, NSStringFromCGPoint(convertedPoint));
+			id attachmentCell = [attachment attachmentCell];
+			
+			return attachmentCell;
+		}
+	}
+	return nil;
+}
+
 //Highjack the single tap recognizer to test if an ouattachmentcell was touched.  if
 //so forward it onto our delegate
 -(void)_activeTap: (UITapGestureRecognizer*)r
@@ -93,28 +115,19 @@
 	if(r.numberOfTapsRequired == 1){
 		CGPoint p = [r locationInView:self];
 		UITextPosition* textPosition = [self tappedPositionForPoint: p];
+		OATextAttachmentCell* attachmentCell = [self attachmentCellForPoint: p fromView: self];
 		
-		if(textPosition){
-			id attributes = [self attribute: OAAttachmentAttributeName 
-								 atPosition: textPosition 
-							 effectiveRange: NULL];
-			OATextAttachment* attachment = [attributes objectForKey: OAAttachmentAttributeName];
-			if(attachment){
-				NSLog(@"OATextAttachment %@ was touched at point %@", attachment, NSStringFromCGPoint(p));
-				id attachmentCell = [attachment attachmentCell];
-				
-				//We select the attachment cell so that any editing will replace it.
-				[self setSelectedTextRange: [self textRangeFromPosition: textPosition 
-															 toPosition: [self positionFromPosition: textPosition offset:1]] 
-							   showingMenu: NO];
-				
-				BOOL handled = [self->nr_attachmentDelegate editableFrame: self 
-														   attachmentCell: attachmentCell 
-														wasTouchedAtPoint: p];
-				if(handled){
-					return;
-				}
-				
+		if(attachmentCell){			
+			//We select the attachment cell so that any editing will replace it.
+			[self setSelectedTextRange: [self textRangeFromPosition: textPosition 
+														 toPosition: [self positionFromPosition: textPosition offset:1]] 
+						   showingMenu: NO];
+			
+			BOOL handled = [self->nr_attachmentDelegate editableFrame: self 
+													   attachmentCell: attachmentCell 
+													wasTouchedAtPoint: p];
+			if(handled){
+				return;
 			}
 		}
 	}
