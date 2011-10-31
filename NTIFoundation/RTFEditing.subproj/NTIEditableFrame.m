@@ -102,6 +102,12 @@
 			if(attachment){
 				NSLog(@"OATextAttachment %@ was touched at point %@", attachment, NSStringFromCGPoint(p));
 				id attachmentCell = [attachment attachmentCell];
+				
+				//We select the attachment cell so that any editing will replace it.
+				[self setSelectedTextRange: [self textRangeFromPosition: textPosition 
+															 toPosition: [self positionFromPosition: textPosition offset:1]] 
+							   showingMenu: NO];
+				
 				BOOL handled = [self->nr_attachmentDelegate editableFrame: self 
 														   attachmentCell: attachmentCell 
 														wasTouchedAtPoint: p];
