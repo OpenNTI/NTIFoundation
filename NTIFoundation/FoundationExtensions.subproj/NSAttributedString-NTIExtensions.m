@@ -17,6 +17,10 @@
 
 +(NSAttributedString*)attributedStringFromObject:(id)object
 {
+	if(!object){
+		return [[NSAttributedString alloc] init];
+	}
+	
 	if( [object isKindOfClass: [NSArray class]] ){
 		return [NSAttributedString attributedStringFromObjects: object];
 	}
@@ -52,7 +56,7 @@
 }
 
 +(NSAttributedString*)attributedStringFromObjects: (NSArray*)objects
-{
+{	
 	if(!objects || [objects count] == 0){
 		return [[NSAttributedString alloc] init];
 	}
