@@ -87,7 +87,7 @@
 	
 	if(textPosition){
 		id attributes = [self attribute: OAAttachmentAttributeName 
-							 atPosition: textPosition 
+							 atPosition: [self positionFromPosition: textPosition offset: -1] 
 						 effectiveRange: NULL];
 		OATextAttachment* attachment = [attributes objectForKey: OAAttachmentAttributeName];
 		if(attachment){
