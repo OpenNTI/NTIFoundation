@@ -83,11 +83,21 @@
 	//Convert the provided point to our coordinate space
 	CGPoint convertedPoint = [self convertPoint: point fromView: view];
 	
-	UITextPosition* textPosition = [self tappedPositionForPoint: convertedPoint];
+	//For some reason the OUEFTextRange is public but the position is not.
+	UITextPosition* textPosition = (UITextPosition*)[self tappedPositionForPoint: convertedPoint];
+	if(!textPosition){
+		return nil;
+	}
+	
+	NSRange characterRange = [self characterRangeForTextRange: [self textRangeFromPosition:textPosition toPosition: textPosition]];
+	
+	if( characterRange.location >= self.attributedText.length ){
+		return nil;
+	}
 	
 	if(textPosition){
 		id attributes = [self attribute: OAAttachmentAttributeName 
-							 atPosition: [self positionFromPosition: textPosition offset: -1] 
+							 atPosition: (UITextPosition*) textPosition
 						 effectiveRange: NULL];
 		OATextAttachment* attachment = [attributes objectForKey: OAAttachmentAttributeName];
 		if(attachment){
