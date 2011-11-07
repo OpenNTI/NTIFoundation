@@ -53,3 +53,14 @@ static NSDateFormatter* rfc3339DateFormatter()
 @end
 
 
+@implementation NSString (NTIExtensions)
+
++(NSString*)uuid
+{
+	CFUUIDRef theUUID = CFUUIDCreate(NULL);
+	NSString* uuidString = (__bridge_transfer NSString*) CFUUIDCreateString(NULL, theUUID);
+	CFRelease(theUUID);
+	return uuidString;
+}
+
+@end

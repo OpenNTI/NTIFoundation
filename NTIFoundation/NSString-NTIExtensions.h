@@ -42,3 +42,9 @@
 -(NSString*)httpHeaderStringValue;
 
 @end
+
+@interface NSString (NTIExtensions)
+
++(NSString*)uuid;
+
+@end
