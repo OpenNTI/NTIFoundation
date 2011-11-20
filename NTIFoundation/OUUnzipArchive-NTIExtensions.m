@@ -96,14 +96,25 @@ NSString* pathFromUrl( NSURL* url )
 			progresscb( worked++, [entries count] );	
 			continue;
 		}
-		
-
+		//An autorelease pool around this look is critical, because each
+		//file is loaded in memory as autoreleased data.
+		//TODO: Not sure how the auto-released out error is supposed to
+		//be able to make it out of the autorelease block. This seems to be a 
+		//clunky solution.
+		NSError* outerError = nil;
+		@autoreleasepool {
+			NSError* localError = nil;
 			NSURL* dest = [self destinationFor: entry under: name within: libraryDir];
 			//Actually extract the entry
-			result = [archive extractEntry: entry to: dest error: outError];
-			progresscb( worked++, [entries count] );				
-
-		
+			result = [archive extractEntry: entry to: dest error: &localError];
+			progresscb( worked++, [entries count] );
+			if( localError ) {
+				outerError = localError;
+			}
+		}
+		if( outerError && outError ) {
+			*outError = outerError;
+		}
 		if( !result ) {
 			NSLog( @"WARNING: Failed to unzip %@", entry );
 			break;
