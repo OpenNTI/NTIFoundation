@@ -60,6 +60,7 @@
 		40C0E1081443AFAD00142406 /* SocketIOPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D754A814278E6900335BEF /* SocketIOPacket.m */; };
 		40C0E1091443AFB000142406 /* SocketIOSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D754AC142791AF00335BEF /* SocketIOSocket.m */; };
 		40C0E10A1443AFB300142406 /* SocketIOTransport.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D754B0142791CD00335BEF /* SocketIOTransport.m */; };
+		40CAA785147B2993009EE078 /* NTIRTFDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D0DC1143E193E0049A755 /* NTIRTFDocument.m */; };
 		40D754A914278E6900335BEF /* SocketIOPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 40D754A714278E6900335BEF /* SocketIOPacket.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40D754AA14278E6900335BEF /* SocketIOPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D754A814278E6900335BEF /* SocketIOPacket.m */; };
 		40D754AD142791AF00335BEF /* SocketIOSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 40D754AB142791AF00335BEF /* SocketIOSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -73,6 +74,8 @@
 		40E04618143F50A60091CE7C /* OQColor-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 40E04616143F50A60091CE7C /* OQColor-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40E04619143F50A60091CE7C /* OQColor-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E04617143F50A60091CE7C /* OQColor-NTIExtensions.m */; };
 		40E0461C143F5F260091CE7C /* NTIHTMLReaderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E0461B143F5F260091CE7C /* NTIHTMLReaderTest.m */; };
+		40ECB2DA147B3C4B00AF4597 /* NTIHTMLWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E045F2143F468D0091CE7C /* NTIHTMLWriter.m */; };
+		40ECB2F5147B3D7000AF4597 /* NSAttributedString-HTMLWritingExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D0DBF143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.m */; };
 		7293CB291451AA7D00CD64B8 /* NTIEditableFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 7293CB271451AA7D00CD64B8 /* NTIEditableFrame.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7293CB2A1451AA7D00CD64B8 /* NTIEditableFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */; };
 		7293CB2B1451AAB700CD64B8 /* NTIEditableFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */; };
@@ -1418,6 +1421,9 @@
 				40C0E10A1443AFB300142406 /* SocketIOTransport.m in Sources */,
 				403C290914577A340012CBAB /* NSAttributedString-NTIExtensionsTest.m in Sources */,
 				403C290A14577C100012CBAB /* NSAttributedString-NTIExtensions.m in Sources */,
+				40CAA785147B2993009EE078 /* NTIRTFDocument.m in Sources */,
+				40ECB2DA147B3C4B00AF4597 /* NTIHTMLWriter.m in Sources */,
+				40ECB2F5147B3D7000AF4597 /* NSAttributedString-HTMLWritingExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1509,7 +1515,6 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NTIFoundation/NTIFoundation-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG_SOCKETIO=1",
 					"DEBUG=1",
 					"$(inherited)",
 				);
