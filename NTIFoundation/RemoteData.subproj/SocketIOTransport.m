@@ -23,27 +23,27 @@
 
 -(void)connect
 {
-
+	OBRequestConcreteImplementation(self, _cmd);
 }
 
 -(void)disconnect
 {
-
+	OBRequestConcreteImplementation(self, _cmd);
 }
 
 -(void)sendPayload:(NSArray*)payload
 {
-	
+	OBRequestConcreteImplementation(self, _cmd);
 }
 
 -(void)sendPacket:(SocketIOPacket *)packet
 {
-	
+	OBRequestConcreteImplementation(self, _cmd);
 }
 
 -(void)forceKill
 {
-	
+	OBRequestConcreteImplementation(self, _cmd);
 }
 
 +(NSString*)name
@@ -92,8 +92,7 @@
 			[self updateStatus: SocketIOTransportStatusOpen];
 			return YES;
 		case SocketIOPacketTypeHeartbeat:
-			//TODO Send a heartbeat back.
-			//[self sendPacket: [SocketIOPacket packetForHeartbeat]];
+			[self sendPacket: [SocketIOPacket packetForHeartbeat]];
 			return YES;
 		case SocketIOPacketTypeNoop:
 			return YES;
