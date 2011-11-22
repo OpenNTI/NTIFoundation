@@ -16,6 +16,16 @@
 	return a == nil || [a isNull] || [a count] == 0;
 }
 
++(BOOL)isNotEmptyArray: (id)a
+{
+	return ![self isEmptyArray: a];
+}
+
+-(BOOL)notEmpty
+{
+	return self.count > 0;
+}
+
 -(id)firstObject
 {
 	return [self objectAtIndex: 0];	

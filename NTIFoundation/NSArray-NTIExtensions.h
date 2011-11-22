@@ -22,5 +22,9 @@
  * the array is empty.
  */
 @property (nonatomic,readonly) id lastNonNullObject;
-+(BOOL)isEmptyArray: (id)a;
+
++(BOOL)isEmptyArray: (id)a; //Not an instance method, because nil would return NO
++(BOOL)isNotEmptyArray: (id)a;
+
+@property (nonatomic,readonly) BOOL notEmpty; //Safe as an instance method, nil returns NO
 @end
