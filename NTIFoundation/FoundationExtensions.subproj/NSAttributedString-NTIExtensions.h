@@ -11,15 +11,16 @@
 #define kNTIChunkSeparatorAttributeName @"NTIChunkSeparatorAttributeName"
 
 @interface NSAttributedString(NTIExtensions)
+//Methods for parsing objects to attributed strings and back the other way.  Should be independent of the
+//chunking implementation
 +(NSAttributedString*)attributedStringFromObject: (id)object;
 +(NSAttributedString*)attributedStringFromObjects: (NSArray*)objects;
 +(NSAttributedString*)attributedStringFromAttributedStrings: (NSArray*)attrStrings;
-
 -(NSArray*)objectsFromAttributedString;
--(NSAttributedString*)attributedStringAsChunkWithLeadingSeparator: (BOOL)leading 
-											 andTrailingSeparator: (BOOL)trailing;
+
+//Methods relating to chunking
 -(NSArray*)attributedStringsFromParts;
 -(NSAttributedString*)attributedStringByAppendingChunk: (NSAttributedString*)chunk;
 -(NSAttributedString*)attributedStringByAppendingChunks: (NSArray*)chunks;
-
+-(NSAttributedString*)attributedStringByReplacingRange: (NSRange)range withChunk: (NSAttributedString*)chunk;
 @end

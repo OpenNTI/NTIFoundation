@@ -8,6 +8,7 @@
 
 #import "NSAttributedString-NTIExtensionsTest.h"
 #import "NSAttributedString-NTIExtensions.h"
+#import "NSAttributedString-HTMLReadingExtensions.h"
 #import <OmniAppKit/OATextStorage.h>
 #import <OmniAppKit/OATextAttachment.h>
 #import <OmniAppKit/OATextAttachmentCell.h>
@@ -87,25 +88,59 @@
 	
 }
 
--(void)testObjectThenTextWithNoSeparator
+-(void)testObjectFollowedByTextNoSeparator
 {
-	id object = [NSNumber numberWithInt: 10];
+	AttachableObject* object = [[AttachableObject alloc] initWithObject: [NSNumber numberWithInt: 10]];
 	
-	NSAttributedString* objectString = [NSAttributedString attributedStringFromObject: 
-										[[AttachableObject alloc] initWithObject: object]];
+	NSMutableAttributedString* fullString = [[NSMutableAttributedString alloc] initWithAttributedString: [NSAttributedString attributedStringFromObject: object]];
 	
-	NSMutableAttributedString* fullString = [[NSMutableAttributedString alloc] initWithAttributedString: objectString];
-	[fullString appendAttributedString: [[NSAttributedString alloc] initWithString: @"text"]];
+	NSAttributedString* toAppend = [[NSAttributedString alloc] initWithString: @"Pizza" 
+																attributeName: @"Kind" 
+															   attributeValue: @"Meat"];
+	[fullString appendAttributedString: toAppend];
 	
-	NSArray* objects = [fullString objectsFromAttributedString];
+	NSArray* parts = [fullString objectsFromAttributedString];
 	
-	STAssertTrue([objects count] == 2, nil);
-	STAssertEqualObjects([objects firstObject], object, nil);
-	STAssertEqualObjects([objects secondObject], @"text", nil);
+	STAssertEquals((int)[parts count], 2, nil);
+	STAssertEqualObjects([parts firstObject], [NSNumber numberWithInt: 10], nil);
+}
+
+-(void)testTextFollowedByObject
+{
 	
 }
 
--(void)testAttributedStringFromAttributedStrings
+#pragma mark Chunking related tests
+-(void)testAttributedStringByAppendingSingleChunk
+{
+	NSAttributedString* one = [[NSAttributedString alloc] initWithString: @"I" 
+														   attributeName: @"Name" 
+														  attributeValue: @"Chris"];
+	
+	NSAttributedString* two = [[NSAttributedString alloc] initWithString: @"Like" 
+														   attributeName: @"Amount" 
+														  attributeValue: [NSNumber numberWithInt: 11]];
+	
+	NSAttributedString* full = [one attributedStringByAppendingChunk: two];
+	
+	STAssertEquals((int)[full length], 5, nil);
+	STAssertNotNil([full attribute: kNTIChunkSeparatorAttributeName atIndex: 1 effectiveRange: NULL], nil);
+	
+	NSArray* splitParts = [full attributedStringsFromParts];
+	
+	STAssertEquals((int)[splitParts count], 2, nil);
+
+	NSAttributedString* firstPart = [splitParts firstObject];
+	STAssertEqualObjects(firstPart.string, @"I", nil);
+	STAssertEqualObjects([firstPart attribute: @"Name" atIndex: 0 effectiveRange: NULL], @"Chris", nil);
+	
+	NSAttributedString* secondPart = [splitParts secondObject];
+	STAssertEqualObjects(secondPart.string, @"Like", nil);
+	STAssertEqualObjects([secondPart attribute: @"Amount" atIndex: 1 effectiveRange: NULL], 
+						 [NSNumber numberWithInt: 11], nil);
+}
+
+-(void)testAttributedStringsByAppendingChunks
 {
 	NSAttributedString* one = [[NSAttributedString alloc] initWithString: @"I" 
 														   attributeName: @"Name" 
@@ -123,52 +158,126 @@
 	
 	NSAttributedString* joined = [NSAttributedString attributedStringFromAttributedStrings: parts];
 	
-	STAssertTrue(joined.string.length == 12, nil);
-	
-	STAssertTrue([joined.string characterAtIndex: 1] == OAAttachmentCharacter , nil);
-	STAssertTrue([joined.string characterAtIndex: 6] == OAAttachmentCharacter , nil);
-	STAssertTrue([joined.string characterAtIndex: joined.string.length -1 ] != OAAttachmentCharacter , nil);
-	
-	//What kind of pizza
-	NSString* kind = [joined attribute: @"Kind" atIndex: 9 effectiveRange: NULL];
-	STAssertEqualObjects(kind, @"Meat", nil);
-	
-	//On a scale of 1-10?
-	NSNumber* amount = [joined attribute: @"Amount" atIndex: 3 effectiveRange: NULL];
-	STAssertTrue([amount intValue] == 11, nil);
-	
-	STAssertNil([joined attribute: @"Amount" atIndex: 0 effectiveRange: NULL], nil);
-}
-
--(void)testAttributedStringsFromAttributedString
-{
-	NSAttributedString* one = [[NSAttributedString alloc] initWithString: @"I" 
-														   attributeName: @"Name" 
-														  attributeValue: @"Chris"];
-	
-	NSAttributedString* two = [[NSAttributedString alloc] initWithString: @"Like" 
-														   attributeName: @"Amount" 
-														  attributeValue: [NSNumber numberWithInt: 11]];
-	
-	NSAttributedString* three = [[NSAttributedString alloc] initWithString: @"Pizza" 
-															 attributeName: @"Kind" 
-															attributeValue: @"Meat"];
-	
-	NSArray* parts = [NSArray arrayWithObjects: one, two, three, nil];
-	
-	NSAttributedString* joined = [NSAttributedString attributedStringFromAttributedStrings: parts];
+	STAssertTrue(joined.string.length == 10, nil);
+	STAssertEqualObjects(joined.string, @"ILikePizza", nil);
 	
 	NSArray* splitParts = [joined attributedStringsFromParts];
 	
-	STAssertTrue([splitParts count] == [parts count], nil);
-	STAssertEqualObjects([[splitParts firstObject] string], @"I", nil);
-	STAssertEqualObjects([[splitParts secondObject] string], @"Like", nil);
-	STAssertEqualObjects([[splitParts lastObject] string], @"Pizza", nil);
+	STAssertEquals((int)[splitParts count], 3, nil);
 	
-	STAssertEqualObjects([splitParts firstObject], one, nil);
-	STAssertEqualObjects([splitParts secondObject], two, nil);
-	STAssertEqualObjects([splitParts lastObject], three, nil);
+	NSAttributedString* firstPart = [splitParts firstObject];
+	STAssertEqualObjects(firstPart.string, @"I", nil);
+	STAssertEqualObjects([firstPart attribute: @"Name" atIndex: 0 effectiveRange: NULL], @"Chris", nil);
+	
+	NSAttributedString* secondPart = [splitParts secondObject];
+	STAssertEqualObjects(secondPart.string, @"Like", nil);
+	STAssertEqualObjects([secondPart attribute: @"Amount" atIndex: 1 effectiveRange: NULL], 
+						 [NSNumber numberWithInt: 11], nil);
+	
+	NSAttributedString* thirdPart = [splitParts lastObject];
+	STAssertEqualObjects(thirdPart.string, @"Pizza", nil);
+	STAssertEqualObjects([thirdPart attribute: @"Kind" atIndex: 1 effectiveRange: NULL], 
+						 @"Meat", nil);
+}
 
+static NSAttributedString* simpleAttributedString(){
+	NSAttributedString* one = [[NSAttributedString alloc] initWithString: @"I" 
+														   attributeName: @"Name" 
+														  attributeValue: @"Chris"];
+	
+	NSAttributedString* two = [[NSAttributedString alloc] initWithString: @"Like" 
+														   attributeName: @"Amount" 
+														  attributeValue: [NSNumber numberWithInt: 11]];
+	
+	NSAttributedString* three = [[NSAttributedString alloc] initWithString: @"Pizza" 
+															 attributeName: @"Kind" 
+															attributeValue: @"Meat"];
+	NSMutableAttributedString* attrString = [[NSMutableAttributedString alloc] initWithAttributedString: one];
+	[attrString appendAttributedString: two];
+	[attrString appendAttributedString: three];
+	return attrString;
+}
+
+-(void)testReplacingAtHeadOfSimpleAttributedString
+{
+	NSAttributedString* simpleString = simpleAttributedString();
+	
+	NSAttributedString* chunk = [[NSAttributedString alloc] initWithString: @"Pepperoni"];
+	
+	NSAttributedString* replaced = [simpleString attributedStringByReplacingRange: NSMakeRange(0, 5) 
+																		withChunk: chunk];
+	
+	STAssertEquals((int)[replaced length], 14, nil);
+	STAssertEqualObjects(replaced.string, @"PepperoniPizza", nil);
+	
+	NSArray* parts = [replaced attributedStringsFromParts];
+	
+	STAssertEquals((int)[parts count], 2, nil);
+	NSAttributedString* firstPart = [parts firstObject];
+	STAssertEqualObjects(firstPart.string, @"Pepperoni", nil);
+	
+	NSAttributedString* secondPart = [parts secondObject];
+	STAssertEqualObjects(secondPart.string, @"Pizza", nil);
+	STAssertEqualObjects([secondPart attribute: @"Kind" atIndex: 1 effectiveRange: NULL], 
+						 @"Meat", nil);
+
+}
+
+-(void)testReplacingAtTailOfSimpleAttributedString
+{
+	NSAttributedString* simpleString = simpleAttributedString();
+	
+	NSAttributedString* chunk = [[NSAttributedString alloc] initWithString: @"Dogs"];
+	
+	NSAttributedString* replaced = [simpleString attributedStringByReplacingRange: NSMakeRange(5, 5) 
+																		withChunk: chunk];
+	
+	STAssertEquals((int)[replaced length], 9, nil);
+	STAssertEqualObjects(replaced.string, @"ILikeDogs", nil);
+	
+	NSArray* splitParts = [replaced attributedStringsFromParts];
+	
+	NSAttributedString* firstPart = [splitParts firstObject];
+	STAssertEqualObjects(firstPart.string, @"ILike", nil);
+	STAssertEqualObjects([firstPart attribute: @"Name" atIndex: 0 effectiveRange: NULL], @"Chris", nil);
+	STAssertEqualObjects([firstPart attribute: @"Amount" atIndex: 1 effectiveRange: NULL], 
+						 [NSNumber numberWithInt: 11], nil);
+	
+	NSAttributedString* secondPart = [splitParts secondObject];
+	STAssertEqualObjects(secondPart.string, @"Dogs", nil);
+	STAssertNil([secondPart attribute: @"Kind" atIndex: 1 effectiveRange: NULL], nil);
+
+}
+
+-(void)testReplacingAtMidleOfSimpleAttributedString
+{
+	NSAttributedString* simpleString = simpleAttributedString();
+	
+	NSAttributedString* chunk = [[NSAttributedString alloc] initWithString: @"Hate"];
+	
+	NSAttributedString* replaced = [simpleString attributedStringByReplacingRange: NSMakeRange(1, 4) 
+																		withChunk: chunk];
+	
+	STAssertTrue(replaced.string.length == 10, nil);
+	STAssertEqualObjects(replaced.string, @"IHatePizza", nil);
+	
+	NSArray* splitParts = [replaced attributedStringsFromParts];
+	
+	STAssertEquals((int)[splitParts count], 3, nil);
+	
+	NSAttributedString* firstPart = [splitParts firstObject];
+	STAssertEqualObjects(firstPart.string, @"I", nil);
+	STAssertEqualObjects([firstPart attribute: @"Name" atIndex: 0 effectiveRange: NULL], @"Chris", nil);
+	
+	NSAttributedString* secondPart = [splitParts secondObject];
+	STAssertEqualObjects(secondPart.string, @"Hate", nil);
+	STAssertNil([secondPart attribute: @"Amount" atIndex: 1 effectiveRange: NULL], nil);
+	
+	NSAttributedString* thirdPart = [splitParts lastObject];
+	STAssertEqualObjects(thirdPart.string, @"Pizza", nil);
+	STAssertEqualObjects([thirdPart attribute: @"Kind" atIndex: 1 effectiveRange: NULL], 
+						 @"Meat", nil);
+	
 }
 
 @end

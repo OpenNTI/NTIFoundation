@@ -13,6 +13,14 @@
 #import <OmniAppKit/OATextStorage.h>
 #import <OmniAppKit/OATextAttachmentCell.h>
 
+/*
+ * Provides methods for working with chunked attributed strings (usefull for multipart note/chat bodies).
+ * An attributedString is chunked if it contains any one length ranges with the kNTIChunkSeparatorAttributeName.
+ * The start of each chunk is signified by the presence of an attribute named kNTIChunkSeparatorAttributeName with
+ * an undefined value.  Attributed strings with no chunk markers are treated as having one chunk that is the
+ * entire string.
+ */
+
 @implementation NSAttributedString(NTIExtensions)
 
 +(NSAttributedString*)attributedStringFromObject:(id)object
@@ -85,15 +93,6 @@
 	return [attrString attributedStringByAppendingChunks: attrStrings];
 }
 
-static void appendChunkSeparator(NSMutableAttributedString* mAttrString)
-{
-	unichar attachmentCharacter = OAAttachmentCharacter;
-	[mAttrString appendString: [NSString stringWithCharacters: &attachmentCharacter
-												  length: 1] 
-			  attributes: [NSDictionary dictionaryWithObject:  [[NSObject alloc] init]
-													  forKey: kNTIChunkSeparatorAttributeName]];
-}
-
 -(NSArray*)objectsFromAttributedString
 {
 	NSArray* attrStrings = [self attributedStringsFromParts];
@@ -119,21 +118,20 @@ static void appendChunkSeparator(NSMutableAttributedString* mAttrString)
 	return externalParts;
 }
 
--(NSAttributedString*)attributedStringAsChunkWithLeadingSeparator: (BOOL)leading 
-											 andTrailingSeparator: (BOOL)trailing
+static void appendChunkToMutableAttributedString(NSMutableAttributedString* mutableAttrString, NSAttributedString* chunk)
 {
-	NSMutableAttributedString* mutableAttrString = [[NSMutableAttributedString alloc] init];
-	
-	//TODO Need to check that leading and trailing separators don't already exist?
-	if(leading){
-		appendChunkSeparator( mutableAttrString );
-	}
-	[mutableAttrString appendAttributedString: self];
-	if(trailing){
-		appendChunkSeparator( mutableAttrString );
+	if(!chunk || [chunk length] < 1){
+		return;
 	}
 	
-	return [[NSAttributedString alloc] initWithAttributedString: mutableAttrString];
+	NSMutableAttributedString* toAddAsChunk = [[NSMutableAttributedString alloc] 
+											   initWithAttributedString: chunk];
+	
+	[toAddAsChunk addAttribute: kNTIChunkSeparatorAttributeName 
+						 value: [NSNumber numberWithBool: YES] 
+						 range: NSMakeRange(0, 1)];
+	
+	[mutableAttrString appendAttributedString: toAddAsChunk];
 }
 
 -(NSAttributedString*)attributedStringByAppendingChunks: (NSArray*)chunks
@@ -141,152 +139,132 @@ static void appendChunkSeparator(NSMutableAttributedString* mAttrString)
 	NSMutableAttributedString* mutableAttrString = [[NSMutableAttributedString alloc] 
 													initWithAttributedString: self];
 	
-	//Do we need to start a new chunk?
-	if( self.length > 0 && ![self attribute: kNTIChunkSeparatorAttributeName 
-									atIndex: self.length - 1 
-							 effectiveRange: NULL] ){
-		appendChunkSeparator(mutableAttrString);
-	}
-	
-	for(NSUInteger i = 0 ; i < [chunks count]; i++){
-		NSAttributedString* attrString = [chunks objectAtIndex: i];
-		
-		[mutableAttrString appendAttributedString: attrString];
-		if( i < [chunks count]-1 ){
-			appendChunkSeparator(mutableAttrString);
-		}
+	for(NSAttributedString* chunk in chunks){
+		appendChunkToMutableAttributedString(mutableAttrString, chunk);
 	}
 	
 	return [[NSAttributedString alloc] initWithAttributedString: mutableAttrString];
 }
 
 -(NSAttributedString*)attributedStringByAppendingChunk:(NSAttributedString *)chunk
-{
+{	
 	NSMutableAttributedString* mutableAttrString = [[NSMutableAttributedString alloc] 
 													initWithAttributedString: self];
 	
-	//Do we need to start a new chunk?
-	if( self.length > 0 && ![self attribute: kNTIChunkSeparatorAttributeName 
-									atIndex: self.length - 1 
-							 effectiveRange: NULL] ){
-		appendChunkSeparator(mutableAttrString);
-	}
-	
-	[mutableAttrString appendAttributedString: chunk];
-	
-	//appendChunkSeparator(mutableAttrString);
+	appendChunkToMutableAttributedString(mutableAttrString, chunk);
 	
 	return [[NSAttributedString alloc] initWithAttributedString: mutableAttrString];
 }
 
-//In the perfect case parts are separated by an attachment charater that
-//has our special chunking attribute.  However, it is possible that this character
-//ends up deleted leaving two different types of objects in what appears to be 
-//the same part.  We identify this change in object type be checking if the
-//attachment cell responds to exportHTMLToDataBuffer.  If it does it can be lumped
-//in with the text part..
+//We make a large assumption here. Any text attachment cell that doesn't respond to
+//htmlWriter:exportHTMLToDataBuffer:withSize: must be in it's own chunk.  
+static BOOL characterAtIndexRequiresOwnChunk(NSAttributedString* string, NSUInteger index)
+{
+	if([string.string characterAtIndex: index] != OAAttachmentCharacter){
+		return NO;
+	}
+	OATextAttachment* textAttachment = [string attribute: OAAttachmentAttributeName 
+												 atIndex: index
+										  effectiveRange: NULL];
+	
+	return textAttachment
+	&& ![(id)[textAttachment attachmentCell]
+		 respondsToSelector: @selector(htmlWriter:exportHTMLToDataBuffer:withSize:)];
+}
+
+static NSAttributedString* correctMissingChunks(NSAttributedString* toCorrect)
+{
+	NSMutableAttributedString* corrected = [[NSMutableAttributedString alloc] initWithAttributedString: toCorrect];
+	
+	//Search the string for each OATextAttachmentCharacter.  When we find one if it responds to 
+	//htmlWriter:exportHTMLToDataBuffer:withSize: move on to the next one.  If it does not
+	//make sure that it is marked as the start of a chunk and the character following 
+	//it (if not another object attachment) is marked as a new chunk.
+	
+	NSUInteger searchStart = 0;
+	NSRange searchResult;
+	unichar markerCharacter = OAAttachmentCharacter;
+	NSString* markerString = [NSString stringWithCharacters: &markerCharacter
+													 length: 1];
+	while(searchStart < corrected.length){
+		searchResult = [corrected.string rangeOfString: markerString
+											   options: 0
+												 range: NSMakeRange(searchStart, corrected.length - searchStart)];
+		if(searchResult.location == NSNotFound){
+			break;
+		}
+		
+		if(characterAtIndexRequiresOwnChunk(corrected, searchResult.location)){
+			[corrected addAttribute: kNTIChunkSeparatorAttributeName 
+							  value: [NSNumber numberWithBool: YES] 
+							  range: searchResult];
+			if(	  searchResult.location + 1 < corrected.length 
+			   && !characterAtIndexRequiresOwnChunk(corrected, searchResult.location + 1)){
+				[corrected addAttribute: kNTIChunkSeparatorAttributeName
+								  value: [NSNumber numberWithBool: YES] 
+								  range: NSMakeRange(searchResult.location + 1, 1)];
+			}
+		}
+		else{
+			//Just continue the search
+		}
+		searchStart = NSMaxRange(searchResult);
+	}
+	
+	
+	
+	return corrected;
+}
+
+//The idea for parsing is to look across the attributed string to identify characters that
+//have an attribute of kNTIChunkSeparatorAttribute.  The presence of this attribute indicates
+//the character starts a new chunk and the chunk continues untill the character before the next 
+//separator or the end of the string.  A string with no separators is treated as one part.
+//
+//Unfortunately the above describes the perfect case in which all chunk markers are present
+//however some things don't properly mark an html/string chunk that follows an object
+//as a new chunk.  We attempt to detect this and fill in missing separators.  See comments
+//on correctMissingChunks for details.
 -(NSArray*)attributedStringsFromParts;
 {
 	NSMutableArray* result = [NSMutableArray arrayWithCapacity: 5];
-	unichar attachmentCharacter = OAAttachmentCharacter;
-	NSString* potentialSeparatorString = [NSString stringWithCharacters: &attachmentCharacter
-																 length: 1];
 	
-	//Starting at the beginning of the attrString find the first potential part split (OAAttachmentCharacter)
-	NSRange searchResult;
-	NSUInteger partStartLocation = 0;
-	NSRange searchRange = NSMakeRange(partStartLocation, self.length);
-	do{	
-		searchResult = [self.string rangeOfString: potentialSeparatorString options: 0 range:searchRange];
-		
-		//The easy case is that there is no potential separator left.  When this happens
-		//We collect from the partStart to the end of the string
-		if(searchResult.location == NSNotFound){
-			NSRange partRange = NSMakeRange(partStartLocation, self.length - partStartLocation);
-			NSAttributedString* part = [self attributedSubstringFromRange: partRange];
-			if(part && part.length > 0){
-				[result addObject: part];
-			}
-			partStartLocation = NSMaxRange(partRange) + 1;
-			NSUInteger searchLength = partStartLocation < self.length ? self.length - partStartLocation : 0;
-			searchRange = NSMakeRange(partStartLocation, searchLength);
-		}
-		//We found a potential split
-		else{
-			//There are three posibilities here
-			//1. potential split is a split triggered by a separator
-			//2. potential split is a split triggered by an attachment that can't be
-			//	 written as html
-			//3. not a split
-			//TODO Need test cases for 2 and 3
-			
-			OATextAttachment* textAttachment = [self attribute: OAAttachmentAttributeName 
-													   atIndex: searchResult.location 
-												effectiveRange: NULL];
-			
-			//Case 1.  we are a split b/c of a separator
-			if( [self attribute: kNTIChunkSeparatorAttributeName 
-						atIndex: searchResult.location 
-				 effectiveRange: NULL] ){
-				//The part is everything from the partStart to the separator exclusive
-				NSRange partRange = NSMakeRange(partStartLocation, searchResult.location - partStartLocation);
-				NSAttributedString* part = [self attributedSubstringFromRange: partRange];
-				if(part && part.length > 0){
-					[result addObject: part];
-				}
-				
-				//Now we need to look for the next part
-				//starting at the character past the separator
-				partStartLocation = NSMaxRange(partRange) + 1;
-				NSUInteger searchLength = partStartLocation <= self.length ? self.length - partStartLocation : 0;
-				searchRange = NSMakeRange(partStartLocation, searchLength);
-			}
-			//Case 2. we are a split b/c of an attachment cell that cant be written as html
-			else if(    textAttachment
-					&& ![(id)[textAttachment attachmentCell] respondsToSelector: @selector(htmlWriter:exportHTMLToDataBuffer:withSize:)]){
-				//The part is everything from the partStart to the separator exclusive
-				NSRange partRange = NSMakeRange(partStartLocation,searchResult.location - partStartLocation);
-				NSAttributedString* part = [self attributedSubstringFromRange: partRange];
-				if(part && part.length > 0){
-					[result addObject: part];
-				}
-				//Next partStart is the character that was our separator
-				partStartLocation = searchResult.location;
-				NSUInteger searchLength = partStartLocation + 1 <= self.length ? self.length - (partStartLocation + 1) : 0;
-				searchRange = NSMakeRange(partStartLocation + 1, searchLength);
-				
-			}
-			//Case 3 we aren't a split
-			else{
-				//We need to continue our search after the potential split
-				//character we just checked
-				
-				//Do we have anymore characters to check
-				if(searchResult.location < self.length - 1 ){
-					NSUInteger nextSearchStart = NSMaxRange(searchResult);
-					NSUInteger searchLength = nextSearchStart <= self.length ? self.length - nextSearchStart : 0;
-					searchRange = NSMakeRange(nextSearchStart, searchLength);
-				}
-				//No more searching to do... we are in the last part
-				//gather it up and finish
-				else{
-					NSRange partRange = NSMakeRange(partStartLocation, self.length - partStartLocation);
-					NSAttributedString* part = [self attributedSubstringFromRange: partRange];
-					if(part && part.length > 0){
-						[result addObject: part];
-					}
-					partStartLocation = NSMaxRange(partRange) + 1;
-					NSUInteger searchLength = partStartLocation <= self.length ? self.length - partStartLocation : 0;
-					searchRange = NSMakeRange(partStartLocation, searchLength);
-				}
-			}
-			
+	NSAttributedString* toSplit = correctMissingChunks(self);
+	
+	NSUInteger inspectingIdx = 1;
+	NSUInteger partStart=0;
+	while(inspectingIdx < toSplit.length){
+		//We found a new start
+		if( [toSplit attribute: kNTIChunkSeparatorAttributeName atIndex: inspectingIdx effectiveRange: NULL] ){
+			NSRange partRange = NSMakeRange(partStart, inspectingIdx - partStart);
+			[result addObject: [toSplit attributedSubstringFromRange: partRange]];
+			partStart = inspectingIdx;
 		}
 		
-	}while (   searchResult.location != NSNotFound 
-			&& NSMaxRange(searchRange) <= self.length );	
+		inspectingIdx++;
+	}
+	
+	//Make sure to grab the last part
+	[result addObject: [toSplit attributedSubstringFromRange: 
+						NSMakeRange(partStart, toSplit.length - partStart)]];
+	
 	
 	return [NSArray arrayWithArray: result];
+}
+
+-(NSAttributedString*)attributedStringByReplacingRange: (NSRange)range 
+											 withChunk: (NSAttributedString *)chunk
+{
+	
+	NSAttributedString* firstPart = [self attributedSubstringFromRange: NSMakeRange(0, range.location)];
+	NSAttributedString* thirdPart = [self attributedSubstringFromRange:
+									 NSMakeRange(NSMaxRange(range), self.length - (NSMaxRange(range)))];
+	
+	NSMutableAttributedString* result = [[NSMutableAttributedString alloc] initWithAttributedString: firstPart];
+	appendChunkToMutableAttributedString(result, chunk);
+	appendChunkToMutableAttributedString(result, thirdPart);
+	
+	return [[NSAttributedString alloc] initWithAttributedString: result];
 }
 
 @end
