@@ -52,7 +52,7 @@
 	
 	self.attributedText = [self.attributedText attributedStringByReplacingRange: range.range 
 																	  withChunk: attrString];
-
+	[self.delegate textViewContentsChanged: self];
 }
 
 -(OATextAttachmentCell*)attachmentCellForPoint:(CGPoint)point fromView :(UIView *)view
