@@ -56,7 +56,10 @@ static void commonInit( NTIHTMLReader* self )
 	//These come in from the web app.
 	string = [string stringByReplacingAllOccurrencesOfString: @"&nbsp;"
 												  withString: @" "];
-	
+	//Tidy up some horrible non-XML stuff the browser leaves in
+	string = [string stringByReplacingAllOccurrencesOfString: @"<br>"
+												  withString: @"<br/>"];
+												  
 	NSXMLParser* parser = [[NSXMLParser alloc] initWithData: 
 						   [string dataUsingEncoding: [string fastestEncoding]]];
 	parser.delegate = self;
@@ -478,6 +481,10 @@ qualifiedName: (NSString*)qName
 	POPIF(@"tt")	
 	POPIF(@"code")		
 #undef POPIF
+	else if( [@"br" isEqual: elementName] ) {
+		[attrBuffer appendString: @"\n"
+					  attributes: nil];
+	}
 	//Besides A, the only other tage we're expecting is IMG.
 	//It won't have style on it, and neither will an enclosing HTML
 	//or BODY, if present, so our stack stays in sync.
