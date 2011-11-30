@@ -34,6 +34,7 @@
 		403D0DD0143E3AE20049A755 /* NSAttributedString-HTMLReadingExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D0DCC143E38FD0049A755 /* NSAttributedString-HTMLReadingExtensionsTest.m */; };
 		40475AEB142A4940003323A9 /* SendRecieveQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 40475AE9142A493F003323A9 /* SendRecieveQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40475AEC142A4940003323A9 /* SendRecieveQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 40475AEA142A4940003323A9 /* SendRecieveQueue.m */; };
+		4080B641148692C500A8899D /* libprofile_rt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4080B640148692C500A8899D /* libprofile_rt.dylib */; };
 		408494B51427DF6C0038BD31 /* WebSockets.h in Headers */ = {isa = PBXBuildFile; fileRef = 408494B31427DF6C0038BD31 /* WebSockets.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		408494B61427DF6C0038BD31 /* WebSockets.m in Sources */ = {isa = PBXBuildFile; fileRef = 408494B41427DF6C0038BD31 /* WebSockets.m */; };
 		408FBF07143F62D80095DD84 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408FBF06143F62D80095DD84 /* CoreText.framework */; };
@@ -403,6 +404,7 @@
 		403D0DCC143E38FD0049A755 /* NSAttributedString-HTMLReadingExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString-HTMLReadingExtensionsTest.m"; sourceTree = "<group>"; };
 		40475AE9142A493F003323A9 /* SendRecieveQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendRecieveQueue.h; sourceTree = "<group>"; };
 		40475AEA142A4940003323A9 /* SendRecieveQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendRecieveQueue.m; sourceTree = "<group>"; };
+		4080B640148692C500A8899D /* libprofile_rt.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libprofile_rt.dylib; path = usr/lib/libprofile_rt.dylib; sourceTree = DEVELOPER_DIR; };
 		408494B31427DF6C0038BD31 /* WebSockets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSockets.h; sourceTree = "<group>"; };
 		408494B41427DF6C0038BD31 /* WebSockets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSockets.m; sourceTree = "<group>"; };
 		408FBF06143F62D80095DD84 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -543,6 +545,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4080B641148692C500A8899D /* libprofile_rt.dylib in Frameworks */,
 				72D7D44113E32F0200652DAC /* libxml2.dylib in Frameworks */,
 				72D7D43C13E32E9500652DAC /* libz.dylib in Frameworks */,
 				72D7D43313E32D2700652DAC /* SenTestingKit.framework in Frameworks */,
@@ -649,6 +652,7 @@
 		72CBA9681385CF1F00E3D28D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4080B640148692C500A8899D /* libprofile_rt.dylib */,
 				408FBF18143F66A40095DD84 /* ImageIO.framework */,
 				408FBF14143F64620095DD84 /* MessageUI.framework */,
 				408FBF12143F64430095DD84 /* QuartzCore.framework */,
@@ -1033,7 +1037,7 @@
 		72CBA95C1385CF1F00E3D28D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 				ORGANIZATIONNAME = NextThought;
 			};
 			buildConfigurationList = 72CBA95F1385CF1F00E3D28D /* Build configuration list for PBXProject "NTIFoundation" */;
@@ -1612,12 +1616,17 @@
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 				);
+				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NTIFoundation/NTIFoundation-Prefix.pch";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(DEVELOPER_DIR)/usr/lib\"",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
-					"-all_load",
 					"-framework",
 					SenTestingKit,
 				);
@@ -1638,12 +1647,17 @@
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 				);
+				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NTIFoundation/NTIFoundation-Prefix.pch";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(DEVELOPER_DIR)/usr/lib\"",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
-					"-all_load",
 					"-framework",
 					SenTestingKit,
 				);
