@@ -32,6 +32,7 @@
 		403D0DC6143E193E0049A755 /* NTIRTFDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 403D0DC0143E193E0049A755 /* NTIRTFDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		403D0DC7143E193E0049A755 /* NTIRTFDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D0DC1143E193E0049A755 /* NTIRTFDocument.m */; };
 		403D0DD0143E3AE20049A755 /* NSAttributedString-HTMLReadingExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D0DCC143E38FD0049A755 /* NSAttributedString-HTMLReadingExtensionsTest.m */; };
+		403FD882148D3D1400811AB5 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D7D43213E32D2700652DAC /* SenTestingKit.framework */; };
 		40475AEB142A4940003323A9 /* SendRecieveQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 40475AE9142A493F003323A9 /* SendRecieveQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40475AEC142A4940003323A9 /* SendRecieveQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 40475AEA142A4940003323A9 /* SendRecieveQueue.m */; };
 		4080B641148692C500A8899D /* libprofile_rt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4080B640148692C500A8899D /* libprofile_rt.dylib */; };
@@ -100,7 +101,6 @@
 		72D7D42F13E32D2700652DAC /* libOmniQuartz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D3616713DB6B2B00257C73 /* libOmniQuartz.a */; };
 		72D7D43013E32D2700652DAC /* libOmniUI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D3616A13DB6B2B00257C73 /* libOmniUI.a */; };
 		72D7D43113E32D2700652DAC /* libOmniUnzip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D3617013DB6B2B00257C73 /* libOmniUnzip.a */; };
-		72D7D43313E32D2700652DAC /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D7D43213E32D2700652DAC /* SenTestingKit.framework */; };
 		72D7D43C13E32E9500652DAC /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D7D43A13E32E9500652DAC /* libz.dylib */; };
 		72D7D44113E32F0200652DAC /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D7D43E13E32F0100652DAC /* libxml2.dylib */; };
 		72D7D53D13E3321800652DAC /* NTIAbstractDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 721DCA0013BA3DBD00340540 /* NTIAbstractDownloader.m */; };
@@ -134,6 +134,27 @@
 			proxyType = 1;
 			remoteGlobalIDString = 72C0D195142529E800D526D8;
 			remoteInfo = NTIFoundation;
+		};
+		40E65067148D250A00276173 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72D3610413DB6B2A00257C73 /* OmniFoundation.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 344D08B91190D47300264D89;
+			remoteInfo = OmniFoundationTouch;
+		};
+		40E65086148D269300276173 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72D3610313DB6B2A00257C73 /* OmniFileStore.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 34D06C53125D202500CA3963;
+			remoteInfo = OmniFileStoreTouch;
+		};
+		40E65088148D2D0F00276173 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7271BBEC13B7DC6600241FEC /* FixStringsFile.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DD76F740486A8DE00D96B5E;
+			remoteInfo = FixStringsFile;
 		};
 		726214DC145891C300BC6DE5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -373,13 +394,6 @@
 			remoteGlobalIDString = 34E20FCA119314D200ECA875;
 			remoteInfo = OmniUnzipTouch;
 		};
-		72E3533A14252E56001B345A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 72D3610413DB6B2A00257C73 /* OmniFoundation.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 344D08B91190D47300264D89;
-			remoteInfo = OmniFoundationTouch;
-		};
 		72E3533C14252E56001B345A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 72D3610213DB6B2A00257C73 /* OmniBase.xcodeproj */;
@@ -519,7 +533,7 @@
 		72D7D43213E32D2700652DAC /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		72D7D43A13E32E9500652DAC /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		72D7D43E13E32F0100652DAC /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
-		72D8185913955D8C00473994 /* UnitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		72D8185913955D8C00473994 /* NTIFoundationLogicTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NTIFoundationLogicTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		72D8185F13955D8C00473994 /* UnitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnitTests-Info.plist"; sourceTree = "<group>"; };
 		72D8186113955D8C00473994 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		72D8186313955D8C00473994 /* UnitTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UnitTests-Prefix.pch"; sourceTree = "<group>"; };
@@ -548,7 +562,6 @@
 				4080B641148692C500A8899D /* libprofile_rt.dylib in Frameworks */,
 				72D7D44113E32F0200652DAC /* libxml2.dylib in Frameworks */,
 				72D7D43C13E32E9500652DAC /* libz.dylib in Frameworks */,
-				72D7D43313E32D2700652DAC /* SenTestingKit.framework in Frameworks */,
 				72D7D42B13E32D2700652DAC /* libOmniAppKit.a in Frameworks */,
 				72D7D42C13E32D2700652DAC /* libOmniBase.a in Frameworks */,
 				72D7D42D13E32D2700652DAC /* libOmniFileStore.a in Frameworks */,
@@ -556,6 +569,7 @@
 				72D7D42F13E32D2700652DAC /* libOmniQuartz.a in Frameworks */,
 				72D7D43013E32D2700652DAC /* libOmniUI.a in Frameworks */,
 				72D7D43113E32D2700652DAC /* libOmniUnzip.a in Frameworks */,
+				403FD882148D3D1400811AB5 /* SenTestingKit.framework in Frameworks */,
 				408FBF19143F66A40095DD84 /* ImageIO.framework in Frameworks */,
 				408FBF15143F64620095DD84 /* MessageUI.framework in Frameworks */,
 				408FBF13143F64430095DD84 /* QuartzCore.framework in Frameworks */,
@@ -643,7 +657,7 @@
 		72CBA9661385CF1F00E3D28D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				72D8185913955D8C00473994 /* UnitTests.octest */,
+				72D8185913955D8C00473994 /* NTIFoundationLogicTests.octest */,
 				72C0D196142529E800D526D8 /* libNTIFoundation.a */,
 			);
 			name = Products;
@@ -999,21 +1013,22 @@
 			buildRules = (
 			);
 			dependencies = (
+				72E3533D14252E56001B345A /* PBXTargetDependency */,
+				40E65068148D250A00276173 /* PBXTargetDependency */,
 				726214E1145891FB00BC6DE5 /* PBXTargetDependency */,
 				726214DD145891C300BC6DE5 /* PBXTargetDependency */,
-				726214DF145891C300BC6DE5 /* PBXTargetDependency */,
 				72CB9ADB142540F700CE4FAA /* PBXTargetDependency */,
-				72E3533B14252E56001B345A /* PBXTargetDependency */,
-				72E3533D14252E56001B345A /* PBXTargetDependency */,
+				40E65087148D269300276173 /* PBXTargetDependency */,
+				726214DF145891C300BC6DE5 /* PBXTargetDependency */,
 			);
 			name = NTIFoundation;
 			productName = NTIFoundation;
 			productReference = 72C0D196142529E800D526D8 /* libNTIFoundation.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		72D8185813955D8C00473994 /* UnitTests */ = {
+		72D8185813955D8C00473994 /* NTIFoundationLogicTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 72D8186813955D8C00473994 /* Build configuration list for PBXNativeTarget "UnitTests" */;
+			buildConfigurationList = 72D8186813955D8C00473994 /* Build configuration list for PBXNativeTarget "NTIFoundationLogicTests" */;
 			buildPhases = (
 				72D8185413955D8C00473994 /* Sources */,
 				72D7D53A13E330BA00652DAC /* Copy Library Resources */,
@@ -1024,11 +1039,12 @@
 			buildRules = (
 			);
 			dependencies = (
+				40E65089148D2D0F00276173 /* PBXTargetDependency */,
 				408FBF05143F627A0095DD84 /* PBXTargetDependency */,
 			);
-			name = UnitTests;
+			name = NTIFoundationLogicTests;
 			productName = UnitTests;
-			productReference = 72D8185913955D8C00473994 /* UnitTests.octest */;
+			productReference = 72D8185913955D8C00473994 /* NTIFoundationLogicTests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -1091,7 +1107,7 @@
 			projectRoot = "";
 			targets = (
 				72C0D195142529E800D526D8 /* NTIFoundation */,
-				72D8185813955D8C00473994 /* UnitTests */,
+				72D8185813955D8C00473994 /* NTIFoundationLogicTests */,
 				7216D72A13CBAE6800509BDC /* GenerateDate */,
 			);
 		};
@@ -1439,6 +1455,21 @@
 			target = 72C0D195142529E800D526D8 /* NTIFoundation */;
 			targetProxy = 408FBF04143F627A0095DD84 /* PBXContainerItemProxy */;
 		};
+		40E65068148D250A00276173 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OmniFoundationTouch;
+			targetProxy = 40E65067148D250A00276173 /* PBXContainerItemProxy */;
+		};
+		40E65087148D269300276173 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OmniFileStoreTouch;
+			targetProxy = 40E65086148D269300276173 /* PBXContainerItemProxy */;
+		};
+		40E65089148D2D0F00276173 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FixStringsFile;
+			targetProxy = 40E65088148D2D0F00276173 /* PBXContainerItemProxy */;
+		};
 		726214DD145891C300BC6DE5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = OmniAppKitTouch;
@@ -1458,11 +1489,6 @@
 			isa = PBXTargetDependency;
 			name = OmniUnzipTouch;
 			targetProxy = 72CB9ADA142540F700CE4FAA /* PBXContainerItemProxy */;
-		};
-		72E3533B14252E56001B345A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = OmniFoundationTouch;
-			targetProxy = 72E3533A14252E56001B345A /* PBXContainerItemProxy */;
 		};
 		72E3533D14252E56001B345A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1613,8 +1639,8 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+					"$(inherited)",
+					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
 				);
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
@@ -1644,8 +1670,8 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+					"$(inherited)",
+					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
 				);
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
@@ -1696,7 +1722,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		72D8186813955D8C00473994 /* Build configuration list for PBXNativeTarget "UnitTests" */ = {
+		72D8186813955D8C00473994 /* Build configuration list for PBXNativeTarget "NTIFoundationLogicTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				72D8186913955D8C00473994 /* Debug */,
