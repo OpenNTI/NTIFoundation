@@ -149,13 +149,6 @@
 			remoteGlobalIDString = 34D06C53125D202500CA3963;
 			remoteInfo = OmniFileStoreTouch;
 		};
-		40E65088148D2D0F00276173 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7271BBEC13B7DC6600241FEC /* FixStringsFile.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 8DD76F740486A8DE00D96B5E;
-			remoteInfo = FixStringsFile;
-		};
 		726214DC145891C300BC6DE5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 72D3610113DB6B2A00257C73 /* OmniAppKit.xcodeproj */;
@@ -1039,7 +1032,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				40E65089148D2D0F00276173 /* PBXTargetDependency */,
 				408FBF05143F627A0095DD84 /* PBXTargetDependency */,
 			);
 			name = NTIFoundationLogicTests;
@@ -1464,11 +1456,6 @@
 			isa = PBXTargetDependency;
 			name = OmniFileStoreTouch;
 			targetProxy = 40E65086148D269300276173 /* PBXContainerItemProxy */;
-		};
-		40E65089148D2D0F00276173 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = FixStringsFile;
-			targetProxy = 40E65088148D2D0F00276173 /* PBXContainerItemProxy */;
 		};
 		726214DD145891C300BC6DE5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
