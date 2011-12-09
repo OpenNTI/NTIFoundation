@@ -21,6 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		4006E76B149272E000D63524 /* NSObject-NTIJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 4006E76A149272E000D63524 /* NSObject-NTIJSON.m */; };
+		4006E76C149272EC00D63524 /* NSObject-NTIJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 4006E76A149272E000D63524 /* NSObject-NTIJSON.m */; };
 		403C28E614576E160012CBAB /* NSAttributedString-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 403C28E414576E160012CBAB /* NSAttributedString-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		403C28E714576E160012CBAB /* NSAttributedString-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C28E514576E160012CBAB /* NSAttributedString-NTIExtensions.m */; };
 		403C290914577A340012CBAB /* NSAttributedString-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C290614577A260012CBAB /* NSAttributedString-NTIExtensionsTest.m */; };
@@ -54,7 +56,6 @@
 		40AEBDD9145A5A6700028750 /* NTIEditableFrameScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40AEBDD7145A5A6700028750 /* NTIEditableFrameScrollView.m */; };
 		40B6F3BA14285AF4007EDF1C /* WebSocket7Test.h in Headers */ = {isa = PBXBuildFile; fileRef = 40B6F3B814285AF4007EDF1C /* WebSocket7Test.h */; };
 		40B6F3D914285B38007EDF1C /* WebSocket7Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 40B6F3B914285AF4007EDF1C /* WebSocket7Test.m */; };
-		40B6F3FC14285D23007EDF1C /* NSString-JSONTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 72D7D42813E32A7600652DAC /* NSString-JSONTest.m */; };
 		40C0E1031443AF9C00142406 /* SocketIOPacketTest.h in Headers */ = {isa = PBXBuildFile; fileRef = 40C0E1011443AF9C00142406 /* SocketIOPacketTest.h */; };
 		40C0E1051443AF9C00142406 /* SocketIOPacketTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40C0E1021443AF9C00142406 /* SocketIOPacketTest.m */; };
 		40C0E1061443AFA600142406 /* SendRecieveQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 40475AEA142A4940003323A9 /* SendRecieveQueue.m */; };
@@ -82,11 +83,8 @@
 		7293CB2A1451AA7D00CD64B8 /* NTIEditableFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */; };
 		7293CB2B1451AAB700CD64B8 /* NTIEditableFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */; };
 		72C0D197142529E800D526D8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72CBA96B1385CF1F00E3D28D /* Foundation.framework */; };
-		72CB9A9C14253CD500CE4FAA /* NSArray-NTIJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 7216D72413CB9F7800509BDC /* NSArray-NTIJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		72CB9A9D14253CD500CE4FAA /* NSDictionary-NTIJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 409951D213CFBD510039982D /* NSDictionary-NTIJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		72CB9A9E14253CD500CE4FAA /* NTIJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 7215956A13CFE80600DCA72E /* NTIJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		72CB9A9E14253CD500CE4FAA /* NSObject-NTIJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 7215956A13CFE80600DCA72E /* NSObject-NTIJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		72CB9A9F14253CD500CE4FAA /* NSString-NTIJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 72CC05A913DDE8E9009B2977 /* NSString-NTIJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		72CB9AA014253CD500CE4FAA /* NSNumber-NTIJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A63468141EAD590026CA3A /* NSNumber-NTIJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		72CB9AA114253CD500CE4FAA /* NSArray-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 72FC5D7813D0FC2A006CBF28 /* NSArray-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		72CB9AA214253CD500CE4FAA /* NSMutableArray-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 72FC5D7B13D10285006CBF28 /* NSMutableArray-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		72CB9AA314253CD500CE4FAA /* NSString-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 72579DF313D8B24C005437A7 /* NSString-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -104,8 +102,6 @@
 		72D7D43C13E32E9500652DAC /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D7D43A13E32E9500652DAC /* libz.dylib */; };
 		72D7D44113E32F0200652DAC /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D7D43E13E32F0100652DAC /* libxml2.dylib */; };
 		72D7D53D13E3321800652DAC /* NTIAbstractDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 721DCA0013BA3DBD00340540 /* NTIAbstractDownloader.m */; };
-		72D7D54613E3321800652DAC /* NSArray-NTIJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 7216D72513CB9F7800509BDC /* NSArray-NTIJSON.m */; };
-		72D7D54713E3321800652DAC /* NSDictionary-NTIJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 409951D313CFBD510039982D /* NSDictionary-NTIJSON.m */; };
 		72D7D54813E3321800652DAC /* NSArray-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 72FC5D7913D0FC2A006CBF28 /* NSArray-NTIExtensions.m */; };
 		72D7D54913E3321800652DAC /* NSMutableArray-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 72FC5D7C13D10285006CBF28 /* NSMutableArray-NTIExtensions.m */; };
 		72D7D54C13E3321800652DAC /* NSString-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 72579DF413D8B24C005437A7 /* NSString-NTIExtensions.m */; };
@@ -115,14 +111,11 @@
 		72D8185B13955D8C00473994 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72CBA96B1385CF1F00E3D28D /* Foundation.framework */; };
 		72D8186213955D8C00473994 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 72D8186013955D8C00473994 /* InfoPlist.strings */; };
 		72E3534114252E6F001B345A /* NTIAbstractDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 721DCA0013BA3DBD00340540 /* NTIAbstractDownloader.m */; };
-		72E3534C14252E6F001B345A /* NSArray-NTIJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 7216D72513CB9F7800509BDC /* NSArray-NTIJSON.m */; };
-		72E3534D14252E6F001B345A /* NSDictionary-NTIJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 409951D313CFBD510039982D /* NSDictionary-NTIJSON.m */; };
 		72E3534E14252E6F001B345A /* NSArray-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 72FC5D7913D0FC2A006CBF28 /* NSArray-NTIExtensions.m */; };
 		72E3534F14252E6F001B345A /* NSMutableArray-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 72FC5D7C13D10285006CBF28 /* NSMutableArray-NTIExtensions.m */; };
 		72E3535214252E6F001B345A /* NSString-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 72579DF413D8B24C005437A7 /* NSString-NTIExtensions.m */; };
 		72E3535314252E6F001B345A /* NTIFoundationOSCompat.m in Sources */ = {isa = PBXBuildFile; fileRef = 728D18E713DA217600B6A332 /* NTIFoundationOSCompat.m */; };
 		72E3535414252E6F001B345A /* NSString-NTIJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 72CC05AA13DDE8EA009B2977 /* NSString-NTIJSON.m */; };
-		72E3535914252E6F001B345A /* NSNumber-NTIJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 40A63469141EAD5A0026CA3A /* NSNumber-NTIJSON.m */; };
 		72E3536214252E6F001B345A /* OUUnzipArchive-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 72ED697913BB7F9F00A7A0F4 /* OUUnzipArchive-NTIExtensions.m */; };
 		72E353B9142533E7001B345A /* NTIFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 72E353B8142533E7001B345A /* NTIFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
@@ -397,6 +390,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4006E76A149272E000D63524 /* NSObject-NTIJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject-NTIJSON.m"; sourceTree = "<group>"; };
 		403C28E414576E160012CBAB /* NSAttributedString-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString-NTIExtensions.h"; sourceTree = "<group>"; };
 		403C28E514576E160012CBAB /* NSAttributedString-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString-NTIExtensions.m"; sourceTree = "<group>"; };
 		403C290514577A260012CBAB /* NSAttributedString-NTIExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString-NTIExtensionsTest.h"; sourceTree = "<group>"; };
@@ -423,10 +417,6 @@
 		408FBF12143F64430095DD84 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		408FBF14143F64620095DD84 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		408FBF18143F66A40095DD84 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
-		409951D213CFBD510039982D /* NSDictionary-NTIJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDictionary-NTIJSON.h"; path = "../NSDictionary-NTIJSON.h"; sourceTree = "<group>"; };
-		409951D313CFBD510039982D /* NSDictionary-NTIJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary-NTIJSON.m"; path = "../NSDictionary-NTIJSON.m"; sourceTree = "<group>"; };
-		40A63468141EAD590026CA3A /* NSNumber-NTIJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNumber-NTIJSON.h"; path = "../NSNumber-NTIJSON.h"; sourceTree = "<group>"; };
-		40A63469141EAD5A0026CA3A /* NSNumber-NTIJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNumber-NTIJSON.m"; path = "../NSNumber-NTIJSON.m"; sourceTree = "<group>"; };
 		40AEBDD6145A5A6700028750 /* NTIEditableFrameScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIEditableFrameScrollView.h; sourceTree = "<group>"; };
 		40AEBDD7145A5A6700028750 /* NTIEditableFrameScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIEditableFrameScrollView.m; sourceTree = "<group>"; };
 		40B6F3B814285AF4007EDF1C /* WebSocket7Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSocket7Test.h; sourceTree = "<group>"; };
@@ -447,9 +437,7 @@
 		40E04617143F50A60091CE7C /* OQColor-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OQColor-NTIExtensions.m"; sourceTree = "<group>"; };
 		40E0461A143F5F260091CE7C /* NTIHTMLReaderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIHTMLReaderTest.h; sourceTree = "<group>"; };
 		40E0461B143F5F260091CE7C /* NTIHTMLReaderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIHTMLReaderTest.m; sourceTree = "<group>"; };
-		7215956A13CFE80600DCA72E /* NTIJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTIJSON.h; path = ../NTIJSON.h; sourceTree = "<group>"; };
-		7216D72413CB9F7800509BDC /* NSArray-NTIJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSArray-NTIJSON.h"; path = "../NSArray-NTIJSON.h"; sourceTree = "<group>"; };
-		7216D72513CB9F7800509BDC /* NSArray-NTIJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSArray-NTIJSON.m"; path = "../NSArray-NTIJSON.m"; sourceTree = "<group>"; };
+		7215956A13CFE80600DCA72E /* NSObject-NTIJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject-NTIJSON.h"; path = "../NSObject-NTIJSON.h"; sourceTree = "<group>"; };
 		7216D73113CBAF0300509BDC /* NTIFoundation-Info.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NTIFoundation-Info.h"; sourceTree = "<group>"; };
 		721DC9FF13BA3DBD00340540 /* NTIAbstractDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTIAbstractDownloader.h; path = ../NTIAbstractDownloader.h; sourceTree = "<group>"; };
 		721DCA0013BA3DBD00340540 /* NTIAbstractDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NTIAbstractDownloader.m; path = ../NTIAbstractDownloader.m; sourceTree = "<group>"; };
@@ -521,8 +509,6 @@
 		72D3610613DB6B2A00257C73 /* OmniQuartz.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OmniQuartz.xcodeproj; path = ../OmniGroup/Frameworks/OmniQuartz/OmniQuartz.xcodeproj; sourceTree = "<group>"; };
 		72D3610713DB6B2A00257C73 /* OmniUI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OmniUI.xcodeproj; path = ../OmniGroup/Frameworks/OmniUI/iPad/OmniUI.xcodeproj; sourceTree = "<group>"; };
 		72D3610813DB6B2A00257C73 /* OmniUnzip.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OmniUnzip.xcodeproj; path = ../OmniGroup/Frameworks/OmniUnzip/OmniUnzip.xcodeproj; sourceTree = "<group>"; };
-		72D7D42713E32A7600652DAC /* NSString-JSONTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString-JSONTest.h"; sourceTree = "<group>"; };
-		72D7D42813E32A7600652DAC /* NSString-JSONTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString-JSONTest.m"; sourceTree = "<group>"; };
 		72D7D43213E32D2700652DAC /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		72D7D43A13E32E9500652DAC /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		72D7D43E13E32F0100652DAC /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
@@ -875,8 +861,6 @@
 				403D0DCB143E38FD0049A755 /* NSAttributedString-HTMLReadingExtensionsTest.h */,
 				403D0DCC143E38FD0049A755 /* NSAttributedString-HTMLReadingExtensionsTest.m */,
 				72D8185E13955D8C00473994 /* Supporting Files */,
-				72D7D42713E32A7600652DAC /* NSString-JSONTest.h */,
-				72D7D42813E32A7600652DAC /* NSString-JSONTest.m */,
 				40B6F3B814285AF4007EDF1C /* WebSocket7Test.h */,
 				40B6F3B914285AF4007EDF1C /* WebSocket7Test.m */,
 				40E0461A143F5F260091CE7C /* NTIHTMLReaderTest.h */,
@@ -939,15 +923,10 @@
 		72E353B714253305001B345A /* JSON */ = {
 			isa = PBXGroup;
 			children = (
-				7216D72413CB9F7800509BDC /* NSArray-NTIJSON.h */,
-				7216D72513CB9F7800509BDC /* NSArray-NTIJSON.m */,
-				409951D213CFBD510039982D /* NSDictionary-NTIJSON.h */,
-				409951D313CFBD510039982D /* NSDictionary-NTIJSON.m */,
-				7215956A13CFE80600DCA72E /* NTIJSON.h */,
+				7215956A13CFE80600DCA72E /* NSObject-NTIJSON.h */,
+				4006E76A149272E000D63524 /* NSObject-NTIJSON.m */,
 				72CC05A913DDE8E9009B2977 /* NSString-NTIJSON.h */,
 				72CC05AA13DDE8EA009B2977 /* NSString-NTIJSON.m */,
-				40A63468141EAD590026CA3A /* NSNumber-NTIJSON.h */,
-				40A63469141EAD5A0026CA3A /* NSNumber-NTIJSON.m */,
 			);
 			name = JSON;
 			path = JSON.subproj;
@@ -960,11 +939,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				72CB9A9C14253CD500CE4FAA /* NSArray-NTIJSON.h in Headers */,
-				72CB9A9D14253CD500CE4FAA /* NSDictionary-NTIJSON.h in Headers */,
-				72CB9A9E14253CD500CE4FAA /* NTIJSON.h in Headers */,
+				72CB9A9E14253CD500CE4FAA /* NSObject-NTIJSON.h in Headers */,
 				72CB9A9F14253CD500CE4FAA /* NSString-NTIJSON.h in Headers */,
-				72CB9AA014253CD500CE4FAA /* NSNumber-NTIJSON.h in Headers */,
 				72CB9AA114253CD500CE4FAA /* NSArray-NTIExtensions.h in Headers */,
 				72CB9AA214253CD500CE4FAA /* NSMutableArray-NTIExtensions.h in Headers */,
 				72CB9AA314253CD500CE4FAA /* NSString-NTIExtensions.h in Headers */,
@@ -1378,14 +1354,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				72E3534114252E6F001B345A /* NTIAbstractDownloader.m in Sources */,
-				72E3534C14252E6F001B345A /* NSArray-NTIJSON.m in Sources */,
-				72E3534D14252E6F001B345A /* NSDictionary-NTIJSON.m in Sources */,
 				72E3534E14252E6F001B345A /* NSArray-NTIExtensions.m in Sources */,
 				72E3534F14252E6F001B345A /* NSMutableArray-NTIExtensions.m in Sources */,
 				72E3535214252E6F001B345A /* NSString-NTIExtensions.m in Sources */,
 				72E3535314252E6F001B345A /* NTIFoundationOSCompat.m in Sources */,
 				72E3535414252E6F001B345A /* NSString-NTIJSON.m in Sources */,
-				72E3535914252E6F001B345A /* NSNumber-NTIJSON.m in Sources */,
 				72E3536214252E6F001B345A /* OUUnzipArchive-NTIExtensions.m in Sources */,
 				40D754AA14278E6900335BEF /* SocketIOPacket.m in Sources */,
 				40D754AE142791AF00335BEF /* SocketIOSocket.m in Sources */,
@@ -1401,6 +1374,7 @@
 				7293CB2A1451AA7D00CD64B8 /* NTIEditableFrame.m in Sources */,
 				403C28E714576E160012CBAB /* NSAttributedString-NTIExtensions.m in Sources */,
 				40AEBDD9145A5A6700028750 /* NTIEditableFrameScrollView.m in Sources */,
+				4006E76B149272E000D63524 /* NSObject-NTIJSON.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1410,8 +1384,6 @@
 			files = (
 				7293CB2B1451AAB700CD64B8 /* NTIEditableFrame.m in Sources */,
 				72D7D53D13E3321800652DAC /* NTIAbstractDownloader.m in Sources */,
-				72D7D54613E3321800652DAC /* NSArray-NTIJSON.m in Sources */,
-				72D7D54713E3321800652DAC /* NSDictionary-NTIJSON.m in Sources */,
 				72D7D54813E3321800652DAC /* NSArray-NTIExtensions.m in Sources */,
 				72D7D54913E3321800652DAC /* NSMutableArray-NTIExtensions.m in Sources */,
 				72D7D54C13E3321800652DAC /* NSString-NTIExtensions.m in Sources */,
@@ -1419,7 +1391,6 @@
 				72D7D54E13E3321800652DAC /* NSString-NTIJSON.m in Sources */,
 				72D7D55713E3321800652DAC /* OUUnzipArchive-NTIExtensions.m in Sources */,
 				40B6F3D914285B38007EDF1C /* WebSocket7Test.m in Sources */,
-				40B6F3FC14285D23007EDF1C /* NSString-JSONTest.m in Sources */,
 				403D0DD0143E3AE20049A755 /* NSAttributedString-HTMLReadingExtensionsTest.m in Sources */,
 				40E0461C143F5F260091CE7C /* NTIHTMLReaderTest.m in Sources */,
 				408FBF16143F65C00095DD84 /* NSAttributedString-HTMLReadingExtensions.m in Sources */,
@@ -1436,6 +1407,7 @@
 				40CAA785147B2993009EE078 /* NTIRTFDocument.m in Sources */,
 				40ECB2DA147B3C4B00AF4597 /* NTIHTMLWriter.m in Sources */,
 				40ECB2F5147B3D7000AF4597 /* NSAttributedString-HTMLWritingExtensions.m in Sources */,
+				4006E76C149272EC00D63524 /* NSObject-NTIJSON.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1532,6 +1504,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NTIFoundation/NTIFoundation-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					DEBUG_SOCKETIO,
 					"DEBUG=1",
 					"$(inherited)",
 				);

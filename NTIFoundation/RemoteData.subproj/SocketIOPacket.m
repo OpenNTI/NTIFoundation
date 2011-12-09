@@ -8,7 +8,6 @@
 
 #import <OmniFoundation/OmniFoundation.h>
 #import "SocketIOPacket.h"
-#import "NTIJSON.h"
 #import "NSString-NTIJSON.h"
 
 @implementation SocketIOPacket

@@ -9,11 +9,8 @@
 #ifndef NTIFoundation_NTIFoundation_h
 #define NTIFoundation_NTIFoundation_h
 
-#import "NSArray-NTIJSON.h"
-#import "NSDictionary-NTIJSON.h"
-#import "NTIJSON.h"
 #import "NSString-NTIJSON.h"
-#import "NSNumber-NTIJSON.h"
+#import "NSObject-NTIJSON.h"
 #import "NSArray-NTIExtensions.h"
 #import "NSMutableArray-NTIExtensions.h"
 #import "NSString-NTIExtensions.h"
