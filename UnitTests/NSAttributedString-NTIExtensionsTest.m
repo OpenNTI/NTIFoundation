@@ -58,6 +58,17 @@
 
 @implementation NSAttributedString_NTIExtensionsTest
 
+-(void)testAttributedStringFromNilObjects
+{
+	STAssertEqualObjects([NSAttributedString attributedStringFromObject: nil],
+						  [[NSAttributedString alloc] init], nil);
+	
+	STAssertEqualObjects([NSAttributedString attributedStringFromObjects: nil],
+						 [[NSAttributedString alloc] init], nil);
+	STAssertEqualObjects([NSAttributedString attributedStringFromObjects: [NSArray array]],
+						 [[NSAttributedString alloc] init], nil);
+}
+
 -(void)testAttributeStringFromBasicObject
 {
 	NSAttributedString* objectString = [NSAttributedString attributedStringFromObject: 

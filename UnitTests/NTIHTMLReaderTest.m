@@ -14,6 +14,18 @@ CGColorRef NTIHTMLReaderParseCreateColor(NSString* color);
 
 @implementation NTIHTMLReaderTest
 
+-(void)testCSSString
+{
+	OQColor* blackColor = [OQColor blackColor];
+	STAssertEqualObjects([blackColor cssString], @"rgba(0,0,0,1.0)", nil);
+	
+	OQColor* whiteColor = [OQColor whiteColor];
+	STAssertEqualObjects([whiteColor cssString], @"rgba(255,255,255,1.0)", nil);
+	
+	OQColor* color = [OQColor colorWithRed: .2 green: .5 blue: .7 alpha: .9];
+	STAssertEqualObjects([color cssString], @"rgba(51,128,178,0.9)", nil);
+}
+
 -(void)testColorParsing
 {
 	NSString* blackColor = @"black";
