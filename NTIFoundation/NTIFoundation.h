@@ -32,5 +32,6 @@
 #import "OQColor-NTIExtensions.h"
 #import "NTIEditableFrame.h"
 #import "NTIEditableFrameScrollView.h"
+#import "NSURL-NTIFileSystemExtensions.h"
 
 #endif

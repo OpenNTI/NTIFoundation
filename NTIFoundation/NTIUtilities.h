@@ -1,6 +1,6 @@
 //Miscelaneous utility functions and macros
 
-
+#include <sys/xattr.h>
 
 #ifndef __has_feature      // Optional.
 #define __has_feature(x) 0 // Compatibility with non-clang compilers.
