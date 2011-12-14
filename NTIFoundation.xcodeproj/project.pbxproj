@@ -27,6 +27,7 @@
 		4029275314986A9800E4720A /* NSMutableArray-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4029275214986A9800E4720A /* NSMutableArray-NTIExtensionsTest.m */; };
 		4029275614991DC400E4720A /* NSURL-NTIFileSystemExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4029275514991DC400E4720A /* NSURL-NTIFileSystemExtensions.m */; };
 		4029275714991E6900E4720A /* NSURL-NTIFileSystemExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4029275414991DC400E4720A /* NSURL-NTIFileSystemExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4029275B14994F0E00E4720A /* NSURL-NTIFileSystemExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4029275514991DC400E4720A /* NSURL-NTIFileSystemExtensions.m */; };
 		403C28E614576E160012CBAB /* NSAttributedString-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 403C28E414576E160012CBAB /* NSAttributedString-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		403C28E714576E160012CBAB /* NSAttributedString-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C28E514576E160012CBAB /* NSAttributedString-NTIExtensions.m */; };
 		403C290914577A340012CBAB /* NSAttributedString-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C290614577A260012CBAB /* NSAttributedString-NTIExtensionsTest.m */; };
@@ -1392,6 +1393,7 @@
 				403C28E714576E160012CBAB /* NSAttributedString-NTIExtensions.m in Sources */,
 				40AEBDD9145A5A6700028750 /* NTIEditableFrameScrollView.m in Sources */,
 				4006E76B149272E000D63524 /* NSObject-NTIJSON.m in Sources */,
+				4029275B14994F0E00E4720A /* NSURL-NTIFileSystemExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

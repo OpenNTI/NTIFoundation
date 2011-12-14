@@ -12,7 +12,7 @@
 
 - (BOOL)addSkipBackupAttributeToItem
 {
-    const char* filePath = [[URL path] fileSystemRepresentation];
+    const char* filePath = [[self path] fileSystemRepresentation];
 	
     const char* attrName = "com.apple.MobileBackup";
     u_int8_t attrValue = 1;
