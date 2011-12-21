@@ -147,8 +147,6 @@ static NSString* stringForErrorAdvice(SocketIOErrorAdvice advice)
 				eventObj = [theData propertyList];
 			}
 			@catch( NSException* ex ) {
-				//While this would be ideal our hacked together
-				//json support on IOS4 does not support dictionaries.
 				eventObj = [theData jsonObjectValue];
 				parsedAs = @"json";
 			}
