@@ -220,7 +220,7 @@
 {
 	//We got a response if it was from connecting we need to start our timer.
 	NSData* dataBody = [downloader data];
-
+	self->downloader = nil;
 	
 	//We only poll if we are open.  If we are closed now just have to throw away the data
 	if( self.status == SocketIOTransportStatusClosed ){
