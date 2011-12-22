@@ -86,18 +86,7 @@
 
 -(void)testParseEvent
 {	
-	SocketIOPacket* event = [self packetForString: @"5:::<?xml version=\"1.0\" encoding=\"UTF-8\"?>\
-							 <!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\
-							 <plist version=\"1.0\">\
-							 <dict>\
-							 <key>args</key>\
-							 <array>\
-							 <string>chris.utz@nextthought.com</string>\
-							 </array>\
-							 <key>name</key>\
-							 <string>chat_enteredRoom</string>\
-							 </dict>\
-							 </plist>"];
+	SocketIOPacket* event = [self packetForString: @"5:::{\"args\": [\"chris.utz@nextthought.com\"], \"name\": \"chat_enteredRoom\"}"];
 	
 	STAssertPacketType(event, SocketIOPacketTypeEvent);
 	STAssertEqualObjects(event.name, @"chat_enteredRoom", nil);
