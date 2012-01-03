@@ -42,6 +42,27 @@
 	}
 }
 
+//In debug builds, we accept ANY self-signed certificates. See comments below.
+//Later, we might make this more specific.
+#ifdef DEBUG
+- (BOOL)connection: (NSURLConnection*)connection 
+canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
+{
+	//By default (e.g., if we don't implement this), the system will
+	//use the keychain for client SSL certs or server SSL cert 
+	//authentication. To use self-signed certs, then, which won't be in the keypad,
+	//we have to take responsibility and say we will take them. 
+	if( OFISEQUAL( protectionSpace.authenticationMethod, NSURLAuthenticationMethodServerTrust ) ) {
+		return YES;
+	}
+	if( OFISEQUAL( protectionSpace.authenticationMethod, NSURLAuthenticationMethodClientCertificate ) ) {	
+		//We cannot do client certs
+		return NO;
+	}
+	//The system defaults to returning YES for everything else
+	return YES;
+}
+#endif
 
 -(void)connection: (NSURLConnection*)connection didReceiveAuthenticationChallenge: (NSURLAuthenticationChallenge*)challenge
 {
