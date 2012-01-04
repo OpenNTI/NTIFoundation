@@ -837,7 +837,7 @@ static NSData* hashUsingSHA1(NSData* data)
 
 
 //Make sure we have ssl turned on.  Similar to NTIAbstractDownloader we allow self signed certs in DEBUG.
--(NSDictionary*)sslProperties
+static NSDictionary* sslProperties()
 {
 	NSMutableDictionary *sslSettings = [[NSMutableDictionary alloc] init];
 	[sslSettings setObject:NSStreamSocketSecurityLevelNegotiatedSSL forKey:(NSString *)kCFStreamSSLLevel];
@@ -876,8 +876,9 @@ static NSData* hashUsingSHA1(NSData* data)
 	
 	//Setup ssl if necessary
 	if(useSSL){
-		[self->socketInputStream setProperty: [self sslProperties] forKey: (__bridge NSString*)kCFStreamPropertySSLSettings];
-		[self->socketOutputStream setProperty: [self sslProperties] forKey: (__bridge NSString*)kCFStreamPropertySSLSettings];
+		NSDictionary* sslProps = sslProperties();
+		[self->socketInputStream setProperty: sslProps forKey: (__bridge NSString*)kCFStreamPropertySSLSettings];
+		[self->socketOutputStream setProperty: sslProps forKey: (__bridge NSString*)kCFStreamPropertySSLSettings];
 	}
 
 	[self->socketInputStream setDelegate:self];
