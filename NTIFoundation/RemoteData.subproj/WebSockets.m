@@ -835,14 +835,51 @@ static NSData* hashUsingSHA1(NSData* data)
 	
 }
 
+
+//Make sure we have ssl turned on.  Similar to NTIAbstractDownloader we allow self signed certs in DEBUG.
+-(NSDictionary*)sslProperties
+{
+	NSMutableDictionary *sslSettings = [[NSMutableDictionary alloc] init];
+	[sslSettings setObject:NSStreamSocketSecurityLevelNegotiatedSSL forKey:(NSString *)kCFStreamSSLLevel];
+#ifdef DEBUG
+	//There is some confusion as to whether or not kCGStreamSSLAllowsAnyRoot is depricated or not.
+	//If it is, it appears we have to fall back to the more "global" kCFStreamSSLValidatesCertificateChain.
+	//It def. appears depricated in mac osx 10.6 but it doesn't appear depricated in IOS
+	[sslSettings setObject:(id)kCFBooleanTrue forKey:(NSString *)kCFStreamSSLAllowsAnyRoot];
+	//	[sslSettings setObject:(id)kCFBooleanFalse forKey:(NSString *)kCFStreamSSLValidatesCertificateChain];
+#endif
+	return sslSettings;
+}
+
 -(void)connect
 {
 	CFReadStreamRef readStream;
 	CFWriteStreamRef writeStream;
-	CFStreamCreatePairWithSocketToHost(NULL, (__bridge CFStringRef)[self->url host], [[self->url port] intValue], &readStream, &writeStream);
+	
+	BOOL useSSL = [[self->url scheme] isEqual: @"https"];
+	
+	NSString* host = [self->url host];
+	NSNumber* port = [self->url port];
+	if(!port){
+		if(useSSL){
+			port = [NSNumber numberWithInt: 443];
+		}
+		else{
+			port = [NSNumber numberWithInt: 80];
+		}
+	}
+	
+	CFStreamCreatePairWithSocketToHost(NULL, (__bridge CFStringRef)host, [port intValue], &readStream, &writeStream);
 	
 	self->socketInputStream = (__bridge NSInputStream *)readStream;
 	self->socketOutputStream = (__bridge NSOutputStream *)writeStream;
+	
+	//Setup ssl if necessary
+	if(useSSL){
+		[self->socketInputStream setProperty: [self sslProperties] forKey: (__bridge NSString*)kCFStreamPropertySSLSettings];
+		[self->socketOutputStream setProperty: [self sslProperties] forKey: (__bridge NSString*)kCFStreamPropertySSLSettings];
+	}
+
 	[self->socketInputStream setDelegate:self];
 	[self->socketOutputStream setDelegate:self];
 	[self->socketInputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
