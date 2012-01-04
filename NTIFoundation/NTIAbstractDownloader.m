@@ -9,6 +9,8 @@
 #import "NTIAbstractDownloader.h"
 #import "NSString-NTIExtensions.h"
 
+#define kHeaderLastModified @"LAST-MODIFIED"
+
 @implementation NTIAbstractDownloader
 @synthesize statusCode,expectedContentLength, lastModified;
 
@@ -33,7 +35,7 @@
 		//TODO: Lousy way to be Case insensitive
 		NSString* lastMod = nil;
 		for( NSString* key in allHeaders ) {
-			if( [[key uppercaseString] isEqual: @"LAST MODIFIED"] ) {
+			if( [[key uppercaseString] isEqual: kHeaderLastModified] ) {
 				lastMod = [allHeaders objectForKey: key];
 				break;
 			}
