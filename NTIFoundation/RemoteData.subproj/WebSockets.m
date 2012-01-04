@@ -778,8 +778,7 @@ static NSData* hashUsingSHA1(NSData* data)
 -(void)handleOutputStreamEvent: (NSStreamEvent)eventCode
 {
 	//The stream wants us to write something
-	if(eventCode == NSStreamEventHasSpaceAvailable)
-	{
+	if(eventCode == NSStreamEventHasSpaceAvailable) {
 		switch (self->status){
 			case WebSocketStatusNew:
 				[self initiateHandshake];

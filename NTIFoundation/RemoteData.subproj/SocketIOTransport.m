@@ -166,8 +166,8 @@
 	NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL: [self urlForTransport]];
 	[request setHTTPMethod: method];
 	
-	if(data){
-		[request setValue: @"Content-type" forHTTPHeaderField: @"text/plain;charset=UTF-8"];
+	if( data ) {
+		[request setValue: @"text/plain;charset=UTF-8" forHTTPHeaderField: @"Content-Type"];
 		[request setHTTPBody: data];
 	}
 	
