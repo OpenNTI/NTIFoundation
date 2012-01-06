@@ -438,6 +438,13 @@ didStartElement: (NSString*)elementName
 								  newFontDescriptorWithBold: YES] );
 		PUSH( coreAttrs );
 	}
+	else if( OFISEQUAL( @"u", elementName ) ) {
+		//push underline
+		NSMutableDictionary* coreAttrs = [self mutableDictionaryWithCurrentStyle];
+		[coreAttrs setUnsignedIntValue: kCTUnderlineStyleSingle
+								forKey: (id)kCTUnderlineStyleAttributeName];
+		PUSH( coreAttrs );
+	}
 	else if( [@"tt" isEqual: elementName] || [@"code" isEqual: elementName] ) {
 		//push type writer font	
 		NSMutableDictionary* coreAttrs = [self mutableDictionaryWithCurrentStyle];
@@ -477,6 +484,7 @@ qualifiedName: (NSString*)qName
 	POPIF(@"i")
 	POPIF(@"em")
 	POPIF(@"b")
+	POPIF(@"u")
 	POPIF(@"strong")	
 	POPIF(@"tt")	
 	POPIF(@"code")		
