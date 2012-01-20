@@ -1,0 +1,32 @@
+//
+// Prefix header for all source files of the 'NTINavigationExample' target in the 'NTINavigationExample' project
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_3_0
+#warning "This project uses features only available in iOS SDK 3.0 and later."
+#endif
+
+#ifdef __OBJC__
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
+
+
+#if __has_feature(objc_arc)
+#undef __strong
+#define __strong
+#define autorelease copy
+#endif
+
+#import <OmniBase/OmniBase.h>
+#import <OmniFoundation/OmniFoundation.h>
+
+#if __has_feature(objc_arc)
+#undef __strong
+#define __strong __attribute__((objc_ownership(strong)))
+#undef autorelease
+#endif
+
+#endif

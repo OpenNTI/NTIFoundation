@@ -43,6 +43,19 @@
 		40475AEB142A4940003323A9 /* SendRecieveQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 40475AE9142A493F003323A9 /* SendRecieveQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40475AEC142A4940003323A9 /* SendRecieveQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 40475AEA142A4940003323A9 /* SendRecieveQueue.m */; };
 		4053898C14B3FB8800B5FB46 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4053898B14B3FB8700B5FB46 /* CFNetwork.framework */; };
+		40572C2B14C88D8E0032D2DB /* NTIAppNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 40572C2914C88D8E0032D2DB /* NTIAppNavigationController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		40572C2C14C88D8E0032D2DB /* NTIAppNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40572C2A14C88D8E0032D2DB /* NTIAppNavigationController.m */; };
+		40572C5B14C894940032D2DB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408FBF0A143F63A90095DD84 /* UIKit.framework */; };
+		40572C5C14C894940032D2DB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72CBA96B1385CF1F00E3D28D /* Foundation.framework */; };
+		40572C5D14C894940032D2DB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408FBF08143F636F0095DD84 /* CoreGraphics.framework */; };
+		40572C6314C894940032D2DB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 40572C6114C894940032D2DB /* InfoPlist.strings */; };
+		4076F88E14C8A132004C6301 /* NTIAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 40572C6814C894940032D2DB /* NTIAppDelegate.m */; };
+		4076F88F14C8A151004C6301 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 40572C6414C894940032D2DB /* main.m */; };
+		4076F98514C8AFF3004C6301 /* NTISampleApplicationLayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4076F98314C8AFF3004C6301 /* NTISampleApplicationLayerViewController.m */; };
+		4076F98614C8AFF3004C6301 /* NTISampleApplicationLayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4076F98414C8AFF3004C6301 /* NTISampleApplicationLayerViewController.xib */; };
+		4076F98F14C8BC45004C6301 /* NTISampleTransientLayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4076F98D14C8BC45004C6301 /* NTISampleTransientLayerViewController.m */; };
+		4076F99014C8BC45004C6301 /* NTISampleTransientLayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4076F98E14C8BC45004C6301 /* NTISampleTransientLayerViewController.xib */; };
+		4076F99114C8FAD1004C6301 /* NTIAppNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40572C2A14C88D8E0032D2DB /* NTIAppNavigationController.m */; };
 		4080B641148692C500A8899D /* libprofile_rt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4080B640148692C500A8899D /* libprofile_rt.dylib */; };
 		408494B51427DF6C0038BD31 /* WebSockets.h in Headers */ = {isa = PBXBuildFile; fileRef = 408494B31427DF6C0038BD31 /* WebSockets.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		408494B61427DF6C0038BD31 /* WebSockets.m in Sources */ = {isa = PBXBuildFile; fileRef = 408494B41427DF6C0038BD31 /* WebSockets.m */; };
@@ -60,6 +73,25 @@
 		408FBF1A143F6E5F0095DD84 /* OQColor-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E04617143F50A60091CE7C /* OQColor-NTIExtensions.m */; };
 		40AEBDD8145A5A6700028750 /* NTIEditableFrameScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 40AEBDD6145A5A6700028750 /* NTIEditableFrameScrollView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40AEBDD9145A5A6700028750 /* NTIEditableFrameScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40AEBDD7145A5A6700028750 /* NTIEditableFrameScrollView.m */; };
+		40B5B49414C896CC009D5810 /* libNTIFoundation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 72C0D196142529E800D526D8 /* libNTIFoundation.a */; };
+		40B5B4A914C89839009D5810 /* libOmniAppKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D3612813DB6B2B00257C73 /* libOmniAppKit.a */; };
+		40B5B4AA14C89839009D5810 /* libOmniBase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D3613413DB6B2B00257C73 /* libOmniBase.a */; };
+		40B5B4AB14C89839009D5810 /* libOmniFileStore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D3613D13DB6B2B00257C73 /* libOmniFileStore.a */; };
+		40B5B4AC14C89839009D5810 /* libOmniFoundation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D3614E13DB6B2B00257C73 /* libOmniFoundation.a */; };
+		40B5B4AD14C89839009D5810 /* libOmniQuartz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D3616713DB6B2B00257C73 /* libOmniQuartz.a */; };
+		40B5B4AE14C89839009D5810 /* libOmniUI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D3616A13DB6B2B00257C73 /* libOmniUI.a */; };
+		40B5B4AF14C89839009D5810 /* libOmniUnzip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D3617013DB6B2B00257C73 /* libOmniUnzip.a */; };
+		40B5B4B014C89A73009D5810 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408FBF06143F62D80095DD84 /* CoreText.framework */; };
+		40B5B4B214C89A9C009D5810 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40B5B4B114C89A9C009D5810 /* CoreImage.framework */; };
+		40B5B4B314C89AFE009D5810 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408FBF12143F64430095DD84 /* QuartzCore.framework */; };
+		40B5B4B414C89B1F009D5810 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408FBF0C143F63B50095DD84 /* SystemConfiguration.framework */; };
+		40B5B4B514C89B25009D5810 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7248F9DE13BFB504009E784A /* MobileCoreServices.framework */; };
+		40B5B4B614C89B3E009D5810 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408FBF18143F66A40095DD84 /* ImageIO.framework */; };
+		40B5B4B714C89B59009D5810 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D7D43E13E32F0100652DAC /* libxml2.dylib */; };
+		40B5B4B814C89B5E009D5810 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7248F9DB13BFB4A9009E784A /* Security.framework */; };
+		40B5B4B914C89B7E009D5810 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D7D43A13E32E9500652DAC /* libz.dylib */; };
+		40B5B4BA14C89B85009D5810 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408FBF14143F64620095DD84 /* MessageUI.framework */; };
+		40B5B4BB14C89B9D009D5810 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4053898B14B3FB8700B5FB46 /* CFNetwork.framework */; };
 		40B6F3BA14285AF4007EDF1C /* WebSocket7Test.h in Headers */ = {isa = PBXBuildFile; fileRef = 40B6F3B814285AF4007EDF1C /* WebSocket7Test.h */; };
 		40B6F3D914285B38007EDF1C /* WebSocket7Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 40B6F3B914285AF4007EDF1C /* WebSocket7Test.m */; };
 		40C0E1031443AF9C00142406 /* SocketIOPacketTest.h in Headers */ = {isa = PBXBuildFile; fileRef = 40C0E1011443AF9C00142406 /* SocketIOPacketTest.h */; };
@@ -133,6 +165,69 @@
 			proxyType = 1;
 			remoteGlobalIDString = 72C0D195142529E800D526D8;
 			remoteInfo = NTIFoundation;
+		};
+		40B5B49714C89701009D5810 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72CBA95C1385CF1F00E3D28D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 72C0D195142529E800D526D8;
+			remoteInfo = NTIFoundation;
+		};
+		40B5B49914C89701009D5810 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72D3610713DB6B2A00257C73 /* OmniUI.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC07D0554694100DB518D;
+			remoteInfo = OmniUITouch;
+		};
+		40B5B49B14C89701009D5810 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7271BBEC13B7DC6600241FEC /* FixStringsFile.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DD76F740486A8DE00D96B5E;
+			remoteInfo = FixStringsFile;
+		};
+		40B5B49D14C89701009D5810 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72D3610313DB6B2A00257C73 /* OmniFileStore.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 34D06C53125D202500CA3963;
+			remoteInfo = OmniFileStoreTouch;
+		};
+		40B5B49F14C89701009D5810 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72D3610813DB6B2A00257C73 /* OmniUnzip.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 34E20FC9119314D200ECA875;
+			remoteInfo = OmniUnzipTouch;
+		};
+		40B5B4A114C89701009D5810 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72D3610413DB6B2A00257C73 /* OmniFoundation.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 344D08B91190D47300264D89;
+			remoteInfo = OmniFoundationTouch;
+		};
+		40B5B4A314C89701009D5810 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72D3610113DB6B2A00257C73 /* OmniAppKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 3434791411923B54007D0CE5;
+			remoteInfo = OmniAppKitTouch;
+		};
+		40B5B4A514C89701009D5810 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72D3610213DB6B2A00257C73 /* OmniBase.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 342163B111907BF600C06E45;
+			remoteInfo = OmniBaseTouch;
+		};
+		40B5B4A714C89701009D5810 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72D3610613DB6B2A00257C73 /* OmniQuartz.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 345613D31193197700E7D187;
+			remoteInfo = OmniQuartzTouch;
 		};
 		40E65067148D250A00276173 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -418,6 +513,21 @@
 		40475AE9142A493F003323A9 /* SendRecieveQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendRecieveQueue.h; sourceTree = "<group>"; };
 		40475AEA142A4940003323A9 /* SendRecieveQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendRecieveQueue.m; sourceTree = "<group>"; };
 		4053898B14B3FB8700B5FB46 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		40572C2914C88D8E0032D2DB /* NTIAppNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIAppNavigationController.h; sourceTree = "<group>"; };
+		40572C2A14C88D8E0032D2DB /* NTIAppNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIAppNavigationController.m; sourceTree = "<group>"; };
+		40572C5914C894940032D2DB /* NTINavigationExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NTINavigationExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		40572C6014C894940032D2DB /* NTINavigationExample-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NTINavigationExample-Info.plist"; sourceTree = "<group>"; };
+		40572C6214C894940032D2DB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		40572C6414C894940032D2DB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = NTINavigationExample/main.m; sourceTree = SOURCE_ROOT; };
+		40572C6614C894940032D2DB /* NTINavigationExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NTINavigationExample-Prefix.pch"; sourceTree = "<group>"; };
+		40572C6714C894940032D2DB /* NTIAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NTIAppDelegate.h; sourceTree = "<group>"; };
+		40572C6814C894940032D2DB /* NTIAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = NTIAppDelegate.m; path = NTINavigationExample/NTIAppDelegate.m; sourceTree = SOURCE_ROOT; };
+		4076F98214C8AFF3004C6301 /* NTISampleApplicationLayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTISampleApplicationLayerViewController.h; sourceTree = "<group>"; };
+		4076F98314C8AFF3004C6301 /* NTISampleApplicationLayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTISampleApplicationLayerViewController.m; sourceTree = "<group>"; };
+		4076F98414C8AFF3004C6301 /* NTISampleApplicationLayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NTISampleApplicationLayerViewController.xib; sourceTree = "<group>"; };
+		4076F98C14C8BC45004C6301 /* NTISampleTransientLayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTISampleTransientLayerViewController.h; sourceTree = "<group>"; };
+		4076F98D14C8BC45004C6301 /* NTISampleTransientLayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTISampleTransientLayerViewController.m; sourceTree = "<group>"; };
+		4076F98E14C8BC45004C6301 /* NTISampleTransientLayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NTISampleTransientLayerViewController.xib; sourceTree = "<group>"; };
 		4080B640148692C500A8899D /* libprofile_rt.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libprofile_rt.dylib; path = usr/lib/libprofile_rt.dylib; sourceTree = DEVELOPER_DIR; };
 		408494B31427DF6C0038BD31 /* WebSockets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSockets.h; sourceTree = "<group>"; };
 		408494B41427DF6C0038BD31 /* WebSockets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSockets.m; sourceTree = "<group>"; };
@@ -432,6 +542,8 @@
 		408FBF18143F66A40095DD84 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		40AEBDD6145A5A6700028750 /* NTIEditableFrameScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIEditableFrameScrollView.h; sourceTree = "<group>"; };
 		40AEBDD7145A5A6700028750 /* NTIEditableFrameScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIEditableFrameScrollView.m; sourceTree = "<group>"; };
+		40B5B49514C896CC009D5810 /* libNTIUserDataModel.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libNTIUserDataModel.a; path = "../../../Library/Developer/Xcode/DerivedData/NTIWorkspace-fdtwmhzrtxvlxtdrcxuhoowljuey/Build/Products/Debug-iphoneos/libNTIUserDataModel.a"; sourceTree = "<group>"; };
+		40B5B4B114C89A9C009D5810 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		40B6F3B814285AF4007EDF1C /* WebSocket7Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSocket7Test.h; sourceTree = "<group>"; };
 		40B6F3B914285AF4007EDF1C /* WebSocket7Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSocket7Test.m; sourceTree = "<group>"; };
 		40C0E1011443AF9C00142406 /* SocketIOPacketTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketIOPacketTest.h; sourceTree = "<group>"; };
@@ -539,6 +651,35 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		40572C5614C894940032D2DB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40B5B4BB14C89B9D009D5810 /* CFNetwork.framework in Frameworks */,
+				40B5B4BA14C89B85009D5810 /* MessageUI.framework in Frameworks */,
+				40B5B4B914C89B7E009D5810 /* libz.dylib in Frameworks */,
+				40B5B4B814C89B5E009D5810 /* Security.framework in Frameworks */,
+				40B5B4B714C89B59009D5810 /* libxml2.dylib in Frameworks */,
+				40B5B4B614C89B3E009D5810 /* ImageIO.framework in Frameworks */,
+				40B5B4B514C89B25009D5810 /* MobileCoreServices.framework in Frameworks */,
+				40B5B4B414C89B1F009D5810 /* SystemConfiguration.framework in Frameworks */,
+				40B5B4B314C89AFE009D5810 /* QuartzCore.framework in Frameworks */,
+				40B5B4A914C89839009D5810 /* libOmniAppKit.a in Frameworks */,
+				40B5B4AA14C89839009D5810 /* libOmniBase.a in Frameworks */,
+				40B5B4AB14C89839009D5810 /* libOmniFileStore.a in Frameworks */,
+				40B5B4AC14C89839009D5810 /* libOmniFoundation.a in Frameworks */,
+				40B5B4AD14C89839009D5810 /* libOmniQuartz.a in Frameworks */,
+				40B5B4AE14C89839009D5810 /* libOmniUI.a in Frameworks */,
+				40B5B4AF14C89839009D5810 /* libOmniUnzip.a in Frameworks */,
+				40B5B49414C896CC009D5810 /* libNTIFoundation.a in Frameworks */,
+				40572C5D14C894940032D2DB /* CoreGraphics.framework in Frameworks */,
+				40B5B4B214C89A9C009D5810 /* CoreImage.framework in Frameworks */,
+				40572C5B14C894940032D2DB /* UIKit.framework in Frameworks */,
+				40572C5C14C894940032D2DB /* Foundation.framework in Frameworks */,
+				40B5B4B014C89A73009D5810 /* CoreText.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		72C0D193142529E800D526D8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -601,6 +742,42 @@
 			path = RTFEditing.subproj;
 			sourceTree = "<group>";
 		};
+		40572C2614C88CD80032D2DB /* NTIAppNavigationController */ = {
+			isa = PBXGroup;
+			children = (
+				40572C2914C88D8E0032D2DB /* NTIAppNavigationController.h */,
+				40572C2A14C88D8E0032D2DB /* NTIAppNavigationController.m */,
+			);
+			path = NTIAppNavigationController;
+			sourceTree = "<group>";
+		};
+		40572C5E14C894940032D2DB /* NTINavigationExample */ = {
+			isa = PBXGroup;
+			children = (
+				40572C6714C894940032D2DB /* NTIAppDelegate.h */,
+				40572C6814C894940032D2DB /* NTIAppDelegate.m */,
+				4076F98214C8AFF3004C6301 /* NTISampleApplicationLayerViewController.h */,
+				4076F98314C8AFF3004C6301 /* NTISampleApplicationLayerViewController.m */,
+				4076F98414C8AFF3004C6301 /* NTISampleApplicationLayerViewController.xib */,
+				40572C5F14C894940032D2DB /* Supporting Files */,
+				4076F98C14C8BC45004C6301 /* NTISampleTransientLayerViewController.h */,
+				4076F98D14C8BC45004C6301 /* NTISampleTransientLayerViewController.m */,
+				4076F98E14C8BC45004C6301 /* NTISampleTransientLayerViewController.xib */,
+			);
+			path = NTINavigationExample;
+			sourceTree = SOURCE_ROOT;
+		};
+		40572C5F14C894940032D2DB /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				40572C6014C894940032D2DB /* NTINavigationExample-Info.plist */,
+				40572C6114C894940032D2DB /* InfoPlist.strings */,
+				40572C6414C894940032D2DB /* main.m */,
+				40572C6614C894940032D2DB /* NTINavigationExample-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		408494B21427DF510038BD31 /* Web Sockets */ = {
 			isa = PBXGroup;
 			children = (
@@ -639,9 +816,12 @@
 		72CBA95A1385CF1F00E3D28D = {
 			isa = PBXGroup;
 			children = (
+				40B5B4B114C89A9C009D5810 /* CoreImage.framework */,
+				40B5B49514C896CC009D5810 /* libNTIUserDataModel.a */,
 				72D360A113DB5DFF00257C73 /* Configurations */,
 				72CBA96F1385CF1F00E3D28D /* NTIFoundation */,
 				72D8185D13955D8C00473994 /* UnitTests */,
+				40572C5E14C894940032D2DB /* NTINavigationExample */,
 				72CBA9681385CF1F00E3D28D /* Frameworks */,
 				72CBA9661385CF1F00E3D28D /* Products */,
 			);
@@ -652,6 +832,7 @@
 			children = (
 				72D8185913955D8C00473994 /* NTIFoundationLogicTests.octest */,
 				72C0D196142529E800D526D8 /* libNTIFoundation.a */,
+				40572C5914C894940032D2DB /* NTINavigationExample.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -686,6 +867,7 @@
 		72CBA96F1385CF1F00E3D28D /* NTIFoundation */ = {
 			isa = PBXGroup;
 			children = (
+				40572C2614C88CD80032D2DB /* NTIAppNavigationController */,
 				403D0D9E143E18B80049A755 /* RTFEditing */,
 				72E353B714253305001B345A /* JSON */,
 				72E353B4142532B9001B345A /* FoundationExtensions */,
@@ -987,12 +1169,40 @@
 				403C28E614576E160012CBAB /* NSAttributedString-NTIExtensions.h in Headers */,
 				40AEBDD8145A5A6700028750 /* NTIEditableFrameScrollView.h in Headers */,
 				4029275714991E6900E4720A /* NSURL-NTIFileSystemExtensions.h in Headers */,
+				40572C2B14C88D8E0032D2DB /* NTIAppNavigationController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		40572C5814C894940032D2DB /* NTINavigationExample2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 40572C6A14C894940032D2DB /* Build configuration list for PBXNativeTarget "NTINavigationExample2" */;
+			buildPhases = (
+				40572C5514C894940032D2DB /* Sources */,
+				4076F98B14C8B928004C6301 /* ShellScript */,
+				40572C5614C894940032D2DB /* Frameworks */,
+				40572C5714C894940032D2DB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				40B5B49C14C89701009D5810 /* PBXTargetDependency */,
+				40B5B4A614C89701009D5810 /* PBXTargetDependency */,
+				40B5B4A214C89701009D5810 /* PBXTargetDependency */,
+				40B5B4A414C89701009D5810 /* PBXTargetDependency */,
+				40B5B4A814C89701009D5810 /* PBXTargetDependency */,
+				40B5B4A014C89701009D5810 /* PBXTargetDependency */,
+				40B5B49E14C89701009D5810 /* PBXTargetDependency */,
+				40B5B49A14C89701009D5810 /* PBXTargetDependency */,
+				40B5B49814C89701009D5810 /* PBXTargetDependency */,
+			);
+			name = NTINavigationExample2;
+			productName = NTINavigationExample;
+			productReference = 40572C5914C894940032D2DB /* NTINavigationExample.app */;
+			productType = "com.apple.product-type.application";
+		};
 		72C0D195142529E800D526D8 /* NTIFoundation */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 72C0D19E142529E800D526D8 /* Build configuration list for PBXNativeTarget "NTIFoundation" */;
@@ -1099,6 +1309,7 @@
 				72C0D195142529E800D526D8 /* NTIFoundation */,
 				72D8185813955D8C00473994 /* NTIFoundationLogicTests */,
 				7216D72A13CBAE6800509BDC /* GenerateDate */,
+				40572C5814C894940032D2DB /* NTINavigationExample2 */,
 			);
 		};
 /* End PBXProject section */
@@ -1317,6 +1528,16 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
+		40572C5714C894940032D2DB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40572C6314C894940032D2DB /* InfoPlist.strings in Resources */,
+				4076F98614C8AFF3004C6301 /* NTISampleApplicationLayerViewController.xib in Resources */,
+				4076F99014C8BC45004C6301 /* NTISampleTransientLayerViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		72D8185613955D8C00473994 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1328,6 +1549,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		4076F98B14C8B928004C6301 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = ../OmniGroup/Scripts/CopyLibraryResources;
+		};
 		7216D72E13CBAE7100509BDC /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1371,6 +1605,17 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		40572C5514C894940032D2DB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4076F88E14C8A132004C6301 /* NTIAppDelegate.m in Sources */,
+				4076F88F14C8A151004C6301 /* main.m in Sources */,
+				4076F98514C8AFF3004C6301 /* NTISampleApplicationLayerViewController.m in Sources */,
+				4076F98F14C8BC45004C6301 /* NTISampleTransientLayerViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		72C0D192142529E800D526D8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1398,6 +1643,7 @@
 				40AEBDD9145A5A6700028750 /* NTIEditableFrameScrollView.m in Sources */,
 				4006E76B149272E000D63524 /* NSObject-NTIJSON.m in Sources */,
 				4029275B14994F0E00E4720A /* NSURL-NTIFileSystemExtensions.m in Sources */,
+				40572C2C14C88D8E0032D2DB /* NTIAppNavigationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1434,6 +1680,7 @@
 				402927501498654200E4720A /* NSArray-NTIExtenstionsTest.m in Sources */,
 				4029275314986A9800E4720A /* NSMutableArray-NTIExtensionsTest.m in Sources */,
 				4029275614991DC400E4720A /* NSURL-NTIFileSystemExtensions.m in Sources */,
+				4076F99114C8FAD1004C6301 /* NTIAppNavigationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1444,6 +1691,51 @@
 			isa = PBXTargetDependency;
 			target = 72C0D195142529E800D526D8 /* NTIFoundation */;
 			targetProxy = 408FBF04143F627A0095DD84 /* PBXContainerItemProxy */;
+		};
+		40B5B49814C89701009D5810 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 72C0D195142529E800D526D8 /* NTIFoundation */;
+			targetProxy = 40B5B49714C89701009D5810 /* PBXContainerItemProxy */;
+		};
+		40B5B49A14C89701009D5810 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OmniUITouch;
+			targetProxy = 40B5B49914C89701009D5810 /* PBXContainerItemProxy */;
+		};
+		40B5B49C14C89701009D5810 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FixStringsFile;
+			targetProxy = 40B5B49B14C89701009D5810 /* PBXContainerItemProxy */;
+		};
+		40B5B49E14C89701009D5810 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OmniFileStoreTouch;
+			targetProxy = 40B5B49D14C89701009D5810 /* PBXContainerItemProxy */;
+		};
+		40B5B4A014C89701009D5810 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OmniUnzipTouch;
+			targetProxy = 40B5B49F14C89701009D5810 /* PBXContainerItemProxy */;
+		};
+		40B5B4A214C89701009D5810 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OmniFoundationTouch;
+			targetProxy = 40B5B4A114C89701009D5810 /* PBXContainerItemProxy */;
+		};
+		40B5B4A414C89701009D5810 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OmniAppKitTouch;
+			targetProxy = 40B5B4A314C89701009D5810 /* PBXContainerItemProxy */;
+		};
+		40B5B4A614C89701009D5810 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OmniBaseTouch;
+			targetProxy = 40B5B4A514C89701009D5810 /* PBXContainerItemProxy */;
+		};
+		40B5B4A814C89701009D5810 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OmniQuartzTouch;
+			targetProxy = 40B5B4A714C89701009D5810 /* PBXContainerItemProxy */;
 		};
 		40E65068148D250A00276173 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1483,6 +1775,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		40572C6114C894940032D2DB /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				40572C6214C894940032D2DB /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		72CBA9721385CF1F00E3D28D /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1502,6 +1802,52 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		40572C6B14C894940032D2DB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 72D360C613DB5DFF00257C73 /* Touch-Application-Debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "NTINavigationExample/NTINavigationExample-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				INFOPLIST_FILE = "NTINavigationExample/NTINavigationExample-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"${SRCROOT}",
+					"${BUILD_DIR}",
+					"$(inherited)",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		40572C6C14C894940032D2DB /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 72D360C713DB5DFF00257C73 /* Touch-Application-Release.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "NTINavigationExample/NTINavigationExample-Prefix.pch";
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				INFOPLIST_FILE = "NTINavigationExample/NTINavigationExample-Info.plist";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
 		7216D72C13CBAE6800509BDC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1577,7 +1923,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_PREFIX_HEADER = "NTIFoundation/NTIFoundation-Info.h";
+				INFOPLIST_PREFIX_HEADER = "NTINavigationExample/NTINavigationExample-Info.plist";
 				INFOPLIST_PREPROCESS = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = "-ObjC";
@@ -1681,6 +2027,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		40572C6A14C894940032D2DB /* Build configuration list for PBXNativeTarget "NTINavigationExample2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				40572C6B14C894940032D2DB /* Debug */,
+				40572C6C14C894940032D2DB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		7216D72B13CBAE6800509BDC /* Build configuration list for PBXAggregateTarget "GenerateDate" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
