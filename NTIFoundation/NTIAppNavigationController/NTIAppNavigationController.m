@@ -71,11 +71,11 @@
 -(void)configureDownButton
 {
 	//We can't allow nav items to have their own custom back buttons.  We need back to do something special
-	self->navController.topViewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
+	[[self->viewControllers lastObject] navigationItem].leftBarButtonItem = [[UIBarButtonItem alloc]
 																			  initWithTitle: @"Down"
 																			  style: UIBarButtonItemStyleBordered
 																			  target: self action: @selector(down:)];
-	self->navController.topViewController.navigationItem.leftBarButtonItem.enabled = [self->viewControllers count] > 1;
+	[[self->viewControllers lastObject] navigationItem].leftBarButtonItem.enabled = [self->viewControllers count] > 1;
 }
 
 -(void)pushLayer: (UIViewController<NTIAppNavigationLayer>*)layer animated: (BOOL)animated
@@ -196,7 +196,7 @@
 									 initWithFrame: self->navController.topViewController.view.bounds];
 		[self->navController.topViewController.view addSubview: mask];
 		[mask addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(maskTapped:)]];
-		[mask addGestureRecognizer: [[UISwipeGestureRecognizer alloc] initWithTarget: self action: @selector(swipedToRemoveTransient:)]];
+		//[mask addGestureRecognizer: [[UISwipeGestureRecognizer alloc] initWithTarget: self action: @selector(swipedToRemoveTransient:)]];
 	}
 	else{
 		//Ok we have another transient view that we want to hide. but we don;t
@@ -228,7 +228,7 @@
 											parentViewsFrame.size.height);
 	transLayer.view.frame = transientFrameStart;
 
-	[transLayer.view addGestureRecognizer: [[UISwipeGestureRecognizer alloc] initWithTarget: self action: @selector(swipedToRemoveTransient:)]];
+	//[transLayer.view addGestureRecognizer: [[UISwipeGestureRecognizer alloc] initWithTarget: self action: @selector(swipedToRemoveTransient:)]];
 	
 	[self->navController.topViewController.view addSubview: transLayer.view];
 	
@@ -291,7 +291,6 @@
 	else{
 		
 		//We want to take it out of the nav control un animated and put it in our view
-		UIView* toAnimateOut = [self->navController popViewControllerAnimated: NO].view;
 		UIView* viewToCover = self->navController.topViewController.view;
 		
 		//We start over the new view
@@ -301,6 +300,7 @@
 		CGRect endingRect = startingRect;
 		endingRect.origin.x = endingRect.origin.x + startingRect.size.width;
 		
+		UIView* toAnimateOut = [self->navController popViewControllerAnimated: NO].view;
 		toAnimateOut.frame = startingRect;
 		[self.view addSubview: toAnimateOut];
 		
