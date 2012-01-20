@@ -28,6 +28,7 @@
 		4029275614991DC400E4720A /* NSURL-NTIFileSystemExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4029275514991DC400E4720A /* NSURL-NTIFileSystemExtensions.m */; };
 		4029275714991E6900E4720A /* NSURL-NTIFileSystemExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4029275414991DC400E4720A /* NSURL-NTIFileSystemExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4029275B14994F0E00E4720A /* NSURL-NTIFileSystemExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4029275514991DC400E4720A /* NSURL-NTIFileSystemExtensions.m */; };
+		402D2F2514C92BDA00E051AF /* NTITransientNeverEndingNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 402D2F2414C92BDA00E051AF /* NTITransientNeverEndingNavController.m */; };
 		403C28E614576E160012CBAB /* NSAttributedString-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 403C28E414576E160012CBAB /* NSAttributedString-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		403C28E714576E160012CBAB /* NSAttributedString-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C28E514576E160012CBAB /* NSAttributedString-NTIExtensions.m */; };
 		403C290914577A340012CBAB /* NSAttributedString-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C290614577A260012CBAB /* NSAttributedString-NTIExtensionsTest.m */; };
@@ -498,6 +499,8 @@
 		4029275214986A9800E4720A /* NSMutableArray-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray-NTIExtensionsTest.m"; sourceTree = "<group>"; };
 		4029275414991DC400E4720A /* NSURL-NTIFileSystemExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL-NTIFileSystemExtensions.h"; sourceTree = "<group>"; };
 		4029275514991DC400E4720A /* NSURL-NTIFileSystemExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL-NTIFileSystemExtensions.m"; sourceTree = "<group>"; };
+		402D2F2314C92BDA00E051AF /* NTITransientNeverEndingNavController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTITransientNeverEndingNavController.h; sourceTree = "<group>"; };
+		402D2F2414C92BDA00E051AF /* NTITransientNeverEndingNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTITransientNeverEndingNavController.m; sourceTree = "<group>"; };
 		403C28E414576E160012CBAB /* NSAttributedString-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString-NTIExtensions.h"; sourceTree = "<group>"; };
 		403C28E514576E160012CBAB /* NSAttributedString-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString-NTIExtensions.m"; sourceTree = "<group>"; };
 		403C290514577A260012CBAB /* NSAttributedString-NTIExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString-NTIExtensionsTest.h"; sourceTree = "<group>"; };
@@ -763,6 +766,8 @@
 				4076F98C14C8BC45004C6301 /* NTISampleTransientLayerViewController.h */,
 				4076F98D14C8BC45004C6301 /* NTISampleTransientLayerViewController.m */,
 				4076F98E14C8BC45004C6301 /* NTISampleTransientLayerViewController.xib */,
+				402D2F2314C92BDA00E051AF /* NTITransientNeverEndingNavController.h */,
+				402D2F2414C92BDA00E051AF /* NTITransientNeverEndingNavController.m */,
 			);
 			path = NTINavigationExample;
 			sourceTree = SOURCE_ROOT;
@@ -1613,6 +1618,7 @@
 				4076F88F14C8A151004C6301 /* main.m in Sources */,
 				4076F98514C8AFF3004C6301 /* NTISampleApplicationLayerViewController.m in Sources */,
 				4076F98F14C8BC45004C6301 /* NTISampleTransientLayerViewController.m in Sources */,
+				402D2F2514C92BDA00E051AF /* NTITransientNeverEndingNavController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

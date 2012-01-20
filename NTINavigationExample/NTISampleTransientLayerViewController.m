@@ -8,6 +8,14 @@
 
 #import "NTISampleTransientLayerViewController.h"
 #import "NTISampleApplicationLayerViewController.h"
+#import "NTITransientNeverEndingNavController.h"
+
+@interface _TransientNavController : UINavigationController<NTIAppNavigationTransientLayer>
+@end
+	
+@implementation _TransientNavController
+
+@end
 
 @implementation NTISampleTransientLayerViewController
 @synthesize titleLabel;
@@ -64,7 +72,9 @@
 {
 	if (recognizer.state == UIGestureRecognizerStateEnded){
 		if(recognizer.view == self->popSelfButton){
-			[self.ntiAppNavigationController popLayerAnimated: YES];
+			NTITransientNeverEndingNavController* newController = [[NTITransientNeverEndingNavController alloc] initWithNibName: nil bundle: nil];
+			_TransientNavController* navController = [[_TransientNavController alloc] initWithRootViewController: newController];
+			[self.ntiAppNavigationController pushLayer: navController animated: YES];
 		}
 		else if(recognizer.view == self->pushAppLayerButton){
 			NTISampleApplicationLayerViewController* newController = [[NTISampleApplicationLayerViewController alloc] 

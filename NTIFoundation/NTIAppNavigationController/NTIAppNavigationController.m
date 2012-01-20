@@ -68,16 +68,6 @@
 	[self.view addSubview: self->navController.view];
 }
 
--(void)configureDownButton
-{
-	//We can't allow nav items to have their own custom back buttons.  We need back to do something special
-	[[self->viewControllers lastObject] navigationItem].leftBarButtonItem = [[UIBarButtonItem alloc]
-																			  initWithTitle: @"Down"
-																			  style: UIBarButtonItemStyleBordered
-																			  target: self action: @selector(down:)];
-	[[self->viewControllers lastObject] navigationItem].leftBarButtonItem.enabled = [self->viewControllers count] > 1;
-}
-
 -(void)pushLayer: (UIViewController<NTIAppNavigationLayer>*)layer animated: (BOOL)animated
 {	
 	if( [layer conformsToProtocol: @protocol(NTIAppNavigationApplicationLayer)] ){
@@ -86,10 +76,7 @@
 	else{
 		[self pushTransientLayer: (id)layer animated: animated];
 	}
-	
-	//Now reconfigure the down button
-	[self configureDownButton];
-	
+	self->navController.topViewController.navigationItem.leftBarButtonItem.enabled = [self->viewControllers count] > 1;
 }
 
 -(UIViewController<NTIAppNavigationLayer>*)popLayerAnimated: (BOOL)animated
@@ -98,7 +85,6 @@
 	if([self->viewControllers count] == 1){
 		return nil;
 	}
-	
 	
 	id popped = nil;
 	//Are we popping an app layer.  Only app layers are on the nav stack
@@ -111,8 +97,8 @@
 		popped = [self popTransientLayer: animated];
 	}
 	
-	//We've popped everything.  Now reconfigure the down button
-	[self configureDownButton];
+	//If we have more than one vc left enable the down button
+	self->navController.topViewController.navigationItem.leftBarButtonItem.enabled = [self->viewControllers count] > 1;
 	return popped;
 }
 
@@ -179,6 +165,13 @@
 				   animated: (BOOL)animated
 {
 	[self->viewControllers addObject: appLayer];
+	//Anything that wants to get pushed on our nav controller has to take our down button
+	appLayer.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
+													 initWithTitle: @"Down"
+												 style: UIBarButtonItemStyleBordered
+												 target: self action: @selector(down:)];
+	appLayer.navigationItem.leftBarButtonItem.enabled = [self->viewControllers count] > 1;
+	
 	[self pushNavController: appLayer animated: animated];
 }
 
