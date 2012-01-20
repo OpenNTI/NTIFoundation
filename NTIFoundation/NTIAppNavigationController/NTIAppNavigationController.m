@@ -17,11 +17,31 @@
 }
 @end
 
-#define kTransientLayerAnimationSpeed .4
+@interface _TransientLayerMask : UIView
+@end
+	
+@implementation _TransientLayerMask
+
+-(id)initWithFrame:(CGRect)frame
+{
+	self = [super initWithFrame: frame];
+	self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	self.alpha = .3;
+	self.backgroundColor = [UIColor blackColor];
+	return self;
+}
+
+@end
+
+#define kTransientLayerAnimationSpeed .25
 #define kTransientLayerSize 320
 
 @interface NTIAppNavigationController()
 -(void)popNavControllerAnimated: (BOOL)animated;
+-(UIViewController<NTIAppNavigationLayer>*)popApplicationLayer: (BOOL)animated;
+-(UIViewController<NTIAppNavigationLayer>*)popTransientLayer: (BOOL)animated;
+-(void)pushApplicationLayer: (UIViewController<NTIAppNavigationApplicationLayer>*)appLayer animated: (BOOL)animated;
+-(void)pushTransientLayer: (UIViewController<NTIAppNavigationTransientLayer>*)transLayer animated: (BOOL)animated;
 @end
 
 @implementation NTIAppNavigationController
@@ -58,49 +78,15 @@
 }
 
 -(void)pushLayer: (UIViewController<NTIAppNavigationLayer>*)layer animated: (BOOL)animated
-{
-	[self->viewControllers addObject: layer];
-	
+{	
 	if( [layer conformsToProtocol: @protocol(NTIAppNavigationApplicationLayer)] ){
-		[self->navController pushViewController: layer animated: animated];
+		[self pushApplicationLayer: (id)layer animated: animated];
 	}
 	else{
-		//We are a transient viewController
-		//OUr parent becomes the view controller that is on top of the nav controller (the top most application layer)
-		[self->navController.topViewController addChildViewController: layer];
-		//Add the layers view as a subview of the topViewControllersView.  Adjust the frame first
-		
-		layer.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin;
-		
-		//Setup the shadow
-		layer.view.layer.masksToBounds = NO;
-		layer.view.layer.cornerRadius = 3;
-		layer.view.layer.shadowRadius = 5;
-		layer.view.layer.shadowOpacity = 0.5;
-		
-		CGRect parentViewsFrame = self->navController.topViewController.view.frame;
-		
-		//We want to start off the right had side of the screen
-		CGRect transientFrameStart = CGRectMake(parentViewsFrame.origin.x + parentViewsFrame.size.width, 
-												0, 
-												kTransientLayerSize, 
-												parentViewsFrame.size.height);
-		layer.view.frame = transientFrameStart;
-		
-		//Add it as a subview
-		[self->navController.topViewController.view addSubview: layer.view];
-		
-		//Now animate it in
-		[UIView animateWithDuration: kTransientLayerAnimationSpeed 
-						 animations: ^{
-							 CGRect endFrame = transientFrameStart;
-							 endFrame.origin.x = endFrame.origin.x - kTransientLayerSize;
-							 layer.view.frame = endFrame;
-						 }
-						 completion: nil];
+		[self pushTransientLayer: (id)layer animated: animated];
 	}
 	
-	
+	//Now reconfigure the down button
 	[self configureDownButton];
 	
 }
@@ -111,28 +97,141 @@
 	if([self->viewControllers count] == 1){
 		return nil;
 	}
-	[self configureDownButton];
-	UIViewController<NTIAppNavigationLayer>* toPop = [self->viewControllers pop];
-	if( toPop == self->navController.topViewController ){
-		[self popNavControllerAnimated: animated];
+	
+	
+	id popped = nil;
+	//Are we popping an app layer.  Only app layers are on the nav stack
+	//if the controller to pop is the same as the top nav controller it is an 
+	//application
+	if( [self->viewControllers lastObject] == self->navController.topViewController){
+		popped = [self popApplicationLayer: animated];
 	}
 	else{
-		//Ok so this better be a transient view
-		//Animate it out and then remove it from the parent view
-		[UIView animateWithDuration: kTransientLayerAnimationSpeed 
-						 animations: ^{
-							 CGRect endFrame = toPop.view.frame;
-							 endFrame.origin.x = endFrame.origin.x + kTransientLayerSize;
-							 toPop.view.frame = endFrame;
-						 }
-						 completion: ^(BOOL completion){
-							 [toPop.view removeFromSuperview];
-							 [toPop removeFromParentViewController];
-						 }];
+		popped = [self popTransientLayer: animated];
 	}
 	
+	//We've popped everything.  Now reconfigure the down button
 	[self configureDownButton];
-	return toPop;
+	return popped;
+}
+
+-(UIViewController<NTIAppNavigationLayer>*)popApplicationLayer: (BOOL)animated
+{
+	id popped = [self->viewControllers pop];
+	[self popNavControllerAnimated: animated];
+	return popped;
+}
+
+-(UIViewController<NTIAppNavigationLayer>*)popTransientLayer: (BOOL)animated
+{
+	UIViewController* popped = [self->viewControllers pop];
+	
+	void (^completion)(BOOL) = ^(BOOL success){
+		[popped.view removeFromSuperview];
+		[popped removeFromParentViewController];
+		
+		//If there are no more transLayers remove the mask
+		if( [self->viewControllers lastObject] == self->navController.topViewController ){
+			//Need to clear the mask
+			for(UIView* subView in self->navController.topViewController.view.subviews){
+				if([subView isKindOfClass: [_TransientLayerMask class]]){
+					[subView removeFromSuperview];
+					break;
+				}
+			}
+		}
+	} ;
+	
+	//Do this at the beggining
+	if([self->viewControllers lastObject] != self->navController.topViewController){
+		//Need to show the trans
+		[[self->viewControllers lastObject] view].hidden = NO;
+	}
+	
+	if(!animated){
+		completion(YES);
+	}
+	else{
+		[UIView animateWithDuration: kTransientLayerAnimationSpeed 
+						 animations: ^{
+							 CGRect endFrame = popped.view.frame;
+							 endFrame.origin.x = endFrame.origin.x + kTransientLayerSize;
+							 popped.view.frame = endFrame;
+						 }
+						 completion: completion];
+	}
+	return (id)popped;
+
+}
+
+-(void)pushApplicationLayer: (UIViewController<NTIAppNavigationApplicationLayer>*)appLayer 
+				   animated: (BOOL)animated
+{
+	[self->viewControllers addObject: appLayer];
+	[self->navController pushViewController: (id)appLayer animated: animated];
+}
+
+-(void)pushTransientLayer: (UIViewController<NTIAppNavigationTransientLayer>*)transLayer 
+				 animated: (BOOL)animated
+{
+	//If this is the first transient we have pushed for this appLayer we need
+	//to mask it out.  It is the first transient if the viewController on top of our
+	//stack is the same as the nav controllers top vc.  If its not we are going to want to
+	//hide the other transient view
+	UIViewController* transToHide=nil;
+	if( [self->viewControllers lastObject] == self->navController.topViewController ){
+		//Ok we need to push the mask.  The mask is a subview of the applicationLayers view
+		_TransientLayerMask* mask = [[_TransientLayerMask alloc] 
+									 initWithFrame: self->navController.topViewController.view.bounds];
+		[self->navController.topViewController.view addSubview: mask];
+		[mask addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(maskTapped:)]];
+		[mask addGestureRecognizer: [[UISwipeGestureRecognizer alloc] initWithTarget: self action: @selector(swipedToRemoveTransient:)]];
+	}
+	else{
+		//Ok we have another transient view that we want to hide. but we don;t
+		//actually want to hide it until we have presented the new one.
+		transToHide = [self->viewControllers lastObject];
+	}
+	
+	
+	//We are a transient viewController
+	//OUr parent becomes the view controller that is on top of the nav controller (the top most application layer)
+	[self->navController.topViewController addChildViewController: transLayer];
+	[self->viewControllers addObject: transLayer];
+	//Add the layers view as a subview of the topViewControllersView.  Adjust the frame first
+	transLayer.view.backgroundColor = [UIColor whiteColor];
+	transLayer.view.alpha = 1;
+	transLayer.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin;
+	
+	//Setup the shadow
+	transLayer.view.layer.masksToBounds = NO;
+	transLayer.view.layer.cornerRadius = 3;
+	transLayer.view.layer.shadowRadius = 5;
+	transLayer.view.layer.shadowOpacity = 0.5;
+	
+	CGRect parentViewsFrame = self->navController.topViewController.view.frame;
+	//We want to start off the right had side of the screen
+	CGRect transientFrameStart = CGRectMake(parentViewsFrame.origin.x + parentViewsFrame.size.width, 
+											0, 
+											kTransientLayerSize, 
+											parentViewsFrame.size.height);
+	transLayer.view.frame = transientFrameStart;
+
+	[transLayer.view addGestureRecognizer: [[UISwipeGestureRecognizer alloc] initWithTarget: self action: @selector(swipedToRemoveTransient:)]];
+	
+	[self->navController.topViewController.view addSubview: transLayer.view];
+	
+	//Now animate it in
+	[UIView animateWithDuration: kTransientLayerAnimationSpeed 
+					 animations: ^{
+						 CGRect endFrame = transientFrameStart;
+						 endFrame.origin.x = endFrame.origin.x - kTransientLayerSize;
+						 transLayer.view.frame = endFrame;
+					 }
+					 completion: ^(BOOL success){
+						 transToHide.view.hidden = YES;
+					 }];
+
 }
 
 -(void)popNavControllerAnimated: (BOOL)animated
@@ -145,9 +244,23 @@
 	}
 }
 
+#pragma mark actions
+
 -(void)down: (id)_
 {
 	[self popLayerAnimated: YES];
+}
+
+-(void)maskTapped: (UIGestureRecognizer*)rec
+{
+	if(rec.state == UIGestureRecognizerStateEnded){
+		[self down: rec];
+	}
+}
+
+-(void)swipedToRemoveTransient: (UIGestureRecognizer*)rec
+{
+	[self down: rec];
 }
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation

@@ -515,7 +515,7 @@
 		4053898B14B3FB8700B5FB46 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		40572C2914C88D8E0032D2DB /* NTIAppNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIAppNavigationController.h; sourceTree = "<group>"; };
 		40572C2A14C88D8E0032D2DB /* NTIAppNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIAppNavigationController.m; sourceTree = "<group>"; };
-		40572C5914C894940032D2DB /* NTINavigationExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NTINavigationExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		40572C5914C894940032D2DB /* NTINavigationExample2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NTINavigationExample2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		40572C6014C894940032D2DB /* NTINavigationExample-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NTINavigationExample-Info.plist"; sourceTree = "<group>"; };
 		40572C6214C894940032D2DB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		40572C6414C894940032D2DB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = NTINavigationExample/main.m; sourceTree = SOURCE_ROOT; };
@@ -832,7 +832,7 @@
 			children = (
 				72D8185913955D8C00473994 /* NTIFoundationLogicTests.octest */,
 				72C0D196142529E800D526D8 /* libNTIFoundation.a */,
-				40572C5914C894940032D2DB /* NTINavigationExample.app */,
+				40572C5914C894940032D2DB /* NTINavigationExample2.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1200,7 +1200,7 @@
 			);
 			name = NTINavigationExample2;
 			productName = NTINavigationExample;
-			productReference = 40572C5914C894940032D2DB /* NTINavigationExample.app */;
+			productReference = 40572C5914C894940032D2DB /* NTINavigationExample2.app */;
 			productType = "com.apple.product-type.application";
 		};
 		72C0D195142529E800D526D8 /* NTIFoundation */ = {
