@@ -37,6 +37,7 @@
 #define kTransientLayerSize 320
 
 @interface NTIAppNavigationController()
+-(void)pushNavController:(UIViewController*)vc animated: (BOOL)animated;
 -(void)popNavControllerAnimated: (BOOL)animated;
 -(UIViewController<NTIAppNavigationLayer>*)popApplicationLayer: (BOOL)animated;
 -(UIViewController<NTIAppNavigationLayer>*)popTransientLayer: (BOOL)animated;
@@ -130,22 +131,32 @@
 		[popped.view removeFromSuperview];
 		[popped removeFromParentViewController];
 		
-		//If there are no more transLayers remove the mask
-		if( [self->viewControllers lastObject] == self->navController.topViewController ){
-			//Need to clear the mask
-			for(UIView* subView in self->navController.topViewController.view.subviews){
-				if([subView isKindOfClass: [_TransientLayerMask class]]){
-					[subView removeFromSuperview];
-					break;
-				}
-			}
-		}
+//		//If there are no more transLayers remove the mask
+//		if( [self->viewControllers lastObject] == self->navController.topViewController ){
+//			//Need to clear the mask
+//			for(UIView* subView in self->navController.topViewController.view.subviews){
+//				if([subView isKindOfClass: [_TransientLayerMask class]]){
+//					[subView removeFromSuperview];
+//					break;
+//				}
+//			}
+//		}
 	} ;
 	
 	//Do this at the beggining
 	if([self->viewControllers lastObject] != self->navController.topViewController){
 		//Need to show the trans
 		[[self->viewControllers lastObject] view].hidden = NO;
+	}
+	else{
+		//We may decide to do this when the animation completes.
+		//Need to clear the mask
+		for(UIView* subView in self->navController.topViewController.view.subviews){
+			if([subView isKindOfClass: [_TransientLayerMask class]]){
+				[subView removeFromSuperview];
+				break;
+			}
+		}
 	}
 	
 	if(!animated){
@@ -168,7 +179,7 @@
 				   animated: (BOOL)animated
 {
 	[self->viewControllers addObject: appLayer];
-	[self->navController pushViewController: (id)appLayer animated: animated];
+	[self pushNavController: appLayer animated: animated];
 }
 
 -(void)pushTransientLayer: (UIViewController<NTIAppNavigationTransientLayer>*)transLayer 
@@ -234,13 +245,75 @@
 
 }
 
+-(void)pushNavController:(UIViewController*)vc animated: (BOOL)animated
+{
+	if(!animated){
+		[self->navController pushViewController: vc animated: NO];
+	}
+	else{
+		//When pushing a nav controller we want it to appear to slide over and sit on 
+		//top of the current view. 
+		
+		//The current view being shown
+		UIView* viewToCover = self->navController.topViewController.view;
+		
+		//The ending rect we need to cover in window coordinate space
+		CGRect endInView = [viewToCover convertRect: viewToCover.frame toView: self.view];
+		
+		//Start position is the end position shifted right by the width
+		CGRect startInView = endInView;
+		startInView.origin.x = startInView.origin.x + startInView.size.width;
+		
+		//Set the frame of our view to push to the start positoin, add it to the window
+		
+		vc.view.frame = startInView;
+		[self.view addSubview: vc.view];
+		
+		//Animate the position change and on complete push it
+		[UIView animateWithDuration: kTransientLayerAnimationSpeed
+						 animations: ^(){
+							 vc.view.frame = endInView;
+						 } 
+						 completion: ^(BOOL success){
+							 //Remove it from the window and push it on the view controller
+							 [vc.view removeFromSuperview];
+							 [self->navController pushViewController: vc animated: NO];
+						 }];
+		
+	}
+}
+
 -(void)popNavControllerAnimated: (BOOL)animated
 {
 	if(!animated){
 		[self->navController popViewControllerAnimated: NO];
 	}
 	else{
-		[self->navController popViewControllerAnimated: YES];
+		
+		//We want to take it out of the nav control un animated and put it in our view
+		UIView* toAnimateOut = [self->navController popViewControllerAnimated: NO].view;
+		UIView* viewToCover = self->navController.topViewController.view;
+		
+		//We start over the new view
+		CGRect startingRect = [viewToCover convertRect: viewToCover.frame toView: self.view];
+		
+		//end position is the start position shifted right by the width
+		CGRect endingRect = startingRect;
+		endingRect.origin.x = endingRect.origin.x + startingRect.size.width;
+		
+		toAnimateOut.frame = startingRect;
+		[self.view addSubview: toAnimateOut];
+		
+		//Animate the position change and on complete push it
+		[UIView animateWithDuration: kTransientLayerAnimationSpeed
+						 animations: ^(){
+							 toAnimateOut.frame = endingRect;
+						 } 
+						 completion: ^(BOOL success){
+							 //Remove it from the window and push it on the view controller
+							 [toAnimateOut removeFromSuperview];
+						 }];
+
 	}
 }
 
