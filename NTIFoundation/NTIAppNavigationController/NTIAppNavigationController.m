@@ -42,13 +42,25 @@
 
 -(void)loadView
 {
-	[super loadView];
+	[super loadView]; //Default implemenation sets up a base UIView
+	self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 	[self.view addSubview: self->navController.view];
+}
+
+-(void)configureDownButton
+{
+	//We can't allow nav items to have their own custom back buttons.  We need back to do something special
+	self->navController.topViewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
+																			  initWithTitle: @"Down"
+																			  style: UIBarButtonItemStyleBordered
+																			  target: self action: @selector(down:)];
+	self->navController.topViewController.navigationItem.leftBarButtonItem.enabled = [self->viewControllers count] > 1;
 }
 
 -(void)pushLayer: (UIViewController<NTIAppNavigationLayer>*)layer animated: (BOOL)animated
 {
 	[self->viewControllers addObject: layer];
+	
 	if( [layer conformsToProtocol: @protocol(NTIAppNavigationApplicationLayer)] ){
 		[self->navController pushViewController: layer animated: animated];
 	}
@@ -65,7 +77,6 @@
 		layer.view.layer.cornerRadius = 3;
 		layer.view.layer.shadowRadius = 5;
 		layer.view.layer.shadowOpacity = 0.5;
-		layer.view.layer.shadowPath = [UIBezierPath bezierPathWithRect: layer.view.bounds].CGPath;
 		
 		CGRect parentViewsFrame = self->navController.topViewController.view.frame;
 		
@@ -89,6 +100,9 @@
 						 completion: nil];
 	}
 	
+	
+	[self configureDownButton];
+	
 }
 
 -(UIViewController<NTIAppNavigationLayer>*)popLayerAnimated: (BOOL)animated
@@ -97,6 +111,7 @@
 	if([self->viewControllers count] == 1){
 		return nil;
 	}
+	[self configureDownButton];
 	UIViewController<NTIAppNavigationLayer>* toPop = [self->viewControllers pop];
 	if( toPop == self->navController.topViewController ){
 		[self popNavControllerAnimated: animated];
@@ -115,6 +130,8 @@
 							 [toPop removeFromParentViewController];
 						 }];
 	}
+	
+	[self configureDownButton];
 	return toPop;
 }
 
@@ -125,23 +142,12 @@
 	}
 	else{
 		[self->navController popViewControllerAnimated: YES];
-		
-//		UIViewController* toPopVC = self->navController.topViewController;
-//		UIView* animatedOut = toPopVC.view;
-//		[UIView animateWithDuration: kTransientLayerAnimationSpeed 
-//						 animations: ^{
-//							 CGRect endFrame = animatedOut.frame;
-//							 endFrame.origin.x = endFrame.origin.x + animatedOut.frame.size.width;
-//							 animatedOut.frame = endFrame;
-//						 }
-//						 completion: ^(BOOL completion){
-//							 [self->navController popViewControllerAnimated:NO];
-//						 }];
-//		
-//		
-		
-
 	}
+}
+
+-(void)down: (id)_
+{
+	[self popLayerAnimated: YES];
 }
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
