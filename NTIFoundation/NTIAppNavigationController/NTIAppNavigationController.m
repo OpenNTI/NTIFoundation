@@ -13,7 +13,11 @@
 @implementation UIViewController(NTIAppNavigationControllerExtensions)
 -(NTIAppNavigationController*)ntiAppNavigationController
 {
-	return (id)[[[[UIApplication sharedApplication] delegate] window] rootViewController];
+	id rootViewController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+	if( [rootViewController respondsToSelector: @selector(appNavController)] ){
+		return objc_msgSend(rootViewController, @selector(appNavController));
+	}
+	return nil;
 }
 @end
 
