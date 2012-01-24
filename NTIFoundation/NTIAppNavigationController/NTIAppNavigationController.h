@@ -28,8 +28,12 @@
 	UINavigationController* navController;
 }
 
+@property (nonatomic, readonly) NSArray* layers;
+
 -(id)initWithRootLayer:(UIViewController<NTIAppNavigationApplicationLayer>*)rootViewController;
 -(void)pushLayer: (UIViewController<NTIAppNavigationLayer>*)layer animated: (BOOL)animated;
 -(UIViewController<NTIAppNavigationLayer>*)popLayerAnimated: (BOOL)animated;
+-(UIViewController<NTIAppNavigationLayer>*)topLayer;
+-(UIViewController<NTIAppNavigationApplicationLayer>*)topApplicationLayer;
 
 @end

@@ -315,6 +315,27 @@
 	}
 }
 
+-(NSArray*)layers
+{
+	return [self->viewControllers copy];
+}
+
+-(UIViewController<NTIAppNavigationLayer>*)topLayer
+{
+	return [self->viewControllers lastObjectOrNil];
+}
+
+-(UIViewController<NTIAppNavigationApplicationLayer>*)topApplicationLayer
+{
+	for(NSInteger i = [self->viewControllers count] - 1 ; i >= 0; i-- ){
+		id layer = [self->viewControllers objectAtIndex: i];
+		if( [ layer conformsToProtocol: @protocol(NTIAppNavigationApplicationLayer)] ){
+			return layer;
+		}
+	}
+	return nil;
+}
+
 #pragma mark actions
 
 -(void)down: (id)_
