@@ -261,6 +261,8 @@
 		//Set the frame of our view to push to the start positoin, add it to the window
 		
 		vc.view.frame = startInView;
+		vc.view.layer.shadowOpacity = .5;
+		vc.view.layer.shadowOffset = CGSizeMake(-5, 0);
 		[self.view addSubview: vc.view];
 		
 		//Animate the position change and on complete push it
@@ -297,6 +299,8 @@
 		UIViewController* leaving = [self->navController popViewControllerAnimated: NO];
 		UIView* toAnimateOut = leaving.view;
 		[toAnimateOut removeFromSuperview];
+		toAnimateOut.layer.shadowOpacity = .5;
+		toAnimateOut.layer.shadowOffset = CGSizeMake(-5, 0);
 		[self addChildViewController: leaving];
 		[self.view addSubview: toAnimateOut];
 		
