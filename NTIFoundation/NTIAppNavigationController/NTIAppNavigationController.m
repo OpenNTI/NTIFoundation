@@ -165,6 +165,7 @@
 				   animated: (BOOL)animated
 {
 	[self->viewControllers addObject: appLayer];
+	[self addChildViewController: appLayer];
 	//Anything that wants to get pushed on our nav controller has to take our down button
 	appLayer.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
 													 initWithTitle: @"Down"
@@ -293,10 +294,14 @@
 		CGRect endingRect = startingRect;
 		endingRect.origin.x = endingRect.origin.x + startingRect.size.width;
 		
-		UIView* toAnimateOut = [self->navController popViewControllerAnimated: NO].view;
-		toAnimateOut.frame = startingRect;
+		UIViewController* leaving = [self->navController popViewControllerAnimated: NO];
+		UIView* toAnimateOut = leaving.view;
+		[toAnimateOut removeFromSuperview];
+		[self addChildViewController: leaving];
 		[self.view addSubview: toAnimateOut];
 		
+		toAnimateOut.frame = startingRect;
+				
 		//Animate the position change and on complete push it
 		[UIView animateWithDuration: kTransientLayerAnimationSpeed
 						 animations: ^(){
