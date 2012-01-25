@@ -14,6 +14,10 @@
 @end
 
 @protocol NTIAppNavigationLayer <NSObject>
+
+@optional
+-(NSString*)textForAppNavigationControllerDownButton: (NTIAppNavigationController*)controller;
+-(NSString*)titleForAppNavigationController: (NTIAppNavigationController*)controller;
 @end
 
 @protocol NTIAppNavigationApplicationLayer <NTIAppNavigationLayer>
@@ -22,10 +26,12 @@
 @protocol NTIAppNavigationTransientLayer <NTIAppNavigationLayer>
 @end
 
+@class NTIAppNavigationToolbar;
 @interface NTIAppNavigationController : UIViewController{
 	@private
 	NSMutableArray* viewControllers;
 	UINavigationController* navController;
+	NTIAppNavigationToolbar* toolBar;
 }
 
 @property (nonatomic, readonly) NSArray* layers;

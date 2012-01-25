@@ -10,6 +10,115 @@
 #import "NSMutableArray-NTIExtensions.h"
 #import "QuartzCore/QuartzCore.h"
 
+@interface NTIAppNavigationToolbar : UIToolbar{
+	@private
+	id target;
+	UIBarButtonItem* downButton;
+	UIBarButtonItem* layerSelectorButton;
+	UIBarButtonItem* titleButton; //Custom view that is a label
+	UIBarButtonItem* inspectorButton;
+	UIBarButtonItem* searchButton;
+	UIBarButtonItem* globeButton;
+	
+}
+-(id)initWithTarget: (id)target andFrame: (CGRect)frame;
+-(void)setDownButtonTitle: (NSString*)title;
+-(void)setDownButtonHidden: (BOOL)enabled;
+-(void)setTitle: (NSString*)title;
+@end
+
+@implementation NTIAppNavigationToolbar
+
+static UILabel* titleLabelForToolbar()
+{
+	UILabel* titleLabel = [[UILabel alloc] init];
+	titleLabel.text = @"Title";
+	CGRect titleFrame = titleLabel.frame;
+	titleFrame.size = CGSizeMake(200, 44);
+	titleLabel.frame = titleFrame;
+	titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18];
+	titleLabel.backgroundColor = [UIColor clearColor];
+	titleLabel.textColor = [UIColor colorWithRed:157.0/255.0 green:157.0/255.0 blue:157.0/255.0 alpha:1.0];
+	titleLabel.textAlignment = UITextAlignmentCenter;
+	titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	return titleLabel;
+}
+
+-(id)initWithTarget: (id)target andFrame: (CGRect)frame
+{
+	self = [super initWithFrame: frame];
+	
+	self->downButton = [[UIBarButtonItem alloc] initWithTitle: @"Down"
+														style: UIBarButtonItemStyleBordered 
+													   target: self->target
+													   action: @selector(down:)];
+	
+	self->layerSelectorButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemAction target: self->target action: @selector(layer:)];
+	
+	UILabel* titleLabel = titleLabelForToolbar();
+	self->titleButton = [[UIBarButtonItem alloc] initWithCustomView: titleLabel];
+	
+	self->inspectorButton =  [[UIBarButtonItem alloc]
+							  initWithImage: [[UIButton buttonWithType: UIButtonTypeInfoLight]
+											  imageForState: UIControlStateNormal]
+							  style: UIBarButtonItemStylePlain
+							  target: self->target action: @selector(inspector:)];
+	
+	self->searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemSearch 
+																	   target: self->target
+																	   action: @selector(search:)];
+	
+	self->globeButton = [[UIBarButtonItem alloc] initWithTitle: @"Globe"
+														  style: UIBarButtonItemStyleBordered 
+														 target: self->target
+														 action: @selector(globe:)];
+	
+	UIBarButtonItem* downSeparation = [[UIBarButtonItem alloc] 
+								   initWithBarButtonSystemItem: UIBarButtonSystemItemFixedSpace		
+								   target: nil action: nil];
+	downSeparation.width = 50;
+	
+	UIBarButtonItem* bitOfPadding = [[UIBarButtonItem alloc] 
+									   initWithBarButtonSystemItem: UIBarButtonSystemItemFixedSpace		
+									   target: nil action: nil];
+	downSeparation.width = 25;
+	
+	
+	UIBarButtonItem* flexibleSpace = [[UIBarButtonItem alloc] 
+									  initWithBarButtonSystemItem: UIBarButtonSystemItemFlexibleSpace		
+									  target: nil action: nil];
+	
+	self.items = [NSArray arrayWithObjects: self->downButton, downSeparation, self->layerSelectorButton, 
+				  flexibleSpace, self->titleButton, flexibleSpace, self->inspectorButton, bitOfPadding,
+				  self->searchButton, bitOfPadding, self->globeButton, nil];
+	
+	return self;
+}
+
+-(void)setDownButtonHidden: (BOOL)hidden
+{
+	if(hidden){
+		self.items = [self.items arrayByRemovingObjectIdenticalTo: self->downButton];
+	}
+	else if(![self.items containsObjectIdenticalTo: self->downButton]){
+		NSMutableArray* newItems = [NSMutableArray arrayWithObject: self->downButton];
+		[newItems addObjectsFromArray: self.items];
+		self.items = newItems;
+	}
+}
+
+-(void)setDownButtonTitle: (NSString*)title
+{
+	self->downButton.title = title;
+}
+
+-(void)setTitle: (NSString*)title
+{
+	[(UILabel*)self->titleButton.customView setText: title];
+}
+
+@end
+
 @implementation UIViewController(NTIAppNavigationControllerExtensions)
 -(NTIAppNavigationController*)ntiAppNavigationController
 {
@@ -57,6 +166,7 @@
 	
 	self->viewControllers = [NSMutableArray arrayWithCapacity: 5];
 	self->navController = [[UINavigationController alloc] initWithNibName: nil bundle: nil];
+	self->navController.navigationBarHidden = YES;
 	
 	[self addChildViewController: self->navController];
 	
@@ -68,8 +178,58 @@
 -(void)loadView
 {
 	[super loadView]; //Default implemenation sets up a base UIView
+	self->toolBar = [[NTIAppNavigationToolbar alloc] initWithTarget: self andFrame: CGRectMake(0, 0, self.view.frame.size.width, 44)];
+	self->toolBar.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth;
+	[self.view addSubview: self->toolBar];
+	
 	self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+	
+	self->navController.view.frame = CGRectMake(0, 44, self.view.frame.size.width, self.view.frame.size.height - 44);
 	[self.view addSubview: self->navController.view];
+}
+
+-(NSString*)titleForLayer: (id)layer
+{
+	NSString* title = nil; //TODO: default to what is in the NavItem?
+	if( [layer respondsToSelector: @selector(titleForAppNavigationController:)] ){
+		title = [layer titleForAppNavigationController: self];
+	}
+	return title;
+}
+
+-(NSString*)downTextForLayer: (id)layer
+{
+	NSString* downText = nil;
+	
+	if( [layer respondsToSelector: @selector(textForAppNavigationControllerDownButton:)] ){
+		downText = [layer textForAppNavigationControllerDownButton: self];
+	}
+	
+	if(!downText){
+		NSUInteger idxOfLayer = [self->viewControllers indexOfObjectIdenticalTo: layer];
+		if(idxOfLayer != NSNotFound && idxOfLayer > 0){
+			id layerBeneath = [self->viewControllers objectAtIndex: idxOfLayer - 1];
+			downText = [self titleForLayer: layerBeneath];
+		}
+	}
+	
+	if(!downText){
+		downText = @"Down";
+	}
+	
+	return downText;
+}
+
+-(void)updateToolbarForTopLayer
+{
+	UIViewController<NTIAppNavigationLayer>* topLayer = [self->viewControllers lastObjectOrNil];
+	[self->toolBar setTitle: [self titleForLayer: topLayer]];
+	
+	if (self->viewControllers.count > 1) {
+		[self->toolBar setDownButtonTitle: [self downTextForLayer: topLayer]];
+		
+	}
+	[self->toolBar setDownButtonHidden: self->viewControllers.count <= 1];
 }
 
 -(void)pushLayer: (UIViewController<NTIAppNavigationLayer>*)layer animated: (BOOL)animated
@@ -80,7 +240,7 @@
 	else{
 		[self pushTransientLayer: (id)layer animated: animated];
 	}
-	self->navController.topViewController.navigationItem.leftBarButtonItem.enabled = [self->viewControllers count] > 1;
+	[self updateToolbarForTopLayer];
 }
 
 -(UIViewController<NTIAppNavigationLayer>*)popLayerAnimated: (BOOL)animated
@@ -102,7 +262,7 @@
 	}
 	
 	//If we have more than one vc left enable the down button
-	self->navController.topViewController.navigationItem.leftBarButtonItem.enabled = [self->viewControllers count] > 1;
+	[self updateToolbarForTopLayer];
 	return popped;
 }
 
@@ -169,14 +329,7 @@
 				   animated: (BOOL)animated
 {
 	[self->viewControllers addObject: appLayer];
-	[self addChildViewController: appLayer];
-	//Anything that wants to get pushed on our nav controller has to take our down button
-	appLayer.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
-													 initWithTitle: @"Down"
-												 style: UIBarButtonItemStyleBordered
-												 target: self action: @selector(down:)];
-	appLayer.navigationItem.leftBarButtonItem.enabled = [self->viewControllers count] > 1;
-	
+	[self addChildViewController: appLayer];	
 	[self pushNavController: appLayer animated: animated];
 }
 
@@ -344,12 +497,32 @@
 	return nil;
 }
 
-#pragma mark actions
+#pragma mark actions from toolbar
 
 -(void)down: (id)_
 {
 	[self popLayerAnimated: YES];
 }
+
+-(void)layer: (id)_
+{
+}
+
+-(void)inspector: (id)_
+{
+}
+
+
+-(void)search: (id)_
+{
+}
+
+-(void)globe: (id)_
+{
+}
+
+
+#pragma mark actions
 
 -(void)maskTapped: (UIGestureRecognizer*)rec
 {
