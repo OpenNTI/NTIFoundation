@@ -8,6 +8,58 @@
 
 #import "NTIAppNavigationLayerSwitcher.h"
 
+@interface _NTIMovableLayers : UITableViewController<UITableViewDelegate, UITableViewDataSource> {
+@private
+    NSArray* movableLayers;
+	NTIAppNavigationLayerSwitcher* __weak nr_switcher;
+}
+-(id)initWithSwitcher: (NTIAppNavigationLayerSwitcher*)switcher;
+@end
+
+@implementation _NTIMovableLayers
+
+-(id)initWithSwitcher: (NTIAppNavigationLayerSwitcher*)switcher;
+{
+	self = [super initWithStyle: UITableViewStylePlain];
+	self->nr_switcher = switcher;
+	self->movableLayers = [[self->nr_switcher layersThatCanBeBroughtForwardForSwitcher: nil] reversedArray];
+	
+	self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem: UITabBarSystemItemRecents 
+																 tag: 0];
+	
+	return self;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+	return self->movableLayers.count;
+}
+
+- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	static NSString * const CellIdentifier = @"MovableLayersSwitcher";
+    
+    // Dequeue or create a cell of the appropriate type.
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (!cell){
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+	}
+    
+	id<NTIAppNavigationLayer> layer = [self->movableLayers objectAtIndex: indexPath.row];
+	//FIXME ick passing nil here
+	cell.textLabel.text = [layer titleForAppNavigationController: nil];
+	
+    return cell;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	[tableView deselectRowAtIndexPath: indexPath animated: YES];
+	[self->nr_switcher switcher: nil bringLayerForward: [self->movableLayers objectAtIndex: indexPath.row]];
+}
+
+@end
+
 @interface _NTIAvailableAppLayers : UITableViewController<UITableViewDelegate, UITableViewDataSource> {
 @private
     NSArray* layerFactories;
@@ -67,7 +119,8 @@
 	self->nr_delegate = delegate;
 	_NTIAvailableAppLayers* controller = [[_NTIAvailableAppLayers alloc] 
 										  initWithSwitcher: self];
-	self.viewControllers = [NSArray arrayWithObjects: controller, nil];
+	_NTIMovableLayers* movableLayers = [[_NTIMovableLayers alloc] initWithSwitcher: self];
+	self.viewControllers = [NSArray arrayWithObjects: controller, movableLayers, nil];
 	
 	return self;
 }

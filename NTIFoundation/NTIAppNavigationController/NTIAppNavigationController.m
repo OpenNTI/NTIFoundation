@@ -149,6 +149,11 @@ static UILabel* titleLabelForToolbar()
 -(void)pushTransientLayer: (UIViewController<NTIAppNavigationTransientLayer>*)transLayer animated: (BOOL)animated;
 @end
 
+static BOOL isAppLayer(id possibleLayer)
+{
+	return [possibleLayer conformsToProtocol: @protocol(NTIAppNavigationApplicationLayer)];
+}
+
 @implementation NTIAppNavigationController
 @synthesize delegate = nr_delegate;
 
@@ -227,7 +232,7 @@ static UILabel* titleLabelForToolbar()
 -(void)pushLayer: (UIViewController<NTIAppNavigationLayer>*)layer animated: (BOOL)animated
 {	
 	[[OUIAppController controller] dismissPopoverAnimated: YES];
-	if( [layer conformsToProtocol: @protocol(NTIAppNavigationApplicationLayer)] ){
+	if( isAppLayer(layer) ){
 		[self pushApplicationLayer: (id)layer animated: animated];
 	}
 	else{
@@ -484,7 +489,7 @@ static UILabel* titleLabelForToolbar()
 {
 	for(NSInteger i = [self->viewControllers count] - 1 ; i >= 0; i-- ){
 		id layer = [self->viewControllers objectAtIndex: i];
-		if( [ layer conformsToProtocol: @protocol(NTIAppNavigationApplicationLayer)] ){
+		if( isAppLayer(layer) ){
 			return layer;
 		}
 	}
@@ -503,7 +508,17 @@ static UILabel* titleLabelForToolbar()
 
 -(NSArray*)layersThatCanBeBroughtForwardForSwitcher: (NTIAppNavigationLayerSwitcher*)switcher
 {
-	return nil;
+	//If it responds to canBringToFront we go based off the result of that, if it does not
+	//respond to that message it can be brought to front if it is an app layer
+	return [self->viewControllers filteredArrayUsingPredicate: 
+			[NSPredicate predicateWithBlock: 
+			 ^BOOL(id obj, NSDictionary* bindings){
+				 if( [obj respondsToSelector: @selector(canBringToFront)] ){
+					 return [obj canBringToFront];
+				 }
+				 
+				 return isAppLayer(obj);
+			 }]];
 }
 
 -(void)switcher: (NTIAppNavigationLayerSwitcher*)switcher bringLayerForward: (id<NTIAppNavigationLayer>)layer
@@ -529,8 +544,8 @@ static UILabel* titleLabelForToolbar()
 		[[OUIAppController controller] dismissPopoverAnimated: YES];
 	}
 	NTIAppNavigationLayerSwitcher* switcher = [[NTIAppNavigationLayerSwitcher alloc] initWithDelegate: (id)self];
+	switcher.contentSizeForViewInPopover = CGSizeMake(320, 480);
 	self->popController = [[UIPopoverController alloc] initWithContentViewController: switcher];
-	
 	[[OUIAppController controller] presentPopover: popController 
 								fromBarButtonItem: _ 
 						 permittedArrowDirections: UIPopoverArrowDirectionUp 
