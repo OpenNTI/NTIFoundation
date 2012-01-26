@@ -9,6 +9,8 @@
 #import "NTIAppNavigationController.h"
 #import "NSMutableArray-NTIExtensions.h"
 #import "QuartzCore/QuartzCore.h"
+#import "NTIAppNavigationLayerSwitcher.h"
+#import <OmniUI/OUIAppController.h>
 
 @interface NTIAppNavigationToolbar : UIToolbar{
 	@private
@@ -34,13 +36,13 @@ static UILabel* titleLabelForToolbar()
 	UILabel* titleLabel = [[UILabel alloc] init];
 	titleLabel.text = @"Title";
 	CGRect titleFrame = titleLabel.frame;
-	titleFrame.size = CGSizeMake(200, 44);
+	titleFrame.size = CGSizeMake(150, 44);
 	titleLabel.frame = titleFrame;
 	titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18];
 	titleLabel.backgroundColor = [UIColor clearColor];
 	titleLabel.textColor = [UIColor colorWithRed:157.0/255.0 green:157.0/255.0 blue:157.0/255.0 alpha:1.0];
 	titleLabel.textAlignment = UITextAlignmentCenter;
-	titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	//titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	return titleLabel;
 }
 
@@ -73,24 +75,13 @@ static UILabel* titleLabelForToolbar()
 														 target: self->target
 														 action: @selector(globe:)];
 	
-	UIBarButtonItem* downSeparation = [[UIBarButtonItem alloc] 
-								   initWithBarButtonSystemItem: UIBarButtonSystemItemFixedSpace		
-								   target: nil action: nil];
-	downSeparation.width = 50;
-	
-	UIBarButtonItem* bitOfPadding = [[UIBarButtonItem alloc] 
-									   initWithBarButtonSystemItem: UIBarButtonSystemItemFixedSpace		
-									   target: nil action: nil];
-	downSeparation.width = 25;
-	
-	
 	UIBarButtonItem* flexibleSpace = [[UIBarButtonItem alloc] 
 									  initWithBarButtonSystemItem: UIBarButtonSystemItemFlexibleSpace		
 									  target: nil action: nil];
 	
-	self.items = [NSArray arrayWithObjects: self->downButton, downSeparation, self->layerSelectorButton, 
-				  flexibleSpace, self->titleButton, flexibleSpace, self->inspectorButton, bitOfPadding,
-				  self->searchButton, bitOfPadding, self->globeButton, nil];
+	self.items = [NSArray arrayWithObjects: self->downButton, self->layerSelectorButton, 
+				  flexibleSpace, self->titleButton, flexibleSpace, self->inspectorButton,
+				  self->searchButton, self->globeButton, nil];
 	
 	return self;
 }
@@ -159,6 +150,7 @@ static UILabel* titleLabelForToolbar()
 @end
 
 @implementation NTIAppNavigationController
+@synthesize delegate = nr_delegate;
 
 -(id)initWithRootLayer:(UIViewController<NTIAppNavigationApplicationLayer>*)rootViewController
 {
@@ -234,6 +226,7 @@ static UILabel* titleLabelForToolbar()
 
 -(void)pushLayer: (UIViewController<NTIAppNavigationLayer>*)layer animated: (BOOL)animated
 {	
+	[[OUIAppController controller] dismissPopoverAnimated: YES];
 	if( [layer conformsToProtocol: @protocol(NTIAppNavigationApplicationLayer)] ){
 		[self pushApplicationLayer: (id)layer animated: animated];
 	}
@@ -249,7 +242,8 @@ static UILabel* titleLabelForToolbar()
 	if([self->viewControllers count] == 1){
 		return nil;
 	}
-	
+
+	[[OUIAppController controller] dismissPopoverAnimated: YES];
 	id popped = nil;
 	//Are we popping an app layer.  Only app layers are on the nav stack
 	//if the controller to pop is the same as the top nav controller it is an 
@@ -497,6 +491,31 @@ static UILabel* titleLabelForToolbar()
 	return nil;
 }
 
+#pragma mark switcher delegate
+-(NSArray*)layerFactoriesForSwitcher: (NTIAppNavigationLayerSwitcher*)switcher
+{
+	if([self->nr_delegate respondsToSelector: @selector(applicationLayerFactoriesForAppNavigationController:)]){
+		return [self->nr_delegate applicationLayerFactoriesForAppNavigationController: self];
+	}
+	
+	return nil;
+}
+
+-(NSArray*)layersThatCanBeBroughtForwardForSwitcher: (NTIAppNavigationLayerSwitcher*)switcher
+{
+	return nil;
+}
+
+-(void)switcher: (NTIAppNavigationLayerSwitcher*)switcher bringLayerForward: (id<NTIAppNavigationLayer>)layer
+{
+	
+}
+
+-(void)switcher: (NTIAppNavigationLayerSwitcher*)switcher showAppLayer: (NTIAppNavigationAppLayerFactory*)appLayer
+{
+	[self pushLayer: [appLayer createApplicationLayer] animated: YES];
+}
+
 #pragma mark actions from toolbar
 
 -(void)down: (id)_
@@ -506,6 +525,16 @@ static UILabel* titleLabelForToolbar()
 
 -(void)layer: (id)_
 {
+	if(self->popController.isPopoverVisible){
+		[[OUIAppController controller] dismissPopoverAnimated: YES];
+	}
+	NTIAppNavigationLayerSwitcher* switcher = [[NTIAppNavigationLayerSwitcher alloc] initWithDelegate: (id)self];
+	self->popController = [[UIPopoverController alloc] initWithContentViewController: switcher];
+	
+	[[OUIAppController controller] presentPopover: popController 
+								fromBarButtonItem: _ 
+						 permittedArrowDirections: UIPopoverArrowDirectionUp 
+										 animated: YES];
 }
 
 -(void)inspector: (id)_
@@ -535,6 +564,8 @@ static UILabel* titleLabelForToolbar()
 {
 	[self down: rec];
 }
+
+#pragma mark layer switcher delegate
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {

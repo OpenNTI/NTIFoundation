@@ -34,5 +34,6 @@
 #import "NTIEditableFrameScrollView.h"
 #import "NSURL-NTIFileSystemExtensions.h"
 #import "NTIAppNavigationController.h"
+#import "NTIAppNavigationAppLayerFactory.h"
 
 #endif

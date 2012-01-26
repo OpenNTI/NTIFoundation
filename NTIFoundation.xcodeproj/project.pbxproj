@@ -23,6 +23,12 @@
 /* Begin PBXBuildFile section */
 		4006E76B149272E000D63524 /* NSObject-NTIJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 4006E76A149272E000D63524 /* NSObject-NTIJSON.m */; };
 		4006E76C149272EC00D63524 /* NSObject-NTIJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 4006E76A149272E000D63524 /* NSObject-NTIJSON.m */; };
+		40103C0314D07509004451A4 /* NTIAppNavigationAppLayerFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 40103C0114D07509004451A4 /* NTIAppNavigationAppLayerFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		40103C0414D07509004451A4 /* NTIAppNavigationAppLayerFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 40103C0214D07509004451A4 /* NTIAppNavigationAppLayerFactory.m */; };
+		40103C0514D07509004451A4 /* NTIAppNavigationAppLayerFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 40103C0214D07509004451A4 /* NTIAppNavigationAppLayerFactory.m */; };
+		40103C0814D07BCC004451A4 /* NTIAppNavigationLayerSwitcher.h in Headers */ = {isa = PBXBuildFile; fileRef = 40103C0614D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.h */; };
+		40103C0914D07BCC004451A4 /* NTIAppNavigationLayerSwitcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 40103C0714D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.m */; };
+		40103C0A14D07BCC004451A4 /* NTIAppNavigationLayerSwitcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 40103C0714D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.m */; };
 		402927501498654200E4720A /* NSArray-NTIExtenstionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4029274D1498653200E4720A /* NSArray-NTIExtenstionsTest.m */; };
 		4029275314986A9800E4720A /* NSMutableArray-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4029275214986A9800E4720A /* NSMutableArray-NTIExtensionsTest.m */; };
 		4029275614991DC400E4720A /* NSURL-NTIFileSystemExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4029275514991DC400E4720A /* NSURL-NTIFileSystemExtensions.m */; };
@@ -493,6 +499,10 @@
 
 /* Begin PBXFileReference section */
 		4006E76A149272E000D63524 /* NSObject-NTIJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject-NTIJSON.m"; sourceTree = "<group>"; };
+		40103C0114D07509004451A4 /* NTIAppNavigationAppLayerFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIAppNavigationAppLayerFactory.h; sourceTree = "<group>"; };
+		40103C0214D07509004451A4 /* NTIAppNavigationAppLayerFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIAppNavigationAppLayerFactory.m; sourceTree = "<group>"; };
+		40103C0614D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIAppNavigationLayerSwitcher.h; sourceTree = "<group>"; };
+		40103C0714D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIAppNavigationLayerSwitcher.m; sourceTree = "<group>"; };
 		4029274C1498653200E4720A /* NSArray-NTIExtenstionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray-NTIExtenstionsTest.h"; sourceTree = "<group>"; };
 		4029274D1498653200E4720A /* NSArray-NTIExtenstionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray-NTIExtenstionsTest.m"; sourceTree = "<group>"; };
 		4029275114986A9800E4720A /* NSMutableArray-NTIExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray-NTIExtensionsTest.h"; sourceTree = "<group>"; };
@@ -750,6 +760,10 @@
 			children = (
 				40572C2914C88D8E0032D2DB /* NTIAppNavigationController.h */,
 				40572C2A14C88D8E0032D2DB /* NTIAppNavigationController.m */,
+				40103C0114D07509004451A4 /* NTIAppNavigationAppLayerFactory.h */,
+				40103C0214D07509004451A4 /* NTIAppNavigationAppLayerFactory.m */,
+				40103C0614D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.h */,
+				40103C0714D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.m */,
 			);
 			path = NTIAppNavigationController;
 			sourceTree = "<group>";
@@ -1175,6 +1189,8 @@
 				40AEBDD8145A5A6700028750 /* NTIEditableFrameScrollView.h in Headers */,
 				4029275714991E6900E4720A /* NSURL-NTIFileSystemExtensions.h in Headers */,
 				40572C2B14C88D8E0032D2DB /* NTIAppNavigationController.h in Headers */,
+				40103C0314D07509004451A4 /* NTIAppNavigationAppLayerFactory.h in Headers */,
+				40103C0814D07BCC004451A4 /* NTIAppNavigationLayerSwitcher.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1650,6 +1666,8 @@
 				4006E76B149272E000D63524 /* NSObject-NTIJSON.m in Sources */,
 				4029275B14994F0E00E4720A /* NSURL-NTIFileSystemExtensions.m in Sources */,
 				40572C2C14C88D8E0032D2DB /* NTIAppNavigationController.m in Sources */,
+				40103C0414D07509004451A4 /* NTIAppNavigationAppLayerFactory.m in Sources */,
+				40103C0914D07BCC004451A4 /* NTIAppNavigationLayerSwitcher.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1687,6 +1705,8 @@
 				4029275314986A9800E4720A /* NSMutableArray-NTIExtensionsTest.m in Sources */,
 				4029275614991DC400E4720A /* NSURL-NTIFileSystemExtensions.m in Sources */,
 				4076F99114C8FAD1004C6301 /* NTIAppNavigationController.m in Sources */,
+				40103C0514D07509004451A4 /* NTIAppNavigationAppLayerFactory.m in Sources */,
+				40103C0A14D07BCC004451A4 /* NTIAppNavigationLayerSwitcher.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
