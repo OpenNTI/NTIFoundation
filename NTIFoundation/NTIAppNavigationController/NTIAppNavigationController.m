@@ -537,7 +537,7 @@ static BOOL isAppLayer(id possibleLayer)
 
 -(void)moveTransientLayerToTop: (id<NTIAppNavigationApplicationLayer>)layer
 {
-	
+	NSLog(@"Moving transient layer not yet implemented.");
 }
 
 -(void)bringLayerForward: (id<NTIAppNavigationLayer>)layer
