@@ -496,6 +496,61 @@ static BOOL isAppLayer(id possibleLayer)
 	return nil;
 }
 
+-(void)moveAppLayerToTop: (id<NTIAppNavigationApplicationLayer>)appLayer
+{
+	//If we are asked to move the top applayer do nothing, it is already on top
+	if( self->navController.topViewController == (id)appLayer){
+		return;
+	}
+	
+	//Because this is an app layer moving the actual view is easy.  Just 
+	//remove the layer to move from the nav controller, grab all the view controllers
+	//in our list up to the next app controller and move them to the end and then animate
+	//in the appLayer
+	
+	NSMutableArray* appControllersToMoveToTop = [NSMutableArray array];
+	NSUInteger idx = [self->viewControllers indexOfObjectIdenticalTo: appLayer];
+	OBASSERT(idx != NSNotFound);
+	
+	id layerToMove = [self->viewControllers objectAtIndex: idx];
+	do{
+		[appControllersToMoveToTop addObject: layerToMove];
+		layerToMove = [self->viewControllers objectAtIndex: ++idx];
+	}
+	while(idx < self->viewControllers.count && !isAppLayer( layerToMove ));
+	
+	//We have the layers that need to move.  Remove them from the view controller list and add them to the end
+	for(id layerToMove in appControllersToMoveToTop){
+		[self->viewControllers removeObjectIdenticalTo: layerToMove];
+		[self->viewControllers addObject: layerToMove];
+	}
+	
+	//change the actual nav heirarchy
+	
+	//Remove it from somewhere in the middle of the stack
+	NSArray* navVCs = self->navController.viewControllers;
+	self->navController.viewControllers = [navVCs arrayByRemovingObjectIdenticalTo: appLayer];
+	
+	//Now we need to push the app layer
+	[self pushNavController: (id)appLayer animated: YES];
+}
+
+-(void)moveTransientLayerToTop: (id<NTIAppNavigationApplicationLayer>)layer
+{
+	
+}
+
+-(void)bringLayerForward: (id<NTIAppNavigationLayer>)layer
+{
+	if(isAppLayer(layer)){
+		[self moveAppLayerToTop: (id)layer];
+	}
+	else{
+		[self moveTransientLayerToTop: (id)layer];
+	}
+	[self updateToolbarForTopLayer];
+}
+
 #pragma mark switcher delegate
 -(NSArray*)layerFactoriesForSwitcher: (NTIAppNavigationLayerSwitcher*)switcher
 {
@@ -523,7 +578,8 @@ static BOOL isAppLayer(id possibleLayer)
 
 -(void)switcher: (NTIAppNavigationLayerSwitcher*)switcher bringLayerForward: (id<NTIAppNavigationLayer>)layer
 {
-	
+	[[OUIAppController controller] dismissPopoverAnimated: YES];
+	[self bringLayerForward: layer];
 }
 
 -(void)switcher: (NTIAppNavigationLayerSwitcher*)switcher showAppLayer: (NTIAppNavigationAppLayerFactory*)appLayer
@@ -543,6 +599,7 @@ static BOOL isAppLayer(id possibleLayer)
 	if(self->popController.isPopoverVisible){
 		[[OUIAppController controller] dismissPopoverAnimated: YES];
 	}
+	//TODO probably want to stash this around or save some state so we can show the tab that was last shown.
 	NTIAppNavigationLayerSwitcher* switcher = [[NTIAppNavigationLayerSwitcher alloc] initWithDelegate: (id)self];
 	switcher.contentSizeForViewInPopover = CGSizeMake(320, 480);
 	self->popController = [[UIPopoverController alloc] initWithContentViewController: switcher];
