@@ -8,8 +8,11 @@
 
 #import "OmniUI/OUIInspector.h"
 
-@interface NTIGlobalInspector : OUIInspector
+@interface NTIGlobalInspector : OUIInspector{
+	@private
+	UIResponder* shownFrom;
+}
 
-
+@property (nonatomic, readonly) UIResponder* shownFrom;
 -(void)inspectObjectsFromBarButtonItem: (UIBarButtonItem*)item;
 @end

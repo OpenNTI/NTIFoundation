@@ -11,6 +11,7 @@
 #import "NTIInspectableController.h"
 
 @implementation NTIGlobalInspector
+@synthesize shownFrom;
 
 static UIResponder* findFirstResponderBeneathView(UIView* startAt)
 {
@@ -39,23 +40,25 @@ static UIResponder* findFirstResponder()
 	//implementing NTIInspectableController.  When/if we find them get the inspectable
 	//objects from them.  
 	//TODO what do we do if there is no first responder?
-	UIResponder* firstResonder = findFirstResponder();
+	self->shownFrom = findFirstResponder();
 	
-	if(!firstResonder){
+	if(!self->shownFrom){
 		NSLog(@"No first responder to start searching from");
 		return;
 	}
 	
 	NSMutableSet* objects = [[NSMutableSet alloc] initWithCapacity: 3];
 	
+	UIResponder* responder = self->shownFrom;
 	do{
-		if( [firstResonder respondsToSelector: @selector(inspectableObjects)] ){
-			[objects unionSet: [(id)firstResonder inspectableObjects]];
+		if( [responder respondsToSelector: @selector(inspectableObjects)] ){
+			[objects unionSet: [(id)responder inspectableObjects]];
 		}
 		
-		firstResonder = firstResonder.nextResponder;
-	}while(firstResonder);
+		responder = responder.nextResponder;
+	}while(responder);
 	
+	[self->shownFrom resignFirstResponder];
 	[self inspectObjects: [objects allObjects] fromBarButtonItem: item];
 }
 

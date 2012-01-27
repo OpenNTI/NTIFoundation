@@ -30,7 +30,7 @@
 		40103C0914D07BCC004451A4 /* NTIAppNavigationLayerSwitcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 40103C0714D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.m */; };
 		40103C0A14D07BCC004451A4 /* NTIAppNavigationLayerSwitcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 40103C0714D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.m */; };
 		40103C1414D2564C004451A4 /* NTIInspectableController.h in Headers */ = {isa = PBXBuildFile; fileRef = 40103C1314D2564C004451A4 /* NTIInspectableController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		40103C1C14D28A54004451A4 /* NTIGlobalInspector.h in Headers */ = {isa = PBXBuildFile; fileRef = 40103C1A14D28A54004451A4 /* NTIGlobalInspector.h */; };
+		40103C1C14D28A54004451A4 /* NTIGlobalInspector.h in Headers */ = {isa = PBXBuildFile; fileRef = 40103C1A14D28A54004451A4 /* NTIGlobalInspector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40103C1D14D28A54004451A4 /* NTIGlobalInspector.m in Sources */ = {isa = PBXBuildFile; fileRef = 40103C1B14D28A54004451A4 /* NTIGlobalInspector.m */; };
 		40103C1E14D28A54004451A4 /* NTIGlobalInspector.m in Sources */ = {isa = PBXBuildFile; fileRef = 40103C1B14D28A54004451A4 /* NTIGlobalInspector.m */; };
 		402927501498654200E4720A /* NSArray-NTIExtenstionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4029274D1498653200E4720A /* NSArray-NTIExtenstionsTest.m */; };
