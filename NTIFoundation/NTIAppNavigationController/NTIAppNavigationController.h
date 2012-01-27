@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OmniUI/OUIInspectorDelegate.h"
 
 @class NTIAppNavigationController;
 @interface UIViewController(NTIAppNavigationControllerExtensions)
@@ -34,7 +35,7 @@
 //Returns a list of layer factories that can be used to create app layers for the global layer switcher button
 -(NSArray*)applicationLayerFactoriesForAppNavigationController: (NTIAppNavigationController*)appNavController;
 @end
-
+@class NTIGlobalInspector;
 @class NTIAppNavigationToolbar;
 @interface NTIAppNavigationController : UIViewController{
 	@private
@@ -43,7 +44,11 @@
 	NTIAppNavigationToolbar* toolBar;
 	id __weak nr_delegate;
 	UIPopoverController* popController;
+	
+	NTIGlobalInspector* inspector;
+	id<OUIInspectorDelegate> inspectorDelegate;
 }
+@property (nonatomic, strong) id<OUIInspectorDelegate> inspectorDelegate;
 @property (nonatomic, weak) id delegate;
 @property (nonatomic, readonly) NSArray* layers;
 

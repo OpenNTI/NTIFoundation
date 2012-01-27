@@ -35,5 +35,6 @@
 #import "NSURL-NTIFileSystemExtensions.h"
 #import "NTIAppNavigationController.h"
 #import "NTIAppNavigationAppLayerFactory.h"
+#import "NTIInspectableController.h"
 
 #endif

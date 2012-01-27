@@ -11,6 +11,7 @@
 #import "QuartzCore/QuartzCore.h"
 #import "NTIAppNavigationLayerSwitcher.h"
 #import <OmniUI/OUIAppController.h>
+#import "NTIGlobalInspector.h"
 
 @interface NTIAppNavigationToolbar : UIToolbar{
 	@private
@@ -156,6 +157,7 @@ static BOOL isAppLayer(id possibleLayer)
 
 @implementation NTIAppNavigationController
 @synthesize delegate = nr_delegate;
+@synthesize inspectorDelegate;
 
 -(id)initWithRootLayer:(UIViewController<NTIAppNavigationApplicationLayer>*)rootViewController
 {
@@ -366,7 +368,7 @@ static BOOL isAppLayer(id possibleLayer)
 	
 	//Setup the shadow
 	transLayer.view.layer.masksToBounds = NO;
-	transLayer.view.layer.cornerRadius = 3;
+	transLayer.view.layer.cornerRadius = 5;
 	transLayer.view.layer.shadowRadius = 5;
 	transLayer.view.layer.shadowOpacity = 0.5;
 	
@@ -611,6 +613,11 @@ static BOOL isAppLayer(id possibleLayer)
 
 -(void)inspector: (id)_
 {
+	if(!inspector){
+		self->inspector = [[NTIGlobalInspector alloc] init];
+		inspector.delegate = self->inspectorDelegate;
+	}
+	[self->inspector inspectObjectsFromBarButtonItem: _];
 }
 
 
