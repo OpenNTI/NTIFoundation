@@ -129,6 +129,8 @@
 		40ECB2DA147B3C4B00AF4597 /* NTIHTMLWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E045F2143F468D0091CE7C /* NTIHTMLWriter.m */; };
 		40ECB2F5147B3D7000AF4597 /* NSAttributedString-HTMLWritingExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D0DBF143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.m */; };
 		40F39C8114D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8014D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m */; };
+		40F39C8414D84EF50089DCF6 /* SendRecieveQueueTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8314D84EF50089DCF6 /* SendRecieveQueueTest.m */; };
+		40F39C8714D852FE0089DCF6 /* NSString-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8614D852FE0089DCF6 /* NSString-NTIExtensionsTest.m */; };
 		7293CB291451AA7D00CD64B8 /* NTIEditableFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 7293CB271451AA7D00CD64B8 /* NTIEditableFrame.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7293CB2A1451AA7D00CD64B8 /* NTIEditableFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */; };
 		7293CB2B1451AAB700CD64B8 /* NTIEditableFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */; };
@@ -583,8 +585,12 @@
 		40E04617143F50A60091CE7C /* OQColor-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OQColor-NTIExtensions.m"; sourceTree = "<group>"; };
 		40E0461A143F5F260091CE7C /* NTIHTMLReaderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIHTMLReaderTest.h; sourceTree = "<group>"; };
 		40E0461B143F5F260091CE7C /* NTIHTMLReaderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIHTMLReaderTest.m; sourceTree = "<group>"; };
-		40F39C7F14D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; path = "NSURL-NTIFileSystemExtensionsTest.h"; sourceTree = "<group>"; };
+		40F39C7F14D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL-NTIFileSystemExtensionsTest.h"; sourceTree = "<group>"; };
 		40F39C8014D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL-NTIFileSystemExtensionsTest.m"; sourceTree = "<group>"; };
+		40F39C8214D84EF50089DCF6 /* SendRecieveQueueTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendRecieveQueueTest.h; sourceTree = "<group>"; };
+		40F39C8314D84EF50089DCF6 /* SendRecieveQueueTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendRecieveQueueTest.m; sourceTree = "<group>"; };
+		40F39C8514D852FE0089DCF6 /* NSString-NTIExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString-NTIExtensionsTest.h"; sourceTree = "<group>"; };
+		40F39C8614D852FE0089DCF6 /* NSString-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString-NTIExtensionsTest.m"; sourceTree = "<group>"; };
 		7215956A13CFE80600DCA72E /* NSObject-NTIJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject-NTIJSON.h"; path = "../NSObject-NTIJSON.h"; sourceTree = "<group>"; };
 		7216D73113CBAF0300509BDC /* NTIFoundation-Info.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NTIFoundation-Info.h"; sourceTree = "<group>"; };
 		721DC9FF13BA3DBD00340540 /* NTIAbstractDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTIAbstractDownloader.h; path = ../NTIAbstractDownloader.h; sourceTree = "<group>"; };
@@ -1111,6 +1117,10 @@
 				40E0461B143F5F260091CE7C /* NTIHTMLReaderTest.m */,
 				40F39C7F14D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.h */,
 				40F39C8014D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m */,
+				40F39C8214D84EF50089DCF6 /* SendRecieveQueueTest.h */,
+				40F39C8314D84EF50089DCF6 /* SendRecieveQueueTest.m */,
+				40F39C8514D852FE0089DCF6 /* NSString-NTIExtensionsTest.h */,
+				40F39C8614D852FE0089DCF6 /* NSString-NTIExtensionsTest.m */,
 			);
 			path = UnitTests;
 			sourceTree = "<group>";
@@ -1736,6 +1746,8 @@
 				40103C0A14D07BCC004451A4 /* NTIAppNavigationLayerSwitcher.m in Sources */,
 				40103C1E14D28A54004451A4 /* NTIGlobalInspector.m in Sources */,
 				40F39C8114D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m in Sources */,
+				40F39C8414D84EF50089DCF6 /* SendRecieveQueueTest.m in Sources */,
+				40F39C8714D852FE0089DCF6 /* NSString-NTIExtensionsTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
