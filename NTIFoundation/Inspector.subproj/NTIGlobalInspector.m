@@ -39,7 +39,8 @@ static UIResponder* findFirstResponder()
 	//Starting from the first responder look up the responder chain for people
 	//implementing NTIInspectableController.  When/if we find them get the inspectable
 	//objects from them.  
-	//TODO what do we do if there is no first responder?
+	
+	//TODO what do we do if there is no first responder?  Maybe we hook this into the topNavLayer
 	self->shownFrom = findFirstResponder();
 	
 	if(!self->shownFrom){

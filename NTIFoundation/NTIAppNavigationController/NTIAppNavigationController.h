@@ -21,6 +21,10 @@
 -(NSString*)titleForAppNavigationController: (NTIAppNavigationController*)controller;
 //Can this layer be moved to the front from somewhere down in the stack.
 -(BOOL)canBringToFront;
+//Messages around badging certain ui components to bring background changes to the users attention.
+//layers must implement both or none.
+-(NSUInteger)outstandingBadgeCount;
+-(void)resetBadgeCount;
 @end
 
 @protocol NTIAppNavigationApplicationLayer <NTIAppNavigationLayer>
@@ -51,11 +55,11 @@
 @property (nonatomic, strong) id<OUIInspectorDelegate> inspectorDelegate;
 @property (nonatomic, weak) id delegate;
 @property (nonatomic, readonly) NSArray* layers;
+@property (nonatomic, readonly) UIViewController<NTIAppNavigationLayer>* topLayer;
+@property (nonatomic, readonly) UIViewController<NTIAppNavigationApplicationLayer>* topApplicationLayer;
 
 -(id)initWithRootLayer:(UIViewController<NTIAppNavigationApplicationLayer>*)rootViewController;
 -(void)pushLayer: (UIViewController<NTIAppNavigationLayer>*)layer animated: (BOOL)animated;
 -(UIViewController<NTIAppNavigationLayer>*)popLayerAnimated: (BOOL)animated;
--(UIViewController<NTIAppNavigationLayer>*)topLayer;
--(UIViewController<NTIAppNavigationApplicationLayer>*)topApplicationLayer;
 
 @end
