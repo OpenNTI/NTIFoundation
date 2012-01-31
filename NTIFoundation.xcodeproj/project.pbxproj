@@ -864,6 +864,7 @@
 		40C34C5D14D88BA6000D91A8 /* LogicTests */ = {
 			isa = PBXGroup;
 			children = (
+				72D8185E13955D8C00473994 /* Supporting Files */,
 				40B6F3B814285AF4007EDF1C /* WebSocket7Test.h */,
 				40B6F3B914285AF4007EDF1C /* WebSocket7Test.m */,
 				40E0461A143F5F260091CE7C /* NTIHTMLReaderTest.h */,
@@ -1179,7 +1180,6 @@
 			children = (
 				40C34C7614D88BCA000D91A8 /* ApplicationTests */,
 				40C34C5D14D88BA6000D91A8 /* LogicTests */,
-				72D8185E13955D8C00473994 /* Supporting Files */,
 			);
 			path = UnitTests;
 			sourceTree = "<group>";
