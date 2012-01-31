@@ -82,6 +82,28 @@
 	id attachmentCell = [attachment attachmentCell];
 	
 	STAssertEqualObjects([attachmentCell object], [NSNumber numberWithInt: 10], nil);
+	
+	NSAttributedString* helloWorldAttrString = [[NSAttributedString alloc] initWithString: @"Hello World"];
+	
+	STAssertEqualObjects([NSAttributedString attributedStringFromObject: @"Hello World"], helloWorldAttrString, nil);
+	
+	STAssertEqualObjects([NSAttributedString attributedStringFromObject: helloWorldAttrString], helloWorldAttrString, nil);
+}
+
+-(void)testAttributedStringFromArray
+{
+	NSArray* objects = [NSArray arrayWithObjects: [[AttachableObject alloc] initWithObject: [NSNumber numberWithInt: 1]],
+						[[AttachableObject alloc] initWithObject: [NSNumber numberWithInt: 2]],
+						[[AttachableObject alloc] initWithObject: [NSNumber numberWithInt: 3]], nil];
+	
+	NSArray* rawObjects = [objects arrayByPerformingBlock: ^(id object){
+		return [object object];
+	}];
+	
+	STAssertEqualObjects([[NSAttributedString attributedStringFromObjects: objects] objectsFromAttributedString], rawObjects, nil);
+	
+	STAssertEqualObjects([[NSAttributedString attributedStringFromObjects: objects] objectsFromAttributedString], 
+						 [[NSAttributedString attributedStringFromObject: objects] objectsFromAttributedString], nil);
 }
 
 -(void)testBasicObjectFromAttributedString
