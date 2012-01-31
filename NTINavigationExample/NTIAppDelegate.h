@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface NTIAppDelegate : UIResponder <UIApplicationDelegate>
+#import "OmniUI/OUIAppController.h"
+@interface NTIAppDelegate : OUIAppController <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 

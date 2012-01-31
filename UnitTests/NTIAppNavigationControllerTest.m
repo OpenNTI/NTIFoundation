@@ -7,6 +7,7 @@
 //
 
 #import "NTIAppNavigationControllerTest.h"
+#import "NTIFoundation/NTIFoundation.h"
 
 @interface TestAppLayer : UIViewController<NTIAppNavigationApplicationLayer>
 @end
@@ -69,36 +70,36 @@
 // Do not ask for images or set up UI before UIApplicationMain() has been called.
 
 
-//-(void)testMovingAppLayer
-//{
-//	id appLayer1 = [[TestAppLayer alloc] initWithNibName: nil bundle: nil];
-//	id transLayer1 = [[TestTransLayer alloc] initWithNibName: nil bundle: nil];
-//	id transLayer2 = [[TestTransLayer alloc] initWithNibName: nil bundle: nil];
-//	id appLayer2 = [[TestAppLayer alloc] initWithNibName: nil bundle: nil];
-//	
-//	[self->appNavController pushLayer: appLayer1 animated: NO];
-//	[self->appNavController pushLayer: transLayer1 animated: NO];
-//	[self->appNavController pushLayer: transLayer2 animated: NO];
-//	[self->appNavController pushLayer: appLayer2 animated: NO];
-//	
-//	NSArray* layers = [NSArray arrayWithObjects: self->rootLayer, 
-//					   appLayer1, transLayer1, 
-//					   transLayer2, appLayer2, nil];
-//	
-//	STAssertEqualObjects(self->appNavController.layers, 
-//						 layers, nil);
-//	
-//	[self->appNavController bringLayerForward: appLayer1];
-//	
-//	STAssertEquals(self->appNavController.topApplicationLayer, appLayer1, nil);
-//	
-//	layers = [NSArray arrayWithObjects: self->rootLayer, 
-//			  appLayer2, appLayer1, transLayer1, 
-//			  transLayer2, nil];
-//	
-//	STAssertEqualObjects(self->appNavController.layers, 
-//						 layers, nil);
-//	
-//}
+-(void)testMovingAppLayer
+{
+	id appLayer1 = [[TestAppLayer alloc] initWithNibName: nil bundle: nil];
+	id transLayer1 = [[TestTransLayer alloc] initWithNibName: nil bundle: nil];
+	id transLayer2 = [[TestTransLayer alloc] initWithNibName: nil bundle: nil];
+	id appLayer2 = [[TestAppLayer alloc] initWithNibName: nil bundle: nil];
+	
+	[self->appNavController pushLayer: appLayer1 animated: NO];
+	[self->appNavController pushLayer: transLayer1 animated: NO];
+	[self->appNavController pushLayer: transLayer2 animated: NO];
+	[self->appNavController pushLayer: appLayer2 animated: NO];
+	
+	NSArray* layers = [NSArray arrayWithObjects: self->rootLayer, 
+					   appLayer1, transLayer1, 
+					   transLayer2, appLayer2, nil];
+	
+	STAssertEqualObjects(self->appNavController.layers, 
+						 layers, nil);
+	
+	[self->appNavController bringLayerForward: appLayer1];
+	
+	STAssertEquals(self->appNavController.topApplicationLayer, appLayer1, nil);
+	
+	layers = [NSArray arrayWithObjects: self->rootLayer, 
+			  appLayer2, appLayer1, transLayer1, 
+			  transLayer2, nil];
+	
+	STAssertEqualObjects(self->appNavController.layers, 
+						 layers, nil);
+	
+}
 
 @end
