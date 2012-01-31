@@ -63,12 +63,31 @@
 	STAssertEqualObjects([self->appNavController layers], currentLayers, nil);
 }
 
-//TODO this can't be run by logic tests.  It does view manipulation which triggers this error.  We may need to setup
-//Application test for this project using the sample app?
-// 
-// 2012-01-31 14:16:57.229 otest[61963:7803] ERROR: System image table has not been initialized. 
-// Do not ask for images or set up UI before UIApplicationMain() has been called.
+-(void)testMovingTopAppLayerDoesNothing
+{
+	id appLayer1 = [[TestAppLayer alloc] initWithNibName: nil bundle: nil];
+	id transLayer1 = [[TestTransLayer alloc] initWithNibName: nil bundle: nil];
+	id transLayer2 = [[TestTransLayer alloc] initWithNibName: nil bundle: nil];
+	id appLayer2 = [[TestAppLayer alloc] initWithNibName: nil bundle: nil];
+	
+	[self->appNavController pushLayer: appLayer1 animated: NO];
+	[self->appNavController pushLayer: transLayer1 animated: NO];
+	[self->appNavController pushLayer: transLayer2 animated: NO];
+	[self->appNavController pushLayer: appLayer2 animated: NO];
+	
+	NSArray* layers = [NSArray arrayWithObjects: self->rootLayer, 
+					   appLayer1, transLayer1, 
+					   transLayer2, appLayer2, nil];
+	
+	STAssertEqualObjects(self->appNavController.layers, 
+						 layers, nil);
+	
+	[self->appNavController bringLayerForward: appLayer2];
+	
+	STAssertEqualObjects(self->appNavController.layers, 
+						 layers, nil);
 
+}
 
 -(void)testMovingAppLayer
 {
