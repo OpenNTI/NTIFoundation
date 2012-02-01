@@ -163,6 +163,7 @@ static BOOL isAppLayer(id possibleLayer)
 {
 	self = [super initWithNibName: nil bundle: nil];
 	
+	self->layerProviders = [NSMutableArray arrayWithCapacity: 3];
 	self->viewControllers = [NSMutableArray arrayWithCapacity: 5];
 	self->navController = [[UINavigationController alloc] initWithNibName: nil bundle: nil];
 	self->navController.navigationBarHidden = YES;
@@ -554,13 +555,9 @@ static BOOL isAppLayer(id possibleLayer)
 }
 
 #pragma mark switcher delegate
--(NSArray*)layerFactoriesForSwitcher: (NTIAppNavigationLayerSwitcher*)switcher
+-(NSArray*)layerProvidersForSwitcher: (NTIAppNavigationLayerSwitcher*)switcher
 {
-	if([self->nr_delegate respondsToSelector: @selector(applicationLayerFactoriesForAppNavigationController:)]){
-		return [self->nr_delegate applicationLayerFactoriesForAppNavigationController: self];
-	}
-	
-	return nil;
+	return self->layerProviders;
 }
 
 -(NSArray*)layersThatCanBeBroughtForwardForSwitcher: (NTIAppNavigationLayerSwitcher*)switcher
@@ -584,9 +581,20 @@ static BOOL isAppLayer(id possibleLayer)
 	[self bringLayerForward: layer];
 }
 
--(void)switcher: (NTIAppNavigationLayerSwitcher*)switcher showAppLayer: (NTIAppNavigationAppLayerFactory*)appLayer
+-(void)switcher: (NTIAppNavigationLayerSwitcher*)switcher showLayer: (id<NTIAppNavigationLayerDescriptor>)layerDescriptor;
 {
-	[self pushLayer: [appLayer createApplicationLayer] animated: YES];
+	UIViewController<NTIAppNavigationLayer>* toPush = [layerDescriptor.provider createLayerForDescriptor: layerDescriptor]; 
+	[self pushLayer: toPush animated: YES];
+}
+
+-(void)registerLayerProvider: (id<NTIAppNavigationLayerProvider>)layerProvider
+{
+	[self->layerProviders addObject: layerProvider];
+}
+
+-(void)unregisterLayerProvider: (id<NTIAppNavigationLayerProvider>)layerProvider
+{
+	[self->layerProviders removeObjectIdenticalTo: layerProvider];
 }
 
 #pragma mark actions from toolbar

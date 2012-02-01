@@ -8,15 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import "NTIAppNavigationController.h"
-#import "NTIAppNavigationAppLayerFactory.h"
+#import "NTIAppNavigationLayerDescriptor.h"
 
 @protocol NTIAppNavigationLayer;
 @class NTIAppNavigationLayerSwitcher;
 @protocol NTIAppNavigationLayerSwitcherDelegate <NSObject>
--(NSArray*)layerFactoriesForSwitcher: (NTIAppNavigationLayerSwitcher*)switcher;
+-(NSArray*)layerProvidersForSwitcher: (NTIAppNavigationLayerSwitcher*)switcher;
 -(NSArray*)layersThatCanBeBroughtForwardForSwitcher: (NTIAppNavigationLayerSwitcher*)switcher;
 -(void)switcher: (NTIAppNavigationLayerSwitcher*)switcher bringLayerForward: (id<NTIAppNavigationLayer>)layer;
--(void)switcher: (NTIAppNavigationLayerSwitcher*)switcher showAppLayer: (NTIAppNavigationAppLayerFactory*)appLayer;
+-(void)switcher: (NTIAppNavigationLayerSwitcher*)switcher showLayer: (id<NTIAppNavigationLayerDescriptor>)layerDescriptor;
 @end
 
 //A tab bar controller that is shown when the layer switch is tapped.

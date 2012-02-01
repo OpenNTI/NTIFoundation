@@ -62,7 +62,7 @@
 
 @interface _NTIAvailableAppLayers : UITableViewController<UITableViewDelegate, UITableViewDataSource> {
 @private
-    NSArray* layerFactories;
+    NSArray* layerProviders;
 	NTIAppNavigationLayerSwitcher* __weak nr_switcher;
 }
 -(id)initWithSwitcher: (NTIAppNavigationLayerSwitcher*)switcher;
@@ -72,9 +72,9 @@
 
 -(id)initWithSwitcher: (NTIAppNavigationLayerSwitcher*)switcher;
 {
-	self = [super initWithStyle: UITableViewStylePlain];
+	self = [super initWithStyle: UITableViewStyleGrouped];
 	self->nr_switcher = switcher;
-	self->layerFactories = [self->nr_switcher layerFactoriesForSwitcher: nil];
+	self->layerProviders = [[self->nr_switcher layerProvidersForSwitcher: nil] copy];
 	
 	self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem: UITabBarSystemItemFavorites 
 																 tag: 0];
@@ -82,9 +82,19 @@
 	return self;
 }
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+	return self->layerProviders.count;
+}
+
+-(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+	return [[self->layerProviders objectAtIndex: section] name];
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return self->layerFactories.count;
+	return [[[self->layerProviders objectAtIndex: section] layerDescriptors] count];
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -97,8 +107,8 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 	}
     
-	NTIAppNavigationAppLayerFactory* layerFactory = [self->layerFactories objectAtIndex: indexPath.row];
-	cell.textLabel.text = layerFactory.title;
+	id<NTIAppNavigationLayerDescriptor> descriptor = [[[self->layerProviders objectAtIndex: indexPath.section] layerDescriptors] objectAtIndex: indexPath.row];
+	cell.textLabel.text = descriptor.title;
 	
     return cell;
 }
@@ -106,7 +116,8 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	[tableView deselectRowAtIndexPath: indexPath animated: YES];
-	[self->nr_switcher switcher: nil showAppLayer: [self->layerFactories objectAtIndex: indexPath.row]];
+	id<NTIAppNavigationLayerDescriptor> descriptor = [[[self->layerProviders objectAtIndex: indexPath.section] layerDescriptors] objectAtIndex: indexPath.row];
+	[self->nr_switcher switcher: nil showLayer: descriptor];
 }
 
 @end
@@ -125,9 +136,9 @@
 	return self;
 }
 
--(NSArray*)layerFactoriesForSwitcher: (NTIAppNavigationLayerSwitcher*)_
+-(NSArray*)layerProvidersForSwitcher: (NTIAppNavigationLayerSwitcher*)_
 {
-	return [self->nr_delegate layerFactoriesForSwitcher: self];
+	return [self->nr_delegate layerProvidersForSwitcher: self];
 }
 
 -(NSArray*)layersThatCanBeBroughtForwardForSwitcher: (NTIAppNavigationLayerSwitcher*)_
@@ -140,9 +151,9 @@
 	[self->nr_delegate switcher: self bringLayerForward: layer];
 }
 
--(void)switcher: (NTIAppNavigationLayerSwitcher*)_ showAppLayer: (NTIAppNavigationAppLayerFactory*)appLayer
+-(void)switcher: (NTIAppNavigationLayerSwitcher*)switcher showLayer: (id<NTIAppNavigationLayerDescriptor>)layerDescriptor;
 {
-	[self->nr_delegate switcher: self showAppLayer: appLayer];
+	[self->nr_delegate switcher: self showLayer: layerDescriptor];
 }
 
 @end
