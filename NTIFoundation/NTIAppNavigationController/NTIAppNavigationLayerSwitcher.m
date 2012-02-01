@@ -89,7 +89,7 @@
 
 -(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-	return [[self->layerProviders objectAtIndex: section] name];
+	return [[self->layerProviders objectAtIndex: section] layerProviderName];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
