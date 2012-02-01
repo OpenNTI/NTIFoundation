@@ -14,37 +14,6 @@
 @implementation SocketIOPacket
 @synthesize type, packetId, endpoint, ack, data, reason, advice, ackId, args, qs, name;
 
-static NSArray* piecesFromString(NSString* data, NSString* regexString){
-	NSError* error = nil;
-	NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern: regexString 
-																		   options: 0 
-																			 error: &error];
-	
-	if (error) {
-		NSLog(@"%@", [error description]);
-		return nil;
-	}
-	
-	NSArray* results = [regex matchesInString: data options:0 range:NSMakeRange(0, [data length])];
-	NSMutableArray* parts = [NSMutableArray arrayWithCapacity: regex.numberOfCaptureGroups];
-	for (NSTextCheckingResult* result in results) {
-		
-		for(NSUInteger i = 1 ; i<=regex.numberOfCaptureGroups; i++ ){
-			NSRange range = [result rangeAtIndex: i];
-			if(range.location == NSNotFound){
-				[parts addObject: @""];
-			}else{
-				[parts addObject: [data substringWithRange: range]];
-			}
-		}
-		
-		//Only take the first match
-		break;
-	}
-	return parts;
-
-}
-
 static NSString* stringForErrorReason(SocketIOErrorReason reason)
 {
 	switch (reason) {
@@ -79,7 +48,7 @@ static id fromExternalData(NSString* external)
 +(SocketIOPacket*)decodePacketData: (NSData*)data;
 {
 	NSString* dataString = [NSString stringWithData: data encoding: NSUTF8StringEncoding];
-	NSArray* pieces = piecesFromString(dataString, @"([^:]+):([0-9]+)?(\\+)?:([^:]+)?:?([\\s\\S]*)?");
+	NSArray* pieces = [dataString piecesUsingRegex: @"([^:]+):([0-9]+)?(\\+)?:([^:]+)?:?([\\s\\S]*)?"];
 	if( !pieces || ![pieces count] > 0){
 		//The spec allows for a simple 0 to be passed back.
 		//FIXME special cased.
@@ -135,7 +104,7 @@ static id fromExternalData(NSString* external)
 			packet.qs = theData ? theData : @"";
 			break;
 		case SocketIOPacketTypeAck:{
-			NSArray* ackPieces = piecesFromString(theData, @"^([0-9]+)(\\+)?(.*)");
+			NSArray* ackPieces = [theData piecesUsingRegex: @"^([0-9]+)(\\+)?(.*)"];
 			if(ackPieces && [ackPieces count] > 0){
 				packet.ack = [ackPieces firstObject];
 				packet.args = [NSArray array];

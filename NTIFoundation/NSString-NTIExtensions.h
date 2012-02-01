@@ -47,4 +47,6 @@
 
 +(NSString*)uuid;
 
+-(NSArray*)piecesUsingRegex: (NSString*)regex;
+
 @end

@@ -22,6 +22,27 @@
 	return [SocketIOPacket decodePacketData: [str dataUsingEncoding: NSUTF8StringEncoding]];
 }
 
+-(void)testDecodePayloadTakesPacket
+{
+	NSString* toDecode = @"3:1::blabla";
+	
+	NSArray* decoded = [SocketIOPacket decodePayload: [toDecode dataUsingEncoding: NSUTF8StringEncoding]];
+	
+	STAssertEquals((int)decoded.count, 1, @"Excpected one packet");
+	
+	SocketIOPacket* packet = [decoded firstObject];
+	
+	STAssertPacketType(packet, SocketIOPacketTypeMessage);
+	STAssertEqualObjects(packet.packetId, @"1", @"Wrong packet id");
+	STAssertEqualObjects(packet.data, @"blabla", @"Bad packet data");
+}
+
+-(void)testParseSpecialDisconnect
+{
+	SocketIOPacket* disconnect = [self packetForString: @"0"];
+	STAssertPacketType(disconnect, SocketIOPacketTypeDisconnect);
+}
+
 -(void)testParseHeartbeat
 {
 	SocketIOPacket* heartbeat = [self packetForString: @"2::"];

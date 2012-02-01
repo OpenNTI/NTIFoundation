@@ -2051,6 +2051,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NTIFoundationApplicationTests/NTIFoundationApplicationTests-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					DEBUG_SOCKETIO,
 					"DEBUG=1",
 					"$(inherited)",
 				);
@@ -2112,7 +2113,6 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NTIFoundation/NTIFoundation-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					DEBUG_SOCKETIO,
 					"DEBUG=1",
 					"$(inherited)",
 				);
@@ -2214,6 +2214,10 @@
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NTIFoundation/NTIFoundation-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					TEST,
+					COVERAGE,
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

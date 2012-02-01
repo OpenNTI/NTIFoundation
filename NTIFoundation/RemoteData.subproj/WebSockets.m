@@ -586,37 +586,6 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	}
 }
 
-static NSArray* piecesFromString(NSString* data, NSString* regexString){
-	NSError* error = nil;
-	NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern: regexString 
-																		   options: 0 
-																			 error: &error];
-	
-	if (error) {
-		NSLog(@"%@", [error description]);
-		return nil;
-	}
-	
-	NSArray* results = [regex matchesInString: data options:0 range:NSMakeRange(0, [data length])];
-	NSMutableArray* parts = [NSMutableArray arrayWithCapacity: 5];
-	for (NSTextCheckingResult* result in results) {
-		
-		for(NSUInteger i = 1 ; i<=regex.numberOfCaptureGroups; i++ ){
-			NSRange range = [result rangeAtIndex: i];
-			if(range.location == NSNotFound){
-				[parts addObject: nil];
-			}else{
-				[parts addObject: [data substringWithRange: range]];
-			}
-		}
-		
-		//Only take the first match
-		break;
-	}
-	return parts;
-	
-}
-
 static NSData* hashUsingSHA1(NSData* data)
 {
     unsigned char hashBytes[CC_SHA1_DIGEST_LENGTH];
@@ -625,9 +594,15 @@ static NSData* hashUsingSHA1(NSData* data)
     return [NSData dataWithBytes:hashBytes length:CC_SHA1_DIGEST_LENGTH];
 }
 
--(BOOL)isSuccessfulHandshakeResponse: (NSString*)response
+#ifdef TEST
+#define PRIVATE_STATIC_TESTABLE
+#else
+#define PRIVATE_STATIC_TESTABLE static
+#endif
+PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, NSString* key);
+PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, NSString* key)
 {
-	NSArray* parts = piecesFromString( response, @"Sec-WebSocket-Accept:\\s+(.+?)\\s");
+	NSArray* parts = [response piecesUsingRegex: @"Sec-WebSocket-Accept:\\s+(.+?)\\s"];
 	//We expect one part the accept key
 	if( [parts count] < 1  || ![parts firstObject]){
 		return NO;
@@ -635,17 +610,19 @@ static NSData* hashUsingSHA1(NSData* data)
 	
 	//return YES;
 	NSString* acceptKey = [parts firstObject];
-//	NSLog(@"Accept key %@", acceptKey);
+	//	NSLog(@"Accept key %@", acceptKey);
 	//The accept key should be our key concated with the secret.  Sha-1 hashed and then base64 encoded
-	NSString* concatWithSecret = [NSString stringWithFormat: @"%@%@", self->key, @"258EAFA5-E914-47DA-95CA-C5AB0DC85B11", nil];
-//	NSLog(@"concat is %@", concatWithSecret);
+	NSString* concatWithSecret = [NSString stringWithFormat: @"%@%@", key, @"258EAFA5-E914-47DA-95CA-C5AB0DC85B11", nil];
+	//	NSLog(@"concat is %@", concatWithSecret);
 	NSData* hash=hashUsingSHA1([concatWithSecret dataUsingEncoding: NSUTF8StringEncoding]);
-//	NSLog(@"hash %@", hash);
+	//	NSLog(@"hash %@", hash);
 	NSString* encoded = [hash base64String];
-//	NSLog(@"encoded %@", encoded);
+	//	NSLog(@"encoded %@", encoded);
 	
 	return [encoded isEqualToString: acceptKey];
 }
+
+#undef STATIC
 
 -(void)processHandshakeResponse: (HandshakeResponseBuffer*)hrBuffer
 {
@@ -655,7 +632,7 @@ static NSData* hashUsingSHA1(NSData* data)
 	NSLog(@"Handling handshake response %@", response);
 #endif
 	//FIXME actually check the accept field
-	if ( response && [self isSuccessfulHandshakeResponse: response] ) {
+	if ( response && isSuccessfulHandshakeResponse(response, self->key) ) {
 		[self updateStatus: WebSocketStatusConnected];
 	} else {
 		[self shutdownAsResultOfError: errorWithCodeAndMessage(300, 
