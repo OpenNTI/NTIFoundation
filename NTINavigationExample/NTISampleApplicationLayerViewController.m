@@ -69,6 +69,30 @@
 	}
 }
 
+-(void)viewWillDisappear:(BOOL)animated
+{
+	NSLog(@"View will disappear %@", self);
+	[super viewWillDisappear: animated];
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+	NSLog(@"View did disappear %@", self);
+	[super viewDidDisappear: animated];
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+	NSLog(@"view did appear %@", self);
+	[super viewDidAppear: animated];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+	NSLog(@"view will appear %@", self);
+	[super viewWillAppear: animated];
+}
+
 - (void)viewDidUnload
 {
 	[self setTitleLabel:nil];

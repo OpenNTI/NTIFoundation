@@ -457,11 +457,14 @@ static BOOL isAppLayer(id possibleLayer)
 		
 		UIViewController* leaving = [self->navController popViewControllerAnimated: NO];
 		UIView* toAnimateOut = leaving.view;
+		[leaving removeFromParentViewController];
 		[toAnimateOut removeFromSuperview];
 		toAnimateOut.layer.shadowOpacity = .5;
 		toAnimateOut.layer.shadowOffset = CGSizeMake(-5, 0);
 		[self addChildViewController: leaving];
 		[self.view addSubview: toAnimateOut];
+		
+		
 		
 		toAnimateOut.frame = startingRect;
 				
@@ -471,8 +474,8 @@ static BOOL isAppLayer(id possibleLayer)
 							 toAnimateOut.frame = endingRect;
 						 } 
 						 completion: ^(BOOL success){
-							 //Remove it from the window and push it on the view controller
 							 [toAnimateOut removeFromSuperview];
+							 [leaving removeFromParentViewController];
 						 }];
 
 	}
@@ -657,6 +660,11 @@ static BOOL isAppLayer(id possibleLayer)
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
 	return YES;
+}
+
+-(id)appNavController
+{
+	return self;
 }
 
 @end
