@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "NTIAppNavigationLayerProvider.h"
+#import "NTIAppNavigationLayer.h"
 
 /*
  * Objects implementing this protocol are used to describe layers.  Layer
@@ -20,6 +21,5 @@
  */
 @protocol NTIAppNavigationLayerDescriptor <NSObject>
 @property (nonatomic, readonly) id<NTIAppNavigationLayerProvider>provider;
--(BOOL)isSameLayerDescriptor: (id<NTIAppNavigationLayerProvider>)otherDescriptor;
 @property (nonatomic, readonly) NSString* title;
 @end

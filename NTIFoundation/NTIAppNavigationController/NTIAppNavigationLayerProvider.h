@@ -16,4 +16,5 @@
 @property (nonatomic, readonly) NSString* layerProviderName; //A name for this layer provider, may be used as part of display
 @property (nonatomic, readonly) NSArray* layerDescriptors; //should provide kvo on this property
 -(UIViewController<NTIAppNavigationLayer>*)createLayerForDescriptor: (id<NTIAppNavigationLayerDescriptor>) descriptor; 
+-(BOOL)descriptor: (id<NTIAppNavigationLayerDescriptor>)descriptor representsLayer: (id<NTIAppNavigationLayer>)layer;
 @end

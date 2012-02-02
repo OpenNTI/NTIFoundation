@@ -638,10 +638,42 @@ static BOOL isAppLayer(id possibleLayer)
 	[self bringLayerForward: layer];
 }
 
+
+//Current hueristic is as follows
+//Search through our view controllers from top to bottom looking for a layer represented by the layerDescriptor. If the layer
+//is found and it responds to and answers yes for canBringToFront as well as shouldAlwaysBringToFront, move it to the front
+//else create a new one and push it.
+-(id<NTIAppNavigationLayer>)layerToMoveForwardForDescriptor: (id<NTIAppNavigationLayerDescriptor>)descriptor
+{
+	//Go from top to bottom
+	id<NTIAppNavigationLayer> layer = nil;
+	for(NSInteger idx = self->viewControllers.count - 1; idx >= 0; idx--)
+	{
+		layer = [self->viewControllers objectAtIndex: idx];
+		if(   [descriptor.provider descriptor: descriptor representsLayer: layer]
+		   && [layer respondsToSelector: @selector(canBringToFront)]
+		   && [layer canBringToFront]
+		   && [layer respondsToSelector: @selector(shouldAlwaysBringToFront)]
+		   && [layer shouldAlwaysBringToFront]){
+			return layer;
+		}
+		
+	}
+	return nil;
+}
+
 -(void)switcher: (NTIAppNavigationLayerSwitcher*)switcher showLayer: (id<NTIAppNavigationLayerDescriptor>)layerDescriptor;
 {
-	UIViewController<NTIAppNavigationLayer>* toPush = [layerDescriptor.provider createLayerForDescriptor: layerDescriptor]; 
-	[self pushLayer: toPush animated: YES];
+	//If this returns nil we will create a new one
+	id<NTIAppNavigationLayer> layerToMove = [self layerToMoveForwardForDescriptor: layerDescriptor];
+	
+	if(layerToMove){
+		[self bringLayerForward: layerToMove];
+	}
+	else{
+		UIViewController<NTIAppNavigationLayer>* toPush = [layerDescriptor.provider createLayerForDescriptor: layerDescriptor]; 
+		[self pushLayer: toPush animated: YES];
+	}
 }
 
 -(void)registerLayerProvider: (id<NTIAppNavigationLayerProvider>)layerProvider

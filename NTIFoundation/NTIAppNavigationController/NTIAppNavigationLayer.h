@@ -16,6 +16,7 @@
 -(NSString*)titleForAppNavigationController: (NTIAppNavigationController*)controller;
 //Can this layer be moved to the front from somewhere down in the stack.
 -(BOOL)canBringToFront;
+-(BOOL)shouldAlwaysBringToFront;
 //Messages around badging certain ui components to bring background changes to the users attention.
 //layers must implement both or none.
 -(NSUInteger)outstandingBadgeCount;
