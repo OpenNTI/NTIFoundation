@@ -867,18 +867,11 @@
 			name = "Web Sockets";
 			sourceTree = "<group>";
 		};
-		40C34C5D14D88BA6000D91A8 /* LogicTests */ = {
+		40A745B414DADDD90093F0D4 /* FoundationExtensionsTests */ = {
 			isa = PBXGroup;
 			children = (
-				72D8185E13955D8C00473994 /* Supporting Files */,
-				40B6F3B814285AF4007EDF1C /* WebSocket7Test.h */,
-				40B6F3B914285AF4007EDF1C /* WebSocket7Test.m */,
-				40E0461A143F5F260091CE7C /* NTIHTMLReaderTest.h */,
-				40E0461B143F5F260091CE7C /* NTIHTMLReaderTest.m */,
 				40F39C7F14D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.h */,
 				40F39C8014D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m */,
-				40F39C8214D84EF50089DCF6 /* SendRecieveQueueTest.h */,
-				40F39C8314D84EF50089DCF6 /* SendRecieveQueueTest.m */,
 				40F39C8514D852FE0089DCF6 /* NSString-NTIExtensionsTest.h */,
 				40F39C8614D852FE0089DCF6 /* NSString-NTIExtensionsTest.m */,
 				403C290514577A260012CBAB /* NSAttributedString-NTIExtensionsTest.h */,
@@ -887,12 +880,51 @@
 				4029274D1498653200E4720A /* NSArray-NTIExtenstionsTest.m */,
 				4029275114986A9800E4720A /* NSMutableArray-NTIExtensionsTest.h */,
 				4029275214986A9800E4720A /* NSMutableArray-NTIExtensionsTest.m */,
-				40C0E1011443AF9C00142406 /* SocketIOPacketTest.h */,
-				40C0E1021443AF9C00142406 /* SocketIOPacketTest.m */,
+			);
+			name = FoundationExtensionsTests;
+			sourceTree = "<group>";
+		};
+		40A745B514DADE290093F0D4 /* RTFEditingTests */ = {
+			isa = PBXGroup;
+			children = (
+				40E0461A143F5F260091CE7C /* NTIHTMLReaderTest.h */,
+				40E0461B143F5F260091CE7C /* NTIHTMLReaderTest.m */,
 				403D0DCB143E38FD0049A755 /* NSAttributedString-HTMLReadingExtensionsTest.h */,
 				403D0DCC143E38FD0049A755 /* NSAttributedString-HTMLReadingExtensionsTest.m */,
+			);
+			name = RTFEditingTests;
+			sourceTree = "<group>";
+		};
+		40A745B614DADE470093F0D4 /* RemoteDataTests */ = {
+			isa = PBXGroup;
+			children = (
+				40B6F3B814285AF4007EDF1C /* WebSocket7Test.h */,
+				40B6F3B914285AF4007EDF1C /* WebSocket7Test.m */,
+				40F39C8214D84EF50089DCF6 /* SendRecieveQueueTest.h */,
+				40F39C8314D84EF50089DCF6 /* SendRecieveQueueTest.m */,
+				40C0E1011443AF9C00142406 /* SocketIOPacketTest.h */,
+				40C0E1021443AF9C00142406 /* SocketIOPacketTest.m */,
+			);
+			name = RemoteDataTests;
+			sourceTree = "<group>";
+		};
+		40A745B714DADE5E0093F0D4 /* JSONTests */ = {
+			isa = PBXGroup;
+			children = (
 				40A7459714DA30050093F0D4 /* NSObject-NTIJSONTest.h */,
 				40A7459814DA30050093F0D4 /* NSObject-NTIJSONTest.m */,
+			);
+			name = JSONTests;
+			sourceTree = "<group>";
+		};
+		40C34C5D14D88BA6000D91A8 /* LogicTests */ = {
+			isa = PBXGroup;
+			children = (
+				40A745B514DADE290093F0D4 /* RTFEditingTests */,
+				40A745B414DADDD90093F0D4 /* FoundationExtensionsTests */,
+				40A745B614DADE470093F0D4 /* RemoteDataTests */,
+				40A745B714DADE5E0093F0D4 /* JSONTests */,
+				72D8185E13955D8C00473994 /* Supporting Files */,
 			);
 			name = LogicTests;
 			sourceTree = "<group>";
