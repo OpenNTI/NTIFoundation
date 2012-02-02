@@ -121,4 +121,74 @@
 	
 }
 
+-(void)testMovingTopTransientLayerFromTopAppLayerDoesNothing
+{
+	id appLayer1 = [[TestAppLayer alloc] initWithNibName: nil bundle: nil];
+	id transLayer1B = [[TestTransLayer alloc] initWithNibName: nil bundle: nil];
+	id transLayer1M = [[TestTransLayer alloc] initWithNibName: nil bundle: nil];
+	id transLayer1T = [[TestTransLayer alloc] initWithNibName: nil bundle: nil];
+	id appLayer2 = [[TestAppLayer alloc] initWithNibName: nil bundle: nil];
+	id transLayer2B = [[TestTransLayer alloc] initWithNibName: nil bundle: nil];
+	id transLayer2M = [[TestTransLayer alloc] initWithNibName: nil bundle: nil];
+	id transLayer2T = [[TestTransLayer alloc] initWithNibName: nil bundle: nil];
+	
+	[self->appNavController pushLayer: appLayer1 animated: NO];
+	[self->appNavController pushLayer: transLayer1B animated: NO];
+	[self->appNavController pushLayer: transLayer1M animated: NO];
+	[self->appNavController pushLayer: transLayer1T animated: NO];
+	[self->appNavController pushLayer: appLayer2 animated: NO];
+	[self->appNavController pushLayer: transLayer2B animated: NO];
+	[self->appNavController pushLayer: transLayer2M animated: NO];
+	[self->appNavController pushLayer: transLayer2T animated: NO];
+	
+	NSArray* layers = [NSArray arrayWithObjects: self->rootLayer, 
+					   appLayer1, transLayer1B, transLayer1M, transLayer1T, 
+					   appLayer2, transLayer2B, transLayer2M, transLayer2T, nil];
+	
+	STAssertEqualObjects(self->appNavController.layers, 
+						 layers, nil);
+	
+	[self->appNavController bringLayerForward: transLayer2T];
+	
+	STAssertEqualObjects(self->appNavController.layers, 
+						 layers, nil);
+
+}
+
+-(void)testMovingTransientLayer
+{
+	id appLayer1 = [[TestAppLayer alloc] initWithNibName: nil bundle: nil];
+	id transLayer1 = [[TestTransLayer alloc] initWithNibName: nil bundle: nil];
+	id transLayer2 = [[TestTransLayer alloc] initWithNibName: nil bundle: nil];
+	id appLayer2 = [[TestAppLayer alloc] initWithNibName: nil bundle: nil];
+	id transLayer3 = [[TestTransLayer alloc] initWithNibName: nil bundle: nil];
+	
+	[self->appNavController pushLayer: appLayer1 animated: NO];
+	[self->appNavController pushLayer: transLayer1 animated: NO];
+	[self->appNavController pushLayer: transLayer2 animated: NO];
+	[self->appNavController pushLayer: appLayer2 animated: NO];
+	[self->appNavController pushLayer: transLayer3 animated: NO];
+	
+	NSArray* layers = [NSArray arrayWithObjects: self->rootLayer, 
+					   appLayer1, transLayer1, 
+					   transLayer2, appLayer2, transLayer3, nil];
+	
+	STAssertEqualObjects(self->appNavController.layers, 
+						 layers, nil);
+	
+	[self->appNavController bringLayerForward: transLayer1];
+	
+	STAssertEquals(self->appNavController.topApplicationLayer, appLayer2, nil);
+	
+	STAssertEqualObjects(self->appNavController.topLayer, transLayer1, nil);
+	
+	layers = [NSArray arrayWithObjects: self->rootLayer, 
+			  appLayer1, transLayer2, appLayer2, transLayer3, 
+			  transLayer1, nil];
+	
+	STAssertEqualObjects(self->appNavController.layers, 
+						 layers, nil);
+
+}
+
 @end

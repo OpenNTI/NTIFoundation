@@ -541,9 +541,63 @@ static BOOL isAppLayer(id possibleLayer)
 	[self pushNavController: (id)appLayer animated: YES];
 }
 
--(void)moveTransientLayerToTop: (id<NTIAppNavigationApplicationLayer>)layer
+-(void)moveTransientLayerToTop: (UIViewController<NTIAppNavigationTransientLayer>*)layer
 {
-	NSLog(@"Moving transient layer not yet implemented.");
+	//If we are asekd to move the top transient layer do nothing
+	if(self.topLayer == (id)layer){
+		return;
+	}
+
+	NSUInteger indexOfTransientLayer = [self->viewControllers indexOfObjectIdenticalTo: layer];
+	
+	OBASSERT(indexOfTransientLayer != NSNotFound);
+	OBASSERT(indexOfTransientLayer < self->viewControllers.count - 1);
+	
+	//Are we the top transient layer of our app layer.  If so the next vc in the view controller list will
+	//be an app layer
+	BOOL isTopTransientLayer = isAppLayer([self->viewControllers objectAtIndex: indexOfTransientLayer + 1]);
+	
+	//We also need to know if we are the very bottom transient layer
+	BOOL isBottomTransientLayer = isAppLayer([self->viewControllers objectAtIndex: indexOfTransientLayer - 1]);
+	
+	//We need to know the applayer this transient layer currently belongs to so we can do
+	//things like removing the mask if necessary
+	UIViewController* appLayerThatOwnsUs = nil;
+	NSInteger idx = indexOfTransientLayer - 1;
+	do{
+		id potentialAppLayer = [self->viewControllers objectAtIndex: idx];
+		if(isAppLayer(potentialAppLayer)){
+			appLayerThatOwnsUs = potentialAppLayer;
+			break;
+		}
+		idx--;
+		
+	}while(idx >= 0);
+	
+	OBASSERT_NOTNULL(appLayerThatOwnsUs);
+	
+	//Now if we are the top transient but not the bottom we need to unhide what is beneath us
+	if( isTopTransientLayer && !isBottomTransientLayer){
+		UIViewController* transientRightBeneathUs = [self->viewControllers objectAtIndex: indexOfTransientLayer - 1];
+		transientRightBeneathUs.view.hidden = NO;
+	}
+	
+	//If we are the only transient layer we need to remove the mask
+	if( isTopTransientLayer && isBottomTransientLayer ){
+		for(UIView* subview in appLayerThatOwnsUs.view.subviews){
+			if( [subview isKindOfClass: [_TransientLayerMask class]] ){
+				[subview removeFromSuperview];
+			}
+		}
+	}
+	
+	//Now we need to remove overselves and push us
+	[layer.view removeFromSuperview];
+	[layer removeFromParentViewController];
+	
+	[self->viewControllers removeObjectIdenticalTo: layer];
+	
+	[self pushLayer: layer animated: YES];
 }
 
 -(void)bringLayerForward: (id<NTIAppNavigationLayer>)layer
