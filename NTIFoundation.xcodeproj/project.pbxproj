@@ -80,6 +80,8 @@
 		408FBF17143F65D70095DD84 /* NTIHTMLReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E04613143F47890091CE7C /* NTIHTMLReader.m */; };
 		408FBF19143F66A40095DD84 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408FBF18143F66A40095DD84 /* ImageIO.framework */; };
 		408FBF1A143F6E5F0095DD84 /* OQColor-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E04617143F50A60091CE7C /* OQColor-NTIExtensions.m */; };
+		40A7459914DA30050093F0D4 /* NSObject-NTIJSONTest.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A7459714DA30050093F0D4 /* NSObject-NTIJSONTest.h */; };
+		40A7459B14DA30050093F0D4 /* NSObject-NTIJSONTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40A7459814DA30050093F0D4 /* NSObject-NTIJSONTest.m */; };
 		40AEBDD8145A5A6700028750 /* NTIEditableFrameScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 40AEBDD6145A5A6700028750 /* NTIEditableFrameScrollView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40AEBDD9145A5A6700028750 /* NTIEditableFrameScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40AEBDD7145A5A6700028750 /* NTIEditableFrameScrollView.m */; };
 		40B5B49414C896CC009D5810 /* libNTIFoundation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 72C0D196142529E800D526D8 /* libNTIFoundation.a */; };
@@ -576,6 +578,8 @@
 		408FBF12143F64430095DD84 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		408FBF14143F64620095DD84 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		408FBF18143F66A40095DD84 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		40A7459714DA30050093F0D4 /* NSObject-NTIJSONTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject-NTIJSONTest.h"; sourceTree = "<group>"; };
+		40A7459814DA30050093F0D4 /* NSObject-NTIJSONTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject-NTIJSONTest.m"; sourceTree = "<group>"; };
 		40AEBDD6145A5A6700028750 /* NTIEditableFrameScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIEditableFrameScrollView.h; sourceTree = "<group>"; };
 		40AEBDD7145A5A6700028750 /* NTIEditableFrameScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIEditableFrameScrollView.m; sourceTree = "<group>"; };
 		40B5B49514C896CC009D5810 /* libNTIUserDataModel.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libNTIUserDataModel.a; path = "../../../Library/Developer/Xcode/DerivedData/NTIWorkspace-fdtwmhzrtxvlxtdrcxuhoowljuey/Build/Products/Debug-iphoneos/libNTIUserDataModel.a"; sourceTree = "<group>"; };
@@ -887,6 +891,8 @@
 				40C0E1021443AF9C00142406 /* SocketIOPacketTest.m */,
 				403D0DCB143E38FD0049A755 /* NSAttributedString-HTMLReadingExtensionsTest.h */,
 				403D0DCC143E38FD0049A755 /* NSAttributedString-HTMLReadingExtensionsTest.m */,
+				40A7459714DA30050093F0D4 /* NSObject-NTIJSONTest.h */,
+				40A7459814DA30050093F0D4 /* NSObject-NTIJSONTest.m */,
 			);
 			name = LogicTests;
 			sourceTree = "<group>";
@@ -1290,6 +1296,7 @@
 				40C34CC114D9AAFB000D91A8 /* NTIAppNavigationLayerProvider.h in Headers */,
 				40C34CC314D9AB9B000D91A8 /* NTIAppNavigationLayerDescriptor.h in Headers */,
 				402665CE14D9BB950053CC53 /* NTIAppNavigationLayer.h in Headers */,
+				40A7459914DA30050093F0D4 /* NSObject-NTIJSONTest.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1858,6 +1865,7 @@
 				40F39C8114D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m in Sources */,
 				40F39C8414D84EF50089DCF6 /* SendRecieveQueueTest.m in Sources */,
 				40F39C8714D852FE0089DCF6 /* NSString-NTIExtensionsTest.m in Sources */,
+				40A7459B14DA30050093F0D4 /* NSObject-NTIJSONTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
