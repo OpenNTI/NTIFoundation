@@ -19,7 +19,7 @@
  * Layer descriptors should also provide information about badge counts for background
  * changes
  */
-@protocol NTIAppNavigationLayerDescriptor <NSObject>
+@protocol NTIAppNavigationLayerDescriptor <NTIChangeCountTracking>
 @property (nonatomic, readonly) id<NTIAppNavigationLayerProvider>provider;
 @property (nonatomic, readonly) NSString* title;
 @end

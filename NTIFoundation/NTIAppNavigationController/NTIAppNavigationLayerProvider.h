@@ -12,7 +12,7 @@
 
 @protocol NTIAppNavigationLayerDescriptor;
 
-@protocol NTIAppNavigationLayerProvider <NSObject>
+@protocol NTIAppNavigationLayerProvider <NTIChangeCountTracking>
 @property (nonatomic, readonly) NSString* layerProviderName; //A name for this layer provider, may be used as part of display
 @property (nonatomic, readonly) NSArray* layerDescriptors; //should provide kvo on this property
 -(UIViewController<NTIAppNavigationLayer>*)createLayerForDescriptor: (id<NTIAppNavigationLayerDescriptor>) descriptor; 

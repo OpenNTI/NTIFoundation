@@ -8,8 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+//FIXME terriblename
+@protocol NTIChangeCountTracking <NSObject>
+@optional
+-(NSUInteger)changeCountSinceLastReset; //Should be kvo-able
+-(void)resetChangeCount;
+@end
+
 @class NTIAppNavigationController;
-@protocol NTIAppNavigationLayer <NSObject>
+@protocol NTIAppNavigationLayer <NTIChangeCountTracking>
 @optional
 //Messages for configuration of the title bar
 -(NSString*)textForAppNavigationControllerDownButton: (NTIAppNavigationController*)controller;
@@ -17,10 +24,6 @@
 //Can this layer be moved to the front from somewhere down in the stack.
 -(BOOL)canBringToFront;
 -(BOOL)shouldAlwaysBringToFront;
-//Messages around badging certain ui components to bring background changes to the users attention.
-//layers must implement both or none.
--(NSUInteger)outstandingBadgeCount;
--(void)resetBadgeCount;
 @end
 
 @protocol NTIAppNavigationApplicationLayer <NTIAppNavigationLayer>

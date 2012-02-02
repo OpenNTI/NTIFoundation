@@ -674,6 +674,10 @@ static BOOL isAppLayer(id possibleLayer)
 		UIViewController<NTIAppNavigationLayer>* toPush = [layerDescriptor.provider createLayerForDescriptor: layerDescriptor]; 
 		[self pushLayer: toPush animated: YES];
 	}
+	
+	if([layerDescriptor respondsToSelector: @selector(resetChangeCount)]){
+		[layerDescriptor resetChangeCount];
+	}
 }
 
 -(void)registerLayerProvider: (id<NTIAppNavigationLayerProvider>)layerProvider
