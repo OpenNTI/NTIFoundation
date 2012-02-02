@@ -131,7 +131,7 @@
 		[updatedIndexes enumerateIndexesUsingBlock:^(NSUInteger index, BOOL *stop) {
 			[indexPathsToUpdate addObject:[NSIndexPath indexPathForRow: index inSection: sectionOfChange]];
 		}];
-		[self.tableView deleteRowsAtIndexPaths: indexPathsToUpdate withRowAnimation: UITableViewRowAnimationAutomatic];	
+		[self.tableView reloadRowsAtIndexPaths: indexPathsToUpdate withRowAnimation: UITableViewRowAnimationAutomatic];	
 	}
 
 }
