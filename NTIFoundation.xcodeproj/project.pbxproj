@@ -58,6 +58,8 @@
 		40572C5C14C894940032D2DB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72CBA96B1385CF1F00E3D28D /* Foundation.framework */; };
 		40572C5D14C894940032D2DB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408FBF08143F636F0095DD84 /* CoreGraphics.framework */; };
 		40572C6314C894940032D2DB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 40572C6114C894940032D2DB /* InfoPlist.strings */; };
+		406DB42A14DB50A1008AEABF /* switch_active.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 406DB42714DB4D9B008AEABF /* switch_active.png */; };
+		406DB42B14DB50A1008AEABF /* switch_inactive.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 406DB42814DB4D9B008AEABF /* switch_inactive.png */; };
 		4076F88E14C8A132004C6301 /* NTIAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 40572C6814C894940032D2DB /* NTIAppDelegate.m */; };
 		4076F88F14C8A151004C6301 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 40572C6414C894940032D2DB /* main.m */; };
 		4076F98514C8AFF3004C6301 /* NTISampleApplicationLayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4076F98314C8AFF3004C6301 /* NTISampleApplicationLayerViewController.m */; };
@@ -521,6 +523,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		406DB42914DB5083008AEABF /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "Resources/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 7;
+			files = (
+				406DB42A14DB50A1008AEABF /* switch_active.png in CopyFiles */,
+				406DB42B14DB50A1008AEABF /* switch_inactive.png in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		4006E76A149272E000D63524 /* NSObject-NTIJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject-NTIJSON.m"; sourceTree = "<group>"; };
 		40103C0614D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIAppNavigationLayerSwitcher.h; sourceTree = "<group>"; };
@@ -563,6 +579,8 @@
 		40572C6614C894940032D2DB /* NTINavigationExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NTINavigationExample-Prefix.pch"; sourceTree = "<group>"; };
 		40572C6714C894940032D2DB /* NTIAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NTIAppDelegate.h; sourceTree = "<group>"; };
 		40572C6814C894940032D2DB /* NTIAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = NTIAppDelegate.m; path = NTINavigationExample/NTIAppDelegate.m; sourceTree = SOURCE_ROOT; };
+		406DB42714DB4D9B008AEABF /* switch_active.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switch_active.png; sourceTree = "<group>"; };
+		406DB42814DB4D9B008AEABF /* switch_inactive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switch_inactive.png; sourceTree = "<group>"; };
 		4076F98214C8AFF3004C6301 /* NTISampleApplicationLayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTISampleApplicationLayerViewController.h; sourceTree = "<group>"; };
 		4076F98314C8AFF3004C6301 /* NTISampleApplicationLayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTISampleApplicationLayerViewController.m; sourceTree = "<group>"; };
 		4076F98414C8AFF3004C6301 /* NTISampleApplicationLayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NTISampleApplicationLayerViewController.xib; sourceTree = "<group>"; };
@@ -863,6 +881,24 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		406DB40D14DB4CFB008AEABF /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				406DB42614DB4D47008AEABF /* NonFreePlaceholders */,
+			);
+			name = Resources;
+			path = NTIFoundation/Resources;
+			sourceTree = "<group>";
+		};
+		406DB42614DB4D47008AEABF /* NonFreePlaceholders */ = {
+			isa = PBXGroup;
+			children = (
+				406DB42714DB4D9B008AEABF /* switch_active.png */,
+				406DB42814DB4D9B008AEABF /* switch_inactive.png */,
+			);
+			name = NonFreePlaceholders;
+			sourceTree = "<group>";
+		};
 		408494B21427DF510038BD31 /* Web Sockets */ = {
 			isa = PBXGroup;
 			children = (
@@ -994,6 +1030,7 @@
 				40572C5E14C894940032D2DB /* NTINavigationExample */,
 				72CBA9681385CF1F00E3D28D /* Frameworks */,
 				72CBA9661385CF1F00E3D28D /* Products */,
+				406DB40D14DB4CFB008AEABF /* Resources */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1396,6 +1433,7 @@
 				72C0D192142529E800D526D8 /* Sources */,
 				72C0D193142529E800D526D8 /* Frameworks */,
 				72C0D194142529E800D526D8 /* Headers */,
+				406DB42914DB5083008AEABF /* CopyFiles */,
 			);
 			buildRules = (
 			);

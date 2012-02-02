@@ -28,6 +28,7 @@
 -(void)setDownButtonTitle: (NSString*)title;
 -(void)setDownButtonHidden: (BOOL)enabled;
 -(void)setTitle: (NSString*)title;
+-(void)setLayerButtonActive: (BOOL)active;
 @end
 
 @implementation NTIAppNavigationToolbar
@@ -47,16 +48,34 @@ static UILabel* titleLabelForToolbar()
 	return titleLabel;
 }
 
--(id)initWithTarget: (id)target andFrame: (CGRect)frame
+-(UIView*)customViewForLayerSwitcher: (BOOL)active
+{
+	UIImage* image = [UIImage imageNamed: active ? @"switch_active.png" : @"switch_inactive.png"];
+	UIButton* button = [[UIButton alloc] init];
+	[button addTarget: self action: @selector(interceptLayer:) forControlEvents: UIControlEventTouchUpInside];
+	[button setImage: image forState: UIControlStateNormal];
+	button.frame = CGRectMake(0, 0, image.size.width, image.size.height);
+	return button;
+}
+
+-(void)interceptLayer: (id)_
+{
+	[self->target performSelector: @selector(layer:) withObject: self->layerSelectorButton];
+}
+
+-(id)initWithTarget: (id)t andFrame: (CGRect)frame
 {
 	self = [super initWithFrame: frame];
-	
+	self->target = t;
 	self->downButton = [[UIBarButtonItem alloc] initWithTitle: @"Down"
 														style: UIBarButtonItemStyleBordered 
 													   target: self->target
 													   action: @selector(down:)];
 	
-	self->layerSelectorButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemAction target: self->target action: @selector(layer:)];
+	UIView* customView = [self customViewForLayerSwitcher: NO];
+	self->layerSelectorButton = [[UIBarButtonItem alloc] initWithCustomView: customView];
+//	self->layerSelectorButton.action = @selector(layer:);
+//	self->layerSelectorButton.target = self->target;
 	
 	UILabel* titleLabel = titleLabelForToolbar();
 	self->titleButton = [[UIBarButtonItem alloc] initWithCustomView: titleLabel];
@@ -85,6 +104,16 @@ static UILabel* titleLabelForToolbar()
 				  self->searchButton, self->globeButton, nil];
 	
 	return self;
+}
+
+-(void)setLayerButtonActive: (BOOL)active
+{
+	UIButton* buttonView = (id)self->layerSelectorButton.customView;
+	UIImage* image = [UIImage imageNamed: active ? @"switch_active.png" : @"switch_inactive.png"];
+	[buttonView setImage: image forState: UIControlStateNormal];
+	CGRect frame = buttonView.frame;
+	frame.size = image.size;
+	buttonView.frame = frame;
 }
 
 -(void)setDownButtonHidden: (BOOL)hidden
@@ -173,6 +202,22 @@ static BOOL isAppLayer(id possibleLayer)
 	[self pushLayer: rootViewController animated: NO];
 	
 	return self;
+}
+
+-(void)updateLayerIcon
+{
+	NSUInteger newCount = 0;
+	for(id provider in self->layerProviders){
+		if( [provider respondsToSelector: @selector(changeCountSinceLastReset)] ){
+			newCount += [provider changeCountSinceLastReset];
+		}
+	}
+	[self->toolBar setLayerButtonActive: newCount > 0];
+}
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+	[self updateLayerIcon];
 }
 
 -(void)loadView
@@ -677,17 +722,27 @@ static BOOL isAppLayer(id possibleLayer)
 	
 	if([layerDescriptor respondsToSelector: @selector(resetChangeCount)]){
 		[layerDescriptor resetChangeCount];
+		[self updateLayerIcon];
 	}
 }
 
--(void)registerLayerProvider: (id<NTIAppNavigationLayerProvider>)layerProvider
+-(void)registerLayerProvider: (NSObject<NTIAppNavigationLayerProvider>*)lp
 {
-	[self->layerProviders addObject: layerProvider];
+	if( [lp respondsToSelector: @selector(changeCountSinceLastReset)] ){
+		[lp addObserver: self
+					forKeyPath: @"changeCountSinceLastReset"
+					  options: NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+					  context: NULL];
+	}
+	[self->layerProviders addObject: lp];
 }
 
--(void)unregisterLayerProvider: (id<NTIAppNavigationLayerProvider>)layerProvider
+-(void)unregisterLayerProvider: (NSObject<NTIAppNavigationLayerProvider>*)lp
 {
-	[self->layerProviders removeObjectIdenticalTo: layerProvider];
+	if( [lp respondsToSelector: @selector(changeCountSinceLastReset)] ){
+		[lp removeObserver: self forKeyPath: @"changeCountSinceLastReset"];
+	}
+	[self->layerProviders removeObjectIdenticalTo: lp];
 }
 
 #pragma mark actions from toolbar
@@ -755,6 +810,11 @@ static BOOL isAppLayer(id possibleLayer)
 -(id)appNavController
 {
 	return self;
+}
+
+-(void)dealloc
+{
+
 }
 
 @end
