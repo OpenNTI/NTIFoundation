@@ -21,7 +21,7 @@
 
 -(id)initWithSwitcher: (NTIAppNavigationLayerSwitcher*)switcher;
 {
-	self = [super initWithStyle: UITableViewStylePlain];
+	self = [super initWithStyle: UITableViewStyleGrouped];
 	self->nr_switcher = switcher;
 	self->movableLayers = [[self->nr_switcher layersThatCanBeBroughtForwardForSwitcher: nil] reversedArray];
 	
@@ -29,6 +29,11 @@
 																 tag: 0];
 	
 	return self;
+}
+
+-(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+	return @"Recent Layers";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -48,7 +53,16 @@
     
 	id<NTIAppNavigationLayer> layer = [self->movableLayers objectAtIndex: indexPath.row];
 	//FIXME ick passing nil here
-	cell.textLabel.text = [layer titleForAppNavigationController: nil];
+	if( [layer respondsToSelector: @selector(titleForRecentLayerList)] ){
+		cell.textLabel.text = [layer titleForRecentLayerList];
+	}
+	else{
+		cell.textLabel.text = [layer titleForAppNavigationController: nil];
+	}
+	
+	if( [layer respondsToSelector: @selector(imageForRecentLayerList)] ){
+		cell.imageView.image = [layer imageForRecentLayerList];
+	}
 	
     return cell;
 }

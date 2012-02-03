@@ -18,6 +18,9 @@
 @class NTIAppNavigationController;
 @protocol NTIAppNavigationLayer <NTIChangeCountTracking>
 @optional
+//For cell presentation
+-(NSString*)titleForRecentLayerList;
+-(UIImage*)imageForRecentLayerList;
 //Messages for configuration of the title bar
 -(NSString*)textForAppNavigationControllerDownButton: (NTIAppNavigationController*)controller;
 -(NSString*)titleForAppNavigationController: (NTIAppNavigationController*)controller;
