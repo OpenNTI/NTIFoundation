@@ -10,6 +10,7 @@
 #import "OmniUI/OUIInspectorDelegate.h"
 #import "NTIAppNavigationLayer.h"
 #import "NTIAppNavigationLayerProvider.h"
+#import "NTIGlobalInspector.h"
 
 @class NTIAppNavigationController;
 @interface UIViewController(NTIAppNavigationControllerExtensions)
@@ -18,11 +19,14 @@
 
 @class NTIAppNavigationController;
 @protocol NTIAppNavigationControllerDelegate <NSObject>
+-(NSArray*)appNavigationController: (NTIAppNavigationController*)controller 
+				   globalInspector: (NTIGlobalInspector*)inspector 
+makeAvailableSlicesForStackedSlicesPane: (OUIStackedSlicesInspectorPane*)pane;
 @end
 
 @class NTIGlobalInspector;
 @class NTIAppNavigationToolbar;
-@interface NTIAppNavigationController : UIViewController{
+@interface NTIAppNavigationController : UIViewController<OUIInspectorDelegate>{
 	@private
 	NSMutableArray* viewControllers;
 	UINavigationController* navController;
@@ -31,7 +35,6 @@
 	UIPopoverController* popController;
 	
 	NTIGlobalInspector* inspector;
-	id<OUIInspectorDelegate> inspectorDelegate;
 	
 	NSMutableArray* layerProviders;
 }

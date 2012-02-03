@@ -186,7 +186,6 @@ static BOOL isAppLayer(id possibleLayer)
 
 @implementation NTIAppNavigationController
 @synthesize delegate = nr_delegate;
-@synthesize inspectorDelegate;
 
 -(id)initWithRootLayer:(UIViewController<NTIAppNavigationApplicationLayer>*)rootViewController
 {
@@ -807,7 +806,7 @@ static BOOL isAppLayer(id possibleLayer)
 {
 	if(!inspector){
 		self->inspector = [[NTIGlobalInspector alloc] init];
-		inspector.delegate = self->inspectorDelegate;
+		inspector.delegate = self;
 	}
 	[self->inspector inspectObjectsFromBarButtonItem: _];
 }
@@ -846,6 +845,37 @@ static BOOL isAppLayer(id possibleLayer)
 -(id)appNavController
 {
 	return self;
+}
+
+#pragma mark inspector delegate
+#pragma mark -
+#pragma mark OUIInspectorDelegate
+// If this is not implemented or returns nil, and the inspector pane doesn't already have a title, an assertion will fire it will be given a title of "Inspector".
+// Thus, you either need to implement this or the manually give titles to the panes.
+-(NSString*)inspector: (NTIGlobalInspector*)insp
+		 titleForPane: (OUIInspectorPane*)pane
+{
+	if(pane == insp.mainPane){
+		return @"Inspector";
+	}
+	//Nil will cause the inspector to ask the pane for the title
+	return nil;
+}
+
+// If this is not implemented or returns nil, and the stacked inspector pane doesn't already have slices, an assertion will fire and the inspector dismissed.
+// Thus, you either need to implement this or the manually give slices to the stacked slice panes. If you make slices this way, you must return all the possible slices and have the slices themselves decide whether they are appropriate for the inspected object set.
+-(NSArray*)inspector: (NTIGlobalInspector*)insp
+makeAvailableSlicesForStackedSlicesPane: (OUIStackedSlicesInspectorPane *)pane
+{
+	if( [self.delegate respondsToSelector: @selector(appNavigationController:globalInspector:makeAvailableSlicesForStackedSlicesPane:)] ){
+		return [self.delegate appNavigationController: self globalInspector: insp makeAvailableSlicesForStackedSlicesPane: pane];
+	}
+	return nil;
+}
+
+-(void)inspectorDidDismiss:(NTIGlobalInspector *)insp
+{
+	[insp.shownFromFirstResponder becomeFirstResponder];
 }
 
 -(void)dealloc

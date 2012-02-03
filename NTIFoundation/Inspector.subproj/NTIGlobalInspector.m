@@ -11,7 +11,7 @@
 #import "NTIInspectableController.h"
 
 @implementation NTIGlobalInspector
-@synthesize shownFrom;
+@synthesize shownFromFirstResponder;
 
 static UIResponder* findFirstResponderBeneathView(UIView* startAt)
 {
@@ -41,16 +41,16 @@ static UIResponder* findFirstResponder()
 	//objects from them.  
 	
 	//TODO what do we do if there is no first responder?  Maybe we hook this into the topNavLayer
-	self->shownFrom = findFirstResponder();
+	self->shownFromFirstResponder = findFirstResponder();
 	
-	if(!self->shownFrom){
+	if(!self->shownFromFirstResponder){
 		NSLog(@"No first responder to start searching from");
 		return;
 	}
 	
 	NSMutableSet* objects = [[NSMutableSet alloc] initWithCapacity: 3];
 	
-	UIResponder* responder = self->shownFrom;
+	UIResponder* responder = self->shownFromFirstResponder;
 	do{
 		if( [responder respondsToSelector: @selector(inspectableObjects)] ){
 			[objects unionSet: [(id)responder inspectableObjects]];
@@ -59,7 +59,7 @@ static UIResponder* findFirstResponder()
 		responder = responder.nextResponder;
 	}while(responder);
 	
-	[self->shownFrom resignFirstResponder];
+	[self->shownFromFirstResponder resignFirstResponder];
 	[self inspectObjects: [objects allObjects] fromBarButtonItem: item];
 }
 

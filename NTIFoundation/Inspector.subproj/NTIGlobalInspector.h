@@ -10,9 +10,9 @@
 
 @interface NTIGlobalInspector : OUIInspector{
 	@private
-	UIResponder* shownFrom;
+	UIResponder* shownFromFirstResponder;
 }
 
-@property (nonatomic, readonly) UIResponder* shownFrom;
+@property (nonatomic, readonly) UIResponder* shownFromFirstResponder;
 -(void)inspectObjectsFromBarButtonItem: (UIBarButtonItem*)item;
 @end
