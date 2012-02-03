@@ -167,7 +167,7 @@ static UILabel* titleLabelForToolbar()
 
 @end
 
-#define kTransientLayerAnimationSpeed .25
+#define kTransientLayerAnimationSpeed .4
 #define kTransientLayerSize 320
 
 @interface NTIAppNavigationController()
@@ -277,8 +277,35 @@ static BOOL isAppLayer(id possibleLayer)
 	[self->toolBar setDownButtonHidden: self->viewControllers.count <= 1];
 }
 
+-(void)possibleStopTrackingLayer: (UIViewController<NTIAppNavigationLayer>*)layer
+{
+	//ick
+	for(id<NTIAppNavigationLayerProvider> provider in self->layerProviders){
+		for(id<NTIAppNavigationLayerDescriptor> desc in provider.layerDescriptors){
+			if(   [provider descriptor: desc representsLayer: layer] 
+			   && [desc respondsToSelector: @selector(endTrackingChanges)] ){
+				[desc endTrackingChanges];
+			}
+		}
+	}
+}
+
+-(void)possibleStartTrackingLayer: (UIViewController<NTIAppNavigationLayer>*)layer
+{
+	//ick
+	for(id<NTIAppNavigationLayerProvider> provider in self->layerProviders){
+		for(id<NTIAppNavigationLayerDescriptor> desc in provider.layerDescriptors){
+			if(   [provider descriptor: desc representsLayer: layer] 
+			   && [desc respondsToSelector: @selector(beginTrackingChanges)] ){
+				[desc beginTrackingChanges];
+			}
+		}
+	}
+}
+
 -(void)pushLayer: (UIViewController<NTIAppNavigationLayer>*)layer animated: (BOOL)animated
 {	
+	[self possibleStartTrackingLayer: self.topLayer];
 	[[OUIAppController controller] dismissPopoverAnimated: YES];
 	if( isAppLayer(layer) ){
 		[self pushApplicationLayer: (id)layer animated: animated];
@@ -286,6 +313,7 @@ static BOOL isAppLayer(id possibleLayer)
 	else{
 		[self pushTransientLayer: (id)layer animated: animated];
 	}
+	[self possibleStopTrackingLayer: layer];
 	[self updateToolbarForTopLayer];
 }
 
@@ -295,7 +323,7 @@ static BOOL isAppLayer(id possibleLayer)
 	if([self->viewControllers count] == 1){
 		return nil;
 	}
-
+	[self possibleStartTrackingLayer: self.topLayer];
 	[[OUIAppController controller] dismissPopoverAnimated: YES];
 	id popped = nil;
 	//Are we popping an app layer.  Only app layers are on the nav stack
@@ -307,7 +335,7 @@ static BOOL isAppLayer(id possibleLayer)
 	else{
 		popped = [self popTransientLayer: animated];
 	}
-	
+	[self possibleStopTrackingLayer: self.topLayer];
 	//If we have more than one vc left enable the down button
 	[self updateToolbarForTopLayer];
 	return popped;

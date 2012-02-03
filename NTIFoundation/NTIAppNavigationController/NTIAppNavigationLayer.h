@@ -13,6 +13,8 @@
 @optional
 -(NSUInteger)changeCountSinceLastReset; //Should be kvo-able
 -(void)resetChangeCount;
+-(void)beginTrackingChanges;
+-(void)endTrackingChanges;
 @end
 
 @class NTIAppNavigationController;
