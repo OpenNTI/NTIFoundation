@@ -391,7 +391,7 @@ static BOOL isAppLayer(id possibleLayer)
 		[UIView animateWithDuration: kTransientLayerAnimationSpeed 
 						 animations: ^{
 							 CGRect endFrame = popped.view.frame;
-							 endFrame.origin.x = endFrame.origin.x + kTransientLayerSize;
+							 endFrame.origin.x = endFrame.origin.x + popped.view.frame.size.width;
 							 popped.view.frame = endFrame;
 						 }
 						 completion: completion];
@@ -447,10 +447,18 @@ static BOOL isAppLayer(id possibleLayer)
 	transLayer.view.layer.shadowOpacity = 0.5;
 	
 	CGRect parentViewsFrame = self->navController.topViewController.view.frame;
+	
+	CGFloat tranisientLayerWidth = kTransientLayerSize;
+	if(   [transLayer respondsToSelector: @selector(wantsFullScreenLayout)] 
+	   && [transLayer wantsFullScreenLayout]){
+		transLayer.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+		tranisientLayerWidth = parentViewsFrame.size.width;
+	}
+	
 	//We want to start off the right had side of the screen
 	CGRect transientFrameStart = CGRectMake(parentViewsFrame.origin.x + parentViewsFrame.size.width, 
 											0, 
-											kTransientLayerSize, 
+											tranisientLayerWidth, 
 											parentViewsFrame.size.height);
 	transLayer.view.frame = transientFrameStart;
 
@@ -462,7 +470,7 @@ static BOOL isAppLayer(id possibleLayer)
 	[UIView animateWithDuration: kTransientLayerAnimationSpeed 
 					 animations: ^{
 						 CGRect endFrame = transientFrameStart;
-						 endFrame.origin.x = endFrame.origin.x - kTransientLayerSize;
+						 endFrame.origin.x = endFrame.origin.x - tranisientLayerWidth;
 						 transLayer.view.frame = endFrame;
 					 }
 					 completion: ^(BOOL success){
