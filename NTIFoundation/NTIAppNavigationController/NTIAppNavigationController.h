@@ -38,7 +38,6 @@ makeAvailableSlicesForStackedSlicesPane: (OUIStackedSlicesInspectorPane*)pane;
 	
 	NSMutableArray* layerProviders;
 }
-@property (nonatomic, strong) id<OUIInspectorDelegate> inspectorDelegate;
 @property (nonatomic, weak) id delegate;
 @property (nonatomic, readonly) NSArray* layers;
 @property (nonatomic, readonly) UIViewController<NTIAppNavigationLayer>* topLayer;
