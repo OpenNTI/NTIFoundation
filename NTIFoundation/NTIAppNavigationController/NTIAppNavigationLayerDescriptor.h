@@ -22,4 +22,5 @@
 @protocol NTIAppNavigationLayerDescriptor <NTIChangeCountTracking>
 @property (nonatomic, readonly) id<NTIAppNavigationLayerProvider>provider;
 @property (nonatomic, readonly) NSString* title;
+@property (nonatomic, readonly) UIImage* image;
 @end

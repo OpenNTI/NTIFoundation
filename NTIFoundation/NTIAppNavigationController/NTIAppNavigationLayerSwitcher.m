@@ -181,6 +181,7 @@
     
 	id<NTIAppNavigationLayerDescriptor> descriptor = [[[self->layerProviders objectAtIndex: indexPath.section] layerDescriptors] objectAtIndex: indexPath.row];
 	cell.textLabel.text = descriptor.title;
+	cell.imageView.image = descriptor.image;
 	
 	if([descriptor respondsToSelector: @selector(changeCountSinceLastReset)]){
 		NSUInteger count = [descriptor changeCountSinceLastReset];
