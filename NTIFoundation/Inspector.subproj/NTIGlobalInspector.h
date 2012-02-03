@@ -13,6 +13,5 @@
 	UIResponder* shownFromFirstResponder;
 }
 
-@property (nonatomic, readonly) UIResponder* shownFromFirstResponder;
--(void)inspectObjectsFromBarButtonItem: (UIBarButtonItem*)item;
+@property (nonatomic, strong) UIResponder* shownFromFirstResponder;
 @end

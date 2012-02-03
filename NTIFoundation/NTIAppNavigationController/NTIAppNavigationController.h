@@ -19,9 +19,12 @@
 
 @class NTIAppNavigationController;
 @protocol NTIAppNavigationControllerDelegate <NSObject>
+@optional
 -(NSArray*)appNavigationController: (NTIAppNavigationController*)controller 
 				   globalInspector: (NTIGlobalInspector*)inspector 
 makeAvailableSlicesForStackedSlicesPane: (OUIStackedSlicesInspectorPane*)pane;
+@optional
+-(NSSet*)appNavigationControllerInspectableObjects: (NTIAppNavigationController*)controller;
 @end
 
 @class NTIGlobalInspector;

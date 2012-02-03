@@ -12,6 +12,7 @@
 #import "NTIAppNavigationLayerSwitcher.h"
 #import <OmniUI/OUIAppController.h>
 #import "NTIGlobalInspector.h"
+#import "NTIInspectableController.h"
 
 @interface NTIAppNavigationToolbar : UIToolbar{
 	@private
@@ -802,22 +803,129 @@ static BOOL isAppLayer(id possibleLayer)
 										 animated: YES];
 }
 
--(void)inspector: (id)_
-{
-	if(!inspector){
-		self->inspector = [[NTIGlobalInspector alloc] init];
-		inspector.delegate = self;
-	}
-	[self->inspector inspectObjectsFromBarButtonItem: _];
-}
-
-
 -(void)search: (id)_
 {
 }
 
 -(void)globe: (id)_
 {
+}
+
+#pragma mark global inspector
+//TODO where if anywhere should this be split out
+
+static UIResponder* findFirstResponderBeneathView(UIView* startAt)
+{
+	if(startAt.isFirstResponder){
+		return startAt;
+	}
+	
+	UIResponder* firstResponder = nil;
+	for(UIView* child in startAt.subviews){
+		firstResponder = findFirstResponderBeneathView( child );
+		if(firstResponder){
+			break;
+		}
+	}
+	return firstResponder;
+}
+
+static UIResponder* findFirstResponder()
+{
+	return findFirstResponderBeneathView([[OUIAppController controller] window]);
+}
+
+static void searchUpResponderChain(UIResponder* responder, NSMutableSet* objects)
+{
+	if(!responder){
+		return;
+	}
+	
+	if( [responder respondsToSelector: @selector(inspectableObjects)] ){
+		[objects unionSet: [(id)responder inspectableObjects]];
+	}
+	
+	searchUpResponderChain(responder.nextResponder, objects);
+}
+
+static void searchUpVCHiererarchy(UIViewController* controller, NSMutableSet* objects)
+{
+	if(!controller){
+		return;
+	}
+	
+	if( [controller respondsToSelector: @selector(inspectableObjects)] ){
+		[objects unionSet: [(id)controller inspectableObjects]];
+	}
+	
+	searchUpVCHiererarchy(controller.parentViewController, objects);
+}
+
+//Create an inspector if one doesn't exist, find all the objects that are inspectable, 
+//and inspect them.  If there is a first responder it will be resigned and restored when the inspector closes.
+//Our current hueristic for locating inspectable objects is as follows.  We search the view/vc heirarchy in one of two
+//ways.  If we can find a firstResponder start there and search up the responder chain for things responding to NTIInspectableController.
+//If we can't find a first responder we ask the top layer if it is an NTIInspectableController.  In both cases we also ask our delegate
+//for objects to inspect
+-(void)inspector: (id)inspectorButton
+{
+	if(!inspector){
+		self->inspector = [[NTIGlobalInspector alloc] init];
+		inspector.delegate = self;
+	}
+	
+	NSMutableSet* inspectableObjects = [NSMutableSet set];
+	
+	UIResponder* firstResponder = findFirstResponder();
+	self->inspector.shownFromFirstResponder = firstResponder;
+	
+	if(firstResponder){
+		searchUpResponderChain(firstResponder, inspectableObjects);
+	}
+	else{
+		//TODO Top layer or application layer here?
+		searchUpVCHiererarchy(self.topLayer, inspectableObjects);
+	}
+	
+	//Now ask our delegate
+	if( [self.delegate respondsToSelector: @selector(appNavigationControllerInspectableObjects:)] ){
+		[inspectableObjects unionSet: [self.delegate appNavigationControllerInspectableObjects: self]];
+	}
+	
+	[self->inspector.shownFromFirstResponder resignFirstResponder];
+	
+	//TODO what do we do if no objects are selected?
+	[self->inspector inspectObjects: [inspectableObjects allObjects] 
+				  fromBarButtonItem: inspectorButton];
+}
+
+#pragma mark inspector delegate
+// If this is not implemented or returns nil, and the inspector pane doesn't already have a title, an assertion will fire it will be given a title of "Inspector".
+// Thus, you either need to implement this or the manually give titles to the panes.
+-(NSString*)inspector: (NTIGlobalInspector*)insp
+		 titleForPane: (OUIInspectorPane*)pane
+{
+	if(pane == insp.mainPane){
+		return @"Inspector";
+	}
+	//Nil will cause the inspector to ask the pane for the title
+	return nil;
+}
+
+// If this is not implemented or returns nil, and the stacked inspector pane doesn't already have slices, an assertion will fire and the inspector dismissed.
+// Thus, you either need to implement this or the manually give slices to the stacked slice panes. If you make slices this way, you must return all the possible slices and have the slices themselves decide whether they are appropriate for the inspected object set.
+-(NSArray*)inspector: (NTIGlobalInspector*)insp
+makeAvailableSlicesForStackedSlicesPane: (OUIStackedSlicesInspectorPane *)pane
+{
+	if( [self.delegate respondsToSelector: @selector(appNavigationController:globalInspector:makeAvailableSlicesForStackedSlicesPane:)] ){
+		return [self.delegate appNavigationController: self globalInspector: insp makeAvailableSlicesForStackedSlicesPane: pane];
+	}
+	return nil;
+}
+
+-(void)inspectorDidDismiss:(NTIGlobalInspector *)insp
+{
+	[insp.shownFromFirstResponder becomeFirstResponder];
 }
 
 
@@ -845,37 +953,6 @@ static BOOL isAppLayer(id possibleLayer)
 -(id)appNavController
 {
 	return self;
-}
-
-#pragma mark inspector delegate
-#pragma mark -
-#pragma mark OUIInspectorDelegate
-// If this is not implemented or returns nil, and the inspector pane doesn't already have a title, an assertion will fire it will be given a title of "Inspector".
-// Thus, you either need to implement this or the manually give titles to the panes.
--(NSString*)inspector: (NTIGlobalInspector*)insp
-		 titleForPane: (OUIInspectorPane*)pane
-{
-	if(pane == insp.mainPane){
-		return @"Inspector";
-	}
-	//Nil will cause the inspector to ask the pane for the title
-	return nil;
-}
-
-// If this is not implemented or returns nil, and the stacked inspector pane doesn't already have slices, an assertion will fire and the inspector dismissed.
-// Thus, you either need to implement this or the manually give slices to the stacked slice panes. If you make slices this way, you must return all the possible slices and have the slices themselves decide whether they are appropriate for the inspected object set.
--(NSArray*)inspector: (NTIGlobalInspector*)insp
-makeAvailableSlicesForStackedSlicesPane: (OUIStackedSlicesInspectorPane *)pane
-{
-	if( [self.delegate respondsToSelector: @selector(appNavigationController:globalInspector:makeAvailableSlicesForStackedSlicesPane:)] ){
-		return [self.delegate appNavigationController: self globalInspector: insp makeAvailableSlicesForStackedSlicesPane: pane];
-	}
-	return nil;
-}
-
--(void)inspectorDidDismiss:(NTIGlobalInspector *)insp
-{
-	[insp.shownFromFirstResponder becomeFirstResponder];
 }
 
 -(void)dealloc
