@@ -345,6 +345,16 @@ static BOOL isAppLayer(id possibleLayer)
 
 -(void)pushLayer: (UIViewController<NTIAppNavigationLayer>*)layer animated: (BOOL)animated
 {	
+	id layerGoingAway = self.topLayer;
+	
+	if( [layer respondsToSelector: @selector(willAppearInAppNavigationControllerAsResultOfPush:)] ){
+		[layer willAppearInAppNavigationControllerAsResultOfPush: YES];
+	}
+	
+	if( [layerGoingAway respondsToSelector: @selector(willDisappearInAppNavigationControllerAsResultOfPush:)] ){
+		[layerGoingAway willDisappearInAppNavigationControllerAsResultOfPush: YES];
+	}
+	
 	[self possibleStartTrackingLayer: self.topLayer];
 	[[OUIAppController controller] dismissPopoverAnimated: YES];
 	if( isAppLayer(layer) ){
@@ -357,14 +367,34 @@ static BOOL isAppLayer(id possibleLayer)
 	[self resetCountsForLayer: layer];
 	[self updateLayerIcon];
 	[self updateToolbarForTopLayer];
+	
+	if( [layerGoingAway respondsToSelector: @selector(didDisappearInAppNavigationControllerAsResultOfPush:)] ){
+		[layerGoingAway didDisappearInAppNavigationControllerAsResultOfPush: YES];
+	}
+	
+	if( [layer respondsToSelector: @selector(didAppearInAppNavigationControllerAsResultOfPush:)] ){
+		[layer didAppearInAppNavigationControllerAsResultOfPush: YES];
+	}
 }
 
 -(UIViewController<NTIAppNavigationLayer>*)popLayerAnimated: (BOOL)animated
 {
 	//Cant pop the final layer
-	if([self->viewControllers count] == 1){
+	if(![self->viewControllers count] > 1){
 		return nil;
 	}
+	
+	id willShow = [self.layers objectAtIndex: self.layers.count - 2 ];
+	id willDisappear = [self.layers lastObject];
+	
+	if( [willShow respondsToSelector: @selector(willAppearInAppNavigationControllerAsResultOfPush:)] ){
+		[willShow willAppearInAppNavigationControllerAsResultOfPush: NO];
+	}
+	
+	if( [willDisappear respondsToSelector: @selector(willDisappearInAppNavigationControllerAsResultOfPush:)] ){
+		[willDisappear willDisappearInAppNavigationControllerAsResultOfPush: NO];
+	}
+	
 	[self possibleStartTrackingLayer: self.topLayer];
 	[[OUIAppController controller] dismissPopoverAnimated: YES];
 	id popped = nil;
@@ -382,6 +412,15 @@ static BOOL isAppLayer(id possibleLayer)
 	[self updateLayerIcon];
 	//If we have more than one vc left enable the down button
 	[self updateToolbarForTopLayer];
+	
+	if( [willDisappear respondsToSelector: @selector(didDisappearInAppNavigationControllerAsResultOfPush:)] ){
+		[willDisappear didDisappearInAppNavigationControllerAsResultOfPush: NO];
+	}
+	
+	if( [willShow respondsToSelector: @selector(didAppearInAppNavigationControllerAsResultOfPush:)] ){
+		[willShow didAppearInAppNavigationControllerAsResultOfPush: NO];
+	}
+	
 	return popped;
 }
 

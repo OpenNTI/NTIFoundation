@@ -20,6 +20,12 @@
 @class NTIAppNavigationController;
 @protocol NTIAppNavigationLayer <NTIChangeCountTracking>
 @optional
+//So layers know when they are being shown/hidden in an app controller
+-(void)willAppearInAppNavigationControllerAsResultOfPush: (BOOL)pushed;
+-(void)didAppearInAppNavigationControllerAsResultOfPush: (BOOL)pushed;
+-(void)willDisappearInAppNavigationControllerAsResultOfPush: (BOOL)pushed;
+-(void)didDisappearInAppNavigationControllerAsResultOfPush: (BOOL)pushed;
+
 //For cell presentation
 -(NSString*)titleForRecentLayerList;
 -(UIImage*)imageForRecentLayerList;
