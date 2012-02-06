@@ -15,6 +15,7 @@
 	NTIAppNavigationLayerSwitcher* __weak nr_switcher;
 }
 -(id)initWithSwitcher: (NTIAppNavigationLayerSwitcher*)switcher;
+-(void)updateTabBarBadge;
 @end
 
 @implementation _NTIMovableLayers
@@ -27,8 +28,55 @@
 	
 	self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem: UITabBarSystemItemRecents 
 																 tag: 0];
+	[self updateTabBarBadge];
+	
+	//We kvo on each provider so if the popup is over we can see updates
+	for(id layer in self->movableLayers){
+		if( [layer respondsToSelector: @selector(changeCountSinceLastReset)] ){
+			[layer addObserver: self
+					   forKeyPath: @"changeCountSinceLastReset"
+						  options: NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+						  context: NULL];
+		}
+	}
 	
 	return self;
+}
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{	
+	if(OFISEQUAL(keyPath, @"changeCountSinceLastReset")){
+		NSUInteger idx = [self->movableLayers indexOfObject: object];
+		if(idx != NSNotFound){
+			[self.tableView reloadRowsAtIndexPaths: [NSArray arrayWithObject: 
+													 [NSIndexPath indexPathForRow: idx inSection: 0]] 
+								  withRowAnimation: UITableViewRowAnimationAutomatic];
+			[self updateTabBarBadge];
+		}
+		
+	}
+	else
+	{
+		[super observeValueForKeyPath: keyPath ofObject: object change: change context: context];
+	}
+	
+}
+
+
+-(void)updateTabBarBadge
+{
+	NSUInteger count = 0;
+	for(id layer in self->movableLayers){
+		if( [layer respondsToSelector: @selector(changeCountSinceLastReset)] ){
+			count += [layer changeCountSinceLastReset];
+		}
+	}
+	if(count > 0){
+		self.tabBarItem.badgeValue = [NSString stringWithFormat: @"%ld", count];
+	}
+	else{
+		self.tabBarItem.badgeValue = nil;
+	}
 }
 
 -(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -64,6 +112,18 @@
 		cell.imageView.image = [layer imageForRecentLayerList];
 	}
 	
+	if([layer respondsToSelector: @selector(changeCountSinceLastReset)]){
+		NSUInteger count = [layer changeCountSinceLastReset];
+		if(count > 0){
+			cell.accessoryView = [[NTIBadgeCountView alloc] initWithCount: count 
+																 andFrame: CGRectMake(0, 0, 25, 25)]; //TODO do we need to set the size?
+		}
+		else{
+			cell.accessoryView = nil;
+		}
+	}
+
+	
     return cell;
 }
 
@@ -71,6 +131,15 @@
 {
 	[tableView deselectRowAtIndexPath: indexPath animated: YES];
 	[self->nr_switcher switcher: nil bringLayerForward: [self->movableLayers objectAtIndex: indexPath.row]];
+}
+
+-(void)dealloc
+{
+	for(id layer in self->movableLayers){
+		if( [layer respondsToSelector: @selector(changeCountSinceLastReset)] ){
+			[layer removeObserver: self forKeyPath: @"changeCountSinceLastReset"];
+		}
+	}
 }
 
 @end
@@ -95,6 +164,8 @@
 	
 	self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem: UITabBarSystemItemFavorites 
 																 tag: 0];
+	
+	[self updateTabBarBadge];
 	
 	//We kvo on each provider so if the popup is over we can see updates
 	for(id provider in self->layerProviders){

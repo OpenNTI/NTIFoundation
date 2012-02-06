@@ -204,15 +204,31 @@ static BOOL isAppLayer(id possibleLayer)
 	return self;
 }
 
--(void)updateLayerIcon
+-(BOOL)anyChangeCounts
 {
-	NSUInteger newCount = 0;
 	for(id provider in self->layerProviders){
 		if( [provider respondsToSelector: @selector(changeCountSinceLastReset)] ){
-			newCount += [provider changeCountSinceLastReset];
+			if( [provider changeCountSinceLastReset] > 0 ){
+				return YES;
+			}
 		}
 	}
-	[self->toolBar setLayerButtonActive: newCount > 0];
+	
+	for(id layer in [(id)self layersThatCanBeBroughtForwardForSwitcher: nil]){
+		if( [layer respondsToSelector: @selector(changeCountSinceLastReset)] ){
+			if([layer changeCountSinceLastReset] > 0){
+				return YES;
+			}
+		}
+	}
+	
+	return NO;
+}
+
+-(void)updateLayerIcon
+{
+	
+	[self->toolBar setLayerButtonActive: [self anyChangeCounts]];
 }
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -279,6 +295,10 @@ static BOOL isAppLayer(id possibleLayer)
 
 -(void)possibleStopTrackingLayer: (UIViewController<NTIAppNavigationLayer>*)layer
 {
+	if( [layer respondsToSelector: @selector(endTrackingChanges)] ){
+		[layer endTrackingChanges];
+	}
+	
 	//ick
 	for(id<NTIAppNavigationLayerProvider> provider in self->layerProviders){
 		for(id<NTIAppNavigationLayerDescriptor> desc in provider.layerDescriptors){
@@ -292,12 +312,32 @@ static BOOL isAppLayer(id possibleLayer)
 
 -(void)possibleStartTrackingLayer: (UIViewController<NTIAppNavigationLayer>*)layer
 {
+	if( [layer respondsToSelector: @selector(beginTrackingChanges)] ){
+		[layer beginTrackingChanges];
+	}
 	//ick
 	for(id<NTIAppNavigationLayerProvider> provider in self->layerProviders){
 		for(id<NTIAppNavigationLayerDescriptor> desc in provider.layerDescriptors){
 			if(   [provider descriptor: desc representsLayer: layer] 
 			   && [desc respondsToSelector: @selector(beginTrackingChanges)] ){
 				[desc beginTrackingChanges];
+			}
+		}
+	}
+}
+
+-(void)resetCountsForLayer:  (UIViewController<NTIAppNavigationLayer>*)layer
+{
+	if( [layer respondsToSelector: @selector(resetChangeCount)] ){
+		[layer resetChangeCount];
+	}
+	
+	//ick
+	for(id<NTIAppNavigationLayerProvider> provider in self->layerProviders){
+		for(id<NTIAppNavigationLayerDescriptor> desc in provider.layerDescriptors){
+			if(   [provider descriptor: desc representsLayer: layer] 
+			   && [desc respondsToSelector: @selector(resetChangeCount)] ){
+				[desc resetChangeCount];
 			}
 		}
 	}
@@ -314,6 +354,8 @@ static BOOL isAppLayer(id possibleLayer)
 		[self pushTransientLayer: (id)layer animated: animated];
 	}
 	[self possibleStopTrackingLayer: layer];
+	[self resetCountsForLayer: layer];
+	[self updateLayerIcon];
 	[self updateToolbarForTopLayer];
 }
 
@@ -336,6 +378,8 @@ static BOOL isAppLayer(id possibleLayer)
 		popped = [self popTransientLayer: animated];
 	}
 	[self possibleStopTrackingLayer: self.topLayer];
+	[self resetCountsForLayer: self.topLayer];
+	[self updateLayerIcon];
 	//If we have more than one vc left enable the down button
 	[self updateToolbarForTopLayer];
 	return popped;
@@ -754,11 +798,6 @@ static BOOL isAppLayer(id possibleLayer)
 	else{
 		UIViewController<NTIAppNavigationLayer>* toPush = [layerDescriptor.provider createLayerForDescriptor: layerDescriptor]; 
 		[self pushLayer: toPush animated: YES];
-	}
-	
-	if([layerDescriptor respondsToSelector: @selector(resetChangeCount)]){
-		[layerDescriptor resetChangeCount];
-		[self updateLayerIcon];
 	}
 }
 
