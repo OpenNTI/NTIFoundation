@@ -30,6 +30,7 @@
 	
 }
 @property (nonatomic, weak) id delegate;
+@property (nonatomic, readonly) UIBarButtonItem* downButton;
 -(id)initWithTarget: (id)target andFrame: (CGRect)frame andDelegate: (id)delegate;
 -(void)setDownButtonTitle: (NSString*)title;
 -(void)setDownButtonHidden: (BOOL)enabled;
@@ -39,7 +40,7 @@
 
 @implementation NTIAppNavigationToolbar
 @synthesize delegate;
-
+@synthesize downButton;
 static UILabel* titleLabelForToolbar()
 {
 	UILabel* titleLabel = [[UILabel alloc] init];
@@ -380,7 +381,7 @@ static BOOL isAppLayer(id possibleLayer)
 	}
 }
 
--(UIViewController<NTIAppNavigationLayer>*)popLayerAnimated: (BOOL)animated
+-(UIViewController<NTIAppNavigationLayer>*)unconditionallyPopLayerAnimated: (BOOL)animated
 {
 	//Cant pop the final layer
 	if(![self->viewControllers count] > 1){
@@ -425,6 +426,33 @@ static BOOL isAppLayer(id possibleLayer)
 	}
 	
 	return popped;
+}
+
+
+-(UIViewController<NTIAppNavigationLayer>*)popLayerAnimated: (BOOL)animated
+{
+	id layer = self.topLayer;
+	if(   [layer respondsToSelector: @selector(poppingLayerWouldBeDestructive)] ){
+		NSString* message = [layer poppingLayerWouldBeDestructive];
+		if( message ){
+			UIActionSheet* actionSheet = [[UIActionSheet alloc] initWithTitle: message 
+																	   delegate: self 
+															  cancelButtonTitle: @"Cancel" 
+														 destructiveButtonTitle: @"Continue" 
+															  otherButtonTitles: nil];
+			[actionSheet showFromBarButtonItem: self->toolBar.downButton animated: YES];
+			return nil;
+		}
+	}
+	return [self unconditionallyPopLayerAnimated: animated];
+
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+	if( [[actionSheet buttonTitleAtIndex: buttonIndex] isEqualToString: @"Continue"] ){
+		[self unconditionallyPopLayerAnimated: YES];
+	}
 }
 
 -(UIViewController<NTIAppNavigationLayer>*)popApplicationLayer: (BOOL)animated

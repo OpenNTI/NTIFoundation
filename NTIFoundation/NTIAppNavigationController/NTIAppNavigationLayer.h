@@ -35,6 +35,8 @@
 //Can this layer be moved to the front from somewhere down in the stack.
 -(BOOL)canBringToFront;
 -(BOOL)shouldAlwaysBringToFront;
+//If implemented and non nil an action sheet will be shown if the layer is popped
+-(NSString*)poppingLayerWouldBeDestructive;
 @end
 
 @protocol NTIAppNavigationApplicationLayer <NTIAppNavigationLayer>

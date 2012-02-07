@@ -29,7 +29,7 @@ makeAvailableSlicesForStackedSlicesPane: (OUIStackedSlicesInspectorPane*)pane;
 
 @class NTIGlobalInspector;
 @class NTIAppNavigationToolbar;
-@interface NTIAppNavigationController : UIViewController<OUIInspectorDelegate>{
+@interface NTIAppNavigationController : UIViewController<OUIInspectorDelegate, UIActionSheetDelegate>{
 	@private
 	NSMutableArray* viewControllers;
 	UINavigationController* navController;
