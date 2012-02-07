@@ -24,6 +24,7 @@
 				   globalInspector: (NTIGlobalInspector*)inspector 
 makeAvailableSlicesForStackedSlicesPane: (OUIStackedSlicesInspectorPane*)pane;
 -(NSSet*)appNavigationControllerInspectableObjects: (NTIAppNavigationController*)controller;
+-(NSArray*)appNavigationControllerAdditionalToolbarButtons:(NTIAppNavigationController *)controller;
 @end
 
 @class NTIGlobalInspector;

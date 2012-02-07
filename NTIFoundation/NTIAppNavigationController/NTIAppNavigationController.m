@@ -14,6 +14,12 @@
 #import "NTIGlobalInspector.h"
 #import "NTIInspectableController.h"
 
+@class NTIAppNavigationToolbar;
+@protocol NTIAppNavigationToolbarDelegate
+@optional
+-(NSArray*)appNavigationToolbarExtraButtons: (NTIAppNavigationToolbar*)toolbar;
+@end
+
 @interface NTIAppNavigationToolbar : UIToolbar{
 	@private
 	id target;
@@ -21,11 +27,10 @@
 	UIBarButtonItem* layerSelectorButton;
 	UIBarButtonItem* titleButton; //Custom view that is a label
 	UIBarButtonItem* inspectorButton;
-	UIBarButtonItem* searchButton;
-	UIBarButtonItem* globeButton;
 	
 }
--(id)initWithTarget: (id)target andFrame: (CGRect)frame;
+@property (nonatomic, weak) id delegate;
+-(id)initWithTarget: (id)target andFrame: (CGRect)frame andDelegate: (id)delegate;
 -(void)setDownButtonTitle: (NSString*)title;
 -(void)setDownButtonHidden: (BOOL)enabled;
 -(void)setTitle: (NSString*)title;
@@ -33,6 +38,7 @@
 @end
 
 @implementation NTIAppNavigationToolbar
+@synthesize delegate;
 
 static UILabel* titleLabelForToolbar()
 {
@@ -64,9 +70,10 @@ static UILabel* titleLabelForToolbar()
 	[self->target performSelector: @selector(layer:) withObject: self->layerSelectorButton];
 }
 
--(id)initWithTarget: (id)t andFrame: (CGRect)frame
+-(id)initWithTarget: (id)t andFrame: (CGRect)frame andDelegate:(id)d
 {
 	self = [super initWithFrame: frame];
+	self.delegate = d;
 	self->target = t;
 	self->downButton = [[UIBarButtonItem alloc] initWithTitle: @"Down"
 														style: UIBarButtonItemStyleBordered 
@@ -87,22 +94,18 @@ static UILabel* titleLabelForToolbar()
 							  style: UIBarButtonItemStylePlain
 							  target: self->target action: @selector(inspector:)];
 	
-	self->searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemSearch 
-																	   target: self->target
-																	   action: @selector(search:)];
-	
-	self->globeButton = [[UIBarButtonItem alloc] initWithTitle: @"Globe"
-														  style: UIBarButtonItemStyleBordered 
-														 target: self->target
-														 action: @selector(globe:)];
-	
 	UIBarButtonItem* flexibleSpace = [[UIBarButtonItem alloc] 
 									  initWithBarButtonSystemItem: UIBarButtonSystemItemFlexibleSpace		
 									  target: nil action: nil];
 	
-	self.items = [NSArray arrayWithObjects: self->downButton, self->layerSelectorButton, 
-				  flexibleSpace, self->titleButton, flexibleSpace, self->inspectorButton,
-				  self->searchButton, self->globeButton, nil];
+	NSArray* buttons = [NSArray arrayWithObjects: self->downButton, self->layerSelectorButton, 
+						flexibleSpace, self->titleButton, flexibleSpace, self->inspectorButton, nil];
+	
+	if( [self.delegate respondsToSelector: @selector(appNavigationToolbarExtraButtons:)] ){
+		buttons = [buttons arrayByAddingObjectsFromArray: [self.delegate appNavigationToolbarExtraButtons: self]];
+	}
+	
+	self.items = buttons;
 	
 	return self;
 }
@@ -239,7 +242,7 @@ static BOOL isAppLayer(id possibleLayer)
 -(void)loadView
 {
 	[super loadView]; //Default implemenation sets up a base UIView
-	self->toolBar = [[NTIAppNavigationToolbar alloc] initWithTarget: self andFrame: CGRectMake(0, 0, self.view.frame.size.width, 44)];
+	self->toolBar = [[NTIAppNavigationToolbar alloc] initWithTarget: self andFrame: CGRectMake(0, 0, self.view.frame.size.width, 44) andDelegate: self];
 	self->toolBar.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth;
 	[self.view addSubview: self->toolBar];
 	
@@ -881,14 +884,6 @@ static BOOL isAppLayer(id possibleLayer)
 										 animated: YES];
 }
 
--(void)search: (id)_
-{
-}
-
--(void)globe: (id)_
-{
-}
-
 #pragma mark global inspector
 //TODO where if anywhere should this be split out
 
@@ -1036,6 +1031,15 @@ makeAvailableSlicesForStackedSlicesPane: (OUIStackedSlicesInspectorPane *)pane
 -(void)dealloc
 {
 
+}
+
+#pragma mark toolbar delegate
+-(NSArray*)appNavigationToolbarExtraButtons: (NTIAppNavigationToolbar*)toolbar
+{
+	if( [self->nr_delegate respondsToSelector:@selector(appNavigationControllerAdditionalToolbarButtons:)] ){
+		return [self->nr_delegate appNavigationControllerAdditionalToolbarButtons: self];
+	}
+	return [NSArray array];
 }
 
 @end
