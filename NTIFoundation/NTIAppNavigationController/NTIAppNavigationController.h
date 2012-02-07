@@ -40,6 +40,9 @@ makeAvailableSlicesForStackedSlicesPane: (OUIStackedSlicesInspectorPane*)pane;
 	NTIGlobalInspector* inspector;
 	
 	NSMutableArray* layerProviders;
+	
+	//Destructive warning action sheet
+	UIActionSheet* destructivePopActionSheet;
 }
 @property (nonatomic, weak) id delegate;
 @property (nonatomic, readonly) NSArray* layers;

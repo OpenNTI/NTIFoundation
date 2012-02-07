@@ -431,16 +431,21 @@ static BOOL isAppLayer(id possibleLayer)
 
 -(UIViewController<NTIAppNavigationLayer>*)popLayerAnimated: (BOOL)animated
 {
+	if(destructivePopActionSheet){
+		//They are in the middle of a destructive pop, don't let them pop again
+		return nil;
+	}
+	
 	id layer = self.topLayer;
 	if(   [layer respondsToSelector: @selector(poppingLayerWouldBeDestructive)] ){
 		NSString* message = [layer poppingLayerWouldBeDestructive];
 		if( message ){
-			UIActionSheet* actionSheet = [[UIActionSheet alloc] initWithTitle: message 
+			destructivePopActionSheet = [[UIActionSheet alloc] initWithTitle: message 
 																	   delegate: self 
 															  cancelButtonTitle: @"Cancel" 
 														 destructiveButtonTitle: @"Continue" 
 															  otherButtonTitles: nil];
-			[actionSheet showFromBarButtonItem: self->toolBar.downButton animated: YES];
+			[destructivePopActionSheet showFromBarButtonItem: self->toolBar.downButton animated: YES];
 			return nil;
 		}
 	}
@@ -453,10 +458,16 @@ static BOOL isAppLayer(id possibleLayer)
 	if( [[actionSheet buttonTitleAtIndex: buttonIndex] isEqualToString: @"Continue"] ){
 		[self unconditionallyPopLayerAnimated: YES];
 	}
+	self->destructivePopActionSheet = nil;
+}
+
+-(void)actionSheetCancel:(UIActionSheet *)actionSheet
+{
+	self->destructivePopActionSheet = nil;
 }
 
 -(UIViewController<NTIAppNavigationLayer>*)popApplicationLayer: (BOOL)animated
-{
+{	
 	id popped = [self->viewControllers pop];
 	[self popNavControllerAnimated: animated];
 	return popped;
