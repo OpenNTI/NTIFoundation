@@ -22,16 +22,6 @@ enum {
 };
 typedef NSInteger WebSocketStatus;
 
-@interface WebSocketData : OFObject {
-@private
-	NSData* data;
-	BOOL dataIsText;
-}
--(id)initWithData: (NSData*)data isText: (BOOL)t;
-@property (nonatomic, strong) NSData* data;
-@property (nonatomic, assign) BOOL dataIsText;
-@end
-
 @class WebSocket7;
 
 @protocol WebSocketDelegate <NSObject>

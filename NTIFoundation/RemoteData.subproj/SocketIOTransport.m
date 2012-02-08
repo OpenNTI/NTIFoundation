@@ -8,6 +8,7 @@
 
 #import "SocketIOTransport.h"
 #import "SocketIOSocket.h"
+#import "WebSocketData.h"
 
 @implementation SocketIOTransport
 @synthesize nr_socket, status;
