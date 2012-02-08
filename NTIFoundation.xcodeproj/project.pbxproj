@@ -36,6 +36,7 @@
 		4029275614991DC400E4720A /* NSURL-NTIFileSystemExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4029275514991DC400E4720A /* NSURL-NTIFileSystemExtensions.m */; };
 		4029275714991E6900E4720A /* NSURL-NTIFileSystemExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4029275414991DC400E4720A /* NSURL-NTIFileSystemExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4029275B14994F0E00E4720A /* NSURL-NTIFileSystemExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4029275514991DC400E4720A /* NSURL-NTIFileSystemExtensions.m */; };
+		402CC12014E2C77800E03835 /* LongWebSocketHexStringResult.txt in Resources */ = {isa = PBXBuildFile; fileRef = 402CC11F14E2C77800E03835 /* LongWebSocketHexStringResult.txt */; };
 		402D2F2514C92BDA00E051AF /* NTITransientNeverEndingNavController.m in Sources */ = {isa = PBXBuildFile; fileRef = 402D2F2414C92BDA00E051AF /* NTITransientNeverEndingNavController.m */; };
 		403C28E614576E160012CBAB /* NSAttributedString-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 403C28E414576E160012CBAB /* NSAttributedString-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		403C28E714576E160012CBAB /* NSAttributedString-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C28E514576E160012CBAB /* NSAttributedString-NTIExtensions.m */; };
@@ -51,6 +52,7 @@
 		403FD882148D3D1400811AB5 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D7D43213E32D2700652DAC /* SenTestingKit.framework */; };
 		40475AEB142A4940003323A9 /* SendRecieveQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 40475AE9142A493F003323A9 /* SendRecieveQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40475AEC142A4940003323A9 /* SendRecieveQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 40475AEA142A4940003323A9 /* SendRecieveQueue.m */; };
+		404B1CD014E2C51400A825AF /* LongWebSocketHexString.txt in Resources */ = {isa = PBXBuildFile; fileRef = 404B1CCF14E2C51400A825AF /* LongWebSocketHexString.txt */; };
 		4053898C14B3FB8800B5FB46 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4053898B14B3FB8700B5FB46 /* CFNetwork.framework */; };
 		40572C2B14C88D8E0032D2DB /* NTIAppNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 40572C2914C88D8E0032D2DB /* NTIAppNavigationController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40572C2C14C88D8E0032D2DB /* NTIAppNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40572C2A14C88D8E0032D2DB /* NTIAppNavigationController.m */; };
@@ -559,6 +561,7 @@
 		4029275214986A9800E4720A /* NSMutableArray-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray-NTIExtensionsTest.m"; sourceTree = "<group>"; };
 		4029275414991DC400E4720A /* NSURL-NTIFileSystemExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL-NTIFileSystemExtensions.h"; sourceTree = "<group>"; };
 		4029275514991DC400E4720A /* NSURL-NTIFileSystemExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL-NTIFileSystemExtensions.m"; sourceTree = "<group>"; };
+		402CC11F14E2C77800E03835 /* LongWebSocketHexStringResult.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LongWebSocketHexStringResult.txt; sourceTree = "<group>"; };
 		402D2F2314C92BDA00E051AF /* NTITransientNeverEndingNavController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTITransientNeverEndingNavController.h; sourceTree = "<group>"; };
 		402D2F2414C92BDA00E051AF /* NTITransientNeverEndingNavController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTITransientNeverEndingNavController.m; sourceTree = "<group>"; };
 		403C28E414576E160012CBAB /* NSAttributedString-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString-NTIExtensions.h"; sourceTree = "<group>"; };
@@ -575,6 +578,7 @@
 		403D0DCC143E38FD0049A755 /* NSAttributedString-HTMLReadingExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString-HTMLReadingExtensionsTest.m"; sourceTree = "<group>"; };
 		40475AE9142A493F003323A9 /* SendRecieveQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendRecieveQueue.h; sourceTree = "<group>"; };
 		40475AEA142A4940003323A9 /* SendRecieveQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendRecieveQueue.m; sourceTree = "<group>"; };
+		404B1CCF14E2C51400A825AF /* LongWebSocketHexString.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LongWebSocketHexString.txt; sourceTree = "<group>"; };
 		4053898B14B3FB8700B5FB46 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		40572C2914C88D8E0032D2DB /* NTIAppNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIAppNavigationController.h; sourceTree = "<group>"; };
 		40572C2A14C88D8E0032D2DB /* NTIAppNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIAppNavigationController.m; sourceTree = "<group>"; };
@@ -959,6 +963,8 @@
 				40F39C8314D84EF50089DCF6 /* SendRecieveQueueTest.m */,
 				40C0E1011443AF9C00142406 /* SocketIOPacketTest.h */,
 				40C0E1021443AF9C00142406 /* SocketIOPacketTest.m */,
+				404B1CCF14E2C51400A825AF /* LongWebSocketHexString.txt */,
+				402CC11F14E2C77800E03835 /* LongWebSocketHexStringResult.txt */,
 			);
 			name = RemoteDataTests;
 			sourceTree = "<group>";
@@ -1792,6 +1798,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				72D8186213955D8C00473994 /* InfoPlist.strings in Resources */,
+				404B1CD014E2C51400A825AF /* LongWebSocketHexString.txt in Resources */,
+				402CC12014E2C77800E03835 /* LongWebSocketHexStringResult.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

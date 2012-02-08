@@ -12,7 +12,29 @@
 
 @implementation WebSocket7Test
 
--(void)testWebSocketResponseToData
+-(void)testLongWebSocketResponseBuffer
+{
+	NSString* hexString = [NSString stringWithContentsOfURL: [[NSBundle bundleForClass: [self class]] 
+															  URLForResource: @"LongWebSocketHexString.txt" withExtension: nil]
+						   encoding: NSUTF8StringEncoding error: nil];
+	hexString = [hexString stringByReplacingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet] withString: @""];
+	
+	WebSocketResponseBuffer* buffer = [[WebSocketResponseBuffer alloc] init];
+	NSData* responseBytes = [NSData dataWithHexString: hexString error: nil];
+	NSUInteger currentByte = 0;
+	const void* bytes = [responseBytes bytes];
+	while(currentByte < responseBytes.length - 1){
+		STAssertFalse([buffer appendByteToBuffer: (u_int8_t*)(bytes + currentByte)], nil);
+		STAssertFalse([buffer containsFullResponse], nil);
+		currentByte++;
+	}
+	STAssertTrue([buffer appendByteToBuffer: (u_int8_t*)(bytes + currentByte)], nil);
+	STAssertTrue([buffer containsFullResponse], nil);
+	
+	STAssertEqualObjects(buffer.dataBuffer, responseBytes, nil);
+}
+
+-(void)testLongWebSocketResponseToData
 {
 	WebSocketResponseBuffer* buffer = [[WebSocketResponseBuffer alloc] init];
 	NSData* responseBytes = [NSData dataWithHexString: @"8103313a3a" error: nil];
@@ -27,6 +49,35 @@
 	NSString* dataString = [NSString stringWithData: wsData.data encoding: NSUTF8StringEncoding];
 	
 	STAssertEqualObjects(dataString, @"1::", nil);
+}
+
+
+-(void)testWebSocketResponseToData
+{
+	NSString* hexString = [NSString stringWithContentsOfURL: [[NSBundle bundleForClass: [self class]] 
+															  URLForResource: @"LongWebSocketHexString.txt" withExtension: nil]
+												   encoding: NSUTF8StringEncoding error: nil];
+	hexString = [hexString stringByReplacingCharactersInSet: [NSCharacterSet whitespaceAndNewlineCharacterSet] withString: @""];
+	
+	NSData* responseBytes = [NSData dataWithHexString: hexString error: nil];
+	
+	WebSocketResponseBuffer* buffer = [[WebSocketResponseBuffer alloc] init];
+	
+	NSUInteger currentByte = 0;
+	const void* bytes = [responseBytes bytes];
+	while(currentByte < responseBytes.length){
+		[buffer appendByteToBuffer: (u_int8_t*)(bytes + currentByte)];
+		currentByte++;
+	}
+	WebSocketData* wsData = buffer.websocketData;
+	
+	NSString* dataString = [NSString stringWithData: wsData.data encoding: NSUTF8StringEncoding];
+	
+	NSString* correctResult = [NSString stringWithContentsOfURL: [[NSBundle bundleForClass: [self class]] 
+																  URLForResource: @"LongWebSocketHexStringResult.txt" withExtension: nil]
+													   encoding: NSUTF8StringEncoding error: nil];
+	
+	STAssertEqualObjects(dataString, correctResult, nil);
 }
 
 -(void)testWebSocketResponseBuffer
