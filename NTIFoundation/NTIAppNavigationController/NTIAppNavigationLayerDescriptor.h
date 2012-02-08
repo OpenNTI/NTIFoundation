@@ -11,16 +11,18 @@
 #import "NTIAppNavigationLayer.h"
 
 /*
- * Objects implementing this protocol are used to describe layers.  Layer
- * descriptors should container enough information that their respective providers
- * can construct the actuall layer objects provided the descriptor.  Layer Descriptor
- * equality should be provided such that the app nav controller can determine whether
- * or not an existing layer on the stack can be used or a new one should be created.
- * Layer descriptors should also provide information about badge counts for background
- * changes
+ * Objects that implement this protocol are descriptors (factories) to produce layer view controllers
+ * from a model. In additon to acting as a factory that creates view controllers that can be used
+ * as layers the descriptor also acts a proxy for the model to get certain information.  This information is
+ * things like background change counts, search information, related item information, etc.
  */
-@protocol NTIAppNavigationLayerDescriptor <NTIChangeCountTracking>
-@property (nonatomic, readonly) id<NTIAppNavigationLayerProvider>provider;
+@protocol NTIAppNavigationLayerDescriptor
 @property (nonatomic, readonly) NSString* title;
 @property (nonatomic, readonly) UIImage* image;
+-(UIViewController<NTIAppNavigationLayer>*)createLayer;
+-(BOOL)wouldCreatedLayerBeTheSameAs: (UIViewController<NTIAppNavigationLayer>*)layer;
+@optional
+//If this message is implemented it should return a key path that is observable
+//for background change counts.
+@property (nonatomic, readonly) NSString* backgroundChangeCountKeyPath;
 @end

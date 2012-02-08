@@ -9,6 +9,17 @@
 #import "NTIAppNavigationLayerSwitcher.h"
 #import "NTIBadgeCountView.h"
 
+static NSString* keyPathForChangeCount(id layer)
+{
+	NSString* keyPath = nil;
+	
+	if( [layer respondsToSelector: @selector(backgroundChangeCountKeyPath)] ){
+		keyPath = [layer backgroundChangeCountKeyPath];
+	}
+	
+	return keyPath;
+}
+
 @interface _NTIMovableLayers : UITableViewController<UITableViewDelegate, UITableViewDataSource> {
 @private
     NSArray* movableLayers;
@@ -28,15 +39,17 @@
 	
 	self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem: UITabBarSystemItemRecents 
 																 tag: 0];
+	
 	[self updateTabBarBadge];
 	
 	//We kvo on each provider so if the popup is over we can see updates
 	for(id layer in self->movableLayers){
-		if( [layer respondsToSelector: @selector(changeCountSinceLastReset)] ){
+		NSString* kp = keyPathForChangeCount( layer );
+		if( kp ){
 			[layer addObserver: self
-					   forKeyPath: @"changeCountSinceLastReset"
-						  options: NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
-						  context: NULL];
+					forKeyPath: kp
+					   options: NSKeyValueObservingOptionNew
+					   context: NULL];
 		}
 	}
 	
@@ -45,21 +58,13 @@
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {	
-	if(OFISEQUAL(keyPath, @"changeCountSinceLastReset")){
-		NSUInteger idx = [self->movableLayers indexOfObject: object];
-		if(idx != NSNotFound){
-			[self.tableView reloadRowsAtIndexPaths: [NSArray arrayWithObject: 
-													 [NSIndexPath indexPathForRow: idx inSection: 0]] 
-								  withRowAnimation: UITableViewRowAnimationAutomatic];
-			[self updateTabBarBadge];
-		}
-		
+	NSUInteger idx = [self->movableLayers indexOfObject: object];
+	if(idx != NSNotFound){
+		[self.tableView reloadRowsAtIndexPaths: [NSArray arrayWithObject: 
+													[NSIndexPath indexPathForRow: idx inSection: 0]] 
+								withRowAnimation: UITableViewRowAnimationAutomatic];
+		[self updateTabBarBadge];
 	}
-	else
-	{
-		[super observeValueForKeyPath: keyPath ofObject: object change: change context: context];
-	}
-	
 }
 
 
@@ -67,8 +72,9 @@
 {
 	NSUInteger count = 0;
 	for(id layer in self->movableLayers){
-		if( [layer respondsToSelector: @selector(changeCountSinceLastReset)] ){
-			count += [layer changeCountSinceLastReset];
+		NSString* changeKP = keyPathForChangeCount( layer );
+		if(changeKP){
+			count += [[(id)layer valueForKeyPath: changeKP] integerValue];
 		}
 	}
 	if(count > 0){
@@ -112,18 +118,19 @@
 		cell.imageView.image = [layer imageForRecentLayerList];
 	}
 	
-	if([layer respondsToSelector: @selector(changeCountSinceLastReset)]){
-		NSUInteger count = [layer changeCountSinceLastReset];
-		if(count > 0){
-			cell.accessoryView = [[NTIBadgeCountView alloc] initWithCount: count 
-																 andFrame: CGRectMake(0, 0, 25, 25)]; //TODO do we need to set the size?
-		}
-		else{
-			cell.accessoryView = nil;
-		}
+	NSString* changeKP = keyPathForChangeCount( layer );
+	NSInteger count = 0;
+	if(changeKP){
+		count = [[(id)layer valueForKeyPath: changeKP] integerValue];
 	}
-
 	
+	if(count > 0){
+		cell.accessoryView = [[NTIBadgeCountView alloc] initWithCount: count 
+															 andFrame: CGRectMake(0, 0, 25, 25)]; //TODO do we need to set the size?
+	}
+	else{
+		cell.accessoryView = nil;
+	}
     return cell;
 }
 
@@ -136,8 +143,9 @@
 -(void)dealloc
 {
 	for(id layer in self->movableLayers){
-		if( [layer respondsToSelector: @selector(changeCountSinceLastReset)] ){
-			[layer removeObserver: self forKeyPath: @"changeCountSinceLastReset"];
+		NSString* kp = keyPathForChangeCount( layer );
+		if( kp ){
+			[layer removeObserver: self forKeyPath: kp];
 		}
 	}
 }
@@ -173,12 +181,6 @@
 				   forKeyPath: @"layerDescriptors"
 					  options: NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
 					  context: NULL];
-		if( [provider respondsToSelector: @selector(changeCountSinceLastReset)] ){
-			[provider addObserver: self
-					   forKeyPath: @"changeCountSinceLastReset"
-						  options: NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
-						  context: NULL];
-		}
 	}
 	
 	return self;
@@ -217,18 +219,19 @@
 			[self.tableView reloadRowsAtIndexPaths: indexPathsToUpdate withRowAnimation: UITableViewRowAnimationAutomatic];	
 		}
 	}
-	else if(OFISEQUAL(keyPath, @"changeCountSinceLastReset")){
-		[self updateTabBarBadge];
-	}
+	[self updateTabBarBadge];
 
 }
 
 -(void)updateTabBarBadge
 {
 	NSUInteger count = 0;
-	for(id provider in self->layerProviders){
-		if( [provider respondsToSelector: @selector(changeCountSinceLastReset)] ){
-			count += [provider changeCountSinceLastReset];
+	for(id<NTIAppNavigationLayerProvider> provider in self->layerProviders){
+		for(id layer in provider.layerDescriptors){
+			NSString* changeKP = keyPathForChangeCount( layer );
+			if(changeKP){
+				count += [[(id)layer valueForKeyPath: changeKP] integerValue];
+			}
 		}
 	}
 	if(count > 0){
@@ -268,15 +271,17 @@
 	cell.textLabel.text = descriptor.title;
 	cell.imageView.image = descriptor.image;
 	
-	if([descriptor respondsToSelector: @selector(changeCountSinceLastReset)]){
-		NSUInteger count = [descriptor changeCountSinceLastReset];
-		if(count > 0){
-			cell.accessoryView = [[NTIBadgeCountView alloc] initWithCount: count 
-																 andFrame: CGRectMake(0, 0, 25, 25)]; //TODO do we need to set the size?
-		}
-		else{
-			cell.accessoryView = nil;
-		}
+	NSString* changeKP = keyPathForChangeCount( descriptor );
+	NSInteger count = 0;
+	if(changeKP){
+		count = [[(id)descriptor valueForKeyPath: changeKP] integerValue];
+	}
+	if(count > 0){
+		cell.accessoryView = [[NTIBadgeCountView alloc] initWithCount: count 
+															 andFrame: CGRectMake(0, 0, 25, 25)]; //TODO do we need to set the size?
+	}
+	else{
+		cell.accessoryView = nil;
 	}
 	
     return cell;
@@ -293,9 +298,6 @@
 {
 	for(id provider in self->layerProviders){
 		[provider removeObserver: self forKeyPath: @"layerDescriptors"];
-		if( [provider respondsToSelector: @selector(changeCountSinceLastReset)] ){
-			[provider removeObserver: self forKeyPath: @"changeCountSinceLastReset"];
-		}
 	}
 }
 

@@ -8,18 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-//FIXME terriblename
-@protocol NTIChangeCountTracking <NSObject>
-@optional
--(NSUInteger)changeCountSinceLastReset; //Should be kvo-able
--(void)resetChangeCount;
--(void)beginTrackingChanges;
--(void)endTrackingChanges;
-@end
-
 @class NTIAppNavigationController;
-@protocol NTIAppNavigationLayer <NTIChangeCountTracking>
+@protocol NTIAppNavigationLayer <NSObject>
 @optional
+//If this message is implemented it should return a key path that is observable
+//for background change counts.
+@property (nonatomic, readonly) NSString* backgroundChangeCountKeyPath;
+
 //So layers know when they are being shown/hidden in an app controller
 -(void)willAppearInAppNavigationControllerAsResultOfPush: (BOOL)pushed;
 -(void)didAppearInAppNavigationControllerAsResultOfPush: (BOOL)pushed;
