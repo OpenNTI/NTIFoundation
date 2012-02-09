@@ -29,7 +29,7 @@ makeAvailableSlicesForStackedSlicesPane: (OUIStackedSlicesInspectorPane*)pane;
 
 @class NTIGlobalInspector;
 @class NTIAppNavigationToolbar;
-@interface NTIAppNavigationController : UIViewController<OUIInspectorDelegate, UIActionSheetDelegate>{
+@interface NTIAppNavigationController : UIViewController<OUIInspectorDelegate, UIActionSheetDelegate, UITabBarControllerDelegate>{
 	@private
 	NSMutableArray* viewControllers;
 	UINavigationController* navController;
@@ -43,6 +43,9 @@ makeAvailableSlicesForStackedSlicesPane: (OUIStackedSlicesInspectorPane*)pane;
 	
 	//Destructive warning action sheet
 	UIActionSheet* destructivePopActionSheet;
+	
+	//Track the tab on the switch
+	NSUInteger activeLayerSwitcherTabIndex;
 }
 @property (nonatomic, weak) id delegate;
 @property (nonatomic, readonly) NSArray* layers;

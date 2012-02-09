@@ -25,4 +25,13 @@
 //If this message is implemented it should return a key path that is observable
 //for background change counts.
 @property (nonatomic, readonly) NSString* backgroundChangeCountKeyPath;
+
+//Returns true if the layer intends to provide search results for the given term and context
+-(BOOL)providesSearchForTerm: (NSString*)searchTerm withContext: (id)ctx;
+//Perform a search for the given terms in the given context and call the callback with the result
+-(void)searchForTerm: (NSString*)searchTerm withContext: (id)ctx callback: (NTIObjectProcBlock)callback;
+//Returns true if the layer intends to provide items related to the given object for the given context
+-(BOOL)providesRelatedItemsForObject: (id)object withContext: (id)ctx;
+//Gathers items related to object with context and calls the callback
+-(void)gatherRelatedItemsForObject: (id)object withContext: (id)ctx callback: (NTIObjectProcBlock)callback;
 @end

@@ -195,7 +195,7 @@ static BOOL isAppLayer(id possibleLayer)
 -(id)initWithRootLayer:(UIViewController<NTIAppNavigationApplicationLayer>*)rootViewController
 {
 	self = [super initWithNibName: nil bundle: nil];
-	
+	self->activeLayerSwitcherTabIndex = 0;
 	self->layerProviders = [NSMutableArray arrayWithCapacity: 3];
 	self->viewControllers = [NSMutableArray arrayWithCapacity: 5];
 	self->navController = [[UINavigationController alloc] initWithNibName: nil bundle: nil];
@@ -875,12 +875,24 @@ static BOOL isAppLayer(id possibleLayer)
 	}
 	//TODO probably want to stash this around or save some state so we can show the tab that was last shown.
 	NTIAppNavigationLayerSwitcher* switcher = [[NTIAppNavigationLayerSwitcher alloc] initWithDelegate: (id)self];
+	switcher.delegate = self;
 	switcher.contentSizeForViewInPopover = CGSizeMake(320, 480);
+	
+	if(   self->activeLayerSwitcherTabIndex < switcher.viewControllers.count
+	   && self->activeLayerSwitcherTabIndex != NSNotFound){
+		switcher.selectedIndex = self->activeLayerSwitcherTabIndex;
+	}
+	
 	self->popController = [[UIPopoverController alloc] initWithContentViewController: switcher];
 	[[OUIAppController controller] presentPopover: popController 
 								fromBarButtonItem: _ 
 						 permittedArrowDirections: UIPopoverArrowDirectionUp 
 										 animated: YES];
+}
+
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
+{
+	self->activeLayerSwitcherTabIndex = tabBarController.selectedIndex;
 }
 
 #pragma mark global inspector
