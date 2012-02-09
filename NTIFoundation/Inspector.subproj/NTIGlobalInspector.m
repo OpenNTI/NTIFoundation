@@ -12,4 +12,18 @@
 
 @implementation NTIGlobalInspector
 @synthesize shownFromFirstResponder;
+static NSMutableArray* globalSliceRegistry;
+
++(NSMutableArray *)globalSliceRegistry 
+{ 
+	return globalSliceRegistry; 
+}
+
++(void)addSliceToGlobalRegistry: (id)slice
+{
+	if ( !globalSliceRegistry ) {
+		globalSliceRegistry = [[NSMutableArray alloc] init];
+	}
+	[globalSliceRegistry addObject: slice];
+}
 @end

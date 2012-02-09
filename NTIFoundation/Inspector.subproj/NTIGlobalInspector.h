@@ -8,10 +8,14 @@
 
 #import "OmniUI/OUIInspector.h"
 
+
 @interface NTIGlobalInspector : OUIInspector{
 	@private
 	UIResponder* shownFromFirstResponder;
 }
 
 @property (nonatomic, strong) UIResponder* shownFromFirstResponder;
+
++(void)addSliceToGlobalRegistry: (id)slice;
++(NSMutableArray *)globalSliceRegistry;
 @end
