@@ -110,7 +110,7 @@ static NSString* keyPathForChangeCount(id layer)
 	if( [layer respondsToSelector: @selector(titleForRecentLayerList)] ){
 		cell.textLabel.text = [layer titleForRecentLayerList];
 	}
-	else{
+	else if( [layer respondsToSelector: @selector(titleForAppNavigationController:)] ){
 		cell.textLabel.text = [layer titleForAppNavigationController: nil];
 	}
 	

@@ -843,6 +843,7 @@ static BOOL isAppLayer(id possibleLayer)
 		UIViewController<NTIAppNavigationLayer>* toPush = [layerDescriptor createLayer]; 
 		[self pushLayer: toPush animated: YES];
 	}
+	[[OUIAppController controller] dismissPopoverAnimated: YES];
 }
 
 -(void)registerLayerProvider: (NSObject<NTIAppNavigationLayerProvider>*)lp
