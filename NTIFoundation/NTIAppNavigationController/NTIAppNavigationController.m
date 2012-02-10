@@ -864,9 +864,14 @@ static BOOL isAppLayer(id possibleLayer)
 
 #pragma mark actions from toolbar
 
--(void)down: (id)_
+-(void)down: (id)sender
 {
-	[self popLayerAnimated: YES];
+	if(sender == self->toolBar.downButton){
+		[self unconditionallyPopLayerAnimated: YES];
+	}
+	else{
+		[self popLayerAnimated: YES];
+	}
 }
 
 -(void)layer: (id)_
