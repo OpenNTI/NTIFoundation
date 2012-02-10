@@ -345,7 +345,7 @@ static BOOL isAppLayer(id possibleLayer)
 -(UIViewController<NTIAppNavigationLayer>*)unconditionallyPopLayerAnimated: (BOOL)animated
 {
 	//Cant pop the final layer
-	if(![self->viewControllers count] > 1){
+	if(!([self->viewControllers count] > 1)){
 		return nil;
 	}
 	
