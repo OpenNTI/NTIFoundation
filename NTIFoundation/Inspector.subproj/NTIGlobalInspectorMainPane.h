@@ -7,11 +7,12 @@
 //
 
 #import <OmniUI/OUIInspectorPane.h>
+
 @protocol OUIScrollNotifier;
 @class OUIInspectorSlice, NTIGlobalInspector;
 @interface NTIGlobalInspectorMainPane : OUIInspectorPane<UITableViewDataSource, UITableViewDelegate> {
-	NSMutableDictionary* inspectObjectsDict;	// pairs of inspectedObjects and their possible slices.
-	UITableView* inspectorTable;	//sections = inspectedObjects, rows = slices
+	NSMutableArray* inspectedObjectSlicesPairs;		// pairs of inspectedObjects and their possible slices.
+	UITableView* inspectorTable;	//sections = inspectableObjects, rows = slices
 }
 
 -(id)init;

@@ -13,6 +13,7 @@
 #import "NTIGlobalInspector.h"
 #import <OmniUI/OUIDetailInspectorSlice.h>
 #import <OmniUI/OUIStackedSlicesInspectorPane.h>
+#import "NTIInspectorSliceObjectPair.h"
 
 @implementation NTIGlobalInspectorMainPane
 
@@ -20,8 +21,7 @@
 {
 	self = [super init];
 	if ( self ) {
-		//Populate the dictionary
-		self->inspectObjectsDict = [NSMutableDictionary dictionary];
+		self->inspectedObjectSlicesPairs = [NSMutableArray array];
 		
 		//Set up table
 		self->inspectorTable = [[UITableView alloc] initWithFrame: CGRectMake(0, 0, 200, 400) style: UITableViewStyleGrouped];
@@ -35,8 +35,9 @@
 {
 	//Update the inspectedObjects and their slices - populate the dictionary
 	NSMutableArray* slices = nil;
+	
 	//Empty dict
-	[self->inspectObjectsDict removeAllObjects];
+	[self->inspectedObjectSlicesPairs removeAllObjects];
 	for ( id object in self.inspectedObjects ) {
 		slices = [NSMutableArray array];
 		for (OUIInspectorSlice* slice in [NTIGlobalInspector globalSliceRegistry] ) {
@@ -44,7 +45,8 @@
 				[slices addObject: slice];
 			}
 		}
-		[self->inspectObjectsDict setObject: slices forKey: object];
+		NTIInspectorSliceObjectPair* inspectablePair = [[NTIInspectorSliceObjectPair alloc] initWithInspectableObject: object andSlices: slices];
+		[self->inspectedObjectSlicesPairs addObject: inspectablePair];
 	}
 	
 	//Relaod the tableview
@@ -57,20 +59,17 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return [self->inspectObjectsDict count];
-    //return [self.inspectedObjects count];
+	return [self->inspectedObjectSlicesPairs count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-   //Get the number of slices each for inspectedObject 
-	NSArray* slices = [self->inspectObjectsDict objectForKey: [self.inspectedObjects objectAtIndex: section]];
+	NSArray* slices = [(NTIInspectorSliceObjectPair *)[self->inspectedObjectSlicesPairs objectAtIndex: section] slices];
     return [slices count];
 }
 
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    // The header for the section is the region name -- get this from the region at the section index.
-	id inspectedObject = [self.inspectedObjects objectAtIndex: section];
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {	
+	id inspectedObject = [(NTIInspectorSliceObjectPair *)[self->inspectedObjectSlicesPairs objectAtIndex: section] inspectableObject];
 	if ( [inspectedObject respondsToSelector: @selector(nameOfInspectableObject)] ) {
 		NSString* name = [inspectedObject performSelector: @selector(nameOfInspectableObject)];
 		if ( name != nil ) {
@@ -88,22 +87,31 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:MyIdentifier];
     }
 	
-    id inspectedObject = [self.inspectedObjects objectAtIndex:indexPath.section];
-    OUIInspectorSlice* slice= [[self->inspectObjectsDict objectForKey: inspectedObject] objectAtIndex: indexPath.row];
+	NSArray* availableSlices = [(NTIInspectorSliceObjectPair *)[self->inspectedObjectSlicesPairs objectAtIndex: indexPath.section] slices];
+	OUIInspectorSlice* slice = [availableSlices objectAtIndex: indexPath.row];
 	cell.textLabel.text = slice.title;
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	id inspectedObject = [self.inspectedObjects objectAtIndex:indexPath.section];
-	OUIInspectorSlice* slice= [[self->inspectObjectsDict objectForKey: inspectedObject] objectAtIndex: indexPath.row];
-	OUIInspectorPane* pane = [OUIDetailInspectorSlice detailLabelWithTitle: slice.title paneMaker: ^OUIInspectorPane* (OUIDetailInspectorSlice* slice) 
+	NSArray* availableSlices = [(NTIInspectorSliceObjectPair *)[self->inspectedObjectSlicesPairs objectAtIndex: indexPath.section] slices];
+	OUIInspectorSlice* slice = [availableSlices objectAtIndex: indexPath.row];
+	/*OUIInspectorPane* pane = [OUIDetailInspectorSlice detailLabelWithTitle: slice.title paneMaker: ^OUIInspectorPane* (OUIDetailInspectorSlice* slice) 
 							  {
 								  return [[OUIStackedSlicesInspectorPane alloc] init];
 							  }];
-	slice.detailPane = pane;
-	[slice showDetails: nil];
+	*/
+	if ( [slice respondsToSelector:@selector(paneMaker)] ){
+		OUIDetailInspectorSlice* detailSlice = (OUIDetailInspectorSlice *)slice;
+		OUIInspectorPane* pane = detailSlice.paneMaker(detailSlice);
+		[self.inspector pushPane: pane];
+	}
+	else if( [slice respondsToSelector: @selector(showDetails:)] ){
+		//[slice showDetails: slice];
+		OUIInspectorPane* pane = slice.detailPane;
+		[self.inspector pushPane: pane];
+	}
 }
 
 @end
