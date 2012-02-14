@@ -17,5 +17,5 @@
 @property (nonatomic, strong) UIResponder* shownFromFirstResponder;
 
 +(void)addSliceToGlobalRegistry: (id)slice;
-+(NSMutableArray *)globalSliceRegistry;
++(NSArray *)globalSliceRegistry;
 @end

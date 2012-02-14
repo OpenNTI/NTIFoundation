@@ -960,7 +960,11 @@ static void searchUpVCHiererarchy(UIViewController* controller, NSMutableSet* ob
 -(void)inspector: (id)inspectorButton
 {
 	if(!inspector){
+		// NOTE: Going with the default pane
 		self->inspector = [[NTIGlobalInspector alloc] init];
+		// NOTE: Using our custom panes
+		//NTIGlobalInspectorMainPane* pane = [[NTIGlobalInspectorMainPane alloc] init];
+		//self->inspector = [[NTIGlobalInspector alloc] initWithMainPane: pane height: 400];
 		inspector.delegate = self;
 	}
 	

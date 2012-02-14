@@ -11,6 +11,7 @@
 #import "NTIAppNavigationLayer.h"
 #import "NTIAppNavigationLayerProvider.h"
 #import "NTIGlobalInspector.h"
+#import "NTIGlobalInspectorMainPane.h"
 
 @class NTIAppNavigationController;
 @interface UIViewController(NTIAppNavigationControllerExtensions)
