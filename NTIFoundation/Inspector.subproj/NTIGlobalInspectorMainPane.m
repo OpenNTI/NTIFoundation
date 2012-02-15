@@ -13,6 +13,7 @@
 #import "NTIGlobalInspector.h"
 #import <OmniUI/OUIDetailInspectorSlice.h>
 #import <OmniUI/OUIStackedSlicesInspectorPane.h>
+#import <OmniUI/OUIColorInspectorPane.h>
 #import "NTIInspectorSliceObjectPair.h"
 
 @implementation NTIGlobalInspectorMainPane
@@ -97,20 +98,21 @@
 {
 	NSArray* availableSlices = [(NTIInspectorSliceObjectPair *)[self->inspectedObjectSlicesPairs objectAtIndex: indexPath.section] slices];
 	OUIInspectorSlice* slice = [availableSlices objectAtIndex: indexPath.row];
-	/*OUIInspectorPane* pane = [OUIDetailInspectorSlice detailLabelWithTitle: slice.title paneMaker: ^OUIInspectorPane* (OUIDetailInspectorSlice* slice) 
-							  {
-								  return [[OUIStackedSlicesInspectorPane alloc] init];
-							  }];
-	*/
+	[self addChildViewController: slice];	//Add slice to the parentViewController to maintain the hierarchy of vc and views.
+
+	NSArray* objects = [slice appropriateObjectsForInspection];		//Get objects our slice is inspecting.
+	
 	if ( [slice respondsToSelector:@selector(paneMaker)] ){
 		OUIDetailInspectorSlice* detailSlice = (OUIDetailInspectorSlice *)slice;
 		OUIInspectorPane* pane = detailSlice.paneMaker(detailSlice);
-		[self.inspector pushPane: pane];
+		[self.inspector pushPane: pane inspectingObjects: objects ];
 	}
-	else if( [slice respondsToSelector: @selector(showDetails:)] ){
-		//[slice showDetails: slice];
-		OUIInspectorPane* pane = slice.detailPane;
-		[self.inspector pushPane: pane];
+	// TODO: do it a better way, this is a hack to handle colors for now because they are not OUIDetailInspectorSlice
+	else if( [slice respondsToSelector: @selector(colorForObject:)] ){
+		OUIColorInspectorPane *pane = [[OUIColorInspectorPane alloc] init];
+        pane.title = slice.title;
+        slice.detailPane = pane;
+		[self.inspector pushPane: pane inspectingObjects: objects];
 	}
 }
 
