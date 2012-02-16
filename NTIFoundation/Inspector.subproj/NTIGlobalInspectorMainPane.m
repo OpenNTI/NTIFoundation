@@ -16,6 +16,46 @@
 #import <OmniUI/OUIColorInspectorPane.h>
 #import "NTIInspectorSliceObjectPair.h"
 
+@implementation NSObject(NTIInspectableObjectExtension)
+-(id)belongsTo
+{
+	return nil; 
+}
+-(id)inspectedObject
+{
+	return self;
+}
+-(NSString *)nameOfInspectableObjectContainer
+{
+	return nil;
+}
+@end
+
+@implementation NTIInspectableObjectWrapper
+
+@synthesize inspectableObject, owner;
+
+- (id)initWithInspectableObject: (id)object andOwner: (id)p 
+{
+    self = [super init];
+    if (self) {
+        self.inspectableObject = object;
+		self.owner = p;
+    }
+    return self;
+}
+
+-(id)belongsTo
+{
+	return self.owner;
+}
+
+-(id)inspectedObject
+{
+	return self.inspectableObject;
+}
+@end
+
 @implementation NTIGlobalInspectorMainPane
 
 -(id)init
@@ -32,26 +72,65 @@
 	return self;
 }
 
+-(NSArray *)inspectedObjects
+{
+	return [[super inspectedObjects] arrayByPerformingBlock:^id(id obj){
+		return [obj inspectedObject];
+	}];
+}
+
+-(NSArray *)rawInspectedObject
+{
+	return [super inspectedObjects];
+}
+
 -(void)updateInterfaceFromInspectedObjects:(OUIInspectorUpdateReason)reason
 {
 	//Update the inspectedObjects and their slices - populate the dictionary
 	NSMutableArray* slices = nil;
 	
-	//Empty dict
 	[self->inspectedObjectSlicesPairs removeAllObjects];
-	for ( id object in self.inspectedObjects ) {
+	for ( id object in [self rawInspectedObject] ) {
+		// NOTE: self.inspectedObjects contains both inspectableObjects or wrappers around inspectableObjects. 
+		//		By calling [object inspectedObject] will make sure we get the right inspectableObject not its wrapper.
+		id inspObject = [object inspectedObject];
 		slices = [NSMutableArray array];
 		for (OUIInspectorSlice* slice in [NTIGlobalInspector globalSliceRegistry] ) {
-			if ( [slice isAppropriateForInspectedObject: object] ) {
+			if ( [slice isAppropriateForInspectedObject: inspObject] ) {
 				[slices addObject: slice];
 			}
 		}
+		[self addObject: object withInspectorSlices: slices];
+	}
+	
+	//Reload the tableview
+	[self->inspectorTable reloadData];
+}
+
+-(void)addObject: (id)object withInspectorSlices: (NSArray *)slices
+{
+	//Check the owner of the object
+	id inspectedObjectOwner = [object belongsTo];
+	if ( !inspectedObjectOwner ) {
 		NTIInspectorSliceObjectPair* inspectablePair = [[NTIInspectorSliceObjectPair alloc] initWithInspectableObject: object andSlices: slices];
 		[self->inspectedObjectSlicesPairs addObject: inspectablePair];
 	}
-	
-	//Relaod the tableview
-	[self->inspectorTable reloadData];
+	else {
+		NTIInspectorSliceObjectPair* parentPair = nil;
+		for ( NTIInspectorSliceObjectPair* pair in self->inspectedObjectSlicesPairs ) {
+			if ( [pair containsInspectableObject: inspectedObjectOwner] ) {
+				parentPair = pair;
+				break;
+			}
+		}
+		if ( parentPair ) {
+			[(NTIInspectorSliceObjectPair *)parentPair addSlices: slices];	//Group slices with the same inspectable owner
+		}
+		else {
+			NTIInspectorSliceObjectPair* inspectablePair = [[NTIInspectorSliceObjectPair alloc] initWithInspectableObject: inspectedObjectOwner andSlices: slices];
+			[self->inspectedObjectSlicesPairs addObject: inspectablePair];
+		}
+	}
 }
 
 -(void)loadView
@@ -71,11 +150,9 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {	
 	id inspectedObject = [(NTIInspectorSliceObjectPair *)[self->inspectedObjectSlicesPairs objectAtIndex: section] inspectableObject];
-	if ( [inspectedObject respondsToSelector: @selector(nameOfInspectableObject)] ) {
-		NSString* name = [inspectedObject performSelector: @selector(nameOfInspectableObject)];
-		if ( name != nil ) {
-			return name;
-		}
+	NSString* name = [inspectedObject nameOfInspectableObjectContainer];
+	if (name) {
+		return name;
 	}
     return NSStringFromClass( [inspectedObject class] ); //[inspectedObject classNameForClass: [inspectedObject class]];
 }
@@ -117,3 +194,4 @@
 }
 
 @end
+

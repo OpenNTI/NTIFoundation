@@ -151,12 +151,13 @@
 		40F39C8114D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8014D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m */; };
 		40F39C8414D84EF50089DCF6 /* SendRecieveQueueTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8314D84EF50089DCF6 /* SendRecieveQueueTest.m */; };
 		40F39C8714D852FE0089DCF6 /* NSString-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8614D852FE0089DCF6 /* NSString-NTIExtensionsTest.m */; };
-		4C3BDC1C14EAF87F008ED49D /* NTIInspectorSliceObjectPair.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3BDC1A14EAF87F008ED49D /* NTIInspectorSliceObjectPair.h */; };
+		4C3BDC1C14EAF87F008ED49D /* NTIInspectorSliceObjectPair.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3BDC1A14EAF87F008ED49D /* NTIInspectorSliceObjectPair.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C3BDC1D14EAF87F008ED49D /* NTIInspectorSliceObjectPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3BDC1B14EAF87F008ED49D /* NTIInspectorSliceObjectPair.m */; };
 		4C3BDC1E14EAF87F008ED49D /* NTIInspectorSliceObjectPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3BDC1B14EAF87F008ED49D /* NTIInspectorSliceObjectPair.m */; };
 		4C3DA33F14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3DA33D14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C3DA34014E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DA33E14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m */; };
 		4C3DA34114E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DA33E14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m */; };
+		4CABB38D14EC28DF00A7FD7C /* NTIInspectableObjectProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CABB38C14EC28DF00A7FD7C /* NTIInspectableObjectProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7293CB291451AA7D00CD64B8 /* NTIEditableFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 7293CB271451AA7D00CD64B8 /* NTIEditableFrame.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7293CB2A1451AA7D00CD64B8 /* NTIEditableFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */; };
 		7293CB2B1451AAB700CD64B8 /* NTIEditableFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */; };
@@ -661,6 +662,7 @@
 		4C3BDC1B14EAF87F008ED49D /* NTIInspectorSliceObjectPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIInspectorSliceObjectPair.m; sourceTree = "<group>"; };
 		4C3DA33D14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIGlobalInspectorMainPane.h; sourceTree = "<group>"; };
 		4C3DA33E14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIGlobalInspectorMainPane.m; sourceTree = "<group>"; };
+		4CABB38C14EC28DF00A7FD7C /* NTIInspectableObjectProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIInspectableObjectProtocol.h; sourceTree = "<group>"; };
 		7215956A13CFE80600DCA72E /* NSObject-NTIJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject-NTIJSON.h"; path = "../NSObject-NTIJSON.h"; sourceTree = "<group>"; };
 		7216D73113CBAF0300509BDC /* NTIFoundation-Info.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NTIFoundation-Info.h"; sourceTree = "<group>"; };
 		721DC9FF13BA3DBD00340540 /* NTIAbstractDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTIAbstractDownloader.h; path = ../NTIAbstractDownloader.h; sourceTree = "<group>"; };
@@ -833,6 +835,7 @@
 			isa = PBXGroup;
 			children = (
 				40103C1314D2564C004451A4 /* NTIInspectableController.h */,
+				4CABB38C14EC28DF00A7FD7C /* NTIInspectableObjectProtocol.h */,
 				40103C1A14D28A54004451A4 /* NTIGlobalInspector.h */,
 				40103C1B14D28A54004451A4 /* NTIGlobalInspector.m */,
 				4C3DA33D14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.h */,
@@ -1404,6 +1407,8 @@
 				40103C1414D2564C004451A4 /* NTIInspectableController.h in Headers */,
 				40103C1C14D28A54004451A4 /* NTIGlobalInspector.h in Headers */,
 				4C3DA33F14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.h in Headers */,
+				4CABB38D14EC28DF00A7FD7C /* NTIInspectableObjectProtocol.h in Headers */,
+				4C3BDC1C14EAF87F008ED49D /* NTIInspectorSliceObjectPair.h in Headers */,
 				40C34CC114D9AAFB000D91A8 /* NTIAppNavigationLayerProvider.h in Headers */,
 				40C34CC314D9AB9B000D91A8 /* NTIAppNavigationLayerDescriptor.h in Headers */,
 				402665CE14D9BB950053CC53 /* NTIAppNavigationLayer.h in Headers */,
@@ -1411,7 +1416,6 @@
 				40A745C014DB32E90093F0D4 /* NTIBadgeCountView.h in Headers */,
 				4066C81D14E1C89F006B56D3 /* WebSocketResponseBuffer.h in Headers */,
 				4066C83A14E1C95F006B56D3 /* WebSocketData.h in Headers */,
-				4C3BDC1C14EAF87F008ED49D /* NTIInspectorSliceObjectPair.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -20,9 +20,9 @@
 	return self;
 }
 
--(void)addSlice: (id)slice
+-(void)addSlices: (NSArray *)slices
 {
-	self->inspectorSlices = [self->inspectorSlices arrayByAddingObject: slice];
+	self->inspectorSlices = [self->inspectorSlices arrayByAddingObjectsFromArray: slices];
 }
 
 -(NSArray *)slices
@@ -33,6 +33,16 @@
 -(id)inspectableObject
 {
 	return inspectableObject;
+}
+
+-(BOOL)containsInspectableObject: (id)object
+{
+	if ( self->inspectableObject == object) {
+		return YES;
+	}
+	else {
+		return NO;
+	}
 }
 
 @end

@@ -7,6 +7,21 @@
 //
 
 #import <OmniUI/OUIInspectorPane.h>
+#import "NTIInspectableObjectProtocol.h"
+
+@interface NSObject(NTIInspectableObjectExtension)
+-(id)belongsTo;
+-(id)inspectedObject;
+-(NSString *)nameOfInspectableObjectContainer;
+@end
+
+@interface NTIInspectableObjectWrapper : NSObject<NTIInspectableObjectProtocol>
+@property (nonatomic, strong) id inspectableObject;
+@property (nonatomic, strong) id owner;
+
+-(id)initWithInspectableObject: (id)object andOwner: (id)p;
+-(id)inspectedObject;
+@end
 
 @protocol OUIScrollNotifier;
 @class OUIInspectorSlice, NTIGlobalInspector;
@@ -16,5 +31,7 @@
 }
 
 -(id)init;
-
+-(void)addObject: (id)object withInspectorSlices: (NSArray *)slices;
 @end
+
+

@@ -16,6 +16,7 @@
 -(id)initWithInspectableObject: (id)object andSlices: (NSArray *)slices;
 -(id)inspectableObject; /* return the object being inspected*/
 -(NSArray *)slices;	/* slices that the object responds to*/
--(void)addSlice: (id)slice;
+-(void)addSlices: (NSArray *)slices;
+-(BOOL)containsInspectableObject: (id)object; 
 
 @end

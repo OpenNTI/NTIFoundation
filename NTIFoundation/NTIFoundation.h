@@ -39,5 +39,7 @@
 #import "NTIAppNavigationLayerProvider.h"
 #import "NTIAppNavigationLayerDescriptor.h"
 #import "NTIAppNavigationLayer.h"
+#import "NTIInspectableObjectProtocol.h"
+#import "NTIGlobalInspectorMainPane.h"
 
 #endif
