@@ -16,6 +16,11 @@
 #import <OmniUI/OUIColorInspectorPane.h>
 #import "NTIInspectorSliceObjectPair.h"
 
+//FIXME move this into a better protocol that describes the slices for our main pane
+@interface NSObject()
+-(UIImage*)imageForSliceCell;
+@end
+
 @implementation NSObject(NTIInspectableObjectExtension)
 -(id)belongsTo
 {
@@ -168,6 +173,14 @@
 	NSArray* availableSlices = [(NTIInspectorSliceObjectPair *)[self->inspectedObjectSlicesPairs objectAtIndex: indexPath.section] slices];
 	OUIInspectorSlice* slice = [availableSlices objectAtIndex: indexPath.row];
 	cell.textLabel.text = slice.title;
+	
+	if( [slice respondsToSelector: @selector(imageForSliceCell)] ){
+		cell.imageView.image = [slice imageForSliceCell];
+	}
+	else{
+		cell.imageView.image = nil;
+	}
+	
     return cell;
 }
 
