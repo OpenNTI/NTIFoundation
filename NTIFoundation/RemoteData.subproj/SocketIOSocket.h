@@ -40,6 +40,7 @@ typedef NSInteger SocketIOSocketStatus;
 //For example for the event chat_EnteredRoom we would attempt to call chat_EnteredRoom: (NSArray*)args;
 //If the delegate does not perform the dynamic selector we will give it to didRecieveUnhandledEventNamed: name : args
 @protocol SocketIOSocketEventDelegate <NSObject>
+@optional
 -(void)socket: (SocketIOSocket*)p didRecieveMessage: (NSString*)message;
 -(void)socket:(SocketIOSocket*)p didRecieveUnhandledEventNamed: (NSString *)name withArgs: (NSArray*)args;
 @end
