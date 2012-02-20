@@ -363,10 +363,8 @@ static BOOL isAppLayer(id possibleLayer)
 	//[self possibleStartTrackingLayer: self.topLayer];
 	[[OUIAppController controller] dismissPopoverAnimated: YES];
 	id popped = nil;
-	//Are we popping an app layer.  Only app layers are on the nav stack
-	//if the controller to pop is the same as the top nav controller it is an 
-	//application
-	if( [self->viewControllers lastObject] == self->navController.topViewController){
+	//Are we popping an app layer?
+	if( isAppLayer(self.topLayer)){
 		popped = [self popApplicationLayer: animated];
 	}
 	else{
@@ -443,28 +441,17 @@ static BOOL isAppLayer(id possibleLayer)
 	void (^completion)(BOOL) = ^(BOOL success){
 		[popped.view removeFromSuperview];
 		[popped removeFromParentViewController];
-		
-//		//If there are no more transLayers remove the mask
-//		if( [self->viewControllers lastObject] == self->navController.topViewController ){
-//			//Need to clear the mask
-//			for(UIView* subView in self->navController.topViewController.view.subviews){
-//				if([subView isKindOfClass: [_TransientLayerMask class]]){
-//					[subView removeFromSuperview];
-//					break;
-//				}
-//			}
-//		}
 	} ;
 	
 	//Do this at the beggining
-	if([self->viewControllers lastObject] != self->navController.topViewController){
+	if([self->viewControllers lastObject] != self.topApplicationLayer){
 		//Need to show the trans
 		[[self->viewControllers lastObject] view].hidden = NO;
 	}
 	else{
 		//We may decide to do this when the animation completes.
 		//Need to clear the mask
-		for(UIView* subView in self->navController.topViewController.view.subviews){
+		for(UIView* subView in self.topApplicationLayer.view.subviews){
 			if([subView isKindOfClass: [_TransientLayerMask class]]){
 				[subView removeFromSuperview];
 				break;
@@ -501,14 +488,14 @@ static BOOL isAppLayer(id possibleLayer)
 {
 	//If this is the first transient we have pushed for this appLayer we need
 	//to mask it out.  It is the first transient if the viewController on top of our
-	//stack is the same as the nav controllers top vc.  If its not we are going to want to
+	//stack is an app layer  If its not we are going to want to
 	//hide the other transient view
 	UIViewController* transToHide=nil;
-	if( [self->viewControllers lastObject] == self->navController.topViewController ){
+	if( isAppLayer(self.topLayer) ){
 		//Ok we need to push the mask.  The mask is a subview of the applicationLayers view
 		_TransientLayerMask* mask = [[_TransientLayerMask alloc] 
-									 initWithFrame: self->navController.topViewController.view.bounds];
-		[self->navController.topViewController.view addSubview: mask];
+									 initWithFrame: self.topLayer.view.bounds];
+		[self.topLayer.view addSubview: mask];
 		[mask addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(maskTapped:)]];
 		//[mask addGestureRecognizer: [[UISwipeGestureRecognizer alloc] initWithTarget: self action: @selector(swipedToRemoveTransient:)]];
 	}
@@ -521,7 +508,7 @@ static BOOL isAppLayer(id possibleLayer)
 	
 	//We are a transient viewController
 	//OUr parent becomes the view controller that is on top of the nav controller (the top most application layer)
-	[self->navController.topViewController addChildViewController: transLayer];
+	[self.topApplicationLayer addChildViewController: transLayer];
 	[self->viewControllers addObject: transLayer];
 	//Add the layers view as a subview of the topViewControllersView.  Adjust the frame first
 	transLayer.view.backgroundColor = [UIColor whiteColor];
@@ -534,7 +521,7 @@ static BOOL isAppLayer(id possibleLayer)
 	transLayer.view.layer.shadowRadius = 5;
 	transLayer.view.layer.shadowOpacity = 0.5;
 	
-	CGRect parentViewsFrame = self->navController.topViewController.view.frame;
+	CGRect parentViewsFrame = self.topApplicationLayer.view.frame;
 	
 	CGFloat tranisientLayerWidth = kTransientLayerSize;
 	if(   [transLayer respondsToSelector: @selector(wantsFullScreenLayout)] 
@@ -552,7 +539,7 @@ static BOOL isAppLayer(id possibleLayer)
 
 	//[transLayer.view addGestureRecognizer: [[UISwipeGestureRecognizer alloc] initWithTarget: self action: @selector(swipedToRemoveTransient:)]];
 	
-	[self->navController.topViewController.view addSubview: transLayer.view];
+	[self.topApplicationLayer.view addSubview: transLayer.view];
 	
 	//Now animate it in
 	[UIView animateWithDuration: kTransientLayerAnimationSpeed 
@@ -674,7 +661,7 @@ static BOOL isAppLayer(id possibleLayer)
 -(void)moveAppLayerToTop: (id<NTIAppNavigationApplicationLayer>)appLayer
 {
 	//If we are asked to move the top applayer do nothing, it is already on top
-	if( self->navController.topViewController == (id)appLayer){
+	if( self.topApplicationLayer == (id)appLayer){
 		return;
 	}
 	
