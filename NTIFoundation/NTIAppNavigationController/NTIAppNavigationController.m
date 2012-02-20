@@ -932,7 +932,12 @@ static void searchUpResponderChain(UIResponder* responder, NSMutableArray* objec
 	}
 	
 	if( [responder respondsToSelector: @selector(inspectableObjects)] ){
-		[objects addObjectsFromArray: [(id)responder inspectableObjects]];
+		NSArray* objs = [(id)responder inspectableObjects];
+		for ( id obj  in objs) {
+			if ( ![objects containsObject: obj] ) {
+				[objects addObject: obj];
+			}
+		}
 	}
 	
 	searchUpResponderChain(responder.nextResponder, objects);
@@ -945,7 +950,12 @@ static void searchUpVCHiererarchy(UIViewController* controller, NSMutableArray* 
 	}
 	
 	if( [controller respondsToSelector: @selector(inspectableObjects)] ){
-		[objects addObjectsFromArray: [(id)controller inspectableObjects]];
+		NSArray* objs = [(id)controller inspectableObjects];
+		for ( id obj  in objs) {
+			if ( ![objects containsObject: obj] ) {
+				[objects addObject: obj];
+			}
+		}
 	}
 	
 	searchUpVCHiererarchy(controller.parentViewController, objects);
@@ -981,11 +991,12 @@ static void searchUpVCHiererarchy(UIViewController* controller, NSMutableArray* 
 	
 	//Now ask our delegate
 	if( [self.delegate respondsToSelector: @selector(appNavigationControllerInspectableObjects:)] ){
-		[inspectableObjects addObjectsFromArray: [[self.delegate appNavigationControllerInspectableObjects: self] allObjects]];
-		//Avoid duplicates
-		//NSSet *uniqueObjects = [NSSet setWithArray: inspectableObjects];
-		//[inspectableObjects removeAllObjects];
-		//[inspectableObjects addObjectsFromArray: [uniqueObjects allObjects]];
+		NSArray* objs = [[self.delegate appNavigationControllerInspectableObjects: self] allObjects];
+		for ( id obj  in objs) {
+			if ( ![inspectableObjects containsObject: obj] ) {
+				[inspectableObjects addObject: obj];
+			}
+		}
 	}
 	
 	[self->inspector.shownFromFirstResponder resignFirstResponder];
