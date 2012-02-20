@@ -925,27 +925,27 @@ static UIResponder* findFirstResponder()
 	return findFirstResponderBeneathView([[OUIAppController controller] window]);
 }
 
-static void searchUpResponderChain(UIResponder* responder, NSMutableSet* objects)
+static void searchUpResponderChain(UIResponder* responder, NSMutableArray* objects)
 {
 	if(!responder){
 		return;
 	}
 	
 	if( [responder respondsToSelector: @selector(inspectableObjects)] ){
-		[objects unionSet: [(id)responder inspectableObjects]];
+		[objects addObjectsFromArray: [(id)responder inspectableObjects]];
 	}
 	
 	searchUpResponderChain(responder.nextResponder, objects);
 }
 
-static void searchUpVCHiererarchy(UIViewController* controller, NSMutableSet* objects)
+static void searchUpVCHiererarchy(UIViewController* controller, NSMutableArray* objects)
 {
 	if(!controller){
 		return;
 	}
 	
 	if( [controller respondsToSelector: @selector(inspectableObjects)] ){
-		[objects unionSet: [(id)controller inspectableObjects]];
+		[objects addObjectsFromArray: [(id)controller inspectableObjects]];
 	}
 	
 	searchUpVCHiererarchy(controller.parentViewController, objects);
@@ -966,8 +966,8 @@ static void searchUpVCHiererarchy(UIViewController* controller, NSMutableSet* ob
 		inspector.delegate = self;
 	}
 	
-	NSMutableSet* inspectableObjects = [NSMutableSet set];
-	
+	//NSMutableSet* inspectableObjects = [NSMutableSet set];
+	NSMutableArray* inspectableObjects = [NSMutableArray array];
 	UIResponder* firstResponder = findFirstResponder();
 	self->inspector.shownFromFirstResponder = firstResponder;
 	
@@ -981,13 +981,17 @@ static void searchUpVCHiererarchy(UIViewController* controller, NSMutableSet* ob
 	
 	//Now ask our delegate
 	if( [self.delegate respondsToSelector: @selector(appNavigationControllerInspectableObjects:)] ){
-		[inspectableObjects unionSet: [self.delegate appNavigationControllerInspectableObjects: self]];
+		[inspectableObjects addObjectsFromArray: [[self.delegate appNavigationControllerInspectableObjects: self] allObjects]];
+		//Avoid duplicates
+		//NSSet *uniqueObjects = [NSSet setWithArray: inspectableObjects];
+		//[inspectableObjects removeAllObjects];
+		//[inspectableObjects addObjectsFromArray: [uniqueObjects allObjects]];
 	}
 	
 	[self->inspector.shownFromFirstResponder resignFirstResponder];
 	
 	//TODO what do we do if no objects are selected?
-	[self->inspector inspectObjects: [inspectableObjects allObjects] 
+	[self->inspector inspectObjects: inspectableObjects 
 				  fromBarButtonItem: inspectorButton];
 }
 

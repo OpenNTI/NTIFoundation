@@ -9,5 +9,5 @@
 #import <Foundation/Foundation.h>
 
 @protocol NTIInspectableController <NSObject>
--(NSSet*)inspectableObjects;
+-(NSArray*)inspectableObjects;
 @end

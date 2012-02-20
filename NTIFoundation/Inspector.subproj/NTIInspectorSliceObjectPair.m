@@ -7,7 +7,7 @@
 //
 
 #import "NTIInspectorSliceObjectPair.h"
-
+#import <OmniUI/OUIInspectorSlice.h>
 @implementation NTIInspectorSliceObjectPair
 
 -(id)initWithInspectableObject: (id)object andSlices: (NSArray *)slices
@@ -27,7 +27,12 @@
 
 -(NSArray *)slices
 {
-	return self->inspectorSlices;
+	//Sort slices alphabetically by title
+	return [self->inspectorSlices sortedArrayUsingComparator:(NSComparator)^(id obj1, id obj2) {
+		NSString* title1 = [(OUIInspectorSlice *)obj1 title];
+		NSString* title2 = [(OUIInspectorSlice *)obj2 title];
+		return [title1 caseInsensitiveCompare: title2];
+	}];
 }
 
 -(id)inspectableObject
