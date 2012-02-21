@@ -10,7 +10,7 @@
 
 @interface NTIInspectorSliceObjectPair : NSObject {
 	id inspectableObject;
-	NSArray* inspectorSlices;
+	NSMutableArray* inspectorSlices;
 }
 
 -(id)initWithInspectableObject: (id)object andSlices: (NSArray *)slices;

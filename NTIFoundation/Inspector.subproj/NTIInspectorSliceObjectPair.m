@@ -8,6 +8,8 @@
 
 #import "NTIInspectorSliceObjectPair.h"
 #import <OmniUI/OUIInspectorSlice.h>
+#import <OmniFoundation/OmniFoundation.h>
+
 @implementation NTIInspectorSliceObjectPair
 
 -(id)initWithInspectableObject: (id)object andSlices: (NSArray *)slices
@@ -15,24 +17,32 @@
 	self = [super init];
 	if (self) {
 		self->inspectableObject = object;
-		self->inspectorSlices = slices;
+		self->inspectorSlices = [NSMutableArray arrayWithArray: slices];
 	}
 	return self;
 }
 
+NSComparisonResult compareByTitle(OUIInspectorSlice* a, OUIInspectorSlice* b, void* context);
+NSComparisonResult compareByTitle(OUIInspectorSlice* a, OUIInspectorSlice* b, void* context)
+{
+	return [[a title] caseInsensitiveCompare: [b title]];
+}
+
+
 -(void)addSlices: (NSArray *)slices
 {
-	self->inspectorSlices = [self->inspectorSlices arrayByAddingObjectsFromArray: slices];
+	for(id slice in slices){
+		if(![self->inspectorSlices containsObject: slice]){
+			[self->inspectorSlices insertObject: slice 
+					 inArraySortedUsingFunction: compareByTitle 
+										context: NULL];
+		}
+	}
 }
 
 -(NSArray *)slices
 {
-	//Sort slices alphabetically by title
-	return [self->inspectorSlices sortedArrayUsingComparator:(NSComparator)^(id obj1, id obj2) {
-		NSString* title1 = [(OUIInspectorSlice *)obj1 title];
-		NSString* title2 = [(OUIInspectorSlice *)obj2 title];
-		return [title1 caseInsensitiveCompare: title2];
-	}];
+	return [self->inspectorSlices copy];
 }
 
 -(id)inspectableObject
