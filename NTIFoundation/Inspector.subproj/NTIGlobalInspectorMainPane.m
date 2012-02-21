@@ -195,6 +195,7 @@
 	if ( [slice respondsToSelector:@selector(paneMaker)] ){
 		OUIDetailInspectorSlice* detailSlice = (OUIDetailInspectorSlice *)slice;
 		OUIInspectorPane* pane = detailSlice.paneMaker(detailSlice);
+		pane.parentSlice = detailSlice;
 		[self.inspector pushPane: pane inspectingObjects: objects ];
 	}
 	// TODO: do it a better way, this is a hack to handle colors for now because they are not OUIDetailInspectorSlice
@@ -202,6 +203,7 @@
 		OUIColorInspectorPane *pane = [[OUIColorInspectorPane alloc] init];
         pane.title = slice.title;
         slice.detailPane = pane;
+		pane.parentSlice = slice;
 		[self.inspector pushPane: pane inspectingObjects: objects];
 	}
 }
