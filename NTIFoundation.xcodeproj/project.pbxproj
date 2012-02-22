@@ -874,9 +874,9 @@
 			children = (
 				40572C2914C88D8E0032D2DB /* NTIAppNavigationController.h */,
 				40572C2A14C88D8E0032D2DB /* NTIAppNavigationController.m */,
-				40103C0614D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.h */,
 				40103C0714D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.m */,
 				40C34CC014D9AAFB000D91A8 /* NTIAppNavigationLayerProvider.h */,
+				40103C0614D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.h */,
 				40C34CC214D9AB9B000D91A8 /* NTIAppNavigationLayerDescriptor.h */,
 				402665CD14D9BB950053CC53 /* NTIAppNavigationLayer.h */,
 			);

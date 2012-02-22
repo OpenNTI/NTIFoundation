@@ -818,18 +818,23 @@ static BOOL isAppLayer(id possibleLayer)
 	return nil;
 }
 
--(void)switcher: (NTIAppNavigationLayerSwitcher*)switcher showLayer: (id<NTIAppNavigationLayerDescriptor>)layerDescriptor;
+-(void)presentLayerForDescriptor: (id<NTIAppNavigationLayerDescriptor>)descriptor
 {
 	//If this returns nil we will create a new one
-	id<NTIAppNavigationLayer> layerToMove = [self layerToMoveForwardForDescriptor: layerDescriptor];
+	id<NTIAppNavigationLayer> layerToMove = [self layerToMoveForwardForDescriptor: descriptor];
 	
 	if(layerToMove){
 		[self bringLayerForward: layerToMove];
 	}
 	else{
-		UIViewController<NTIAppNavigationLayer>* toPush = [layerDescriptor createLayer]; 
+		UIViewController<NTIAppNavigationLayer>* toPush = [descriptor createLayer]; 
 		[self pushLayer: toPush animated: YES];
 	}
+}
+
+-(void)switcher: (NTIAppNavigationLayerSwitcher*)switcher showLayer: (id<NTIAppNavigationLayerDescriptor>)layerDescriptor;
+{
+	[self presentLayerForDescriptor: layerDescriptor];
 	[[OUIAppController controller] dismissPopoverAnimated: YES];
 }
 

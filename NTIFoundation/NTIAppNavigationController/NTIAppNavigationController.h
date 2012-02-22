@@ -57,6 +57,8 @@ makeAvailableSlicesForStackedSlicesPane: (OUIStackedSlicesInspectorPane*)pane;
 -(void)pushLayer: (UIViewController<NTIAppNavigationLayer>*)layer animated: (BOOL)animated;
 -(UIViewController<NTIAppNavigationLayer>*)popLayerAnimated: (BOOL)animated;
 
+-(void)presentLayerForDescriptor: (id<NTIAppNavigationLayerDescriptor>)descriptor;
+
 -(void)registerLayerProvider: (id<NTIAppNavigationLayerProvider>)layerProvider;
 -(void)unregisterLayerProvider: (id<NTIAppNavigationLayerProvider>)layerProvider;
 
