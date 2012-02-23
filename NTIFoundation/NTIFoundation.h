@@ -41,5 +41,6 @@
 #import "NTIAppNavigationLayer.h"
 #import "NTIInspectableObjectProtocol.h"
 #import "NTIGlobalInspectorMainPane.h"
+#import "NTIBadgeCountView.h"
 
 #endif

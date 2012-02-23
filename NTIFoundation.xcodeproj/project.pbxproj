@@ -92,7 +92,7 @@
 		408FBF1A143F6E5F0095DD84 /* OQColor-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E04617143F50A60091CE7C /* OQColor-NTIExtensions.m */; };
 		40A7459914DA30050093F0D4 /* NSObject-NTIJSONTest.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A7459714DA30050093F0D4 /* NSObject-NTIJSONTest.h */; };
 		40A7459B14DA30050093F0D4 /* NSObject-NTIJSONTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40A7459814DA30050093F0D4 /* NSObject-NTIJSONTest.m */; };
-		40A745C014DB32E90093F0D4 /* NTIBadgeCountView.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A745BE14DB32E90093F0D4 /* NTIBadgeCountView.h */; };
+		40A745C014DB32E90093F0D4 /* NTIBadgeCountView.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A745BE14DB32E90093F0D4 /* NTIBadgeCountView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40A745C114DB32E90093F0D4 /* NTIBadgeCountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40A745BF14DB32E90093F0D4 /* NTIBadgeCountView.m */; };
 		40A745C214DB32E90093F0D4 /* NTIBadgeCountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40A745BF14DB32E90093F0D4 /* NTIBadgeCountView.m */; };
 		40AEBDD8145A5A6700028750 /* NTIEditableFrameScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 40AEBDD6145A5A6700028750 /* NTIEditableFrameScrollView.h */; settings = {ATTRIBUTES = (Public, ); }; };
