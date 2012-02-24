@@ -192,16 +192,22 @@ static BOOL isAppLayer(id possibleLayer)
 @implementation NTIAppNavigationController
 @synthesize delegate = nr_delegate;
 
--(id)initWithRootLayer:(UIViewController<NTIAppNavigationApplicationLayer>*)rootViewController
+-(id)initWithRootLayer:(UIViewController<NTIAppNavigationApplicationLayer>*)rootViewController 
+accessoryViewController: (UIViewController*)aVC;
 {
 	self = [super initWithNibName: nil bundle: nil];
+	
+	self->splitViewController = [[UISplitViewController alloc] initWithNibName: nil bundle: nil];
+	[self addChildViewController: self->splitViewController];
+	
 	self->activeLayerSwitcherTabIndex = 0;
 	self->layerProviders = [NSMutableArray arrayWithCapacity: 3];
 	self->viewControllers = [NSMutableArray arrayWithCapacity: 5];
 	self->navController = [[UINavigationController alloc] initWithNibName: nil bundle: nil];
 	self->navController.navigationBarHidden = YES;
 	
-	[self addChildViewController: self->navController];
+	self->splitViewController.viewControllers = [NSArray arrayWithObjects: aVC, 
+												 self->navController, nil];
 	
 	[self pushLayer: rootViewController animated: NO];
 	
@@ -251,15 +257,16 @@ static BOOL isAppLayer(id possibleLayer)
 
 -(void)loadView
 {
-	[super loadView]; //Default implemenation sets up a base UIView
+	[super loadView];
+	
 	self->toolBar = [[NTIAppNavigationToolbar alloc] initWithTarget: self andFrame: CGRectMake(0, 0, self.view.frame.size.width, 44) andDelegate: self];
 	self->toolBar.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth;
 	[self.view addSubview: self->toolBar];
 	
 	self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 	
-	self->navController.view.frame = CGRectMake(0, 44, self.view.frame.size.width, self.view.frame.size.height - 44);
-	[self.view addSubview: self->navController.view];
+	self->splitViewController.view.frame = CGRectMake(0, 44, self.view.frame.size.width, self.view.frame.size.height - 44);
+	[self.view addSubview: self->splitViewController.view];
 }
 
 -(NSString*)titleForLayer: (id)layer
