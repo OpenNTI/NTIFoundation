@@ -20,6 +20,8 @@
 -(void)didAppearInAppNavigationControllerAsResultOfPush: (BOOL)pushed;
 -(void)willDisappearInAppNavigationControllerAsResultOfPush: (BOOL)pushed;
 -(void)didDisappearInAppNavigationControllerAsResultOfPush: (BOOL)pushed;
+-(void)willMoveToTopOfAppNavigationController;
+-(void)didMoveToTopOfAppNavigationController;
 
 //For cell presentation
 -(NSString*)titleForRecentLayerList;

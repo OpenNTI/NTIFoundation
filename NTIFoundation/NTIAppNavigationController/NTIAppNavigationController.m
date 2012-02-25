@@ -182,6 +182,7 @@ static UILabel* titleLabelForToolbar()
 -(UIViewController<NTIAppNavigationLayer>*)popTransientLayer: (BOOL)animated;
 -(void)pushApplicationLayer: (UIViewController<NTIAppNavigationApplicationLayer>*)appLayer animated: (BOOL)animated;
 -(void)pushTransientLayer: (UIViewController<NTIAppNavigationTransientLayer>*)transLayer animated: (BOOL)animated;
+-(void)updateToolbarForTopLayer;
 @end
 
 static BOOL isAppLayer(id possibleLayer)
@@ -261,6 +262,7 @@ accessoryViewController: (UIViewController*)aVC;
 	
 	self->toolBar = [[NTIAppNavigationToolbar alloc] initWithTarget: self andFrame: CGRectMake(0, 0, self.view.frame.size.width, 44) andDelegate: self];
 	self->toolBar.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth;
+	[self updateToolbarForTopLayer];
 	[self.view addSubview: self->toolBar];
 	
 	self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -765,6 +767,10 @@ accessoryViewController: (UIViewController*)aVC;
 
 -(void)bringLayerForward: (id<NTIAppNavigationLayer>)layer
 {
+	if([layer respondsToSelector: @selector(willMoveToTopOfAppNavigationController)]){
+		[layer willMoveToTopOfAppNavigationController];
+	}
+	
 	if(isAppLayer(layer)){
 		[self moveAppLayerToTop: (id)layer];
 	}
@@ -772,6 +778,10 @@ accessoryViewController: (UIViewController*)aVC;
 		[self moveTransientLayerToTop: (id)layer];
 	}
 	[self updateToolbarForTopLayer];
+	
+	if([layer respondsToSelector: @selector(didMoveToTopOfAppNavigationController)]){
+		[layer didMoveToTopOfAppNavigationController];
+	}
 }
 
 #pragma mark switcher delegate
@@ -825,23 +835,38 @@ accessoryViewController: (UIViewController*)aVC;
 	return nil;
 }
 
--(void)presentLayerForDescriptor: (id<NTIAppNavigationLayerDescriptor>)descriptor
+//Returns true if a layer was created
+-(BOOL)_presentLayerForDescriptor: (id<NTIAppNavigationLayerDescriptor>)descriptor
 {
 	//If this returns nil we will create a new one
 	id<NTIAppNavigationLayer> layerToMove = [self layerToMoveForwardForDescriptor: descriptor];
 	
 	if(layerToMove){
 		[self bringLayerForward: layerToMove];
+		return NO;
 	}
 	else{
 		UIViewController<NTIAppNavigationLayer>* toPush = [descriptor createLayer]; 
 		[self pushLayer: toPush animated: YES];
+		return YES;
 	}
+	
+}
+
+-(void)presentLayerForDescriptor: (id<NTIAppNavigationLayerDescriptor>)descriptor
+{
+	[self _presentLayerForDescriptor: descriptor];
 }
 
 -(void)switcher: (NTIAppNavigationLayerSwitcher*)switcher showLayer: (id<NTIAppNavigationLayerDescriptor>)layerDescriptor;
 {
-	[self presentLayerForDescriptor: layerDescriptor];
+	BOOL created = [self _presentLayerForDescriptor: layerDescriptor];
+	if([self->nr_delegate respondsToSelector: @selector(appNavigationController:switcherDidShowLayer:fromDescriptor:layerWasCreated:)]){
+		[self->nr_delegate appNavigationController: self 
+							  switcherDidShowLayer: self.topLayer 
+									fromDescriptor: layerDescriptor 
+								   layerWasCreated: created];
+	}
 	[[OUIAppController controller] dismissPopoverAnimated: YES];
 }
 

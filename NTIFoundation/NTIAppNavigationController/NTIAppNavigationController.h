@@ -26,6 +26,10 @@
 makeAvailableSlicesForStackedSlicesPane: (OUIStackedSlicesInspectorPane*)pane;
 -(NSSet*)appNavigationControllerInspectableObjects: (NTIAppNavigationController*)controller;
 -(NSArray*)appNavigationControllerAdditionalToolbarButtons:(NTIAppNavigationController *)controller;
+-(void)appNavigationController: (NTIAppNavigationController*)controller 
+		  switcherDidShowLayer: (id<NTIAppNavigationLayer>)layer
+				fromDescriptor: (id<NTIAppNavigationLayerDescriptor>)desc
+			   layerWasCreated: (BOOL)created;
 @end
 
 @class NTIGlobalInspector;
