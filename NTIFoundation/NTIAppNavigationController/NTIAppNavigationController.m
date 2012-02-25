@@ -667,7 +667,7 @@ accessoryViewController: (UIViewController*)aVC;
 	return nil;
 }
 
--(void)moveAppLayerToTop: (id<NTIAppNavigationApplicationLayer>)appLayer
+-(void)moveAppLayerToTop: (id<NTIAppNavigationApplicationLayer>)appLayer animated: (BOOL)animated;
 {
 	//If we are asked to move the top applayer do nothing, it is already on top
 	if( self.topApplicationLayer == (id)appLayer){
@@ -703,10 +703,10 @@ accessoryViewController: (UIViewController*)aVC;
 	self->navController.viewControllers = [navVCs arrayByRemovingObjectIdenticalTo: appLayer];
 	
 	//Now we need to push the app layer
-	[self pushNavController: (id)appLayer animated: YES];
+	[self pushNavController: (id)appLayer animated: animated];
 }
 
--(void)moveTransientLayerToTop: (UIViewController<NTIAppNavigationTransientLayer>*)layer
+-(void)moveTransientLayerToTop: (UIViewController<NTIAppNavigationTransientLayer>*)layer animated: (BOOL)animated;
 {
 	//If we are asekd to move the top transient layer do nothing
 	if(self.topLayer == (id)layer){
@@ -762,20 +762,20 @@ accessoryViewController: (UIViewController*)aVC;
 	
 	[self->viewControllers removeObjectIdenticalTo: layer];
 	
-	[self pushLayer: layer animated: YES];
+	[self pushLayer: layer animated: animated];
 }
 
--(void)bringLayerForward: (id<NTIAppNavigationLayer>)layer
+-(void)bringLayerForward: (id<NTIAppNavigationLayer>)layer animated: (BOOL)animated
 {
 	if([layer respondsToSelector: @selector(willMoveToTopOfAppNavigationController)]){
 		[layer willMoveToTopOfAppNavigationController];
 	}
 	
 	if(isAppLayer(layer)){
-		[self moveAppLayerToTop: (id)layer];
+		[self moveAppLayerToTop: (id)layer animated: animated];
 	}
 	else{
-		[self moveTransientLayerToTop: (id)layer];
+		[self moveTransientLayerToTop: (id)layer animated: animated];
 	}
 	[self updateToolbarForTopLayer];
 	
@@ -808,7 +808,7 @@ accessoryViewController: (UIViewController*)aVC;
 -(void)switcher: (NTIAppNavigationLayerSwitcher*)switcher bringLayerForward: (id<NTIAppNavigationLayer>)layer
 {
 	[[OUIAppController controller] dismissPopoverAnimated: YES];
-	[self bringLayerForward: layer];
+	[self bringLayerForward: layer animated: YES];
 }
 
 
@@ -836,18 +836,18 @@ accessoryViewController: (UIViewController*)aVC;
 }
 
 //Returns true if a layer was created
--(BOOL)_presentLayerForDescriptor: (id<NTIAppNavigationLayerDescriptor>)descriptor
+-(BOOL)_presentLayerForDescriptor: (id<NTIAppNavigationLayerDescriptor>)descriptor animated: (BOOL)animated;
 {
 	//If this returns nil we will create a new one
 	id<NTIAppNavigationLayer> layerToMove = [self layerToMoveForwardForDescriptor: descriptor];
 	
 	if(layerToMove){
-		[self bringLayerForward: layerToMove];
+		[self bringLayerForward: layerToMove animated: animated];
 		return NO;
 	}
 	else{
 		UIViewController<NTIAppNavigationLayer>* toPush = [descriptor createLayer]; 
-		[self pushLayer: toPush animated: YES];
+		[self pushLayer: toPush animated: animated];
 		return YES;
 	}
 	
@@ -855,12 +855,17 @@ accessoryViewController: (UIViewController*)aVC;
 
 -(void)presentLayerForDescriptor: (id<NTIAppNavigationLayerDescriptor>)descriptor
 {
-	[self _presentLayerForDescriptor: descriptor];
+	[self presentLayerForDescriptor: descriptor animated: YES];
+}
+
+-(void)presentLayerForDescriptor: (id<NTIAppNavigationLayerDescriptor>)descriptor animated: (BOOL)animated;
+{
+	[self _presentLayerForDescriptor: descriptor animated: animated];
 }
 
 -(void)switcher: (NTIAppNavigationLayerSwitcher*)switcher showLayer: (id<NTIAppNavigationLayerDescriptor>)layerDescriptor;
 {
-	BOOL created = [self _presentLayerForDescriptor: layerDescriptor];
+	BOOL created = [self _presentLayerForDescriptor: layerDescriptor animated: YES];
 	if([self->nr_delegate respondsToSelector: @selector(appNavigationController:switcherDidShowLayer:fromDescriptor:layerWasCreated:)]){
 		[self->nr_delegate appNavigationController: self 
 							  switcherDidShowLayer: self.topLayer 

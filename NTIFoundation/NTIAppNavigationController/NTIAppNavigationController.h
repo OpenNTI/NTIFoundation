@@ -66,6 +66,7 @@ accessoryViewController: (UIViewController*)aVC;
 -(UIViewController<NTIAppNavigationLayer>*)popLayerAnimated: (BOOL)animated;
 
 -(void)presentLayerForDescriptor: (id<NTIAppNavigationLayerDescriptor>)descriptor;
+-(void)presentLayerForDescriptor: (id<NTIAppNavigationLayerDescriptor>)descriptor animated: (BOOL)animated;
 
 -(void)registerLayerProvider: (id<NTIAppNavigationLayerProvider>)layerProvider;
 -(void)unregisterLayerProvider: (id<NTIAppNavigationLayerProvider>)layerProvider;
