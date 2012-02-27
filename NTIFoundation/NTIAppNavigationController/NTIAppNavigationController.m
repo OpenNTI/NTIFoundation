@@ -530,20 +530,20 @@ accessoryViewController: (UIViewController*)aVC;
 	transLayer.view.layer.shadowRadius = 5;
 	transLayer.view.layer.shadowOpacity = 0.5;
 	
-	CGRect parentViewsFrame = self.topApplicationLayer.view.frame;
+	CGRect parentsViewBounds = self.topApplicationLayer.view.bounds;
 	
 	CGFloat tranisientLayerWidth = kTransientLayerSize;
 	if(   [transLayer respondsToSelector: @selector(wantsFullScreenLayout)] 
 	   && [transLayer wantsFullScreenLayout]){
 		transLayer.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-		tranisientLayerWidth = parentViewsFrame.size.width;
+		tranisientLayerWidth = parentsViewBounds.size.width;
 	}
 	
 	//We want to start off the right had side of the screen
-	CGRect transientFrameStart = CGRectMake(parentViewsFrame.origin.x + parentViewsFrame.size.width, 
+	CGRect transientFrameStart = CGRectMake(parentsViewBounds.origin.x + parentsViewBounds.size.width, 
 											0, 
 											tranisientLayerWidth, 
-											parentViewsFrame.size.height);
+											parentsViewBounds.size.height);
 	transLayer.view.frame = transientFrameStart;
 
 	//[transLayer.view addGestureRecognizer: [[UISwipeGestureRecognizer alloc] initWithTarget: self action: @selector(swipedToRemoveTransient:)]];
@@ -576,7 +576,7 @@ accessoryViewController: (UIViewController*)aVC;
 		UIView* viewToCover = self->navController.topViewController.view;
 		
 		//The ending rect we need to cover in window coordinate space
-		CGRect endInView = [viewToCover convertRect: viewToCover.frame toView: self.view];
+		CGRect endInView = [viewToCover convertRect: viewToCover.bounds toView: self.view];
 		
 		//Start position is the end position shifted right by the width
 		CGRect startInView = endInView;
