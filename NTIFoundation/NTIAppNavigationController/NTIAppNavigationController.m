@@ -614,7 +614,7 @@ accessoryViewController: (UIViewController*)aVC;
 		UIView* viewToCover = self->navController.topViewController.view;
 		
 		//We start over the new view
-		CGRect startingRect = [viewToCover convertRect: viewToCover.frame toView: self.view];
+		CGRect startingRect = [viewToCover convertRect: viewToCover.bounds toView: self.view];
 		
 		//end position is the start position shifted right by the width
 		CGRect endingRect = startingRect;
