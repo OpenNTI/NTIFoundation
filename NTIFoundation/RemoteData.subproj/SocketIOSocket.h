@@ -11,6 +11,13 @@
 #import "SocketIOTransport.h"
 #import "NTIAbstractDownloader.h"
 
+//Callback for ack callbacks.  First argument indicates
+//whether the callback is being called because an ack was recieved.  The argument
+//will be true if it is being called as a result of receievning the ack, else false.
+//The second argument contains any data args that acompanied the ack and
+//is only valid if the first arg is true.
+typedef void(^NTISocketIOAckCallback)(BOOL, id);
+
 extern NSString* const SocketIOResource;
 extern NSString* const SocketIOProtocol;
 
@@ -69,6 +76,8 @@ typedef NSInteger SocketIOSocketStatus;
 	NSTimeInterval currentReconnectTimeout;
 	NSMutableArray* attemptedTransports;
 	BOOL forceDisconnect;
+	NSMutableDictionary* ackCallbacks;
+	NSUInteger ackMessageId;
 }
 @property (nonatomic, readonly) SocketIOSocketStatus status;
 @property (nonatomic, strong) NSString* username;
@@ -87,6 +96,9 @@ typedef NSInteger SocketIOSocketStatus;
 -(void)connect;
 //Sends the packet via the selected transport or buffers it for transmission
 -(void)sendPacket: (SocketIOPacket*)packet;
+//Sends the packet via the selected transport and configures it to request an ack.  When the ack is recieved the callback will
+//be called.
+-(void)sendPacket: (SocketIOPacket*)packet onAck: (NTISocketIOAckCallback)then;
 -(void)disconnect;
 -(void)forceKill;
 //Bascially delegate emethods but the socket is the only delegate the transport will need.

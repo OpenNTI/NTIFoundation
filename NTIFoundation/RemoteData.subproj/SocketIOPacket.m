@@ -48,7 +48,9 @@ static id fromExternalData(NSString* external)
 +(SocketIOPacket*)decodePacketData: (NSData*)data;
 {
 	NSString* dataString = [NSString stringWithData: data encoding: NSUTF8StringEncoding];
+//	NSLog(@"Decoded to %@", dataString);
 	NSArray* pieces = [dataString piecesUsingRegex: @"([^:]+):([0-9]+)?(\\+)?:([^:]+)?:?([\\s\\S]*)?"];
+//	NSLog(@"split to %@", pieces);
 	if( !pieces || ![pieces count] > 0){
 		//The spec allows for a simple 0 to be passed back.
 		//FIXME special cased.
@@ -266,6 +268,7 @@ static NSData* externalizeComponent(id component)
 	
 	NSString* string = [toEncode componentsJoinedByString: @":"];
 	
+//	NSLog(@"Encoded to %@", string);	
 	return [string dataUsingEncoding: NSUTF8StringEncoding];
 }
 

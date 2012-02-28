@@ -54,6 +54,9 @@ static NSArray* implementedTransportClasses()
 -(id)initWithURL: (NSURL *)u andName: (NSString*)name andPassword: (NSString*)pwd
 {
 	self = [super init];
+	self->ackMessageId = 0;
+	self->ackCallbacks = [NSMutableDictionary dictionary];
+	
 	//URLByAppendingPathComponent likes to add a second slash if the appended path component
 	//ends in a slash
 	self->url = [NSURL URLWithString: [NSString stringWithFormat: @"%@/1/", u.relativeString] relativeToURL: u.baseURL];
@@ -208,6 +211,7 @@ static NSArray* implementedTransportClasses()
 													 andArgs: [NSArray arrayWithObjects: 
 															   self->username, self->password, nil]]];
 	
+	self->ackMessageId = 0;
 	self->reconnectAttempts = 0;
 	self->reconnecting = NO;
 	self->currentReconnectTimeout = self->baseReconnectTimeout;
@@ -223,6 +227,11 @@ static NSArray* implementedTransportClasses()
 {
 	//If we still have a closeTimer running make sure to cancel it
 	[self clearCloseTimer];
+	
+	for(NTISocketIOAckCallback callback in self->ackCallbacks.allValues){
+		callback(NO, nil);
+	}
+	[self->ackCallbacks removeAllObjects];
 	
 	[self->buffer removeAllObjects];
 	
@@ -366,6 +375,13 @@ static NSArray* implementedTransportClasses()
 	}
 }
 
+-(void)handleAck: (SocketIOPacket*)ackPacket
+{
+	NTISocketIOAckCallback callback = [self->ackCallbacks objectForKey: ackPacket.ack];
+	[self->ackCallbacks removeObjectForKey: ackPacket.ack];
+	callback(YES, ackPacket.args);
+}
+
 -(void)handlePacket: (SocketIOPacket*)packet
 {
 	switch(packet.type){
@@ -379,6 +395,10 @@ static NSArray* implementedTransportClasses()
 		}
 		case SocketIOPacketTypeDisconnect:{
 			[self disconnect];
+			break;
+		}
+		case SocketIOPacketTypeAck:{
+			[self handleAck: packet];
 			break;
 		}
 		default:
@@ -519,6 +539,17 @@ static NSArray* implementedTransportClasses()
 
 	//Find and start transport
 	[self findAndStartTransport];
+}
+
+-(void)sendPacket: (SocketIOPacket*)packet onAck: (NTISocketIOAckCallback)then
+{
+	if(then){
+		NSString* ackId = [NSString stringWithFormat: @"%ld", self->ackMessageId++];
+		packet.packetId = ackId;
+		packet.ack = @"data";
+		[self->ackCallbacks setObject: [then copy] forKey: ackId];
+	}
+	[self sendPacket: packet];
 }
 
 -(void)sendPacket: (SocketIOPacket*)packet
