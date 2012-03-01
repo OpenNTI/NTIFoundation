@@ -8,6 +8,7 @@
 
 #import "SocketIOSocket.h"
 #import "NTIAbstractDownloader.h"
+#import "SocketIOTransport.h"
 
 NSString* const SocketIOResource = @"socket.io";
 NSString* const SocketIOProtocol = @"1";

@@ -7,9 +7,10 @@
 //
 
 #import <OmniFoundation/OmniFoundation.h>
-#import "SocketIOPacket.h"
-#import "SocketIOTransport.h"
-#import "NTIAbstractDownloader.h"
+
+@class SocketIOPacket;
+@class SocketIOTransport;
+@class NTIDelegatingDownloader;
 
 //Callback for ack callbacks.  First argument indicates
 //whether the callback is being called because an ack was recieved.  The argument
@@ -102,7 +103,7 @@ typedef NSInteger SocketIOSocketStatus;
 -(void)disconnect;
 -(void)forceKill;
 //Bascially delegate emethods but the socket is the only delegate the transport will need.
--(void)transport: (SocketIOTransport*)t connectionStatusDidChange: (SocketIOTransportStatus)status;
+-(void)transport: (SocketIOTransport*)t connectionStatusDidChange: (NSInteger)status;
 -(void)transport: (SocketIOTransport*)t didEncounterError: (NSError*)error;
 -(void)transport: (SocketIOTransport*)t didRecievePayload: (NSArray*)payload;
 @end
