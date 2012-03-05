@@ -9,6 +9,7 @@
 #ifndef NTIFoundation_NTIFoundation_h
 #define NTIFoundation_NTIFoundation_h
 
+#import "NSDate-NTIExtensions.h"
 #import "NSString-NTIJSON.h"
 #import "NSObject-NTIJSON.h"
 #import "NSArray-NTIExtensions.h"
