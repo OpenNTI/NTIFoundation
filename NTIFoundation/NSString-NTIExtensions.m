@@ -63,18 +63,8 @@ static NSDateFormatter* rfc3339DateFormatter()
 	return uuidString;
 }
 
--(NSArray*)piecesUsingRegex: (NSString*)regexString
+-(NSArray*)piecesUsingRegex: (NSRegularExpression*)regex
 {
-	NSError* error = nil;
-	NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern: regexString 
-																		   options: 0 
-																			 error: &error];
-	
-	if (error) {
-		NSLog(@"%@", [error description]);
-		return nil;
-	}
-	
 	NSArray* results = [regex matchesInString: self options:0 range:NSMakeRange(0, [self length])];
 	NSMutableArray* parts = [NSMutableArray arrayWithCapacity: regex.numberOfCaptureGroups];
 	for (NSTextCheckingResult* result in results) {
@@ -92,6 +82,21 @@ static NSDateFormatter* rfc3339DateFormatter()
 		break;
 	}
 	return parts;
+}
+
+-(NSArray*)piecesUsingRegexString: (NSString*)regexString
+{
+	NSError* error = nil;
+	NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern: regexString 
+																		   options: 0 
+																			 error: &error];
+	
+	if (error) {
+		NSLog(@"%@", [error description]);
+		return nil;
+	}
+	
+	return [self piecesUsingRegex: regex];
 }
 
 @end

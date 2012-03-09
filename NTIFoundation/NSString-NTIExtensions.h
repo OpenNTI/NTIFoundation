@@ -46,7 +46,7 @@
 @interface NSString (NTIExtensions)
 
 +(NSString*)uuid;
-
--(NSArray*)piecesUsingRegex: (NSString*)regex;
+-(NSArray*)piecesUsingRegex: (NSRegularExpression*)regex;
+-(NSArray*)piecesUsingRegexString: (NSString*)regex;
 
 @end

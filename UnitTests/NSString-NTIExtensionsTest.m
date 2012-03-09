@@ -26,7 +26,7 @@
 {
 	NSString* handshake = @"HTTP/1.1 101 Switching Protocols\nUpgrade: WebSocket\nConnection: Upgrade\nSec-WebSocket-Accept: hrIyuqmFm4k655eTa9Ibgw8Kvss=\nAccess-Control-Allow-Origin: http://ipad.nextthought.com\nAccess-Control-Allow-Credentials: true";
 	
-	NSArray* parts = [handshake piecesUsingRegex: @"Sec-WebSocket-Accept:\\s+(.+?)\\s"];
+	NSArray* parts = [handshake piecesUsingRegexString: @"Sec-WebSocket-Accept:\\s+(.+?)\\s"];
 	
 	STAssertEquals((int)parts.count, 1, nil);
 	
@@ -34,7 +34,7 @@
 
 	
 	NSString* packet = @"3:1::blabla";
-	NSArray* pieces = [packet piecesUsingRegex: @"([^:]+):([0-9]+)?(\\+)?:([^:]+)?:?([\\s\\S]*)?"];
+	NSArray* pieces = [packet piecesUsingRegexString: @"([^:]+):([0-9]+)?(\\+)?:([^:]+)?:?([\\s\\S]*)?"];
 	
 	NSArray* shouldEqual = [NSArray arrayWithObjects: @"3", @"1", @"", @"", @"blabla", nil];
 	

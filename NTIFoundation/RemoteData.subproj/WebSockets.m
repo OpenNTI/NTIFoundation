@@ -264,7 +264,7 @@ static NSData* hashUsingSHA1(NSData* data)
 PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, NSString* key);
 PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, NSString* key)
 {
-	NSArray* parts = [response piecesUsingRegex: @"Sec-WebSocket-Accept:\\s+(.+?)\\s"];
+	NSArray* parts = [response piecesUsingRegexString: @"Sec-WebSocket-Accept:\\s+(.+?)\\s"];
 	//We expect one part the accept key
 	if( [parts count] < 1  || ![parts firstObject]){
 		return NO;

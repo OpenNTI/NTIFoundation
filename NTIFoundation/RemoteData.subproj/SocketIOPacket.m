@@ -49,7 +49,7 @@ static id fromExternalData(NSString* external)
 {
 	NSString* dataString = [NSString stringWithData: data encoding: NSUTF8StringEncoding];
 //	NSLog(@"Decoded to %@", dataString);
-	NSArray* pieces = [dataString piecesUsingRegex: @"([^:]+):([0-9]+)?(\\+)?:([^:]+)?:?([\\s\\S]*)?"];
+	NSArray* pieces = [dataString piecesUsingRegexString: @"([^:]+):([0-9]+)?(\\+)?:([^:]+)?:?([\\s\\S]*)?"];
 //	NSLog(@"split to %@", pieces);
 	if( !pieces || ![pieces count] > 0){
 		//The spec allows for a simple 0 to be passed back.
@@ -106,7 +106,7 @@ static id fromExternalData(NSString* external)
 			packet.qs = theData ? theData : @"";
 			break;
 		case SocketIOPacketTypeAck:{
-			NSArray* ackPieces = [theData piecesUsingRegex: @"^([0-9]+)(\\+)?(.*)"];
+			NSArray* ackPieces = [theData piecesUsingRegexString: @"^([0-9]+)(\\+)?(.*)"];
 			if(ackPieces && [ackPieces count] > 0){
 				packet.ack = [ackPieces firstObject];
 				packet.args = [NSArray array];
