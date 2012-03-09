@@ -1010,6 +1010,10 @@ static void searchUpVCHiererarchy(UIViewController* controller, NSMutableArray* 
 	UIResponder* firstResponder = findFirstResponder();
 	self->inspector.shownFromFirstResponder = firstResponder;
 	
+	//Search both the responder chain and vc hierarchy
+	searchUpResponderChain(firstResponder, inspectableObjects);
+	searchUpVCHiererarchy(self.topLayer, inspectableObjects);
+	/*
 	if(firstResponder){
 		searchUpResponderChain(firstResponder, inspectableObjects);
 	}
@@ -1017,6 +1021,7 @@ static void searchUpVCHiererarchy(UIViewController* controller, NSMutableArray* 
 		//TODO Top layer or application layer here?
 		searchUpVCHiererarchy(self.topLayer, inspectableObjects);
 	}
+	*/
 	
 	//Now ask our delegate
 	if( [self.delegate respondsToSelector: @selector(appNavigationControllerInspectableObjects:)] ){
