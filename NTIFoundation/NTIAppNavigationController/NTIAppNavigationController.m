@@ -443,6 +443,16 @@ accessoryViewController: (UIViewController*)aVC;
 	return popped;
 }
 
+static _TransientLayerMask* maskForAppLayer(UIViewController<NTIAppNavigationApplicationLayer>* appLayer)
+{
+	for(id subView in appLayer.view.subviews){
+		if([subView isKindOfClass: [_TransientLayerMask class]]){
+			return subView;
+		}
+	}
+	return nil;
+}
+
 -(UIViewController<NTIAppNavigationLayer>*)popTransientLayer: (BOOL)animated
 {
 	UIViewController* popped = [self->viewControllers pop];
@@ -450,23 +460,24 @@ accessoryViewController: (UIViewController*)aVC;
 	void (^completion)(BOOL) = ^(BOOL success){
 		[popped.view removeFromSuperview];
 		[popped removeFromParentViewController];
-	} ;
-	
-	//Do this at the beggining
-	if([self->viewControllers lastObject] != self.topApplicationLayer){
-		//Need to show the trans
-		[[self->viewControllers lastObject] view].hidden = NO;
-	}
-	else{
-		//We may decide to do this when the animation completes.
-		//Need to clear the mask
-		for(UIView* subView in self.topApplicationLayer.view.subviews){
-			if([subView isKindOfClass: [_TransientLayerMask class]]){
-				[subView removeFromSuperview];
-				break;
-			}
+		
+		//If there are more transient layers move the mask down
+		//otherwise we remove it entirely
+		if(isAppLayer(self.topLayer)){
+			//The top layer is an app layer, so we remove the mask
+			[maskForAppLayer((id)self.topLayer) removeFromSuperview];
 		}
-	}
+		else{
+			//we need to move the mask just beneath the top transient layer
+			id topTrans = self.topLayer.view;
+			[topTrans removeFromSuperview];
+			
+			id mask = maskForAppLayer(self.topApplicationLayer);
+			[mask removeFromSuperview];
+			[self.topApplicationLayer.view addSubview: mask];
+			[self.topApplicationLayer.view addSubview: topTrans];
+		}
+	} ;
 	
 	if(!animated){
 		completion(YES);
@@ -495,25 +506,18 @@ accessoryViewController: (UIViewController*)aVC;
 -(void)pushTransientLayer: (UIViewController<NTIAppNavigationTransientLayer>*)transLayer 
 				 animated: (BOOL)animated
 {
-	//If this is the first transient we have pushed for this appLayer we need
-	//to mask it out.  It is the first transient if the viewController on top of our
-	//stack is an app layer  If its not we are going to want to
-	//hide the other transient view
-	UIViewController* transToHide=nil;
-	if( isAppLayer(self.topLayer) ){
-		//Ok we need to push the mask.  The mask is a subview of the applicationLayers view
-		_TransientLayerMask* mask = [[_TransientLayerMask alloc] 
-									 initWithFrame: self.topLayer.view.bounds];
-		[self.topLayer.view addSubview: mask];
-		[mask addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(maskTapped:)]];
-		//[mask addGestureRecognizer: [[UISwipeGestureRecognizer alloc] initWithTarget: self action: @selector(swipedToRemoveTransient:)]];
-	}
-	else{
-		//Ok we have another transient view that we want to hide. but we don;t
-		//actually want to hide it until we have presented the new one.
-		transToHide = [self->viewControllers lastObject];
-	}
+	//We need to reposition the mask as the top most view subview, the view just beneath 
+	//what we are about to add.
+	_TransientLayerMask* mask = maskForAppLayer( self.topApplicationLayer );
+	[mask removeFromSuperview];
 	
+	if(!mask){
+		mask = [[_TransientLayerMask alloc] 
+									 initWithFrame: self.topApplicationLayer.view.bounds];
+		[mask addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(maskTapped:)]];
+		
+	}
+	[self.topApplicationLayer.view addSubview: mask];
 	
 	//We are a transient viewController
 	//OUr parent becomes the view controller that is on top of the nav controller (the top most application layer)
@@ -557,9 +561,7 @@ accessoryViewController: (UIViewController*)aVC;
 						 endFrame.origin.x = endFrame.origin.x - tranisientLayerWidth;
 						 transLayer.view.frame = endFrame;
 					 }
-					 completion: ^(BOOL success){
-						 transToHide.view.hidden = YES;
-					 }];
+					 completion: nil];
 
 }
 
@@ -741,19 +743,12 @@ accessoryViewController: (UIViewController*)aVC;
 	
 	OBASSERT_NOTNULL(appLayerThatOwnsUs);
 	
-	//Now if we are the top transient but not the bottom we need to unhide what is beneath us
-	if( isTopTransientLayer && !isBottomTransientLayer){
-		UIViewController* transientRightBeneathUs = [self->viewControllers objectAtIndex: indexOfTransientLayer - 1];
-		transientRightBeneathUs.view.hidden = NO;
-	}
-	
-	//If we are the only transient layer we need to remove the mask
-	if( isTopTransientLayer && isBottomTransientLayer ){
-		for(UIView* subview in appLayerThatOwnsUs.view.subviews){
-			if( [subview isKindOfClass: [_TransientLayerMask class]] ){
-				[subview removeFromSuperview];
-			}
-		}
+	//We are the top transient layer and we have a mask associated with us
+	_TransientLayerMask* mask = nil;
+	if(isTopTransientLayer){
+		//If we are the top transient layer we need to remove the mask
+		mask = maskForAppLayer((id)appLayerThatOwnsUs);
+		[mask removeFromSuperview];
 	}
 	
 	//Now we need to remove overselves and push us
@@ -761,6 +756,17 @@ accessoryViewController: (UIViewController*)aVC;
 	[layer removeFromParentViewController];
 	
 	[self->viewControllers removeObjectIdenticalTo: layer];
+	
+	//If we aren't the only transient layer we need to put the mask in the
+	//correct spot
+	if(isTopTransientLayer && !isBottomTransientLayer && mask){
+		//we need to move the mask just beneath the top transient layer
+		id topTrans = [appLayerThatOwnsUs.view.subviews lastObjectOrNil];
+		[topTrans removeFromSuperview];
+		
+		[appLayerThatOwnsUs.view addSubview: mask];
+		[appLayerThatOwnsUs.view addSubview: topTrans];
+	}
 	
 	[self pushLayer: layer animated: animated];
 }

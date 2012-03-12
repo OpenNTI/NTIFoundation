@@ -22,7 +22,7 @@
 @end
 
 @interface NTIAppNavigationController(PrivateMessagesToTest)
--(void)bringLayerForward: (id<NTIAppNavigationLayer>)layer;
+-(void)bringLayerForward: (id<NTIAppNavigationLayer>)layer animated:(BOOL)animated;
 @end
 
 
@@ -83,7 +83,7 @@
 	STAssertEqualObjects(self->appNavController.layers, 
 						 layers, nil);
 	
-	[self->appNavController bringLayerForward: appLayer2];
+	[self->appNavController bringLayerForward: appLayer2 animated: YES];
 	
 	STAssertEqualObjects(self->appNavController.layers, 
 						 layers, nil);
@@ -109,7 +109,7 @@
 	STAssertEqualObjects(self->appNavController.layers, 
 						 layers, nil);
 	
-	[self->appNavController bringLayerForward: appLayer1];
+	[self->appNavController bringLayerForward: appLayer1 animated: YES];
 	
 	STAssertEquals(self->appNavController.topApplicationLayer, appLayer1, nil);
 	
@@ -149,7 +149,7 @@
 	STAssertEqualObjects(self->appNavController.layers, 
 						 layers, nil);
 	
-	[self->appNavController bringLayerForward: transLayer2T];
+	[self->appNavController bringLayerForward: transLayer2T animated: YES];
 	
 	STAssertEqualObjects(self->appNavController.layers, 
 						 layers, nil);
@@ -177,7 +177,7 @@
 	STAssertEqualObjects(self->appNavController.layers, 
 						 layers, nil);
 	
-	[self->appNavController bringLayerForward: transLayer1];
+	[self->appNavController bringLayerForward: transLayer1 animated: YES];
 	
 	STAssertEquals(self->appNavController.topApplicationLayer, appLayer2, nil);
 	
