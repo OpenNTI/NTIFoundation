@@ -42,6 +42,9 @@
 		403C28E714576E160012CBAB /* NSAttributedString-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C28E514576E160012CBAB /* NSAttributedString-NTIExtensions.m */; };
 		403C290914577A340012CBAB /* NSAttributedString-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C290614577A260012CBAB /* NSAttributedString-NTIExtensionsTest.m */; };
 		403C290A14577C100012CBAB /* NSAttributedString-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C28E514576E160012CBAB /* NSAttributedString-NTIExtensions.m */; };
+		403C317A1512A5DD00C53D22 /* NSData-NTIJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 403C31781512A5DD00C53D22 /* NSData-NTIJSON.h */; };
+		403C317B1512A5DD00C53D22 /* NSData-NTIJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C31791512A5DD00C53D22 /* NSData-NTIJSON.m */; };
+		403C317C1512A5DD00C53D22 /* NSData-NTIJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C31791512A5DD00C53D22 /* NSData-NTIJSON.m */; };
 		403D0DC2143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 403D0DBC143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		403D0DC3143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D0DBD143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.m */; };
 		403D0DC4143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 403D0DBE143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -578,6 +581,8 @@
 		403C28E514576E160012CBAB /* NSAttributedString-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString-NTIExtensions.m"; sourceTree = "<group>"; };
 		403C290514577A260012CBAB /* NSAttributedString-NTIExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString-NTIExtensionsTest.h"; sourceTree = "<group>"; };
 		403C290614577A260012CBAB /* NSAttributedString-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString-NTIExtensionsTest.m"; sourceTree = "<group>"; };
+		403C31781512A5DD00C53D22 /* NSData-NTIJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData-NTIJSON.h"; sourceTree = "<group>"; };
+		403C31791512A5DD00C53D22 /* NSData-NTIJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData-NTIJSON.m"; sourceTree = "<group>"; };
 		403D0DBC143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString-HTMLReadingExtensions.h"; sourceTree = "<group>"; };
 		403D0DBD143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString-HTMLReadingExtensions.m"; sourceTree = "<group>"; };
 		403D0DBE143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString-HTMLWritingExtensions.h"; sourceTree = "<group>"; };
@@ -1370,6 +1375,8 @@
 				4006E76A149272E000D63524 /* NSObject-NTIJSON.m */,
 				72CC05A913DDE8E9009B2977 /* NSString-NTIJSON.h */,
 				72CC05AA13DDE8EA009B2977 /* NSString-NTIJSON.m */,
+				403C31781512A5DD00C53D22 /* NSData-NTIJSON.h */,
+				403C31791512A5DD00C53D22 /* NSData-NTIJSON.m */,
 			);
 			name = JSON;
 			path = JSON.subproj;
@@ -1424,6 +1431,7 @@
 				4066C81D14E1C89F006B56D3 /* WebSocketResponseBuffer.h in Headers */,
 				4066C83A14E1C95F006B56D3 /* WebSocketData.h in Headers */,
 				40A4147F1505748A0017242E /* NSDate-NTIExtensions.h in Headers */,
+				403C317A1512A5DD00C53D22 /* NSData-NTIJSON.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1959,6 +1967,7 @@
 				4C3DA34014E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m in Sources */,
 				4C3BDC1D14EAF87F008ED49D /* NTIInspectorSliceObjectPair.m in Sources */,
 				40A414801505748A0017242E /* NSDate-NTIExtensions.m in Sources */,
+				403C317B1512A5DD00C53D22 /* NSData-NTIJSON.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2008,6 +2017,7 @@
 				4C3DA34114E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m in Sources */,
 				4C3BDC1E14EAF87F008ED49D /* NTIInspectorSliceObjectPair.m in Sources */,
 				40A414811505748A0017242E /* NSDate-NTIExtensions.m in Sources */,
+				403C317C1512A5DD00C53D22 /* NSData-NTIJSON.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

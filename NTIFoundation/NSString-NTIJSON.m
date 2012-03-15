@@ -11,25 +11,14 @@
 #import <objc/objc.h>
 #import <OmniBase/OmniBase.h>
 #import <OmniFoundation/OmniFoundation.h>
-
+#import "NSData-NTIJSON.h"
 
 
 @implementation NSString(NTIJSON)
 
 -(id)jsonObjectValue
 {
-	NSError* error;
-	id result = [NSJSONSerialization JSONObjectWithData: [self dataUsingEncoding: NSUTF8StringEncoding]
-									  options: NSJSONReadingMutableContainers 
-											| NSJSONReadingMutableLeaves
-											| NSJSONReadingAllowFragments
-										error: &error];
-	if(!result && error){
-		NSLog(@"An error occurred when derserializing %@. %@", self, error);
-		return nil;
-	}
-	
-	return result;
+	return [[self dataUsingEncoding: NSUTF8StringEncoding] jsonObjectValue];
 }
 
 @end
