@@ -42,7 +42,7 @@
 		403C28E714576E160012CBAB /* NSAttributedString-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C28E514576E160012CBAB /* NSAttributedString-NTIExtensions.m */; };
 		403C290914577A340012CBAB /* NSAttributedString-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C290614577A260012CBAB /* NSAttributedString-NTIExtensionsTest.m */; };
 		403C290A14577C100012CBAB /* NSAttributedString-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C28E514576E160012CBAB /* NSAttributedString-NTIExtensions.m */; };
-		403C317A1512A5DD00C53D22 /* NSData-NTIJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 403C31781512A5DD00C53D22 /* NSData-NTIJSON.h */; };
+		403C317A1512A5DD00C53D22 /* NSData-NTIJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 403C31781512A5DD00C53D22 /* NSData-NTIJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		403C317B1512A5DD00C53D22 /* NSData-NTIJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C31791512A5DD00C53D22 /* NSData-NTIJSON.m */; };
 		403C317C1512A5DD00C53D22 /* NSData-NTIJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C31791512A5DD00C53D22 /* NSData-NTIJSON.m */; };
 		403D0DC2143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 403D0DBC143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
