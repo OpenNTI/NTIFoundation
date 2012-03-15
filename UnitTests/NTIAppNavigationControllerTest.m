@@ -36,6 +36,13 @@
 							  accessoryViewController: [[UITableViewController alloc] initWithNibName: nil bundle: nil]];
 }
 
+-(void)testPushingNil
+{
+	NSArray* layers = self->appNavController.layers;
+	[self->appNavController pushLayer: nil animated: NO];
+	STAssertEqualObjects(self->appNavController.layers, layers, nil);
+}
+
 -(void)testRootIsTopAndOnlyLayer
 {
 	STAssertEquals([self->appNavController topLayer], self->rootLayer, nil);

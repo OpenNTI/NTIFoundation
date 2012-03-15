@@ -317,6 +317,10 @@ accessoryViewController: (UIViewController*)aVC;
 
 -(void)pushLayer: (UIViewController<NTIAppNavigationLayer>*)layer animated: (BOOL)animated
 {	
+	if(!layer){
+		return;
+	}
+	
 	id layerGoingAway = self.topLayer;
 	
 	if( [layer respondsToSelector: @selector(willAppearInAppNavigationControllerAsResultOfPush:)] ){
@@ -857,6 +861,9 @@ accessoryViewController: (UIViewController*)aVC;
 
 -(void)presentLayerForDescriptor: (id<NTIAppNavigationLayerDescriptor>)descriptor animated: (BOOL)animated;
 {
+	if(!descriptor){
+		return;
+	}
 	[self _presentLayerForDescriptor: descriptor animated: animated];
 }
 
@@ -874,6 +881,10 @@ accessoryViewController: (UIViewController*)aVC;
 
 -(void)registerLayerProvider: (NSObject<NTIAppNavigationLayerProvider>*)lp
 {
+	if(!lp){
+		return;
+	}
+	
 	[lp addObserver: self
 			   forKeyPath: @"layerDescriptors"
 				  options: NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
@@ -883,6 +894,10 @@ accessoryViewController: (UIViewController*)aVC;
 
 -(void)unregisterLayerProvider: (NSObject<NTIAppNavigationLayerProvider>*)lp
 {
+	if(!lp){
+		return;
+	}
+	
 	[lp removeObserver: self
 			forKeyPath: @"layerDescriptors"];
 	[self->layerProviders removeObjectIdenticalTo: lp];
