@@ -10,6 +10,7 @@
 #import "OmniUI/OUIAppController.h"
 @interface NTIAppDelegate : OUIAppController <UIApplicationDelegate>
 
++(NTIAppDelegate *)sharedDelegate;
 @property (strong, nonatomic) UIWindow *window;
 
 @end

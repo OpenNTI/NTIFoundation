@@ -1081,6 +1081,37 @@ makeAvailableSlicesForStackedSlicesPane: (OUIStackedSlicesInspectorPane *)pane
 	[insp.shownFromFirstResponder becomeFirstResponder];
 }
 
+#pragma mark global inspector testing
+//NOTE: this message is ONLY used for TESTING purposes, 
+//we pass it an inspector in order to test if we are getting the right objects to inspect. Since inspector is a private variable and we don't want to make it public for testing purposes only, this message takes in an inspector. It behaves similarly to -inspector:, so it may need to be changed.
+-(void)searchHierachiesForInspector: (NTIGlobalInspector *)theInspector
+{
+	NSMutableArray* inspectableObjects = [NSMutableArray array];
+	UIResponder* firstResponder = findFirstResponder();
+	theInspector.shownFromFirstResponder = firstResponder;
+	
+	//Search both the responder chain and vc hierarchy
+	searchUpResponderChain(firstResponder, inspectableObjects);
+	searchUpVCHiererarchy(self.topLayer, inspectableObjects);
+	
+	//Now ask our delegate
+	if( [self.delegate respondsToSelector: @selector(appNavigationControllerInspectableObjects:)] ){
+		NSArray* objs = [[self.delegate appNavigationControllerInspectableObjects: self] allObjects];
+		for ( id obj  in objs) {
+			if ( ![inspectableObjects containsObject: obj] ) {
+				[inspectableObjects addObject: obj];
+			}
+		}
+	}
+	
+	[theInspector.shownFromFirstResponder resignFirstResponder];
+	
+	//TODO what do we do if no objects are selected?
+	theInspector.mainPane.inspectedObjects = inspectableObjects;
+	//[theInspector inspectObjects: inspectableObjects 
+	//			  fromBarButtonItem: inspectorButton];
+}
+
 
 #pragma mark actions
 

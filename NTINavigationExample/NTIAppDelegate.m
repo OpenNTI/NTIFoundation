@@ -14,6 +14,11 @@
 
 @synthesize window = _window;
 
++(NTIAppDelegate *)sharedDelegate
+{
+	return [OUIAppController controller];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
