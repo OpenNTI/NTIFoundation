@@ -427,11 +427,11 @@ static NSArray* implementedTransportClasses()
 	NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL: self->url];
 	[request setHTTPMethod: @"POST"];
 	
-	//While we use Basic auth, we can save ourselves a roundtrip to the
-	//server by pre-authenticating the outgoing connection.
-	NSString* auth = [[[NSString stringWithFormat: @"%@:%@", self->username, self->password] 
-					   dataUsingEncoding: NSUTF8StringEncoding] base64String];
-	[request setValue: [NSString stringWithFormat: @"Basic %@", auth] forHTTPHeaderField: @"Authorization"];
+//	//While we use Basic auth, we can save ourselves a roundtrip to the
+//	//server by pre-authenticating the outgoing connection.
+//	NSString* auth = [[[NSString stringWithFormat: @"%@:%@", self->username, self->password] 
+//					   dataUsingEncoding: NSUTF8StringEncoding] base64String];
+//	[request setValue: [NSString stringWithFormat: @"Basic %@", auth] forHTTPHeaderField: @"Authorization"];
 	
 	//Use timeout?
 	NSURLConnection* connection = [NSURLConnection connectionWithRequest: request delegate: self->handshakeDownloader];
