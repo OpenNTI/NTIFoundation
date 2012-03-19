@@ -163,6 +163,7 @@
 		4C3DA33F14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3DA33D14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C3DA34014E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DA33E14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m */; };
 		4C3DA34114E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DA33E14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m */; };
+		4C696D0A1516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C696D091516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m */; };
 		4CABB38D14EC28DF00A7FD7C /* NTIInspectableObjectProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CABB38C14EC28DF00A7FD7C /* NTIInspectableObjectProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CEC1D96151395DB0074F3DD /* NTIGlobalInspectorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEC1D93151395DB0074F3DD /* NTIGlobalInspectorTest.m */; };
 		4CEC1D97151395DB0074F3DD /* NTIInspectorObjectWrapperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEC1D95151395DB0074F3DD /* NTIInspectorObjectWrapperTest.m */; };
@@ -675,6 +676,8 @@
 		4C3BDC1B14EAF87F008ED49D /* NTIInspectorSliceObjectPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIInspectorSliceObjectPair.m; sourceTree = "<group>"; };
 		4C3DA33D14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIGlobalInspectorMainPane.h; sourceTree = "<group>"; };
 		4C3DA33E14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIGlobalInspectorMainPane.m; sourceTree = "<group>"; };
+		4C696D081516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIGlobalInspectorPaneAndSliceAppTest.h; sourceTree = "<group>"; };
+		4C696D091516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIGlobalInspectorPaneAndSliceAppTest.m; sourceTree = "<group>"; };
 		4CABB38C14EC28DF00A7FD7C /* NTIInspectableObjectProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIInspectableObjectProtocol.h; sourceTree = "<group>"; };
 		4CEC1D92151395DB0074F3DD /* NTIGlobalInspectorTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIGlobalInspectorTest.h; sourceTree = "<group>"; };
 		4CEC1D93151395DB0074F3DD /* NTIGlobalInspectorTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIGlobalInspectorTest.m; sourceTree = "<group>"; };
@@ -1073,6 +1076,8 @@
 				4CEC1D93151395DB0074F3DD /* NTIGlobalInspectorTest.m */,
 				4CEC1D94151395DB0074F3DD /* NTIInspectorObjectWrapperTest.h */,
 				4CEC1D95151395DB0074F3DD /* NTIInspectorObjectWrapperTest.m */,
+				4C696D081516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.h */,
+				4C696D091516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m */,
 			);
 			name = GlobalInspectorTests;
 			sourceTree = "<group>";
@@ -1952,6 +1957,7 @@
 			files = (
 				40C34CBF14D893DC000D91A8 /* NTIAppNavigationControllerTest.m in Sources */,
 				4CEC1DB2151395F70074F3DD /* NTIGlobalInspectorAppTest.m in Sources */,
+				4C696D0A1516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

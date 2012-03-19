@@ -208,5 +208,10 @@
 	}
 }
 
+//For TESTING purposes only
+-(NSArray *)objectSlicesPairs
+{
+	return [NSArray arrayWithArray: self->inspectedObjectSlicesPairs];
+}
 @end
 
