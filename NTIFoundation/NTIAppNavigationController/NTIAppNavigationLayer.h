@@ -41,5 +41,5 @@
 
 @protocol NTIAppNavigationTransientLayer <NTIAppNavigationLayer>
 @optional
--(BOOL)wantsFullScreenLayout;
+-(BOOL)layerWantsFullWidth;
 @end

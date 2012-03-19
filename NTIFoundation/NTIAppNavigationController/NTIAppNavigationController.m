@@ -528,8 +528,8 @@ accessoryViewController: (UIViewController*)aVC;
 	CGRect parentsViewBounds = containingView.bounds;
 	
 	CGFloat tranisientLayerWidth = kTransientLayerSize;
-	if(   [transLayer respondsToSelector: @selector(wantsFullScreenLayout)] 
-	   && [transLayer wantsFullScreenLayout]){
+	if(   [transLayer respondsToSelector: @selector(layerWantsFullWidth)] 
+	   && [transLayer layerWantsFullWidth]){
 		transLayer.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 		tranisientLayerWidth = parentsViewBounds.size.width;
 	}
