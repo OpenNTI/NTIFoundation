@@ -69,7 +69,7 @@ static NSArray* implementedTransportClasses()
 	self->status = SocketIOSocketStatusDisconnected;
 	self.shouldBuffer = YES;	
 	self->handshakeDownloader = [[NTIDelegatingDownloader alloc] 
-								 initWithUsername: self->username password: self->password];
+								 init];
 	self->eventDelegates = [NSMutableArray arrayWithCapacity: 3];
 	self->baseReconnectTimeout = 3;
 	self->maxReconnectAttempts = NSIntegerMax;
@@ -578,15 +578,23 @@ static NSArray* implementedTransportClasses()
 
 -(void)downloader: (NTIDelegatingDownloader *)d didFinishLoading:(NSURLConnection *)c
 {
-	NSString* dataString = [self->handshakeDownloader stringFromData];
-	
-	if(!dataString){
-		NSError* error = [self createErrorWithCode: 101 
-										andMessage: @"No response data from handshake"];
-		[self logAndRaiseError: error];
-		[self updateStatus: SocketIOSocketStatusDisconnected];
+	if( [d statusWasSuccess] ){
+		NSString* dataString = [self->handshakeDownloader stringFromData];
+		
+		if(!dataString){
+			NSError* error = [self createErrorWithCode: 101 
+											andMessage: @"No response data from handshake"];
+			[self logAndRaiseError: error];
+			[self updateStatus: SocketIOSocketStatusDisconnected];
+		}
+		[self parseHandshakeResponse: dataString];
 	}
-	[self parseHandshakeResponse: dataString];
+	else{
+		NSError* error = [NSError errorWithDomain: @"NTIDataserverResponseDomain" 
+											 code: d.statusCode 
+										 userInfo: nil];
+		[self downloader: d connection: c didFailWithError: error];
+	}
 }
 
 -(void)connect

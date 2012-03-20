@@ -15,9 +15,6 @@
  */
 @interface NTIAbstractDownloader : OFObject {
 	@private
-	NSString* username;
-	NSString* password;
-	
 	NSInteger statusCode;
 	long long expectedContentLength;
 	NSDate* lastModified;
@@ -26,10 +23,10 @@
 @property (readonly) NSInteger statusCode;
 @property (readonly) long long expectedContentLength;
 
--(id)initWithUsername: (NSString*)user password: (NSString*)password;
+-(BOOL)statusWasSuccess;
 
 -(void)connection: (NSURLConnection*)connection didReceiveResponse: (id)response;
--(void)connection: (NSURLConnection*)connection didReceiveAuthenticationChallenge: (NSURLAuthenticationChallenge *)challenge;
+//-(void)connection: (NSURLConnection*)connection didReceiveAuthenticationChallenge: (NSURLAuthenticationChallenge *)challenge;
 -(void)connection: (NSURLConnection*)connection didFailWithError: (NSError*)error;
 -(void)connectionDidFinishLoading: (NSURLConnection*)connection;
 
@@ -39,8 +36,6 @@
 	@package
 	NSMutableData* dataBuffer;
 }
--(id)initWithUsername: (NSString*)user password: (NSString*)password;
-
 -(void)connection: (NSURLConnection*)connection didReceiveResponse: (id)response;
 -(void)connection: (NSURLConnection*)connection didReceiveData: (NSData*)data;
 -(void)connection: (NSURLConnection*)connection didFailWithError: (NSError*)error;

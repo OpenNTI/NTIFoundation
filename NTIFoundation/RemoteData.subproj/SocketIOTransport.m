@@ -200,7 +200,7 @@
 #endif
 	}
 
-	self->downloader = [[NTIDelegatingDownloader alloc] initWithUsername: nil password: nil];
+	self->downloader = [[NTIDelegatingDownloader alloc] init];
 	self->downloader.nr_delegate = self;
 	NSURLRequest* request = [self requestWithMethod: method andData: data];
 	NSURLConnection* connection = [NSURLConnection connectionWithRequest: request delegate: self->downloader];
@@ -219,24 +219,31 @@
 
 -(void)downloader: (NTIDelegatingDownloader *)d didFinishLoading:(NSURLConnection *)c
 {
-	//We got a response if it was from connecting we need to start our timer.
-	NSData* dataBody = [downloader data];
-	self->downloader = nil;
-	
-	//We only poll if we are open.  If we are closed now just have to throw away the data
-	if( self.status == SocketIOTransportStatusClosed ){
-		return;
-	}
-	
-	BOOL opening = self.status == SocketIOTransportStatusOpening;
-	
-	BOOL goodData = [self recievedData: dataBody];
-	
-	if(opening && !goodData){
-		[self disconnect];
+	if( [d statusWasSuccess] ){
+		//We got a response if it was from connecting we need to start our timer.
+		NSData* dataBody = [downloader data];
+		self->downloader = nil;
+		
+		//We only poll if we are open.  If we are closed now just have to throw away the data
+		if( self.status == SocketIOTransportStatusClosed ){
+			return;
+		}
+		
+		BOOL opening = self.status == SocketIOTransportStatusOpening;
+		
+		BOOL goodData = [self recievedData: dataBody];
+		
+		if(opening && !goodData){
+			[self disconnect];
+		}
+		else{
+			[self poll];
+		}
 	}
 	else{
-		[self poll];
+		NSError* error = [self createErrorWithCode: d.statusCode 
+										andMessage: @"The transport recieved an unsuccesful http response"];
+		[self downloader: d connection: c didFailWithError: error];
 	}
 }
 
@@ -245,7 +252,7 @@
 {
 	[self updateStatus: SocketIOTransportStatusOpening];
 	NSURLRequest* request = [self requestWithMethod: @"POST" andData: nil];
-	self->downloader = [[NTIDelegatingDownloader alloc] initWithUsername: nil password: nil];
+	self->downloader = [[NTIDelegatingDownloader alloc] init];
 	self->downloader.nr_delegate = self;
 	NSURLConnection* connection = [NSURLConnection connectionWithRequest: request delegate: self->downloader];
 	[connection start];

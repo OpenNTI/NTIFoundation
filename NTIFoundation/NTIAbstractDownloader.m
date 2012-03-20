@@ -8,22 +8,12 @@
 
 #import "NTIAbstractDownloader.h"
 #import "NSString-NTIExtensions.h"
+#import "OmniUI/OUIAppController.h"
 
 #define kHeaderLastModified @"LAST-MODIFIED"
 
 @implementation NTIAbstractDownloader
 @synthesize statusCode,expectedContentLength, lastModified;
-
--(id)initWithUsername: (NSString*)user password: (NSString*)p
-{
-    self = [super init];
-    if (self) {
-		self->username = [user copy];
-		self->password = [p copy];
-    }
-    
-    return self;
-}
 
 -(void)connection: (NSURLConnection*)connection didReceiveResponse: (id)response
 {
@@ -66,21 +56,31 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 }
 #endif
 
--(void)connection: (NSURLConnection*)connection didReceiveAuthenticationChallenge: (NSURLAuthenticationChallenge*)challenge
+-(BOOL)statusWasSuccess
 {
-	//NSURLConnection doesn't give up, it keeps calling this method
-	//even if the username and password are bad. So we have to handle bailing.
-	if( [challenge previousFailureCount] == 0 ) {	
-		[[challenge sender]
-		 useCredential: [NSURLCredential credentialWithUser: username
-												   password: password
-												persistence: NSURLCredentialPersistenceForSession]
-		 forAuthenticationChallenge: challenge];
-	}
-	else {
-		[[challenge sender] cancelAuthenticationChallenge: challenge];
-	}
+	return self.statusCode >= 200 && self.statusCode < 300;	
 }
+
+//We no long have the information to respond to this with.  If we don't have an auth cookie there is 
+//nothing we can do.  The default implementation of this method will check the credential storage
+//and use credentials if they exist, otherwise the [challenge sender] is sent a continue without authentication
+//message
+
+//-(void)connection: (NSURLConnection*)connection didReceiveAuthenticationChallenge: (NSURLAuthenticationChallenge*)challenge
+//{
+//	//NSURLConnection doesn't give up, it keeps calling this method
+//	//even if the username and password are bad. So we have to handle bailing.
+//	if( [challenge previousFailureCount] == 0 ) {	
+//		[[challenge sender]
+//		 useCredential: [NSURLCredential credentialWithUser: username
+//												   password: password
+//												persistence: NSURLCredentialPersistenceForSession]
+//		 forAuthenticationChallenge: challenge];
+//	}
+//	else {
+//		[[challenge sender] cancelAuthenticationChallenge: challenge];
+//	}
+//}
 
 -(void)connection: (NSURLConnection*)connection didFailWithError: (NSError*)error
 {
@@ -88,17 +88,17 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 
 -(void)connectionDidFinishLoading: (NSURLConnection*)connection
 {
+	if( ![self statusWasSuccess] ){
+		NSError* error = [NSError errorWithDomain: @"NTIDataserverResponseDomain" 
+											 code: self.statusCode 
+										 userInfo: nil];
+		OUI_PRESENT_ERROR(error);
+	}
 }
 
 @end
 
 @implementation NTIBufferedDownloader
-
--(id)initWithUsername: (NSString*)user password: (NSString*)password
-{
-	self = [super initWithUsername: user password: password];
-	return self;
-}
 
 -(void)connection: (NSURLConnection*)connection didReceiveResponse: (id)response
 {
@@ -205,7 +205,8 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 			 onFinish: (void(^)())finish
 			  onError: (void(^)())error
 {
-	self = [super initWithUsername: user password: password];
+	//self = [super initWithUsername: user password: password];
+	self = [super init];
 	self->outputStream = stream;
 	[stream setDelegate: self];
 	
