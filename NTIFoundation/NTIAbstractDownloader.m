@@ -88,12 +88,6 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 
 -(void)connectionDidFinishLoading: (NSURLConnection*)connection
 {
-	if( ![self statusWasSuccess] ){
-		NSError* error = [NSError errorWithDomain: @"NTIDataserverResponseDomain" 
-											 code: self.statusCode 
-										 userInfo: nil];
-		OUI_PRESENT_ERROR(error);
-	}
 }
 
 @end
@@ -115,6 +109,7 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 {
 	//TODO: Somebody needs to present this to the user.
 	NSLog( @"Failed to download data: %@", error );
+	OUI_PRESENT_ERROR(error);
 	dataBuffer = nil;
 }
 

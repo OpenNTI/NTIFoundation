@@ -9,6 +9,7 @@
 #import "SocketIOSocket.h"
 #import "NTIAbstractDownloader.h"
 #import "SocketIOTransport.h"
+#import "OmniUI/OUIAppController.h"
 
 NSString* const SocketIOResource = @"socket.io";
 NSString* const SocketIOProtocol = @"1";
@@ -572,6 +573,7 @@ static NSArray* implementedTransportClasses()
 #pragma mark handshake downloader delegate
 -(void)downloader:(NTIDelegatingDownloader *)d connection: (NSURLConnection*)c didFailWithError:(NSError *)error
 {
+	OUI_PRESENT_ERROR(error);
 	[self logAndRaiseError: error];
 	[self updateStatus: SocketIOSocketStatusDisconnected];
 }
