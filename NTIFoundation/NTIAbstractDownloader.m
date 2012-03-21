@@ -109,7 +109,6 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 {
 	//TODO: Somebody needs to present this to the user.
 	NSLog( @"Failed to download data: %@", error );
-	OUI_PRESENT_ERROR(error);
 	dataBuffer = nil;
 }
 
