@@ -573,7 +573,7 @@ static NSArray* implementedTransportClasses()
 #pragma mark handshake downloader delegate
 -(void)downloader:(NTIDelegatingDownloader *)d connection: (NSURLConnection*)c didFailWithError:(NSError *)error
 {
-	OUI_PRESENT_ERROR(error);
+	//OUI_PRESENT_ERROR(error);
 	[self logAndRaiseError: error];
 	[self updateStatus: SocketIOSocketStatusDisconnected];
 }
