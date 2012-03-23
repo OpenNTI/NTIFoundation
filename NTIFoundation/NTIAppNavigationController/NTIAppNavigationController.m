@@ -505,6 +505,8 @@ accessoryViewController: (UIViewController*)aVC;
 	mask.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 	
 	UIView* containingView = [[UIView alloc] initWithFrame: self.topApplicationLayer.view.bounds];
+	//We want the containing view to shrink and grow apporiately.
+	containingView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[containingView addSubview: mask];
 	
 	[self.topApplicationLayer.view addSubview: containingView];
