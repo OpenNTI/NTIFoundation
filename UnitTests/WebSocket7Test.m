@@ -135,4 +135,48 @@ BOOL isSuccessfulHandshakeResponse(NSString* response, NSString* key);
 	STAssertFalse(isSuccessfulHandshakeResponse(handshake, badKey), nil);
 }
 
+static NSHTTPCookie* cookieWithNameValue(NSString* domain, NSString* name, NSString* value)
+{
+	NSMutableDictionary* cookieProps = [NSMutableDictionary dictionary];
+	[cookieProps setObject: name forKey: NSHTTPCookieName];
+	[cookieProps setObject: value 
+					forKey: NSHTTPCookieValue];
+	[cookieProps setObject: domain forKey: NSHTTPCookieDomain];
+	[cookieProps setObject: @"/" forKey: NSHTTPCookiePath];
+	[cookieProps setObject: @"60" forKey: NSHTTPCookieMaximumAge];
+	
+	return [NSHTTPCookie cookieWithProperties: cookieProps];
+}
+
+NSString* cookieHeaderForServer(NSURL* server);
+
+-(void)testCookieHeader
+{
+	NSURL* noCookieHost = [NSURL URLWithString: @"http://foobar.com/"];
+	NSURL* cookieHost = [NSURL URLWithString: @"http://cookiehost.com/"];
+	
+	NSHTTPCookieStorage* cookieJar = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+	
+	//Start with a clean slate
+	for(NSHTTPCookie* cookie in [cookieJar cookiesForURL: noCookieHost]){
+		[cookieJar deleteCookie: cookie];
+	}
+	for(NSHTTPCookie* cookie in [cookieJar cookiesForURL: cookieHost]){
+		[cookieJar deleteCookie: cookie];
+	}
+	
+	STAssertEqualObjects(cookieHeaderForServer(noCookieHost), @"", @"Excpected empty cookie header", nil);
+	
+	NSHTTPCookie* c1 = cookieWithNameValue(@"cookiehost.com", @"foo", @"bar");
+	[cookieJar setCookie: c1];
+	
+	STAssertEqualObjects(cookieHeaderForServer(cookieHost), @"Cookie: foo=bar", nil);
+	
+	NSHTTPCookie* c2 = cookieWithNameValue(@"cookiehost.com", @"red", @"fish");
+	[cookieJar setCookie: c2];
+	
+	STAssertEqualObjects(cookieHeaderForServer(cookieHost), @"Cookie: foo=bar; red=fish", nil);
+	
+}
+
 @end

@@ -284,7 +284,42 @@ PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, N
 	return [encoded isEqualToString: acceptKey];
 }
 
-#undef STATIC
+PRIVATE_STATIC_TESTABLE NSArray* validCookiesForServer(NSURL* server);
+PRIVATE_STATIC_TESTABLE NSArray* validCookiesForServer(NSURL* server)
+{
+	NSHTTPCookieStorage* cookieJar = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+	
+	NSMutableArray* cookies = [NSMutableArray array];
+	NSDate* expiredAfter = [NSDate date];
+	for(NSHTTPCookie* cookie in [cookieJar cookiesForURL: server])
+	{
+		if(    cookie.expiresDate 
+		   && [cookie.expiresDate compare: expiredAfter] != NSOrderedDescending ){
+			continue;
+		}
+		[cookies addObject: cookie];
+	}
+	return cookies;
+}
+
+PRIVATE_STATIC_TESTABLE NSString* cookieHeaderForServer(NSURL* server);
+PRIVATE_STATIC_TESTABLE NSString* cookieHeaderForServer(NSURL* server)
+{
+	NSMutableArray* cookieStringParts = [NSMutableArray array];
+	for(NSHTTPCookie* cookie in validCookiesForServer(server)){
+		[cookieStringParts addObject: 
+		 [NSString stringWithFormat: @"%@=%@", 
+		  cookie.name, cookie.value]];
+	}
+	
+	if( [NSArray isEmptyArray: cookieStringParts] ){
+		return @"";
+	}
+	
+	return [NSString stringWithFormat: @"Cookie: %@", [cookieStringParts componentsJoinedByString: @"; "]];
+}
+
+#undef PRIVATE_STATIC_TESTABLE
 
 -(void)processHandshakeResponse: (HandshakeResponseBuffer*)hrBuffer
 {
@@ -402,9 +437,10 @@ PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, N
 							"Origin: %@\r\n"
 							"sec-websocket-origin: %@\r\n"
 							"Sec-WebSocket-Key: %@\r\n"
-							"Sec-WebSocket-Version: 7\r\n\r\n",
+							"Sec-WebSocket-Version: 7\r\n"
+							"%@\r\n\r\n",
 							self->url.path ? self->url.path : @"/",self->url.host, kNTIWebSocket7Origin,
-							[NSString stringWithFormat: @"http://%@",self->url.host], self->key] ;
+							[NSString stringWithFormat: @"http://%@",self->url.host], self->key, cookieHeaderForServer(self->url)] ;
 #ifdef DEBUG_SOCKETIO
 	NSLog(@"Initiating handshake with %@", getRequest);
 #endif

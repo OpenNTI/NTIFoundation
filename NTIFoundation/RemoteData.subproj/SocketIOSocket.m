@@ -209,10 +209,6 @@ static NSArray* implementedTransportClasses()
 		}
 	}
 	
-	[self sendPacket: [SocketIOPacket packetForEventWithName: @"message" 
-													 andArgs: [NSArray arrayWithObjects: 
-															   self->username, self->password, nil]]];
-	
 	self->ackMessageId = 0;
 	self->reconnectAttempts = 0;
 	self->reconnecting = NO;
