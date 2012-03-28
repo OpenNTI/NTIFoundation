@@ -4,6 +4,22 @@
    <BuildAction
       parallelizeBuildables = "NO"
       buildImplicitDependencies = "NO">
+      <BuildActionEntries>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "40C34CAA14D88DD5000D91A8"
+               BuildableName = "NTIFoundationApplicationTests.octest"
+               BlueprintName = "NTIFoundationApplicationTests"
+               ReferencedContainer = "container:../NTIWorkspace/NTIFoundation/NTIFoundation.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+      </BuildActionEntries>
    </BuildAction>
    <TestAction
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.GDB"
@@ -36,10 +52,19 @@
    </LaunchAction>
    <ProfileAction
       shouldUseLaunchSchemeArgsEnv = "YES"
-      savedToolIdentifier = ""
+      savedToolIdentifier = "/Developer/Applications/Instruments.app/Contents/Resources/templates/Time Profiler.tracetemplate"
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Release"
+      buildConfiguration = "Debug"
       debugDocumentVersioning = "YES">
+      <BuildableProductRunnable>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "40572C5814C894940032D2DB"
+            BuildableName = "NTINavigationExample2.app"
+            BlueprintName = "NTINavigationExample2"
+            ReferencedContainer = "container:../NTIWorkspace/NTIFoundation/NTIFoundation.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

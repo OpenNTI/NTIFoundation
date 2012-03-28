@@ -163,6 +163,8 @@
 		4C3DA33F14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3DA33D14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C3DA34014E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DA33E14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m */; };
 		4C3DA34114E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DA33E14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m */; };
+		4C4096FD1522140C002A9445 /* JsonPlistSerializationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4096FC1522140C002A9445 /* JsonPlistSerializationTests.m */; };
+		4C40971815221D91002A9445 /* jsonUserData.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C40971615221D91002A9445 /* jsonUserData.json */; };
 		4C696D0A1516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C696D091516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m */; };
 		4CABB38D14EC28DF00A7FD7C /* NTIInspectableObjectProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CABB38C14EC28DF00A7FD7C /* NTIInspectableObjectProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CEC1D96151395DB0074F3DD /* NTIGlobalInspectorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEC1D93151395DB0074F3DD /* NTIGlobalInspectorTest.m */; };
@@ -676,6 +678,9 @@
 		4C3BDC1B14EAF87F008ED49D /* NTIInspectorSliceObjectPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIInspectorSliceObjectPair.m; sourceTree = "<group>"; };
 		4C3DA33D14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIGlobalInspectorMainPane.h; sourceTree = "<group>"; };
 		4C3DA33E14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIGlobalInspectorMainPane.m; sourceTree = "<group>"; };
+		4C4096FB1522140C002A9445 /* JsonPlistSerializationTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JsonPlistSerializationTests.h; sourceTree = "<group>"; };
+		4C4096FC1522140C002A9445 /* JsonPlistSerializationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JsonPlistSerializationTests.m; sourceTree = "<group>"; };
+		4C40971615221D91002A9445 /* jsonUserData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = jsonUserData.json; sourceTree = "<group>"; };
 		4C696D081516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIGlobalInspectorPaneAndSliceAppTest.h; sourceTree = "<group>"; };
 		4C696D091516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIGlobalInspectorPaneAndSliceAppTest.m; sourceTree = "<group>"; };
 		4CABB38C14EC28DF00A7FD7C /* NTIInspectableObjectProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIInspectableObjectProtocol.h; sourceTree = "<group>"; };
@@ -1011,8 +1016,11 @@
 		40A745B714DADE5E0093F0D4 /* JSONTests */ = {
 			isa = PBXGroup;
 			children = (
+				4C40971615221D91002A9445 /* jsonUserData.json */,
 				40A7459714DA30050093F0D4 /* NSObject-NTIJSONTest.h */,
 				40A7459814DA30050093F0D4 /* NSObject-NTIJSONTest.m */,
+				4C4096FB1522140C002A9445 /* JsonPlistSerializationTests.h */,
+				4C4096FC1522140C002A9445 /* JsonPlistSerializationTests.m */,
 			);
 			name = JSONTests;
 			sourceTree = "<group>";
@@ -1864,6 +1872,7 @@
 				72D8186213955D8C00473994 /* InfoPlist.strings in Resources */,
 				404B1CD014E2C51400A825AF /* LongWebSocketHexString.txt in Resources */,
 				402CC12014E2C77800E03835 /* LongWebSocketHexStringResult.txt in Resources */,
+				4C40971815221D91002A9445 /* jsonUserData.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2050,6 +2059,7 @@
 				403C317C1512A5DD00C53D22 /* NSData-NTIJSON.m in Sources */,
 				4CEC1D96151395DB0074F3DD /* NTIGlobalInspectorTest.m in Sources */,
 				4CEC1D97151395DB0074F3DD /* NTIInspectorObjectWrapperTest.m in Sources */,
+				4C4096FD1522140C002A9445 /* JsonPlistSerializationTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

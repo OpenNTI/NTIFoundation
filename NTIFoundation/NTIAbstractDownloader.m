@@ -8,7 +8,32 @@
 
 #import "NTIAbstractDownloader.h"
 #import "NSString-NTIExtensions.h"
+#import "NSData-NTIJSON.h"
 #import "OmniUI/OUIAppController.h"
+
+
+@interface NSData(NTIExtensions)
+-(BOOL)isPrefixedByByte:(const uint8_t *)data;
+@end
+
+@implementation NSData(NTIExtensions)
+- (BOOL)isPrefixedByByte:(const uint8_t *)ptr;
+{
+	if ([self length] == 0) {
+		return NO;
+	}
+	const uint8_t *selfPtr;
+    selfPtr = [self bytes];
+	
+	//We only care about the first byte.
+	if (*ptr != *selfPtr) {
+		return NO;
+	}
+    return YES;
+}
+
+@end
+
 
 #define kHeaderLastModified @"LAST-MODIFIED"
 
@@ -94,6 +119,28 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 
 @implementation NTIBufferedDownloader
 
++(BOOL)isPlistData: (NSData *)data
+{
+	//NOTE: We expect to have either json data or plist data both encoded in UTF-8 format.
+	//		We detect if it's plist data or not, by checking the first character, 
+	//		for plist, it is '<' or 0x3C in UTF-8 encoding.
+	uint8_t	firstChar[1] = {0x3C};
+#if 0
+	NSString* dataString = [NSString stringWithData: data encoding: NSUTF8StringEncoding];
+	NSLog(@"%@", dataString);
+	NSData* fData = [NSData dataWithBytes: firstChar length: 1];
+	NSLog(@"%@", [NSString stringWithData: fData encoding: NSUTF8StringEncoding]);
+#endif
+	BOOL stype = [data isPrefixedByByte: firstChar];
+	
+	if (stype) {
+		return YES;
+	}
+	else {
+		return NO;
+	}
+}
+
 -(void)connection: (NSURLConnection*)connection didReceiveResponse: (id)response
 {
 	[super connection: connection didReceiveResponse: response];
@@ -128,10 +175,15 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 
 -(id)objectFromData
 {
-	return [NSPropertyListSerialization 
-			propertyListWithData: dataBuffer 
-			options: NSPropertyListImmutable
-			format: nil error: NULL];
+	if ( [NTIBufferedDownloader isPlistData: self->dataBuffer] ) {
+		return [NSPropertyListSerialization 
+				propertyListWithData: dataBuffer 
+				options: NSPropertyListImmutable
+				format: nil error: NULL];
+	}
+	else {
+		return [self->dataBuffer jsonObjectValue];
+	}
 }
 
 -(NSDictionary*)dictionaryFromData
