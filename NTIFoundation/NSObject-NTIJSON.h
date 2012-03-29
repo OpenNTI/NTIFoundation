@@ -15,6 +15,7 @@
  */
 @interface NSObject(NTIJSON)
 -(NSString*)stringWithJsonRepresentation;
+-(NSData *)dataWithJsonRepresentation;
 /**
  * Because we have to wrap null to NSNull in JSON collections, this 
  * lets us easily unwrap.

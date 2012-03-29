@@ -5,6 +5,12 @@
 
 -(NSString*)stringWithJsonRepresentation
 {
+	NSData* jsonData = [self dataWithJsonRepresentation];
+	return [NSString stringWithData: jsonData encoding: NSUTF8StringEncoding];
+}
+
+-(NSData *)dataWithJsonRepresentation
+{
 	if(![NSJSONSerialization isValidJSONObject: self]){
 		return nil;
 	}
@@ -18,8 +24,7 @@
 		NSLog(@"An error occurred when serializing %@. %@", self, error);
 		return nil;
 	}
-	
-	return [NSString stringWithData: jsonData encoding: NSUTF8StringEncoding];
+	return  jsonData;
 }
 
 -(id)jsonObjectUnwrap
