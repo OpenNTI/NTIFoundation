@@ -502,6 +502,9 @@ accessoryViewController: (UIViewController*)aVC;
 	_TransientLayerMask* mask = [[_TransientLayerMask alloc] 
 										initWithFrame: self.topApplicationLayer.view.bounds];
 	[mask addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(maskTapped:)]];
+	
+	[mask addGestureRecognizer: [[UISwipeGestureRecognizer alloc] initWithTarget: self action: @selector(swipedToRemoveTransient:)]];
+	
 	mask.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 	
 	UIView* containingView = [[UIView alloc] initWithFrame: self.topApplicationLayer.view.bounds];
@@ -542,8 +545,6 @@ accessoryViewController: (UIViewController*)aVC;
 											tranisientLayerWidth, 
 											parentsViewBounds.size.height);
 	transLayer.view.frame = transientFrameStart;
-
-	//[transLayer.view addGestureRecognizer: [[UISwipeGestureRecognizer alloc] initWithTarget: self action: @selector(swipedToRemoveTransient:)]];
 	
 	[containingView addSubview: transLayer.view];
 	
