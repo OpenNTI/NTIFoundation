@@ -1061,7 +1061,7 @@ static void searchUpVCHiererarchy(UIViewController* controller, NSMutableArray* 
 		 titleForPane: (OUIInspectorPane*)pane
 {
 	if(pane == insp.mainPane){
-		return @"Inspector";
+		return @"Info";
 	}
 	//Nil will cause the inspector to ask the pane for the title
 	return nil;
