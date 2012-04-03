@@ -44,5 +44,6 @@
 #import "NTIInspectableObjectProtocol.h"
 #import "NTIGlobalInspectorMainPane.h"
 #import "NTIBadgeCountView.h"
+#import	"NTIKeyboardAdjustmentListener.h"
 
 #endif

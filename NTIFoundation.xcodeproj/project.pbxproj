@@ -166,6 +166,7 @@
 		4C4096FD1522140C002A9445 /* JsonPlistSerializationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4096FC1522140C002A9445 /* JsonPlistSerializationTests.m */; };
 		4C40971815221D91002A9445 /* jsonUserData.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C40971615221D91002A9445 /* jsonUserData.json */; };
 		4C696D0A1516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C696D091516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m */; };
+		4C8CFD1D1529F712003B387D /* NTIKeyboardAdjustmentListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8CFD1C1529F712003B387D /* NTIKeyboardAdjustmentListener.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CABB38D14EC28DF00A7FD7C /* NTIInspectableObjectProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CABB38C14EC28DF00A7FD7C /* NTIInspectableObjectProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CEC1D96151395DB0074F3DD /* NTIGlobalInspectorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEC1D93151395DB0074F3DD /* NTIGlobalInspectorTest.m */; };
 		4CEC1D97151395DB0074F3DD /* NTIInspectorObjectWrapperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEC1D95151395DB0074F3DD /* NTIInspectorObjectWrapperTest.m */; };
@@ -683,6 +684,7 @@
 		4C40971615221D91002A9445 /* jsonUserData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = jsonUserData.json; sourceTree = "<group>"; };
 		4C696D081516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIGlobalInspectorPaneAndSliceAppTest.h; sourceTree = "<group>"; };
 		4C696D091516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIGlobalInspectorPaneAndSliceAppTest.m; sourceTree = "<group>"; };
+		4C8CFD1C1529F712003B387D /* NTIKeyboardAdjustmentListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIKeyboardAdjustmentListener.h; sourceTree = "<group>"; };
 		4CABB38C14EC28DF00A7FD7C /* NTIInspectableObjectProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIInspectableObjectProtocol.h; sourceTree = "<group>"; };
 		4CEC1D92151395DB0074F3DD /* NTIGlobalInspectorTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIGlobalInspectorTest.h; sourceTree = "<group>"; };
 		4CEC1D93151395DB0074F3DD /* NTIGlobalInspectorTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIGlobalInspectorTest.m; sourceTree = "<group>"; };
@@ -906,6 +908,7 @@
 				40103C0614D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.h */,
 				40C34CC214D9AB9B000D91A8 /* NTIAppNavigationLayerDescriptor.h */,
 				402665CD14D9BB950053CC53 /* NTIAppNavigationLayer.h */,
+				4C8CFD1C1529F712003B387D /* NTIKeyboardAdjustmentListener.h */,
 			);
 			path = NTIAppNavigationController;
 			sourceTree = "<group>";
@@ -1425,6 +1428,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C8CFD1D1529F712003B387D /* NTIKeyboardAdjustmentListener.h in Headers */,
 				72CB9A9E14253CD500CE4FAA /* NSObject-NTIJSON.h in Headers */,
 				72CB9A9F14253CD500CE4FAA /* NSString-NTIJSON.h in Headers */,
 				72CB9AA114253CD500CE4FAA /* NSArray-NTIExtensions.h in Headers */,
