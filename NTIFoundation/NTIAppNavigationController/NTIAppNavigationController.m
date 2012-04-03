@@ -669,6 +669,16 @@ accessoryViewController: (UIViewController*)aVC;
 		return;
 	}
 	
+	id layerGoingAway = self.topLayer;
+	
+	if( [appLayer respondsToSelector: @selector(willAppearInAppNavigationControllerAsResultOfPush:)] ){
+		[appLayer willAppearInAppNavigationControllerAsResultOfPush: YES];
+	}
+	
+	if( [layerGoingAway respondsToSelector: @selector(willDisappearInAppNavigationControllerAsResultOfPush:)] ){
+		[layerGoingAway willDisappearInAppNavigationControllerAsResultOfPush: YES];
+	}
+	
 	//Because this is an app layer moving the actual view is easy.  Just 
 	//remove the layer to move from the nav controller, grab all the view controllers
 	//in our list up to the next app controller and move them to the end and then animate
@@ -699,6 +709,15 @@ accessoryViewController: (UIViewController*)aVC;
 	
 	//Now we need to push the app layer
 	[self pushNavController: (id)appLayer animated: animated];
+	
+	if( [layerGoingAway respondsToSelector: @selector(didDisappearInAppNavigationControllerAsResultOfPush:)] ){
+		[layerGoingAway didDisappearInAppNavigationControllerAsResultOfPush: YES];
+	}
+	
+	if( [appLayer respondsToSelector: @selector(didAppearInAppNavigationControllerAsResultOfPush:)] ){
+		[appLayer didAppearInAppNavigationControllerAsResultOfPush: YES];
+	}
+	
 }
 
 -(void)moveTransientLayerToTop: (UIViewController<NTIAppNavigationTransientLayer>*)layer animated: (BOOL)animated;
