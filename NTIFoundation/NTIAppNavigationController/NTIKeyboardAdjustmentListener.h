@@ -11,11 +11,11 @@
 @protocol NTIKeyboardAdjustmentListener <NSObject>
 @optional
 
--(BOOL)adjustContentOffsetForKeyboardShowNotification: (NSNotification *)aNotification 
-												   at: (id)touchPointValue;
--(BOOL)adjustContentOffsetForKeyboardHideNotification: (NSNotification *)aNotification 
-												 from: (id)touchPointValue;
--(BOOL)adjustViewsForKeyboardFrameChange: (NSNotification *)notification 
-									  at: (id)touchPointValue;
--(id)canHandleKeyboardNotificationsForResponder: (id)responder;
+-(BOOL)adjustLayoutInResponseToKeyboardWillShow: (NSNotification *)aNotification 
+								firstResponder: (UIResponder *)responder;
+-(BOOL)adjustLayoutInResponseToKeyboardWillHide: (NSNotification *)aNotification 
+								 firstResponder: (UIResponder *)responder;
+-(BOOL)adjustLayoutInResponseToKeyboardWillChangeFrame: (NSNotification *)aNotification 
+								 firstResponder: (UIResponder *)responder;
+-(id)canHandleKeyboardNotificationsForResponder: (UIResponder *)responder;
 @end
