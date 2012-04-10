@@ -120,7 +120,7 @@
 		self->mask[i] = 0x00;
 	}
 	
-	for(NSUInteger i=0; i < 2 ; i++){
+	for(NSUInteger i=0; i < 8 ; i++){
 		self->sizeBytes[i] = 0x00;
 	}
 	
@@ -158,6 +158,25 @@
 	
 }
 
+#ifdef TEST
+#define PRIVATE_STATIC_TESTABLE
+#else
+#define PRIVATE_STATIC_TESTABLE static
+#endif
+
+PRIVATE_STATIC_TESTABLE NSUInteger bytesToLength(uint8_t* bytes, uint8_t num);
+PRIVATE_STATIC_TESTABLE NSUInteger bytesToLength(uint8_t* bytes, uint8_t num)
+{
+	NSUInteger theLength = 0;
+	for(int i=0; i<num; i++){
+		theLength = theLength << 8;
+		theLength = theLength | bytes[i];
+	}
+	return theLength;
+}
+
+#undef PRIVATE_STATIC_TESTABLE
+
 -(BOOL)readSizeAndMasked: (uint8_t*)byte
 {	
 	
@@ -179,29 +198,40 @@
 		else if( client_len == 126 ){
 			self->responseSize = WebSocketResponseSize32bit;
 		}
-		else{
+		else if( client_len == 127){
 			self->responseSize = WebSocketResponseSize64bit;
+		}
+		else{
+			self->responseSize = WebSocketResponseSizeUnknown;
 			[[NSException exceptionWithName: @"UnexpectedResponse" 
 									 reason: [NSString stringWithFormat: 
-											  @"Expected 32 bit size but had size state of %ld", self->responseSize]
+											  @"Encounted bad size info. expected value <= 127 but found %ld", client_len]
 								   userInfo: nil] raise];
 		}
 	}
 	else{
 		//If we ever get to here we better be 32 bit response
-		if(self->responseSize != WebSocketResponseSize32bit){
+		if(self->responseSize == WebSocketResponseSizeUnknown){
 			[[NSException exceptionWithName: @"UnexpectedResponse" 
 									 reason: [NSString stringWithFormat: 
-											  @"Expected 32 bit size but had size state of %ld", self->responseSize]
+											  @"Expected known size but had size state of %ld", self->responseSize]
 								   userInfo: nil] raise];
 		}
+		
 		//We have size bytes to read
 		self->sizeBytes[self->sizeBytesRead++] = *byte;
 		
+		int sizeBytesRequired = 0;
+		if(self->responseSize == WebSocketResponseSize32bit){
+			sizeBytesRequired = 2;
+		}
+		else if(self->responseSize == WebSocketResponseSize64bit){
+			sizeBytesRequired = 8;
+		}
+		
 		//If we have read two size bytes we have all we need to construct the lenght
-		if( self->sizeBytesRead == 2){
-			self->dataLength = (self->sizeBytes[0] << 8) | (self->sizeBytes[1]);
-			
+		if( self->sizeBytesRead == sizeBytesRequired){
+			self->dataLength = bytesToLength(self->sizeBytes, sizeBytesRequired);
 			//Next is the mask or the data
 			self->readingPart = self->masked ? WebSocketResponseReadingMask : WebSocketResponseReadingData;
 		}

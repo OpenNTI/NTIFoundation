@@ -179,4 +179,64 @@ NSString* cookieHeaderForServer(NSURL* server);
 	
 }
 
+NSString* generateSecWebsocketKey();
+
+-(void)testSecWebsocketKeyGenerationIsRightLength
+{
+	NSString* key = generateSecWebsocketKey();
+	NSData* data = [NSData dataWithBase64String: key];
+	STAssertEquals((int)data.length, 16, @"Expected 16 bytes of data but got");
+}
+
+void sizeToBytes(NSUInteger length, uint8_t* sizeInfoPointer, int* sizeLength);
+-(void)testSizeToBytesSmall
+{
+	NSUInteger smallSize = 87;
+	
+	uint8_t bytes[8];
+	int length;
+	
+	sizeToBytes(smallSize, bytes, &length);
+	
+	STAssertEquals(length, 1, @"Expected one byte", nil);
+	STAssertEquals((int)bytes[0], 87, @"Excpected size of 174", nil);
+}
+
+-(void)testSizeToBytesMedium
+{
+	NSUInteger smallSize = 312;
+	
+	uint8_t bytes[8];
+	int length;
+	
+	sizeToBytes(smallSize, bytes, &length);
+	
+	STAssertEquals(length, 3, @"Expected one byte", nil);
+	STAssertEquals((int)bytes[0], 126, @"Excpected size control of 126", nil);
+	STAssertEquals((int)bytes[1], 1, @"Excpected most significant byte of 1", nil);
+	STAssertEquals((int)bytes[2], 56, @"Excpected least significant byte of 56", nil);
+}
+
+-(void)testSizeToBytesLong
+{
+	//9 876 543 = 0x96B43F
+	NSUInteger smallSize = 9876543;
+	
+	uint8_t bytes[9];
+	int length;
+	
+	sizeToBytes(smallSize, bytes, &length);
+	
+	STAssertEquals(length, 9, @"Expected one byte", nil);
+	STAssertEquals((int)bytes[0], 127, @"Excpected size control of 127", nil);
+	STAssertEquals((int)bytes[1], 0, @"Excpected byte 1 to be 0", nil);
+	STAssertEquals((int)bytes[2], 0, @"Excpected byte 2 to be 0", nil);
+	STAssertEquals((int)bytes[3], 0, @"Excpected byte 3 to be 0", nil);
+	STAssertEquals((int)bytes[4], 0, @"Excpected byte 4 to be 0", nil);
+	STAssertEquals((int)bytes[5], 0, @"Excpected byte 5 to be 0", nil);
+	STAssertEquals((int)bytes[6], 150, @"Excpected byte 6 to be 0", nil);
+	STAssertEquals((int)bytes[7], 180, @"Excpected byte 7 to be 0", nil);
+	STAssertEquals((int)bytes[8], 63, @"Excpected byte 8 to be 0", nil);
+}
+
 @end

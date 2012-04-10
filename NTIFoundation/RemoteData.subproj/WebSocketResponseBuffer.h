@@ -38,7 +38,7 @@
 	uint8_t responseSize;
 	uint8_t responseType;
 	uint8_t mask[4];
-	uint8_t sizeBytes[2];
+	uint8_t sizeBytes[8];
 	NSInteger dataPosition;
 	uint8_t sizeBytesRead;
 	uint8_t maskBytesRead;

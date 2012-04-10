@@ -16,10 +16,11 @@
 @implementation WebSocket7
 @synthesize status, nr_delegate;
 
-static NSString* b64EncodeString(NSString* string)
-{
-	return [[string dataUsingEncoding: NSUTF8StringEncoding] base64String];
-}
+#ifdef TEST
+#define PRIVATE_STATIC_TESTABLE
+#else
+#define PRIVATE_STATIC_TESTABLE static
+#endif
 
 static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 {
@@ -46,6 +47,22 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	
 }
 
+//Generate key.
+//A "Sec-WebSocket-Key" header field with a base64-encoded (see
+//Section 4 of [RFC4648]) value that, when decoded, is 16 bytes in
+//length.
+PRIVATE_STATIC_TESTABLE NSString* generateSecWebsocketKey(void);
+PRIVATE_STATIC_TESTABLE NSString* generateSecWebsocketKey()
+{
+	NSMutableData* bytesToEncode = [NSMutableData data];
+	
+	for(NSInteger i = 0; i < 16; i++){
+		uint8_t byte = arc4random() % 256;
+		[bytesToEncode appendBytes: &byte length: 1];
+	}
+	return [bytesToEncode base64String];
+}
+
 -(id)initWithURL: (NSURL *)u
 {
 	self = [super init];
@@ -53,19 +70,8 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	self->shouldForcePumpOutputStream = NO;
 	[self updateStatus: WebSocketStatusNew];
 
-	//Generate key.
-	//A "Sec-WebSocket-Key" header field with a base64-encoded (see
-	//Section 4 of [RFC4648]) value that, when decoded, is 16 bytes in
-	//length.
 	
-	NSMutableData* bytesToEncode = [NSMutableData data];
-	
-	for(NSInteger i = 0; i < 16; i++){
-		uint8_t byte = arc4random() % 256;
-		[bytesToEncode appendBytes: &byte length: 1];
-	}
-	NSString* k = [NSString stringWithData: bytesToEncode encoding: NSASCIIStringEncoding] ;
-	self->key = b64EncodeString(k);
+	self->key = generateSecWebsocketKey();
 	
 	return self;
 }
@@ -170,6 +176,33 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	
 }
 
+PRIVATE_STATIC_TESTABLE void sizeToBytes(NSUInteger length, uint8_t* sizeInfoPointer, int* sizeLength);
+PRIVATE_STATIC_TESTABLE void sizeToBytes(NSUInteger length, uint8_t* sizeInfoPointer, int* sizeLength)
+{
+	if( length < 126 ){
+		*sizeInfoPointer = length;
+		*sizeLength = 1;
+	}
+	else{
+		//We need to send a byte array for our data
+		if(length < 65536){ //2^16
+			*sizeLength = 3; //126 + 2 bytes
+			*sizeInfoPointer = 126;
+		}
+		else{
+			*sizeLength = 9; //126 + 8 bytes
+			*sizeInfoPointer = 127;
+		}
+		
+		NSUInteger theLength = length;
+		for(int i = *sizeLength - 1; i > 0; i--){
+			sizeInfoPointer[i] = theLength & 0xFF;
+			theLength = theLength >> 8;
+		}
+	}
+
+}
+
 -(void)dequeueAndSend
 {
 	WebSocketData* wsdata = [self dequeueDataForSending];
@@ -191,35 +224,21 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	NSLog(@"About to send data %@", wsdata);
 #endif
 	
-	BOOL isLong=NO;
-	uint8_t first = 0x00;
-	uint8_t second = 0x00;
-	uint8_t third = 0x00;
-		
-	if( [data length] < 126 ){
-		first = [data length];
-	}
-	else if([data length] < 0xFFFF){
-		first = 126;
-		second = ([data length] & 0xFF00) >> 8;
-		third = [data length] & 0xFF;
-		isLong = YES;
-	}
-	else{
-		[self shutdownAsResultOfError: errorWithCodeAndMessage(301, @"64 bit length frame not allowed")];
-	}
+	uint8_t sizeInfoPointer[9] = {0};
+	int sizeLength;
+	
+	sizeToBytes(data.length, sizeInfoPointer, &sizeLength);
+	
 #ifdef DEBUG_SOCKETIO
 	NSLog(@"About to send data length = %ld", [data length]);
 #endif
-	//Client is always masked
-	first = first | 0x80;
 	
 	[self->socketOutputStream write: &flag_and_opcode maxLength: 1];
-	[self->socketOutputStream write: &first maxLength: 1];
-	if(isLong){
-		[self->socketOutputStream write: &second maxLength: 1];
-		[self->socketOutputStream write: &third maxLength: 1];
-	}
+	
+	//Client is always masked
+	*sizeInfoPointer = *sizeInfoPointer | 0x80;
+	[self->socketOutputStream write: sizeInfoPointer maxLength: sizeLength];
+	
 	
 	//Generate a random 4 bytes to use as our mask
 	uint8_t mask[4];
@@ -256,11 +275,6 @@ static NSData* hashUsingSHA1(NSData* data)
     return [NSData dataWithBytes:hashBytes length:CC_SHA1_DIGEST_LENGTH];
 }
 
-#ifdef TEST
-#define PRIVATE_STATIC_TESTABLE
-#else
-#define PRIVATE_STATIC_TESTABLE static
-#endif
 PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, NSString* key);
 PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, NSString* key)
 {
@@ -318,8 +332,6 @@ PRIVATE_STATIC_TESTABLE NSString* cookieHeaderForServer(NSURL* server)
 	
 	return [NSString stringWithFormat: @"Cookie: %@", [cookieStringParts componentsJoinedByString: @"; "]];
 }
-
-#undef PRIVATE_STATIC_TESTABLE
 
 -(void)processHandshakeResponse: (HandshakeResponseBuffer*)hrBuffer
 {
@@ -589,5 +601,7 @@ static NSDictionary* sslProperties()
 {
 	[self shutdownStreams];
 }
+
+#undef PRIVATE_STATIC_TESTABLE
 
 @end
