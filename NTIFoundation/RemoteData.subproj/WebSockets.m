@@ -13,6 +13,12 @@
 #import "OmniFoundation/NSDictionary-OFExtensions.h"
 #import "OmniFoundation/NSMutableDictionary-OFExtensions.h"
 
+//TODO we are version 13 now.
+@interface WebSocket7()
+@property (nonatomic, readonly) HandshakeResponseBuffer* handshakeResponseBuffer;
+@property (nonatomic, readonly) WebSocketResponseBuffer* socketResponseBuffer;
+@end
+
 @implementation WebSocket7
 @synthesize status, nr_delegate;
 
@@ -68,14 +74,30 @@ PRIVATE_STATIC_TESTABLE NSString* generateSecWebsocketKey()
 	self = [super init];
 	self->url = u;
 	self->shouldForcePumpOutputStream = NO;
-	[self updateStatus: WebSocketStatusNew];
-
+	self->dataToWrite = nil;
+	self->dataToWriteOffset = 0;
 	
+	[self updateStatus: WebSocketStatusNew];
 	self->key = generateSecWebsocketKey();
 	
 	return self;
 }
 
+-(HandshakeResponseBuffer*)handshakeResponseBuffer
+{
+	if(!self->handshakeResponseBuffer){
+		self->handshakeResponseBuffer = [[HandshakeResponseBuffer alloc] init];
+	}
+	return self->handshakeResponseBuffer;
+}
+
+-(WebSocketResponseBuffer*)socketResponseBuffer
+{
+	if(!self->socketRespsonseBuffer){
+		self->socketRespsonseBuffer= [[WebSocketResponseBuffer alloc] init];
+	}
+	return self->socketRespsonseBuffer;
+}
 
 -(void)shutdownStreams
 {
@@ -104,76 +126,27 @@ PRIVATE_STATIC_TESTABLE NSString* generateSecWebsocketKey()
 	//If we are a close we just need to shut things down
 	if( [responseBuffer isCloseResponse] ){
 		
+		//Fixme this isn't quite right.
 		//If we aren't already disconnecting send the disconnect packet
 		if( self->status != WebSocketStatusDisconnecting ){
-			uint8_t shutdownByte = 0x88;
 			[self updateStatus: WebSocketStatusDisconnecting];
-			//Does this need to be queued up for writing?  Is it possible this blocks?
-			[self->socketOutputStream write: &shutdownByte maxLength: 1];
+			uint8_t shutdownByte = 0x88;
+			NSData* shutdownData = [NSData dataWithBytes: &shutdownByte length: 1];
+			[self enqueueDataForSending: shutdownData];
 		}
 		[self shutdownStreams];
-		
-		
 	}
 	else{
 		WebSocketData* wsdata = [responseBuffer websocketData];
+#ifdef DEBUG_SOCKETIO
+		NSLog(@"Recieved data for length %ld", wsdata.data.length);
+#endif
 		[self enqueueRecievedData: wsdata];
 		if( [self->nr_delegate respondsToSelector: @selector(websocketDidRecieveData:)] ){
 			[self->nr_delegate websocketDidRecieveData: self];
 		}
 	}
-}
-
-//FIXME This code is extremely similar to how we readResponseData for the handshake
-//generalize and abstract it away
--(void)readSocketResponse
-{
-	//When we are told to read we will read as much as we
-	//possibly can.
-	uint8_t currentByte = 0x00;
-	while( [self->socketInputStream hasBytesAvailable] ){
-		
-		//If we haven't yet started the response start it now.
-		if(!self->socketRespsonseBuffer){
-			self->socketRespsonseBuffer = [[WebSocketResponseBuffer alloc] init];
-		}
-		
-		//Read a byte off the input stream.  Be careful to inspect
-		//the return value
-		NSInteger readResult = -5;
-		readResult = [self->socketInputStream read: &currentByte maxLength: 1];
-		
-		//If we didn't read one byte its because we reached the end
-		//of the stream or the operation failed.  Either case is bad
-		if(readResult != 1){
-			[self shutdownAsResultOfError: 
-			 errorWithCodeAndMessage(300, 
-									 [NSString stringWithFormat: 
-									  @"Unable to read socket response.  Error code %ld", readResult])];
-			break;
-		}
-		
-		//Ok we have a byte from the stream.  Put it in our buffer.  Remember this may throw an exception
-		BOOL completeResult = NO;
-		@try{
-			completeResult = [self->socketRespsonseBuffer appendByteToBuffer: &currentByte];
-		}
-		@catch (NSException* e) {
-			[self shutdownAsResultOfError: 
-			 errorWithCodeAndMessage(301, [NSString stringWithFormat: @"%@: %@", e.name, e.reason])];
-			break;
-		}
-		
-		//Ok we added the byte.  If we have a complete result we need to handle it.
-		if(completeResult){
-			[self processSocketResponse: self->socketRespsonseBuffer];
-			//Unlike with the handshake we may have more data that start new packets. 
-			//We clear our the socketResponseBuffer and keep reading if we can
-			self->socketRespsonseBuffer = nil;
-			
-		}
-	}
-	
+	self->socketRespsonseBuffer = nil;
 }
 
 PRIVATE_STATIC_TESTABLE void sizeToBytes(NSUInteger length, uint8_t* sizeInfoPointer, int* sizeLength);
@@ -201,101 +174,6 @@ PRIVATE_STATIC_TESTABLE void sizeToBytes(NSUInteger length, uint8_t* sizeInfoPoi
 		}
 	}
 
-}
-
--(void)dequeueAndSend
-{
-	WebSocketData* wsdata = [self dequeueDataForSending];
-	
-	if( !wsdata ){
-		self->shouldForcePumpOutputStream = YES;
-		return;
-	}
-	
-		
-	uint8_t flag_and_opcode = 0x80;
-	if( [wsdata dataIsText] ){
-		//We will go as string
-		flag_and_opcode = flag_and_opcode+1;
-	}
-	
-	NSData* data = wsdata.data;
-#ifdef DEBUG_SOCKETIO
-	NSLog(@"About to send data %@", wsdata);
-#endif
-	
-	uint8_t sizeInfoPointer[9] = {0};
-	int sizeLength;
-	
-	sizeToBytes(data.length, sizeInfoPointer, &sizeLength);
-	
-#ifdef DEBUG_SOCKETIO
-	NSLog(@"About to send data length = %ld", [data length]);
-#endif
-	
-	[self->socketOutputStream write: &flag_and_opcode maxLength: 1];
-	
-	//Client is always masked
-	*sizeInfoPointer = *sizeInfoPointer | 0x80;
-	[self->socketOutputStream write: sizeInfoPointer maxLength: sizeLength];
-	
-	
-	//Generate a random 4 bytes to use as our mask
-	uint8_t mask[4];
-	for(NSInteger i = 0; i < 4; i++){
-		mask[i] = arc4random() % 128;
-	}
-	
-	[self->socketOutputStream write: (const uint8_t*)mask maxLength: 4];
-
-	//We must go byte by byte so we can apply the mask
-	for(NSUInteger i=0; i<[data length]; i++){
-		uint8_t byte;
-		[data getBytes: &byte range: NSMakeRange(i, 1)];
-		byte = byte ^ mask[i%4];
-		[self->socketOutputStream write: &byte maxLength: 1];
-	}
-	
-	self->shouldForcePumpOutputStream = NO;
-}
-
--(void)enqueueDataForSending:(id)data
-{
-	[super enqueueDataForSending: data];
-	if(self->shouldForcePumpOutputStream){
-		[self dequeueAndSend];
-	}
-}
-
-static NSData* hashUsingSHA1(NSData* data)
-{
-    unsigned char hashBytes[CC_SHA1_DIGEST_LENGTH];
-    CC_SHA1([data bytes], [data length], hashBytes);
-	
-    return [NSData dataWithBytes:hashBytes length:CC_SHA1_DIGEST_LENGTH];
-}
-
-PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, NSString* key);
-PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, NSString* key)
-{
-	NSArray* parts = [response piecesUsingRegexString: @"Sec-WebSocket-Accept:\\s+(.+?)\\s"];
-	//We expect one part the accept key
-	if( [parts count] < 1  || ![parts firstObject]){
-		return NO;
-	}
-	
-	//return YES;
-	NSString* acceptKey = [parts firstObject];
-	//	NSLog(@"Accept key %@", acceptKey);
-	//The accept key should be our key concated with the secret.  Sha-1 hashed and then base64 encoded
-	NSString* concatWithSecret = [NSString stringWithFormat: @"%@%@", key, @"258EAFA5-E914-47DA-95CA-C5AB0DC85B11", nil];
-	//	NSLog(@"concat is %@", concatWithSecret);
-	NSData* hash=hashUsingSHA1([concatWithSecret dataUsingEncoding: NSUTF8StringEncoding]);
-	//	NSLog(@"hash %@", hash);
-	NSString* encoded = [hash base64String];
-	//	NSLog(@"encoded %@", encoded);
-	
-	return [encoded isEqualToString: acceptKey];
 }
 
 PRIVATE_STATIC_TESTABLE NSArray* validCookiesForServer(NSURL* server);
@@ -333,6 +211,209 @@ PRIVATE_STATIC_TESTABLE NSString* cookieHeaderForServer(NSURL* server)
 	return [NSString stringWithFormat: @"Cookie: %@", [cookieStringParts componentsJoinedByString: @"; "]];
 }
 
+//See http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-17#page-7
+-(NSData*)createHandshakeData
+{
+	//The spec indicates the origin header "may" be sent by non browser clients
+	//We go ahead and send it so we look as much like a browser client as possible (for firewall sake)
+	//and for an added layer of security should the server decide to use it.
+	
+	NSString* getRequest = [NSString stringWithFormat:@"GET %@ HTTP/1.1\r\n"
+							"Upgrade: WebSocket\r\n"
+							"Connection: Upgrade\r\n"
+							"Host: %@\r\n"
+							"Origin: %@\r\n"
+							"sec-websocket-origin: %@\r\n"
+							"Sec-WebSocket-Key: %@\r\n"
+							"Sec-WebSocket-Version: 13\r\n"
+							"%@\r\n\r\n",
+							self->url.path ? self->url.path : @"/",self->url.host, kNTIWebSocket7Origin,
+							[NSString stringWithFormat: @"http://%@",self->url.host], self->key, cookieHeaderForServer(self->url)] ;
+#ifdef DEBUG_SOCKETIO
+	NSLog(@"Initiating handshake with %@", getRequest);
+#endif
+	
+	return [getRequest dataUsingEncoding: NSUTF8StringEncoding];
+}
+
+-(NSData*)dataForNextPacket
+{
+	WebSocketData* wsdata = [self dequeueDataForSending];
+	
+	if( !wsdata ){
+		return nil;
+	}
+	
+	//Try to allocate what we need up front
+	//capacity is length of data + estimate of header length.  we will truncate appropriately
+	NSMutableData* mutableData = [NSMutableData dataWithCapacity: wsdata.data.length + 20]; 
+	
+	uint8_t flag_and_opcode = 0x80;
+	if( [wsdata dataIsText] ){
+		//We will go as string
+		flag_and_opcode = flag_and_opcode+1;
+	}
+	
+	NSData* data = wsdata.data;
+#ifdef DEBUG_SOCKETIO_VERBOSE
+	NSLog(@"Constructin data object to send %@", wsdata);
+#endif
+	
+	uint8_t sizeInfoPointer[9] = {0};
+	int sizeLength;
+	
+	NSLog(@"Generating size bytes for %ld", data.length);
+	
+	sizeToBytes(data.length, sizeInfoPointer, &sizeLength);
+	
+	[mutableData appendBytes: &flag_and_opcode length: 1];
+	
+	//Client is always masked
+	*sizeInfoPointer = *sizeInfoPointer | 0x80;
+	[mutableData appendBytes: sizeInfoPointer length: sizeLength];
+	
+	
+	//Generate a random 4 bytes to use as our mask
+	uint8_t mask[4];
+	for(NSInteger i = 0; i < 4; i++){
+		mask[i] = arc4random() % 128;
+	}
+	
+	[mutableData appendBytes: (const uint8_t*)mask length: 4];
+	
+#ifdef DEBUG_SOCKETIO
+	NSLog(@"About to mask data");
+#endif	
+	//We must go byte by byte so we can apply the mask
+	uint8_t* byteArray = (uint8_t*)data.bytes;
+	for(NSUInteger i=0; i<[data length]; i++){
+		*byteArray = *byteArray ^ mask[i%4];
+		byteArray++;
+	}
+#ifdef DEBUG_SOCKETIO
+	NSLog(@"Data is now masked");
+#endif	
+	[mutableData appendBytes: data.bytes length: data.length];
+	
+	return mutableData;
+}
+
+
+
+//Sends as much data is possible from the dataToWrite buffer.
+//Returns the number of bytes actually written
+-(NSUInteger)sendDataFromBuffer
+{
+	NSUInteger numBytesToTryAndSend = self->dataToWrite.length - self->dataToWriteOffset;
+#ifdef DEBUG_SOCKETIO
+	NSLog(@"About to send data length = %ld", numBytesToTryAndSend);
+#endif
+	NSInteger bytesSent = [self->socketOutputStream write: self->dataToWrite.bytes + self->dataToWriteOffset 
+												maxLength: numBytesToTryAndSend];
+#ifdef DEBUG_SOCKETIO
+	NSLog(@"Data send complete.  Sent %ld bytes", bytesSent);
+#endif
+	self->shouldForcePumpOutputStream = NO;
+	self->dataToWriteOffset += bytesSent;
+	
+	if(self->dataToWriteOffset >= self->dataToWrite.length){
+#ifdef DEBUG_SOCKETIO
+		NSLog(@"Entire send buffer depleted.");
+#endif		
+		self->dataToWrite = nil;
+		self->dataToWriteOffset = 0;
+	}
+	
+	return bytesSent;
+}
+
+//Consumes the bytes from the stream by appending them to the various buffers (which will intern
+//cause complete packets to be handled)
+-(void)pumpBytesOntoStream
+{
+	//If we currently have a buffer of bytes to put on the stream just keep sending those
+	if(self->dataToWrite){
+		[self sendDataFromBuffer];
+	}
+	else{
+		OBASSERT(self->dataToWriteOffset == 0);
+		
+		//We need to populate the buffer
+		switch (self->status){
+			case WebSocketStatusNew:{
+				self->dataToWrite = [self createHandshakeData];
+				[self updateStatus: WebSocketStatusConnecting];
+				break;
+			}
+			case WebSocketStatusConnected:{
+				self->dataToWrite = [self dataForNextPacket];
+				
+				//TODO it's not clear doing this here is correct any longer.  Nothing actually
+				//implements this.  I'm not sure its even needed anymore...
+				//if we just wrote data we have room for more, otherwise we were empty and we 
+				//have room for more.
+				if( [self->nr_delegate respondsToSelector: @selector(websocketIsReadyForData:)] ){
+					[self->nr_delegate websocketIsReadyForData: self];
+				}
+				
+				break;
+			}
+			default:
+#ifdef DEBUG_SOCKETIO
+				NSLog(@"Unhandled stream event NSStreamEventHasSpaceAvailable for stream %@", self->socketOutputStream);
+#endif
+				break;
+		}
+
+		if(self->dataToWrite){
+			[self sendDataFromBuffer];
+		}
+		else{
+			self->shouldForcePumpOutputStream = YES;
+		}
+		
+	}
+}
+
+-(void)enqueueDataForSending:(id)data
+{
+	[super enqueueDataForSending: data];
+	if(self->shouldForcePumpOutputStream){
+		[self pumpBytesOntoStream];
+	}
+}
+
+static NSData* hashUsingSHA1(NSData* data)
+{
+    unsigned char hashBytes[CC_SHA1_DIGEST_LENGTH];
+    CC_SHA1([data bytes], [data length], hashBytes);
+	
+    return [NSData dataWithBytes:hashBytes length:CC_SHA1_DIGEST_LENGTH];
+}
+
+PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, NSString* key);
+PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, NSString* key)
+{
+	NSArray* parts = [response piecesUsingRegexString: @"Sec-WebSocket-Accept:\\s+(.+?)\\s"];
+	//We expect one part the accept key
+	if( [parts count] < 1  || ![parts firstObject]){
+		return NO;
+	}
+	
+	//return YES;
+	NSString* acceptKey = [parts firstObject];
+	//	NSLog(@"Accept key %@", acceptKey);
+	//The accept key should be our key concated with the secret.  Sha-1 hashed and then base64 encoded
+	NSString* concatWithSecret = [NSString stringWithFormat: @"%@%@", key, @"258EAFA5-E914-47DA-95CA-C5AB0DC85B11", nil];
+	//	NSLog(@"concat is %@", concatWithSecret);
+	NSData* hash=hashUsingSHA1([concatWithSecret dataUsingEncoding: NSUTF8StringEncoding]);
+	//	NSLog(@"hash %@", hash);
+	NSString* encoded = [hash base64String];
+	//	NSLog(@"encoded %@", encoded);
+	
+	return [encoded isEqualToString: acceptKey];
+}
+
 -(void)processHandshakeResponse: (HandshakeResponseBuffer*)hrBuffer
 {
 	NSString* response = [[NSString alloc] initWithData: hrBuffer.dataBuffer 
@@ -353,53 +434,83 @@ PRIVATE_STATIC_TESTABLE NSString* cookieHeaderForServer(NSURL* server)
 
 }
 
--(void)readHandshakeResponse
+//Appends as many bytes as necessary to the handshake response dealing with a complete handshake if necessary
+//returns the number of bytes consumed.
+-(NSUInteger)handleHandshakeResponseBytes: (uint8_t*)bytes length: (NSUInteger)maxLength
 {
-	//If we haven't yet started the response start it now.
-	if(!self->handshakeResponseBuffer){
-		self->handshakeResponseBuffer = [[HandshakeResponseBuffer alloc] init];
+	BOOL completeResponse = NO;
+	NSUInteger consumed = [self.handshakeResponseBuffer appendBytesToBuffer: bytes 
+																  maxLength: maxLength
+														  makesFullResponse: &completeResponse];
+	
+	if(completeResponse){
+		[self processHandshakeResponse: self.handshakeResponseBuffer];
 	}
 	
-	//When we are told to read we will read as much as we
-	//possibly can.
-	uint8_t currentByte = 0x00;
+	return consumed;
+}
+
+//Appends bytes to the socket response buffer handling the packet when its complete.
+-(NSUInteger)handleSocketResponseBytes: (uint8_t*)bytes length: (NSUInteger)maxLength
+{
+	BOOL completeResponse = NO;
+	NSUInteger consumed = [self.socketResponseBuffer appendBytesToBuffer: bytes 
+															   maxLength: maxLength
+													   makesFullResponse: &completeResponse];
+	
+	if(completeResponse){
+		[self processSocketResponse: self.socketResponseBuffer];
+	}
+	
+	return consumed;
+}
+
+//Consumes the bytes from the stream by appending them to the various buffers (which will intern
+//cause complete packets to be handled)
+-(void)consumeBytesFromStream: (uint8_t*)bytes length: (NSUInteger)maxLength
+{
+	NSUInteger consumed = 0;
+	uint8_t* byteArray = bytes;
+	while(consumed < maxLength){
+		
+		if(self->status == WebSocketStatusConnecting){
+			consumed += [self handleHandshakeResponseBytes: byteArray + consumed length: maxLength - consumed];
+		}
+		else if(   self->status == WebSocketStatusConnected
+				|| self->status == WebSocketStatusDisconnecting){
+			consumed += [self handleSocketResponseBytes: byteArray + consumed length: maxLength - consumed];
+		}
+		else{
+#ifdef DEBUG_SOCKETIO
+			NSLog(@"Unhandled stream event NSStreamEventHasBytesAvailable for stream %@ status is %ld. Dropping %ld bytes", 
+				  self->socketInputStream, self->status, maxLength - consumed);
+#endif
+			
+			break;
+		}
+	}
+}
+
+-(void)consumeStreamData
+{
 	while( [self->socketInputStream hasBytesAvailable] ){
+		//Fill our buffer with data
+		NSInteger countFromSocketRead = [self->socketInputStream read: self->readBuffer maxLength: kNTIWebSocketReadBufferSize];
 		
-		//Read a byte off the input stream.  Be careful to inspect
-		//the return value
-		NSInteger readResult = -5;
-		readResult = [self->socketInputStream read: &currentByte maxLength: 1];
-		
-		//If we didn't read one byte its because we reached the end
+		//If we didn't read byte its because we reached the end
 		//of the stream or the operation failed.  Either case is bad
-		if(readResult != 1){
+		if(countFromSocketRead < 1){
 			[self shutdownAsResultOfError: 
 			 errorWithCodeAndMessage(300, 
 									 [NSString stringWithFormat: 
-											@"Unable to read handshake response.  Error code %ld", readResult])];
+									  @"Unable to read handshake response.  Error code %ld", countFromSocketRead])];
 			break;
 		}
 		
-		//Ok we have a byte from the stream.  Put it in our buffer.  Remember this may through an exception
-		BOOL completeResult = NO;
-		@try{
-			completeResult = [self->handshakeResponseBuffer appendByteToBuffer: &currentByte];
-		}
-		@catch (NSException* e) {
-			[self shutdownAsResultOfError: 
-			 errorWithCodeAndMessage(301, [NSString stringWithFormat: @"%@: %@", e.name, e.reason])];
-			break;
-		}
-		
-		//Ok we added the byte.  If we have a complete result we need to handle it.
-		if(completeResult){
-			[self processHandshakeResponse: self->handshakeResponseBuffer];
-			//When we are reading the response we know we wont have data after it.
-			//we haven't sent any socket data until we move to connected.  safe assumption?
-			break;
-		}
+		//ok we have a bunch of bytes from the server.  Consume them
+		[self consumeBytesFromStream: self->readBuffer length: countFromSocketRead];
 	}
-	
+
 }
 
 -(void)handleInputStreamEvent: (NSStreamEvent)eventCode
@@ -407,25 +518,7 @@ PRIVATE_STATIC_TESTABLE NSString* cookieHeaderForServer(NSURL* server)
 	//Stream wants us to read something
 	if( eventCode == NSStreamEventHasBytesAvailable)
 	{
-		switch (self->status) {
-			case WebSocketStatusConnecting:
-				[self readHandshakeResponse];
-				break;
-			case WebSocketStatusConnected:{ //Todo handle opcodes here
-				[self readSocketResponse];
-				break;
-			}
-			case WebSocketStatusDisconnecting:{
-				[self readSocketResponse];
-				break;
-			}
-			default:
-#ifdef DEBUG_SOCKETIO
-				NSLog(@"Unhandled stream event %ld for stream %@ status is %ld", 
-					  eventCode, self->socketInputStream, self->status);
-#endif
-				break;
-		}
+		[self consumeStreamData];
 	}
 	else if( eventCode == NSStreamEventEndEncountered ){
 		if(self->status != WebSocketStatusDisconnected){
@@ -435,61 +528,11 @@ PRIVATE_STATIC_TESTABLE NSString* cookieHeaderForServer(NSURL* server)
 	}
 }
 
-//See http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-17#page-7
--(void)initiateHandshake
-{
-	//The spec indicates the origin header "may" be sent by non browser clients
-	//We go ahead and send it so we look as much like a browser client as possible (for firewall sake)
-	//and for an added layer of security should the server decide to use it.
-	
-	NSString* getRequest = [NSString stringWithFormat:@"GET %@ HTTP/1.1\r\n"
-							"Upgrade: WebSocket\r\n"
-							"Connection: Upgrade\r\n"
-							"Host: %@\r\n"
-							"Origin: %@\r\n"
-							"sec-websocket-origin: %@\r\n"
-							"Sec-WebSocket-Key: %@\r\n"
-							"Sec-WebSocket-Version: 7\r\n"
-							"%@\r\n\r\n",
-							self->url.path ? self->url.path : @"/",self->url.host, kNTIWebSocket7Origin,
-							[NSString stringWithFormat: @"http://%@",self->url.host], self->key, cookieHeaderForServer(self->url)] ;
-#ifdef DEBUG_SOCKETIO
-	NSLog(@"Initiating handshake with %@", getRequest);
-#endif
-	NSData* data = [getRequest dataUsingEncoding: NSUTF8StringEncoding];
-	[self->socketOutputStream write: [data bytes] maxLength: [data length]];
-	[self updateStatus: WebSocketStatusConnecting];
-	self->shouldForcePumpOutputStream = NO;
-}
-
 -(void)handleOutputStreamEvent: (NSStreamEvent)eventCode
 {
 	//The stream wants us to write something
 	if(eventCode == NSStreamEventHasSpaceAvailable) {
-		switch (self->status){
-			case WebSocketStatusNew:
-				[self initiateHandshake];
-				break;
-			case WebSocketStatusConnecting:
-				self->shouldForcePumpOutputStream = YES;
-				break;
-			case WebSocketStatusConnected:{
-				[self dequeueAndSend];
-				
-				//if we just wrote data we have room for more, otherwise we were empty and we 
-				//have room for more.
-				if( [self->nr_delegate respondsToSelector: @selector(websocketIsReadyForData:)] ){
-					[self->nr_delegate websocketIsReadyForData: self];
-				}
-				
-				break;
-			}
-			default:
-#ifdef DEBUG_SOCKETIO
-				NSLog(@"Unhandled stream event %ld for stream %@", eventCode, self->socketOutputStream);
-#endif
-				break;
-		}
+		[self pumpBytesOntoStream];
 	}
 	else if( eventCode == NSStreamEventEndEncountered ){
 		if(self->status != WebSocketStatusDisconnected){
@@ -587,7 +630,8 @@ static NSDictionary* sslProperties()
 	//FIXME Send disconnect handshake.
 	[self updateStatus: WebSocketStatusDisconnecting];
 	uint8_t closeByte = 0x88;
-	[self->socketOutputStream write: &closeByte maxLength: 1];
+	NSData* closeData = [NSData dataWithBytes: &closeByte length: 1];
+	[self enqueueDataForSending: closeData];
 }
 
 -(void)kill

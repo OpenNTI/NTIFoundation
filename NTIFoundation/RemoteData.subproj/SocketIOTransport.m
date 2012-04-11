@@ -85,7 +85,8 @@
 
 -(BOOL)handlePacket: (SocketIOPacket*)p
 {
-#ifdef DEBUG_SOCKETIO
+#ifdef DEBUG_SOCKETIO_VERBOSE
+	//These can be
 	NSLog(@"Handling packet %@", [p encode]);
 #endif
 	switch(p.type){
@@ -195,7 +196,7 @@
 	if( [toSend count] > 0 ){
 		method = @"POST";
 		data = [SocketIOPacket encodePayload: toSend];
-#ifdef DEBUG_SOCKETIO
+#ifdef DEBUG_SOCKETIO_VERBOSE
 		NSLog(@"Sending payload %@", data);
 #endif
 	}
@@ -323,8 +324,19 @@
 #ifdef DEBUG_SOCKETIO
 	NSLog(@"Websocket status updated to %ld", wss);
 #endif
-	if( wss == WebSocketStatusDisconnected ){
-		[self updateStatus: SocketIOTransportStatusClosed];
+	switch(wss){
+		case WebSocketStatusConnecting:
+			[self updateStatus: SocketIOTransportStatusOpening];
+			break;
+		case WebSocketStatusConnected:
+			[self updateStatus: SocketIOTransportStatusOpen];
+			break;
+		case WebSocketStatusDisconnecting:
+			[self updateStatus: SocketIOTransportStatusClosing];
+			break;
+		case WebSocketStatusDisconnected:
+			[self updateStatus: SocketIOTransportStatusClosed];
+			break;
 	}
 }
 

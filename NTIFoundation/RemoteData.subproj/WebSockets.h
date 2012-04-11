@@ -34,6 +34,8 @@ typedef NSInteger WebSocketStatus;
 @class HandshakeResponseBuffer;
 @class WebSocketResponseBuffer;
 
+#define kNTIWebSocketReadBufferSize 1024
+
 //Our implementation of the websocket spec v7
 //http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-17
 @interface WebSocket7 : SendRecieveQueue<NSStreamDelegate>{
@@ -41,13 +43,20 @@ typedef NSInteger WebSocketStatus;
 	NSString* key;
 	NSInputStream* socketInputStream;
 	NSOutputStream* socketOutputStream;
-	BOOL shouldForcePumpOutputStream;
+
 	WebSocketStatus status;
 	NSURL* url;
 	id __weak nr_delegate;
 	
+	//Reading data
+	uint8_t readBuffer[kNTIWebSocketReadBufferSize];
 	HandshakeResponseBuffer* handshakeResponseBuffer;
 	WebSocketResponseBuffer* socketRespsonseBuffer;
+	
+	//Writing data
+	BOOL shouldForcePumpOutputStream;
+	NSData* dataToWrite;
+	NSUInteger dataToWriteOffset;
 }
 @property (nonatomic, weak) id nr_delegate;
 @property (nonatomic, readonly) WebSocketStatus status;

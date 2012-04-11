@@ -24,11 +24,15 @@
 	NSUInteger currentByte = 0;
 	const void* bytes = [responseBytes bytes];
 	while(currentByte < responseBytes.length - 1){
-		STAssertFalse([buffer appendByteToBuffer: (u_int8_t*)(bytes + currentByte)], nil);
+		STAssertEquals((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
+											  maxLength: 1 
+									  makesFullResponse: NULL], 1, nil);
 		STAssertFalse([buffer containsFullResponse], nil);
 		currentByte++;
 	}
-	STAssertTrue([buffer appendByteToBuffer: (u_int8_t*)(bytes + currentByte)], nil);
+	STAssertEquals((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
+										  maxLength: 1 
+								  makesFullResponse: NULL], 1, nil);
 	STAssertTrue([buffer containsFullResponse], nil);
 	
 	STAssertEqualObjects(buffer.dataBuffer, responseBytes, nil);
@@ -41,7 +45,9 @@
 	NSUInteger currentByte = 0;
 	const void* bytes = [responseBytes bytes];
 	while(currentByte < responseBytes.length){
-		[buffer appendByteToBuffer: (u_int8_t*)(bytes + currentByte)];
+		STAssertEquals((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
+											  maxLength: 1 
+									  makesFullResponse: NULL], 1, nil);
 		currentByte++;
 	}
 	WebSocketData* wsData = buffer.websocketData;
@@ -66,7 +72,9 @@
 	NSUInteger currentByte = 0;
 	const void* bytes = [responseBytes bytes];
 	while(currentByte < responseBytes.length){
-		[buffer appendByteToBuffer: (u_int8_t*)(bytes + currentByte)];
+		STAssertEquals((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
+											  maxLength: 1 
+									  makesFullResponse: NULL], 1, nil);
 		currentByte++;
 	}
 	WebSocketData* wsData = buffer.websocketData;
@@ -80,6 +88,47 @@
 	STAssertEqualObjects(dataString, correctResult, nil);
 }
 
+-(void)testWebSocketResponseBufferAllAtOnce
+{
+	WebSocketResponseBuffer* buffer = [[WebSocketResponseBuffer alloc] init];
+	NSData* responseBytes = [NSData dataWithHexString: @"8103313a3a" error: nil];
+
+	BOOL containsFullResponse = NO;
+	NSUInteger consumed = [buffer appendBytesToBuffer: (uint8_t*)responseBytes.bytes 
+											maxLength: responseBytes.length 
+									makesFullResponse: &containsFullResponse];
+	
+	STAssertTrue(containsFullResponse, nil);
+	STAssertEquals(consumed, responseBytes.length, nil);
+	STAssertEqualObjects(buffer.dataBuffer, responseBytes, nil);
+}
+
+-(void)testWebSocketResponseBufferMultiplePackets
+{
+	WebSocketResponseBuffer* buffer = [[WebSocketResponseBuffer alloc] init];
+	NSData* responseBytes = [NSData dataWithHexString: @"8103313a3a8103313a3a" error: nil];
+	
+	BOOL containsFullResponse = NO;
+	NSUInteger consumed = [buffer appendBytesToBuffer: (uint8_t*)responseBytes.bytes 
+											maxLength: responseBytes.length 
+									makesFullResponse: &containsFullResponse];
+	
+	STAssertTrue(containsFullResponse, nil);
+	STAssertEquals((int)consumed, 5, nil);
+	STAssertEqualObjects(buffer.dataBuffer, [NSData dataWithHexString: @"8103313a3a" error: nil], nil);
+	
+	buffer = [[WebSocketResponseBuffer alloc] init];
+	containsFullResponse = NO;
+	consumed = [buffer appendBytesToBuffer: (uint8_t*)(responseBytes.bytes + consumed)
+								 maxLength: responseBytes.length - consumed 
+						 makesFullResponse: &containsFullResponse];
+	
+	STAssertTrue(containsFullResponse, nil);
+	STAssertEquals((int)consumed, 5, nil);
+	STAssertEqualObjects(buffer.dataBuffer, [NSData dataWithHexString: @"8103313a3a" error: nil], nil);
+
+}
+
 -(void)testWebSocketResponseBuffer
 {
 	WebSocketResponseBuffer* buffer = [[WebSocketResponseBuffer alloc] init];
@@ -87,15 +136,18 @@
 	NSUInteger currentByte = 0;
 	const void* bytes = [responseBytes bytes];
 	while(currentByte < responseBytes.length - 1){
-		STAssertFalse([buffer appendByteToBuffer: (u_int8_t*)(bytes + currentByte)], nil);
+		STAssertEquals((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
+											  maxLength: 1 
+									  makesFullResponse: NULL], 1, nil);
 		STAssertFalse([buffer containsFullResponse], nil);
 		currentByte++;
 	}
-	STAssertTrue([buffer appendByteToBuffer: (u_int8_t*)(bytes + currentByte)], nil);
+	STAssertEquals((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
+										  maxLength: 1 
+								  makesFullResponse: NULL], 1, nil);
 	STAssertTrue([buffer containsFullResponse], nil);
 	
 	STAssertEqualObjects(buffer.dataBuffer, responseBytes, nil);
-	
 }
 
 
@@ -110,11 +162,15 @@
 	NSUInteger currentByte = 0;
 	const void* bytes = [handshakeBytes bytes];
 	while(currentByte < handshakeBytes.length - 1){
-		STAssertFalse([buffer appendByteToBuffer: (u_int8_t*)(bytes + currentByte)], nil);
+		STAssertEquals((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
+										maxLength: 1 
+								makesFullResponse: NULL], 1, nil);
 		STAssertFalse([buffer containsFullResponse], nil);
 		currentByte++;
 	}
-	STAssertTrue([buffer appendByteToBuffer: (u_int8_t*)(bytes + currentByte)], nil);
+	STAssertEquals((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
+										  maxLength: 1 
+								  makesFullResponse: NULL], 1, nil);
 	STAssertTrue([buffer containsFullResponse], nil);
 	
 	STAssertEqualObjects(buffer.dataBuffer, handshakeBytes, nil);

@@ -14,10 +14,14 @@
 	NSMutableData* buffer;
 }
 @property (strong, nonatomic, readonly) NSData* dataBuffer;
-//Appends the byte to the buffer and returns whether the buffer
-//contains a full response.  May through an exception if
-//the byte makes the buffer an invalid response.
--(BOOL)appendByteToBuffer: (uint8_t*)byte;
+
+//Appends bytes from the byte array to the buffer.  As many bytes will be appended
+//to the buffer as available or until a full response is created.  The BOOL outparameter
+//will be populated with whether or not the response is not full and the return value
+//will indicate the number of bytes from the bytes array that were actually buffered.
+-(NSInteger)appendBytesToBuffer: (uint8_t*)bytes 
+					  maxLength: (NSUInteger)length 
+			  makesFullResponse: (BOOL*)fullResponse;
 //For subclasses
 -(BOOL)containsFullResponse;
 
@@ -26,6 +30,7 @@
 @interface HandshakeResponseBuffer : ResponseBuffer {
 @private
     uint8_t state;
+	NSNumber* isValidHTTPResponse;
 }
 @end
 
