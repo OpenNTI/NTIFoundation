@@ -275,7 +275,7 @@ PRIVATE_STATIC_TESTABLE NSString* cookieHeaderForServer(NSURL* server)
 		}
 		else{
 #ifdef DEBUG_SOCKETIO
-			NSLog(@"Unhandled stream event NSStreamEventHasSpaceAvailable for stream %@", self->socketOutputStream);
+			NSLog(@"Unhandled stream event NSStreamEventHasSpaceAvailable for stream %@.  Will force pump output stream", self->socketOutputStream);
 #endif
 		}
 		
