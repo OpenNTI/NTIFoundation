@@ -16,4 +16,7 @@
 -(id)initWithData: (NSData*)data isText: (BOOL)t;
 @property (nonatomic, strong) NSData* data;
 @property (nonatomic, assign) BOOL dataIsText;
+
+-(NSData*)dataForTransmission;
+
 @end

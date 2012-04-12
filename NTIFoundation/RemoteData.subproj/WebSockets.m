@@ -13,6 +13,24 @@
 #import "OmniFoundation/NSDictionary-OFExtensions.h"
 #import "OmniFoundation/NSMutableDictionary-OFExtensions.h"
 
+@interface WebSocketClose : WebSocketData
+@end
+
+@implementation WebSocketClose
+
+-(id)init
+{
+	return [super initWithData: nil isText: NO];
+}
+
+-(NSData*)dataForTransmission
+{
+	uint8_t closeByte = 0x88;
+	return [NSData dataWithBytes: &closeByte length: 1];
+}
+
+@end
+
 //TODO we are version 13 now.
 @interface WebSocket7()
 @property (nonatomic, readonly) HandshakeResponseBuffer* handshakeResponseBuffer;
@@ -130,9 +148,7 @@ PRIVATE_STATIC_TESTABLE NSString* generateSecWebsocketKey()
 		//If we aren't already disconnecting send the disconnect packet
 		if( self->status != WebSocketStatusDisconnecting ){
 			[self updateStatus: WebSocketStatusDisconnecting];
-			uint8_t shutdownByte = 0x88;
-			NSData* shutdownData = [NSData dataWithBytes: &shutdownByte length: 1];
-			[self enqueueDataForSending: shutdownData];
+			[self enqueueDataForSending: [[WebSocketClose alloc] init]];
 		}
 		[self shutdownStreams];
 	}
@@ -147,33 +163,6 @@ PRIVATE_STATIC_TESTABLE NSString* generateSecWebsocketKey()
 		}
 	}
 	self->socketRespsonseBuffer = nil;
-}
-
-PRIVATE_STATIC_TESTABLE void sizeToBytes(NSUInteger length, uint8_t* sizeInfoPointer, int* sizeLength);
-PRIVATE_STATIC_TESTABLE void sizeToBytes(NSUInteger length, uint8_t* sizeInfoPointer, int* sizeLength)
-{
-	if( length < 126 ){
-		*sizeInfoPointer = length;
-		*sizeLength = 1;
-	}
-	else{
-		//We need to send a byte array for our data
-		if(length < 65536){ //2^16
-			*sizeLength = 3; //126 + 2 bytes
-			*sizeInfoPointer = 126;
-		}
-		else{
-			*sizeLength = 9; //126 + 8 bytes
-			*sizeInfoPointer = 127;
-		}
-		
-		NSUInteger theLength = length;
-		for(int i = *sizeLength - 1; i > 0; i--){
-			sizeInfoPointer[i] = theLength & 0xFF;
-			theLength = theLength >> 8;
-		}
-	}
-
 }
 
 PRIVATE_STATIC_TESTABLE NSArray* validCookiesForServer(NSURL* server);
@@ -236,70 +225,6 @@ PRIVATE_STATIC_TESTABLE NSString* cookieHeaderForServer(NSURL* server)
 	return [getRequest dataUsingEncoding: NSUTF8StringEncoding];
 }
 
--(NSData*)dataForNextPacket
-{
-	WebSocketData* wsdata = [self dequeueDataForSending];
-	
-	if( !wsdata ){
-		return nil;
-	}
-	
-	//Try to allocate what we need up front
-	//capacity is length of data + estimate of header length.  we will truncate appropriately
-	NSMutableData* mutableData = [NSMutableData dataWithCapacity: wsdata.data.length + 20]; 
-	
-	uint8_t flag_and_opcode = 0x80;
-	if( [wsdata dataIsText] ){
-		//We will go as string
-		flag_and_opcode = flag_and_opcode+1;
-	}
-	
-	NSData* data = wsdata.data;
-#ifdef DEBUG_SOCKETIO_VERBOSE
-	NSLog(@"Constructin data object to send %@", wsdata);
-#endif
-	
-	uint8_t sizeInfoPointer[9] = {0};
-	int sizeLength;
-	
-	NSLog(@"Generating size bytes for %ld", data.length);
-	
-	sizeToBytes(data.length, sizeInfoPointer, &sizeLength);
-	
-	[mutableData appendBytes: &flag_and_opcode length: 1];
-	
-	//Client is always masked
-	*sizeInfoPointer = *sizeInfoPointer | 0x80;
-	[mutableData appendBytes: sizeInfoPointer length: sizeLength];
-	
-	
-	//Generate a random 4 bytes to use as our mask
-	uint8_t mask[4];
-	for(NSInteger i = 0; i < 4; i++){
-		mask[i] = arc4random() % 128;
-	}
-	
-	[mutableData appendBytes: (const uint8_t*)mask length: 4];
-	
-#ifdef DEBUG_SOCKETIO
-	NSLog(@"About to mask data");
-#endif	
-	//We must go byte by byte so we can apply the mask
-	uint8_t* byteArray = (uint8_t*)data.bytes;
-	for(NSUInteger i=0; i<[data length]; i++){
-		*byteArray = *byteArray ^ mask[i%4];
-		byteArray++;
-	}
-#ifdef DEBUG_SOCKETIO
-	NSLog(@"Data is now masked");
-#endif	
-	[mutableData appendBytes: data.bytes length: data.length];
-	
-	return mutableData;
-}
-
-
-
 //Sends as much data is possible from the dataToWrite buffer.
 //Returns the number of bytes actually written
 -(NSUInteger)sendDataFromBuffer
@@ -338,31 +263,31 @@ PRIVATE_STATIC_TESTABLE NSString* cookieHeaderForServer(NSURL* server)
 	else{
 		OBASSERT(self->dataToWriteOffset == 0);
 		
-		//We need to populate the buffer
-		switch (self->status){
-			case WebSocketStatusNew:{
-				self->dataToWrite = [self createHandshakeData];
-				[self updateStatus: WebSocketStatusConnecting];
-				break;
-			}
-			case WebSocketStatusConnected:{
-				self->dataToWrite = [self dataForNextPacket];
-				
-				//TODO it's not clear doing this here is correct any longer.  Nothing actually
-				//implements this.  I'm not sure its even needed anymore...
-				//if we just wrote data we have room for more, otherwise we were empty and we 
-				//have room for more.
-				if( [self->nr_delegate respondsToSelector: @selector(websocketIsReadyForData:)] ){
-					[self->nr_delegate websocketIsReadyForData: self];
-				}
-				
-				break;
-			}
-			default:
+		if(self->status == WebSocketStatusNew){
+			self->dataToWrite = [self createHandshakeData];
+			[self updateStatus: WebSocketStatusConnecting];
+		}
+		else if(   self->status == WebSocketStatusConnected
+				|| self->status == WebSocketStatusDisconnecting){
+			
+			self->dataToWrite = [[self dequeueDataForSending] dataForTransmission];
+			
+		}
+		else{
 #ifdef DEBUG_SOCKETIO
-				NSLog(@"Unhandled stream event NSStreamEventHasSpaceAvailable for stream %@", self->socketOutputStream);
+			NSLog(@"Unhandled stream event NSStreamEventHasSpaceAvailable for stream %@", self->socketOutputStream);
 #endif
-				break;
+		}
+		
+		if(self->status == WebSocketStatusConnected){
+			//TODO it's not clear doing this here is correct any longer.  Nothing actually
+			//implements this.  I'm not sure its even needed anymore...
+			//if we just wrote data we have room for more, otherwise we were empty and we 
+			//have room for more.
+			if( [self->nr_delegate respondsToSelector: @selector(websocketIsReadyForData:)] ){
+				[self->nr_delegate websocketIsReadyForData: self];
+			}
+
 		}
 
 		if(self->dataToWrite){
@@ -499,16 +424,30 @@ PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, N
 		
 		//If we didn't read byte its because we reached the end
 		//of the stream or the operation failed.  Either case is bad
-		if(countFromSocketRead < 1){
+		if(countFromSocketRead < 0){
 			[self shutdownAsResultOfError: 
 			 errorWithCodeAndMessage(300, 
 									 [NSString stringWithFormat: 
-									  @"Unable to read handshake response.  Error code %ld", countFromSocketRead])];
-			break;
+									  @"Unable to consume data from stream.  Error code %ld", countFromSocketRead])];
+		}
+		else if(countFromSocketRead == 0){
+			if(self->status == WebSocketStatusDisconnecting){
+				//We found the end of the stream after sending a disconnect.
+				//Should the server have sent us a disconnect?
+				[self shutdownStreams];
+			}
+			else{
+				[self shutdownAsResultOfError: 
+				 errorWithCodeAndMessage(310, 
+										 [NSString stringWithFormat: 
+										  @"Encountered unexpexted end of stream, websocket status is %ld", self->status])];
+			}
+		}
+		else{
+			//ok we have a bunch of bytes from the server.  Consume them
+			[self consumeBytesFromStream: self->readBuffer length: countFromSocketRead];
 		}
 		
-		//ok we have a bunch of bytes from the server.  Consume them
-		[self consumeBytesFromStream: self->readBuffer length: countFromSocketRead];
 	}
 
 }
@@ -629,9 +568,7 @@ static NSDictionary* sslProperties()
 #endif
 	//FIXME Send disconnect handshake.
 	[self updateStatus: WebSocketStatusDisconnecting];
-	uint8_t closeByte = 0x88;
-	NSData* closeData = [NSData dataWithBytes: &closeByte length: 1];
-	[self enqueueDataForSending: closeData];
+	[self enqueueDataForSending: [[WebSocketClose alloc] init]];
 }
 
 -(void)kill
