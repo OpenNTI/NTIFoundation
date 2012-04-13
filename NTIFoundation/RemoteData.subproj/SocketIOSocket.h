@@ -102,6 +102,9 @@ typedef NSInteger SocketIOSocketStatus;
 -(void)sendPacket: (SocketIOPacket*)packet onAck: (NTISocketIOAckCallback)then;
 -(void)disconnect;
 -(void)forceKill;
+//Resets the reconnect timer values. (For example, use this to trigger a reconnecting socket to act as if
+//it just started reconnecting)
+-(void)resetReconnectTimeout;
 //Bascially delegate emethods but the socket is the only delegate the transport will need.
 -(void)transport: (SocketIOTransport*)t connectionStatusDidChange: (NSInteger)status;
 -(void)transport: (SocketIOTransport*)t didEncounterError: (NSError*)error;

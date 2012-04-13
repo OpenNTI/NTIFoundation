@@ -260,6 +260,12 @@ static NSArray* implementedTransportClasses()
 	}
 }
 
+-(void)resetReconnectTimeout
+{
+	self->currentReconnectTimeout = self->baseReconnectTimeout;
+	self->reconnectAttempts = 0;
+}
+
 -(void)updateStatus: (SocketIOSocketStatus)s
 {
 	if(self->status == s){
