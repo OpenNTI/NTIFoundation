@@ -557,7 +557,7 @@
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "Resources/$(PRODUCT_NAME)";
-			dstSubfolderSpec = 7;
+			dstSubfolderSpec = 16;
 			files = (
 				406DB42A14DB50A1008AEABF /* switch_active.png in CopyFiles */,
 				406DB42B14DB50A1008AEABF /* switch_inactive.png in CopyFiles */,
