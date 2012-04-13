@@ -305,6 +305,13 @@
 			remoteGlobalIDString = 34D06C53125D202500CA3963;
 			remoteInfo = OmniFileStoreTouch;
 		};
+		724535D11537FC3D00DABC5D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72D3610213DB6B2A00257C73 /* OmniBase.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 34EE20D114F0354300722491;
+			remoteInfo = OBUnitTests;
+		};
 		726214DC145891C300BC6DE5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 72D3610113DB6B2A00257C73 /* OmniAppKit.xcodeproj */;
@@ -1285,6 +1292,7 @@
 				72D3613213DB6B2B00257C73 /* OBLoadBundle */,
 				72D3613413DB6B2B00257C73 /* libOmniBase.a */,
 				72D3613613DB6B2B00257C73 /* libOmniBaseTouchTests.a */,
+				724535D21537FC3D00DABC5D /* OBUnitTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1643,6 +1651,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		724535D21537FC3D00DABC5D /* OBUnitTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = OBUnitTests.octest;
+			remoteRef = 724535D11537FC3D00DABC5D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		72D3604213DB5D5200257C73 /* FixStringsFile */ = {
 			isa = PBXReferenceProxy;
 			fileType = "compiled.mach-o.executable";
