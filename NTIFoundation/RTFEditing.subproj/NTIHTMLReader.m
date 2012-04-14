@@ -148,11 +148,16 @@ static void setCurrentFontDescriptor( NSMutableDictionary* dict,
 			 forKey: (id)kCTFontAttributeName];
 }
 
-//Returns nil on unrecognized colors
-CGColorRef NTIHTMLReaderParseCreateColor(NSString* attribute) NS_RETURNS_RETAINED;
+//Note things that call us stuff our result in a dictionary.  Make sure we don't return nil;
+//Returns defaultColor on unrecognized colors.  If defaultColor is nil black will be returned
+CGColorRef NTIHTMLReaderParseCreateColor(NSString* attribute, OQColor* defaultColor) NS_RETURNS_RETAINED;
 
-NS_RETURNS_RETAINED CGColorRef NTIHTMLReaderParseCreateColor( NSString* attribute )
+NS_RETURNS_RETAINED CGColorRef NTIHTMLReaderParseCreateColor( NSString* attribute, OQColor* defaultColor )
 {
+	if(defaultColor == nil){
+		defaultColor = [OQColor blackColor];
+	}
+	
 	OQColor* color = nil;
 	if( [@"black" isEqual: attribute] ) {
 		color = [OQColor blackColor];
@@ -177,6 +182,12 @@ NS_RETURNS_RETAINED CGColorRef NTIHTMLReaderParseCreateColor( NSString* attribut
 								green: [g hexValue] / 255.0f
 								 blue: [b hexValue] / 255.0f
 								alpha: 1];
+	}
+	
+	//If we got something we can't parse as a color return the default.
+	if(!color){
+		NSLog(@"Unable to parse color attribute \"%@\".  Returning default color %@", attribute, defaultColor);
+		color = defaultColor;
 	}
 	
 	return [color rgbaCGColorRef];
@@ -229,7 +240,7 @@ static void setCurrentParagraphStyle( NSMutableDictionary* dict, OAMutableParagr
 	for( id styleName in fontAttrs ) {
 		id styleValue = [fontAttrs objectForKey: styleName];
 		if( OFISEQUAL( styleName,  @"color") ) {
-			[dict setObject: (__bridge_transfer id)NTIHTMLReaderParseCreateColor( styleValue )
+			[dict setObject: (__bridge_transfer id)NTIHTMLReaderParseCreateColor( styleValue, [OQColor blackColor] )
 					 forKey: (id)kCTForegroundColorAttributeName];
 		}
 	}
@@ -290,11 +301,12 @@ styleAttribute = stringFromStyle( styleAttribute, @prefix );
 		} EHV
 		//Colors
 		else HAS_VALUE("color") {
-			[dict setObject: (__bridge id)NTIHTMLReaderParseCreateColor( styleAttribute )
+			[dict setObject: (__bridge id)NTIHTMLReaderParseCreateColor( styleAttribute, [OQColor blackColor] )
 					 forKey: (id)kCTForegroundColorAttributeName];
 		} EHV
 		else HAS_VALUE("background-color") {
-			[dict setObject: (__bridge id)NTIHTMLReaderParseCreateColor( styleAttribute )
+			//TODO white or clear for the 
+			[dict setObject: (__bridge id)NTIHTMLReaderParseCreateColor( styleAttribute, [OQColor clearColor] )
 					 forKey: (id)OABackgroundColorAttributeName];
 		} EHV
 		//Paragraph style

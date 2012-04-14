@@ -10,7 +10,7 @@
 #import "NTIHTMLReader.h"
 #import "OQColor-NTIExtensions.h"
 
-CGColorRef NTIHTMLReaderParseCreateColor(NSString* color);
+CGColorRef NTIHTMLReaderParseCreateColor(NSString* color, OQColor* defaultColor);
 
 @implementation NTIHTMLReaderTest
 
@@ -30,14 +30,14 @@ CGColorRef NTIHTMLReaderParseCreateColor(NSString* color);
 {
 	NSString* blackColor = @"black";
 	
-	CGColorRef parsedValue = NTIHTMLReaderParseCreateColor(blackColor);
+	CGColorRef parsedValue = NTIHTMLReaderParseCreateColor(blackColor, nil);
 	
 	STAssertTrue(CGColorEqualToColor(parsedValue,  [[OQColor blackColor] rgbaCGColorRef]),
 						 @"Should be same color");
 	
 	NSString* rgbColor = @"rgb(20, 70, 200)";
 	
-	parsedValue = NTIHTMLReaderParseCreateColor(rgbColor);
+	parsedValue = NTIHTMLReaderParseCreateColor(rgbColor, nil);
 	
 	STAssertTrue(CGColorEqualToColor(parsedValue,  [[OQColor colorWithRed: 20.0f/255.0f 
 																	green: 70.0f/255.0f 
@@ -48,7 +48,7 @@ CGColorRef NTIHTMLReaderParseCreateColor(NSString* color);
 	
 	NSString* hexColor = @"#1446C8";
 	
-	parsedValue = NTIHTMLReaderParseCreateColor(hexColor);
+	parsedValue = NTIHTMLReaderParseCreateColor(hexColor, nil);
 	
 	STAssertTrue(CGColorEqualToColor(parsedValue,  [[OQColor colorWithRed: 20.0f/255.0f 
 																	green: 70.0f/255.0f 
@@ -57,4 +57,22 @@ CGColorRef NTIHTMLReaderParseCreateColor(NSString* color);
 				 @"Should be same color");
 
 }
+
+-(void)testUnparsableReturnsDefault
+{
+	NSString* gobbledegoop = @"asdlkfadlf";
+	OQColor* defaultColor = [OQColor yellowColor];
+	CGColorRef parsedValue = NTIHTMLReaderParseCreateColor(gobbledegoop, defaultColor);
+	
+	STAssertTrue(CGColorEqualToColor(parsedValue, [defaultColor rgbaCGColorRef]), @"Expected default color");
+}
+
+-(void)testNoDefaultIsBlack
+{
+	NSString* gobbledegoop = @"asdlkfadlf";
+	CGColorRef parsedValue = NTIHTMLReaderParseCreateColor(gobbledegoop, nil);
+	
+	STAssertTrue(CGColorEqualToColor(parsedValue, [[OQColor blackColor] rgbaCGColorRef]), @"Expected default color");
+}
+
 @end
