@@ -16,6 +16,7 @@
 	NSString* currentHref;
 	CGImageRef currentImage;
 	BOOL inError;
+	BOOL unparsableFormat;
 }
 @property(nonatomic, readonly) NSAttributedString* attributedString;
 

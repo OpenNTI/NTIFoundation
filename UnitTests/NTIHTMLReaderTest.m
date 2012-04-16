@@ -65,14 +65,31 @@ CGColorRef NTIHTMLReaderParseCreateColor(NSString* color, OQColor* defaultColor)
 	CGColorRef parsedValue = NTIHTMLReaderParseCreateColor(gobbledegoop, defaultColor);
 	
 	STAssertTrue(CGColorEqualToColor(parsedValue, [defaultColor rgbaCGColorRef]), @"Expected default color");
+	
+	parsedValue = NTIHTMLReaderParseCreateColor(gobbledegoop, nil);
+	
+	STAssertTrue(CGColorEqualToColor(parsedValue, nil), @"Expected default color");
 }
 
--(void)testNoDefaultIsBlack
+-(void)testDropFormattingIfWeCantParseIt
 {
-	NSString* gobbledegoop = @"asdlkfadlf";
-	CGColorRef parsedValue = NTIHTMLReaderParseCreateColor(gobbledegoop, nil);
+	NSString* badFormat = @"<html><body>blah blah blah<font color=\"FF0000\">foo foo foo</font>?</body></html>";
 	
-	STAssertTrue(CGColorEqualToColor(parsedValue, [[OQColor blackColor] rgbaCGColorRef]), @"Expected default color");
+	NTIHTMLReader* reader = [[NTIHTMLReader alloc] initWithHTML: badFormat];
+	
+	NSAttributedString* parsed = reader.attributedString;
+	
+	STAssertEqualObjects(parsed, [[NSAttributedString alloc] initWithString: @"blah blah blahfoo foo foo?"], 
+						 @"Expected formatting data to be striped", nil);
+}
+
+-(void)testBadXMLInitsToNil
+{
+	NSString* badFormat = @"<html><body><body>blah blah blah<font color=\"FF0000\">foo foo foo</font>?</body></html>";
+	
+	NTIHTMLReader* reader = [[NTIHTMLReader alloc] initWithHTML: badFormat];
+
+	STAssertNil(reader, @"Bad xml should return nil from init");
 }
 
 @end

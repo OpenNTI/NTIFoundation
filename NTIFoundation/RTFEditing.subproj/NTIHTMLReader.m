@@ -42,6 +42,7 @@ static Class readerClass = nil;
 static void commonInit( NTIHTMLReader* self )
 {
 	self->inError = NO;
+	self->unparsableFormat = NO;
 	self->attrBuffer = [[NSMutableAttributedString alloc] init];
 	self->nsattrStack = [[NSMutableArray alloc] initWithCapacity: 3];
 }
@@ -80,6 +81,21 @@ static void commonInit( NTIHTMLReader* self )
 	if( self->inError ) {
 		//Well nuts.
 		self = nil;
+		
+	}
+	
+	//If we can't parse parts of the format we almost certainly can't guess
+	//some defaults if there are other format parts that did parse.  It's all or nothing
+	//for us.
+	if( self && self->unparsableFormat ){
+		//TODO we lose any attachments here.  This includes things like inlined images.
+		//Maybe we should work harder to only strip the format related attrs?
+		
+		NSString* plainString = [self->attrBuffer string];
+		
+		NSLog(@"Encountered an error parsing formatting data from html \"%@\".  "
+			  "Falling back to simple plain text \"%@\".", string, plainString);
+		self->attrBuffer = [[NSMutableAttributedString alloc] initWithString: plainString];
 	}
 	
 	return self;
@@ -149,15 +165,11 @@ static void setCurrentFontDescriptor( NSMutableDictionary* dict,
 }
 
 //Note things that call us stuff our result in a dictionary.  Make sure we don't return nil;
-//Returns defaultColor on unrecognized colors.  If defaultColor is nil black will be returned
+//Returns defaultColor on unrecognized colors.  
 CGColorRef NTIHTMLReaderParseCreateColor(NSString* attribute, OQColor* defaultColor) NS_RETURNS_RETAINED;
 
 NS_RETURNS_RETAINED CGColorRef NTIHTMLReaderParseCreateColor( NSString* attribute, OQColor* defaultColor )
-{
-	if(defaultColor == nil){
-		defaultColor = [OQColor blackColor];
-	}
-	
+{	
 	OQColor* color = nil;
 	if( [@"black" isEqual: attribute] ) {
 		color = [OQColor blackColor];
@@ -229,6 +241,20 @@ static void setCurrentParagraphStyle( NSMutableDictionary* dict, OAMutableParagr
 	return dict;
 }
 
+//Sets the value in the dictionary using the specified key.  If val is nil the dictionary is not
+//changed and the unparsableFormatFlag is set.
+-(void)safelyParseAndSetColorAttrInAttrs: (NSMutableDictionary*)attrs attrKey: (id)key colorString: (NSString*)color
+{
+	CGColorRef colorObject = NTIHTMLReaderParseCreateColor(color, nil);
+	if(colorObject == nil){
+		self->unparsableFormat = YES;
+	}
+	else{
+		[attrs setObject: (__bridge_transfer id)colorObject forKey: key];
+	}
+
+}
+
 -(NSDictionary*)coreTextAttrsForFontAttrs: (NSDictionary*)fontAttrs
 {
 	if( !fontAttrs || ![fontAttrs count] ) {
@@ -240,8 +266,9 @@ static void setCurrentParagraphStyle( NSMutableDictionary* dict, OAMutableParagr
 	for( id styleName in fontAttrs ) {
 		id styleValue = [fontAttrs objectForKey: styleName];
 		if( OFISEQUAL( styleName,  @"color") ) {
-			[dict setObject: (__bridge_transfer id)NTIHTMLReaderParseCreateColor( styleValue, [OQColor blackColor] )
-					 forKey: (id)kCTForegroundColorAttributeName];
+			[self safelyParseAndSetColorAttrInAttrs: dict 
+											attrKey: (id)kCTForegroundColorAttributeName 
+										colorString: styleValue];
 		}
 	}
 	return dict;
@@ -301,13 +328,18 @@ styleAttribute = stringFromStyle( styleAttribute, @prefix );
 		} EHV
 		//Colors
 		else HAS_VALUE("color") {
-			[dict setObject: (__bridge id)NTIHTMLReaderParseCreateColor( styleAttribute, [OQColor blackColor] )
-					 forKey: (id)kCTForegroundColorAttributeName];
+			//Theres not really a known safe default.  Imagine the case where this fails to parse so we
+			//default it to white, but the background does parse to white.  If we can't parse
+			//any format data all we can be sure about is dropping all of it.
+			[self safelyParseAndSetColorAttrInAttrs: dict 
+											attrKey: (id)kCTForegroundColorAttributeName 
+										colorString: styleAttribute];
 		} EHV
 		else HAS_VALUE("background-color") {
-			//TODO white or clear for the 
-			[dict setObject: (__bridge id)NTIHTMLReaderParseCreateColor( styleAttribute, [OQColor clearColor] )
-					 forKey: (id)OABackgroundColorAttributeName];
+			//See comment above
+			[self safelyParseAndSetColorAttrInAttrs: dict 
+											attrKey: (id)OABackgroundColorAttributeName 
+										colorString: styleAttribute];
 		} EHV
 		//Paragraph style
 		else HAS_VALUE("text-align") {
