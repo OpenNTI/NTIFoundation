@@ -1,4 +1,3 @@
-
 //
 //  WebSockets.m
 //  NTIFoundation
@@ -25,8 +24,14 @@
 
 -(NSData*)dataForTransmission
 {
-	uint8_t closeByte = 0x88;
-	return [NSData dataWithBytes: &closeByte length: 1];
+	uint8_t closeBytes[6];
+	closeBytes[0] = 0x88;
+	closeBytes[1] = 0x80;
+	//Generate a random 4 bytes to use as our mask
+	for(NSInteger i = 2; i < 6; i++){
+		closeBytes[i] = arc4random() % 128;
+	}
+	return [NSData dataWithBytes: closeBytes length: 6];
 }
 
 @end
@@ -302,6 +307,10 @@ PRIVATE_STATIC_TESTABLE NSString* cookieHeaderForServer(NSURL* server)
 
 -(void)enqueueDataForSending:(id)data
 {
+	if(   self->status == WebSocketStatusDisconnecting
+	   || self->status == WebSocketStatusDisconnected ){
+		return;
+	}
 	[super enqueueDataForSending: data];
 	if(self->shouldForcePumpOutputStream){
 		[self pumpBytesOntoStream];
@@ -567,8 +576,8 @@ static NSDictionary* sslProperties()
 	NSLog(@"Client initiated disconnect");
 #endif
 	//FIXME Send disconnect handshake.
-	[self updateStatus: WebSocketStatusDisconnecting];
 	[self enqueueDataForSending: [[WebSocketClose alloc] init]];
+	[self updateStatus: WebSocketStatusDisconnecting];
 }
 
 -(void)kill

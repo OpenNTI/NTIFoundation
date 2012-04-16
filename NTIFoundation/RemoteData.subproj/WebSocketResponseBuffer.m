@@ -163,13 +163,13 @@
 
 -(void)readFirstByte: (uint8_t*)byte
 {
-	if( *byte & 0x81 ){ //This is text
+	if( *byte == 0x81 ){ //This is text
 		self->responseType = WebSocketResponseTypeText;
 	}
-	else if( *byte & 0x82 ){ //This is binary
+	else if( *byte == 0x82 ){ //This is binary
 		self->responseType = WebSocketResponseTypeBinary;
 	}
-	else if( *byte & 0x88){ //This is a close
+	else if( *byte == 0x88){ //This is a close
 		self->responseType = WebSocketResponseTypeClose;
 	}
 	else{ //1000 0001
@@ -419,7 +419,7 @@ PRIVATE_STATIC_TESTABLE NSUInteger bytesToLength(uint8_t* bytes, uint8_t num)
 
 -(BOOL)containsFullResponse
 {
-	return self->responseType == WebSocketResponseTypeClose || dataBytesSoFar == dataLength;
+	return dataBytesSoFar == dataLength;
 }
 
 @end

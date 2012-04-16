@@ -10,6 +10,9 @@
 #import "WebSockets.h"
 #import "WebSocketResponseBuffer.h"
 
+@interface WebSocketClose : WebSocketData
+@end
+
 @implementation WebSocket7Test
 
 -(void)testLongWebSocketResponseBuffer
@@ -233,6 +236,34 @@ NSString* cookieHeaderForServer(NSURL* server);
 	
 	STAssertEqualObjects(cookieHeaderForServer(cookieHost), @"Cookie: foo=bar; red=fish", nil);
 	
+}
+
+-(void)testCloseFrameGeneration
+{
+	WebSocketClose* close = [[WebSocketClose alloc] init];
+	
+	NSData* closeData = [(id)close dataForTransmission];
+	
+	uint8_t* firstByte = (uint8_t*)closeData.bytes;
+	uint8_t* secondByte = (uint8_t*)(closeData.bytes + 1);
+	STAssertEquals(*firstByte, (uint8_t)0x88, nil);
+	STAssertEquals(*secondByte, (uint8_t)0x80, nil);
+	
+	STAssertEquals((int)closeData.length, 6, nil);
+}
+
+-(void)testCloseResponse
+{
+	NSMutableData* closeBytes = [NSMutableData dataWithHexString: @"0x8800" error: nil];
+	STAssertNotNil(closeBytes, @"Unable to parse close bytes");
+	
+	WebSocketResponseBuffer* buffer = [[WebSocketResponseBuffer alloc] init];
+	BOOL isFull = NO;
+	[buffer appendBytesToBuffer: (uint8_t*)closeBytes.bytes maxLength: 4 makesFullResponse: &isFull];
+	
+	STAssertTrue(isFull, @"Expected full buffer");
+	
+	STAssertTrue([buffer isCloseResponse], @"Expected close response");
 }
 
 NSString* generateSecWebsocketKey();
