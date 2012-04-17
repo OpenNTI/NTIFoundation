@@ -180,6 +180,37 @@
 					
 }
 
+-(void)testHandshakeResponseBufferReturnsCorrectConsumptionLength
+{
+	NSString* fullHandshake = @"HTTP/1.1 101 Switching Protocols\nUpgrade: websocket\n"
+								"Connection: Upgrade\nSec-WebSocket-Accept: lLqFF6P67X8D9hOfRq1A5BR073Y=\r\n\r\n";
+	
+
+	NSData* fullHandshakeData = [fullHandshake dataUsingEncoding: NSUTF8StringEncoding];
+	
+	NSUInteger fullLength = fullHandshakeData.length;
+	
+	HandshakeResponseBuffer* buffer = [[HandshakeResponseBuffer alloc] init];
+	NSUInteger consumed = [buffer appendBytesToBuffer: (uint8_t*)fullHandshakeData.bytes
+											maxLength: fullLength 
+									makesFullResponse: NULL];
+	
+	STAssertEquals(fullLength, consumed, 
+				   @"Expected all bytes (%ld) to be consumed but only consumed %ld", 
+				   fullLength, consumed);
+	
+	NSMutableData* handshakeWithMore = [NSMutableData dataWithData: fullHandshakeData];
+	[handshakeWithMore appendData: [@"foobarfalksdfaldf" dataUsingEncoding: NSUTF8StringEncoding]];
+	
+	consumed = [buffer appendBytesToBuffer: (uint8_t*)handshakeWithMore.bytes
+								 maxLength: handshakeWithMore.length 
+						 makesFullResponse: NULL];
+	STAssertTrue( handshakeWithMore.length > fullLength, nil);
+	STAssertEquals(fullLength, consumed, 
+				   @"Expected %ld bytes to be consumed but only consumed %ld", 
+				   fullLength, consumed);
+}
+
 BOOL isSuccessfulHandshakeResponse(NSString* response, NSString* key);
 
 -(void)testHandshakeParsing

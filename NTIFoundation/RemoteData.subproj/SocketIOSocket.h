@@ -109,4 +109,5 @@ typedef NSInteger SocketIOSocketStatus;
 -(void)transport: (SocketIOTransport*)t connectionStatusDidChange: (NSInteger)status;
 -(void)transport: (SocketIOTransport*)t didEncounterError: (NSError*)error;
 -(void)transport: (SocketIOTransport*)t didRecievePayload: (NSArray*)payload;
+-(void)transport: (SocketIOTransport *)t didRecievePacket: (SocketIOPacket*)packet;
 @end

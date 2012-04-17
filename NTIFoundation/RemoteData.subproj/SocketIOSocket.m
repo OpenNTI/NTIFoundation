@@ -413,11 +413,16 @@ static NSArray* implementedTransportClasses()
 	}
 }
 
+-(void)transport: (SocketIOTransport *)t didRecievePacket: (SocketIOPacket*)packet
+{
+	[self handlePacket: packet];
+}
+
 -(void)transport: (SocketIOTransport*)socket didRecievePayload: (NSArray*)payload;
 {
 	//payload may be an array
 	for(SocketIOPacket* packet in payload){
-		[self handlePacket: packet];
+		[self transport: socket didRecievePacket: packet];
 	}
 }
 

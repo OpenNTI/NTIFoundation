@@ -126,12 +126,14 @@
 		return NO;
 	}
 	
-	NSArray* toPassOn = [payload filteredArrayUsingPredicate: [NSPredicate predicateWithBlock: ^BOOL(id obj, NSDictionary* bindings){
-		return ![self handlePacket: obj];
-	}]];
-	
-	//Now we inform our delegate that we have data
-	[self.nr_socket transport: self didRecievePayload: toPassOn];
+
+	//We need to make sure we handle things FIFO
+	for(SocketIOPacket* packet in payload){
+		if( ![self handlePacket: packet] ){
+			[self.nr_socket transport: self didRecievePacket: packet];
+		}
+	}
+
 	return YES;
 }
 
@@ -298,7 +300,7 @@
 	{
 		return;
 	}
-	
+	[self updateStatus: SocketIOTransportStatusOpening];
 	NSURL* websocketURL = [self urlForTransport];
 	
 	self->socket = [[WebSocket7 alloc] initWithURL: websocketURL];
@@ -324,19 +326,9 @@
 #ifdef DEBUG_SOCKETIO
 	NSLog(@"Websocket status updated to %ld", wss);
 #endif
-	switch(wss){
-		case WebSocketStatusConnecting:
-			[self updateStatus: SocketIOTransportStatusOpening];
-			break;
-		case WebSocketStatusConnected:
-			[self updateStatus: SocketIOTransportStatusOpen];
-			break;
-		case WebSocketStatusDisconnecting:
-			[self updateStatus: SocketIOTransportStatusClosing];
-			break;
-		case WebSocketStatusDisconnected:
-			[self updateStatus: SocketIOTransportStatusClosed];
-			break;
+	
+	if( wss == WebSocketStatusDisconnected ){
+		[self updateStatus: SocketIOTransportStatusClosed];
 	}
 }
 

@@ -103,7 +103,7 @@
 	if(fullResponse){
 		*fullResponse = [self containsFullResponse];
 	}
-	return length;
+	return endOffset;
 }
 
 -(BOOL)containsFullResponse
