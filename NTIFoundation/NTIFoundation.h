@@ -46,4 +46,15 @@
 #import "NTIBadgeCountView.h"
 #import	"NTIKeyboardAdjustmentListener.h"
 
+#import "NTIMathSymbol.h"
+#import "NTIMathAlphaNumericSymbol.h"
+#import "NTIMathOperatorSymbol.h"
+#import "NTIMathPlaceholderSymbol.h"
+#import "NTIMathGroup.h"
+#import "NTIMathParenthesisSymbol.h"
+#import "NTIMathPrefixedSymbol.h"
+#import "NTIMathAbstractBinaryCombiningSymbol.h"
+#import "NTIMathFractionCombiningBinarySymbol.h"
+#import "NTIMathExponentCombiningBinarySymbol.h"
+
 #endif
