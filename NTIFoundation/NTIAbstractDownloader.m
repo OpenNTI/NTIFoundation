@@ -313,6 +313,7 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 			bytes += currentOffset;
 			NSInteger written = [theStream write: bytes
 									   maxLength: [self->currentDataChunk length] - currentOffset];
+			//NSLog(@"Wrote data of length %ld", written);
 			if( written > -1 ) {
 				currentOffset += written;
 				if( currentOffset >= [self->currentDataChunk length] ) {
@@ -322,7 +323,7 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 				}
 			}
 			else {
-				NSLog( @"Expecting error callback" );
+				NSLog( @"Expecting error callback %@", [theStream streamError] );
 				//If we actually close the stream now, we won't
 				//get the error callback.
 			}
@@ -340,10 +341,17 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 -(void)connection: (NSURLConnection*)connection didReceiveResponse: (id)response
 {
 	[super connection: connection didReceiveResponse: response];
-	if( self.statusCode == 200 ) {
+	if( self.statusWasSuccess) {
+		//NSLog(@"Did recieve response expected content length %lld", [response expectedContentLength]);
 		[self->outputStream scheduleInRunLoop: [NSRunLoop currentRunLoop]
 									  forMode: NSDefaultRunLoopMode];
 		[self->outputStream open];
+	}
+	else{
+		NSLog(@"Encountered unsuccessful response status code of %ld", self.statusCode);
+		if( self->onError ) {
+			self->onError();
+		}
 	}
 }
 
@@ -369,7 +377,9 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 		[self stream: self->outputStream handleEvent: NSStreamEventHasSpaceAvailable];
 	}
 	else {
-		self->currentDataChunk = lastData;
+		if(lastData.length > 0){
+			self->currentDataChunk = lastData;
+		}
 		if( [self->outputStream hasSpaceAvailable] ) {
 			[self stream: self->outputStream handleEvent: NSStreamEventHasSpaceAvailable];
 		}
