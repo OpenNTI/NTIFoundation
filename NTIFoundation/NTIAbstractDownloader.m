@@ -250,14 +250,17 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 		 outputStream: (NSOutputStream*)stream
 			 onFinish: (void(^)())finish
 			  onError: (void(^)())error
+		   onProgress: (void(^)(float percentComplete)) progress
 {
 	//self = [super initWithUsername: user password: password];
 	self = [super init];
+	self->consumed = 0;
 	self->outputStream = stream;
 	[stream setDelegate: self];
 	
 	self->onFinish = [finish copy];
 	self->onError = [error copy];
+	self->onProgress = [progress copy];
 	return self;
 }
 
@@ -273,6 +276,12 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 -(void)connection: (NSURLConnection*)connection didReceiveData: (NSData*)data
 {
 	[super connection: connection didReceiveData: data];
+	self->consumed += data.length;
+	if(self->onProgress){
+		float progress = ((float)(self->consumed * 100)) / self.expectedContentLength;
+		self->onProgress(progress);
+	}
+	
 	//FIXME: For some reason, when I have both the connection and the stream
 	//in a run loop, the connection appears to "starve" the stream. I get
 	//many connection events, and NO stream events. There's only a stream 

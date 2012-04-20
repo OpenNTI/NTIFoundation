@@ -91,18 +91,20 @@
 	NSOutputStream* outputStream;
 	NSMutableData* currentDataChunk;
 	NSUInteger currentOffset;
-	
+	NSUInteger consumed;
 	void (^onFinish)();
 	void (^onError)();
+	void (^onProgress)(float percentComplete);
 }
 /**
  * The callback methods, if given, will be called on the run loop of
  * the NSURLConnection whose delegate we are.
  */
 -(id)initWithUsername: (NSString*)user 
-			 password: (NSString*)password 
+			 password: (NSString*)password
 		 outputStream: (NSOutputStream*)stream
 			 onFinish: (void(^)())finish
-			  onError: (void(^)())error;
+			  onError: (void(^)())error
+		   onProgress: (void(^)(float percentComplete)) progress;
 
 @end
