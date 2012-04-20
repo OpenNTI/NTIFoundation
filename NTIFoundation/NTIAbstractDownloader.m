@@ -264,6 +264,14 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 	return self;
 }
 
+-(void)calculateAndSendProgress
+{
+	if(self->onProgress){
+		double progress = (double)self->consumed / self.expectedContentLength;
+		self->onProgress(progress * 100);
+	}
+}
+
 -(void)closeStream
 {
 	[self->outputStream close];
@@ -277,10 +285,7 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 {
 	[super connection: connection didReceiveData: data];
 	self->consumed += data.length;
-	if(self->onProgress){
-		float progress = ((float)(self->consumed * 100)) / self.expectedContentLength;
-		self->onProgress(progress);
-	}
+	[self calculateAndSendProgress];
 	
 	//FIXME: For some reason, when I have both the connection and the stream
 	//in a run loop, the connection appears to "starve" the stream. I get
@@ -351,6 +356,7 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 {
 	[super connection: connection didReceiveResponse: response];
 	if( self.statusWasSuccess) {
+		[self calculateAndSendProgress];
 		//NSLog(@"Did recieve response expected content length %lld", [response expectedContentLength]);
 		[self->outputStream scheduleInRunLoop: [NSRunLoop currentRunLoop]
 									  forMode: NSDefaultRunLoopMode];
