@@ -167,6 +167,7 @@
 		4C4096FD1522140C002A9445 /* JsonPlistSerializationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4096FC1522140C002A9445 /* JsonPlistSerializationTests.m */; };
 		4C40971815221D91002A9445 /* jsonUserData.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C40971615221D91002A9445 /* jsonUserData.json */; };
 		4C696D0A1516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C696D091516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m */; };
+		4C8B84251541224D005BBDF2 /* NTIMathSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F4831535F1390005FECD /* NTIMathSymbol.m */; };
 		4C8CFD1D1529F712003B387D /* NTIKeyboardAdjustmentListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8CFD1C1529F712003B387D /* NTIKeyboardAdjustmentListener.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CA4F4841535F1390005FECD /* NTIMathSymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA4F4821535F1390005FECD /* NTIMathSymbol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CA4F4851535F1390005FECD /* NTIMathSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F4831535F1390005FECD /* NTIMathSymbol.m */; };
@@ -2181,6 +2182,7 @@
 				4CA4F4AF1536287A0005FECD /* NTIMathFractionCombiningBinarySymbol.m in Sources */,
 				4CA4F4B2153629150005FECD /* NTIMathExponentCombiningBinarySymbol.m in Sources */,
 				4CA4F4B715362A2D0005FECD /* NTIMathOperatorSymbol.m in Sources */,
+				4C8B84251541224D005BBDF2 /* NTIMathSymbol.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
