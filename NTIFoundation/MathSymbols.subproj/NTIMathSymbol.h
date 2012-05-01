@@ -11,7 +11,9 @@
 
 @interface NTIMathSymbol : NSObject<NTIMathExpressionSymbolProtocol>
 
-@property(nonatomic, strong) NSString* latexValue;
 @property(nonatomic, strong) NTIMathSymbol* parentMathSymbol;
+@property(nonatomic) NSUInteger precedenceLevel;
 
+-(NSString *)toString;
+-(NSString *)latexValue;
 @end

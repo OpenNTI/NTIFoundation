@@ -10,10 +10,14 @@
 @interface NTIMathPrefixedSymbol : NTIMathSymbol {
 	NSString* symbolValue;
 }
-@property( nonatomic, strong) NTIMathSymbol* prefix;
-@property( nonatomic, strong) NTIMathSymbol* contents;
-@property( nonatomic ) BOOL canAddNewSymbol;
+@property( nonatomic, strong, readonly) NTIMathSymbol* prefix;
+@property( nonatomic, strong) NTIMathSymbol* childMathNode;
+//@property( nonatomic, strong) NTIMathSymbol* contents;
+//@property( nonatomic ) BOOL canAddNewSymbol;
+@property( nonatomic ) NSUInteger precedenceLevel; 
 
--(id)initWithSymbolValue: (NSString *)value 
-		  withMathSymbol: (NTIMathSymbol *)mathSymbol;
+//-(id)initWithSymbolValue: (NSString *)value 
+//		  withMathSymbol: (NTIMathSymbol *)mathSymbol;
+-(id)initWithMathOperatorString: (NSString *)operatorString;
+
 @end

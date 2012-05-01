@@ -9,28 +9,41 @@
 #import "NTIMathParenthesisSymbol.h"
 #import "NTIMathPlaceholderSymbol.h"
 @implementation NTIMathParenthesisSymbol
-@synthesize openQueueSymbol;
--(id)initWithMathSymbol:(NTIMathSymbol *)aSymbol
+@synthesize openingParanthesis;
+
+-(id)initWithMathSymbolString: (NSString *)string
 {
-	self = [super initWithMathSymbol: aSymbol];
-	self.openQueueSymbol = YES;
+	self = [super init];
+	if (self) {
+		if ([string isEqualToString: @"("]) {
+			self->openingParanthesis = YES;
+		}
+		else{
+			self->openingParanthesis = NO;
+		}
+	}
 	return self;
 }
 
 -(NTIMathSymbol *)addSymbol:(id)mathSym
 {
-	if (!self.openQueueSymbol) {
-		return nil;
-	}
-	//Make sure to delete the placeholder before add new symbol.
-	if ( [[self.components objectAtIndex: 0] isKindOfClass:[NTIMathPlaceholderSymbol class]] && [self.components count] == 1 && mathSym ) {
-		[_components removeObjectAtIndex: 0];
-	}
-	return [super addSymbol: mathSym];
+	//Doesn't handle adding.
+	return nil;
 }
 
 -(NSString *)latexValue
 {
-	return [NSString stringWithFormat:@"{%@}", [super latexValue]];
+	//This won't be necessary now because the paranthesis won't be an actual math symbol, rather a way of displaying a grouping.
+	//return [NSString stringWithFormat:@"{%@}", [super latexValue]];
+//	if (self.openingParanthesis) {
+//		return @"(";
+//	}
+//	return @")";
+	return nil;
+}
+
+-(NSString *)toString
+{
+	return nil;
 }
 @end

@@ -28,6 +28,20 @@
 	return NO;
 }
 
+
+-(NTIMathSymbol *)appendMathSymbol: (NTIMathSymbol *)newSymbol
+{
+	if (![newSymbol isKindOfClass:[NTIMathAlphaNumericSymbol class]]) {
+		return nil;
+	}
+	
+	//Append the math value of the new symbol to the old one
+	self.mathSymbolValue = [NSString stringWithFormat:@"%@%@", self.mathSymbolValue, [(NTIMathAlphaNumericSymbol *)newSymbol mathSymbolValue]];
+	return self;
+
+}
+
+
 -(NTIMathSymbol *)addSymbol:(NTIMathSymbol *)newSymbol
 {
 	if (![newSymbol isKindOfClass:[NTIMathAlphaNumericSymbol class]]) {
@@ -58,4 +72,8 @@
 	return self.mathSymbolValue;
 }
 
+-(NSString *)toString
+{
+	return self.mathSymbolValue;
+}
 @end

@@ -56,5 +56,5 @@
 #import "NTIMathAbstractBinaryCombiningSymbol.h"
 #import "NTIMathFractionCombiningBinarySymbol.h"
 #import "NTIMathExponentCombiningBinarySymbol.h"
-
+#import "NTIMathInputExpressionModel.h"
 #endif

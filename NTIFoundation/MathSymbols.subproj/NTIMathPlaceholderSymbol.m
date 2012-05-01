@@ -31,4 +31,9 @@
 {
 	return nil;
 }
+
+-(NSString *)toString
+{
+	return nil;
+}
 @end

@@ -12,11 +12,11 @@
 
 -(id)init
 {
-	return [super initWithLeftMathSymbol: nil rightMathSymbol: nil];
+	return [super initWithMathOperatorSymbol: @"^"];
 }
 
 -(NSString *)latexValue
 {
-	return [NSString stringWithFormat: @"%@^%@", [self.leftMathSymbol latexValue], [self.rightMathSymbol latexValue]];
+	return [NSString stringWithFormat: @"%@^%@", [self.leftMathNode latexValue], [self.rightMathNode latexValue]];
 }
 @end

@@ -7,14 +7,16 @@
 //
 
 #import "NTIMathSymbol.h"
+@class NTIMathOperatorSymbol;
 @interface NTIMathAbstractBinaryCombiningSymbol : NTIMathSymbol {
+	NSUInteger precedenceLevel;
 }
 
-@property( nonatomic, strong) NTIMathSymbol* leftMathSymbol;
-@property( nonatomic, strong) NTIMathSymbol* rightMathSymbol;
-@property( nonatomic ) BOOL leftSymbolOpen;	//To switch between left and right symbol.
-@property( nonatomic ) BOOL rightSymbolOpen;
+@property( nonatomic, strong, readonly) NTIMathOperatorSymbol* operatorMathNode;	//Parent node
+@property( nonatomic, strong) NTIMathSymbol* leftMathNode;
+@property( nonatomic, strong) NTIMathSymbol* rightMathNode;
 
--(id)initWithLeftMathSymbol: (NTIMathSymbol *)leftSymbol rightMathSymbol: (NTIMathSymbol *)rightSymbol;
 
+//-(id)initWithLeftMathSymbol: (NTIMathSymbol *)leftSymbol rightMathSymbol: (NTIMathSymbol *)rightSymbol;
+-(id)initWithMathOperatorSymbol: (NSString *)operatorString;
 @end

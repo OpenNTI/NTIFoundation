@@ -39,4 +39,9 @@
 {
 	return mathSymbolValue;
 }
+
+-(NSString *)toString
+{
+	return mathSymbolValue;
+}
 @end

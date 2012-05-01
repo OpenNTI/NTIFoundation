@@ -9,7 +9,7 @@
 #import "NTIMathSymbol.h"
 
 @implementation NTIMathSymbol
-@synthesize latexValue, parentMathSymbol;
+@synthesize parentMathSymbol, precedenceLevel;
 
 -(BOOL)requiresGraphicKeyboard
 {
@@ -30,6 +30,21 @@
 	[NSException raise:NSInvalidArgumentException
 				format:@"Subclasses need to implement deleteCurrentSymbol:"];
 
+	return nil;
+}
+
+-(NSUInteger)precedenceLevel
+{
+	return 0;
+}
+
+-(NSString *)toString
+{
+	return nil;
+}
+
+-(NSString *)latexValue
+{
 	return nil;
 }
 @end

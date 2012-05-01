@@ -8,6 +8,7 @@
 
 #import "NTIMathGroup.h"
 
-@interface NTIMathParenthesisSymbol : NTIMathGroup
-@property(nonatomic)BOOL openQueueSymbol;	//This will help determine when we can add things or not. Help to move out of the paranthesis;
+@interface NTIMathParenthesisSymbol: NTIMathSymbol
+@property(nonatomic, readonly)BOOL openingParanthesis; //either we have an opening paranthesis or a closing paranthesis
+-(id)initWithMathSymbolString: (NSString *)string;
 @end
