@@ -16,4 +16,5 @@
 
 -(NSString *)toString;
 -(NSString *)latexValue;
+-(NSArray *)children;
 @end

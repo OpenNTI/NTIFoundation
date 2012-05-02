@@ -47,4 +47,9 @@
 {
 	return nil;
 }
+
+-(NSArray *)children
+{
+	return nil;
+}
 @end

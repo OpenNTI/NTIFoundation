@@ -65,11 +65,12 @@
 	return nil;
 }
 
--(void)removeMathNode: (NTIMathSymbol *)newMathNode
+-(void)replaceNode: (NTIMathSymbol *)newMathNode withPlaceholderFor: (NTIMathSymbol *)pointingTo
 {
 	//Replace child node with a placeholder
 	if (self.childMathNode == newMathNode) {
 		self.childMathNode = [[NTIMathPlaceholderSymbol alloc] init];
+		[(NTIMathPlaceholderSymbol *)self.childMathNode setInPlaceOfObject: pointingTo];
 	}
 }
 
@@ -103,9 +104,21 @@
 
 -(NSString *)toString
 {
-	if (self.precedenceLevel > self.childMathNode.precedenceLevel && self.childMathNode.precedenceLevel > 0) {
+	//Case of a placeholder point to another tree
+	if ([self.childMathNode isKindOfClass: [NTIMathPlaceholderSymbol class]] && [(NTIMathPlaceholderSymbol *)self.childMathNode inPlaceOfObject] ) {
+		NTIMathSymbol* representingExpr = [(NTIMathPlaceholderSymbol *)self.childMathNode inPlaceOfObject];
+		if (self.precedenceLevel > representingExpr.precedenceLevel && representingExpr.precedenceLevel > 0) {
+			return [NSString stringWithFormat: @"%@(%@)", [prefix toString], [childMathNode toString]];
+		}
+	}
+	if (self.precedenceLevel > self.childMathNode.precedenceLevel && self.childMathNode.precedenceLevel > 0) {		
 		return [NSString stringWithFormat: @"%@(%@)", [prefix toString], [childMathNode toString]];
 	}
 	return [NSString stringWithFormat: @"%@%@", [prefix toString], [childMathNode toString]];
+}
+
+-(NSArray *)children
+{
+	return [NSArray arrayWithObject: self.childMathNode];
 }
 @end

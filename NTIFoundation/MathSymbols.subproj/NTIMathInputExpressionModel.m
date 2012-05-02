@@ -55,7 +55,7 @@
 -(BOOL)isMathBinaryCombiningSymbol
 {
 	//The list will grow as we support more symbols
-	NSArray* array = [[NSArray alloc] initWithObjects:@"^",@"/", @"+", @"-", @"*", @"÷", nil];
+	NSArray* array = [[NSArray alloc] initWithObjects:@"^",@"/", @"+", @"-", @"*", @"÷", @"x/y", nil];
 	return [array containsObject: self];
 }
 
@@ -65,6 +65,8 @@
 -(NTIMathSymbol *)addMathNode: (NTIMathSymbol *)newNode on: (NTIMathSymbol *)currentNode;
 -(NTIMathSymbol *)createMathSymbolForString: (NSString *)stringValue;
 -(void)logCurrentAndRootSymbol;
+-(NTIMathSymbol *)closeAndAppendTree;
+
 @end
 
 @implementation NTIMathInputExpressionModel
@@ -92,6 +94,11 @@
 		return;
 	}
 	[self logCurrentAndRootSymbol];
+	//Check if it's a special case of implicit multiplication. In which case, we will need to add
+	if ([self->currentMathSymbol isKindOfClass:[NTIMathAlphaNumericSymbol class]] && [newSymbol isKindOfClass: [NTIMathPrefixedSymbol class]]) {
+		NTIMathSymbol* implicitSymbol = [self createMathSymbolForString:@"*"];
+		self->currentMathSymbol = [self addMathNode:implicitSymbol on: self->currentMathSymbol];
+	}
 	self->currentMathSymbol = [self addMathNode: newSymbol on: self->currentMathSymbol];
 	[self logCurrentAndRootSymbol];
 }
@@ -108,18 +115,32 @@
 		return self->rootMathSymbol; //it's the current symbol as well.
 	}
 	else {
+		//This a special case when a user clicks on an element of the tree, we start a new tree at that element, and we set it as a root element. No child at this point.
+		if (newRootSymbol && !childSymbol) {
+			NTIMathSymbol* parent = newRootSymbol.parentMathSymbol;
+			if ([parent respondsToSelector: @selector(replaceNode:  withPlaceholderFor:)]) {
+				//We remove it from its parent
+				[parent performSelector: @selector(replaceNode:  withPlaceholderFor:) withObject: newRootSymbol withObject: newRootSymbol];
+				//Add current root to stack
+				[self->stackEquationTrees addObject: self->rootMathSymbol];
+				//Set new root 
+				self->rootMathSymbol = newRootSymbol;
+				self->rootMathSymbol.parentMathSymbol = nil;
+				//Add the childsymbol to new root
+				return self->rootMathSymbol;
+			}
+		}	
 		if (childSymbol.parentMathSymbol) {
 			NTIMathSymbol* parent = childSymbol.parentMathSymbol;
-			if ([parent respondsToSelector: @selector(removeMathNode:)]) {
+			if ([parent respondsToSelector: @selector(replaceNode:  withPlaceholderFor:)]) {
 				//We remove it from its parent
-				[parent performSelector: @selector(removeMathNode:) withObject: childSymbol];
-				
+				[parent performSelector: @selector(replaceNode:  withPlaceholderFor:) withObject: childSymbol withObject: newRootSymbol];
 				//Add current root to stack
 				[self->stackEquationTrees addObject: self->rootMathSymbol];
 				
 				//Set new root 
 				self->rootMathSymbol = newRootSymbol;
-				
+				//self->rootMathSymbol.parentMathSymbol = nil;
 				//Add the childsymbol to new root
 				return [self->rootMathSymbol addSymbol: childSymbol];
 			}
@@ -139,16 +160,40 @@
 	return nil;
 }
 
+-(NTIMathSymbol *)findRootOfMathNode: (NTIMathSymbol *)mathSymbol
+{
+	while (mathSymbol.parentMathSymbol) {
+		mathSymbol = mathSymbol.parentMathSymbol;
+	}
+	return mathSymbol;
+}
+
+//We want to traverse the tree from the top to bottom.
+-(void)addPlaceholdersTo: (NSMutableArray *)placeholders startingAt: (NTIMathSymbol *)aRootNode
+{
+	if (!aRootNode) {
+		return;
+	}
+	if (!aRootNode.children) {
+		if ( [aRootNode isKindOfClass:[NTIMathPlaceholderSymbol class]] && 
+			[(NTIMathPlaceholderSymbol *)aRootNode inPlaceOfObject] ) {
+			[placeholders addObject: aRootNode];
+		}
+		return;
+	}
+	
+	for (NTIMathSymbol* child in aRootNode.children) {
+		if ( [child isKindOfClass:[NTIMathPlaceholderSymbol class]] && 
+			[(NTIMathPlaceholderSymbol *)child inPlaceOfObject] ) {
+			[placeholders addObject: child];
+		}
+		[self addPlaceholdersTo: placeholders startingAt: child];
+	}
+}
+
 //We return the currentSymbol
 -(NTIMathSymbol *)closeAndAppendTree
-{
-	//we make the parent the current symbol
-//	if (self->currentMathSymbol.parentMathSymbol) {
-//		NTIMathSymbol* newCurrentSymbol = self->currentMathSymbol.parentMathSymbol;
-//		return newCurrentSymbol;
-//	}
-//	return nil;
-	
+{	
 	//Pop the top most item off the tree stack
 	NTIMathSymbol* oldRootSymbol = [self->stackEquationTrees lastObject];
 	if (oldRootSymbol) {
@@ -167,26 +212,6 @@
 		return tempCurrentSymbol;
 	}
 	return  nil;
-}
-
-//We return the composed math symbol
--(NTIMathSymbol *)appendParentTreeTo: (NTIMathSymbol *)aRootSymbol
-{
-	NTIMathSymbol* oldRootSymbol = [self->stackEquationTrees lastObject];
-	if (oldRootSymbol) {
-		//We add the new rootMathSymbol to the tree.
-		NTIMathSymbol* tempCurrent = [oldRootSymbol addSymbol: aRootSymbol];
-		if (!tempCurrent) {
-			//if we can't add it, that means we could be a placeholder, in which case we would simply be replaced.
-			if ([oldRootSymbol isKindOfClass: [NTIMathPlaceholderSymbol class]]) {
-				oldRootSymbol = aRootSymbol;
-			}
-		}
-		//Remove the element from the stack tree
-		[self->stackEquationTrees removeObject: oldRootSymbol];
-		return oldRootSymbol;
-	}
-	return aRootSymbol;
 }
 
 -(NTIMathSymbol *)replacePlaceHolder: (NTIMathSymbol *)pholder withLiteral: (NTIMathSymbol *)literal
@@ -234,7 +259,6 @@
 		return num;
 	}
 	
-	//
 	while ( currentNode.parentMathSymbol ) {
 		// look ahead
 		// Rule 1: if our parent's precedence is lower, we make a new tree at current.
@@ -256,43 +280,35 @@
 
 -(NSString *)generateEquationString
 {
-	NSString* eqString;
-	//We will start by appending things on the stack tree,
-	for (NTIMathSymbol* m in self->stackEquationTrees) {
-		eqString = [NSString stringWithFormat:@"%@%@", eqString, [m toString]];
-	}
-	//The current root last,
-	if (!eqString) {
-		eqString = [self->rootMathSymbol toString];
-	}
-	else {
-		eqString =  [NSString stringWithFormat:@"%@%@", eqString, [self->rootMathSymbol toString]];
-	}
-	return eqString;
+	return [[self fullEquation] toString];
 }
 
 -(NTIMathSymbol *)fullEquation
 {
-	//Should we return the original or a copy?
-	NTIMathSymbol* rootCopy = self->rootMathSymbol;
 	if (!stackEquationTrees || stackEquationTrees.count == 0) {
 		return self->rootMathSymbol;
 	}
-	
-	NTIMathSymbol* composedRoot = rootCopy;
-	for (NSUInteger i = 0;  i<=stackEquationTrees.count; i++) {
-		composedRoot = [self appendParentTreeTo: composedRoot];
+	NTIMathSymbol* oldRootSymbol;
+	for (int i = stackEquationTrees.count-1;  i>= 0; i--) {
+		//Update plaholders pointing to math expressions( trees)
+		oldRootSymbol = [self->stackEquationTrees objectAtIndex:i];
+		NSMutableArray* placeholders = [NSMutableArray array];
+		[self addPlaceholdersTo: placeholders startingAt: oldRootSymbol];
+		for (NTIMathPlaceholderSymbol* pholder in placeholders) {
+			//The logic is that as we add things, the root changes and we need to know we need to update the pointer of the placeholder to the new root.
+			NTIMathSymbol* replacedExpression= [pholder inPlaceOfObject];
+			if (replacedExpression) {
+				pholder.inPlaceOfObject = [self findRootOfMathNode: replacedExpression];
+			}
+		}
 	}
-	
-	//set new root
-	self->rootMathSymbol = composedRoot;
-	return composedRoot;
+	return oldRootSymbol;
 }
 
 -(void)setCurrentSymbolTo: (NTIMathSymbol *)mathSymbol
 {
 	//Needs to be implemented better. go through the math expression tree to find our node
-	self->currentMathSymbol = [self newMathSymbolTreeWithRoot:nil firstChild: mathSymbol]; 
+	self->currentMathSymbol = [self newMathSymbolTreeWithRoot:mathSymbol firstChild: nil]; 
 	//self->currentMathSymbol = mathSymbol;
 }
 
@@ -339,6 +355,6 @@
 
 -(void)logCurrentAndRootSymbol
 {
-	NSLog(@"root's string: %@,\ncurrentSymbol's string: %@", [self->rootMathSymbol toString], [self->currentMathSymbol toString]);
+	NSLog(@"root's laTex: %@,\ncurrentSymbol's laTex: %@", [self->rootMathSymbol latexValue], [self->currentMathSymbol latexValue]);
 }
 @end

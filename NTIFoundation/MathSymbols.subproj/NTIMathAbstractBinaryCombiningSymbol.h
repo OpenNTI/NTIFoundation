@@ -16,7 +16,5 @@
 @property( nonatomic, strong) NTIMathSymbol* leftMathNode;
 @property( nonatomic, strong) NTIMathSymbol* rightMathNode;
 
-
-//-(id)initWithLeftMathSymbol: (NTIMathSymbol *)leftSymbol rightMathSymbol: (NTIMathSymbol *)rightSymbol;
 -(id)initWithMathOperatorSymbol: (NSString *)operatorString;
 @end

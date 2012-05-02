@@ -98,14 +98,16 @@
 	return nil;
 }
 
--(void)removeMathNode: (NTIMathSymbol *)newMathNode
+-(void)replaceNode: (NTIMathSymbol *)newMathNode withPlaceholderFor: (NTIMathSymbol *)pointingTo
 {
 	//Replace child node with a placeholder
 	if (self.leftMathNode == newMathNode) {
 		self.leftMathNode = [[NTIMathPlaceholderSymbol alloc] init];
+		[(NTIMathPlaceholderSymbol *)self.leftMathNode setInPlaceOfObject: pointingTo];
 	}
 	if (self.rightMathNode == newMathNode) {
 		self.rightMathNode = [[NTIMathPlaceholderSymbol alloc] init];
+		[(NTIMathPlaceholderSymbol *)self.rightMathNode setInPlaceOfObject: pointingTo];
 	}
 }
 
@@ -165,5 +167,10 @@
 	}
 	
 	return [NSString stringWithFormat: @"%@%@%@", operatorString,leftNodeString, rightNodeString];
+}
+
+-(NSArray *)children
+{
+	return [NSArray arrayWithObjects:self.leftMathNode, self.rightMathNode, nil];
 }
 @end

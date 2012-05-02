@@ -10,5 +10,5 @@
 #import "NTIMathSymbol.h"
 
 @interface NTIMathPlaceholderSymbol : NTIMathSymbol
-
+@property(nonatomic, strong)NTIMathSymbol* inPlaceOfObject;
 @end

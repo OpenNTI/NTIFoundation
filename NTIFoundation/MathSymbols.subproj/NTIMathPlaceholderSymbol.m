@@ -9,7 +9,7 @@
 #import "NTIMathPlaceholderSymbol.h"
 
 @implementation NTIMathPlaceholderSymbol
-
+@synthesize inPlaceOfObject;
 
 #pragma mark - NTIMathExpressionSymbolProtocol Methods
 -(BOOL)requiresGraphicKeyboard
@@ -29,11 +29,17 @@
 
 -(NSString *)latexValue
 {
+	if (self.inPlaceOfObject) {
+		return [self.inPlaceOfObject latexValue];
+	}
 	return nil;
 }
 
 -(NSString *)toString
 {
+	if (self.inPlaceOfObject) {
+		return [self.inPlaceOfObject toString];
+	}
 	return nil;
 }
 @end
