@@ -93,14 +93,18 @@
 	if (!newSymbol) {
 		return;
 	}
+#if 0
 	[self logCurrentAndRootSymbol];
+#endif
 	//Check if it's a special case of implicit multiplication. In which case, we will need to add
 	if ([self->currentMathSymbol isKindOfClass:[NTIMathAlphaNumericSymbol class]] && [newSymbol isKindOfClass: [NTIMathPrefixedSymbol class]]) {
 		NTIMathSymbol* implicitSymbol = [self createMathSymbolForString:@"*"];
 		self->currentMathSymbol = [self addMathNode:implicitSymbol on: self->currentMathSymbol];
 	}
 	self->currentMathSymbol = [self addMathNode: newSymbol on: self->currentMathSymbol];
+#if 0
 	[self logCurrentAndRootSymbol];
+#endif
 }
 
 #pragma mark -- Handling and building the equation model
@@ -355,6 +359,6 @@
 
 -(void)logCurrentAndRootSymbol
 {
-	NSLog(@"root's laTex: %@,\ncurrentSymbol's laTex: %@", [self->rootMathSymbol latexValue], [self->currentMathSymbol latexValue]);
+	NSLog(@"root's string: %@,\ncurrentSymbol's string: %@", [self->rootMathSymbol toString], [self->currentMathSymbol toString]);
 }
 @end

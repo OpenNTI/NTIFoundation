@@ -14,7 +14,7 @@
 	NTIMathSymbol* rootMathSymbol;
 	NSMutableArray* stackEquationTrees;
 }
-//@property( nonatomic, strong) NTIMathSymbol* mathInputModel;
+
 -(id)initWithMathSymbol:(NTIMathSymbol *)mathExpression;
 -(void)addMathSymbolForString: (NSString *)stringValue;
 -(NTIMathSymbol *)fullEquation;

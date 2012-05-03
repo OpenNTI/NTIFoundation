@@ -32,7 +32,7 @@
 	if (self.inPlaceOfObject) {
 		return [self.inPlaceOfObject latexValue];
 	}
-	return nil;
+	return @"";
 }
 
 -(NSString *)toString
@@ -40,6 +40,6 @@
 	if (self.inPlaceOfObject) {
 		return [self.inPlaceOfObject toString];
 	}
-	return nil;
+	return @"";
 }
 @end
