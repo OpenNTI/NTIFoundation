@@ -24,10 +24,16 @@
 	if (self) {
 		self->prefix = [[NTIMathOperatorSymbol alloc] initWithValue: operatorString];
 		self->prefix.parentMathSymbol = self;
-		self->childMathNode = [[NTIMathPlaceholderSymbol alloc] init];
+		self.childMathNode = [[NTIMathPlaceholderSymbol alloc] init];
 		self->precedenceLevel = [self precedenceLevelForString: operatorString];
 	}
 	return self;
+}
+
+-(void)setChildMathNode:(NTIMathSymbol *)newChildMathNode
+{
+	self->childMathNode = newChildMathNode;
+	self->childMathNode.parentMathSymbol = self;
 }
 
 -(NSUInteger)precedenceLevelForString: (NSString *)opString
@@ -57,7 +63,7 @@
 -(NTIMathSymbol *)addSymbol:(NTIMathSymbol *)newSymbol
 {
 	//Stack it on the left
-	if ([self.childMathNode isKindOfClass: [NTIMathPlaceholderSymbol class]])	{
+	if ([self.childMathNode respondsToSelector:@selector(isPlaceholder)])	{
 		self.childMathNode = newSymbol;
 		self.childMathNode.parentMathSymbol = self;
 		return self.childMathNode;
@@ -76,17 +82,13 @@
 
 -(NTIMathSymbol *)deleteSymbol:(NTIMathSymbol *)mathSymbol
 {
-	//FIXME: we haven't yet decided what the right behavior should be.
-	
-	/*
-	if (!self->contents || [self.contents isKindOfClass: [NTIMathPlaceholderSymbol class]]) {
+	if ([self.childMathNode respondsToSelector:@selector(isPlaceholder)]) {
 		return nil;
 	}
-	NTIMathSymbol* headSymbol = [self.contents deleteSymbol: mathSymbol];
-	if (headSymbol) {
-		return headSymbol;
+	if (self.childMathNode == mathSymbol) {
+		self.childMathNode = [[NTIMathPlaceholderSymbol alloc] init];
+		return self.childMathNode;
 	}
-	*/
 	return nil;
 }
 
@@ -105,7 +107,7 @@
 -(NSString *)toString
 {
 	//Case of a placeholder point to another tree
-	if ([self.childMathNode isKindOfClass: [NTIMathPlaceholderSymbol class]] && [(NTIMathPlaceholderSymbol *)self.childMathNode inPlaceOfObject] ) {
+	if ([self.childMathNode respondsToSelector:@selector(isPlaceholder)] && [(NTIMathPlaceholderSymbol *)self.childMathNode inPlaceOfObject] ) {
 		NTIMathSymbol* representingExpr = [(NTIMathPlaceholderSymbol *)self.childMathNode inPlaceOfObject];
 		if (self.precedenceLevel > representingExpr.precedenceLevel && representingExpr.precedenceLevel > 0) {
 			return [NSString stringWithFormat: @"%@(%@)", [prefix toString], [childMathNode toString]];
@@ -120,5 +122,10 @@
 -(NSArray *)children
 {
 	return [NSArray arrayWithObject: self.childMathNode];
+}
+
+-(BOOL)isUnaryOperator
+{
+	return YES;
 }
 @end

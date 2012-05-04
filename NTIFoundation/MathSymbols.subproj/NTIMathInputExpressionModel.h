@@ -16,8 +16,13 @@
 }
 
 -(id)initWithMathSymbol:(NTIMathSymbol *)mathExpression;
+//Addition
 -(void)addMathSymbolForString: (NSString *)stringValue;
+//Selection
+-(void)setCurrentSymbolTo: (NTIMathSymbol *)mathSymbol;
+//Deletion
+-(void)deleteMathExpression: (NTIMathSymbol *)aMathSymbol;
+//Output
 -(NTIMathSymbol *)fullEquation;
 -(NSString *)generateEquationString;
--(void)setCurrentSymbolTo: (NTIMathSymbol *)mathSymbol;
 @end

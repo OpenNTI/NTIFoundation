@@ -67,6 +67,16 @@
 	return self;
 }
 
+-(NTIMathSymbol *)deleteLastLiteral
+{
+	if ( [self.mathSymbolValue length] == 1 ) {
+		return nil;	//The whole object should be deleted
+	}
+	//Otherwise delete the last literal character
+	self.mathSymbolValue = [self.mathSymbolValue substringToIndex:[self.mathSymbolValue length] - 1];
+	return self;
+}
+
 -(NSString *)latexValue
 {
 	return self.mathSymbolValue;
@@ -75,5 +85,10 @@
 -(NSString *)toString
 {
 	return self.mathSymbolValue;
+}
+
+-(BOOL)isLiteral
+{
+	return YES;
 }
 @end

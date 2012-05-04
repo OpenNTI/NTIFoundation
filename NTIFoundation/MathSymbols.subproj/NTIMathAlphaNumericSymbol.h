@@ -15,4 +15,6 @@
 @property(nonatomic, strong) NSString* mathSymbolValue;
 
 -(id)initWithValue: (NSString *)value;
+-(NTIMathSymbol *)deleteLastLiteral;
+-(BOOL)isLiteral;
 @end

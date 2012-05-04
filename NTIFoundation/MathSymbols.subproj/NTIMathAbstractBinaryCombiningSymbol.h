@@ -17,4 +17,5 @@
 @property( nonatomic, strong) NTIMathSymbol* rightMathNode;
 
 -(id)initWithMathOperatorSymbol: (NSString *)operatorString;
+-(BOOL)isBinaryOperator;
 @end

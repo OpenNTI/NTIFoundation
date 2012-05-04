@@ -83,12 +83,12 @@
 -(NTIMathSymbol *)addSymbol:(NTIMathSymbol *)newSymbol
 {
 	//Stack it on the left
-	if ([self.leftMathNode isKindOfClass: [NTIMathPlaceholderSymbol class]] && [self.rightMathNode isKindOfClass: [NTIMathPlaceholderSymbol class]] )	{
+	if ([self.leftMathNode respondsToSelector:@selector(isPlaceholder)] && [self.rightMathNode respondsToSelector:@selector(isPlaceholder)] )	{
 		self.leftMathNode = newSymbol;
 		self.leftMathNode.parentMathSymbol = self;
 		return rightMathNode;
 	}
-	else if (![self.leftMathNode isKindOfClass: [NTIMathPlaceholderSymbol class]] && [self.rightMathNode isKindOfClass: [NTIMathPlaceholderSymbol class]] ) {
+	else if (![self.leftMathNode respondsToSelector:@selector(isPlaceholder)] && [self.rightMathNode respondsToSelector:@selector(isPlaceholder)] ) {
 		//Left full, right is placeholder
 		self.rightMathNode = newSymbol;
 		self.rightMathNode.parentMathSymbol = self;
@@ -113,23 +113,22 @@
 
 -(NTIMathSymbol *)deleteSymbol:(NTIMathSymbol *)mathSymbol
 {
-	//if we only have placeholder
-	if ( [self.leftMathNode isKindOfClass: [NTIMathPlaceholderSymbol class]] && [self.rightMathNode isKindOfClass: [NTIMathPlaceholderSymbol class]] ) {
+	//if we only have placeholders
+	if ( [self.leftMathNode respondsToSelector:@selector(isPlaceholder)] && [self.rightMathNode respondsToSelector:@selector(isPlaceholder)] ) {
 		return nil;
 	}
 	
-	//Delete something on the left math symbol
-	NTIMathSymbol* tempSmyol = [self.leftMathNode deleteSymbol: mathSymbol];
-	if (tempSmyol) {
-		return tempSmyol;
+	if ([mathSymbol respondsToSelector:@selector(isPlaceholder)]) {
+		return nil;
 	}
-	
-	tempSmyol = [self.rightMathNode deleteSymbol: mathSymbol];
-	if (tempSmyol) {
-		return tempSmyol;
+	if (self.leftMathNode == mathSymbol) {
+		self.leftMathNode = [[NTIMathPlaceholderSymbol alloc] init];
+		return self.leftMathNode;
 	}
-	//Unhandled issue: should we immediately add placeholders for empty left or right symbol?
-	
+	if (self.rightMathNode == mathSymbol) {
+		self.rightMathNode = [[NTIMathPlaceholderSymbol alloc] init];
+		return self.rightMathNode;
+	}
 	return nil;
 }
 
@@ -172,5 +171,10 @@
 -(NSArray *)children
 {
 	return [NSArray arrayWithObjects:self.leftMathNode, self.rightMathNode, nil];
+}
+
+-(BOOL)isBinaryOperator
+{
+	return YES;
 }
 @end

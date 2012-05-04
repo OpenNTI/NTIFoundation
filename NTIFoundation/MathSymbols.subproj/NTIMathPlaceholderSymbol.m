@@ -42,4 +42,9 @@
 	}
 	return @"";
 }
+
+-(BOOL)isPlaceholder
+{
+	return YES;
+}
 @end

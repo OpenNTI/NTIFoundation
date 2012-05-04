@@ -11,4 +11,5 @@
 
 @interface NTIMathPlaceholderSymbol : NTIMathSymbol
 @property(nonatomic, strong)NTIMathSymbol* inPlaceOfObject;
+-(BOOL)isPlaceholder;
 @end

@@ -19,5 +19,5 @@
 //-(id)initWithSymbolValue: (NSString *)value 
 //		  withMathSymbol: (NTIMathSymbol *)mathSymbol;
 -(id)initWithMathOperatorString: (NSString *)operatorString;
-
+-(BOOL)isUnaryOperator;
 @end
