@@ -410,55 +410,13 @@
 	}
 }
 
--(NTIMathSymbol *)deleteAndReplace: (NTIMathSymbol *)aMathSymbol
+-(void)updatePlaceholderLinkFor: (NTIMathSymbol *)aMathSymbol toPointTo:(NTIMathSymbol *)newMathSymbol
 {
-	//These are special cases,
-	if ([aMathSymbol.parentMathSymbol respondsToSelector:@selector(isBinaryOperator)] && [aMathSymbol respondsToSelector:@selector(isPlaceholder)]) {
-		NTIMathAbstractBinaryCombiningSymbol* parentSymbol = (NTIMathAbstractBinaryCombiningSymbol *)aMathSymbol.parentMathSymbol;
-		
-		if (parentSymbol.rightMathNode == aMathSymbol && ![parentSymbol.leftMathNode respondsToSelector: @selector(isPlaceholder)] ) {
-			//At this point, we know 3 things: our parent is a binary operator, the left node has some expression, and the right node is a placeholder/empty. We are going to ask the parent of our parent(grandpa), to replace our parent with the left child.
-			NTIMathSymbol* leftNode = parentSymbol.leftMathNode;
-			if (parentSymbol.parentMathSymbol) {
-				[parentSymbol.parentMathSymbol deleteSymbol: parentSymbol];
-				return [parentSymbol.parentMathSymbol addSymbol: leftNode];
-			}
-			else {
-				//if our parent doesn't have a parent, by definition, it is the current root symbol
-				OBASSERT(parentSymbol == self->rootMathSymbol);
-				//so we will set the root symbol to be the leftNode;
-				self->rootMathSymbol = leftNode;
-				self->rootMathSymbol.parentMathSymbol = nil;
-				if (self->stackEquationTrees.count > 0) {
-					//update who is pointing to us
-					NTIMathPlaceholderSymbol* placeHolderLink = [self placeholderLinkFor: parentSymbol inExpression: [self->stackEquationTrees lastObject]];
-					placeHolderLink.inPlaceOfObject = leftNode;
-				}
-				return [self findLastLeafNodeFrom: self->rootMathSymbol]; // it also become the current symbol.
-			}
-		}
-		else if(parentSymbol.leftMathNode == aMathSymbol && ![parentSymbol.rightMathNode respondsToSelector:@selector(isPlaceholder)]) {
-			NTIMathSymbol* rightNode = parentSymbol.rightMathNode;
-			if (parentSymbol.parentMathSymbol) {
-				[parentSymbol.parentMathSymbol deleteSymbol: parentSymbol];
-				return [parentSymbol.parentMathSymbol addSymbol: rightNode];
-			}
-			else {
-				//if our parent doesn't have a parent, by definition, it is the current root symbol
-				OBASSERT(parentSymbol == self->rootMathSymbol);
-				//so we will set the root symbol to be the leftNode;
-				self->rootMathSymbol = rightNode;
-				self->rootMathSymbol.parentMathSymbol = nil;
-				if (self->stackEquationTrees.count > 0) {
-					//update who is pointing to us
-					NTIMathPlaceholderSymbol* placeHolderLink = [self placeholderLinkFor: parentSymbol inExpression: [self->stackEquationTrees lastObject]];
-					placeHolderLink.inPlaceOfObject = rightNode;
-				}
-				return [self findLastLeafNodeFrom: self->rootMathSymbol]; // it also become the current symbol.
-			}
-		}
+	if (self->stackEquationTrees.count > 0) {
+		//update who is pointing to us
+		NTIMathPlaceholderSymbol* placeHolderLink = [self placeholderLinkFor: aMathSymbol inExpression: [self->stackEquationTrees lastObject]];
+		placeHolderLink.inPlaceOfObject = newMathSymbol;
 	}
-	return nil;
 }
 
 -(NTIMathSymbol *)deleteMathsymbol: (NTIMathSymbol *)aMathNode
@@ -483,27 +441,50 @@
 		if (newCurrentNode) {
 			return newCurrentNode;
 		}
-		
-		//Check for special cases of delete and replace
-		newCurrentNode = [self deleteAndReplace: aMathNode];
-		if (newCurrentNode) {
-			return newCurrentNode;
-		}
-		
 		//If we couldn't delete it, ask the parent to delete us! They may be exceptions to this rule.
 		aMathNode = parent;
 	}
 	
 	if (!aMathNode.parentMathSymbol) {
-		if (aMathNode == self->rootMathSymbol && [aMathNode respondsToSelector:@selector(isPlaceholder)] && self->stackEquationTrees.count > 0) {
-			aMathNode = [self switchTotreeInplaceOfPlaceholder: aMathNode];
-			if (aMathNode) {
+		OBASSERT(aMathNode == self->rootMathSymbol);
+		
+		if ([aMathNode respondsToSelector:@selector(isPlaceholder)]) {
+			if (self->stackEquationTrees.count > 0) {
+				aMathNode = [self switchTotreeInplaceOfPlaceholder: aMathNode];
+				if (aMathNode) {
+					return [self deleteMathsymbol: aMathNode];
+				}
+			}
+			else {
+				return aMathNode;
+			}
+		}
+		else if([aMathNode respondsToSelector:@selector(isUnaryOperator)]) {
+			NTIMathPrefixedSymbol* unaryOp = (NTIMathPrefixedSymbol *)aMathNode;
+			if ([unaryOp.childMathNode respondsToSelector:@selector(isPlaceholder)]) {
+				self->rootMathSymbol = unaryOp.childMathNode;
+				self->rootMathSymbol.parentMathSymbol = nil;
+				[self updatePlaceholderLinkFor:aMathNode toPointTo: self->rootMathSymbol];
+				return self->rootMathSymbol;
+			}
+			else {
+				aMathNode = [self findRootOfMathNode: aMathNode];
 				return [self deleteMathsymbol: aMathNode];
 			}
 		}
+		else if([aMathNode respondsToSelector:@selector(isBinaryOperator)]){
+			NTIMathAbstractBinaryCombiningSymbol* binaryOp = (NTIMathAbstractBinaryCombiningSymbol *)aMathNode;
+			if ([binaryOp.rightMathNode respondsToSelector:@selector(isPlaceholder)]) {
+				self->rootMathSymbol = binaryOp.leftMathNode;
+				self->rootMathSymbol.parentMathSymbol = nil;
+				[self updatePlaceholderLinkFor:aMathNode toPointTo: self->rootMathSymbol];
+				return [self findLastLeafNodeFrom:self->rootMathSymbol];
+			}
+			else {
+				return [self deleteMathsymbol: [self findLastLeafNodeFrom: binaryOp.rightMathNode]];
+			}
+		}
 	}
-	
-	//if we couldn't delete it, we will return the node
 	return nil;
 }
 
