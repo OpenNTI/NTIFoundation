@@ -25,4 +25,12 @@
 //Output
 -(NTIMathSymbol *)fullEquation;
 -(NSString *)generateEquationString;
+//Selection and navigation
+-(NTIMathSymbol *)currentMathSymbol;
+
+//Helpers
+-(NTIMathSymbol *)findLastLeafNodeFrom: (NTIMathSymbol *)mathSymbol;
+-(NTIMathSymbol *)findFirstLeafNodeFrom: (NTIMathSymbol *)mathSymbol;
+-(NTIMathSymbol *)findPlaceHolderLinkIn: (NTIMathSymbol *)mathNode;
+-(NTIMathSymbol *)mergeLastTreeOnStackWith: (NTIMathSymbol *)mathSymbol;
 @end

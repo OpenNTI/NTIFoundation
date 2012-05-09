@@ -42,7 +42,7 @@
 -(BOOL)isMathPrefixedSymbol
 {
 	//The list will grow as we support more symbols
-	NSArray* array = [[NSArray alloc] initWithObjects: @"∫", @"√", nil];
+	NSArray* array = [[NSArray alloc] initWithObjects: @"√", @"≈", nil];
 	return [array containsObject: self];
 }
 
@@ -94,7 +94,13 @@
 	if (!newSymbol) {
 		return;
 	}
-#if 0
+	
+	//NOTE: As the user navigates through the equation, the may want to insert things in between, we need to be able to distinguish inserting in the equation and adding to the end of the rootsymbol. The easy way if comparing the currentSymbol with the last leaf node of the rootSymbol, if they differ, we are inserting, else we are are adding to the end of the equation
+	if (self->currentMathSymbol != [self findLastLeafNodeFrom: self->rootMathSymbol]) {
+		[self setCurrentSymbolTo: self->currentMathSymbol];	// we create a new tree at the current symbol to allow inserting into the equation.
+	}
+	
+#if 1
 	[self logCurrentAndRootSymbol];
 #endif
 	//Check if it's a special case of implicit multiplication. In which case, we will need to add
@@ -103,7 +109,7 @@
 		self->currentMathSymbol = [self addMathNode:implicitSymbol on: self->currentMathSymbol];
 	}
 	self->currentMathSymbol = [self addMathNode: newSymbol on: self->currentMathSymbol];
-#if 0
+#if 1
 	[self logCurrentAndRootSymbol];
 #endif
 }
@@ -173,6 +179,7 @@
 	return mathSymbol;
 }
 
+//TODO: Need refactoring around this stuff, several function are duplicates!
 //We want to traverse the tree from the top to bottom.
 -(void)addPlaceholdersWithExpressionTo: (NSMutableArray *)placeholders fromMathNode: (NTIMathSymbol *)aRootNode
 {
@@ -191,27 +198,69 @@
 	}
 }
 
-//We return the currentSymbol
--(NTIMathSymbol *)closeAndAppendTree
-{	
-	//Pop the top most item off the tree stack
-	NTIMathSymbol* oldRootSymbol = [self->stackEquationTrees lastObject];
-	if (oldRootSymbol) {
-		//remove the last object 
-		[self->stackEquationTrees removeLastObject];
-		NTIMathSymbol* tempCurrentSymbol = self->rootMathSymbol;	//Because we are done adding things to this tree
-		//We add the new rootMathSymbol to the tree.
-		if (![oldRootSymbol addSymbol: self->rootMathSymbol]) {
-			//if we can't add it, that means we could be a placeholder, in which case we would simple replace it
-			if ([oldRootSymbol respondsToSelector:@selector(isPlaceholder)]) {
-				oldRootSymbol = self->rootMathSymbol;
+-(NTIMathSymbol *)findPlaceHolderLinkIn: (NTIMathSymbol *)mathNode
+{
+	if (!mathNode.children) {
+		if ( [mathNode respondsToSelector:@selector(isPlaceholder)] && 
+			[(NTIMathPlaceholderSymbol *)mathNode inPlaceOfObject] ) {
+			return mathNode;
+		}
+	}
+	for (NTIMathSymbol* child in mathNode.children) {
+		if (child.children) {
+			return [self findPlaceHolderLinkIn: child];
+		}
+		else {
+			if ( [child respondsToSelector:@selector(isPlaceholder)] && 
+				[(NTIMathPlaceholderSymbol *)child inPlaceOfObject] ) {
+				return child;
 			}
 		}
-		self->rootMathSymbol = oldRootSymbol;
-		//the current symbol should becomes the root symbol.
-		return tempCurrentSymbol;
 	}
-	return  nil;
+	return nil;
+}
+
+//We return the currentSymbol
+-(NTIMathSymbol *)closeAndAppendTree
+{
+	NTIMathSymbol* tempCurrentSymbol = self->rootMathSymbol;
+	self->rootMathSymbol = [self mergeLastTreeOnStackWith: self->rootMathSymbol];
+	return tempCurrentSymbol;
+//	//Pop the top most item off the tree stack
+//	NTIMathSymbol* oldRootSymbol = [self->stackEquationTrees lastObject];
+//	if (oldRootSymbol) {
+//		//remove the last object 
+//		[self->stackEquationTrees removeLastObject];
+//		NTIMathSymbol* tempCurrentSymbol = self->rootMathSymbol;	//Because we are done adding things to this tree
+//		//We add the new rootMathSymbol to the tree.
+//		if (![oldRootSymbol addSymbol: self->rootMathSymbol]) {
+//			//if we can't add it, that means we could be a placeholder, in which case we would simple replace it
+//			if ([oldRootSymbol respondsToSelector:@selector(isPlaceholder)]) {
+//				oldRootSymbol = self->rootMathSymbol;
+//			}
+//		}
+//		self->rootMathSymbol = oldRootSymbol;
+//		//the current symbol should becomes the root symbol.
+//		return tempCurrentSymbol;
+//	}
+//	return  nil;
+}
+
+-(NTIMathSymbol *)mergeLastTreeOnStackWith: (NTIMathSymbol *)mathSymbol
+{
+	if (self->stackEquationTrees.count == 0) {
+		return mathSymbol;
+	}
+	
+	//Pop last object 
+	NTIMathSymbol* combinedTree = [self->stackEquationTrees lastObject];
+	[self->stackEquationTrees removeLastObject];
+	
+	NTIMathPlaceholderSymbol* plink = (NTIMathPlaceholderSymbol *)[self findPlaceHolderLinkIn: combinedTree];
+	OBASSERT( plink.inPlaceOfObject == mathSymbol );
+	//combined both tree, and get a notification if it fails.
+	OBASSERT( [plink.parentMathSymbol addSymbol: mathSymbol]);
+	return combinedTree;
 }
 
 -(NTIMathSymbol *)replacePlaceHolder: (NTIMathSymbol *)pholder withLiteral: (NTIMathSymbol *)literal
@@ -344,11 +393,18 @@
 	return oldRootSymbol;
 }
 
+//this method gets called, when a user clicks on a leaf node( i.e literal button, placeholder button), at that point we create a new tree at the location.
 -(void)setCurrentSymbolTo: (NTIMathSymbol *)mathSymbol
 {
-	//Needs to be implemented better. go through the math expression tree to find our node
+	//Before we create a new tree at the new current symbol, we will close the tree that we were working on.
+	self->rootMathSymbol = [self mergeLastTreeOnStackWith: self->rootMathSymbol];
 	self->currentMathSymbol = [self newMathSymbolTreeWithRoot:mathSymbol firstChild: nil]; 
-	//self->currentMathSymbol = mathSymbol;
+}
+
+//Returns the current symbol mainly for rendering purposes
+-(NTIMathSymbol *)currentMathSymbol
+{
+	return self->currentMathSymbol;
 }
 
 -(void)clearEquation
@@ -405,6 +461,25 @@
 		if ([mathSymbol respondsToSelector:@selector(isUnaryOperator)]) {
 			NTIMathPrefixedSymbol* uMathSymbol = (NTIMathPrefixedSymbol *)mathSymbol;
 			return [self findLastLeafNodeFrom: uMathSymbol.childMathNode];
+		}
+		return nil;
+	}
+}
+
+-(NTIMathSymbol *)findFirstLeafNodeFrom: (NTIMathSymbol *)mathSymbol
+{
+	if ([mathSymbol respondsToSelector:@selector(isPlaceholder)] ||
+		[mathSymbol respondsToSelector:@selector(isLiteral) ]) {
+		return mathSymbol;
+	}
+	else {
+		if ([mathSymbol respondsToSelector:@selector(isBinaryOperator)]) {
+			NTIMathAbstractBinaryCombiningSymbol* bMathSymbol = (NTIMathAbstractBinaryCombiningSymbol *)mathSymbol;
+			return [self findFirstLeafNodeFrom: bMathSymbol.leftMathNode];
+		}
+		if ([mathSymbol respondsToSelector:@selector(isUnaryOperator)]) {
+			NTIMathPrefixedSymbol* uMathSymbol = (NTIMathPrefixedSymbol *)mathSymbol;
+			return [self findFirstLeafNodeFrom: uMathSymbol.childMathNode];
 		}
 		return nil;
 	}
@@ -525,4 +600,5 @@
 {
 	NSLog(@"root's string: %@,\ncurrentSymbol's string: %@", [self->rootMathSymbol toString], [self->currentMathSymbol toString]);
 }
+
 @end

@@ -83,7 +83,7 @@
 -(NTIMathSymbol *)addSymbol:(NTIMathSymbol *)newSymbol
 {
 	//Stack it on the left
-	if ([self.leftMathNode respondsToSelector:@selector(isPlaceholder)] && [self.rightMathNode respondsToSelector:@selector(isPlaceholder)] )	{
+	if ([self.leftMathNode respondsToSelector:@selector(isPlaceholder)])	{
 		self.leftMathNode = newSymbol;
 		self.leftMathNode.parentMathSymbol = self;
 		return rightMathNode;
@@ -165,7 +165,7 @@
 		return [NSString stringWithFormat:@"\\frac{%@}{%@}", leftNodeString, rightNodeString];
 	}
 	
-	return [NSString stringWithFormat: @"%@%@%@", operatorString,leftNodeString, rightNodeString];
+	return [NSString stringWithFormat: @"%@%@%@", leftNodeString, operatorString, rightNodeString];
 }
 
 -(NSArray *)children
