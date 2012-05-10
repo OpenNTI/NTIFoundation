@@ -71,7 +71,6 @@
 @end
 
 @implementation NTIMathInputExpressionModel
-//@synthesize mathInputModel;
 
 -(id)initWithMathSymbol:(NTIMathSymbol *)mathExpression
 {
@@ -80,7 +79,6 @@
 		if (!mathExpression) {
 			mathExpression = [[NTIMathPlaceholderSymbol alloc] init];
 		}
-		//self.mathInputModel = mathExpression;
 		self->rootMathSymbol = mathExpression;
 		self->currentMathSymbol = mathExpression;
 		self->stackEquationTrees = [NSMutableArray array];
@@ -139,6 +137,10 @@
 				self->rootMathSymbol.parentMathSymbol = nil;
 				//Add the childsymbol to new root
 				return self->rootMathSymbol;
+			}
+			if (!parent) {
+				//Odd case, we want to create a new tree at the new root symbol, and we are root already, so no need for a new tree.
+				return newRootSymbol;
 			}
 		}	
 		if (childSymbol.parentMathSymbol) {
@@ -563,10 +565,9 @@
 	return nil;
 }
 
-//Override property
--(NTIMathSymbol *)mathInputModel
+-(NSString *)tolaTex
 {
-	return [self fullEquation];
+	return [[self fullEquation] latexValue];
 }
 
 #pragma mark - Building on a mathSymbol

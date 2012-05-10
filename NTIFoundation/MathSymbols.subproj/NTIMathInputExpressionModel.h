@@ -25,10 +25,12 @@
 //Output
 -(NTIMathSymbol *)fullEquation;
 -(NSString *)generateEquationString;
+-(NSString *)tolaTex;
 //Selection and navigation
 -(NTIMathSymbol *)currentMathSymbol;
 
 //Helpers
+-(void)clearEquation;
 -(NTIMathSymbol *)findLastLeafNodeFrom: (NTIMathSymbol *)mathSymbol;
 -(NTIMathSymbol *)findFirstLeafNodeFrom: (NTIMathSymbol *)mathSymbol;
 -(NTIMathSymbol *)findPlaceHolderLinkIn: (NTIMathSymbol *)mathNode;
