@@ -259,9 +259,11 @@
 	[self->stackEquationTrees removeLastObject];
 	
 	NTIMathPlaceholderSymbol* plink = (NTIMathPlaceholderSymbol *)[self findPlaceHolderLinkIn: combinedTree];
+	
 	OBASSERT( plink.inPlaceOfObject == mathSymbol );
 	//combined both tree, and get a notification if it fails.
-	OBASSERT( [plink.parentMathSymbol addSymbol: mathSymbol]);
+	[plink.parentMathSymbol addSymbol: mathSymbol];
+	//OBASSERT(addedSymbol);
 	return combinedTree;
 }
 
@@ -398,6 +400,10 @@
 //this method gets called, when a user clicks on a leaf node( i.e literal button, placeholder button), at that point we create a new tree at the location.
 -(void)setCurrentSymbolTo: (NTIMathSymbol *)mathSymbol
 {
+	//If we are the current symbol already, and you click on it, don't do anything.
+	if (mathSymbol == self->currentMathSymbol) {
+		return;
+	}
 	//Before we create a new tree at the new current symbol, we will close the tree that we were working on.
 	self->rootMathSymbol = [self mergeLastTreeOnStackWith: self->rootMathSymbol];
 	self->currentMathSymbol = [self newMathSymbolTreeWithRoot:mathSymbol firstChild: nil]; 

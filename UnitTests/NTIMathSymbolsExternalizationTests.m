@@ -33,7 +33,7 @@
 	[self buildEquationFromString: eq];
 	STAssertNotNil([self->mathModel fullEquation], @"It should contain a valid eq");
 	STAssertTrue([[[self->mathModel fullEquation] toString] isEqualToString: eq], @"Equations string should be similar");
-	STAssertTrue([[[self->mathModel fullEquation] latexValue]isEqualToString: @"+45"], @"Equations laTex should be similar");
+	STAssertTrue([[[self->mathModel fullEquation] latexValue]isEqualToString: @"4+5"], @"Equations laTex should be similar");
 }
 
 -(void)testSimplePrecedenceLogic
@@ -43,7 +43,7 @@
 	
 	NTIMathSymbol* eqMath = [self->mathModel fullEquation];
 	STAssertTrue([[eqMath toString] isEqualToString: eq], @"Equations string should be equal");
-	STAssertTrue([[[self->mathModel fullEquation] latexValue]isEqualToString: @"+4*56"], @"Equations laTex should be similar");
+	STAssertTrue([[[self->mathModel fullEquation] latexValue]isEqualToString: eq], @"Equations laTex should be similar");
 }
 
 -(void)testSimpleParanthesisEquation
@@ -53,7 +53,7 @@
 	
 	NTIMathSymbol* eqMath = [self->mathModel fullEquation];
 	STAssertTrue([[eqMath toString] isEqualToString: eq], @"Equations string should be similar");
-	STAssertTrue([[eqMath latexValue] isEqualToString: @"*(+48)2"], @"Equations laTex should be similar");
+	STAssertTrue([[eqMath latexValue] isEqualToString: @"(4+8)*2"], @"Equations laTex should be similar");
 }
 
 -(void)testFractionEquation
@@ -63,7 +63,7 @@
 	
 	NTIMathSymbol* eqMath = [self->mathModel fullEquation];
 	STAssertTrue([[eqMath toString] isEqualToString: @"4*(1-5)/(3+2)"], @"Equations string should be similar");
-	STAssertTrue([[eqMath latexValue] isEqualToString: @"*4\\frac{(-15)}{(+32)}"], @"Equations laTex should be similar");
+	STAssertTrue([[eqMath latexValue] isEqualToString: @"*4\\frac{(1-5)}{(3+2)}"], @"Equations laTex should be similar");
 
 }
 
@@ -74,7 +74,16 @@
 	
 	NTIMathSymbol* eqMath = [self->mathModel fullEquation];
 	STAssertTrue([[eqMath toString] isEqualToString: eq], @"Equations string should be similar");
-	STAssertTrue([[eqMath latexValue] isEqualToString: @"+\\sqrt{+27}2"], @"Equations laTex should be similar. but it's : %@", [eqMath latexValue]);
+	STAssertTrue([[eqMath latexValue] isEqualToString: @"\\sqrt{2+7}+2"], @"Equations laTex should be similar. but it's : %@", [eqMath latexValue]);
+}
+
+-(void)testImplicitMultiplication
+{
+	NSString* eq = [NSString stringWithFormat:@"4√3"];
+	[self buildEquationFromString: eq];
+	NTIMathSymbol* eqMath = [self->mathModel fullEquation];
+	STAssertTrue([[eqMath toString] isEqualToString: eq], @"should be 4√3");
+	STAssertTrue([[eqMath latexValue] isEqualToString: @"4\\sqrt{3}"], @" expressions should be equal");
 }
 
 //More tests cases: 

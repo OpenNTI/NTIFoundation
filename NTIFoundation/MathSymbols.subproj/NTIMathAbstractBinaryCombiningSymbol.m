@@ -132,10 +132,28 @@
 	return nil;
 }
 
+static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
+{
+	//helper method, for placeholder that may be pointing to expression tree.
+	if ([mathSymbol respondsToSelector:@selector(isPlaceholder)]) {
+		NTIMathSymbol* rep = [mathSymbol performSelector:@selector(inPlaceOfObject)];
+		if (rep) {
+			return rep;
+		}
+	}
+	return mathSymbol;
+}
+
 -(NSString *)toString
 {
 	NSString* leftNodeString = [self.leftMathNode toString];
 	NSString* rightNodeString = [self.rightMathNode toString];
+	
+	//case of implicit multiplication, e.g 4√3 instead of 4*√3
+	if ([mathExpressionForSymbol(self.leftMathNode) respondsToSelector:@selector(isLiteral)] && [mathExpressionForSymbol(self.rightMathNode) respondsToSelector:@selector(isUnaryOperator)]) {
+		return [NSString stringWithFormat:@"%@%@", leftNodeString, rightNodeString];
+	}
+		
 	if (self.leftMathNode.precedenceLevel < self.precedenceLevel && (self.leftMathNode.precedenceLevel > 0)) {
 		leftNodeString = [NSString stringWithFormat: @"(%@)", leftNodeString]; 
 	}
@@ -152,6 +170,11 @@
 	NSString* leftNodeString = [self.leftMathNode latexValue];
 	NSString* rightNodeString = [self.rightMathNode latexValue];
 	NSString* operatorString = [self.operatorMathNode latexValue];
+	
+	//case of implicit multiplication, e.g 4√3 instead of 4*√3
+	if ([mathExpressionForSymbol(self.leftMathNode) respondsToSelector:@selector(isLiteral)] && [mathExpressionForSymbol(self.rightMathNode) respondsToSelector:@selector(isUnaryOperator)]) {
+		return [NSString stringWithFormat:@"%@%@", leftNodeString, rightNodeString];
+	}
 	
 	//we don't want paranthesis around literals and placeholders( their precedence level is 0)
 	if (self.leftMathNode.precedenceLevel < self.precedenceLevel && (self.leftMathNode.precedenceLevel > 0)) {
