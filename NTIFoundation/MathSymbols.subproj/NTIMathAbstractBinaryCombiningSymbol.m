@@ -34,6 +34,9 @@
 
 -(NSUInteger)precedenceLevelForString: (NSString *)opString
 {
+	if ([opString isEqualToString: @"^"]) {
+		return 60;
+	}
 	if ([opString isEqualToString: @"*"] || 
 		[opString isEqualToString: @"/"] || 
 		[opString isEqualToString:@"÷"]) {
