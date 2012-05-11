@@ -63,18 +63,18 @@
 	
 	NTIMathSymbol* eqMath = [self->mathModel fullEquation];
 	STAssertTrue([[eqMath toString] isEqualToString: @"4*(1-5)/(3+2)"], @"Equations string should be similar");
-	STAssertTrue([[eqMath latexValue] isEqualToString: @"*4\\frac{(1-5)}{(3+2)}"], @"Equations laTex should be similar");
+	STAssertTrue([[eqMath latexValue] isEqualToString: @"4*\\frac{(1-5)}{(3+2)}"], @"Equations laTex should be similar");
 
 }
 
 -(void)testSquareRootEquation
 {
-	NSString* eq = [NSString stringWithFormat:@"√(2+7)+2"];
+	NSString* eq = [NSString stringWithFormat:@"4+√(2+7)"];
 	[self buildEquationFromString:eq];
 	
 	NTIMathSymbol* eqMath = [self->mathModel fullEquation];
-	STAssertTrue([[eqMath toString] isEqualToString: eq], @"Equations string should be similar");
-	STAssertTrue([[eqMath latexValue] isEqualToString: @"\\sqrt{2+7}+2"], @"Equations laTex should be similar. but it's : %@", [eqMath latexValue]);
+	STAssertTrue([[eqMath toString] isEqualToString: eq], @"Equation %@ should be equal to %@", [eqMath toString], eq);
+	STAssertTrue([[eqMath latexValue] isEqualToString: @"4+\\sqrt{(2+7)}"], @"Equations laTex should be similar. but it's : %@", [eqMath latexValue]);
 }
 
 -(void)testImplicitMultiplication

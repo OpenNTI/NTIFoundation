@@ -107,10 +107,12 @@
 	if (self.leftMathNode == newMathNode) {
 		self.leftMathNode = [[NTIMathPlaceholderSymbol alloc] init];
 		[(NTIMathPlaceholderSymbol *)self.leftMathNode setInPlaceOfObject: pointingTo];
+		pointingTo.substituteSymbol = self.leftMathNode;
 	}
 	if (self.rightMathNode == newMathNode) {
 		self.rightMathNode = [[NTIMathPlaceholderSymbol alloc] init];
 		[(NTIMathPlaceholderSymbol *)self.rightMathNode setInPlaceOfObject: pointingTo];
+		pointingTo.substituteSymbol = self.rightMathNode;
 	}
 }
 
@@ -153,7 +155,8 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 	NSString* rightNodeString = [self.rightMathNode toString];
 	
 	//case of implicit multiplication, e.g 4√3 instead of 4*√3
-	if ([mathExpressionForSymbol(self.leftMathNode) respondsToSelector:@selector(isLiteral)] && [mathExpressionForSymbol(self.rightMathNode) respondsToSelector:@selector(isUnaryOperator)]) {
+	if ([mathExpressionForSymbol(self.leftMathNode) respondsToSelector:@selector(isLiteral)] && [mathExpressionForSymbol(self.rightMathNode) respondsToSelector:@selector(isUnaryOperator)] &&
+		[self.operatorMathNode.mathSymbolValue isEqualToString:@"*"]) {
 		return [NSString stringWithFormat:@"%@%@", leftNodeString, rightNodeString];
 	}
 		
@@ -175,7 +178,8 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 	NSString* operatorString = [self.operatorMathNode latexValue];
 	
 	//case of implicit multiplication, e.g 4√3 instead of 4*√3
-	if ([mathExpressionForSymbol(self.leftMathNode) respondsToSelector:@selector(isLiteral)] && [mathExpressionForSymbol(self.rightMathNode) respondsToSelector:@selector(isUnaryOperator)]) {
+	if ([mathExpressionForSymbol(self.leftMathNode) respondsToSelector:@selector(isLiteral)] && [mathExpressionForSymbol(self.rightMathNode) respondsToSelector:@selector(isUnaryOperator)]&&
+		[self.operatorMathNode.mathSymbolValue isEqualToString:@"*"]) {
 		return [NSString stringWithFormat:@"%@%@", leftNodeString, rightNodeString];
 	}
 	

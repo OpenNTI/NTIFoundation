@@ -8,12 +8,15 @@
 
 #import <Foundation/Foundation.h>
 @class NTIMathSymbol;
+@class NTIMathExpressionStack;
 @interface NTIMathInputExpressionModel : NSObject{
 	@private
 	NTIMathSymbol* currentMathSymbol;
 	NTIMathSymbol* rootMathSymbol;
-	NSMutableArray* stackEquationTrees;
+	NTIMathExpressionStack* mathExpressionQueue;
 }
+
+@property(nonatomic, strong) NTIMathSymbol* rootMathSymbol;
 
 -(id)initWithMathSymbol:(NTIMathSymbol *)mathExpression;
 //Addition

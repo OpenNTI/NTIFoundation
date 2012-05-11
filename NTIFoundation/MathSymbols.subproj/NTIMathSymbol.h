@@ -8,11 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "NTIMathExpressionSymbolProtocol.h"
-
 @interface NTIMathSymbol : NSObject<NTIMathExpressionSymbolProtocol>
 
 @property(nonatomic, strong) NTIMathSymbol* parentMathSymbol;
 @property(nonatomic) NSUInteger precedenceLevel;
+@property(nonatomic, weak) NTIMathSymbol* substituteSymbol; //should only be a placeholder.
 
 -(NSString *)toString;
 -(NSString *)latexValue;

@@ -77,6 +77,7 @@
 	if (self.childMathNode == newMathNode) {
 		self.childMathNode = [[NTIMathPlaceholderSymbol alloc] init];
 		[(NTIMathPlaceholderSymbol *)self.childMathNode setInPlaceOfObject: pointingTo];
+		pointingTo.substituteSymbol = self.childMathNode;
 	}
 }
 

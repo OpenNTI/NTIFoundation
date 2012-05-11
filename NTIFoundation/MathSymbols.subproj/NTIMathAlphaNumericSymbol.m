@@ -16,10 +16,15 @@
 {
 	self = [super init];
 	if (self) {
-		self.isNegative = NO;
 		self.mathSymbolValue = value;
 	}
 	return  self;
+}
+
+-(void)setIsNegative:(BOOL)negativeFlag
+{
+	//Toggle on and off.
+	self->isNegative = !self->isNegative; 
 }
 
 #pragma mark - NTIMathExpressionSymbolProtocol Methods
@@ -27,7 +32,6 @@
 {
 	return NO;
 }
-
 
 -(NTIMathSymbol *)appendMathSymbol: (NTIMathSymbol *)newSymbol
 {
@@ -40,7 +44,6 @@
 	return self;
 
 }
-
 
 -(NTIMathSymbol *)addSymbol:(NTIMathSymbol *)newSymbol
 {
@@ -79,11 +82,17 @@
 
 -(NSString *)latexValue
 {
+	if (self.isNegative) {
+		return [NSString stringWithFormat:@"-%@", self.mathSymbolValue];
+	}
 	return self.mathSymbolValue;
 }
 
 -(NSString *)toString
 {
+	if (self.isNegative) {
+		return [NSString stringWithFormat:@"-%@", self.mathSymbolValue];
+	}
 	return self.mathSymbolValue;
 }
 
