@@ -393,6 +393,7 @@ styleAttribute = stringFromStyle( styleAttribute, @prefix );
 		imgData = [NSData dataWithBase64String: [url substringFromIndex: dataPfx.length]];
 	}
 	else {
+		//FIXME we are running on the main thread here.  THis may block
 		imgData = [NSData dataWithContentsOfURL: [NSURL URLWithString: url]];
 	}
 	
@@ -446,6 +447,10 @@ didStartElement: (NSString*)elementName
 		}
 		NSString* src = [attributeDict objectForKey: @"src"];
 		self->currentImage = [self newImageFromURL: src];
+	}
+	else if( [@"audio" isEqual: elementName] ){
+		parsingAudio = YES;
+		self->currentAudioURL = [attributeDict objectForKey: @"src"];
 	}
 	else if( [attributeDict objectForKey: @"style"] ) {
 		//p or a span with style info
@@ -508,6 +513,9 @@ didStartElement: (NSString*)elementName
 -(void)parser: (NSXMLParser*)parser
 foundCharacters: (NSString *)string
 {
+	if(parsingAudio){
+		return;
+	}
 	[attrBuffer appendString: string attributes: self->nsattrStack.lastNonNullObject];	
 }
 
@@ -547,6 +555,12 @@ qualifiedName: (NSString*)qName
 				  currentHref: self->currentHref		
 				 currentImage: self->currentImage];
 	}
+	else if( [@"audio" isEqual: elementName] ){
+		self->parsingAudio = NO;
+		[self handleAudioTag: self->attrBuffer
+				currentAudio: self->currentAudioURL];
+		
+	}
 	
 }
 
@@ -557,6 +571,11 @@ qualifiedName: (NSString*)qName
 	
 }
 
+-(void)handleAudioTag: (NSMutableAttributedString*)attrBuffer
+		 currentAudio: (NSString*)currentHref
+{
+	
+}
 
 - (void)dealloc
 {

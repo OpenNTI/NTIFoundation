@@ -10,6 +10,26 @@
 #import "NTIHTMLReader.h"
 #import "OQColor-NTIExtensions.h"
 
+@interface AudioCapturingHtmlReader : NTIHTMLReader{
+	NSString* source;
+}
+@property (nonatomic, readonly) NSString* source;
+@end
+
+@implementation AudioCapturingHtmlReader
+
+-(NSString*)source
+{
+	return self->source;
+}
+
+-(void)handleAudioTag:(NSMutableAttributedString *)attrBuffer currentAudio:(NSString *)currentAudio
+{
+	self->source = currentAudio;
+}
+
+@end
+
 CGColorRef NTIHTMLReaderParseCreateColor(NSString* color, OQColor* defaultColor);
 
 @implementation NTIHTMLReaderTest
@@ -90,6 +110,15 @@ CGColorRef NTIHTMLReaderParseCreateColor(NSString* color, OQColor* defaultColor)
 	NTIHTMLReader* reader = [[NTIHTMLReader alloc] initWithHTML: badFormat];
 
 	STAssertNil(reader, @"Bad xml should return nil from init");
+}
+
+-(void)testCapturesAudio
+{
+	NSString* audioHtml = @"<html><body><audio controls=\"\" src=\"data:foobar\"></audio></body></html>";
+	
+	AudioCapturingHtmlReader* reader = [[AudioCapturingHtmlReader alloc] initWithHTML: audioHtml];
+	
+	STAssertEqualObjects(reader.source, @"data:foobar", nil);
 }
 
 @end

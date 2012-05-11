@@ -104,11 +104,19 @@
 									atIndex: 0
 							 effectiveRange: NULL];
 			
-			if(  [attachment respondsToSelector: @selector(attachmentCell)]
-			   &&[[attachment attachmentCell] respondsToSelector: @selector(object)] ){
+			if(  [attachment respondsToSelector: @selector(attachmentCell)] ){
 				id attachmentCell = [attachment attachmentCell];
-				return [attachmentCell object];
+				if( [attachmentCell respondsToSelector: @selector(object)]  ){
+					return [attachmentCell object];
+				}
+				else if( [attachmentCell respondsToSelector: @selector(htmlString)] ){
+					return [attachmentCell htmlString];
+				}
+				
 			}
+			
+			return [part htmlStringFromString];
+
 		}
 		//Else we assume its an html string like we always have
 		return [part htmlStringFromString];

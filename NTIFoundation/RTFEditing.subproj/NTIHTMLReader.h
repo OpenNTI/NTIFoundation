@@ -14,6 +14,8 @@
 	NSMutableArray* nsattrStack;
 	//Assuming only one link, as per writer
 	NSString* currentHref;
+	NSString* currentAudioURL;
+	BOOL parsingAudio;
 	CGImageRef currentImage;
 	BOOL inError;
 	BOOL unparsableFormat;
@@ -29,6 +31,9 @@
 -(void)handleAnchorTag: (NSMutableAttributedString*)attrBuffer
 		   currentHref: (NSString*)currentHref 
 		  currentImage: (CGImageRef) currentImage;
+
+-(void)handleAudioTag: (NSMutableAttributedString*)attrBuffer
+		 currentAudio: (NSString*)currentAudio ;
 @end
 
 

@@ -13,6 +13,30 @@
 #import <OmniAppKit/OATextAttachment.h>
 #import <OmniAppKit/OATextAttachmentCell.h>
 
+@interface HTMLAttachmentCell : OATextAttachmentCell {
+@private
+    NSString* htmlString;
+}
+-(id)initWithHtml: (NSString*)html;
+@property (nonatomic, strong) NSString* htmlString;
+@end
+
+@implementation HTMLAttachmentCell
+@synthesize  htmlString;
+-(id)initWithHtml: (NSString*)obj
+{
+	self = [super init];
+	self.htmlString = obj;
+	return self;
+}
+
+-(id)attachmentCell
+{
+	return self;
+}
+
+@end
+
 @interface ObjectAttachmentCell : OATextAttachmentCell {
 @private
     id object;
@@ -57,6 +81,24 @@
 @end
 
 @implementation NSAttributedString_NTIExtensionsTest
+
+-(void)testHTMLAttributedString
+{
+	unichar attachmentCharacter = OAAttachmentCharacter;
+	NSString* charString = [[NSString alloc] initWithCharacters: &attachmentCharacter length: 1];
+	
+	NSDictionary* attrs = [NSDictionary dictionaryWithObject: [[HTMLAttachmentCell alloc] initWithHtml: @"foobar"] 
+													  forKey: OAAttachmentAttributeName];
+	
+	NSMutableAttributedString* attrString = [[NSMutableAttributedString alloc] 
+											 initWithString: charString 
+											 attributes: attrs];
+	
+	NSArray* objects = [attrString objectsFromAttributedString];
+	
+	STAssertTrue(objects.count == 1, nil);
+	STAssertEqualObjects([objects firstObject], @"foobar", nil);
+}
 
 -(void)testAttributedStringFromNilObjects
 {
@@ -136,11 +178,6 @@
 	
 	STAssertEquals((int)[parts count], 2, nil);
 	STAssertEqualObjects([parts firstObject], [NSNumber numberWithInt: 10], nil);
-}
-
--(void)testTextFollowedByObject
-{
-	
 }
 
 #pragma mark Chunking related tests
