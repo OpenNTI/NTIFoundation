@@ -29,8 +29,8 @@
 
 -(BOOL)isOperatorSymbol
 {
-	NSArray* array = [[NSArray alloc] initWithObjects: @"=", nil];
-	return [array containsObject: self];
+	//NSArray* array = [[NSArray alloc] initWithObjects: @"=", nil];
+	return NO; // [array containsObject: self];
 }
 
 -(BOOL)isAlphaNumeric
@@ -64,7 +64,7 @@
 -(BOOL)isMathBinaryCombiningSymbol
 {
 	//The list will grow as we support more symbols
-	NSArray* array = [[NSArray alloc] initWithObjects:@"^",@"/", @"+", @"-", @"*", @"÷", @"x/y", nil];
+	NSArray* array = [[NSArray alloc] initWithObjects:@"^",@"/", @"+", @"-", @"*", @"÷", @"x/y", @"=", nil];
 	return [array containsObject: self];
 }
 
