@@ -86,10 +86,10 @@
 -(NTIMathSymbol *)addSymbol:(NTIMathSymbol *)newSymbol
 {
 	//Stack it on the left
-	if ([self.leftMathNode respondsToSelector:@selector(isPlaceholder)])	{
+	if ([self.leftMathNode respondsToSelector:@selector(isPlaceholder)]){
 		self.leftMathNode = newSymbol;
 		self.leftMathNode.parentMathSymbol = self;
-		return rightMathNode;
+		return self.rightMathNode;
 	}
 	else if (![self.leftMathNode respondsToSelector:@selector(isPlaceholder)] && [self.rightMathNode respondsToSelector:@selector(isPlaceholder)] ) {
 		//Left full, right is placeholder

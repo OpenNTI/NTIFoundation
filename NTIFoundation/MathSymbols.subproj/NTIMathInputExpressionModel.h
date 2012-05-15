@@ -36,6 +36,5 @@
 -(void)clearEquation;
 -(NTIMathSymbol *)findLastLeafNodeFrom: (NTIMathSymbol *)mathSymbol;
 -(NTIMathSymbol *)findFirstLeafNodeFrom: (NTIMathSymbol *)mathSymbol;
--(NTIMathSymbol *)findPlaceHolderLinkIn: (NTIMathSymbol *)mathNode;
 -(NTIMathSymbol *)mergeLastTreeOnStackWith: (NTIMathSymbol *)mathSymbol;
 @end
