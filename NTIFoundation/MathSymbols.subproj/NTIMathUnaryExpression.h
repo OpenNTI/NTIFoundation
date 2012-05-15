@@ -1,5 +1,5 @@
 //
-//  NTIMathPrefixedSymbol.h
+//  NTIMathUnaryExpression.h
 //  NTIFoundation
 //
 //  Created by Pacifique Mahoro on 4/11/12.
@@ -7,17 +7,13 @@
 //
 
 #import "NTIMathSymbol.h"
-@interface NTIMathPrefixedSymbol : NTIMathSymbol {
+@interface NTIMathUnaryExpression : NTIMathSymbol {
 	NSString* symbolValue;
 }
 @property( nonatomic, strong, readonly) NTIMathSymbol* prefix;
 @property( nonatomic, strong) NTIMathSymbol* childMathNode;
-//@property( nonatomic, strong) NTIMathSymbol* contents;
-//@property( nonatomic ) BOOL canAddNewSymbol;
 @property( nonatomic ) NSUInteger precedenceLevel; 
 
-//-(id)initWithSymbolValue: (NSString *)value 
-//		  withMathSymbol: (NTIMathSymbol *)mathSymbol;
 -(id)initWithMathOperatorString: (NSString *)operatorString;
 -(BOOL)isUnaryOperator;
 @end

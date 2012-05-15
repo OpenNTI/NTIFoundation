@@ -7,8 +7,8 @@
 //
 
 #import "NTIMathSymbolUtils.h"
-#import "NTIMathPrefixedSymbol.h"
-#import "NTIMathAbstractBinaryCombiningSymbol.h"
+#import "NTIMathUnaryExpression.h"
+#import "NTIMathBinaryExpression.h"
 #import "NTIMathPlaceholderSymbol.h"
 
 
@@ -16,7 +16,7 @@
 static void traverseDepthFirstStartAt(NTIMathSymbol* mathNode, NSMutableArray* nodesArray)
 {
 	if ([mathNode respondsToSelector:@selector(isBinaryOperator)]) {
-		NTIMathAbstractBinaryCombiningSymbol* bMathNode = (NTIMathAbstractBinaryCombiningSymbol *)mathNode;
+		NTIMathBinaryExpression* bMathNode = (NTIMathBinaryExpression *)mathNode;
 		//Add left subtree
 		traverseDepthFirstStartAt(bMathNode.leftMathNode, nodesArray);
 		//Add the root. FIXME: should we add the whole BinaryOperator or just the operator?
@@ -25,7 +25,7 @@ static void traverseDepthFirstStartAt(NTIMathSymbol* mathNode, NSMutableArray* n
 		traverseDepthFirstStartAt(bMathNode.rightMathNode, nodesArray);
 	}
 	else if([mathNode respondsToSelector:@selector(isUnaryOperator)]) {
-		NTIMathPrefixedSymbol* uMathNode = (NTIMathPrefixedSymbol *)mathNode;
+		NTIMathUnaryExpression* uMathNode = (NTIMathUnaryExpression *)mathNode;
 		//Add the root
 		[nodesArray addObject: uMathNode.prefix];
 		//Add the child subtree

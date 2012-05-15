@@ -182,24 +182,21 @@
 		4CA4F48F153614640005FECD /* NTIMathPlaceholderSymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA4F48D153614640005FECD /* NTIMathPlaceholderSymbol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CA4F490153614640005FECD /* NTIMathPlaceholderSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F48E153614640005FECD /* NTIMathPlaceholderSymbol.m */; };
 		4CA4F491153614640005FECD /* NTIMathPlaceholderSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F48E153614640005FECD /* NTIMathPlaceholderSymbol.m */; };
-		4CA4F494153617420005FECD /* NTIMathGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA4F492153617410005FECD /* NTIMathGroup.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CA4F495153617420005FECD /* NTIMathGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F493153617410005FECD /* NTIMathGroup.m */; };
-		4CA4F496153617420005FECD /* NTIMathGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F493153617410005FECD /* NTIMathGroup.m */; };
 		4CA4F49915361E6D0005FECD /* NTIMathParenthesisSymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA4F49715361E6C0005FECD /* NTIMathParenthesisSymbol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CA4F49A15361E6D0005FECD /* NTIMathParenthesisSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F49815361E6C0005FECD /* NTIMathParenthesisSymbol.m */; };
 		4CA4F49B15361E6D0005FECD /* NTIMathParenthesisSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F49815361E6C0005FECD /* NTIMathParenthesisSymbol.m */; };
-		4CA4F49E15361FDD0005FECD /* NTIMathPrefixedSymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA4F49C15361FDB0005FECD /* NTIMathPrefixedSymbol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CA4F49F15361FDD0005FECD /* NTIMathPrefixedSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F49D15361FDC0005FECD /* NTIMathPrefixedSymbol.m */; };
-		4CA4F4A015361FDE0005FECD /* NTIMathPrefixedSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F49D15361FDC0005FECD /* NTIMathPrefixedSymbol.m */; };
-		4CA4F4A31536234C0005FECD /* NTIMathAbstractBinaryCombiningSymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA4F4A11536234A0005FECD /* NTIMathAbstractBinaryCombiningSymbol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CA4F4A41536234C0005FECD /* NTIMathAbstractBinaryCombiningSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F4A21536234A0005FECD /* NTIMathAbstractBinaryCombiningSymbol.m */; };
-		4CA4F4A51536234C0005FECD /* NTIMathAbstractBinaryCombiningSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F4A21536234A0005FECD /* NTIMathAbstractBinaryCombiningSymbol.m */; };
-		4CA4F4A8153627F00005FECD /* NTIMathExponentCombiningBinarySymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA4F4A6153627EE0005FECD /* NTIMathExponentCombiningBinarySymbol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CA4F4AD153628790005FECD /* NTIMathFractionCombiningBinarySymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA4F4AB153628770005FECD /* NTIMathFractionCombiningBinarySymbol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4CA4F4AE1536287A0005FECD /* NTIMathFractionCombiningBinarySymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F4AC153628780005FECD /* NTIMathFractionCombiningBinarySymbol.m */; };
-		4CA4F4AF1536287A0005FECD /* NTIMathFractionCombiningBinarySymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F4AC153628780005FECD /* NTIMathFractionCombiningBinarySymbol.m */; };
-		4CA4F4B1153629150005FECD /* NTIMathExponentCombiningBinarySymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F4B0153629130005FECD /* NTIMathExponentCombiningBinarySymbol.m */; };
-		4CA4F4B2153629150005FECD /* NTIMathExponentCombiningBinarySymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F4B0153629130005FECD /* NTIMathExponentCombiningBinarySymbol.m */; };
+		4CA4F49E15361FDD0005FECD /* NTIMathUnaryExpression.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA4F49C15361FDB0005FECD /* NTIMathUnaryExpression.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CA4F49F15361FDD0005FECD /* NTIMathUnaryExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F49D15361FDC0005FECD /* NTIMathUnaryExpression.m */; };
+		4CA4F4A015361FDE0005FECD /* NTIMathUnaryExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F49D15361FDC0005FECD /* NTIMathUnaryExpression.m */; };
+		4CA4F4A31536234C0005FECD /* NTIMathBinaryExpression.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA4F4A11536234A0005FECD /* NTIMathBinaryExpression.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CA4F4A41536234C0005FECD /* NTIMathBinaryExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F4A21536234A0005FECD /* NTIMathBinaryExpression.m */; };
+		4CA4F4A51536234C0005FECD /* NTIMathBinaryExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F4A21536234A0005FECD /* NTIMathBinaryExpression.m */; };
+		4CA4F4A8153627F00005FECD /* NTIMathExponentBinaryExpression.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA4F4A6153627EE0005FECD /* NTIMathExponentBinaryExpression.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CA4F4AD153628790005FECD /* NTIMathFractionBinaryExpression.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA4F4AB153628770005FECD /* NTIMathFractionBinaryExpression.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4CA4F4AE1536287A0005FECD /* NTIMathFractionBinaryExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F4AC153628780005FECD /* NTIMathFractionBinaryExpression.m */; };
+		4CA4F4AF1536287A0005FECD /* NTIMathFractionBinaryExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F4AC153628780005FECD /* NTIMathFractionBinaryExpression.m */; };
+		4CA4F4B1153629150005FECD /* NTIMathExponentBinaryExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F4B0153629130005FECD /* NTIMathExponentBinaryExpression.m */; };
+		4CA4F4B2153629150005FECD /* NTIMathExponentBinaryExpression.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F4B0153629130005FECD /* NTIMathExponentBinaryExpression.m */; };
 		4CA4F4B515362A2D0005FECD /* NTIMathOperatorSymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA4F4B315362A2A0005FECD /* NTIMathOperatorSymbol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CA4F4B615362A2D0005FECD /* NTIMathOperatorSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F4B415362A2B0005FECD /* NTIMathOperatorSymbol.m */; };
 		4CA4F4B715362A2D0005FECD /* NTIMathOperatorSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F4B415362A2B0005FECD /* NTIMathOperatorSymbol.m */; };
@@ -735,18 +732,16 @@
 		4CA4F4891535F7AE0005FECD /* NTIMathAlphaNumericSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathAlphaNumericSymbol.m; sourceTree = "<group>"; };
 		4CA4F48D153614640005FECD /* NTIMathPlaceholderSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathPlaceholderSymbol.h; sourceTree = "<group>"; };
 		4CA4F48E153614640005FECD /* NTIMathPlaceholderSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathPlaceholderSymbol.m; sourceTree = "<group>"; };
-		4CA4F492153617410005FECD /* NTIMathGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathGroup.h; sourceTree = "<group>"; };
-		4CA4F493153617410005FECD /* NTIMathGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathGroup.m; sourceTree = "<group>"; };
 		4CA4F49715361E6C0005FECD /* NTIMathParenthesisSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathParenthesisSymbol.h; sourceTree = "<group>"; };
 		4CA4F49815361E6C0005FECD /* NTIMathParenthesisSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathParenthesisSymbol.m; sourceTree = "<group>"; };
-		4CA4F49C15361FDB0005FECD /* NTIMathPrefixedSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathPrefixedSymbol.h; sourceTree = "<group>"; };
-		4CA4F49D15361FDC0005FECD /* NTIMathPrefixedSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathPrefixedSymbol.m; sourceTree = "<group>"; };
-		4CA4F4A11536234A0005FECD /* NTIMathAbstractBinaryCombiningSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathAbstractBinaryCombiningSymbol.h; sourceTree = "<group>"; };
-		4CA4F4A21536234A0005FECD /* NTIMathAbstractBinaryCombiningSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathAbstractBinaryCombiningSymbol.m; sourceTree = "<group>"; };
-		4CA4F4A6153627EE0005FECD /* NTIMathExponentCombiningBinarySymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathExponentCombiningBinarySymbol.h; sourceTree = "<group>"; };
-		4CA4F4AB153628770005FECD /* NTIMathFractionCombiningBinarySymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathFractionCombiningBinarySymbol.h; sourceTree = "<group>"; };
-		4CA4F4AC153628780005FECD /* NTIMathFractionCombiningBinarySymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathFractionCombiningBinarySymbol.m; sourceTree = "<group>"; };
-		4CA4F4B0153629130005FECD /* NTIMathExponentCombiningBinarySymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathExponentCombiningBinarySymbol.m; sourceTree = "<group>"; };
+		4CA4F49C15361FDB0005FECD /* NTIMathUnaryExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathUnaryExpression.h; sourceTree = "<group>"; };
+		4CA4F49D15361FDC0005FECD /* NTIMathUnaryExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathUnaryExpression.m; sourceTree = "<group>"; };
+		4CA4F4A11536234A0005FECD /* NTIMathBinaryExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathBinaryExpression.h; sourceTree = "<group>"; };
+		4CA4F4A21536234A0005FECD /* NTIMathBinaryExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathBinaryExpression.m; sourceTree = "<group>"; };
+		4CA4F4A6153627EE0005FECD /* NTIMathExponentBinaryExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathExponentBinaryExpression.h; sourceTree = "<group>"; };
+		4CA4F4AB153628770005FECD /* NTIMathFractionBinaryExpression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathFractionBinaryExpression.h; sourceTree = "<group>"; };
+		4CA4F4AC153628780005FECD /* NTIMathFractionBinaryExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathFractionBinaryExpression.m; sourceTree = "<group>"; };
+		4CA4F4B0153629130005FECD /* NTIMathExponentBinaryExpression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathExponentBinaryExpression.m; sourceTree = "<group>"; };
 		4CA4F4B315362A2A0005FECD /* NTIMathOperatorSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathOperatorSymbol.h; sourceTree = "<group>"; };
 		4CA4F4B415362A2B0005FECD /* NTIMathOperatorSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathOperatorSymbol.m; sourceTree = "<group>"; };
 		4CABB38C14EC28DF00A7FD7C /* NTIInspectableObjectProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIInspectableObjectProtocol.h; sourceTree = "<group>"; };
@@ -1161,18 +1156,16 @@
 				4CA4F48E153614640005FECD /* NTIMathPlaceholderSymbol.m */,
 				4CA4F4B315362A2A0005FECD /* NTIMathOperatorSymbol.h */,
 				4CA4F4B415362A2B0005FECD /* NTIMathOperatorSymbol.m */,
-				4CA4F492153617410005FECD /* NTIMathGroup.h */,
-				4CA4F493153617410005FECD /* NTIMathGroup.m */,
 				4CA4F49715361E6C0005FECD /* NTIMathParenthesisSymbol.h */,
 				4CA4F49815361E6C0005FECD /* NTIMathParenthesisSymbol.m */,
-				4CA4F49C15361FDB0005FECD /* NTIMathPrefixedSymbol.h */,
-				4CA4F49D15361FDC0005FECD /* NTIMathPrefixedSymbol.m */,
-				4CA4F4A11536234A0005FECD /* NTIMathAbstractBinaryCombiningSymbol.h */,
-				4CA4F4A21536234A0005FECD /* NTIMathAbstractBinaryCombiningSymbol.m */,
-				4CA4F4A6153627EE0005FECD /* NTIMathExponentCombiningBinarySymbol.h */,
-				4CA4F4B0153629130005FECD /* NTIMathExponentCombiningBinarySymbol.m */,
-				4CA4F4AB153628770005FECD /* NTIMathFractionCombiningBinarySymbol.h */,
-				4CA4F4AC153628780005FECD /* NTIMathFractionCombiningBinarySymbol.m */,
+				4CA4F49C15361FDB0005FECD /* NTIMathUnaryExpression.h */,
+				4CA4F49D15361FDC0005FECD /* NTIMathUnaryExpression.m */,
+				4CA4F4A11536234A0005FECD /* NTIMathBinaryExpression.h */,
+				4CA4F4A21536234A0005FECD /* NTIMathBinaryExpression.m */,
+				4CA4F4A6153627EE0005FECD /* NTIMathExponentBinaryExpression.h */,
+				4CA4F4B0153629130005FECD /* NTIMathExponentBinaryExpression.m */,
+				4CA4F4AB153628770005FECD /* NTIMathFractionBinaryExpression.h */,
+				4CA4F4AC153628780005FECD /* NTIMathFractionBinaryExpression.m */,
 				4C2ECDD31549D0A400C69E3A /* NTIMathInputExpressionModel.h */,
 				4C2ECDD41549D0A400C69E3A /* NTIMathInputExpressionModel.m */,
 				4CC6847D15614D99003823E7 /* NTIMathSymbolUtils.h */,
@@ -1584,12 +1577,11 @@
 				4CA4F4871535F3460005FECD /* NTIMathExpressionSymbolProtocol.h in Headers */,
 				4CA4F48A1535F7AF0005FECD /* NTIMathAlphaNumericSymbol.h in Headers */,
 				4CA4F48F153614640005FECD /* NTIMathPlaceholderSymbol.h in Headers */,
-				4CA4F494153617420005FECD /* NTIMathGroup.h in Headers */,
 				4CA4F49915361E6D0005FECD /* NTIMathParenthesisSymbol.h in Headers */,
-				4CA4F49E15361FDD0005FECD /* NTIMathPrefixedSymbol.h in Headers */,
-				4CA4F4A31536234C0005FECD /* NTIMathAbstractBinaryCombiningSymbol.h in Headers */,
-				4CA4F4A8153627F00005FECD /* NTIMathExponentCombiningBinarySymbol.h in Headers */,
-				4CA4F4AD153628790005FECD /* NTIMathFractionCombiningBinarySymbol.h in Headers */,
+				4CA4F49E15361FDD0005FECD /* NTIMathUnaryExpression.h in Headers */,
+				4CA4F4A31536234C0005FECD /* NTIMathBinaryExpression.h in Headers */,
+				4CA4F4A8153627F00005FECD /* NTIMathExponentBinaryExpression.h in Headers */,
+				4CA4F4AD153628790005FECD /* NTIMathFractionBinaryExpression.h in Headers */,
 				4CA4F4B515362A2D0005FECD /* NTIMathOperatorSymbol.h in Headers */,
 				40A7459914DA30050093F0D4 /* NSObject-NTIJSONTest.h in Headers */,
 				4CC6847F15614D99003823E7 /* NTIMathSymbolUtils.h in Headers */,
@@ -2141,12 +2133,11 @@
 				4CA4F4851535F1390005FECD /* NTIMathSymbol.m in Sources */,
 				4CA4F48B1535F7AF0005FECD /* NTIMathAlphaNumericSymbol.m in Sources */,
 				4CA4F490153614640005FECD /* NTIMathPlaceholderSymbol.m in Sources */,
-				4CA4F495153617420005FECD /* NTIMathGroup.m in Sources */,
 				4CA4F49A15361E6D0005FECD /* NTIMathParenthesisSymbol.m in Sources */,
-				4CA4F49F15361FDD0005FECD /* NTIMathPrefixedSymbol.m in Sources */,
-				4CA4F4A41536234C0005FECD /* NTIMathAbstractBinaryCombiningSymbol.m in Sources */,
-				4CA4F4AE1536287A0005FECD /* NTIMathFractionCombiningBinarySymbol.m in Sources */,
-				4CA4F4B1153629150005FECD /* NTIMathExponentCombiningBinarySymbol.m in Sources */,
+				4CA4F49F15361FDD0005FECD /* NTIMathUnaryExpression.m in Sources */,
+				4CA4F4A41536234C0005FECD /* NTIMathBinaryExpression.m in Sources */,
+				4CA4F4AE1536287A0005FECD /* NTIMathFractionBinaryExpression.m in Sources */,
+				4CA4F4B1153629150005FECD /* NTIMathExponentBinaryExpression.m in Sources */,
 				4CA4F4B615362A2D0005FECD /* NTIMathOperatorSymbol.m in Sources */,
 				4C2ECDD61549D0A400C69E3A /* NTIMathInputExpressionModel.m in Sources */,
 				4CC6848015614D99003823E7 /* NTIMathSymbolUtils.m in Sources */,
@@ -2206,12 +2197,11 @@
 				406B23FD1533CDCA00BF691E /* WebSocketResponseBufferTest.m in Sources */,
 				4CA4F48C1535F7AF0005FECD /* NTIMathAlphaNumericSymbol.m in Sources */,
 				4CA4F491153614640005FECD /* NTIMathPlaceholderSymbol.m in Sources */,
-				4CA4F496153617420005FECD /* NTIMathGroup.m in Sources */,
 				4CA4F49B15361E6D0005FECD /* NTIMathParenthesisSymbol.m in Sources */,
-				4CA4F4A015361FDE0005FECD /* NTIMathPrefixedSymbol.m in Sources */,
-				4CA4F4A51536234C0005FECD /* NTIMathAbstractBinaryCombiningSymbol.m in Sources */,
-				4CA4F4AF1536287A0005FECD /* NTIMathFractionCombiningBinarySymbol.m in Sources */,
-				4CA4F4B2153629150005FECD /* NTIMathExponentCombiningBinarySymbol.m in Sources */,
+				4CA4F4A015361FDE0005FECD /* NTIMathUnaryExpression.m in Sources */,
+				4CA4F4A51536234C0005FECD /* NTIMathBinaryExpression.m in Sources */,
+				4CA4F4AF1536287A0005FECD /* NTIMathFractionBinaryExpression.m in Sources */,
+				4CA4F4B2153629150005FECD /* NTIMathExponentBinaryExpression.m in Sources */,
 				4CA4F4B715362A2D0005FECD /* NTIMathOperatorSymbol.m in Sources */,
 				4C8B84251541224D005BBDF2 /* NTIMathSymbol.m in Sources */,
 				4C2ECDD71549D0A400C69E3A /* NTIMathInputExpressionModel.m in Sources */,

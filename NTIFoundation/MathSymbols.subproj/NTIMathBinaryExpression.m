@@ -1,22 +1,21 @@
 //
-//  NTIMathAbstractBinaryCombiningSymbol.m
+//  NTIMathBinaryExpression.m
 //  NTIFoundation
 //
 //  Created by Pacifique Mahoro on 4/11/12.
 //  Copyright (c) 2012 NextThought. All rights reserved.
 //
 
-#import "NTIMathAbstractBinaryCombiningSymbol.h"
-#import "NTIMathGroup.h"
+#import "NTIMathBinaryExpression.h"
 #import "NTIMathPlaceholderSymbol.h"
 #import "NTIMathOperatorSymbol.h"
 
-@interface NTIMathAbstractBinaryCombiningSymbol() 
+@interface NTIMathBinaryExpression() 
 -(NSUInteger)precedenceLevelForString: (NSString *)opString;
 -(NTIMathSymbol *)addAsChildMathSymbol: (NTIMathSymbol *)newMathSymbol;
 @end
 
-@implementation NTIMathAbstractBinaryCombiningSymbol
+@implementation NTIMathBinaryExpression
 @synthesize leftMathNode, rightMathNode, operatorMathNode;
 
 

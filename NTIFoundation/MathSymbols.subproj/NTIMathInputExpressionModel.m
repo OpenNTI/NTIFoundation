@@ -8,14 +8,14 @@
 
 #import "NTIMathInputExpressionModel.h"
 #import "NTIMathSymbol.h"
-#import "NTIMathAbstractBinaryCombiningSymbol.h"
-#import "NTIMathPrefixedSymbol.h"
+#import "NTIMathBinaryExpression.h"
+#import "NTIMathUnaryExpression.h"
 #import "NTIMathPlaceholderSymbol.h"
 #import "NTIMathAlphaNumericSymbol.h"
 #import "NTIMathOperatorSymbol.h"
-#import "NTIMathExponentCombiningBinarySymbol.h"
+#import "NTIMathExponentBinaryExpression.h"
 #import "NTIMathParenthesisSymbol.h"
-#import "NTIMathFractionCombiningBinarySymbol.h"
+#import "NTIMathFractionBinaryExpression.h"
 #import "NTIMathSymbolUtils.h"
 
 @interface NSString(mathSymbolExtension)
@@ -35,6 +35,9 @@
 
 -(BOOL)isAlphaNumeric
 {
+	if ([self isEqualToString:@"∏"]) {
+		return YES;
+	}
 	NSString* regex = @"^[a-zA-Z0-9]*$|^\\.$";	//count alphanumeric plus a dot(.)
 	NSPredicate* regexTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
 	return [regexTest evaluateWithObject: self];
@@ -479,11 +482,11 @@
 	}
 	else{
 		if ([mathSymbol respondsToSelector:@selector(isBinaryOperator)]) {
-			NTIMathAbstractBinaryCombiningSymbol* bMathSymbol = (NTIMathAbstractBinaryCombiningSymbol *)mathSymbol;
+			NTIMathBinaryExpression* bMathSymbol = (NTIMathBinaryExpression *)mathSymbol;
 			return [self findLastLeafNodeFrom: bMathSymbol.rightMathNode];
 		}
 		if ([mathSymbol respondsToSelector:@selector(isUnaryOperator)]) {
-			NTIMathPrefixedSymbol* uMathSymbol = (NTIMathPrefixedSymbol *)mathSymbol;
+			NTIMathUnaryExpression* uMathSymbol = (NTIMathUnaryExpression *)mathSymbol;
 			return [self findLastLeafNodeFrom: uMathSymbol.childMathNode];
 		}
 		return nil;
@@ -498,11 +501,11 @@
 	}
 	else {
 		if ([mathSymbol respondsToSelector:@selector(isBinaryOperator)]) {
-			NTIMathAbstractBinaryCombiningSymbol* bMathSymbol = (NTIMathAbstractBinaryCombiningSymbol *)mathSymbol;
+			NTIMathBinaryExpression* bMathSymbol = (NTIMathBinaryExpression *)mathSymbol;
 			return [self findFirstLeafNodeFrom: bMathSymbol.leftMathNode];
 		}
 		if ([mathSymbol respondsToSelector:@selector(isUnaryOperator)]) {
-			NTIMathPrefixedSymbol* uMathSymbol = (NTIMathPrefixedSymbol *)mathSymbol;
+			NTIMathUnaryExpression* uMathSymbol = (NTIMathUnaryExpression *)mathSymbol;
 			return [self findFirstLeafNodeFrom: uMathSymbol.childMathNode];
 		}
 		return nil;
@@ -527,16 +530,16 @@
 		return [[NTIMathParenthesisSymbol alloc] initWithMathSymbolString: stringValue];
 	}
 	if ( [stringValue isMathPrefixedSymbol] ) {
-		return [[NTIMathPrefixedSymbol alloc] initWithMathOperatorString: stringValue];
+		return [[NTIMathUnaryExpression alloc] initWithMathOperatorString: stringValue];
 	}
 	if ( [stringValue isMathBinaryCombiningSymbol] ) {
 		if ([stringValue isEqualToString:@"^"]) {
-			return [[NTIMathExponentCombiningBinarySymbol alloc] init];
+			return [[NTIMathExponentBinaryExpression alloc] init];
 		}
-		if ([stringValue isEqualToString: @"x/y"]) {
-			return [[NTIMathFractionCombiningBinarySymbol alloc] init];
+		if ([stringValue isEqualToString: @"x/y"] || [stringValue isEqualToString:@"÷"]) {
+			return [[NTIMathFractionBinaryExpression alloc] init];
 		}
-		return [[NTIMathAbstractBinaryCombiningSymbol alloc] initWithMathOperatorSymbol: stringValue];
+		return [[NTIMathBinaryExpression alloc] initWithMathOperatorSymbol: stringValue];
 	}
 	return nil;
 }

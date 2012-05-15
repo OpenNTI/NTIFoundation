@@ -1,21 +1,20 @@
 //
-//  NTIMathPrefixedSymbol.m
+//  NTIMathUnaryExpression.m
 //  NTIFoundation
 //
 //  Created by Pacifique Mahoro on 4/11/12.
 //  Copyright (c) 2012 NextThought. All rights reserved.
 //
 
-#import "NTIMathPrefixedSymbol.h"
-#import "NTIMathGroup.h"
+#import "NTIMathUnaryExpression.h"
 #import "NTIMathOperatorSymbol.h"
 #import "NTIMathPlaceholderSymbol.h"
 
-@interface NTIMathPrefixedSymbol()
+@interface NTIMathUnaryExpression()
 -(NSUInteger)precedenceLevelForString: (NSString *)opString;
 @end
 
-@implementation NTIMathPrefixedSymbol
+@implementation NTIMathUnaryExpression
 @synthesize prefix, precedenceLevel, childMathNode;
 
 -(id)initWithMathOperatorString: (NSString *)operatorString

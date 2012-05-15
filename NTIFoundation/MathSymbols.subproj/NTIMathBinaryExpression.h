@@ -1,5 +1,5 @@
 //
-//  NTIMathAbstractBinaryCombiningSymbol.h
+//  NTIMathBinaryExpression.h
 //  NTIFoundation
 //
 //  Created by Pacifique Mahoro on 4/11/12.
@@ -8,7 +8,7 @@
 
 #import "NTIMathSymbol.h"
 @class NTIMathOperatorSymbol;
-@interface NTIMathAbstractBinaryCombiningSymbol : NTIMathSymbol {
+@interface NTIMathBinaryExpression : NTIMathSymbol {
 	NSUInteger precedenceLevel;
 }
 
