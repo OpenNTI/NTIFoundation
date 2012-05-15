@@ -35,7 +35,7 @@
 
 -(BOOL)isAlphaNumeric
 {
-	if ([self isEqualToString:@"∏"]) {
+	if ([self isEqualToString:@"∏"] || [self isEqualToString:@"π"]) {
 		return YES;
 	}
 	NSString* regex = @"^[a-zA-Z0-9]*$|^\\.$";	//count alphanumeric plus a dot(.)

@@ -82,10 +82,15 @@
 
 -(NSString *)latexValue
 {
-	if (self.isNegative) {
-		return [NSString stringWithFormat:@"-%@", self.mathSymbolValue];
+	NSString* latexVal = self.mathSymbolValue;
+	NSRange aRange = [latexVal rangeOfString:@"π"];
+	if (aRange.location != NSNotFound) {
+		latexVal = [latexVal stringByReplacingOccurrencesOfString:@"π" withString:@"\\pi"];
 	}
-	return self.mathSymbolValue;
+	if (self.isNegative) {
+		latexVal = [NSString stringWithFormat:@"-%@", latexVal];
+	}
+	return latexVal;
 }
 
 -(NSString *)toString
