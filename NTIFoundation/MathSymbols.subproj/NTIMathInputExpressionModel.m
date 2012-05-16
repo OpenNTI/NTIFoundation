@@ -166,6 +166,35 @@
 	self->rootMathSymbol.parentMathSymbol = nil;
 }
 
+static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
+{
+	//Implicit multiplication
+	if ([currentNode respondsToSelector:@selector(isLiteral)] && [newNode respondsToSelector:@selector(isUnaryOperator)]) {
+		return YES;
+	}
+	//Implicit addition. e.g 2 1/3 is equivalent to 2+1/3. Mixed number case.
+	if ([currentNode respondsToSelector:@selector(isLiteral)] && [newNode isKindOfClass:[NTIMathFractionBinaryExpression class]]) {
+		return YES;
+	}
+	return NO;
+}
+
+-(void)addImplicitSymbolBetween: (NTIMathSymbol *)currentNode andNewSymbol: (NTIMathSymbol *)newNode
+{
+	if ([currentNode respondsToSelector:@selector(isLiteral)] && [newNode respondsToSelector:@selector(isUnaryOperator)]) {
+		NTIMathBinaryExpression* implicitSymbol = [NTIMathBinaryExpression binaryExpressionForString:@"*"];
+		implicitSymbol.isOperatorImplicit = YES;	
+		self->currentMathSymbol = [self addMathNode:implicitSymbol on: currentNode];
+	}
+	
+	//Implicit addition. e.g 2 1/3 is equivalent to 2+1/3. Mixed number case.
+	if ([currentNode respondsToSelector:@selector(isLiteral)] && [newNode isKindOfClass:[NTIMathFractionBinaryExpression class]]) {
+		NTIMathBinaryExpression* implicitSymbol = [NTIMathBinaryExpression binaryExpressionForString:@"+"];
+		implicitSymbol.isOperatorImplicit = YES;	//Set the flag for implicit binary symbol
+		self->currentMathSymbol = [self addMathNode:implicitSymbol on: self->currentMathSymbol];
+	}
+}
+
 -(void)addMathSymbolForString: (NSString *)stringValue
 {
 	if ([stringValue isPlusMinusSymbol]) {
@@ -181,15 +210,13 @@
 	}
 	//NOTE: As the user navigates through the equation, the may want to insert things in between, we need to be able to distinguish inserting in the equation and adding to the end of the rootsymbol. The easy way if comparing the currentSymbol with the last leaf node of the rootSymbol, if they differ, we are inserting, else we are are adding to the end of the equation
 	if (self->currentMathSymbol != [self findLastLeafNodeFrom: self.rootMathSymbol]) {
-		//[self setCurrentSymbolTo: self->currentMathSymbol];	// we create a new tree at the current symbol to allow inserting into the equation.
 		//Before we create a new tree at the new current symbol, we will close the tree that we were working on.
 		self.rootMathSymbol = [self mergeLastTreeOnStackWith: self.rootMathSymbol];
 		self->currentMathSymbol = [self newMathSymbolTreeWithRoot:self->currentMathSymbol firstChild: nil]; 
 	}
-	//Check if it's a special case of implicit multiplication. In which case, we will need to add
-	if ([self->currentMathSymbol respondsToSelector:@selector(isLiteral)] && [newSymbol respondsToSelector:@selector(isUnaryOperator)]) {
-		NTIMathSymbol* implicitSymbol = [self createMathSymbolForString:@"*"];
-		self->currentMathSymbol = [self addMathNode:implicitSymbol on: self->currentMathSymbol];
+
+	if (isImplicitSymbol(self->currentMathSymbol, newSymbol)) {
+		[self addImplicitSymbolBetween: self->currentMathSymbol andNewSymbol:newSymbol];
 	}
 	self->currentMathSymbol = [self addMathNode: newSymbol on: self->currentMathSymbol];
 }
@@ -533,13 +560,10 @@
 		return [[NTIMathUnaryExpression alloc] initWithMathOperatorString: stringValue];
 	}
 	if ( [stringValue isMathBinaryCombiningSymbol] ) {
-		if ([stringValue isEqualToString:@"^"]) {
-			return [[NTIMathExponentBinaryExpression alloc] init];
+		if ([stringValue isEqualToString:@"x/y"]) {
+			stringValue = @"/";
 		}
-		if ([stringValue isEqualToString: @"x/y"] || [stringValue isEqualToString:@"÷"]) {
-			return [[NTIMathFractionBinaryExpression alloc] init];
-		}
-		return [[NTIMathBinaryExpression alloc] initWithMathOperatorSymbol: stringValue];
+		return [NTIMathBinaryExpression binaryExpressionForString: stringValue];
 	}
 	return nil;
 }

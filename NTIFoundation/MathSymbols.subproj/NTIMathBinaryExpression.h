@@ -15,7 +15,21 @@
 @property( nonatomic, strong, readonly) NTIMathOperatorSymbol* operatorMathNode;	//Parent node
 @property( nonatomic, strong) NTIMathSymbol* leftMathNode;
 @property( nonatomic, strong) NTIMathSymbol* rightMathNode;
+@property( nonatomic ) BOOL isOperatorImplicit;
 
 -(id)initWithMathOperatorSymbol: (NSString *)operatorString;
 -(BOOL)isBinaryOperator;
+//Helpers
+-(NSString *)latexValueForChildNode: (NTIMathSymbol *)childExpression;
+-(NSString *)toStringValueForChildNode: (NTIMathSymbol *)childExpression;
++(NTIMathBinaryExpression *)binaryExpressionForString:(NSString *)symbolString;
+@end
+
+@interface NTIMathAdditionBinaryExpression : NTIMathBinaryExpression
+@end
+
+@interface NTIMathSubtractionBinaryExpression : NTIMathBinaryExpression
+@end
+
+@interface NTIMathMultiplicationBinaryExpression : NTIMathBinaryExpression
 @end

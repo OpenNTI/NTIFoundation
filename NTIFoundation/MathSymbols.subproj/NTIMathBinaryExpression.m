@@ -9,43 +9,53 @@
 #import "NTIMathBinaryExpression.h"
 #import "NTIMathPlaceholderSymbol.h"
 #import "NTIMathOperatorSymbol.h"
+#import "NTIMathExponentBinaryExpression.h"
+#import "NTIMathFractionBinaryExpression.h"
 
 @interface NTIMathBinaryExpression() 
--(NSUInteger)precedenceLevelForString: (NSString *)opString;
+//-(NSUInteger)precedenceLevelForString: (NSString *)opString;
 -(NTIMathSymbol *)addAsChildMathSymbol: (NTIMathSymbol *)newMathSymbol;
 @end
 
 @implementation NTIMathBinaryExpression
-@synthesize leftMathNode, rightMathNode, operatorMathNode;
+@synthesize leftMathNode, rightMathNode, operatorMathNode, isOperatorImplicit;
 
++(NTIMathBinaryExpression *)binaryExpressionForString:(NSString *)symbolString
+{
+	if ([symbolString isEqualToString:@"+"]) {
+		return [[NTIMathAdditionBinaryExpression alloc] init];
+	}
+	if ([symbolString isEqualToString:@"-"]) {
+		return [[NTIMathSubtractionBinaryExpression alloc] init];
+	}
+	if ([symbolString isEqualToString:@"^"]) {
+		return [[NTIMathExponentBinaryExpression alloc] init];
+	}
+	if ([symbolString isEqualToString:@"*"]) {
+		return [[NTIMathMultiplicationBinaryExpression alloc] init];
+	}
+	if ([symbolString isEqualToString:@"/"]	) {
+		return [[NTIMathFractionBinaryExpression alloc] init];
+	}
+	if ([symbolString isEqualToString:@"÷"]) {
+		return [[NTIMathFractionBinaryExpression alloc] init];
+	}
+	OBAssertFailed();
+	return nil;
+}
 
 -(id)initWithMathOperatorSymbol: (NSString *)operatorString
 {
 	self = [super init];
 	if (self) {
 		self->operatorMathNode = [[NTIMathOperatorSymbol alloc] initWithValue:operatorString];
-		self.leftMathNode = [[NTIMathPlaceholderSymbol alloc] init];
-		self.rightMathNode = [[NTIMathPlaceholderSymbol alloc] init];
-		self->precedenceLevel = [self precedenceLevelForString: operatorString];
+		self->leftMathNode = [[NTIMathPlaceholderSymbol alloc] init];
+		self->leftMathNode.parentMathSymbol = self;
+		self->rightMathNode = [[NTIMathPlaceholderSymbol alloc] init];
+		self->rightMathNode.parentMathSymbol = self;
+		//self->precedenceLevel = [self precedenceLevelForString: operatorString];
 	}
 	return self;
-}
-
--(NSUInteger)precedenceLevelForString: (NSString *)opString
-{
-	if ([opString isEqualToString: @"^"]) {
-		return 60;
-	}
-	if ([opString isEqualToString: @"*"] || 
-		[opString isEqualToString: @"/"] || 
-		[opString isEqualToString:@"÷"]) {
-		return 50;
-	}
-	if ([opString isEqualToString: @"+"] || 
-		[opString isEqualToString: @"-"]) {
-		return 40;
-	}
-	return 0;
 }
 
 -(NSUInteger)precedenceLevel
@@ -96,7 +106,6 @@
 		self.rightMathNode.parentMathSymbol = self;
 		return rightMathNode;
 	}
-	
 	return nil;
 }
 
@@ -136,64 +145,47 @@
 	return nil;
 }
 
-static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
+-(NSString *)toStringValueForChildNode: (NTIMathSymbol *)childExpression
 {
-	//helper method, for placeholder that may be pointing to expression tree.
-	if ([mathSymbol respondsToSelector:@selector(isPlaceholder)]) {
-		NTIMathSymbol* rep = [mathSymbol performSelector:@selector(inPlaceOfObject)];
-		if (rep) {
-			return rep;
-		}
+	NSString* childStringValue = [childExpression toString];
+	if (childExpression.precedenceLevel < self.precedenceLevel && (childExpression.precedenceLevel > 0)) {
+		childStringValue = [NSString stringWithFormat: @"(%@)", childStringValue]; 
 	}
-	return mathSymbol;
+	return childStringValue;
+}
+
+//Adds parenthesis, if they need to be added.
+-(NSString *)latexValueForChildNode: (NTIMathSymbol *)childExpression
+{
+	NSString* childLatexValue = [childExpression latexValue];
+	if (childExpression.precedenceLevel < self.precedenceLevel && (childExpression.precedenceLevel > 0)) {
+		childLatexValue = [NSString stringWithFormat: @"(%@)", childLatexValue]; 
+	}
+	return childLatexValue;
 }
 
 -(NSString *)toString
 {
-	NSString* leftNodeString = [self.leftMathNode toString];
-	NSString* rightNodeString = [self.rightMathNode toString];
+	NSString* leftNodeString = [self toStringValueForChildNode: self.leftMathNode];
+	NSString* rightNodeString = [self toStringValueForChildNode: self.rightMathNode];
 	
-	//case of implicit multiplication, e.g 4√3 instead of 4*√3
-	if ([mathExpressionForSymbol(self.leftMathNode) respondsToSelector:@selector(isLiteral)] && [mathExpressionForSymbol(self.rightMathNode) respondsToSelector:@selector(isUnaryOperator)] &&
-		[self.operatorMathNode.mathSymbolValue isEqualToString:@"*"]) {
+	//If it's implicit we will ignore the operator symbol.
+	if (self.isOperatorImplicit) {
 		return [NSString stringWithFormat:@"%@%@", leftNodeString, rightNodeString];
 	}
-		
-	if (self.leftMathNode.precedenceLevel < self.precedenceLevel && (self.leftMathNode.precedenceLevel > 0)) {
-		leftNodeString = [NSString stringWithFormat: @"(%@)", leftNodeString]; 
-	}
-	if (self.rightMathNode.precedenceLevel < self.precedenceLevel && (self.rightMathNode.precedenceLevel > 0)) {
-		rightNodeString = [NSString stringWithFormat:@"(%@)", rightNodeString];
-	}
-	
-	
 	return [NSString stringWithFormat: @"%@%@%@", leftNodeString, [self.operatorMathNode toString], rightNodeString];
 }
 
 -(NSString *)latexValue 
 {
-	NSString* leftNodeString = [self.leftMathNode latexValue];
-	NSString* rightNodeString = [self.rightMathNode latexValue];
-	NSString* operatorString = [self.operatorMathNode latexValue];
+	NSString* leftNodeString = [self latexValueForChildNode: self.leftMathNode];
+	NSString* rightNodeString = [self latexValueForChildNode: self.rightMathNode];
 	
-	//case of implicit multiplication, e.g 4√3 instead of 4*√3
-	if ([mathExpressionForSymbol(self.leftMathNode) respondsToSelector:@selector(isLiteral)] && [mathExpressionForSymbol(self.rightMathNode) respondsToSelector:@selector(isUnaryOperator)]&&
-		[self.operatorMathNode.mathSymbolValue isEqualToString:@"*"]) {
+	//If it's implicit we will ignore the operator symbol.
+	if (self.isOperatorImplicit) {
 		return [NSString stringWithFormat:@"%@%@", leftNodeString, rightNodeString];
 	}
-	
-	//we don't want paranthesis around literals and placeholders( their precedence level is 0)
-	if (self.leftMathNode.precedenceLevel < self.precedenceLevel && (self.leftMathNode.precedenceLevel > 0)) {
-		leftNodeString = [NSString stringWithFormat: @"(%@)", leftNodeString]; 
-	}
-	if (self.rightMathNode.precedenceLevel < self.precedenceLevel && (self.rightMathNode.precedenceLevel > 0)) {
-		rightNodeString = [NSString stringWithFormat:@"(%@)", rightNodeString];
-	}
-	
-	if ([operatorString isEqualToString:@"/"] || [operatorString isEqualToString:@"÷"]) {
-		return [NSString stringWithFormat:@"\\frac{%@}{%@}", leftNodeString, rightNodeString];
-	}
-	
+	NSString* operatorString = [self.operatorMathNode latexValue];
 	return [NSString stringWithFormat: @"%@%@%@", leftNodeString, operatorString, rightNodeString];
 }
 
@@ -207,3 +199,63 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 	return YES;
 }
 @end
+
+@implementation NTIMathMultiplicationBinaryExpression
+//static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
+//{
+//	//helper method, for placeholder that may be pointing to expression tree.
+//	if ([mathSymbol respondsToSelector:@selector(isPlaceholder)]) {
+//		NTIMathSymbol* rep = [mathSymbol performSelector:@selector(inPlaceOfObject)];
+//		if (rep) {
+//			return rep;
+//		}
+//	}
+//	return mathSymbol;
+//}
+
+-(id)init
+{
+	self = [super initWithMathOperatorSymbol: @"*"];
+	if (self) {
+		self->precedenceLevel = 50;
+	}
+	return self;
+}
+
+@end
+
+@implementation NTIMathAdditionBinaryExpression
+-(id)init
+{
+	self = [super initWithMathOperatorSymbol: @"+"];
+	if (self) {
+		self->precedenceLevel = 40;
+	}
+	return self;
+}
+
+-(NSString *)toString
+{
+	if (self.isOperatorImplicit) {
+		NSString* leftChildString = [self toStringValueForChildNode: self.leftMathNode];
+		NSString* rightChildString = [self toStringValueForChildNode: self.rightMathNode];
+		return [NSString stringWithFormat:@"%@ %@", leftChildString, rightChildString];
+	}
+	else {
+		return [super toString];
+	}
+}
+@end
+
+@implementation NTIMathSubtractionBinaryExpression
+-(id)init
+{
+	self = [super initWithMathOperatorSymbol: @"-"];
+	if (self) {
+		self->precedenceLevel = 40;
+	}
+	return self;
+}
+@end
+
+

@@ -12,11 +12,15 @@
 
 -(id)init
 {
-	return [super initWithMathOperatorSymbol: @"^"];
+	self = [super initWithMathOperatorSymbol: @"^"];
+	if (self) {
+		self.precedenceLevel = 60;
+	}
+	return self;
 }
 
 -(NSString *)latexValue
 {
-	return [NSString stringWithFormat: @"%@^%@", [self.leftMathNode latexValue], [self.rightMathNode latexValue]];
+	return [super latexValue];
 }
 @end
