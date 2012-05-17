@@ -52,7 +52,7 @@
 
 -(BOOL)isParanthesisSymbol
 {
-	NSArray* array = [[NSArray alloc] initWithObjects: @"(", @")", nil];
+	NSArray* array = [[NSArray alloc] initWithObjects: @"(", @")", @"( )", nil];
 	return [array containsObject: self];
 }
 
@@ -195,6 +195,14 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
 	}
 }
 
+-(BOOL)isLeafMathNode: (NTIMathSymbol *)mathNode
+{
+	if ([mathNode respondsToSelector:@selector(isPlaceholder)] || [mathNode respondsToSelector:@selector(isLiteral)]) {
+		return YES;
+	}
+	return NO;
+}
+
 -(void)addMathSymbolForString: (NSString *)stringValue
 {
 	if ([stringValue isPlusMinusSymbol]) {
@@ -209,7 +217,7 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
 		return;
 	}
 	//NOTE: As the user navigates through the equation, the may want to insert things in between, we need to be able to distinguish inserting in the equation and adding to the end of the rootsymbol. The easy way if comparing the currentSymbol with the last leaf node of the rootSymbol, if they differ, we are inserting, else we are are adding to the end of the equation
-	if (self->currentMathSymbol != [self findLastLeafNodeFrom: self.rootMathSymbol]) {
+	if (self->currentMathSymbol != [self findLastLeafNodeFrom: self.rootMathSymbol] && [self isLeafMathNode: self->currentMathSymbol]) {
 		//Before we create a new tree at the new current symbol, we will close the tree that we were working on.
 		self.rootMathSymbol = [self mergeLastTreeOnStackWith: self.rootMathSymbol];
 		self->currentMathSymbol = [self newMathSymbolTreeWithRoot:self->currentMathSymbol firstChild: nil]; 
@@ -280,12 +288,13 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
 				newRootSymbol.substituteSymbol = pointer;
 			}
 		}
+		OBASSERT(childSymbol == self->rootMathSymbol);
+		newRootSymbol.hasParenthesis = childSymbol.hasParenthesis;
+		childSymbol.hasParenthesis = NO;
 		self.rootMathSymbol = newRootSymbol;
-		
 		if ([newRootSymbol respondsToSelector:@selector(isLiteral)]) {
 			return self.rootMathSymbol;
 		}
-		
 		//Add as first child the childsymbol
 		return [self.rootMathSymbol addSymbol: childSymbol];
 	}
@@ -320,6 +329,9 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
 	OBASSERT( plink.inPlaceOfObject == mathSymbol );
 	//combined both tree, and get a notification if it fails.
 	if ([plink.parentMathSymbol addSymbol: mathSymbol]) {
+		//Change current to point to the old mathSymbol
+		//TODO: are we always going to assume that leaf node can only be currentNode? naturally after closing a tree, we should make the root of the tree the current node but right now it breaks our tree model because of the way our -addNode: On:  works. Needs some thinking.
+		//self->currentMathSymbol = mathSymbol;
 		return combinedTree;
 	}
 	else {
@@ -340,8 +352,9 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
 	}
 	else {
 		//a pholder is the root element, needs to update who is pointing to us.
+		literal.hasParenthesis = pholder.hasParenthesis;
+		pholder.hasParenthesis = NO;
  		self.rootMathSymbol = literal;
-		
 		if (self->mathExpressionQueue.count > 0) {
 			NTIMathPlaceholderSymbol* linker = (NTIMathPlaceholderSymbol *)pholder.substituteSymbol;
 			[self makeExpression: linker representExpression: self.rootMathSymbol];
@@ -357,6 +370,7 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
 	if ([newNode respondsToSelector:@selector(openingParanthesis)]) {
 		if( [newNode performSelector:@selector(openingParanthesis)] ) {
 			//Make a new tree
+			currentNode.hasParenthesis = YES;
 			return [self newMathSymbolTreeWithRoot: currentNode firstChild: nil];
 		}
 		else {
@@ -554,6 +568,9 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
 		return [[NTIMathOperatorSymbol alloc] initWithValue: stringValue];
 	}
 	if ( [stringValue isParanthesisSymbol] ) {
+		if ([stringValue isEqualToString:@"( )"]) {
+			return [[NTIMathParenthesisSymbol alloc] initWithMathSymbolString: @"("];
+		}
 		return [[NTIMathParenthesisSymbol alloc] initWithMathSymbolString: stringValue];
 	}
 	if ( [stringValue isMathPrefixedSymbol] ) {

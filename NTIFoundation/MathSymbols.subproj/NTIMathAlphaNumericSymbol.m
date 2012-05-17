@@ -90,13 +90,21 @@
 	if (self.isNegative) {
 		latexVal = [NSString stringWithFormat:@"-%@", latexVal];
 	}
+
+	if (self.hasParenthesis) {
+		latexVal = [NSString stringWithFormat:@"(%@)", latexVal];
+	}
 	return latexVal;
 }
 
 -(NSString *)toString
 {
+	NSString* string;
 	if (self.isNegative) {
-		return [NSString stringWithFormat:@"-%@", self.mathSymbolValue];
+		string = [NSString stringWithFormat:@"-%@", self.mathSymbolValue];
+	}
+	if (self.hasParenthesis) {
+		return [NSString stringWithFormat:@"(%@)", string];
 	}
 	return self.mathSymbolValue;
 }

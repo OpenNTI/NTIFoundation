@@ -9,7 +9,7 @@
 #import "NTIMathSymbol.h"
 
 @implementation NTIMathSymbol
-@synthesize parentMathSymbol, precedenceLevel,substituteSymbol;
+@synthesize parentMathSymbol, precedenceLevel,substituteSymbol, hasParenthesis;
 
 -(BOOL)requiresGraphicKeyboard
 {
@@ -51,5 +51,10 @@
 -(NSArray *)children
 {
 	return nil;
+}
+
+-(void)setSubstituteSymbol:(NTIMathSymbol *)theSubstituteSymbol
+{
+	substituteSymbol = theSubstituteSymbol;
 }
 @end

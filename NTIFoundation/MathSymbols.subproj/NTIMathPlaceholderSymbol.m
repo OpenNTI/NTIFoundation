@@ -32,6 +32,9 @@
 	if (self.inPlaceOfObject) {
 		return [self.inPlaceOfObject latexValue];
 	}
+	if (self.hasParenthesis) {
+		return @"()";
+	}
 	return @"";
 }
 
@@ -39,6 +42,9 @@
 {
 	if (self.inPlaceOfObject) {
 		return [self.inPlaceOfObject toString];
+	}
+	if (self.hasParenthesis) {
+		return @"()";
 	}
 	return @"";
 }

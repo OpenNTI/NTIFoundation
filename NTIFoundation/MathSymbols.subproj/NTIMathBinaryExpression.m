@@ -144,10 +144,22 @@
 	}
 	return nil;
 }
+static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
+{
+	//helper method, for placeholder that may be pointing to expression tree.
+	if ([mathSymbol respondsToSelector:@selector(isPlaceholder)]) {
+		NTIMathSymbol* rep = [mathSymbol performSelector:@selector(inPlaceOfObject)];
+		if (rep) {
+			return rep;
+		}
+	}
+	return mathSymbol;
+}
 
 -(NSString *)toStringValueForChildNode: (NTIMathSymbol *)childExpression
 {
 	NSString* childStringValue = [childExpression toString];
+	childExpression = mathExpressionForSymbol(childExpression);
 	if (childExpression.precedenceLevel < self.precedenceLevel && (childExpression.precedenceLevel > 0)) {
 		childStringValue = [NSString stringWithFormat: @"(%@)", childStringValue]; 
 	}
@@ -158,6 +170,7 @@
 -(NSString *)latexValueForChildNode: (NTIMathSymbol *)childExpression
 {
 	NSString* childLatexValue = [childExpression latexValue];
+	childExpression = mathExpressionForSymbol(childExpression);
 	if (childExpression.precedenceLevel < self.precedenceLevel && (childExpression.precedenceLevel > 0)) {
 		childLatexValue = [NSString stringWithFormat: @"(%@)", childLatexValue]; 
 	}
@@ -173,7 +186,11 @@
 	if (self.isOperatorImplicit) {
 		return [NSString stringWithFormat:@"%@%@", leftNodeString, rightNodeString];
 	}
-	return [NSString stringWithFormat: @"%@%@%@", leftNodeString, [self.operatorMathNode toString], rightNodeString];
+	NSString* string = [NSString stringWithFormat: @"%@%@%@", leftNodeString, [self.operatorMathNode toString], rightNodeString];
+	if (self.hasParenthesis) {
+		return [NSString stringWithFormat:@"(%@)", string];
+	}
+	return string;
 }
 
 -(NSString *)latexValue 
@@ -186,7 +203,11 @@
 		return [NSString stringWithFormat:@"%@%@", leftNodeString, rightNodeString];
 	}
 	NSString* operatorString = [self.operatorMathNode latexValue];
-	return [NSString stringWithFormat: @"%@%@%@", leftNodeString, operatorString, rightNodeString];
+	NSString* latexVal = [NSString stringWithFormat: @"%@%@%@", leftNodeString, operatorString, rightNodeString];
+	if (self.hasParenthesis) {
+		latexVal = [NSString stringWithFormat:@"(%@)", latexVal];
+	}
+	return latexVal;
 }
 
 -(NSArray *)children
@@ -201,18 +222,6 @@
 @end
 
 @implementation NTIMathMultiplicationBinaryExpression
-//static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
-//{
-//	//helper method, for placeholder that may be pointing to expression tree.
-//	if ([mathSymbol respondsToSelector:@selector(isPlaceholder)]) {
-//		NTIMathSymbol* rep = [mathSymbol performSelector:@selector(inPlaceOfObject)];
-//		if (rep) {
-//			return rep;
-//		}
-//	}
-//	return mathSymbol;
-//}
-
 -(id)init
 {
 	self = [super initWithMathOperatorSymbol: @"*"];
