@@ -39,8 +39,14 @@
 	}
 	if ([symbolString isEqualToString:@"÷"]) {
 		return [[NTIMathFractionBinaryExpression alloc] init];
+
 	}
-	OBAssertFailed();
+	NSString* notReachedString = [NSString stringWithFormat: @"%@ not supported", symbolString];
+	
+	//Get the compiler to shutup about unused variable.
+	if(notReachedString){
+		OBASSERT_NOT_REACHED([notReachedString cStringUsingEncoding: NSUTF8StringEncoding] );
+	}
 	return nil;
 }
 

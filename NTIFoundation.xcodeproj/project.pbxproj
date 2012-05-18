@@ -102,6 +102,8 @@
 		40A745C014DB32E90093F0D4 /* NTIBadgeCountView.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A745BE14DB32E90093F0D4 /* NTIBadgeCountView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40A745C114DB32E90093F0D4 /* NTIBadgeCountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40A745BF14DB32E90093F0D4 /* NTIBadgeCountView.m */; };
 		40A745C214DB32E90093F0D4 /* NTIBadgeCountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40A745BF14DB32E90093F0D4 /* NTIBadgeCountView.m */; };
+		40AB82451566A6F600BB7375 /* OCHamcrestIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40AB82441566A6F500BB7375 /* OCHamcrestIOS.framework */; };
+		40AB82601566AA0C00BB7375 /* OQColor-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40AB825F1566AA0C00BB7375 /* OQColor-NTIExtensionsTest.m */; };
 		40AEBDD8145A5A6700028750 /* NTIEditableFrameScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 40AEBDD6145A5A6700028750 /* NTIEditableFrameScrollView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40AEBDD9145A5A6700028750 /* NTIEditableFrameScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40AEBDD7145A5A6700028750 /* NTIEditableFrameScrollView.m */; };
 		40B5B49414C896CC009D5810 /* libNTIFoundation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 72C0D196142529E800D526D8 /* libNTIFoundation.a */; };
@@ -679,6 +681,9 @@
 		40A7459814DA30050093F0D4 /* NSObject-NTIJSONTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject-NTIJSONTest.m"; sourceTree = "<group>"; };
 		40A745BE14DB32E90093F0D4 /* NTIBadgeCountView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIBadgeCountView.h; sourceTree = "<group>"; };
 		40A745BF14DB32E90093F0D4 /* NTIBadgeCountView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIBadgeCountView.m; sourceTree = "<group>"; };
+		40AB82441566A6F500BB7375 /* OCHamcrestIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OCHamcrestIOS.framework; path = "../NTIWorkspace/OCHamcrest-1.7/OCHamcrestIOS.framework"; sourceTree = "<group>"; };
+		40AB825E1566AA0C00BB7375 /* OQColor-NTIExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OQColor-NTIExtensionsTest.h"; sourceTree = "<group>"; };
+		40AB825F1566AA0C00BB7375 /* OQColor-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OQColor-NTIExtensionsTest.m"; sourceTree = "<group>"; };
 		40AEBDD6145A5A6700028750 /* NTIEditableFrameScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIEditableFrameScrollView.h; sourceTree = "<group>"; };
 		40AEBDD7145A5A6700028750 /* NTIEditableFrameScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIEditableFrameScrollView.m; sourceTree = "<group>"; };
 		40B5B49514C896CC009D5810 /* libNTIUserDataModel.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libNTIUserDataModel.a; path = "../../../Library/Developer/Xcode/DerivedData/NTIWorkspace-fdtwmhzrtxvlxtdrcxuhoowljuey/Build/Products/Debug-iphoneos/libNTIUserDataModel.a"; sourceTree = "<group>"; };
@@ -895,6 +900,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40AB82451566A6F600BB7375 /* OCHamcrestIOS.framework in Frameworks */,
 				4053898C14B3FB8800B5FB46 /* CFNetwork.framework in Frameworks */,
 				4080B641148692C500A8899D /* libprofile_rt.dylib in Frameworks */,
 				72D7D44113E32F0200652DAC /* libxml2.dylib in Frameworks */,
@@ -1049,6 +1055,8 @@
 				4029274D1498653200E4720A /* NSArray-NTIExtenstionsTest.m */,
 				4029275114986A9800E4720A /* NSMutableArray-NTIExtensionsTest.h */,
 				4029275214986A9800E4720A /* NSMutableArray-NTIExtensionsTest.m */,
+				40AB825E1566AA0C00BB7375 /* OQColor-NTIExtensionsTest.h */,
+				40AB825F1566AA0C00BB7375 /* OQColor-NTIExtensionsTest.m */,
 			);
 			name = FoundationExtensionsTests;
 			sourceTree = "<group>";
@@ -1214,7 +1222,6 @@
 		72CBA95A1385CF1F00E3D28D = {
 			isa = PBXGroup;
 			children = (
-				40B5B4B114C89A9C009D5810 /* CoreImage.framework */,
 				40B5B49514C896CC009D5810 /* libNTIUserDataModel.a */,
 				72D360A113DB5DFF00257C73 /* Configurations */,
 				72CBA96F1385CF1F00E3D28D /* NTIFoundation */,
@@ -1240,6 +1247,8 @@
 		72CBA9681385CF1F00E3D28D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				40AB82441566A6F500BB7375 /* OCHamcrestIOS.framework */,
+				40B5B4B114C89A9C009D5810 /* CoreImage.framework */,
 				4053898B14B3FB8700B5FB46 /* CFNetwork.framework */,
 				4080B640148692C500A8899D /* libprofile_rt.dylib */,
 				408FBF18143F66A40095DD84 /* ImageIO.framework */,
@@ -2207,6 +2216,7 @@
 				4C2ECDD71549D0A400C69E3A /* NTIMathInputExpressionModel.m in Sources */,
 				4CE3E62D154E4FE20005918E /* NTIMathSymbolsExternalizationTests.m in Sources */,
 				4C99F86A1562F9E600A26C91 /* NTIMathSymbolUtils.m in Sources */,
+				40AB82601566AA0C00BB7375 /* OQColor-NTIExtensionsTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2561,11 +2571,12 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
+					"\"$(SRCROOT)/../NTIWorkspace/OCHamcrest-1.7\"",
 				);
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "NTIFoundation/NTIFoundation-Prefix.pch";
+				GCC_PREFIX_HEADER = "UnitTests/UnitTests-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					TEST,
 					COVERAGE,
@@ -2576,6 +2587,7 @@
 					"\"$(DEVELOPER_DIR)/usr/lib\"",
 				);
 				OTHER_LDFLAGS = (
+					"-lstdc++",
 					"-ObjC",
 					"-framework",
 					SenTestingKit,
@@ -2596,17 +2608,19 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
+					"\"$(SRCROOT)/../NTIWorkspace/OCHamcrest-1.7\"",
 				);
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "NTIFoundation/NTIFoundation-Prefix.pch";
+				GCC_PREFIX_HEADER = "UnitTests/UnitTests-Prefix.pch";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(DEVELOPER_DIR)/usr/lib\"",
 				);
 				OTHER_LDFLAGS = (
+					"-lstdc++",
 					"-ObjC",
 					"-framework",
 					SenTestingKit,
