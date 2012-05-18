@@ -15,8 +15,10 @@
 	NTIMathSymbol* rootMathSymbol;
 	NTIMathExpressionStack* mathExpressionQueue;
 }
-
+// RootMathSymbol is mainly used mainly for keeping up with internal state.
 @property(nonatomic, strong) NTIMathSymbol* rootMathSymbol;
+// FullEquation is used as an output. It will always be the root of all roots. 
+@property(nonatomic, strong, readonly) NTIMathSymbol* fullEquation;
 
 -(id)initWithMathSymbol:(NTIMathSymbol *)mathExpression;
 //Addition
@@ -25,8 +27,6 @@
 -(void)setCurrentSymbolTo: (NTIMathSymbol *)mathSymbol;
 //Deletion
 -(void)deleteMathExpression: (NTIMathSymbol *)aMathSymbol;
-//Output
--(NTIMathSymbol *)fullEquation;
 -(NSString *)generateEquationString;
 -(NSString *)tolaTex;
 //Selection and navigation

@@ -7,8 +7,6 @@
 //
 
 #import "NTIMathSymbol.h"
-
-@interface NTIMathParenthesisSymbol: NTIMathSymbol
-@property(nonatomic, readonly)BOOL openingParanthesis; //either we have an opening paranthesis or a closing paranthesis
--(id)initWithMathSymbolString: (NSString *)string;
+#import "NTIMathUnaryExpression.h"
+@interface NTIMathParenthesisSymbol: NTIMathUnaryExpression
 @end

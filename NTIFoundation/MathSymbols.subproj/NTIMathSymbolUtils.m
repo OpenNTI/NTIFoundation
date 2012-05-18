@@ -11,7 +11,6 @@
 #import "NTIMathBinaryExpression.h"
 #import "NTIMathPlaceholderSymbol.h"
 
-
 @implementation NTIMathExpressionReverseTraversal
 static void traverseDepthFirstStartAt(NTIMathSymbol* mathNode, NSMutableArray* nodesArray)
 {
@@ -24,7 +23,8 @@ static void traverseDepthFirstStartAt(NTIMathSymbol* mathNode, NSMutableArray* n
 		//Add the right subtree
 		traverseDepthFirstStartAt(bMathNode.rightMathNode, nodesArray);
 	}
-	else if([mathNode respondsToSelector:@selector(isUnaryOperator)]) {
+	else if([mathNode respondsToSelector:@selector(isUnaryOperator)]) {	
+		//FIXME: NEEDS refactoring.
 		NTIMathUnaryExpression* uMathNode = (NTIMathUnaryExpression *)mathNode;
 		//Add the root
 		[nodesArray addObject: uMathNode.prefix];

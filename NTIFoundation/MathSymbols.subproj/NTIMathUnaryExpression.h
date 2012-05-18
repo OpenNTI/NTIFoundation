@@ -9,11 +9,20 @@
 #import "NTIMathSymbol.h"
 @interface NTIMathUnaryExpression : NTIMathSymbol {
 	NSString* symbolValue;
+	NSUInteger precedenceLevel;
 }
 @property( nonatomic, strong, readonly) NTIMathSymbol* prefix;
-@property( nonatomic, strong) NTIMathSymbol* childMathNode;
-@property( nonatomic ) NSUInteger precedenceLevel; 
+@property( nonatomic, strong) NTIMathSymbol* childMathNode; 
 
++(NTIMathUnaryExpression *)unaryExpressionForString: (NSString *)stringValue;
 -(id)initWithMathOperatorString: (NSString *)operatorString;
 -(BOOL)isUnaryOperator;
+-(NSString *)toStringValueForChildNode: (NTIMathSymbol *)childExpression;
+-(NSString *)latexValueForChildNode: (NTIMathSymbol *)childExpression;
+@end
+
+@interface NTIMathAprroxUnaryExpression : NTIMathUnaryExpression
+@end
+
+@interface NTIMathSquareRootUnaryExpression : NTIMathUnaryExpression 
 @end

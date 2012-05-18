@@ -9,7 +9,7 @@
 #import "NTIMathSymbol.h"
 
 @implementation NTIMathSymbol
-@synthesize parentMathSymbol, precedenceLevel,substituteSymbol, hasParenthesis;
+@synthesize parentMathSymbol, precedenceLevel,substituteSymbol;
 
 -(BOOL)requiresGraphicKeyboard
 {

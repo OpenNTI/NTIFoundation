@@ -23,6 +23,7 @@
 -(NSString *)latexValueForChildNode: (NTIMathSymbol *)childExpression;
 -(NSString *)toStringValueForChildNode: (NTIMathSymbol *)childExpression;
 +(NTIMathBinaryExpression *)binaryExpressionForString:(NSString *)symbolString;
+-(NTIMathSymbol *)findLastLeafNodeFrom: (NTIMathSymbol *)mathSymbol;
 @end
 
 @interface NTIMathAdditionBinaryExpression : NTIMathBinaryExpression

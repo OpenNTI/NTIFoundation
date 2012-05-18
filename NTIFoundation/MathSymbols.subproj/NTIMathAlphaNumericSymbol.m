@@ -91,9 +91,6 @@
 		latexVal = [NSString stringWithFormat:@"-%@", latexVal];
 	}
 
-	if (self.hasParenthesis) {
-		latexVal = [NSString stringWithFormat:@"(%@)", latexVal];
-	}
 	return latexVal;
 }
 
@@ -102,9 +99,6 @@
 	NSString* string;
 	if (self.isNegative) {
 		string = [NSString stringWithFormat:@"-%@", self.mathSymbolValue];
-	}
-	if (self.hasParenthesis) {
-		return [NSString stringWithFormat:@"(%@)", string];
 	}
 	return self.mathSymbolValue;
 }

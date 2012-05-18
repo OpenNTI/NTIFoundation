@@ -11,6 +11,7 @@
 #import "NTIMathOperatorSymbol.h"
 #import "NTIMathExponentBinaryExpression.h"
 #import "NTIMathFractionBinaryExpression.h"
+#import "NTIMathUnaryExpression.h"
 
 @interface NTIMathBinaryExpression() 
 //-(NSUInteger)precedenceLevelForString: (NSString *)opString;
@@ -172,6 +173,25 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 	return childStringValue;
 }
 
+-(NTIMathSymbol *)findLastLeafNodeFrom: (NTIMathSymbol *)mathSymbol
+{
+	if ([mathSymbol respondsToSelector:@selector(isPlaceholder)] ||
+		[mathSymbol respondsToSelector:@selector(isLiteral) ]) {
+		return mathSymbol;
+	}
+	else{
+		if ([mathSymbol respondsToSelector:@selector(isBinaryOperator)]) {
+			NTIMathBinaryExpression* bMathSymbol = (NTIMathBinaryExpression *)mathSymbol;
+			return [self findLastLeafNodeFrom: bMathSymbol.rightMathNode];
+		}
+		if ([mathSymbol respondsToSelector:@selector(isUnaryOperator)]) {
+			NTIMathUnaryExpression* uMathSymbol = (NTIMathUnaryExpression *)mathSymbol;
+			return [self findLastLeafNodeFrom: uMathSymbol.childMathNode];
+		}
+		return nil;
+	}
+}
+
 //Adds parenthesis, if they need to be added.
 -(NSString *)latexValueForChildNode: (NTIMathSymbol *)childExpression
 {
@@ -193,9 +213,6 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 		return [NSString stringWithFormat:@"%@%@", leftNodeString, rightNodeString];
 	}
 	NSString* string = [NSString stringWithFormat: @"%@%@%@", leftNodeString, [self.operatorMathNode toString], rightNodeString];
-	if (self.hasParenthesis) {
-		return [NSString stringWithFormat:@"(%@)", string];
-	}
 	return string;
 }
 
@@ -210,9 +227,6 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 	}
 	NSString* operatorString = [self.operatorMathNode latexValue];
 	NSString* latexVal = [NSString stringWithFormat: @"%@%@%@", leftNodeString, operatorString, rightNodeString];
-	if (self.hasParenthesis) {
-		latexVal = [NSString stringWithFormat:@"(%@)", latexVal];
-	}
 	return latexVal;
 }
 

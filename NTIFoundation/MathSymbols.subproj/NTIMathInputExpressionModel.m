@@ -23,6 +23,7 @@
 -(BOOL)isAlphaNumeric;
 -(BOOL)isMathPrefixedSymbol;
 -(BOOL)isMathBinaryCombiningSymbol;
+-(BOOL)isClosingParanthesisSymbol;
 @end
 
 @implementation NSString(mathSymbolExtension)
@@ -46,14 +47,16 @@
 -(BOOL)isMathPrefixedSymbol
 {
 	//The list will grow as we support more symbols
-	NSArray* array = [[NSArray alloc] initWithObjects: @"√", @"≈", nil];
+	NSArray* array = [[NSArray alloc] initWithObjects: @"√", @"≈", @"(", @"( )", nil];
 	return [array containsObject: self];
 }
 
--(BOOL)isParanthesisSymbol
+-(BOOL)isClosingParanthesisSymbol
 {
-	NSArray* array = [[NSArray alloc] initWithObjects: @"(", @")", @"( )", nil];
-	return [array containsObject: self];
+	//We need to figure out how to handle closing paranthesis )
+	//NSArray* array = [[NSArray alloc] initWithObjects: @"(", @"( )", nil];
+	//return [array containsObject: self];
+	return [self isEqualToString:@")"];
 }
 
 -(BOOL)isPlusMinusSymbol
@@ -145,7 +148,7 @@
 
 @class NTIMathExpressionReverseTraversal;
 @implementation NTIMathInputExpressionModel
-@synthesize rootMathSymbol;
+@synthesize rootMathSymbol, fullEquation;
 -(id)initWithMathSymbol:(NTIMathSymbol *)mathExpression
 {
 	self = [super init];
@@ -154,6 +157,7 @@
 			mathExpression = [[NTIMathPlaceholderSymbol alloc] init];
 		}
 		self.rootMathSymbol = mathExpression;
+		self->fullEquation = self.rootMathSymbol;
 		self->currentMathSymbol = mathExpression;
 		self->mathExpressionQueue = [[NTIMathExpressionStack alloc] init];
 	}
@@ -176,12 +180,24 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
 	if ([currentNode respondsToSelector:@selector(isLiteral)] && [newNode isKindOfClass:[NTIMathFractionBinaryExpression class]]) {
 		return YES;
 	}
+	
+	//FIXME: HACK, edge case where we end up with a leaf node at the top.
+	if (([currentNode respondsToSelector:@selector(isBinaryOperator)] || [currentNode respondsToSelector:@selector( isUnaryOperator)]) && [newNode respondsToSelector:@selector(isLiteral)] ) {
+		return YES;
+	}
 	return NO;
 }
 
 -(void)addImplicitSymbolBetween: (NTIMathSymbol *)currentNode andNewSymbol: (NTIMathSymbol *)newNode
 {
 	if ([currentNode respondsToSelector:@selector(isLiteral)] && [newNode respondsToSelector:@selector(isUnaryOperator)]) {
+		NTIMathBinaryExpression* implicitSymbol = [NTIMathBinaryExpression binaryExpressionForString:@"*"];
+		implicitSymbol.isOperatorImplicit = YES;	
+		self->currentMathSymbol = [self addMathNode:implicitSymbol on: currentNode];
+	}
+	
+	//FIXME: HACK, edge case where we end up with a leaf node(literal) at the top, we add an implicit multiplication
+	if (([currentNode respondsToSelector:@selector(isBinaryOperator)] || [currentNode respondsToSelector:@selector( isUnaryOperator)]) && [newNode respondsToSelector:@selector(isLiteral)] ) {
 		NTIMathBinaryExpression* implicitSymbol = [NTIMathBinaryExpression binaryExpressionForString:@"*"];
 		implicitSymbol.isOperatorImplicit = YES;	
 		self->currentMathSymbol = [self addMathNode:implicitSymbol on: currentNode];
@@ -203,6 +219,13 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
 	return NO;
 }
 
+-(void)createTreeWithRoot: (NTIMathSymbol *)mathSymbol
+{
+	//Close last tree and create a new one
+	self.rootMathSymbol = [self mergeLastTreeOnStackWith: self.rootMathSymbol];
+	self->currentMathSymbol = [self newMathSymbolTreeWithRoot:mathSymbol firstChild: nil]; 
+}
+
 -(void)addMathSymbolForString: (NSString *)stringValue
 {
 	if ([stringValue isPlusMinusSymbol]) {
@@ -216,13 +239,19 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
 	if (!newSymbol) {
 		return;
 	}
+	
+	//FIXME: #HACK: we want to create a new tree under certain symbol to match user expectations. Needs to be done a better way.
+	if ([self isLeafMathNode: self->currentMathSymbol] && ([self->currentMathSymbol.parentMathSymbol isKindOfClass:[NTIMathSquareRootUnaryExpression class]] || [self->currentMathSymbol.parentMathSymbol isKindOfClass: [NTIMathParenthesisSymbol class]] || [self->currentMathSymbol.parentMathSymbol isKindOfClass: [NTIMathFractionBinaryExpression class]])) {
+		[self createTreeWithRoot:self->currentMathSymbol];
+	}
+	
 	//NOTE: As the user navigates through the equation, the may want to insert things in between, we need to be able to distinguish inserting in the equation and adding to the end of the rootsymbol. The easy way if comparing the currentSymbol with the last leaf node of the rootSymbol, if they differ, we are inserting, else we are are adding to the end of the equation
 	if (self->currentMathSymbol != [self findLastLeafNodeFrom: self.rootMathSymbol] && [self isLeafMathNode: self->currentMathSymbol]) {
 		//Before we create a new tree at the new current symbol, we will close the tree that we were working on.
 		self.rootMathSymbol = [self mergeLastTreeOnStackWith: self.rootMathSymbol];
 		self->currentMathSymbol = [self newMathSymbolTreeWithRoot:self->currentMathSymbol firstChild: nil]; 
 	}
-
+	
 	if (isImplicitSymbol(self->currentMathSymbol, newSymbol)) {
 		[self addImplicitSymbolBetween: self->currentMathSymbol andNewSymbol:newSymbol];
 	}
@@ -289,8 +318,6 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
 			}
 		}
 		OBASSERT(childSymbol == self->rootMathSymbol);
-		newRootSymbol.hasParenthesis = childSymbol.hasParenthesis;
-		childSymbol.hasParenthesis = NO;
 		self.rootMathSymbol = newRootSymbol;
 		if ([newRootSymbol respondsToSelector:@selector(isLiteral)]) {
 			return self.rootMathSymbol;
@@ -331,7 +358,7 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
 	if ([plink.parentMathSymbol addSymbol: mathSymbol]) {
 		//Change current to point to the old mathSymbol
 		//TODO: are we always going to assume that leaf node can only be currentNode? naturally after closing a tree, we should make the root of the tree the current node but right now it breaks our tree model because of the way our -addNode: On:  works. Needs some thinking.
-		//self->currentMathSymbol = mathSymbol;
+		self->currentMathSymbol = mathSymbol;
 		return combinedTree;
 	}
 	else {
@@ -352,8 +379,6 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
 	}
 	else {
 		//a pholder is the root element, needs to update who is pointing to us.
-		literal.hasParenthesis = pholder.hasParenthesis;
-		pholder.hasParenthesis = NO;
  		self.rootMathSymbol = literal;
 		if (self->mathExpressionQueue.count > 0) {
 			NTIMathPlaceholderSymbol* linker = (NTIMathPlaceholderSymbol *)pholder.substituteSymbol;
@@ -366,19 +391,12 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
 
 -(NTIMathSymbol *)addMathNode: (NTIMathSymbol *)newNode on: (NTIMathSymbol *)currentNode
 {
-	// Paranthesis
-	if ([newNode respondsToSelector:@selector(openingParanthesis)]) {
-		if( [newNode performSelector:@selector(openingParanthesis)] ) {
-			//Make a new tree
-			currentNode.hasParenthesis = YES;
-			return [self newMathSymbolTreeWithRoot: currentNode firstChild: nil];
-		}
-		else {
-			//close and append tree --> closing paranthesis
-			return [self closeAndAppendTree];
-		}
+	// Special casing: closing paranths
+	if ([newNode respondsToSelector:@selector(isOperatorSymbol)] && 
+		[[newNode toString] isEqualToString:@")"]) {
+		//close and append tree --> closing paranthesis
+		return [self closeAndAppendTree];
 	}
-	
 	//See if we can append it
 	if ([currentNode respondsToSelector: @selector(appendMathSymbol:)] && 
 		[newNode respondsToSelector:@selector(isLiteral)]) {
@@ -418,10 +436,12 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
 -(NTIMathSymbol *)fullEquation
 {
 	if (!mathExpressionQueue || mathExpressionQueue.count == 0) {
-		return self.rootMathSymbol;
+		self->fullEquation = self.rootMathSymbol;
+		return self->fullEquation;
 	}
 	//First element is the root of all our roots
-	return [[self->mathExpressionQueue stack] objectAtIndex: 0];
+	self->fullEquation = [[self->mathExpressionQueue stack] objectAtIndex: 0];
+	return self->fullEquation;
 }
 
 //this method gets called, when a user clicks on a leaf node( i.e literal button, placeholder button), at that point we create a new tree at the location.
@@ -432,10 +452,7 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
 		return;
 	}
 	//Before we create a new tree at the new current symbol, we will close the tree that we were working on.
-	//if (![self.rootMathSymbol respondsToSelector:@selector(isUnaryOperator)]) {
-		self.rootMathSymbol = [self mergeLastTreeOnStackWith: self.rootMathSymbol];
-	//}
-	self->currentMathSymbol = [self newMathSymbolTreeWithRoot:mathSymbol firstChild: nil]; 
+	[self createTreeWithRoot: mathSymbol];
 }
 
 //Returns the current symbol mainly for rendering purposes
@@ -567,14 +584,11 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
 	if ( [stringValue isOperatorSymbol] ) {
 		return [[NTIMathOperatorSymbol alloc] initWithValue: stringValue];
 	}
-	if ( [stringValue isParanthesisSymbol] ) {
-		if ([stringValue isEqualToString:@"( )"]) {
-			return [[NTIMathParenthesisSymbol alloc] initWithMathSymbolString: @"("];
-		}
-		return [[NTIMathParenthesisSymbol alloc] initWithMathSymbolString: stringValue];
+	if ( [stringValue isClosingParanthesisSymbol] ) {
+		return [[NTIMathOperatorSymbol alloc] initWithValue:@")"];
 	}
 	if ( [stringValue isMathPrefixedSymbol] ) {
-		return [[NTIMathUnaryExpression alloc] initWithMathOperatorString: stringValue];
+		return [NTIMathUnaryExpression unaryExpressionForString: stringValue];
 	}
 	if ( [stringValue isMathBinaryCombiningSymbol] ) {
 		if ([stringValue isEqualToString:@"x/y"]) {
@@ -582,7 +596,10 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
 		}
 		return [NTIMathBinaryExpression binaryExpressionForString: stringValue];
 	}
-	return nil;
+	
+	//Right now anything that was typed that we do not handle, we will treat it as a literal
+	return  [[NTIMathAlphaNumericSymbol alloc] initWithValue: stringValue];
+	//return nil;
 }
 
 -(void)logCurrentAndRootSymbol

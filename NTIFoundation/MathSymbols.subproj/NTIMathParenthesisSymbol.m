@@ -9,41 +9,22 @@
 #import "NTIMathParenthesisSymbol.h"
 #import "NTIMathPlaceholderSymbol.h"
 @implementation NTIMathParenthesisSymbol
-@synthesize openingParanthesis;
-
--(id)initWithMathSymbolString: (NSString *)string
+-(id)init
 {
-	self = [super init];
+	self = [super initWithMathOperatorString:@"()"];
 	if (self) {
-		if ([string isEqualToString: @"("]) {
-			self->openingParanthesis = YES;
-		}
-		else{
-			self->openingParanthesis = NO;
-		}
+		precedenceLevel = 90;	//Paranthesis have the highest precedence of all math expressions.
 	}
 	return self;
 }
 
--(NTIMathSymbol *)addSymbol:(id)mathSym
-{
-	//Doesn't handle adding.
-	return nil;
-}
-
 -(NSString *)latexValue
 {
-	//This won't be necessary now because the paranthesis won't be an actual math symbol, rather a way of displaying a grouping.
-	//return [NSString stringWithFormat:@"{%@}", [super latexValue]];
-//	if (self.openingParanthesis) {
-//		return @"(";
-//	}
-//	return @")";
-	return nil;
+	return [NSString stringWithFormat: @"(%@)", [self latexValueForChildNode: self.childMathNode]];
 }
 
 -(NSString *)toString
 {
-	return nil;
+	return [NSString stringWithFormat: @"(%@)", [self latexValueForChildNode: self.childMathNode]];
 }
 @end

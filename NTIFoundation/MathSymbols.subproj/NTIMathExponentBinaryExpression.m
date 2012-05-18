@@ -14,7 +14,7 @@
 {
 	self = [super initWithMathOperatorSymbol: @"^"];
 	if (self) {
-		self.precedenceLevel = 60;
+		self->precedenceLevel = 60;
 	}
 	return self;
 }

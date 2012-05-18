@@ -9,13 +9,24 @@
 #import "NTIMathUnaryExpression.h"
 #import "NTIMathOperatorSymbol.h"
 #import "NTIMathPlaceholderSymbol.h"
-
-@interface NTIMathUnaryExpression()
--(NSUInteger)precedenceLevelForString: (NSString *)opString;
-@end
+#import "NTIMathParenthesisSymbol.h"
 
 @implementation NTIMathUnaryExpression
-@synthesize prefix, precedenceLevel, childMathNode;
+@synthesize prefix, childMathNode;
+
++(NTIMathUnaryExpression *)unaryExpressionForString: (NSString *)stringValue
+{
+	if ([stringValue isEqualToString: @"("] || [stringValue isEqualToString:@"( )"]) {
+		return [[NTIMathParenthesisSymbol alloc] init];
+	}
+	if ([stringValue isEqualToString:@"√"]) {
+		return [[NTIMathSquareRootUnaryExpression alloc] init];
+	}
+	if ([stringValue isEqualToString:@"≈"]) {
+		return [[NTIMathAprroxUnaryExpression alloc] init];
+	}
+	return nil;
+}
 
 -(id)initWithMathOperatorString: (NSString *)operatorString
 {
@@ -23,8 +34,8 @@
 	if (self) {
 		self->prefix = [[NTIMathOperatorSymbol alloc] initWithValue: operatorString];
 		self->prefix.parentMathSymbol = self;
-		self.childMathNode = [[NTIMathPlaceholderSymbol alloc] init];
-		self->precedenceLevel = [self precedenceLevelForString: operatorString];
+		self->childMathNode = [[NTIMathPlaceholderSymbol alloc] init];
+		self->childMathNode.parentMathSymbol = self;
 	}
 	return self;
 }
@@ -35,12 +46,9 @@
 	self->childMathNode.parentMathSymbol = self;
 }
 
--(NSUInteger)precedenceLevelForString: (NSString *)opString
+-(NSUInteger)precedenceLevel
 {
-	/*if ([opString isEqualToString: @"!"] || [opString isEqualToString: @"√"]) {
-		return 60;
-	} */
-	return 60;
+	return self->precedenceLevel;
 }
 
 //NOTE: NOT TO BE CONFUSED with -addSymbol, because this is only invoked in case we need to add something in between the parent node( self ) and its child. We get to this case based on precedence level comparison.
@@ -92,31 +100,47 @@
 	return nil;
 }
 
+static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
+{
+	//helper method, for placeholder that may be pointing to expression tree.
+	if ([mathSymbol respondsToSelector:@selector(isPlaceholder)]) {
+		NTIMathSymbol* rep = [mathSymbol performSelector:@selector(inPlaceOfObject)];
+		if (rep) {
+			return rep;
+		}
+	}
+	return mathSymbol;
+}
+
+-(NSString *)toStringValueForChildNode: (NTIMathSymbol *)childExpression
+{
+	NSString* childStringValue = [childExpression toString];
+	childExpression = mathExpressionForSymbol(childExpression);
+	if (childExpression.precedenceLevel < self.precedenceLevel && (childExpression.precedenceLevel > 0)) {
+		childStringValue = [NSString stringWithFormat: @"(%@)", childStringValue]; 
+	}
+	return childStringValue;
+}
+
+//Adds parenthesis, if they need to be added.
+-(NSString *)latexValueForChildNode: (NTIMathSymbol *)childExpression
+{
+	NSString* childLatexValue = [childExpression latexValue];
+	childExpression = mathExpressionForSymbol(childExpression);
+	if (childExpression.precedenceLevel < self.precedenceLevel && (childExpression.precedenceLevel > 0)) {
+		childLatexValue = [NSString stringWithFormat: @"(%@)", childLatexValue]; 
+	}
+	return childLatexValue;
+}
+
 -(NSString *)latexValue
 {
-	if ([[self.prefix latexValue] isEqualToString:@"√"]) {
-		NSString* childlaTex = [childMathNode latexValue];
-		if (self.precedenceLevel > self.childMathNode.precedenceLevel && self.childMathNode.precedenceLevel > 0) {
-			childlaTex = [NSString stringWithFormat:@"(%@)", [childMathNode latexValue]];
-		}
-		return [NSString stringWithFormat: @"\\sqrt{%@}", childlaTex];
-	}
-	return [NSString stringWithFormat: @"%@%@", [prefix latexValue], [childMathNode latexValue]];
+	return [NSString stringWithFormat: @"%@%@", [prefix latexValue], [self latexValueForChildNode: self.childMathNode]];
 }
 
 -(NSString *)toString
 {
-	//Case of a placeholder point to another tree
-	if ([self.childMathNode respondsToSelector:@selector(isPlaceholder)] && [(NTIMathPlaceholderSymbol *)self.childMathNode inPlaceOfObject] ) {
-		NTIMathSymbol* representingExpr = [(NTIMathPlaceholderSymbol *)self.childMathNode inPlaceOfObject];
-		if (self.precedenceLevel > representingExpr.precedenceLevel && representingExpr.precedenceLevel > 0) {
-			return [NSString stringWithFormat: @"%@(%@)", [prefix toString], [childMathNode toString]];
-		}
-	}
-	if (self.precedenceLevel > self.childMathNode.precedenceLevel && self.childMathNode.precedenceLevel > 0) {		
-		return [NSString stringWithFormat: @"%@(%@)", [prefix toString], [childMathNode toString]];
-	}
-	return [NSString stringWithFormat: @"%@%@", [prefix toString], [childMathNode toString]];
+	return [NSString stringWithFormat: @"%@%@", [prefix toString], [self toStringValueForChildNode:self.childMathNode]];
 }
 
 -(NSArray *)children
@@ -129,3 +153,36 @@
 	return YES;
 }
 @end
+
+
+
+@implementation NTIMathAprroxUnaryExpression
+-(id)init
+{
+	self = [super initWithMathOperatorString: @"≈"];
+	if (self) {
+		self->precedenceLevel = 0;
+	}
+	return self;
+}
+@end
+
+@implementation NTIMathSquareRootUnaryExpression
+
+-(id)init
+{
+	self = [super initWithMathOperatorString: @"√"];
+	if (self) {
+		self->precedenceLevel = 60;
+	}
+	return self;
+}
+
+-(NSString *)latexValue
+{
+	//Now we are sending \\surd{} instead of \\sqrt{} for latex.
+	return [NSString stringWithFormat: @"\\surd{%@}", [self latexValueForChildNode: self.childMathNode]];
+}
+@end
+
+

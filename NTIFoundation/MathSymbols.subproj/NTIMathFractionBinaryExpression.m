@@ -26,4 +26,21 @@
 	return [NSString stringWithFormat: @"\\frac{%@}{%@}", leftString, rightString]; 
 }
 
+-(NTIMathSymbol *)addSymbol:(NTIMathSymbol *)newSymbol
+{
+	//Stack it on the left
+	if ([self.leftMathNode respondsToSelector:@selector(isPlaceholder)]){
+		self.leftMathNode = newSymbol;
+		self.leftMathNode.parentMathSymbol = self;
+		return [self findLastLeafNodeFrom: self.leftMathNode];
+	}
+	else if (![self.leftMathNode respondsToSelector:@selector(isPlaceholder)] && [self.rightMathNode respondsToSelector:@selector(isPlaceholder)] ) {
+		//Left full, right is placeholder
+		self.rightMathNode = newSymbol;
+		self.rightMathNode.parentMathSymbol = self;
+		return self.rightMathNode;
+	}
+	return nil;
+}
+
 @end
