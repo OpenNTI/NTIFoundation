@@ -95,7 +95,7 @@
 
 -(NSString *)toString
 {
-	NSString* string;
+	NSString* string = self.mathSymbolValue;
 	if (self.isNegative) {
 		string = [NSString stringWithFormat:@"-%@", self.mathSymbolValue];
 	}
