@@ -90,7 +90,6 @@
 	if (self.isNegative) {
 		latexVal = [NSString stringWithFormat:@"-%@", latexVal];
 	}
-
 	return latexVal;
 }
 
@@ -100,7 +99,7 @@
 	if (self.isNegative) {
 		string = [NSString stringWithFormat:@"-%@", self.mathSymbolValue];
 	}
-	return self.mathSymbolValue;
+	return string;
 }
 
 -(BOOL)isLiteral

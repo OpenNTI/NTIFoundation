@@ -78,6 +78,24 @@
 	return nil;
 }
 
+-(NTIMathSymbol *)swapNode: (NTIMathSymbol *)childNode withNewNode: (NTIMathSymbol *)newNode
+{
+	//NOTE: this function should only be used to swap an existing node with another non-placeholder node.
+	if (self.childMathNode == childNode){
+		self.childMathNode = newNode;
+		return self.childMathNode;
+	}
+	
+	NSString* notReachedString = [NSString stringWithFormat: @"child node: %@ is not one of our children nodes", childNode];
+	
+	//Get the compiler to shutup about unused variable.
+	if(notReachedString){
+		OBASSERT_NOT_REACHED([notReachedString cStringUsingEncoding: NSUTF8StringEncoding] );
+	}
+	return nil;
+}
+
+
 -(void)replaceNode: (NTIMathSymbol *)newMathNode withPlaceholderFor: (NTIMathSymbol *)pointingTo
 {
 	//Replace child node with a placeholder
@@ -148,6 +166,16 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 	return [NSArray arrayWithObject: self.childMathNode];
 }
 
+-(NSArray *)nonEmptyChildren
+{
+	NSMutableArray* neChildren = [NSMutableArray array];
+	//not a placeholder, or it's a placeholder pointing to a subtree.
+	if (![self.childMathNode respondsToSelector:@selector(isPlaceholder)] || mathExpressionForSymbol(self.childMathNode) != self.childMathNode) {
+		[neChildren addObject: self.childMathNode];
+	}
+	return neChildren;
+}
+
 -(BOOL)isUnaryOperator
 {
 	return YES;
@@ -180,8 +208,9 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 
 -(NSString *)latexValue
 {
-	//Now we are sending \\surd{} instead of \\sqrt{} for latex.
-	return [NSString stringWithFormat: @"\\surd{%@}", [self latexValueForChildNode: self.childMathNode]];
+	//Now we are sending \\surd{ instead of \\sqrt{} for latex.
+	NSString* lString = [NSString stringWithFormat: @"\\surd%@", [self latexValueForChildNode: self.childMathNode]];
+	return lString; 
 }
 @end
 

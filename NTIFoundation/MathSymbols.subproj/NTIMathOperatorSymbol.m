@@ -44,4 +44,9 @@
 {
 	return mathSymbolValue;
 }
+
+-(BOOL)isOperatorSymbol
+{
+	return YES;
+}
 @end

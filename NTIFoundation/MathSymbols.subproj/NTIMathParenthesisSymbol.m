@@ -11,7 +11,7 @@
 @implementation NTIMathParenthesisSymbol
 -(id)init
 {
-	self = [super initWithMathOperatorString:@"()"];
+	self = [super initWithMathOperatorString:@"("];
 	if (self) {
 		precedenceLevel = 90;	//Paranthesis have the highest precedence of all math expressions.
 	}
@@ -20,11 +20,14 @@
 
 -(NSString *)latexValue
 {
-	return [NSString stringWithFormat: @"(%@)", [self latexValueForChildNode: self.childMathNode]];
+	//NOTE: We don't need to add parenthesis, they will be added automatically because parenthesis have the highest precedence of all the math symbols. Adding them here, results in duplicate parenthesis.
+	//return [NSString stringWithFormat: @"(%@)", [self latexValueForChildNode: self.childMathNode]];
+	return [self latexValueForChildNode: self.childMathNode];
 }
 
 -(NSString *)toString
 {
-	return [NSString stringWithFormat: @"(%@)", [self latexValueForChildNode: self.childMathNode]];
+	//return [NSString stringWithFormat: @"(%@)", [self latexValueForChildNode: self.childMathNode]];
+	return [self latexValueForChildNode: self.childMathNode];
 }
 @end

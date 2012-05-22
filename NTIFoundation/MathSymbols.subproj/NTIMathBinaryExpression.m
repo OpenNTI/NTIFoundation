@@ -56,11 +56,11 @@
 	self = [super init];
 	if (self) {
 		self->operatorMathNode = [[NTIMathOperatorSymbol alloc] initWithValue:operatorString];
+		self->operatorMathNode.parentMathSymbol = self;
 		self->leftMathNode = [[NTIMathPlaceholderSymbol alloc] init];
 		self->leftMathNode.parentMathSymbol = self;
 		self->rightMathNode = [[NTIMathPlaceholderSymbol alloc] init];
 		self->rightMathNode.parentMathSymbol = self;
-		//self->precedenceLevel = [self precedenceLevelForString: operatorString];
 	}
 	return self;
 }
@@ -104,14 +104,33 @@
 	//Stack it on the left
 	if ([self.leftMathNode respondsToSelector:@selector(isPlaceholder)]){
 		self.leftMathNode = newSymbol;
-		self.leftMathNode.parentMathSymbol = self;
 		return self.rightMathNode;
 	}
 	else if (![self.leftMathNode respondsToSelector:@selector(isPlaceholder)] && [self.rightMathNode respondsToSelector:@selector(isPlaceholder)] ) {
 		//Left full, right is placeholder
 		self.rightMathNode = newSymbol;
-		self.rightMathNode.parentMathSymbol = self;
-		return rightMathNode;
+		return self.rightMathNode;
+	}
+	return nil;
+}
+
+-(NTIMathSymbol *)swapNode: (NTIMathSymbol *)childNode withNewNode: (NTIMathSymbol *)newNode
+{
+	//NOTE: this function should only be used to swap an existing node with another non-placeholder node.
+	if (self.leftMathNode == childNode) {
+		self.leftMathNode = newNode;
+		return self.leftMathNode;
+	}
+	else if (self.rightMathNode == childNode){
+		self.rightMathNode = newNode;
+		return self.rightMathNode;
+	}
+	
+	NSString* notReachedString = [NSString stringWithFormat: @"child node: %@ is not one of our children nodes", childNode];
+	
+	//Get the compiler to shutup about unused variable.
+	if(notReachedString){
+		OBASSERT_NOT_REACHED([notReachedString cStringUsingEncoding: NSUTF8StringEncoding] );
 	}
 	return nil;
 }
@@ -233,6 +252,19 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 -(NSArray *)children
 {
 	return [NSArray arrayWithObjects:self.leftMathNode, self.rightMathNode, nil];
+}
+
+-(NSArray *)nonEmptyChildren
+{
+	NSMutableArray* neChildren = [NSMutableArray array];
+	//not a placeholder, or it's a placeholder pointing to a subtree.
+	if (![self.leftMathNode respondsToSelector:@selector(isPlaceholder)] || mathExpressionForSymbol(self.leftMathNode) != self.leftMathNode) {
+		[neChildren addObject: self.leftMathNode];
+	}
+	if (![self.rightMathNode respondsToSelector:@selector(isPlaceholder)] || mathExpressionForSymbol(self.rightMathNode) != self.rightMathNode) {
+		[neChildren addObject: self.rightMathNode];
+	}
+	return neChildren;
 }
 
 -(BOOL)isBinaryOperator

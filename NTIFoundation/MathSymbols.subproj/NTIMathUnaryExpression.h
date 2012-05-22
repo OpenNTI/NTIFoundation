@@ -16,6 +16,8 @@
 
 +(NTIMathUnaryExpression *)unaryExpressionForString: (NSString *)stringValue;
 -(id)initWithMathOperatorString: (NSString *)operatorString;
+-(NTIMathSymbol *)swapNode: (NTIMathSymbol *)childNode 
+			   withNewNode: (NTIMathSymbol *)newNode;
 -(BOOL)isUnaryOperator;
 -(NSString *)toStringValueForChildNode: (NTIMathSymbol *)childExpression;
 -(NSString *)latexValueForChildNode: (NTIMathSymbol *)childExpression;

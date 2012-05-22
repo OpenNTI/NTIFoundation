@@ -18,6 +18,8 @@
 @property( nonatomic ) BOOL isOperatorImplicit;
 
 -(id)initWithMathOperatorSymbol: (NSString *)operatorString;
+-(NTIMathSymbol *)swapNode: (NTIMathSymbol *)childNode 
+			   withNewNode: (NTIMathSymbol *)newNode;
 -(BOOL)isBinaryOperator;
 //Helpers
 -(NSString *)latexValueForChildNode: (NTIMathSymbol *)childExpression;

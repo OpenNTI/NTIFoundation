@@ -16,6 +16,4 @@
 }
 -(id)initWithRoot:(NTIMathSymbol *)aRootNode selectedNode: (NTIMathSymbol *)aCurrentNode;
 -(NTIMathSymbol *)previousNodeTo: (NTIMathSymbol*)mathNode;
--(NSString *)newEquationString;
--(void)deleteCurrentNode;
 @end
