@@ -11,6 +11,7 @@
 #import <CommonCrypto/CommonDigest.h>
 #import "OmniFoundation/NSDictionary-OFExtensions.h"
 #import "OmniFoundation/NSMutableDictionary-OFExtensions.h"
+#import "UIDevice-NTIExtensions.h"
 
 @interface WebSocketClose : WebSocketData
 @end
@@ -205,6 +206,24 @@ PRIVATE_STATIC_TESTABLE NSString* cookieHeaderForServer(NSURL* server)
 	return [NSString stringWithFormat: @"Cookie: %@", [cookieStringParts componentsJoinedByString: @"; "]];
 }
 
+-(NSString*)userAgentValue
+{
+	NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+	
+	//TODO include build version here along with bundle version?
+    NSString* appNameVersion =  [NSString stringWithFormat:@"%@/%@", 
+								 [infoDictionary objectForKey:@"CFBundleName"], 
+								 [infoDictionary objectForKey:@"CFBundleVersion"]];
+	
+	return [NSString stringWithFormat: @"%@ WebSocket "
+			"%@/%@ "
+			"%@ "
+			"(NTIFoundation WebSocket client. http://nextthought.com)", 
+			appNameVersion, [UIDevice currentDevice].systemName,
+			[UIDevice currentDevice].systemVersion, 
+			[UIDevice currentDevice].platform];
+}
+
 //See http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-17#page-7
 -(NSData*)createHandshakeData
 {
@@ -215,13 +234,15 @@ PRIVATE_STATIC_TESTABLE NSString* cookieHeaderForServer(NSURL* server)
 	NSString* getRequest = [NSString stringWithFormat:@"GET %@ HTTP/1.1\r\n"
 							"Upgrade: WebSocket\r\n"
 							"Connection: Upgrade\r\n"
+							"User-Agent: %@\r\n"
 							"Host: %@\r\n"
 							"Origin: %@\r\n"
 							"sec-websocket-origin: %@\r\n"
 							"Sec-WebSocket-Key: %@\r\n"
 							"Sec-WebSocket-Version: 13\r\n"
 							"%@\r\n\r\n",
-							self->url.path ? self->url.path : @"/",self->url.host, kNTIWebSocket7Origin,
+							self->url.path ? self->url.path : @"/", [self userAgentValue],
+							self->url.host, kNTIWebSocket7Origin,
 							[NSString stringWithFormat: @"http://%@",self->url.host], self->key, cookieHeaderForServer(self->url)] ;
 #ifdef DEBUG_SOCKETIO
 	NSLog(@"Initiating handshake with %@", getRequest);

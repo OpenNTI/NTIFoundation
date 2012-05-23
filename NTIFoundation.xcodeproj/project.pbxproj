@@ -55,6 +55,9 @@
 		403FD882148D3D1400811AB5 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D7D43213E32D2700652DAC /* SenTestingKit.framework */; };
 		40475AEB142A4940003323A9 /* SendRecieveQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 40475AE9142A493F003323A9 /* SendRecieveQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40475AEC142A4940003323A9 /* SendRecieveQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 40475AEA142A4940003323A9 /* SendRecieveQueue.m */; };
+		404A67A0156D906900A81B6A /* UIDevice-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 404A679E156D906900A81B6A /* UIDevice-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		404A67A1156D906900A81B6A /* UIDevice-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 404A679F156D906900A81B6A /* UIDevice-NTIExtensions.m */; };
+		404A67A2156D906900A81B6A /* UIDevice-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 404A679F156D906900A81B6A /* UIDevice-NTIExtensions.m */; };
 		404B1CD014E2C51400A825AF /* LongWebSocketHexString.txt in Resources */ = {isa = PBXBuildFile; fileRef = 404B1CCF14E2C51400A825AF /* LongWebSocketHexString.txt */; };
 		4053898C14B3FB8800B5FB46 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4053898B14B3FB8700B5FB46 /* CFNetwork.framework */; };
 		40572C2B14C88D8E0032D2DB /* NTIAppNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 40572C2914C88D8E0032D2DB /* NTIAppNavigationController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -639,6 +642,8 @@
 		403D0DCC143E38FD0049A755 /* NSAttributedString-HTMLReadingExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString-HTMLReadingExtensionsTest.m"; sourceTree = "<group>"; };
 		40475AE9142A493F003323A9 /* SendRecieveQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendRecieveQueue.h; sourceTree = "<group>"; };
 		40475AEA142A4940003323A9 /* SendRecieveQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendRecieveQueue.m; sourceTree = "<group>"; };
+		404A679E156D906900A81B6A /* UIDevice-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice-NTIExtensions.h"; sourceTree = "<group>"; };
+		404A679F156D906900A81B6A /* UIDevice-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice-NTIExtensions.m"; sourceTree = "<group>"; };
 		404B1CCF14E2C51400A825AF /* LongWebSocketHexString.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LongWebSocketHexString.txt; sourceTree = "<group>"; };
 		4053898B14B3FB8700B5FB46 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		40572C2914C88D8E0032D2DB /* NTIAppNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIAppNavigationController.h; sourceTree = "<group>"; };
@@ -1502,6 +1507,8 @@
 				4029275514991DC400E4720A /* NSURL-NTIFileSystemExtensions.m */,
 				40A4147D1505748A0017242E /* NSDate-NTIExtensions.h */,
 				40A4147E1505748A0017242E /* NSDate-NTIExtensions.m */,
+				404A679E156D906900A81B6A /* UIDevice-NTIExtensions.h */,
+				404A679F156D906900A81B6A /* UIDevice-NTIExtensions.m */,
 			);
 			name = FoundationExtensions;
 			path = FoundationExtensions.subproj;
@@ -1605,6 +1612,7 @@
 				4066C83A14E1C95F006B56D3 /* WebSocketData.h in Headers */,
 				40A4147F1505748A0017242E /* NSDate-NTIExtensions.h in Headers */,
 				403C317A1512A5DD00C53D22 /* NSData-NTIJSON.h in Headers */,
+				404A67A0156D906900A81B6A /* UIDevice-NTIExtensions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2155,6 +2163,7 @@
 				4CA4F4B615362A2D0005FECD /* NTIMathOperatorSymbol.m in Sources */,
 				4C2ECDD61549D0A400C69E3A /* NTIMathInputExpressionModel.m in Sources */,
 				4CC6848015614D99003823E7 /* NTIMathSymbolUtils.m in Sources */,
+				404A67A1156D906900A81B6A /* UIDevice-NTIExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2222,6 +2231,7 @@
 				4CE3E62D154E4FE20005918E /* NTIMathSymbolsExternalizationTests.m in Sources */,
 				4C99F86A1562F9E600A26C91 /* NTIMathSymbolUtils.m in Sources */,
 				40AB82601566AA0C00BB7375 /* OQColor-NTIExtensionsTest.m in Sources */,
+				404A67A2156D906900A81B6A /* UIDevice-NTIExtensions.m in Sources */,
 				5158CA78156AE5240054CA85 /* NTIMathModelTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
