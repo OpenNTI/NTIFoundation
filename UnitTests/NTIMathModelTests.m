@@ -401,7 +401,7 @@
 {
 	self->mathModel = [NTIMathEquationBuilder modelFromString: @"4^5*6+7"];
 	NTIMathSymbol* eq = [self->mathModel fullEquation];
-	assertThat([[self->mathModel findLastLeafNodeFrom: eq] toString], is(@"4"));
+	assertThat([[self->mathModel findLastLeafNodeFrom: eq] toString], is(@"7"));
 }
 
 @end
