@@ -34,7 +34,7 @@
 
 // -------------checker methods---------------
 
-#define assertThatOutputIsInput(str) \
+#define mathmodel_assertThatOutputIsInput(str) \
 			[self buildEquationFromString: str]; \
 			assertThat([[self->mathModel fullEquation] toString], is(str));
 
@@ -59,67 +59,67 @@
 // tests if we can get a string from the model
 -(void)testModelBasicToString
 {
-	assertThatOutputIsInput(@"55")
+	mathmodel_assertThatOutputIsInput(@"55")
 }
 
 // tests if the model will return symbols as string correctly
 -(void)testModelSymbolToString
 {
-	assertThatOutputIsInput(@"4+5-6*7^8");
+	mathmodel_assertThatOutputIsInput(@"4+5-6*7^8");
 }
 
 // tests if the model stores parentheses as string correctly
 -(void)testModelParenthesesToString
 {
-	assertThatOutputIsInput(@"(4+5)");
+	mathmodel_assertThatOutputIsInput(@"(4+5)");
 }
 
 // tests if the model will return square roots as string correctly
 -(void)testModelSurdToString
 {
-	assertThatOutputIsInput(@"4√3");
+	mathmodel_assertThatOutputIsInput(@"4√3");
 }
 
 // tests if the model will return decimals as string correctly
 -(void)testModelDecimalToString
 {
-	assertThatOutputIsInput(@"20.5");
+	mathmodel_assertThatOutputIsInput(@"20.5");
 }
 
 // tests if the model will return fractions as string correctly
 -(void)testModelFractionToString
 {
-	assertThatOutputIsInput(@"3/4");
+	mathmodel_assertThatOutputIsInput(@"3/4");
 }
 
 // tests if the model will return negative numbers as string correctly
 -(void)testModelNegativeToString
 {
-	assertThatOutputIsInput(@"-1");
+	mathmodel_assertThatOutputIsInput(@"-1");
 }
 
 // tests if the model will return a pi value as a string correctly
 -(void)testModelPiToString
 {
-	assertThatOutputIsInput(@"π");
+	mathmodel_assertThatOutputIsInput(@"π");
 }
 
 // tests if the model will return a Scientific Notation value as a string correctly
 -(void)testModelScientificNotationToString
 {
-	assertThatOutputIsInput(@"2.16 × 10^5");
+	mathmodel_assertThatOutputIsInput(@"2.16 × 10^5");
 }
 
 // tests if the model will return a graph point value as a string correctly
 -(void)testModelGraphPointToString
 {
-	assertThatOutputIsInput(@"(0.5, 0.5)");
+	mathmodel_assertThatOutputIsInput(@"(0.5, 0.5)");
 }
 
 // tests if the model will return a string value as a string correctly
 -(void)testModelStringToString
 {
-	assertThatOutputIsInput(@"triangle");
+	mathmodel_assertThatOutputIsInput(@"triangle");
 }
 
 // -----------------latex tests-----------------------
