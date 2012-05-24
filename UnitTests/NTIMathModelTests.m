@@ -132,6 +132,11 @@
 	mathmodel_assertThatOutputIsInput(@"1 1/2");
 }
 
+-(void)testColon
+{
+	mathmodel_assertThatOutputIsInput(@"3:45");
+}
+
 // -----------------latex tests-----------------------
 
 // tests if we can get the latex value from the model
@@ -203,6 +208,11 @@
 -(void)testMixedNumberLatexValue
 {
 	mathModel_assertThatIsValidLatex(@"1 1/2", @"1\\frac{1}{2}");
+}
+
+-(void)testColonLatexValue
+{
+	mathModel_assertThatIsValidLatex(@"3:45", @"3:45");
 }
 
 // -------------find root tests--------------------
