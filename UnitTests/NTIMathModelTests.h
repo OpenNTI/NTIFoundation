@@ -14,6 +14,7 @@
 @interface NTIMathModelTests : SenTestCase {
 @private
 	NTIMathInputExpressionModel* mathModel;
+	NTIMathInputExpressionModel* baseModel;
 }
 
 @end
