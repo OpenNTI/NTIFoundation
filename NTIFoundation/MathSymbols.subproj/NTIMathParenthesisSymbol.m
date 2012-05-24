@@ -20,7 +20,12 @@
 
 -(NSString *)latexValue
 {
-	if ([self.childMathNode respondsToSelector:@selector(isPlaceholder)] || [self.childMathNode respondsToSelector:@selector(isLiteral)]) {
+	if ([self.childMathNode respondsToSelector:@selector(isPlaceholder)] 
+		|| [self.childMathNode respondsToSelector:@selector(isLiteral)]) {
+		//Add explicit paranthesis only if it's a placeholder(pointing nowhere) or literal. Otherwise, the paranthesis will have already been added based on the precedence level logic
+		if([(NTIMathPlaceholderSymbol *)self.childMathNode inPlaceOfObject]){
+			return [self latexValueForChildNode: self.childMathNode];
+		}
 		return [NSString stringWithFormat:@"(%@)", [self.childMathNode latexValue]]; 
 	}
 	return [self latexValueForChildNode: self.childMathNode];
@@ -29,6 +34,9 @@
 -(NSString *)toString
 {
 	if ([self.childMathNode respondsToSelector:@selector(isPlaceholder)] || [self.childMathNode respondsToSelector:@selector(isLiteral)]) {
+		if([(NTIMathPlaceholderSymbol *)self.childMathNode inPlaceOfObject]){
+			return [self toStringValueForChildNode: self.childMathNode];
+		}
 		return [NSString stringWithFormat:@"(%@)", [self.childMathNode toString]]; 
 	}
 	return [self toStringValueForChildNode: self.childMathNode];

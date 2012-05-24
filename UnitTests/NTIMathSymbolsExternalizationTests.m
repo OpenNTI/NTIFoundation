@@ -65,8 +65,8 @@
 	[self buildEquationFromString:eq];
 	
 	NTIMathSymbol* eqMath = [self->mathModel fullEquation];
-	assertThat([eqMath toString], is(@"4*(1-5)/(3+2)"));
-	assertThat([eqMath latexValue], is(@"4*\\frac{(1-5)}{(3+2)}"));
+	assertThat([eqMath toString], is(eq));
+	assertThat([eqMath latexValue], is(@"4*(\\frac{(1-5)}{(3+2)})"));
 }
 
 -(void)testSquareRootEquation

@@ -279,7 +279,8 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 	
 	//If our parent is a parenthesis we create a new tree, regardless of the sender. This ensures that we stay in the parenthesis.
 	if ([self isLeafMathNode: self->currentMathSymbol] && [currentMathSymbol.parentMathSymbol isKindOfClass: [NTIMathParenthesisSymbol class]]) {
-		[self createTreeWithRoot: self->currentMathSymbol];
+		//In case of a paranthesis we don't want to close the last tree until when we come across a closing a paranthesis. 
+		self->currentMathSymbol = [self newMathSymbolTreeWithRoot:self->currentMathSymbol firstChild: nil];
 	}
 		
 	if (isImplicitSymbol(self->currentMathSymbol, newSymbol, senderType)) {
@@ -447,8 +448,11 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 		return nil;
 	}
 	if (pholder.parentMathSymbol) {
-		// Add literal to replace pholder
-		return [pholder.parentMathSymbol addSymbol: literal];
+		//Unary and binary operators should respond to -swapNode:withNewNode:
+		if ([pholder.parentMathSymbol respondsToSelector:@selector(swapNode:withNewNode:)]) {
+			return [pholder.parentMathSymbol performSelector:@selector(swapNode:withNewNode:) withObject:pholder withObject: literal];
+		}
+		//return [pholder.parentMathSymbol addSymbol: literal];
 	}
 	else {
 		//a pholder is the root element, needs to update who is pointing to us.
