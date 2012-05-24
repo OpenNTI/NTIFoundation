@@ -124,6 +124,11 @@
 	mathmodel_assertThatOutputIsInput(@"triangle");
 }
 
+-(void)testMixedNumber
+{
+	mathmodel_assertThatOutputIsInput(@"1 1/2");
+}
+
 // -----------------latex tests-----------------------
 
 // tests if we can get the latex value from the model
@@ -190,6 +195,11 @@
 -(void)testModelStringLatexValue
 {
 	mathModel_assertThatIsValidLatex(@"triangle", @"triangle");
+}
+
+-(void)testMixedNumberLatexValue
+{
+	mathModel_assertThatIsValidLatex(@"1 1/2", @"1\\frac{1}{2}");
 }
 
 // -------------find root tests--------------------

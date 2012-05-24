@@ -23,6 +23,7 @@
 -(BOOL)isAlphaNumeric;
 -(BOOL)isMathPrefixedSymbol;
 -(BOOL)isMathBinaryCombiningSymbol;
+-(BOOL)isPlusMinusSymbol;
 -(BOOL)isClosingParanthesisSymbol;
 @end
 
@@ -36,12 +37,18 @@
 
 -(BOOL)isAlphaNumeric
 {
-	if ([self isEqualToString:@"∏"] || [self isEqualToString:@"π"]) {
-		return YES;
-	}
-	NSString* regex = @"^[a-zA-Z0-9]*$|^\\.$";	//count alphanumeric plus a dot(.)
-	NSPredicate* regexTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
-	return [regexTest evaluateWithObject: self];
+//	if ([self isEqualToString:@"∏"] || [self isEqualToString:@"π"]) {
+//		return YES;
+//	}
+//	NSString* regex = @"^[a-zA-Z0-9]*$|^\\.$";	//count alphanumeric plus a dot(.)
+//	NSPredicate* regexTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+//	return [regexTest evaluateWithObject: self];
+	
+	//alpha numeric is anything that isn't another type
+	return	   ![self isMathPrefixedSymbol] 
+			&& ![self isClosingParanthesisSymbol] 
+			&& ![self isPlusMinusSymbol] 
+			&& ![self isMathBinaryCombiningSymbol];
 }
 
 -(BOOL)isMathPrefixedSymbol
@@ -220,6 +227,7 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 		if ([currentNode respondsToSelector:@selector(isLiteral)] && [newNode isKindOfClass:[NTIMathFractionBinaryExpression class]]) {
 			NTIMathBinaryExpression* implicitSymbol = [NTIMathBinaryExpression binaryExpressionForString:@"+"];
 			implicitSymbol.isOperatorImplicit = YES;	//Set the flag for implicit binary symbol
+			implicitSymbol.implicitForSymbol = newNode;
 			self->currentMathSymbol = [self addMathNode:implicitSymbol on: self->currentMathSymbol];
 		}
 	}
@@ -228,6 +236,7 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 		if ([currentNode respondsToSelector:@selector(isLiteral)] && [newNode respondsToSelector:@selector(isLiteral)] && [[(NTIMathAlphaNumericSymbol *)newNode mathSymbolValue] isEqualToString: @" "]) {
 			NTIMathBinaryExpression* implicitSymbol = [NTIMathBinaryExpression binaryExpressionForString:@"+"];
 			implicitSymbol.isOperatorImplicit = YES;	//Set the flag for implicit binary symbol
+			implicitSymbol.implicitForSymbol = newNode;
 			self->currentMathSymbol = [self addMathNode:implicitSymbol on: self->currentMathSymbol];
 		}
 	}

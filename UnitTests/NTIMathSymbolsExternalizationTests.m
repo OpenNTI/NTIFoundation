@@ -10,6 +10,9 @@
 #import "NTIMathInputExpressionModel.h"
 #import "NTIMathSymbol.h"
 
+#define HC_SHORTHAND
+#import <OCHamcrest/OCHamcrest.h>
+
 @implementation NTIMathSymbolsExternalizationTests
 -(void)setUp
 {
@@ -62,9 +65,8 @@
 	[self buildEquationFromString:eq];
 	
 	NTIMathSymbol* eqMath = [self->mathModel fullEquation];
-	STAssertTrue([[eqMath toString] isEqualToString: @"4*(1-5)/(3+2)"], @"Equations string should be similar");
-	STAssertTrue([[eqMath latexValue] isEqualToString: @"4*\\frac{(1-5)}{(3+2)}"], @"Equations laTex should be similar");
-
+	assertThat([eqMath toString], is(@"4*(1-5)/(3+2)"));
+	assertThat([eqMath latexValue], is(@"4*\\frac{(1-5)}{(3+2)}"));
 }
 
 -(void)testSquareRootEquation
@@ -73,8 +75,8 @@
 	[self buildEquationFromString:eq];
 	
 	NTIMathSymbol* eqMath = [self->mathModel fullEquation];
-	STAssertTrue([[eqMath toString] isEqualToString: eq], @"Equation %@ should be equal to %@", [eqMath toString], eq);
-	STAssertTrue([[eqMath latexValue] isEqualToString: @"4+\\sqrt{(2+7)}"], @"Equations laTex should be similar. but it's : %@", [eqMath latexValue]);
+	assertThat([eqMath toString], is(eq));
+	assertThat([eqMath latexValue], is(@"4+\\surd(2+7)"));
 }
 
 -(void)testImplicitMultiplication
@@ -82,8 +84,8 @@
 	NSString* eq = [NSString stringWithFormat:@"4√3"];
 	[self buildEquationFromString: eq];
 	NTIMathSymbol* eqMath = [self->mathModel fullEquation];
-	STAssertTrue([[eqMath toString] isEqualToString: eq], @"should be 4√3");
-	STAssertTrue([[eqMath latexValue] isEqualToString: @"4\\sqrt{3}"], @" expressions should be equal");
+	assertThat([eqMath toString], is(eq));
+	assertThat([eqMath latexValue], is( @"4\\surd3"));
 }
 
 //More tests cases: 
@@ -91,3 +93,5 @@
 //succeeds: 1-5*4/2, 4+(1-5), (4+8)*2, 4*((1-5)/(3+2)), √(2+7)+2
 //Fails: 4*√(2+7)-3, 2*√(2+7)
 @end
+
+#undef HC_SHORTHAND

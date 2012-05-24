@@ -19,7 +19,7 @@
 @end
 
 @implementation NTIMathBinaryExpression
-@synthesize leftMathNode, rightMathNode, operatorMathNode, isOperatorImplicit;
+@synthesize leftMathNode, rightMathNode, operatorMathNode, isOperatorImplicit, implicitForSymbol;
 
 +(NTIMathBinaryExpression *)binaryExpressionForString:(NSString *)symbolString
 {
@@ -235,7 +235,7 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 	
 	//If it's implicit we will ignore the operator symbol.
 	if (self.isOperatorImplicit) {
-		return [NSString stringWithFormat:@"%@%@", leftNodeString, rightNodeString];
+		return [NSString stringWithFormat:@"%@%@%@", leftNodeString, self.implicitForSymbol ? self.implicitForSymbol.toString : @"" ,rightNodeString];
 	}
 	NSString* string = [NSString stringWithFormat: @"%@%@%@", leftNodeString, [self.operatorMathNode toString], rightNodeString];
 	return string;
