@@ -8,7 +8,5 @@
 
 #import "NTIMathBinaryExpression.h"
 
-@interface NTIMathFractionBinaryExpression : NTIMathBinaryExpression
-
--(id)init;
+@interface NTIMathFractionBinaryExpression : NTIMathDivisionBinaryExpression
 @end

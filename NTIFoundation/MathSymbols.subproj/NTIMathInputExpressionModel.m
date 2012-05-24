@@ -137,6 +137,7 @@
 }
 @end
 
+
 @interface NTIMathInputExpressionModel()
 -(NTIMathSymbol *)addMathNode: (NTIMathSymbol *)newNode on: (NTIMathSymbol *)currentNode;
 -(NTIMathSymbol *)createMathSymbolForString: (NSString *)stringValue;
@@ -149,6 +150,9 @@
 @class NTIMathExpressionReverseTraversal;
 @implementation NTIMathInputExpressionModel
 @synthesize rootMathSymbol, fullEquation;
+
+#define kNTIMathGraphicKeyboardInput @"NTIMathGraphicKeyboardInput"
+#define kNTIMathTextfieldInput @"NTIMathTextfieldInput"
 -(id)initWithMathSymbol:(NTIMathSymbol *)mathExpression
 {
 	self = [super init];
@@ -170,17 +174,25 @@
 	self->rootMathSymbol.parentMathSymbol = nil;
 }
 
-static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
+static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode, NSString* senderType)
 {
+	if ([senderType isEqualToString: kNTIMathGraphicKeyboardInput]) {
+		//Implicit addition. e.g 2 1/3 is equivalent to 2+1/3. Mixed number case.
+		if ([currentNode respondsToSelector:@selector(isLiteral)] && [newNode isKindOfClass:[NTIMathFractionBinaryExpression class]]) {
+			return YES;
+		}
+	}
+	else {
+		//specific for textfield input
+		if ([currentNode respondsToSelector:@selector(isLiteral)] && [newNode respondsToSelector:@selector(isLiteral)] && [[(NTIMathAlphaNumericSymbol *)newNode mathSymbolValue] isEqualToString: @" "]) {
+			return YES;
+		}
+	}
 	//Implicit multiplication
 	if ([currentNode respondsToSelector:@selector(isLiteral)] && [newNode respondsToSelector:@selector(isUnaryOperator)]) {
 		return YES;
 	}
-	//Implicit addition. e.g 2 1/3 is equivalent to 2+1/3. Mixed number case.
-	if ([currentNode respondsToSelector:@selector(isLiteral)] && [newNode isKindOfClass:[NTIMathFractionBinaryExpression class]]) {
-		return YES;
-	}
-	
+
 	//FIXME: HACK, edge case where we end up with a leaf node at the top.
 	if (([currentNode respondsToSelector:@selector(isBinaryOperator)] || [currentNode respondsToSelector:@selector( isUnaryOperator)]) && [newNode respondsToSelector:@selector(isLiteral)] ) {
 		return YES;
@@ -188,7 +200,9 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
 	return NO;
 }
 
--(void)addImplicitSymbolBetween: (NTIMathSymbol *)currentNode andNewSymbol: (NTIMathSymbol *)newNode
+-(void)addImplicitSymbolBetween: (NTIMathSymbol *)currentNode 
+				   andNewSymbol: (NTIMathSymbol *)newNode 
+					 senderType: (NSString *)senderType
 {
 	if ([currentNode respondsToSelector:@selector(isLiteral)] && [newNode respondsToSelector:@selector(isUnaryOperator)]) {
 		NTIMathBinaryExpression* implicitSymbol = [NTIMathBinaryExpression binaryExpressionForString:@"*"];
@@ -204,10 +218,20 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
 	}
 	
 	//Implicit addition. e.g 2 1/3 is equivalent to 2+1/3. Mixed number case.
-	if ([currentNode respondsToSelector:@selector(isLiteral)] && [newNode isKindOfClass:[NTIMathFractionBinaryExpression class]]) {
-		NTIMathBinaryExpression* implicitSymbol = [NTIMathBinaryExpression binaryExpressionForString:@"+"];
-		implicitSymbol.isOperatorImplicit = YES;	//Set the flag for implicit binary symbol
-		self->currentMathSymbol = [self addMathNode:implicitSymbol on: self->currentMathSymbol];
+	if ([senderType isEqualToString: kNTIMathGraphicKeyboardInput]) {
+		if ([currentNode respondsToSelector:@selector(isLiteral)] && [newNode isKindOfClass:[NTIMathFractionBinaryExpression class]]) {
+			NTIMathBinaryExpression* implicitSymbol = [NTIMathBinaryExpression binaryExpressionForString:@"+"];
+			implicitSymbol.isOperatorImplicit = YES;	//Set the flag for implicit binary symbol
+			self->currentMathSymbol = [self addMathNode:implicitSymbol on: self->currentMathSymbol];
+		}
+	}
+	else {
+		//Implicit addition with textfield input
+		if ([currentNode respondsToSelector:@selector(isLiteral)] && [newNode respondsToSelector:@selector(isLiteral)] && [[(NTIMathAlphaNumericSymbol *)newNode mathSymbolValue] isEqualToString: @" "]) {
+			NTIMathBinaryExpression* implicitSymbol = [NTIMathBinaryExpression binaryExpressionForString:@"+"];
+			implicitSymbol.isOperatorImplicit = YES;	//Set the flag for implicit binary symbol
+			self->currentMathSymbol = [self addMathNode:implicitSymbol on: self->currentMathSymbol];
+		}
 	}
 }
 
@@ -226,37 +250,46 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
 	self->currentMathSymbol = [self newMathSymbolTreeWithRoot:mathSymbol firstChild: nil]; 
 }
 
--(void)addMathExpression: (NTIMathSymbol *)newSymbol
+-(void)addMathExpression: (NTIMathSymbol *)newSymbol senderType: (NSString *)senderType
 {
-	//FIXME: #HACK: we want to create a new tree under certain symbol to match user expectations. Needs to be done a better way.
-	if ([self isLeafMathNode: self->currentMathSymbol] && ([self->currentMathSymbol.parentMathSymbol isKindOfClass:[NTIMathSquareRootUnaryExpression class]] || [self->currentMathSymbol.parentMathSymbol isKindOfClass: [NTIMathParenthesisSymbol class]] || [self->currentMathSymbol.parentMathSymbol isKindOfClass: [NTIMathFractionBinaryExpression class]])) {
-		[self createTreeWithRoot:self->currentMathSymbol];
+	if ([senderType isEqualToString:kNTIMathGraphicKeyboardInput]) {
+		//FIXME: #HACK: we want to create a new tree under certain symbol to match user expectations. Needs to be done a better way.
+		if ([self isLeafMathNode: self->currentMathSymbol] && ([self->currentMathSymbol.parentMathSymbol isKindOfClass:[NTIMathSquareRootUnaryExpression class]] || [self->currentMathSymbol.parentMathSymbol isKindOfClass: [NTIMathParenthesisSymbol class]] || [self->currentMathSymbol.parentMathSymbol isKindOfClass: [NTIMathFractionBinaryExpression class]])) {
+			[self createTreeWithRoot:self->currentMathSymbol];
+		}
+		//NOTE: As the user navigates through the equation, the may want to insert things in between, we need to be able to distinguish inserting in the equation and adding to the end of the rootsymbol. The easy way if comparing the currentSymbol with the last leaf node of the rootSymbol, if they differ, we are inserting, else we are are adding to the end of the equation
+		if (self->currentMathSymbol != [self findLastLeafNodeFrom: self.rootMathSymbol] && [self isLeafMathNode: self->currentMathSymbol]) {
+			//Before we create a new tree at the new current symbol, we will close the tree that we were working on.
+			[self createTreeWithRoot: self->currentMathSymbol];
+		}
 	}
-	
-	//NOTE: As the user navigates through the equation, the may want to insert things in between, we need to be able to distinguish inserting in the equation and adding to the end of the rootsymbol. The easy way if comparing the currentSymbol with the last leaf node of the rootSymbol, if they differ, we are inserting, else we are are adding to the end of the equation
-	if (self->currentMathSymbol != [self findLastLeafNodeFrom: self.rootMathSymbol] && [self isLeafMathNode: self->currentMathSymbol]) {
-		//Before we create a new tree at the new current symbol, we will close the tree that we were working on.
-		self.rootMathSymbol = [self mergeLastTreeOnStackWith: self.rootMathSymbol];
-		self->currentMathSymbol = [self newMathSymbolTreeWithRoot:self->currentMathSymbol firstChild: nil]; 
-	}
-	
-	if (isImplicitSymbol(self->currentMathSymbol, newSymbol)) {
-		[self addImplicitSymbolBetween: self->currentMathSymbol andNewSymbol:newSymbol];
+		
+	if (isImplicitSymbol(self->currentMathSymbol, newSymbol, senderType)) {
+		[self addImplicitSymbolBetween: self->currentMathSymbol andNewSymbol:newSymbol senderType:senderType];
+		if ([newSymbol respondsToSelector:@selector(isLiteral)] && [[(NTIMathAlphaNumericSymbol *)newSymbol mathSymbolValue] isEqualToString: @" "] && [senderType isEqualToString:kNTIMathTextfieldInput]) {
+			return; 
+			//we don't want to add a space symbol, we implicitly interpret it as an implicit addition.
+		}
 	}
 	self->currentMathSymbol = [self addMathNode: newSymbol on: self->currentMathSymbol];
 }
 
--(void)addMathSymbolForString: (NSString *)stringValue
+-(void)addMathSymbolForString: (NSString *)stringValue fromSenderType: (NSString *)senderType
 {
 	if ([stringValue isPlusMinusSymbol]) {
 		if ([self->currentMathSymbol respondsToSelector:@selector(isLiteral)]) {
 			[(NTIMathAlphaNumericSymbol *)self->currentMathSymbol setIsNegative: YES];
 			return;
 		}
+		//if the user placed plusMinus when a placeholder is selected, we will create a literal and add the plus minus afterwards
+		NTIMathAlphaNumericSymbol* lit = [[NTIMathAlphaNumericSymbol alloc] initWithValue:@""];
+		[lit setIsNegative: YES];
+		[self addMathExpression: lit senderType: senderType];
+		return;
 	}
 	NTIMathSymbol* newSymbol = [self createMathSymbolForString:stringValue];
 	if (newSymbol) {
-		[self addMathExpression: newSymbol];
+		[self addMathExpression: newSymbol senderType: senderType];
 	}
 }
 
@@ -520,7 +553,7 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
 			self.rootMathSymbol.substituteSymbol = oldParent.substituteSymbol;
 			[(NTIMathPlaceholderSymbol *)self.rootMathSymbol.substituteSymbol setInPlaceOfObject: self.rootMathSymbol];
 			self->currentMathSymbol = self.rootMathSymbol;
-			[self addMathExpression: [children objectAtIndex: 1]];	
+			[self addMathExpression: [children objectAtIndex: 1] senderType: kNTIMathGraphicKeyboardInput];	
 		}
 	}
 }
@@ -545,8 +578,10 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode)
 	//Now we delete the selected symbol
 	if (mathNode.parentMathSymbol) {
 		NTIMathSymbol* parent = mathNode.parentMathSymbol;
-		if ([parent deleteSymbol: mathNode]) {
+		NTIMathSymbol* newCurrent = [parent deleteSymbol: mathNode];
+		if (newCurrent) {
 			[self addChildrenOfNode: mathNode to: mathNode.parentMathSymbol];
+			return newCurrent;
 		}
 		//if we there is no next symbol, then return the first leaf node
 		if (!previousNode) {

@@ -39,8 +39,7 @@
 		return [[NTIMathFractionBinaryExpression alloc] init];
 	}
 	if ([symbolString isEqualToString:@"÷"]) {
-		return [[NTIMathFractionBinaryExpression alloc] init];
-
+		return [[NTIMathDivisionBinaryExpression alloc] init];
 	}
 	NSString* notReachedString = [NSString stringWithFormat: @"%@ not supported", symbolString];
 	
@@ -104,14 +103,21 @@
 	//Stack it on the left
 	if ([self.leftMathNode respondsToSelector:@selector(isPlaceholder)]){
 		self.leftMathNode = newSymbol;
-		return self.rightMathNode;
+		//return self.rightMathNode;
 	}
 	else if (![self.leftMathNode respondsToSelector:@selector(isPlaceholder)] && [self.rightMathNode respondsToSelector:@selector(isPlaceholder)] ) {
 		//Left full, right is placeholder
 		self.rightMathNode = newSymbol;
+		//return self.rightMathNode;
+	}
+	
+	if ([self.leftMathNode respondsToSelector:@selector(isPlaceholder)]) {
+		return self.leftMathNode;
+	}
+	else {
 		return self.rightMathNode;
 	}
-	return nil;
+	//return nil;
 }
 
 -(NTIMathSymbol *)swapNode: (NTIMathSymbol *)childNode withNewNode: (NTIMathSymbol *)newNode
@@ -316,6 +322,24 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 		self->precedenceLevel = 40;
 	}
 	return self;
+}
+@end
+
+@implementation NTIMathDivisionBinaryExpression
+-(id)init
+{
+	self = [super initWithMathOperatorSymbol: @"/"];
+	if (self) {
+		self->precedenceLevel = 50;
+	}
+	return self;
+}
+
+-(NSString *)latexValue
+{
+	NSString* leftString = [self latexValueForChildNode: self.leftMathNode];
+	NSString* rightString = [self latexValueForChildNode: self.rightMathNode];
+	return [NSString stringWithFormat: @"\\frac{%@}{%@}", leftString, rightString]; 
 }
 @end
 

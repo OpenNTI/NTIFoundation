@@ -36,3 +36,6 @@
 
 @interface NTIMathMultiplicationBinaryExpression : NTIMathBinaryExpression
 @end
+
+@interface NTIMathDivisionBinaryExpression : NTIMathBinaryExpression
+@end
