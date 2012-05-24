@@ -7,6 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+
+#define kNTIMathGraphicKeyboardInput @"NTIMathGraphicKeyboardInput"
+#define kNTIMathTextfieldInput @"NTIMathTextfieldInput"
+
 @class NTIMathSymbol;
 @class NTIMathExpressionStack;
 @interface NTIMathInputExpressionModel : NSObject{

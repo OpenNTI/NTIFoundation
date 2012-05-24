@@ -151,8 +151,6 @@
 @implementation NTIMathInputExpressionModel
 @synthesize rootMathSymbol, fullEquation;
 
-#define kNTIMathGraphicKeyboardInput @"NTIMathGraphicKeyboardInput"
-#define kNTIMathTextfieldInput @"NTIMathTextfieldInput"
 -(id)initWithMathSymbol:(NTIMathSymbol *)mathExpression
 {
 	self = [super init];
@@ -252,7 +250,7 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 
 -(void)addMathExpression: (NTIMathSymbol *)newSymbol senderType: (NSString *)senderType
 {
-	if ([senderType isEqualToString:kNTIMathGraphicKeyboardInput]) {
+	if ([senderType isEqualToString: kNTIMathGraphicKeyboardInput]) {
 		//FIXME: #HACK: we want to create a new tree under certain symbol to match user expectations. Needs to be done a better way.
 		if ([self isLeafMathNode: self->currentMathSymbol] && ([self->currentMathSymbol.parentMathSymbol isKindOfClass:[NTIMathSquareRootUnaryExpression class]] || [self->currentMathSymbol.parentMathSymbol isKindOfClass: [NTIMathParenthesisSymbol class]] || [self->currentMathSymbol.parentMathSymbol isKindOfClass: [NTIMathFractionBinaryExpression class]])) {
 			[self createTreeWithRoot:self->currentMathSymbol];

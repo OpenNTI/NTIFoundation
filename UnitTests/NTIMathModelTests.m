@@ -28,7 +28,7 @@
 		NSString* symbolString = [equationString substringWithRange: NSMakeRange(i, 1)];
 		
 		//Add the mathSymbol to the equation
-		[self->mathModel addMathSymbolForString: symbolString];
+		[self->mathModel addMathSymbolForString: symbolString fromSenderType: kNTIMathTextfieldInput];
 	}
 }
 
