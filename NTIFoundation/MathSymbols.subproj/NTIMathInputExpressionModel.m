@@ -252,7 +252,7 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 {
 	if ([senderType isEqualToString: kNTIMathGraphicKeyboardInput]) {
 		//FIXME: #HACK: we want to create a new tree under certain symbol to match user expectations. Needs to be done a better way.
-		if ([self isLeafMathNode: self->currentMathSymbol] && ([self->currentMathSymbol.parentMathSymbol isKindOfClass:[NTIMathSquareRootUnaryExpression class]] || [self->currentMathSymbol.parentMathSymbol isKindOfClass: [NTIMathParenthesisSymbol class]] || [self->currentMathSymbol.parentMathSymbol isKindOfClass: [NTIMathFractionBinaryExpression class]])) {
+		if ([self isLeafMathNode: self->currentMathSymbol] && ([self->currentMathSymbol.parentMathSymbol isKindOfClass:[NTIMathSquareRootUnaryExpression class]] || [self->currentMathSymbol.parentMathSymbol isKindOfClass: [NTIMathFractionBinaryExpression class]])) {
 			[self createTreeWithRoot:self->currentMathSymbol];
 		}
 		//NOTE: As the user navigates through the equation, the may want to insert things in between, we need to be able to distinguish inserting in the equation and adding to the end of the rootsymbol. The easy way if comparing the currentSymbol with the last leaf node of the rootSymbol, if they differ, we are inserting, else we are are adding to the end of the equation
@@ -260,6 +260,11 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 			//Before we create a new tree at the new current symbol, we will close the tree that we were working on.
 			[self createTreeWithRoot: self->currentMathSymbol];
 		}
+	}
+	
+	//If our parent is a parenthesis we create a new tree, regardless of the sender. This ensures that we stay in the parenthesis.
+	if ([self isLeafMathNode: self->currentMathSymbol] && [currentMathSymbol.parentMathSymbol isKindOfClass: [NTIMathParenthesisSymbol class]]) {
+		[self createTreeWithRoot: self->currentMathSymbol];
 	}
 		
 	if (isImplicitSymbol(self->currentMathSymbol, newSymbol, senderType)) {
