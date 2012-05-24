@@ -142,6 +142,16 @@
 	mathmodel_assertThatOutputIsInput(@"B2, E5");
 }
 
+-(void)testApprox
+{
+	mathmodel_assertThatOutputIsInput(@"x ≈ 6.2");
+}
+
+-(void)testEquals
+{
+	mathmodel_assertThatOutputIsInput(@"x = 6.2");
+}
+
 // -----------------latex tests-----------------------
 
 // tests if we can get the latex value from the model
@@ -223,6 +233,16 @@
 -(void)testCommaLatexValue
 {
 	mathModel_assertThatIsValidLatex(@"B2, E5", @"B2, E5");
+}
+
+-(void)testApproxLatexValue
+{
+	mathModel_assertThatIsValidLatex(@"x ≈ 6.2", @"x ≈ 6.2");
+}
+
+-(void)testEqualsLatexValue
+{
+	mathModel_assertThatIsValidLatex(@"x = 6.2", @"x = 6.2");
 }
 
 // -------------find root tests--------------------
