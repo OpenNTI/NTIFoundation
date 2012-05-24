@@ -41,7 +41,7 @@
 
 #define mathmodel_assertThatOutputIsInput(str) \
 			[self buildEquationFromString: str]; \
-			assertThat([[self->mathModel fullEquation] toString], is(str));
+			assertThat([self->mathModel generateEquationString], is(str));
 
 #define mathModel_assertThatIsValidLatex(userInput, expectedOutPut) \
 	[self buildEquationFromString: userInput]; \

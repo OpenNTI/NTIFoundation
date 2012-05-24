@@ -176,6 +176,9 @@
 	}
 	return nil;
 }
+
+//TODO the getters for leftMathNode and rightMathNode should return after passing
+//through this function.
 static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 {
 	//helper method, for placeholder that may be pointing to expression tree.
@@ -243,12 +246,23 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 
 -(NSString *)latexValue 
 {
+	//FIXME terrible hack here for mixed numbers
+	BOOL showImplicitForSymbol = YES;
+	if(	  self.isOperatorImplicit
+	   && [[self.operatorMathNode toString] isEqualToString: @"+"]
+	   && [mathExpressionForSymbol(self.leftMathNode) respondsToSelector: @selector(isLiteral)]
+	   && [mathExpressionForSymbol(self.rightMathNode) isKindOfClass: [NTIMathDivisionBinaryExpression class]]){
+		showImplicitForSymbol = NO;
+	}
+	
+	showImplicitForSymbol = showImplicitForSymbol && self.implicitForSymbol;
+	
 	NSString* leftNodeString = [self latexValueForChildNode: self.leftMathNode];
 	NSString* rightNodeString = [self latexValueForChildNode: self.rightMathNode];
 	
 	//If it's implicit we will ignore the operator symbol.
 	if (self.isOperatorImplicit) {
-		return [NSString stringWithFormat:@"%@%@", leftNodeString, rightNodeString];
+		return [NSString stringWithFormat:@"%@%@%@", leftNodeString, showImplicitForSymbol ? self.implicitForSymbol.latexValue : @"" ,rightNodeString];
 	}
 	NSString* operatorString = [self.operatorMathNode latexValue];
 	NSString* latexVal = [NSString stringWithFormat: @"%@%@%@", leftNodeString, operatorString, rightNodeString];
