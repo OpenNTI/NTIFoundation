@@ -15,6 +15,7 @@
 
 @interface NTIMathInputExpressionModel(NTIMathInputExpressionTest)
 -(NTIMathSymbol *)findRootOfMathNode: (NTIMathSymbol *)mathSymbol;
+-(NTIMathSymbol *)removeMathExpression: (NTIMathSymbol *)mathNode;
 -(NSString *)tolaTex;
 @end
 
@@ -22,29 +23,30 @@
 
 -(void)setUp
 {
+	self->baseModel = [[NTIMathInputExpressionModel alloc] initWithMathSymbol: nil];
 	self->mathModel = [[NTIMathInputExpressionModel alloc] initWithMathSymbol: nil];
 }
 
 // -------------builder method---------------
 
--(void)buildEquationFromString: (NSString *)equationString
+-(void)buildEquationFromString: (NSString *)equationString: (NTIMathInputExpressionModel*) model
 {
 	for (NSUInteger i= 0; i<equationString.length; i++) {
 		NSString* symbolString = [equationString substringWithRange: NSMakeRange(i, 1)];
 		
 		//Add the mathSymbol to the equation
-		[self->mathModel addMathSymbolForString: symbolString fromSenderType: kNTIMathTextfieldInput];
+		[model addMathSymbolForString: symbolString fromSenderType: kNTIMathTextfieldInput];
 	}
 }
 
 // -------------checker methods---------------
 
 #define mathmodel_assertThatOutputIsInput(str) \
-			[self buildEquationFromString: str]; \
+			[self buildEquationFromString: str: self->mathModel]; \
 			assertThat([self->mathModel generateEquationString], is(str));
 
 #define mathModel_assertThatIsValidLatex(userInput, expectedOutPut) \
-	[self buildEquationFromString: userInput]; \
+	[self buildEquationFromString: userInput: self->mathModel]; \
 	assertThat([self->mathModel tolaTex], is(expectedOutPut));
 
 // -----------data retention test------------
@@ -53,7 +55,7 @@
 -(void)testModelDataStorage
 {
 	NSString* latexToString = @"0";
-	[self buildEquationFromString: latexToString];
+	[self buildEquationFromString: latexToString: self->mathModel];
 	assertThat([self->mathModel fullEquation], isNot(nil));
 }
 
@@ -208,21 +210,23 @@
 // tests finding the root of a nil expression
 -(void)testFindRootOfMathNodeNil
 {
-	[self buildEquationFromString: nil];
+	[self buildEquationFromString: nil: self->mathModel];
 	NTIMathSymbol* parent = [self->mathModel rootMathSymbol];
 	assertThat([self->mathModel findRootOfMathNode: parent], is(parent));
 }
 
+// test finding the root of the root expression
 -(void)testFindRootOfMathNodeRoot
 {
-	[self buildEquationFromString: @"4+5"];
+	[self buildEquationFromString: @"4+5": self->mathModel];
 	NTIMathSymbol* parent = [self->mathModel rootMathSymbol];
 	assertThat([self->mathModel findRootOfMathNode: parent], is(parent));
 }
 
+// test finding the root of the child expression
 -(void)testFindFootOfMathNodeChild
 {
-	[self buildEquationFromString: @"4+5*6"];
+	[self buildEquationFromString: @"4+5*6": self->mathModel];
 	NTIMathSymbol* parent = [self->mathModel rootMathSymbol];
 	for(NTIMathSymbol* child in parent.children){
 		assertThat([self->mathModel findRootOfMathNode: child], is(parent));
@@ -231,13 +235,89 @@
 
 -(void)testFindFootOfMathNodeGrandchildPlus
 {
-	[self buildEquationFromString: @"4+5*6^7"];
+	[self buildEquationFromString: @"4+5*6^7": self->mathModel];
 	NTIMathSymbol* parent = [self->mathModel rootMathSymbol];
 	for(NTIMathSymbol* child in parent.children){
-		for(NTIMathSymbol* grandChild in child.children){
-			assertThat([self->mathModel findRootOfMathNode: grandChild], is(parent));
+		if(child.children != nil){
+			for(NTIMathSymbol* grandChild in child.children){
+				assertThat([self->mathModel findRootOfMathNode: grandChild], is(parent));
+			}
 		}
 	}
+}
+
+// --------------modify current symbol-----------------
+
+-(void)testCurrentMathSymbolNil
+{
+	assertThat([[self->mathModel currentMathSymbol] toString], is(@""));
+}
+
+-(void)testCurrentMathSymbolBasic
+{
+	[self buildEquationFromString:@"4+5": self->mathModel];
+	assertThat([[self->mathModel currentMathSymbol] toString], is(@"5"));
+}
+
+-(void)testCurrentMathSymbolNilDiv
+{
+	[self buildEquationFromString:@"*": self->mathModel];
+	NTIMathSymbol* parent = [self->mathModel rootMathSymbol];
+	NTIMathSymbol* leftChild = [parent.children objectAtIndex:0];
+	NTIMathSymbol* rightChild = [parent.children objectAtIndex:1];
+	assertThat([self->mathModel currentMathSymbol], is(equalTo(leftChild)));
+	[self->mathModel setCurrentSymbolTo: rightChild];
+	assertThat([self->mathModel currentMathSymbol], is(equalTo(rightChild)));
+	[self buildEquationFromString:@"7": self->mathModel];
+	assertThat([self->mathModel generateEquationString], is(@"*7"));
+}
+
+-(void)testSetMathSymbolNil
+{
+	[self buildEquationFromString: nil: self->baseModel];
+	[self->mathModel setCurrentSymbolTo: [self->baseModel rootMathSymbol]];
+	assertThat([[self->mathModel currentMathSymbol] toString], is(@""));
+}
+
+-(void)testSetMathSymbolBasic
+{
+	[self buildEquationFromString: @"4": self->baseModel];
+	NTIMathSymbol* changeSymbol = [self->mathModel rootMathSymbol];
+	[self buildEquationFromString: @"4+5": self->mathModel];
+	[self->mathModel setCurrentSymbolTo: changeSymbol];
+	assertThat([[self->mathModel currentMathSymbol] toString], is(@"4"));
+}
+
+-(void)testSetMathSymbolOutside
+{
+	[self buildEquationFromString: @"4": self->baseModel];
+	[self buildEquationFromString: @"4+5": self->mathModel];
+	[self->mathModel setCurrentSymbolTo: [self->baseModel rootMathSymbol]];
+	assertThat([[self->mathModel currentMathSymbol] toString], isNot(@"4"));
+}
+
+-(void)testRemoveMathExpressionNil
+{
+	[self buildEquationFromString: @"" : self->baseModel];
+	[self->mathModel removeMathExpression: [self->baseModel rootMathSymbol]];
+	assertThat([[self->mathModel fullEquation] toString], is(@""));
+}
+
+-(void)testRemoveMathExpressionBasic
+{
+	[self buildEquationFromString: @"4" : self->baseModel];
+	NTIMathSymbol* changeSymbol = [self->mathModel rootMathSymbol];
+	[self buildEquationFromString: @"+5" : self->mathModel];
+	[self->mathModel removeMathExpression: changeSymbol];
+	assertThat([self->mathModel generateEquationString], is(@"+5"));
+}
+
+-(void)testRemoveMathSymbolOutside
+{
+	[self buildEquationFromString: @"4": self->baseModel];
+	[self buildEquationFromString: @"4+5": self->mathModel];
+	[self->mathModel removeMathExpression: [self->baseModel rootMathSymbol]];
+	assertThat([[self->mathModel currentMathSymbol] toString], isNot(@"4"));
 }
 
 @end
