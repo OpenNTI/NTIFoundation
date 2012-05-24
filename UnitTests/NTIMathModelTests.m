@@ -137,6 +137,11 @@
 	mathmodel_assertThatOutputIsInput(@"3:45");
 }
 
+-(void)testComma
+{
+	mathmodel_assertThatOutputIsInput(@"B2, E5");
+}
+
 // -----------------latex tests-----------------------
 
 // tests if we can get the latex value from the model
@@ -213,6 +218,11 @@
 -(void)testColonLatexValue
 {
 	mathModel_assertThatIsValidLatex(@"3:45", @"3:45");
+}
+
+-(void)testCommaLatexValue
+{
+	mathModel_assertThatIsValidLatex(@"B2, E5", @"B2, E5");
 }
 
 // -------------find root tests--------------------
