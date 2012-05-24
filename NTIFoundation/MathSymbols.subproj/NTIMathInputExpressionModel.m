@@ -595,7 +595,11 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 			[self addChildrenOfNode: mathNode to: mathNode.parentMathSymbol];
 			return newCurrent;
 		}
-		//if we there is no next symbol, then return the first leaf node
+		else {
+			//if our parent cannot delete us, then, that means we are a placeholder, so we will add the parent to be deleted
+			return [self removeMathExpression: parent];
+		}
+		//if there is no next symbol, then return the first leaf node
 		if (!previousNode) {
 			return [self findFirstLeafNodeFrom: self.rootMathSymbol];
 		}
@@ -609,6 +613,14 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 			self.rootMathSymbol = [[NTIMathPlaceholderSymbol alloc] init];
 			return self.rootMathSymbol;
 		}
+//		else if([self->currentMathSymbol.parentMathSymbol respondsToSelector:@selector(nonEmptyChildren)] && self->currentMathSymbol.parentMathSymbol == self.rootMathSymbol) {
+//			NSArray* children = [self->currentMathSymbol.parentMathSymbol performSelector:@selector(nonEmptyChildren)];
+//			if (children.count == 0) {
+//				self.rootMathSymbol = [[NTIMathPlaceholderSymbol alloc] init];
+//				return self.rootMathSymbol;
+//			}
+//		}
+																					
 		if (!previousNode) {
 			return self.rootMathSymbol;
 		}
