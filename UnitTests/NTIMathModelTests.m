@@ -374,4 +374,34 @@
 	assertThat([[self->mathModel currentMathSymbol] toString], isNot(@"4"));
 }
 
+// ---------------find leaf node tests-----------------
+
+-(void)testfindFirstLeafNodFromNil
+{
+	self->mathModel = [NTIMathEquationBuilder modelFromString: @""];
+	NTIMathSymbol* eq = [self->mathModel fullEquation];
+	assertThat([[self->mathModel findFirstLeafNodeFrom: eq] toString], is(@""));
+}
+
+-(void)testfindFirstLeafNodFromBasic
+{
+	self->mathModel = [NTIMathEquationBuilder modelFromString: @"4^5*6+7"];
+	NTIMathSymbol* eq = [self->mathModel fullEquation];
+	assertThat([[self->mathModel findFirstLeafNodeFrom: eq] toString], is(@"4"));
+}
+
+-(void)testfindLastLeafNodFromNil
+{
+	self->mathModel = [NTIMathEquationBuilder modelFromString: @""];
+	NTIMathSymbol* eq = [self->mathModel fullEquation];
+	assertThat([[self->mathModel findLastLeafNodeFrom: eq] toString], is(@""));
+}
+
+-(void)testfindLastLeafNodFromBasic
+{
+	self->mathModel = [NTIMathEquationBuilder modelFromString: @"4^5*6+7"];
+	NTIMathSymbol* eq = [self->mathModel fullEquation];
+	assertThat([[self->mathModel findLastLeafNodeFrom: eq] toString], is(@"4"));
+}
+
 @end
