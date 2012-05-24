@@ -38,13 +38,6 @@
 
 -(BOOL)isAlphaNumeric
 {
-//	if ([self isEqualToString:@"∏"] || [self isEqualToString:@"π"]) {
-//		return YES;
-//	}
-//	NSString* regex = @"^[a-zA-Z0-9]*$|^\\.$";	//count alphanumeric plus a dot(.)
-//	NSPredicate* regexTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
-//	return [regexTest evaluateWithObject: self];
-	
 	//alpha numeric is anything that isn't another type
 	return	   ![self isMathPrefixedSymbol] 
 			&& ![self isClosingParanthesisSymbol] 

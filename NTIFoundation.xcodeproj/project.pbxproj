@@ -163,6 +163,9 @@
 		40F39C8114D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8014D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m */; };
 		40F39C8414D84EF50089DCF6 /* SendRecieveQueueTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8314D84EF50089DCF6 /* SendRecieveQueueTest.m */; };
 		40F39C8714D852FE0089DCF6 /* NSString-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8614D852FE0089DCF6 /* NSString-NTIExtensionsTest.m */; };
+		40F72DA8156EE1C50050C93E /* NTIMathEquationBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 40F72DA6156EE1C40050C93E /* NTIMathEquationBuilder.h */; };
+		40F72DA9156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */; };
+		40F72DAA156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */; };
 		4C2ECDD51549D0A400C69E3A /* NTIMathInputExpressionModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2ECDD31549D0A400C69E3A /* NTIMathInputExpressionModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2ECDD61549D0A400C69E3A /* NTIMathInputExpressionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2ECDD41549D0A400C69E3A /* NTIMathInputExpressionModel.m */; };
 		4C2ECDD71549D0A400C69E3A /* NTIMathInputExpressionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2ECDD41549D0A400C69E3A /* NTIMathInputExpressionModel.m */; };
@@ -724,6 +727,8 @@
 		40F39C8314D84EF50089DCF6 /* SendRecieveQueueTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendRecieveQueueTest.m; sourceTree = "<group>"; };
 		40F39C8514D852FE0089DCF6 /* NSString-NTIExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString-NTIExtensionsTest.h"; sourceTree = "<group>"; };
 		40F39C8614D852FE0089DCF6 /* NSString-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString-NTIExtensionsTest.m"; sourceTree = "<group>"; };
+		40F72DA6156EE1C40050C93E /* NTIMathEquationBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathEquationBuilder.h; sourceTree = "<group>"; };
+		40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathEquationBuilder.m; sourceTree = "<group>"; };
 		4C2ECDD31549D0A400C69E3A /* NTIMathInputExpressionModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathInputExpressionModel.h; sourceTree = "<group>"; };
 		4C2ECDD41549D0A400C69E3A /* NTIMathInputExpressionModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathInputExpressionModel.m; sourceTree = "<group>"; };
 		4C3BDC1A14EAF87F008ED49D /* NTIInspectorSliceObjectPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIInspectorSliceObjectPair.h; sourceTree = "<group>"; };
@@ -1163,6 +1168,8 @@
 		4CA4F4691535DDD30005FECD /* MathSymbols */ = {
 			isa = PBXGroup;
 			children = (
+				40F72DA6156EE1C40050C93E /* NTIMathEquationBuilder.h */,
+				40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */,
 				4CA4F4861535F3460005FECD /* NTIMathExpressionSymbolProtocol.h */,
 				4CA4F4821535F1390005FECD /* NTIMathSymbol.h */,
 				4CA4F4831535F1390005FECD /* NTIMathSymbol.m */,
@@ -1613,6 +1620,7 @@
 				40A4147F1505748A0017242E /* NSDate-NTIExtensions.h in Headers */,
 				403C317A1512A5DD00C53D22 /* NSData-NTIJSON.h in Headers */,
 				404A67A0156D906900A81B6A /* UIDevice-NTIExtensions.h in Headers */,
+				40F72DA8156EE1C50050C93E /* NTIMathEquationBuilder.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2164,6 +2172,7 @@
 				4C2ECDD61549D0A400C69E3A /* NTIMathInputExpressionModel.m in Sources */,
 				4CC6848015614D99003823E7 /* NTIMathSymbolUtils.m in Sources */,
 				404A67A1156D906900A81B6A /* UIDevice-NTIExtensions.m in Sources */,
+				40F72DA9156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2233,6 +2242,7 @@
 				40AB82601566AA0C00BB7375 /* OQColor-NTIExtensionsTest.m in Sources */,
 				404A67A2156D906900A81B6A /* UIDevice-NTIExtensions.m in Sources */,
 				5158CA78156AE5240054CA85 /* NTIMathModelTests.m in Sources */,
+				40F72DAA156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

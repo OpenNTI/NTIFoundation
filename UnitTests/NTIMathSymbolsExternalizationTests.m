@@ -9,6 +9,7 @@
 #import "NTIMathSymbolsExternalizationTests.h"
 #import "NTIMathInputExpressionModel.h"
 #import "NTIMathSymbol.h"
+#import "NTIMathEquationBuilder.h"
 
 #define HC_SHORTHAND
 #import <OCHamcrest/OCHamcrest.h>
@@ -19,21 +20,11 @@
 	self->mathModel = [[NTIMathInputExpressionModel alloc] initWithMathSymbol: nil];
 }
 
-//mainly for testing purposes, not used anywhere else, now
--(void)buildEquationFromString: (NSString *)equationString
-{
-	for (NSUInteger i= 0; i<equationString.length; i++) {
-		NSString* symbolString = [equationString substringWithRange: NSMakeRange(i, 1)];
-			
-		//Add the mathSymbol to the equation
-		[self->mathModel addMathSymbolForString: symbolString fromSenderType: kNTIMathTextfieldInput];
-	}
-}
-
 - (void)testSimpleEquation
 {
+	
 	NSString* eq = [NSString stringWithFormat:@"4+5"];
-	[self buildEquationFromString: eq];
+	self->mathModel = [NTIMathEquationBuilder modelFromString: eq];
 	STAssertNotNil([self->mathModel fullEquation], @"It should contain a valid eq");
 	STAssertTrue([[[self->mathModel fullEquation] toString] isEqualToString: eq], @"Equations string should be similar");
 	STAssertTrue([[[self->mathModel fullEquation] latexValue]isEqualToString: @"4+5"], @"Equations laTex should be similar");
@@ -42,7 +33,7 @@
 -(void)testSimplePrecedenceLogic
 {
 	NSString* eq = [NSString stringWithFormat:@"4+5*6"];
-	[self buildEquationFromString:eq];
+	self->mathModel = [NTIMathEquationBuilder modelFromString: eq];
 	
 	NTIMathSymbol* eqMath = [self->mathModel fullEquation];
 	STAssertTrue([[eqMath toString] isEqualToString: eq], @"Equations string should be equal");
@@ -52,7 +43,7 @@
 -(void)testSimpleParanthesisEquation
 {
 	NSString* eq = [NSString stringWithFormat:@"(4+8)*2"];
-	[self buildEquationFromString:eq];
+	self->mathModel = [NTIMathEquationBuilder modelFromString: eq];
 	
 	NTIMathSymbol* eqMath = [self->mathModel fullEquation];
 	STAssertTrue([[eqMath toString] isEqualToString: eq], @"Equations string should be similar");
@@ -62,7 +53,7 @@
 -(void)testFractionEquation
 {
 	NSString* eq = [NSString stringWithFormat:@"4*((1-5)/(3+2))"];
-	[self buildEquationFromString:eq];
+	self->mathModel = [NTIMathEquationBuilder modelFromString: eq];
 	
 	NTIMathSymbol* eqMath = [self->mathModel fullEquation];
 	assertThat([eqMath toString], is(eq));
@@ -72,7 +63,7 @@
 -(void)testSquareRootEquation
 {
 	NSString* eq = [NSString stringWithFormat:@"4+√(2+7)"];
-	[self buildEquationFromString:eq];
+	self->mathModel = [NTIMathEquationBuilder modelFromString: eq];
 	
 	NTIMathSymbol* eqMath = [self->mathModel fullEquation];
 	assertThat([eqMath toString], is(eq));
@@ -82,7 +73,7 @@
 -(void)testImplicitMultiplication
 {
 	NSString* eq = [NSString stringWithFormat:@"4√3"];
-	[self buildEquationFromString: eq];
+	self->mathModel = [NTIMathEquationBuilder modelFromString: eq];
 	NTIMathSymbol* eqMath = [self->mathModel fullEquation];
 	assertThat([eqMath toString], is(eq));
 	assertThat([eqMath latexValue], is( @"4\\surd3"));
