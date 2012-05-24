@@ -13,6 +13,10 @@
 #define HC_SHORTHAND
 #import <OCHamcrest/OCHamcrest.h>
 
+@interface NTIMathInputExpressionModel(NTIMathInputExpressionTest)
+-(NTIMathSymbol *)findRootOfMathNode: (NTIMathSymbol *)mathSymbol;
+@end
+
 @implementation NTIMathModelTests
 
 -(void)setUp
@@ -38,11 +42,9 @@
 			[self buildEquationFromString: str]; \
 			assertThat([[self->mathModel fullEquation] toString], is(str));
 
--(void)toLatexChecker: (NSString*) userInput: (NSString*) expectedOutPut
-{
-	[self buildEquationFromString: userInput];
+#define mathModel_assertThatIsValidLatex(userInput, expectedOutPut) \
+	[self buildEquationFromString: userInput]; \
 	assertThat([[self->mathModel fullEquation] latexValue], is(expectedOutPut));
-}
 
 // -----------data retention test------------
 
@@ -127,67 +129,104 @@
 // tests if we can get the latex value from the model
 -(void)testModelBasicLatexValue
 {
-	[self toLatexChecker: @"45": @"45"];
+	mathModel_assertThatIsValidLatex(@"45", @"45");
 }
 
 // tests if the model will return symbols with the latex value correctly
 -(void)testModelSymbolLatexValue
 {
-	[self toLatexChecker: @"4+5-6*7^8": @"4+5-6*7^8"];
+	mathModel_assertThatIsValidLatex(@"4+5-6*7^8", @"4+5-6*7^8");
 }
 
 // tests if the model stores parentheses with the latex value correctly
 -(void)testModelParenthesesLatexValue
 {
-	[self toLatexChecker: @"(4+5)": @"(4+5)"];
+	mathModel_assertThatIsValidLatex(@"(4+5)", @"(4+5)");
 }
 
 // tests if the model will return square roots with the latex value correctly
 -(void)testModelSurdLatexValue
 {
-	[self toLatexChecker: @"4√3": @"4\\surd{3}"];
+	mathModel_assertThatIsValidLatex(@"4√3", @"4\\surd3");
 }
 
 // tests if the model will return decimals with the latex value correctly
 -(void)testModelDecimalLatexValue
 {
-	[self toLatexChecker: @"20.5": @"20.5"];
+	mathModel_assertThatIsValidLatex(@"20.5", @"20.5");
 }
 
 // tests if the model will return fractions with the latex value correctly
 -(void)testModelFractionLatexValue
 {
-	[self toLatexChecker: @"3/4": @"3\\frac{4}{}"];
+	mathModel_assertThatIsValidLatex(@"3/4", @"\\frac{3}{4}");
 }
 
 // tests if the model will return negative numbers with the latex value correctly
 -(void)testModelNegativeLatexValue
 {
-	[self toLatexChecker: @"-1": @"-1"];
+	mathModel_assertThatIsValidLatex(@"-1", @"-1");
 }
 
 // tests if the model will return a pi value with the latex value correctly
 -(void)testModelPiLatexValue
 {
-	[self toLatexChecker: @"π": @"\\pi"];
+	mathModel_assertThatIsValidLatex(@"π", @"\\pi");
 }
 
 // tests if the model will return a Scientific Notation value with the latex value correctly
 -(void)testModelScientificNotationLatexValue
 {
-	[self toLatexChecker:  @"2.16 × 10^5": @"2.16 × 10^5"]; //not the same value as if typed in
+	mathModel_assertThatIsValidLatex(@"2.16 × 10^5", @"2.16 × 10^5"); //not the same value as if typed in
 }
 
 // tests if the model will return a graph point value with the latex value correctly
 -(void)testModelGraphPointLatexValue
 {
-	[self toLatexChecker: @"(0.5, 0.5)": @"(0.5, 0.5)"];
+	mathModel_assertThatIsValidLatex(@"(0.5, 0.5)", @"(0.5, 0.5)");
 }
 
 // tests if the model will return a string value with the latex value correctly
 -(void)testModelStringLatexValue
 {
-	[self toLatexChecker: @"triangle": @"triangle"];
+	mathModel_assertThatIsValidLatex(@"triangle", @"triangle");
+}
+
+// -------------find root tests--------------------
+
+// tests finding the root of a nil expression
+-(void)testFindRootOfMathNodeNil
+{
+	[self buildEquationFromString: nil];
+	NTIMathSymbol* parent = [self->mathModel rootMathSymbol];
+	assertThat([self->mathModel findRootOfMathNode: parent], is(parent));
+}
+
+-(void)testFindRootOfMathNodeRoot
+{
+	[self buildEquationFromString: @"4+5"];
+	NTIMathSymbol* parent = [self->mathModel rootMathSymbol];
+	assertThat([self->mathModel findRootOfMathNode: parent], is(parent));
+}
+
+-(void)testFindFootOfMathNodeChild
+{
+	[self buildEquationFromString: @"4+5*6"];
+	NTIMathSymbol* parent = [self->mathModel rootMathSymbol];
+	for(NTIMathSymbol* child in parent.children){
+		assertThat([self->mathModel findRootOfMathNode: child], is(parent));
+	}
+}
+
+-(void)testFindFootOfMathNodeGrandchildPlus
+{
+	[self buildEquationFromString: @"4+5*6^7"];
+	NTIMathSymbol* parent = [self->mathModel rootMathSymbol];
+	for(NTIMathSymbol* child in parent.children){
+		for(NTIMathSymbol* grandChild in child.children){
+			assertThat([self->mathModel findRootOfMathNode: grandChild], is(parent));
+		}
+	}
 }
 
 @end
