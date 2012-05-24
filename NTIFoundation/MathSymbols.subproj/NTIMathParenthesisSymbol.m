@@ -20,19 +20,16 @@
 
 -(NSString *)latexValue
 {
-	//NOTE: We don't need to add parenthesis, they will be added automatically because parenthesis have the highest precedence of all the math symbols. Adding them here, results in duplicate parenthesis.
-	//return [NSString stringWithFormat: @"(%@)", [self latexValueForChildNode: self.childMathNode]];
 	if ([self.childMathNode respondsToSelector:@selector(isPlaceholder)] || [self.childMathNode respondsToSelector:@selector(isLiteral)]) {
-		return [NSString stringWithFormat:@"(%@)", [self latexValueForChildNode: self.childMathNode]]; 
+		return [NSString stringWithFormat:@"(%@)", [self.childMathNode latexValue]]; 
 	}
 	return [self latexValueForChildNode: self.childMathNode];
 }
 
 -(NSString *)toString
 {
-	//return [NSString stringWithFormat: @"(%@)", [self latexValueForChildNode: self.childMathNode]];
 	if ([self.childMathNode respondsToSelector:@selector(isPlaceholder)] || [self.childMathNode respondsToSelector:@selector(isLiteral)]) {
-		return [NSString stringWithFormat:@"(%@)", [self toStringValueForChildNode: self.childMathNode]]; 
+		return [NSString stringWithFormat:@"(%@)", [self.childMathNode toString]]; 
 	}
 	return [self toStringValueForChildNode: self.childMathNode];
 }
