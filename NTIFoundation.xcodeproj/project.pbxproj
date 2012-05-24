@@ -163,7 +163,7 @@
 		40F39C8114D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8014D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m */; };
 		40F39C8414D84EF50089DCF6 /* SendRecieveQueueTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8314D84EF50089DCF6 /* SendRecieveQueueTest.m */; };
 		40F39C8714D852FE0089DCF6 /* NSString-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8614D852FE0089DCF6 /* NSString-NTIExtensionsTest.m */; };
-		40F72DA8156EE1C50050C93E /* NTIMathEquationBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 40F72DA6156EE1C40050C93E /* NTIMathEquationBuilder.h */; };
+		40F72DA8156EE1C50050C93E /* NTIMathEquationBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 40F72DA6156EE1C40050C93E /* NTIMathEquationBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40F72DA9156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */; };
 		40F72DAA156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */; };
 		4C2ECDD51549D0A400C69E3A /* NTIMathInputExpressionModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2ECDD31549D0A400C69E3A /* NTIMathInputExpressionModel.h */; settings = {ATTRIBUTES = (Public, ); }; };

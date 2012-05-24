@@ -56,5 +56,6 @@
 #import "NTIMathBinaryExpression.h"
 #import "NTIMathFractionBinaryExpression.h"
 #import "NTIMathExponentBinaryExpression.h"
+#import "NTIMathEquationBuilder.h"
 #import "NTIMathInputExpressionModel.h"
 #endif
