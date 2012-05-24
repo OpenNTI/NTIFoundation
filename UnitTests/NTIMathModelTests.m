@@ -15,6 +15,7 @@
 
 @interface NTIMathInputExpressionModel(NTIMathInputExpressionTest)
 -(NTIMathSymbol *)findRootOfMathNode: (NTIMathSymbol *)mathSymbol;
+-(NSString *)tolaTex;
 @end
 
 @implementation NTIMathModelTests
@@ -44,7 +45,7 @@
 
 #define mathModel_assertThatIsValidLatex(userInput, expectedOutPut) \
 	[self buildEquationFromString: userInput]; \
-	assertThat([[self->mathModel fullEquation] latexValue], is(expectedOutPut));
+	assertThat([self->mathModel tolaTex], is(expectedOutPut));
 
 // -----------data retention test------------
 
