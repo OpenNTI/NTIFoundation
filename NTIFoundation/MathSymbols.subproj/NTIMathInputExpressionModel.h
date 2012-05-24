@@ -28,6 +28,7 @@
 //Addition
 -(void)addMathSymbolForString: (NSString *)stringValue 
 			   fromSenderType: (NSString *)senderType;
+-(void)addMathExpression: (NTIMathSymbol *)newSymbol senderType: (NSString *)senderType;
 //Selection
 -(void)setCurrentSymbolTo: (NTIMathSymbol *)mathSymbol;
 //Deletion

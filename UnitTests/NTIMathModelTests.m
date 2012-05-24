@@ -146,6 +146,11 @@
 	mathmodel_assertThatOutputIsInput(@"x = 6.2");
 }
 
+-(void)testHandlesJunkValue
+{
+	mathmodel_assertThatOutputIsInput(@"x--6+/*3#-");
+}
+
 // -----------------latex tests-----------------------
 
 // tests if we can get the latex value from the model

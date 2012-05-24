@@ -7,6 +7,7 @@
 //
 
 #import "NTIMathEquationBuilder.h"
+#import "NTIMathAlphaNumericSymbol.h"
 #import "NTIMathInputExpressionModel.h"
 
 @implementation NTIMathEquationBuilder
@@ -31,11 +32,25 @@
 
 -(void)buildModelFromEquationString: (NSString *)stringValue
 {
+	if(!stringValue){
+		return;
+	}
+	
 	// could be one string with one char or even more. 
 	for (NSUInteger i= 0; i<stringValue.length; i++) {
 		NSString* symbolString = [stringValue substringWithRange: NSMakeRange(i, 1)];
 		//Add the mathSymbol to the equation
 		[self.mathModel addMathSymbolForString: symbolString fromSenderType: kNTIMathTextfieldInput];
+	}
+	
+	if( ![[self.mathModel generateEquationString] isEqualToString: stringValue] ){
+		NSLog(@"WARN Unable to build consistent model for %@.  Falling back to literal", stringValue);
+		[self clearModelEquation];
+		NTIMathAlphaNumericSymbol* literal = [[NTIMathAlphaNumericSymbol alloc] initWithValue: stringValue];
+		[self.mathModel addMathExpression: literal senderType: kNTIMathTextfieldInput];
+		
+		//If we can't even roundtrip it as a literal we are in trouble
+		OBASSERT([[self.mathModel generateEquationString] isEqualToString: stringValue]);
 	}
 }
 
