@@ -345,6 +345,21 @@
 //	[self->mathModel removeMathExpression: changeSymbol];
 //	assertThat([self->mathModel generateEquationString], is(@"+5"));
 //}
+//
+//-(void)testDeleteMathExpressionNil
+//{
+//	NTIMathSymbol* removeSymbol = [[NTIMathEquationBuilder modelFromString: @"4"] rootMathSymbol];
+//	[self->mathModel deleteMathExpression: removeSymbol];
+//	assertThat([[self->mathModel rootMathSymbol] toString], is(@""));
+//}
+//
+//-(void)testDeleteMathExpressionBasic
+//{
+//	NTIMathSymbol* removeSymbol = [[NTIMathEquationBuilder modelFromString: @"4"] rootMathSymbol];
+//	self->mathModel = [NTIMathEquationBuilder modelFromString: @"4+5"];
+//	[self->mathModel deleteMathExpression: removeSymbol];
+//	assertThat([[self->mathModel rootMathSymbol] toString], is(@"+5"));
+//}
 
 -(void)testRemoveMathSymbolOutside
 {
