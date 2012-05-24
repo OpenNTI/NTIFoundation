@@ -25,6 +25,7 @@
 -(BOOL)isMathBinaryCombiningSymbol;
 -(BOOL)isPlusMinusSymbol;
 -(BOOL)isClosingParanthesisSymbol;
+-(BOOL)isSubtractionSymbol;
 @end
 
 @implementation NSString(mathSymbolExtension)
@@ -76,6 +77,11 @@
 	//The list will grow as we support more symbols
 	NSArray* array = [[NSArray alloc] initWithObjects:@"^",@"/", @"+", @"-", @"*", @"÷", @"x/y", @"=", nil];
 	return [array containsObject: self];
+}
+
+-(BOOL)isSubtractionSymbol
+{
+	return [self isEqualToString: @"-"];
 }
 
 @end
@@ -286,9 +292,30 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 	self->currentMathSymbol = [self addMathNode: newSymbol on: self->currentMathSymbol];
 }
 
+-(BOOL)shouldStringBeTreatedAsNegation: (NSString *)stringValue fromSenderType: (NSString *)senderType
+{
+	if( [stringValue isPlusMinusSymbol] ){
+		return YES;
+	}
+	
+	//IF we are a subtraction symbol that would go into a placeholder it is
+	//a negation
+	if(   [senderType isEqualToString: kNTIMathTextfieldInput]
+	   && [stringValue isSubtractionSymbol] ){
+		
+		if( [self->currentMathSymbol respondsToSelector: @selector(isPlaceholder)]
+		   && (   !self->currentMathSymbol.parentMathSymbol 
+			   || [self->currentMathSymbol.parentMathSymbol respondsToSelector: @selector(isBinaryOperator)])){
+			   return YES;
+		}
+	}
+	
+	return NO;
+}
+
 -(void)addMathSymbolForString: (NSString *)stringValue fromSenderType: (NSString *)senderType
 {
-	if ([stringValue isPlusMinusSymbol]) {
+	if( [self shouldStringBeTreatedAsNegation: stringValue fromSenderType: senderType] ) {
 		if ([self->currentMathSymbol respondsToSelector:@selector(isLiteral)]) {
 			[(NTIMathAlphaNumericSymbol *)self->currentMathSymbol setIsNegative: YES];
 			return;
