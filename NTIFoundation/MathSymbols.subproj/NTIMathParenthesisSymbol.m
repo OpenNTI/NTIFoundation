@@ -24,8 +24,8 @@
 		return [NSString stringWithFormat:@"(%@)", [self.childMathNode toString]]; 
 	}
 	if([self.childMathNode respondsToSelector:@selector(isPlaceholder)]
-	   && [(NTIMathPlaceholderSymbol *)self.childMathNode inPlaceOfObject]){
-		return [self latexValueForChildNode: self.childMathNode];
+	   && ![(NTIMathPlaceholderSymbol *)self.childMathNode inPlaceOfObject]){
+		return [NSString stringWithFormat:@"(%@)", [self.childMathNode toString]]; 
 	}
 	return [self latexValueForChildNode: self.childMathNode];
 }
@@ -36,8 +36,8 @@
 		return [NSString stringWithFormat:@"(%@)", [self.childMathNode toString]]; 
 	}
 	if([self.childMathNode respondsToSelector:@selector(isPlaceholder)]
-	   && [(NTIMathPlaceholderSymbol *)self.childMathNode inPlaceOfObject]){
-		return [self toStringValueForChildNode: self.childMathNode];
+	   && ![(NTIMathPlaceholderSymbol *)self.childMathNode inPlaceOfObject]){
+		return [NSString stringWithFormat:@"(%@)", [self.childMathNode toString]]; 
 	}
 	return [self toStringValueForChildNode: self.childMathNode];
 }
