@@ -979,4 +979,156 @@
 	assertThat([self->mathModel generateEquationString], is(@"5"));
 }
 
+// ----------------debug tests-------------------
+
+-(void)testSymbolsCrash
+{
+	@try {
+		[self pushKey: @"("];
+		[self pushKey: @"*"];
+		[self pushKey: @"x/y"];
+		[self pushKey: @"->"];
+		[self pushKey: @"+"];
+		[self pushKey: @"->"];
+		[self pushKey: @"+"];
+		[self pushKey: @"<-"];
+		[self pushKey: @"bs"];
+		[self pushKey: @"bs"];
+		[self pushKey: @"<-"];
+	}
+	@catch (NSException *exception) {
+		assertThat(exception, isNot([self->mathModel fullEquation]));
+	}
+}
+
+-(void)testOverwrittingSymbols
+{
+	mathmodel_assertThatOutputIsInput(@"(<");
+}
+
+-(void)testCancelingSqrts
+{
+	[self pushKey: @"√"];
+	[self pushKey: @"√"];
+	[self pushKey: @"5"];
+	assertThat([self->mathModel generateEquationString], is(@"√√5"));
+}
+
+-(void)testBackButtonBugCarrotVersion
+{
+	[self pushKey: @"^"];
+	[self pushKey: @"*"];
+	[self pushKey: @"*"];
+	[self pushKey: @"<-"];
+	[self pushKey: @"<-"];
+	assertThat([self->mathModel generateEquationString], is(@"(**)^"));
+}
+
+-(void)testBackButtonBugDivisionVersion
+{
+	[self pushKey: @"x/y"];
+	[self pushKey: @"+"];
+	[self pushKey: @"*"];
+	[self pushKey: @"<-"];
+	[self pushKey: @"<-"];
+	[self pushKey: @"<-"];
+	assertThat([self->mathModel generateEquationString], is(@"(*+)/"));
+}
+
+-(void)testRandomInsert_v1
+{
+	[self pushKey: @"("];
+	[self pushKey: @"+"];
+	[self pushKey: @"->"];
+	[self pushKey: @"->"];
+	[self pushKey: @"+"];
+	assertThat([self->mathModel generateEquationString], is(@"(+)+"));
+}
+
+-(void)testRandomInsert_v2
+{
+	[self pushKey: @"("];
+	[self pushKey: @"5"];
+	[self pushKey: @"*"];
+	[self pushKey: @"4"];
+	[self pushKey: @"bs"];
+	[self pushKey: @"8"];
+	assertThat([self->mathModel generateEquationString], is(@"(5*8)"));
+}
+
+-(void)testRandomInsert_v3
+{
+	[self pushKey: @"x/y"];
+	[self pushKey: @"*"];
+	[self pushKey: @"->"];
+	[self pushKey: @"4"];
+	assertThat([self->mathModel generateEquationString], is(@"*4/"));
+}
+
+-(void)testRandomInsert_v4
+{
+	[self pushKey: @"x/y"];
+	[self pushKey: @"*"];
+	[self pushKey: @"bs"];
+	[self pushKey: @"4"];
+	assertThat([self->mathModel generateEquationString], is(@"4/"));
+}
+
+-(void)testRandomInsert_v5
+{
+	
+}
+
+-(void)testParenthesesDeletion
+{
+	[self pushKey: @"("];
+	[self pushKey: @"*"];
+	[self pushKey: @"<-"];
+	[self pushKey: @"<-"];
+	[self pushKey: @"*"];
+	assertThat([self->mathModel generateEquationString], is(@"(*)*"));
+}
+
+-(void)testDivisionDeletion
+{
+	[self pushKey: @"x/y"];
+	[self pushKey: @"*"];
+	[self pushKey: @"<-"];
+	[self pushKey: @"<-"];
+	[self pushKey: @"*"];
+	assertThat([self->mathModel generateEquationString], is(@"*/*"));
+}
+
+-(void)testNonDeletingPlus
+{
+	[self pushKey: @"("];
+	[self pushKey: @"*"];
+	[self pushKey: @"x/y"];
+	[self pushKey: @"->"];
+	[self pushKey: @"+"];
+	[self pushKey: @"bs"];
+	[self pushKey: @"bs"];
+	assertThat([self->mathModel generateEquationString], is(@"(*)"));
+}
+
+-(void)testSingleEntityDeletion
+{
+	[self pushKey: @"^"];
+	[self pushKey: @"->"];
+	[self pushKey: @"bs"];
+	assertThat([self->mathModel generateEquationString], is(@""));
+}
+
+-(void)testShiftingCarrot
+{
+	[self pushKey: @"4"];
+	[self pushKey: @"^"];
+	[self pushKey: @"->"];
+	[self pushKey: @"5"];
+	[self pushKey: @"<-"];
+	[self pushKey: @"*"];
+	[self pushKey: @"6"];
+	assertThat([self->mathModel generateEquationString], is(@"(4*6)^5"));
+}
+
 @end
