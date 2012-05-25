@@ -61,7 +61,7 @@
 	if (self != mathSymbol) {
 		return nil;
 	}
-	if ( [self.mathSymbolValue length] == 1 ) {
+	if ( !self.mathSymbolValue || [self.mathSymbolValue isEqualToString:@""] || [self.mathSymbolValue length] == 1 ) {
 		return nil;	//The whole object should be deleted
 	}
 	
@@ -72,7 +72,7 @@
 
 -(NTIMathSymbol *)deleteLastLiteral
 {
-	if ( [self.mathSymbolValue length] == 1 ) {
+	if ( !self.mathSymbolValue || [self.mathSymbolValue isEqualToString:@""] || [self.mathSymbolValue length] == 1 ) {
 		return nil;	//The whole object should be deleted
 	}
 	//Otherwise delete the last literal character
