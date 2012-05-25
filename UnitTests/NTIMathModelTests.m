@@ -188,7 +188,7 @@
 // tests if the model will return a garbage values as a string correctly from a text field
 -(void)testHandlesJunkValueToStringTextField
 {
-	mathmodel_assertThatOutputIsInput(@"x--6+/*3#-");
+	mathmodel_assertThatOutputIsInput(@"x--6+/*3#@%-");
 }
 
 // tests if the model will return a division sign as a string correctly from a text field
@@ -508,6 +508,14 @@
 	assertThat([self->mathModel generateEquationString], is(@"3/4"));
 }
 
+// tests if the model will return a x/y division sign as a string correctly from a text field
+-(void)testXYDivisionSignToStringGraphicalKeyboard
+{
+	[self pushKey: @"x/y"];
+	[self pushKey: @"3"];
+	assertThat([self->mathModel generateEquationString], is(@"3/"));
+}
+
 // -------------to latex tests----------------
 
 // tests if we can get latex from the model from a text field
@@ -707,6 +715,14 @@
 	[self pushKey: @"÷"];
 	[self pushKey: @"4"];
 	assertThat([self->mathModel tolaTex], is(@"\\frac{3}{4}"));
+}
+
+// tests if the model will return a x/y division sign as latex correctly from a text field
+-(void)testXYDivisionSignToLatexGraphicalKeyboard
+{
+	[self pushKey: @"x/y"];
+	[self pushKey: @"3"];
+	assertThat([self->mathModel tolaTex], is(@"\\frac{3}{}"));
 }
 
 // -------------find root tests--------------------
