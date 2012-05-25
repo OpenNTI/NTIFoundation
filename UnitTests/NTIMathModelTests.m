@@ -67,124 +67,347 @@
 	assertThat([self->mathModel fullEquation], isNot(nil));
 }
 
+// -------------text field tests--------------
+
 // ---------------string tests----------------
 
-// tests if we can get a string from the model
--(void)testModelBasicToString
+// tests if we can get a string from the model from a text field
+-(void)testModelBasicToStringTextField
 {
 	mathmodel_assertThatOutputIsInput(@"55")
 }
 
-// tests if the model will return symbols as string correctly
--(void)testModelSymbolToString
+// tests if the model will return symbols as string correctly from a text field
+-(void)testModelSymbolToStringTextField
 {
 	mathmodel_assertThatOutputIsInput(@"4+5-6*7^8");
 }
 
-// tests if the model stores parentheses as string correctly
--(void)testModelParenthesesToString
+// tests if the model stores parentheses as string correctly from a text field
+-(void)testModelParenthesesToStringTextField
 {
 	mathmodel_assertThatOutputIsInput(@"(4+5)");
 }
 
-// tests if the model will return square roots as string correctly
--(void)testModelSurdToString
+// tests if the model will return square roots as string correctly from a text field
+-(void)testModelSurdToStringTextField
 {
 	mathmodel_assertThatOutputIsInput(@"4√3");
 }
 
-// tests if the model will return decimals as string correctly
--(void)testModelDecimalToString
+// tests if the model will return decimals as string correctly from a text field
+-(void)testModelDecimalToStringTextField
 {
 	mathmodel_assertThatOutputIsInput(@"20.5");
 }
 
-// tests if the model will return fractions as string correctly
--(void)testModelFractionToString
+// tests if the model will return fractions as string correctly from a text field
+-(void)testModelFractionToStringTextField
 {
 	mathmodel_assertThatOutputIsInput(@"3/4");
 }
 
-// tests if the model will return negative numbers as string correctly
--(void)testModelNegativeToString
+// tests if the model will return negative numbers as string correctly from a text field
+-(void)testModelNegativeToStringTextField
 {
 	mathmodel_assertThatOutputIsInput(@"-1");
 }
 
-// tests if the model will return a pi value as a string correctly
--(void)testModelPiToString
+// tests if the model will return a pi value as a string correctly from a text field
+-(void)testModelPiToStringTextField
 {
 	mathmodel_assertThatOutputIsInput(@"π");
 }
 
-// tests if the model will return a Scientific Notation value as a string correctly
--(void)testModelScientificNotationToString
+// tests if the model will return a Scientific Notation value as a string correctly from a text field
+-(void)testModelScientificNotationToStringTextField
 {
 	mathmodel_assertThatOutputIsInput(@"2.16 × 10^5");
 }
 
-// tests if the model will return a graph point value as a string correctly
--(void)testModelGraphPointToString
+// tests if the model will return a graph point value as a string correctly from a text field
+-(void)testModelGraphPointToStringTextField
 {
 	mathmodel_assertThatOutputIsInput(@"(0.5, 0.5)");
 }
 
-// tests if the model will return a string value as a string correctly
--(void)testModelStringToString
+// tests if the model will return a string value as a string correctly from a text field
+-(void)testModelStringToStringTextField
 {
 	mathmodel_assertThatOutputIsInput(@"triangle");
 }
 
--(void)testMixedNumber
+// tests if the model will return a mixed number as a string correctly from a text field
+-(void)testMixedNumberToStringTextField
 {
 	mathmodel_assertThatOutputIsInput(@"1 1/2");
 }
 
--(void)testColon
+// tests if the model will return a colon as a string correctly from a text field
+-(void)testColonToStringTextField
 {
 	mathmodel_assertThatOutputIsInput(@"3:45");
 }
 
--(void)testComma
+// tests if the model will return comma separated values as a string correctly from a text field
+-(void)testCommaToStringTextField
 {
 	mathmodel_assertThatOutputIsInput(@"B2, E5");
 }
 
--(void)testUnaryApprox
+// tests if the model will return approximations as a string correctly from a text field
+-(void)testUnaryApproxToStringTextField
 {
 	mathmodel_assertThatOutputIsInput(@"≈6.2");
 }
 
--(void)testApprox
+// tests if the model will return approximations as a string value as a string correctly from a text field
+-(void)testApproxToStringTextField
 {
 	mathmodel_assertThatOutputIsInput(@"x ≈ 6.2");
 }
 
--(void)testEquals
+// tests if the model will return equals as a string correctly from a text field
+-(void)testEqualsToStringTextField
 {
 	mathmodel_assertThatOutputIsInput(@"x = 6.2");
 }
 
--(void)testHandlesJunkValue
+// tests if the model will return a garbage values as a string correctly from a text field
+-(void)testHandlesJunkValueToStringTextField
 {
 	mathmodel_assertThatOutputIsInput(@"x--6+/*3#-");
 }
 
--(void)testDivisionSignToString
+// tests if the model will return a division sign as a string correctly from a text field
+-(void)testDivisionSignToStringToStringTextField
 {
 	mathmodel_assertThatOutputIsInput(@"3÷4");
 }
 
-// tests if the model will return fractions as string with the graphics keyboard correctly
--(void)testModelFractionToStringGraphicsKeyboard
+// -----------------latex tests-----------------------
+
+// tests if we can get the latex value from the model
+-(void)testModelBasicLatexValueTextField
+{
+	mathModel_assertThatIsValidLatex(@"45", @"45");
+}
+
+// tests if the model will return symbols with the latex value correctly
+-(void)testModelSymbolLatexValueTextField
+{
+	mathModel_assertThatIsValidLatex(@"4+5-6*7^8", @"4+5-6*7^8");
+}
+
+// tests if the model stores parentheses with the latex value correctly
+-(void)testModelParenthesesLatexValueTextField
+{
+	mathModel_assertThatIsValidLatex(@"(4+5)", @"(4+5)");
+}
+
+// tests if the model will return square roots with the latex value correctly
+-(void)testModelSurdLatexValueTextField
+{
+	mathModel_assertThatIsValidLatex(@"4√3", @"4\\surd3");
+}
+
+// tests if the model will return decimals with the latex value correctly
+-(void)testModelDecimalLatexValueTextField
+{
+	mathModel_assertThatIsValidLatex(@"20.5", @"20.5");
+}
+
+// tests if the model will return fractions with the latex value correctly
+-(void)testModelFractionLatexValueTextField
+{
+	mathModel_assertThatIsValidLatex(@"3/4", @"\\frac{3}{4}");
+}
+
+// tests if the model will return negative numbers with the latex value correctly
+-(void)testModelNegativeLatexValueTextField
+{
+	mathModel_assertThatIsValidLatex(@"-1", @"-1");
+}
+
+// tests if the model will return a pi value with the latex value correctly
+-(void)testModelPiLatexValueTextField
+{
+	mathModel_assertThatIsValidLatex(@"π", @"\\pi");
+}
+
+// tests if the model will return a Scientific Notation value with the latex value correctly
+-(void)testModelScientificNotationLatexValueTextField
+{
+	mathModel_assertThatIsValidLatex(@"2.16 × 10^5", @"2.16 × 10^5"); //not the same value as if typed in
+}
+
+// tests if the model will return a graph point value with the latex value correctly
+-(void)testModelGraphPointLatexValueTextField
+{
+	mathModel_assertThatIsValidLatex(@"(0.5, 0.5)", @"(0.5, 0.5)");
+}
+
+// tests if the model will return a string value with the latex value correctly
+-(void)testModelStringLatexValueTextField
+{
+	mathModel_assertThatIsValidLatex(@"triangle", @"triangle");
+}
+
+// tests if the model will return a mixed number as a string correctly from a text field
+-(void)testMixedNumberLatexValueTextField
+{
+	mathModel_assertThatIsValidLatex(@"1 1/2", @"1\\frac{1}{2}");
+}
+
+// tests if the model will return a colon as a string correctly from a text field
+-(void)testColonLatexValueTextField
+{
+	mathModel_assertThatIsValidLatex(@"3:45", @"3:45");
+}
+
+// tests if the model will return comma separated values as a string correctly from a text field
+-(void)testCommaLatexValueTextField
+{
+	mathModel_assertThatIsValidLatex(@"B2, E5", @"B2, E5");
+}
+
+// tests if the model will return approximations as a string correctly from a text field
+-(void)testUnaryApproxLatexValueTextField
+{
+	mathModel_assertThatIsValidLatex(@"≈ 6.2", @"\\approx 6.2");
+}
+
+// tests if the model will return approximations as a string value as a string correctly from a text field
+-(void)testApproxLatexValueTextField
+{
+	mathModel_assertThatIsValidLatex(@"x ≈ 6.2", @"x \\approx 6.2");
+}
+
+// tests if the model will return equals as a string correctly from a text field
+-(void)testEqualsLatexValueTextField
+{
+	mathModel_assertThatIsValidLatex(@"x = 6.2", @"x = 6.2");
+}
+
+// tests if the model will return a division sign as a string correctly from a text field
+-(void)testDivisionSignLatexValueTextField
+{
+	mathModel_assertThatIsValidLatex(@"3÷4", @"3÷4");
+}
+
+// ------graphical keyboard tests -------
+
+// -----------to string tests------------
+
+// tests if we can get a string from the model from a text field
+-(void)testModelBasicToStringGraphicalKeyboard
+{
+	[self pushKey: @"5"];
+	assertThat([self->mathModel generateEquationString], is(@"5"));
+}
+
+// tests if the model will return symbols as string correctly from a text field
+-(void)testModelSymbolToStringGraphicalKeyboard
+{
+	[self pushKey: @"4"];
+	[self pushKey: @"+"];
+	[self pushKey: @"5"];
+	[self pushKey: @"-"];
+	[self pushKey: @"6"];
+	[self pushKey: @"*"];
+	[self pushKey: @"7"];
+	[self pushKey: @"^"];
+	[self pushKey: @"8"];
+	assertThat([self->mathModel generateEquationString], is(@"4+5-6*7^8"));
+}
+
+// tests if the model stores parentheses as string correctly from a text field
+-(void)testModelParenthesesToStringGraphicalKeyboard
+{
+	[self pushKey: @"("];
+	[self pushKey: @"4"];
+	assertThat([self->mathModel generateEquationString], is(@"(4)"));
+}
+
+// tests if the model stores parentheses as string correctly from a text field
+-(void)testModelParenthesesToStringGraphicalKeyboard
+{
+	[self pushKey: @"("];
+	[self pushKey: @"4"];
+	[self pushKey: @"+"];
+	[self pushKey: @"5"];
+	assertThat([self->mathModel generateEquationString], is(@"(4+5)"));
+}
+
+// tests if the model will return square roots as string correctly from a text field
+-(void)testModelSurdToStringGraphicalKeyboard
+{
+	[self pushKey: @"4"];
+	[self pushKey: @"√"];
+	[self pushKey: @"3"];
+	assertThat([self->mathModel generateEquationString], is(@"4√3"));
+}
+
+// tests if the model will return decimals as string correctly from a text field
+-(void)testModelDecimalToStringGraphicalKeyboardd
+{
+	mathmodel_assertThatOutputIsInput(@"20.5");
+}
+
+// tests if the model will return fractions as string correctly from a text field
+-(void)testModelFractionToStringGraphicalKeyboard
 {
 	[self pushKey: @"/"];
 	[self pushKey: @"3"];
 	assertThat([self->mathModel generateEquationString], is(@"3/"));
 }
 
-// tests if the model will return mixedNumbers as string with the graphics keyboard correctly
--(void)testModeMixedNumberToStringGraphicsKeyboard
+// tests if the model will return negative numbers as string correctly from a text field
+//-(void)testModelNegativeToStringGraphicalKeyboard
+//{
+//	[self pushKey: @"1"];
+//	[self pushKey: @"+/-"];
+//	assertThat([self->mathModel generateEquationString], is(@"-1"));
+//}
+
+// tests if the model will return a pi value as a string correctly from a text field
+-(void)testModelPiToStringGraphicalKeyboard
+{
+	[self pushKey: @"π"];
+	assertThat([self->mathModel generateEquationString], is(@"π"));
+}
+
+// tests if the model will return a Scientific Notation value as a string correctly from a text field
+-(void)testModelScientificNotationToStringGraphicalKeyboard
+{
+	[self pushKey: @"2"];
+	[self pushKey: @"."];
+	[self pushKey: @"1"];
+	[self pushKey: @"6"];
+	[self pushKey: @"*"];
+	[self pushKey: @"1"];
+	[self pushKey: @"0"];
+	[self pushKey: @"^"];
+	[self pushKey: @"5"];
+	assertThat([self->mathModel generateEquationString], is(@"2.16*10^5"));
+}
+
+// tests if the model will return a graph point value as a string correctly from a text field
+-(void)testModelGraphPointToStringGraphicalKeyboard
+{
+	[self pushKey: @"("];
+	[self pushKey: @"0"];
+	[self pushKey: @"."];
+	[self pushKey: @"5"];
+	[self pushKey: @","];
+	[self pushKey: @"0"];
+	[self pushKey: @"."];
+	[self pushKey: @"5"];
+	assertThat([self->mathModel generateEquationString], is(@"(0.5, 0.5)"));
+}
+
+// tests if the model will return a mixed number as a string correctly from a text field
+-(void)testMixedNumberToStringGraphicalKeyboard
 {
 	[self pushKey: @"2"];
 	[self pushKey: @"/"];
@@ -192,103 +415,84 @@
 	assertThat([self->mathModel generateEquationString], is(@"2 3/"));
 }
 
-// -----------------latex tests-----------------------
-
-// tests if we can get the latex value from the model
--(void)testModelBasicLatexValue
+// tests if the model will return a colon as a string correctly from a text field
+-(void)testColonToStringGraphicalKeyboard
 {
-	mathModel_assertThatIsValidLatex(@"45", @"45");
+	[self pushKey: @"3"];
+	[self pushKey: @":"];
+	[self pushKey: @"4"];
+	[self pushKey: @"5"];
+	mathmodel_assertThatOutputIsInput(@"3:45");
 }
 
-// tests if the model will return symbols with the latex value correctly
--(void)testModelSymbolLatexValue
+// tests if the model will return comma separated values as a string correctly from a text field
+-(void)testCommaToStringGraphicalKeyboard
 {
-	mathModel_assertThatIsValidLatex(@"4+5-6*7^8", @"4+5-6*7^8");
+	[self pushKey: @"b"];
+	[self pushKey: @"2"];
+	[self pushKey: @","];
+	[self pushKey: @"c"];
+	[self pushKey: @"5"];
+	assertThat([self->mathModel generateEquationString], is(@"b2,c5"));
 }
 
-// tests if the model stores parentheses with the latex value correctly
--(void)testModelParenthesesLatexValue
+// tests if the model will return approximations as a string correctly from a text field
+-(void)testUnaryApproxToStringGraphicalKeyboard
 {
-	mathModel_assertThatIsValidLatex(@"(4+5)", @"(4+5)");
+	[self pushKey: @"≈"];
+	[self pushKey: @"6"];
+	[self pushKey: @"."];
+	[self pushKey: @"2"];
+	assertThat([self->mathModel generateEquationString], is(@"≈6.2"));
 }
 
-// tests if the model will return square roots with the latex value correctly
--(void)testModelSurdLatexValue
+// tests if the model will return approximations as a string value as a string correctly from a text field
+-(void)testApproxToStringGraphicalKeyboard
 {
-	mathModel_assertThatIsValidLatex(@"4√3", @"4\\surd3");
+	[self pushKey: @"a"];
+	[self pushKey: @"≈"];
+	[self pushKey: @"6"];
+	[self pushKey: @"."];
+	[self pushKey: @"2"];
+	assertThat([self->mathModel generateEquationString], is(@"a ≈ 6.2"));
 }
 
-// tests if the model will return decimals with the latex value correctly
--(void)testModelDecimalLatexValue
+// tests if the model will return equals as a string correctly from a text field
+-(void)testEqualsToStringGraphicalKeyboard
 {
-	mathModel_assertThatIsValidLatex(@"20.5", @"20.5");
+	[self pushKey: @"a"];
+	[self pushKey: @"="];
+	[self pushKey: @"6"];
+	[self pushKey: @"."];
+	[self pushKey: @"2"];
+	assertThat([self->mathModel generateEquationString], is(@"a = 6.2"));
 }
 
-// tests if the model will return fractions with the latex value correctly
--(void)testModelFractionLatexValue
+// tests if the model will return a garbage values as a string correctly from a text field
+-(void)testHandlesJunkValueToStringGraphicalKeyboard
 {
-	mathModel_assertThatIsValidLatex(@"3/4", @"\\frac{3}{4}");
+	[self pushKey: @"x"];
+	[self pushKey: @"-"];
+	[self pushKey: @"-"];
+	[self pushKey: @"6"];
+	[self pushKey: @"+"];
+	[self pushKey: @"/"];
+	[self pushKey: @"*"];
+	[self pushKey: @"3"];
+	[self pushKey: @"-"];
+	assertThat([self->mathModel generateEquationString], is(@"x--6+/*3-"));
 }
 
-// tests if the model will return negative numbers with the latex value correctly
--(void)testModelNegativeLatexValue
+// tests if the model will return a division sign as a string correctly from a text field
+-(void)testDivisionSignToStringToStringGraphicalKeyboard
 {
-	mathModel_assertThatIsValidLatex(@"-1", @"-1");
+	[self pushKey: @"3"];
+	[self pushKey: @"÷"];
+	[self pushKey: @"4"];
+	assertThat([self->mathModel generateEquationString], is(@"3/4"));
 }
 
-// tests if the model will return a pi value with the latex value correctly
--(void)testModelPiLatexValue
-{
-	mathModel_assertThatIsValidLatex(@"π", @"\\pi");
-}
-
-// tests if the model will return a Scientific Notation value with the latex value correctly
--(void)testModelScientificNotationLatexValue
-{
-	mathModel_assertThatIsValidLatex(@"2.16 × 10^5", @"2.16 × 10^5"); //not the same value as if typed in
-}
-
-// tests if the model will return a graph point value with the latex value correctly
--(void)testModelGraphPointLatexValue
-{
-	mathModel_assertThatIsValidLatex(@"(0.5, 0.5)", @"(0.5, 0.5)");
-}
-
-// tests if the model will return a string value with the latex value correctly
--(void)testModelStringLatexValue
-{
-	mathModel_assertThatIsValidLatex(@"triangle", @"triangle");
-}
-
--(void)testMixedNumberLatexValue
-{
-	mathModel_assertThatIsValidLatex(@"1 1/2", @"1\\frac{1}{2}");
-}
-
--(void)testColonLatexValue
-{
-	mathModel_assertThatIsValidLatex(@"3:45", @"3:45");
-}
-
--(void)testCommaLatexValue
-{
-	mathModel_assertThatIsValidLatex(@"B2, E5", @"B2, E5");
-}
-
--(void)testApproxLatexValue
-{
-	mathModel_assertThatIsValidLatex(@"x ≈ 6.2", @"x \\approx 6.2");
-}
-
--(void)testEqualsLatexValue
-{
-	mathModel_assertThatIsValidLatex(@"x = 6.2", @"x = 6.2");
-}
-
--(void)testDivisionSignLatexValue
-{
-	mathModel_assertThatIsValidLatex(@"3÷4", @"3÷4");
-}
+// -------------to latex tests----------------
 
 // tests if the model will return fractions as string with the graphics keyboard correctly
 -(void)testModelFractionLatexValuGraphicsKeyboard
