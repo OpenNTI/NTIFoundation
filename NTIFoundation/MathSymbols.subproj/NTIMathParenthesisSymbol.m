@@ -20,25 +20,29 @@
 
 -(NSString *)latexValue
 {
-	if ([self.childMathNode respondsToSelector:@selector(isLiteral)]) {
-		return [NSString stringWithFormat:@"(%@)", [self.childMathNode toString]]; 
-	}
-	if([self.childMathNode respondsToSelector:@selector(isPlaceholder)]
-	   && ![(NTIMathPlaceholderSymbol *)self.childMathNode inPlaceOfObject]){
-		return [NSString stringWithFormat:@"(%@)", [self.childMathNode toString]]; 
-	}
-	return [self latexValueForChildNode: self.childMathNode];
+//	if ([self.childMathNode respondsToSelector:@selector(isLiteral)]) {
+//		return [NSString stringWithFormat:@"(%@)", [self.childMathNode toString]]; 
+//	}
+//	if([self.childMathNode respondsToSelector:@selector(isPlaceholder)]
+//	   && ![(NTIMathPlaceholderSymbol *)self.childMathNode inPlaceOfObject]){
+//		return [NSString stringWithFormat:@"(%@)", [self.childMathNode toString]]; 
+//	}
+//	return [self latexValueForChildNode: self.childMathNode];
+	
+	return [NSString stringWithFormat:@"(%@)", [self.childMathNode latexValue]]; 
 }
 
 -(NSString *)toString
 {	
-	if ([self.childMathNode respondsToSelector:@selector(isLiteral)]) {
-		return [NSString stringWithFormat:@"(%@)", [self.childMathNode toString]]; 
-	}
-	if([self.childMathNode respondsToSelector:@selector(isPlaceholder)]
-	   && ![(NTIMathPlaceholderSymbol *)self.childMathNode inPlaceOfObject]){
-		return [NSString stringWithFormat:@"(%@)", [self.childMathNode toString]]; 
-	}
-	return [self toStringValueForChildNode: self.childMathNode];
+//	if ([self.childMathNode respondsToSelector:@selector(isLiteral)]) {
+//		return [NSString stringWithFormat:@"(%@)", [self.childMathNode toString]]; 
+//	}
+//	if([self.childMathNode respondsToSelector:@selector(isPlaceholder)]
+//	   && ![(NTIMathPlaceholderSymbol *)self.childMathNode inPlaceOfObject]){
+//		return [NSString stringWithFormat:@"(%@)", [self.childMathNode toString]]; 
+//	}
+//	return [self toStringValueForChildNode: self.childMathNode];
+	
+	return [NSString stringWithFormat:@"(%@)", [self.childMathNode toString]]; 
 }
 @end

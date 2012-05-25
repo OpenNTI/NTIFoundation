@@ -48,7 +48,7 @@
 -(BOOL)isMathPrefixedSymbol
 {
 	//The list will grow as we support more symbols
-	NSArray* array = [[NSArray alloc] initWithObjects: @"√", @"≈", @"(", @"( )", nil];
+	NSArray* array = [[NSArray alloc] initWithObjects: @"√", @"(", @"( )", nil];
 	return [array containsObject: self];
 }
 
@@ -68,7 +68,7 @@
 -(BOOL)isMathBinaryCombiningSymbol
 {
 	//The list will grow as we support more symbols
-	NSArray* array = [[NSArray alloc] initWithObjects:@"^",@"/", @"+", @"-", @"*", @"÷", @"x/y", @"=", nil];
+	NSArray* array = [[NSArray alloc] initWithObjects:@"^",@"/", @"+", @"-", @"*", @"÷", @"x/y", @"=", @"≈", nil];
 	return [array containsObject: self];
 }
 

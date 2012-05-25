@@ -407,7 +407,7 @@
 	[self pushKey: @"0"];
 	[self pushKey: @"."];
 	[self pushKey: @"5"];
-	assertThat([self->mathModel generateEquationString], is(@"(0.5, 0.5)"));
+	assertThat([self->mathModel generateEquationString], is(@"(0.5,0.5)"));
 }
 
 // tests if the model will return a mixed number as a string correctly from a text field
@@ -606,7 +606,7 @@
 	[self pushKey: @"0"];
 	[self pushKey: @"."];
 	[self pushKey: @"5"];
-	assertThat([self->mathModel tolaTex], is(@"(0.5, 0.5)"));
+	assertThat([self->mathModel tolaTex], is(@"(0.5,0.5)"));
 }
 
 // tests if the model will return a mixed number as latex correctly from a text field
@@ -683,7 +683,9 @@
 	[self pushKey: @"*"];
 	[self pushKey: @"3"];
 	[self pushKey: @"-"];
-	assertThat([self->mathModel tolaTex], is(@"x--6+\\frac*3-"));
+	//Note: Parenthesis that get put into the equation are required
+	//so that the string matches what the equation looks like
+	assertThat([self->mathModel tolaTex], is(@"x--6+\\frac{(3-)*}{}"));
 }
 
 // tests if the model will return a division sign as latex correctly from a text field
