@@ -43,10 +43,20 @@
 		[self->mathModel deleteMathExpression: nil];
 	}
 	
-	
-	[self->mathModel addMathSymbolForString: stringValue 
+	if([stringValue isEqualToString: @"+/-"]) {
+		[self->mathModel addMathSymbolForString: stringValue 
 								 fromSenderType: kNTIMathGraphicKeyboardInput];
+	}
 	
+	if([stringValue isEqualToString: @"x/y"]) {
+		[self->mathModel addMathSymbolForString: stringValue 
+								 fromSenderType: kNTIMathGraphicKeyboardInput];
+	}
+	
+	if( stringValue.length == 1) {
+		[self->mathModel addMathSymbolForString: stringValue 
+								 fromSenderType: kNTIMathGraphicKeyboardInput];
+	}
 }
 
 // -------------checker methods---------------
