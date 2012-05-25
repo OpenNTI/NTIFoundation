@@ -17,6 +17,7 @@
 @interface NTIMathInputExpressionModel(NTIMathInputExpressionTest)
 -(NTIMathSymbol *)findRootOfMathNode: (NTIMathSymbol *)mathSymbol;
 -(NTIMathSymbol *)removeMathExpression: (NTIMathSymbol *)mathNode;
+-(void)addChildrenOfNode: (NTIMathSymbol *)mathSymbol to: (NTIMathSymbol *)parentSymbol;
 -(NSString *)tolaTex;
 @end
 
@@ -368,12 +369,12 @@
 }
 
 // tests if the model will return negative numbers as string correctly from a text field
-//-(void)testModelNegativeToStringGraphicalKeyboard
-//{
-//	[self pushKey: @"1"];
-//	[self pushKey: @"+/-"];
-//	assertThat([self->mathModel generateEquationString], is(@"-1"));
-//}
+-(void)testModelNegativeToStringGraphicalKeyboard
+{
+	[self pushKey: @"1"];
+	[self pushKey: @"+/-"];
+	assertThat([self->mathModel generateEquationString], is(@"-1"));
+}
 
 // tests if the model will return a pi value as a string correctly from a text field
 -(void)testModelPiToStringGraphicalKeyboard
@@ -567,12 +568,12 @@
 }
 
 // tests if the model will return negative numbers as latex correctly from a text field
-//-(void)testModelNegativeToStringGraphicalKeyboard
-//{
-//	[self pushKey: @"1"];
-//	[self pushKey: @"+/-"];
-//	assertThat([self->mathModel generateEquationString], is(@"-1"));
-//}
+-(void)testModelNegativeToLatexGraphicalKeyboard
+{
+	[self pushKey: @"1"];
+	[self pushKey: @"+/-"];
+	assertThat([self->mathModel tolaTex], is(@"-1"));
+}
 
 // tests if the model will return a pi value as latex correctly from a text field
 -(void)testModelPiToLatexGraphicalKeyboard
@@ -857,7 +858,14 @@
 	assertThat([[self->mathModel findFirstLeafNodeFrom: eq] toString], is(@""));
 }
 
--(void)testfindFirstLeafNodFromBasic
+-(void)testfindFirstLeafNodFromUnaryOperator
+{
+	self->mathModel = [NTIMathEquationBuilder modelFromString: @"√3"];
+	NTIMathSymbol* eq = [self->mathModel fullEquation];
+	assertThat([[self->mathModel findFirstLeafNodeFrom: eq] toString], is(@"3"));
+}
+
+-(void)testfindFirstLeafNodFromBinaryOperator
 {
 	self->mathModel = [NTIMathEquationBuilder modelFromString: @"4^5*6+7"];
 	NTIMathSymbol* eq = [self->mathModel fullEquation];
@@ -871,11 +879,78 @@
 	assertThat([[self->mathModel findLastLeafNodeFrom: eq] toString], is(@""));
 }
 
+-(void)testfindLastLeafNodFromUnaryOperator
+{
+	self->mathModel = [NTIMathEquationBuilder modelFromString: @"√3"];
+	NTIMathSymbol* eq = [self->mathModel fullEquation];
+	assertThat([[self->mathModel findLastLeafNodeFrom: eq] toString], is(@"3"));
+}
+
 -(void)testfindLastLeafNodFromBasic
 {
 	self->mathModel = [NTIMathEquationBuilder modelFromString: @"4^5*6+7"];
 	NTIMathSymbol* eq = [self->mathModel fullEquation];
 	assertThat([[self->mathModel findLastLeafNodeFrom: eq] toString], is(@"7"));
+}
+
+// --------------add math symbol to node----------------
+
+-(void)testAddChildrenOfNodeTwoEmpty
+{
+	self->baseModel = [NTIMathEquationBuilder modelFromString: @"4*5"];
+	self->mathModel = [NTIMathEquationBuilder modelFromString: @"*"];
+	NTIMathSymbol* childTree = [self->baseModel fullEquation];
+	NTIMathSymbol* parentTree = [self->mathModel fullEquation];
+	[self->mathModel addChildrenOfNode: childTree to: parentTree];
+	assertThat([self->mathModel generateEquationString], is(@"4*5"));
+}
+
+-(void)testAddChildrenOfNodeLeftEmpty
+{
+	self->baseModel = [NTIMathEquationBuilder modelFromString: @"4*5"];
+	self->mathModel = [NTIMathEquationBuilder modelFromString: @"*6"];
+	NTIMathSymbol* childTree = [self->baseModel fullEquation];
+	NTIMathSymbol* parentTree = [self->mathModel fullEquation];
+	[self->mathModel addChildrenOfNode: childTree to: parentTree];
+	assertThat([self->mathModel generateEquationString], is(@"*645"));
+}
+
+-(void)testAddChildrenOfNodeRightEmpty
+{
+	self->baseModel = [NTIMathEquationBuilder modelFromString: @"4*5"];
+	self->mathModel = [NTIMathEquationBuilder modelFromString: @"3*"];
+	NTIMathSymbol* childTree = [self->baseModel fullEquation];
+	NTIMathSymbol* parentTree = [self->mathModel fullEquation];
+	[self->mathModel addChildrenOfNode: childTree to: parentTree];
+	assertThat([self->mathModel generateEquationString], is(@"3*4"));
+}
+
+-(void)testAddChildrenOfNodeAllFull
+{
+	self->baseModel = [NTIMathEquationBuilder modelFromString: @"4*5"];
+	self->mathModel = [NTIMathEquationBuilder modelFromString: @"3*6"];
+	NTIMathSymbol* childTree = [self->baseModel fullEquation];
+	NTIMathSymbol* parentTree = [self->mathModel fullEquation];
+	[self->mathModel addChildrenOfNode: childTree to: parentTree];
+	assertThat([self->mathModel generateEquationString], is(@"3*6"));
+}
+
+-(void)testAddChildrenOfNodeTwoChildrenNil
+{
+	self->baseModel = [NTIMathEquationBuilder modelFromString: @"4*5"];
+	NTIMathSymbol* childTree = [self->baseModel fullEquation];
+	NTIMathSymbol* parentTree = nil;
+	[self->mathModel addChildrenOfNode: childTree to: parentTree];
+	assertThat([self->mathModel generateEquationString], is(@"45"));
+}
+
+-(void)testAddChildrenOfNodeOneChildNil
+{
+	self->baseModel = [NTIMathEquationBuilder modelFromString: @"√5"];
+	NTIMathSymbol* childTree = [self->baseModel fullEquation];
+	NTIMathSymbol* parentTree = nil;
+	[self->mathModel addChildrenOfNode: childTree to: parentTree];
+	assertThat([self->mathModel generateEquationString], is(@"5"));
 }
 
 @end
