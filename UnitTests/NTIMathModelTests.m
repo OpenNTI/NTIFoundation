@@ -28,11 +28,30 @@
 	self->mathModel = [[NTIMathInputExpressionModel alloc] initWithMathSymbol: nil];
 }
 
+-(void)pushKey: (NSString*) stringValue
+{
+	if([stringValue isEqualToString: @"->"]){
+		[self->mathModel nextKeyPressed];
+	}
+	
+	if([stringValue isEqualToString: @"<-"]){
+		[self->mathModel backPressed];
+	}
+	
+	if([stringValue isEqualToString: @"backspace"] || [stringValue isEqualToString: @"bs"]){
+		[self->mathModel deleteMathExpression: nil];
+	}
+	
+	if(stringValue.length == 1){
+		[self->mathModel addMathSymbolForString: stringValue fromSenderType:kNTIMathGraphicKeyboardInput];
+	}
+}
+
 // -------------checker methods---------------
 
 #define mathmodel_assertThatOutputIsInput(str) \
-			self->mathModel = [NTIMathEquationBuilder modelFromString: str]; \
-			assertThat([self->mathModel generateEquationString], is(str));
+	self->mathModel = [NTIMathEquationBuilder modelFromString: str]; \
+	assertThat([self->mathModel generateEquationString], is(str));
 
 #define mathModel_assertThatIsValidLatex(userInput, expectedOutPut) \
 	self->mathModel = [NTIMathEquationBuilder modelFromString: userInput]; \
@@ -151,6 +170,28 @@
 	mathmodel_assertThatOutputIsInput(@"x--6+/*3#-");
 }
 
+-(void)testDivisionSignToString
+{
+	mathmodel_assertThatOutputIsInput(@"3÷4");
+}
+
+// tests if the model will return fractions as string with the graphics keyboard correctly
+-(void)testModelFractionToStringGraphicsKeyboard
+{
+	[self pushKey: @"/"];
+	[self pushKey: @"3"];
+	assertThat([self->mathModel generateEquationString], is(@"3/"));
+}
+
+// tests if the model will return mixedNumbers as string with the graphics keyboard correctly
+-(void)testModeMixedNumberToStringGraphicsKeyboard
+{
+	[self pushKey: @"2"];
+	[self pushKey: @"/"];
+	[self pushKey: @"3"];
+	assertThat([self->mathModel generateEquationString], is(@"2 3/"));
+}
+
 // -----------------latex tests-----------------------
 
 // tests if we can get the latex value from the model
@@ -244,6 +285,27 @@
 	mathModel_assertThatIsValidLatex(@"x = 6.2", @"x = 6.2");
 }
 
+-(void)testDivisionSignLatexValue
+{
+	mathModel_assertThatIsValidLatex(@"3÷4", @"3÷4");
+}
+
+// tests if the model will return fractions as string with the graphics keyboard correctly
+-(void)testModelFractionLatexValuGraphicsKeyboard
+{
+	[self pushKey: @"/"];
+	[self pushKey: @"3"];
+	assertThat([self->mathModel tolaTex], is(@"\\frac{3}{}"));
+}
+
+-(void)testModelMixedNumberLatexValuGraphicsKeyboard
+{
+	[self pushKey: @"2"];
+	[self pushKey: @"/"];
+	[self pushKey: @"3"];
+	assertThat([self->mathModel tolaTex], is(@"2\\frac{3}{}"));
+}
+
 // -------------find root tests--------------------
 
 // tests finding the root of a nil expression
@@ -285,7 +347,7 @@
 	}
 }
 
-// --------------modify current symbol-----------------
+// --------------navigation tests-----------------
 
 -(void)testCurrentMathSymbolNil
 {
@@ -351,20 +413,18 @@
 //	assertThat([self->mathModel generateEquationString], is(@"+5"));
 //}
 //
-//-(void)testDeleteMathExpressionNil
-//{
-//	NTIMathSymbol* removeSymbol = [[NTIMathEquationBuilder modelFromString: @"4"] rootMathSymbol];
-//	[self->mathModel deleteMathExpression: removeSymbol];
-//	assertThat([[self->mathModel rootMathSymbol] toString], is(@""));
-//}
-//
-//-(void)testDeleteMathExpressionBasic
-//{
-//	NTIMathSymbol* removeSymbol = [[NTIMathEquationBuilder modelFromString: @"4"] rootMathSymbol];
-//	self->mathModel = [NTIMathEquationBuilder modelFromString: @"4+5"];
-//	[self->mathModel deleteMathExpression: removeSymbol];
-//	assertThat([[self->mathModel rootMathSymbol] toString], is(@"+5"));
-//}
+-(void)testDeleteMathExpressionNil
+{
+	[self->mathModel deleteMathExpression: nil];
+	assertThat([[self->mathModel rootMathSymbol] toString], is(@""));
+}
+
+-(void)testDeleteMathExpressionBasic
+{
+	self->mathModel = [NTIMathEquationBuilder modelFromString: @"4+5"];
+	[self->mathModel deleteMathExpression: nil];
+	assertThat([[self->mathModel rootMathSymbol] toString], is(@"4+"));
+}
 
 -(void)testRemoveMathSymbolOutside
 {
@@ -372,6 +432,28 @@
 	self->mathModel = [NTIMathEquationBuilder modelFromString: @"4+5"];
 	[self->mathModel removeMathExpression: [self->baseModel rootMathSymbol]];
 	assertThat([[self->mathModel currentMathSymbol] toString], isNot(@"4"));
+}
+
+// double arrow bug- needs to be fixed
+-(void)testNextKeyPressed
+{
+	[self pushKey: @"2"];
+	[self pushKey: @"/"];
+	[self pushKey: @"3"];
+	[self pushKey: @"->"];
+	[self pushKey: @"->"];
+	assertThat([[self->mathModel currentMathSymbol] toString], is(@""));
+}
+
+// double arrow bug- needs to be fixed
+-(void)testBackKeyPressed
+{
+	[self pushKey: @"2"];
+	[self pushKey: @"/"];
+	[self pushKey: @"3"];
+	[self pushKey: @"<-"];
+	[self pushKey: @"<-"];
+	assertThat([[self->mathModel currentMathSymbol] toString], is(@"2"));
 }
 
 // ---------------find leaf node tests-----------------
