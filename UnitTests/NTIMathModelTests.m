@@ -30,20 +30,21 @@
 
 -(void)pushKey: (NSString*) stringValue
 {
-	if([stringValue isEqualToString: @"->"]){
+	if( [stringValue isEqualToString: @"->"] ){
 		[self->mathModel nextKeyPressed];
 	}
 	
-	if([stringValue isEqualToString: @"<-"]){
+	if( [stringValue isEqualToString: @"<-"] ){
 		[self->mathModel backPressed];
 	}
 	
-	if([stringValue isEqualToString: @"backspace"] || [stringValue isEqualToString: @"bs"]){
+	if( [stringValue isEqualToString: @"backspace"] || [stringValue isEqualToString: @"bs"] ){
 		[self->mathModel deleteMathExpression: nil];
 	}
 	
-	if(stringValue.length == 1){
-		[self->mathModel addMathSymbolForString: stringValue fromSenderType:kNTIMathGraphicKeyboardInput];
+	if( stringValue.length == 1) {
+		[self->mathModel addMathSymbolForString: stringValue 
+								 fromSenderType: kNTIMathGraphicKeyboardInput];
 	}
 }
 
@@ -447,7 +448,7 @@
 	[self pushKey: @"6"];
 	[self pushKey: @"."];
 	[self pushKey: @"2"];
-	assertThat([self->mathModel generateEquationString], is(@"≈6.2"));
+	assertThat([self->mathModel generateEquationString], is(@"6.2≈"));
 }
 
 // tests if the model will return approximations as a string value as a string correctly from a text field
@@ -458,7 +459,7 @@
 	[self pushKey: @"6"];
 	[self pushKey: @"."];
 	[self pushKey: @"2"];
-	assertThat([self->mathModel generateEquationString], is(@"a ≈ 6.2"));
+	assertThat([self->mathModel generateEquationString], is(@"a≈6.2"));
 }
 
 // tests if the model will return equals as a string correctly from a text field
@@ -469,7 +470,7 @@
 	[self pushKey: @"6"];
 	[self pushKey: @"."];
 	[self pushKey: @"2"];
-	assertThat([self->mathModel generateEquationString], is(@"a = 6.2"));
+	assertThat([self->mathModel generateEquationString], is(@"a=6.2"));
 }
 
 // tests if the model will return a garbage values as a string correctly from a text field
@@ -484,7 +485,7 @@
 	[self pushKey: @"*"];
 	[self pushKey: @"3"];
 	[self pushKey: @"-"];
-	assertThat([self->mathModel generateEquationString], is(@"x--6+/*3-"));
+	assertThat([self->mathModel generateEquationString], is(@"x--6+(3-)*/"));
 }
 
 // tests if the model will return a division sign as a string correctly from a text field
@@ -646,7 +647,7 @@
 	[self pushKey: @"6"];
 	[self pushKey: @"."];
 	[self pushKey: @"2"];
-	assertThat([self->mathModel tolaTex], is(@"≈6.2"));
+	assertThat([self->mathModel tolaTex], is(@"6.2\\approx"));
 }
 
 // tests if the model will return approximations as latex value as a string correctly from a text field
@@ -657,7 +658,7 @@
 	[self pushKey: @"6"];
 	[self pushKey: @"."];
 	[self pushKey: @"2"];
-	assertThat([self->mathModel tolaTex], is(@"a ≈ 6.2"));
+	assertThat([self->mathModel tolaTex], is(@"a\\approx6.2"));
 }
 
 // tests if the model will return equals as latex correctly from a text field
@@ -668,7 +669,7 @@
 	[self pushKey: @"6"];
 	[self pushKey: @"."];
 	[self pushKey: @"2"];
-	assertThat([self->mathModel tolaTex], is(@"a = 6.2"));
+	assertThat([self->mathModel tolaTex], is(@"a=6.2"));
 }
 
 // tests if the model will return a garbage values as latex correctly from a text field

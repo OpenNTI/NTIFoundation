@@ -40,3 +40,9 @@
 
 @interface NTIMathDivisionBinaryExpression : NTIMathBinaryExpression
 @end
+
+@interface NTIMathEqualityExpression : NTIMathBinaryExpression
+@end
+
+@interface NTIMathApproxExpression : NTIMathEqualityExpression
+@end

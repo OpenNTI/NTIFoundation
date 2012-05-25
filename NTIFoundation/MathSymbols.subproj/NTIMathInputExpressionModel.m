@@ -320,7 +320,7 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 		[self addMathExpression: lit senderType: senderType];
 		return;
 	}
-	NTIMathSymbol* newSymbol = [self createMathSymbolForString:stringValue];
+	NTIMathSymbol* newSymbol = [self createMathSymbolForString: stringValue];
 	if (newSymbol) {
 		[self addMathExpression: newSymbol senderType: senderType];
 	}

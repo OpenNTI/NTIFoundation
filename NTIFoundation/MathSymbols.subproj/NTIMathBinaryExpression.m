@@ -41,6 +41,12 @@
 	if ([symbolString isEqualToString:@"÷"]) {
 		return [[NTIMathDivisionBinaryExpression alloc] init];
 	}
+	if ([symbolString isEqualToString:@"="]	) {
+		return [[NTIMathEqualityExpression alloc] init];
+	}
+	if ([symbolString isEqualToString:@"≈"]) {
+		return [[NTIMathApproxExpression alloc] init];
+	}
 	NSString* notReachedString = [NSString stringWithFormat: @"%@ not supported", symbolString];
 	
 	//Get the compiler to shutup about unused variable.
@@ -301,6 +307,59 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 		self->precedenceLevel = 50;
 	}
 	return self;
+}
+
+@end
+
+
+@implementation NTIMathEqualityExpression
+
+-(id)init
+{
+	self = [super initWithMathOperatorSymbol: @"="];
+	if (self) {
+		self->precedenceLevel = 0;
+	}
+	return self;
+}
+
+@end
+
+@implementation NTIMathApproxExpression
+
+-(id)init
+{
+	self = [super initWithMathOperatorSymbol: @"≈"];
+	if (self) {
+		self->precedenceLevel = 0;
+	}
+	return self;
+}
+
+//This needs refactoring
+-(NSString*)latexValue
+{
+	//FIXME terrible hack here for mixed numbers
+	BOOL showImplicitForSymbol = YES;
+	if(	  self.isOperatorImplicit
+	   && [[self.operatorMathNode toString] isEqualToString: @"+"]
+	   && [mathExpressionForSymbol(self.leftMathNode) respondsToSelector: @selector(isLiteral)]
+	   && [mathExpressionForSymbol(self.rightMathNode) isKindOfClass: [NTIMathDivisionBinaryExpression class]]){
+		showImplicitForSymbol = NO;
+	}
+	
+	showImplicitForSymbol = showImplicitForSymbol && self.implicitForSymbol;
+	
+	NSString* leftNodeString = [self latexValueForChildNode: self.leftMathNode];
+	NSString* rightNodeString = [self latexValueForChildNode: self.rightMathNode];
+	
+	//If it's implicit we will ignore the operator symbol.
+	if (self.isOperatorImplicit) {
+		return [NSString stringWithFormat:@"%@%@%@", leftNodeString, showImplicitForSymbol ? self.implicitForSymbol.latexValue : @"" ,rightNodeString];
+	}
+	NSString* operatorString = @"\\approx";
+	NSString* latexVal = [NSString stringWithFormat: @"%@%@%@", leftNodeString, operatorString, rightNodeString];
+	return latexVal;
 }
 
 @end
