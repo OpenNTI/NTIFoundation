@@ -351,7 +351,11 @@
 // tests if the model will return decimals as string correctly from a text field
 -(void)testModelDecimalToStringGraphicalKeyboardd
 {
-	mathmodel_assertThatOutputIsInput(@"20.5");
+	[self pushKey: @"2"];
+	[self pushKey: @"0"];
+	[self pushKey: @"."];
+	[self pushKey: @"5"];
+	assertThat([self->mathModel generateEquationString], is(@"20.5"));
 }
 
 // tests if the model will return fractions as string correctly from a text field
@@ -422,7 +426,7 @@
 	[self pushKey: @":"];
 	[self pushKey: @"4"];
 	[self pushKey: @"5"];
-	mathmodel_assertThatOutputIsInput(@"3:45");
+	assertThat([self->mathModel generateEquationString], is(@"3:45"));
 }
 
 // tests if the model will return comma separated values as a string correctly from a text field
@@ -494,20 +498,201 @@
 
 // -------------to latex tests----------------
 
-// tests if the model will return fractions as string with the graphics keyboard correctly
--(void)testModelFractionLatexValuGraphicsKeyboard
+// tests if we can get latex from the model from a text field
+-(void)testModelBasicToLatexGraphicalKeyboard
+{
+	[self pushKey: @"5"];
+	assertThat([self->mathModel tolaTex], is(@"5"));
+}
+
+// tests if the model will return symbols as latex correctly from a text field
+-(void)testModelSymbolToLatexGraphicalKeyboard
+{
+	[self pushKey: @"4"];
+	[self pushKey: @"+"];
+	[self pushKey: @"5"];
+	[self pushKey: @"-"];
+	[self pushKey: @"6"];
+	[self pushKey: @"*"];
+	[self pushKey: @"7"];
+	[self pushKey: @"^"];
+	[self pushKey: @"8"];
+	assertThat([self->mathModel tolaTex], is(@"4+5-6*7^8"));
+}
+
+// tests if the model stores parentheses as latex correctly from a text field
+-(void)testModelParenthesesToLatexGraphicalKeyboard
+{
+	[self pushKey: @"("];
+	[self pushKey: @"4"];
+	assertThat([self->mathModel tolaTex], is(@"(4)"));
+}
+
+// tests if the model stores parentheses as latex correctly from a text field
+-(void)testModelParenthesesWithBinaryOpporatorToLatexGraphicalKeyboard
+{
+	[self pushKey: @"("];
+	[self pushKey: @"4"];
+	[self pushKey: @"+"];
+	[self pushKey: @"5"];
+	assertThat([self->mathModel tolaTex], is(@"(4+5)"));
+}
+
+// tests if the model will return square roots as latex correctly from a text field
+-(void)testModelSurdToLatexGraphicalKeyboard
+{
+	[self pushKey: @"4"];
+	[self pushKey: @"√"];
+	[self pushKey: @"3"];
+	assertThat([self->mathModel tolaTex], is(@"4\\surd3"));
+}
+
+// tests if the model will return decimals as latex correctly from a text field
+-(void)testModelDecimalToLatexGraphicalKeyboardd
+{
+	[self pushKey: @"2"];
+	[self pushKey: @"0"];
+	[self pushKey: @"."];
+	[self pushKey: @"5"];
+	assertThat([self->mathModel tolaTex], is(@"20.5"));
+}
+
+// tests if the model will return fractions as latex correctly from a text field
+-(void)testModelFractionToLatexGraphicalKeyboard
 {
 	[self pushKey: @"/"];
 	[self pushKey: @"3"];
 	assertThat([self->mathModel tolaTex], is(@"\\frac{3}{}"));
 }
 
--(void)testModelMixedNumberLatexValuGraphicsKeyboard
+// tests if the model will return negative numbers as latex correctly from a text field
+//-(void)testModelNegativeToStringGraphicalKeyboard
+//{
+//	[self pushKey: @"1"];
+//	[self pushKey: @"+/-"];
+//	assertThat([self->mathModel generateEquationString], is(@"-1"));
+//}
+
+// tests if the model will return a pi value as latex correctly from a text field
+-(void)testModelPiToLatexGraphicalKeyboard
+{
+	[self pushKey: @"π"];
+	assertThat([self->mathModel tolaTex], is(@"\\pi"));
+}
+
+// tests if the model will return a Scientific Notation value as latex correctly from a text field
+-(void)testModelScientificNotationToLatexGraphicalKeyboard
+{
+	[self pushKey: @"2"];
+	[self pushKey: @"."];
+	[self pushKey: @"1"];
+	[self pushKey: @"6"];
+	[self pushKey: @"*"];
+	[self pushKey: @"1"];
+	[self pushKey: @"0"];
+	[self pushKey: @"^"];
+	[self pushKey: @"5"];
+	assertThat([self->mathModel tolaTex], is(@"2.16*10^5"));
+}
+
+// tests if the model will return a graph point value as latex correctly from a text field
+-(void)testModelGraphPointToLatexGraphicalKeyboard
+{
+	[self pushKey: @"("];
+	[self pushKey: @"0"];
+	[self pushKey: @"."];
+	[self pushKey: @"5"];
+	[self pushKey: @","];
+	[self pushKey: @"0"];
+	[self pushKey: @"."];
+	[self pushKey: @"5"];
+	assertThat([self->mathModel tolaTex], is(@"(0.5, 0.5)"));
+}
+
+// tests if the model will return a mixed number as latex correctly from a text field
+-(void)testMixedNumberToLatexGraphicalKeyboard
 {
 	[self pushKey: @"2"];
 	[self pushKey: @"/"];
 	[self pushKey: @"3"];
 	assertThat([self->mathModel tolaTex], is(@"2\\frac{3}{}"));
+}
+
+// tests if the model will return a colon as latex correctly from a text field
+-(void)testColonToLatexGraphicalKeyboard
+{
+	[self pushKey: @"3"];
+	[self pushKey: @":"];
+	[self pushKey: @"4"];
+	[self pushKey: @"5"];
+	assertThat([self->mathModel tolaTex], is(@"3:45"));
+}
+
+// tests if the model will return comma separated values as latex correctly from a text field
+-(void)testCommaToLatexGraphicalKeyboard
+{
+	[self pushKey: @"b"];
+	[self pushKey: @"2"];
+	[self pushKey: @","];
+	[self pushKey: @"c"];
+	[self pushKey: @"5"];
+	assertThat([self->mathModel tolaTex], is(@"b2,c5"));
+}
+
+// tests if the model will return approximations as latex correctly from a text field
+-(void)testUnaryApproxToLatexGraphicalKeyboard
+{
+	[self pushKey: @"≈"];
+	[self pushKey: @"6"];
+	[self pushKey: @"."];
+	[self pushKey: @"2"];
+	assertThat([self->mathModel tolaTex], is(@"≈6.2"));
+}
+
+// tests if the model will return approximations as latex value as a string correctly from a text field
+-(void)testApproxToLatexGraphicalKeyboard
+{
+	[self pushKey: @"a"];
+	[self pushKey: @"≈"];
+	[self pushKey: @"6"];
+	[self pushKey: @"."];
+	[self pushKey: @"2"];
+	assertThat([self->mathModel tolaTex], is(@"a ≈ 6.2"));
+}
+
+// tests if the model will return equals as latex correctly from a text field
+-(void)testEqualsToLatexGraphicalKeyboard
+{
+	[self pushKey: @"a"];
+	[self pushKey: @"="];
+	[self pushKey: @"6"];
+	[self pushKey: @"."];
+	[self pushKey: @"2"];
+	assertThat([self->mathModel tolaTex], is(@"a = 6.2"));
+}
+
+// tests if the model will return a garbage values as latex correctly from a text field
+-(void)testHandlesJunkValueToLatexGraphicalKeyboard
+{
+	[self pushKey: @"x"];
+	[self pushKey: @"-"];
+	[self pushKey: @"-"];
+	[self pushKey: @"6"];
+	[self pushKey: @"+"];
+	[self pushKey: @"/"];
+	[self pushKey: @"*"];
+	[self pushKey: @"3"];
+	[self pushKey: @"-"];
+	assertThat([self->mathModel tolaTex], is(@"x--6+\\frac*3-"));
+}
+
+// tests if the model will return a division sign as latex correctly from a text field
+-(void)testDivisionSignToLatexToStringGraphicalKeyboard
+{
+	[self pushKey: @"3"];
+	[self pushKey: @"÷"];
+	[self pushKey: @"4"];
+	assertThat([self->mathModel tolaTex], is(@"\\frac{3}{4}"));
 }
 
 // -------------find root tests--------------------
