@@ -777,7 +777,7 @@ static NSArray* gatherNodes(NTIMathSymbol* root, NSMutableArray* result)
 		nextIndex = currentIndex + 1;
 	}
 	
-	self->currentMathSymbol = [traversal objectAtIndex: nextIndex];
+	self.currentMathSymbol = [traversal objectAtIndex: nextIndex];
 	
 //	NTIMathSymbol* next = symbol.nextSibling;
 //	if(!next){
@@ -822,7 +822,7 @@ static NSArray* gatherNodes(NTIMathSymbol* root, NSMutableArray* result)
 		nextIndex = currentIndex - 1;
 	}
 	
-	self->currentMathSymbol = [traversal objectAtIndex: nextIndex];
+	self.currentMathSymbol = [traversal objectAtIndex: nextIndex];
 	
 //	NTIMathSymbol* previous = symbol.previousSibling;
 //	
