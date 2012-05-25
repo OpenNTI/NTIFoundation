@@ -745,35 +745,110 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 
 #pragma mark -- Navigation through an equation. These functions should be used in the graphic math keyboard
 
+static NSArray* gatherNodes(NTIMathSymbol* root, NSMutableArray* result)
+{
+	if(!root || [result containsObjectIdenticalTo: root]){
+		return result;
+	}
+	
+	[result addObject: root];
+	gatherNodes(root.firstChild, result);
+	gatherNodes([root.childrenFollowingLinks lastObjectOrNil], result);
+	
+	
+	return result;
+}
+
+//NOTE. we have a terribly inefficient next and previous implementation
+//that requires flattening the tree each time....
+
+-(void)goNextFrom: (NTIMathSymbol*)symbol
+{
+	NTIMathSymbol* root = symbol;
+	while(root.parentMathSymbolFollowingLinks){
+		root = root.parentMathSymbolFollowingLinks;
+	}
+
+	NSArray* traversal = gatherNodes(root, [NSMutableArray array]);
+	
+	NSUInteger currentIndex = [traversal indexOfObjectIdenticalTo: symbol];
+	NSUInteger nextIndex = 0;
+	if(currentIndex != NSNotFound && currentIndex + 1 < traversal.count){
+		nextIndex = currentIndex + 1;
+	}
+	
+	self->currentMathSymbol = [traversal objectAtIndex: nextIndex];
+	
+//	NTIMathSymbol* next = symbol.nextSibling;
+//	if(!next){
+//		next = symbol.firstChild;
+//	}
+//	
+//	if(next){
+//		self.currentMathSymbol = next;
+//	}
+//	else{
+//		//at the beginning, go all the way to the other end
+//		//which is the root
+//		NTIMathSymbol* mathSymbol = symbol;
+//		while(mathSymbol.parentMathSymbolFollowingLinks){
+//			mathSymbol = mathSymbol.parentMathSymbolFollowingLinks;
+//		}
+//		self.currentMathSymbol = mathSymbol;
+//	}
+}
+
 //If we have a next sibling go to that, else go to our first child
 -(void)nextKeyPressed
 {
 	NTIMathSymbol* current = [NTIMathSymbol followIfPlaceholder: self.currentMathSymbol];
 	
-	NTIMathSymbol* next = current.nextSibling;
-	if(!next){
-		next = current.firstChild;
-	}
-	
-	if(next){
-		self.currentMathSymbol = next;
-	}
+	[self goNextFrom: current];
 }
+
+-(void)goPreviousFrom: (NTIMathSymbol*)symbol
+{
 	
+	NTIMathSymbol* root = symbol;
+	while(root.parentMathSymbolFollowingLinks){
+		root = root.parentMathSymbolFollowingLinks;
+	}
+	
+	NSArray* traversal = gatherNodes(root, [NSMutableArray array]);
+	
+	NSInteger currentIndex = [traversal indexOfObjectIdenticalTo: symbol];
+	NSUInteger nextIndex = traversal.count - 1;
+	if(currentIndex != NSNotFound && currentIndex - 1 >= 0){
+		nextIndex = currentIndex - 1;
+	}
+	
+	self->currentMathSymbol = [traversal objectAtIndex: nextIndex];
+	
+//	NTIMathSymbol* previous = symbol.previousSibling;
+//	
+//	if(!previous){
+//		previous = [symbol.childrenFollowingLinks lastObjectOrNil];
+//	}
+//	
+//	if(previous){
+//		self.currentMathSymbol = previous;
+//	}
+//	else{
+//		//at the beginning, go all the way to the other end
+//		//which is the root
+//		NTIMathSymbol* mathSymbol = symbol;
+//		while(mathSymbol.parentMathSymbolFollowingLinks){
+//			mathSymbol = mathSymbol.parentMathSymbolFollowingLinks;
+//		}
+//		self.currentMathSymbol = mathSymbol;
+//	}
+}
 
 //If we have a previous sibling go there, else go to our parent
 -(void)backPressed
 {
 	NTIMathSymbol* current = [NTIMathSymbol followIfPlaceholder: self.currentMathSymbol];
-	NTIMathSymbol* previous = current.previousSibling;
-	
-	if(!previous){
-		previous = current.parentMathSymbolFollowingLinks;
-	}
-	
-	if(previous){
-		self.currentMathSymbol = previous;
-	}
+	[self goPreviousFrom: current];
 }
 
 @end
