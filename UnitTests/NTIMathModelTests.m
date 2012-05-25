@@ -786,7 +786,7 @@
 	NTIMathSymbol* leftChild = [parent.children objectAtIndex:0];
 	NTIMathSymbol* rightChild = [parent.children objectAtIndex:1];
 	assertThat([self->mathModel currentMathSymbol], is(equalTo(leftChild)));
-	[self->mathModel setCurrentSymbolTo: rightChild];
+	[self->mathModel selectSymbolAsNewExpression: rightChild];
 	assertThat([self->mathModel currentMathSymbol], is(equalTo(rightChild)));
 	[self->mathModel addMathSymbolForString: @"7" fromSenderType: kNTIMathTextfieldInput];
 	assertThat([self->mathModel generateEquationString], is(@"*7"));
@@ -795,7 +795,7 @@
 -(void)testSetMathSymbolNil
 {
 	self->baseModel = [NTIMathEquationBuilder modelFromString: nil];
-	[self->mathModel setCurrentSymbolTo: [self->baseModel rootMathSymbol]];
+	[self->mathModel selectSymbolAsNewExpression: [self->baseModel rootMathSymbol]];
 	assertThat([[self->mathModel currentMathSymbol] toString], is(@""));
 }
 
@@ -804,7 +804,7 @@
 //	[self buildEquationFromString: @"4": self->baseModel];
 //	NTIMathSymbol* changeSymbol = [self->mathModel rootMathSymbol];
 //	[self buildEquationFromString: @"4+5": self->mathModel];
-//	[self->mathModel setCurrentSymbolTo: changeSymbol];
+//	[self->mathModel selectSymbolAsNewExpression: changeSymbol];
 //	assertThat([[self->mathModel currentMathSymbol] toString], is(@"4"));
 //}
 //
@@ -812,7 +812,7 @@
 //{
 //	[self buildEquationFromString: @"4": self->baseModel];
 //	[self buildEquationFromString: @"4+5": self->mathModel];
-//	[self->mathModel setCurrentSymbolTo: [self->baseModel rootMathSymbol]];
+//	[self->mathModel selectSymbolAsNewExpression: [self->baseModel rootMathSymbol]];
 //	assertThat([[self->mathModel currentMathSymbol] toString], isNot(@"4"));
 //}
 //

@@ -46,6 +46,14 @@
 	self->childMathNode.parentMathSymbol = self;
 }
 
+-(NSArray*)children
+{
+	if(self.childMathNode){
+		return [NSArray arrayWithObject: childMathNode];
+	}
+	return nil;
+}
+
 -(NSUInteger)precedenceLevel
 {
 	return self->precedenceLevel;
@@ -159,11 +167,6 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 -(NSString *)toString
 {
 	return [NSString stringWithFormat: @"%@%@", [prefix toString], [self toStringValueForChildNode:self.childMathNode]];
-}
-
--(NSArray *)children
-{
-	return [NSArray arrayWithObject: self.childMathNode];
 }
 
 -(NSArray *)nonEmptyChildren

@@ -151,11 +151,13 @@
 -(NTIMathSymbol *)closeAndAppendTree;
 -(NTIMathSymbol *)newMathSymbolTreeWithRoot: (NTIMathSymbol *)newRootSymbol 
 								 firstChild: (NTIMathSymbol *)childSymbol;
+@property (nonatomic, strong) NTIMathSymbol* currentMathSymbol;
 @end
 
 @class NTIMathExpressionReverseTraversal;
 @implementation NTIMathInputExpressionModel
 @synthesize rootMathSymbol, fullEquation;
+@dynamic currentMathSymbol;
 
 -(id)initWithMathSymbol:(NTIMathSymbol *)mathExpression
 {
@@ -164,16 +166,42 @@
 		if (!mathExpression) {
 			mathExpression = [[NTIMathPlaceholderSymbol alloc] init];
 		}
-		self.rootMathSymbol = mathExpression;
 		self->fullEquation = self.rootMathSymbol;
-		self->currentMathSymbol = mathExpression;
+		self.currentMathSymbol = mathExpression;
 		self->mathExpressionQueue = [[NTIMathExpressionStack alloc] init];
 	}
 	return self;
 }
 
--(void)setRootMathSymbol:(NTIMathSymbol *)theRootMathSymbol
+-(NTIMathSymbol*)currentMathSymbol
 {
+	return self->currentMathSymbol;
+}
+
+-(void)setCurrentMathSymbol: (NTIMathSymbol *)symbol
+{
+	if(symbol == self.currentMathSymbol){
+		return;
+	}
+	
+	NTIMathSymbol* root = symbol;
+	while(root.parentMathSymbol){
+		root = root.parentMathSymbol;
+	}
+	self.rootMathSymbol = root;
+	
+	self->currentMathSymbol = symbol;
+}
+
+-(void)setRootMathSymbol: (NTIMathSymbol *)theRootMathSymbol
+{
+	if(self->rootMathSymbol == theRootMathSymbol){
+		return;
+	}
+	
+	if( [[self->mathExpressionQueue lastMathExpression] isEqual: theRootMathSymbol] ){
+		theRootMathSymbol = [self mergeLastTreeOnStackWith: self->rootMathSymbol];
+	}
 	self->rootMathSymbol = theRootMathSymbol;
 	self->rootMathSymbol.parentMathSymbol = nil;
 }
@@ -211,14 +239,14 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 	if ([currentNode respondsToSelector:@selector(isLiteral)] && [newNode respondsToSelector:@selector(isUnaryOperator)]) {
 		NTIMathBinaryExpression* implicitSymbol = [NTIMathBinaryExpression binaryExpressionForString:@"*"];
 		implicitSymbol.isOperatorImplicit = YES;	
-		self->currentMathSymbol = [self addMathNode:implicitSymbol on: currentNode];
+		self.currentMathSymbol = [self addMathNode:implicitSymbol on: currentNode];
 	}
 	
 	//FIXME: HACK, edge case where we end up with a leaf node(literal) at the top, we add an implicit multiplication
 	if (([currentNode respondsToSelector:@selector(isBinaryOperator)] || [currentNode respondsToSelector:@selector( isUnaryOperator)]) && [newNode respondsToSelector:@selector(isLiteral)] ) {
 		NTIMathBinaryExpression* implicitSymbol = [NTIMathBinaryExpression binaryExpressionForString:@"*"];
 		implicitSymbol.isOperatorImplicit = YES;	
-		self->currentMathSymbol = [self addMathNode:implicitSymbol on: currentNode];
+		self.currentMathSymbol = [self addMathNode:implicitSymbol on: currentNode];
 	}
 	
 	//Implicit addition. e.g 2 1/3 is equivalent to 2+1/3. Mixed number case.
@@ -227,7 +255,7 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 			NTIMathBinaryExpression* implicitSymbol = [NTIMathBinaryExpression binaryExpressionForString:@"+"];
 			implicitSymbol.isOperatorImplicit = YES;	//Set the flag for implicit binary symbol
 			implicitSymbol.implicitForSymbol = newNode;
-			self->currentMathSymbol = [self addMathNode:implicitSymbol on: self->currentMathSymbol];
+			self.currentMathSymbol = [self addMathNode:implicitSymbol on: self.currentMathSymbol];
 		}
 	}
 	else {
@@ -236,7 +264,7 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 			NTIMathBinaryExpression* implicitSymbol = [NTIMathBinaryExpression binaryExpressionForString:@"+"];
 			implicitSymbol.isOperatorImplicit = YES;	//Set the flag for implicit binary symbol
 			implicitSymbol.implicitForSymbol = newNode;
-			self->currentMathSymbol = [self addMathNode:implicitSymbol on: self->currentMathSymbol];
+			self.currentMathSymbol = [self addMathNode:implicitSymbol on: self.currentMathSymbol];
 		}
 	}
 }
@@ -253,37 +281,44 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 {
 	//Close last tree and create a new one
 	self.rootMathSymbol = [self mergeLastTreeOnStackWith: self.rootMathSymbol];
-	self->currentMathSymbol = [self newMathSymbolTreeWithRoot:mathSymbol firstChild: nil]; 
+	self.currentMathSymbol = [self newMathSymbolTreeWithRoot:mathSymbol firstChild: nil]; 
 }
 
 -(void)addMathExpression: (NTIMathSymbol *)newSymbol senderType: (NSString *)senderType
 {
 	if ([senderType isEqualToString: kNTIMathGraphicKeyboardInput]) {
 		//FIXME: #HACK: we want to create a new tree under certain symbol to match user expectations. Needs to be done a better way.
-		if ([self isLeafMathNode: self->currentMathSymbol] && ([self->currentMathSymbol.parentMathSymbol isKindOfClass:[NTIMathSquareRootUnaryExpression class]] || [self->currentMathSymbol.parentMathSymbol isKindOfClass: [NTIMathFractionBinaryExpression class]])) {
-			[self createTreeWithRoot:self->currentMathSymbol];
+		if (   [self isLeafMathNode: self.currentMathSymbol] 
+			&& ([self.currentMathSymbol.parentMathSymbol isKindOfClass:[NTIMathSquareRootUnaryExpression class]] 
+				|| [self.currentMathSymbol.parentMathSymbol isKindOfClass: [NTIMathFractionBinaryExpression class]])) {
+			[self createTreeWithRoot: self.currentMathSymbol];
 		}
 		//NOTE: As the user navigates through the equation, the may want to insert things in between, we need to be able to distinguish inserting in the equation and adding to the end of the rootsymbol. The easy way if comparing the currentSymbol with the last leaf node of the rootSymbol, if they differ, we are inserting, else we are are adding to the end of the equation
-		if (self->currentMathSymbol != [self findLastLeafNodeFrom: self.rootMathSymbol] && [self isLeafMathNode: self->currentMathSymbol]) {
+		if (   self.currentMathSymbol != [self findLastLeafNodeFrom: self.rootMathSymbol] 
+			&& [self isLeafMathNode: self.currentMathSymbol]) {
 			//Before we create a new tree at the new current symbol, we will close the tree that we were working on.
-			[self createTreeWithRoot: self->currentMathSymbol];
+			[self createTreeWithRoot: self.currentMathSymbol];
 		}
 	}
 	
 	//If our parent is a parenthesis we create a new tree, regardless of the sender. This ensures that we stay in the parenthesis.
-	if ([self isLeafMathNode: self->currentMathSymbol] && [currentMathSymbol.parentMathSymbol isKindOfClass: [NTIMathParenthesisSymbol class]]) {
+	if (   [self isLeafMathNode: self.currentMathSymbol] 
+		&& [currentMathSymbol.parentMathSymbol isKindOfClass: [NTIMathParenthesisSymbol class]]) {
 		//In case of a paranthesis we don't want to close the last tree until when we come across a closing a paranthesis. 
-		self->currentMathSymbol = [self newMathSymbolTreeWithRoot:self->currentMathSymbol firstChild: nil];
+		self.currentMathSymbol = [self newMathSymbolTreeWithRoot: self.currentMathSymbol firstChild: nil];
 	}
 		
-	if (isImplicitSymbol(self->currentMathSymbol, newSymbol, senderType)) {
-		[self addImplicitSymbolBetween: self->currentMathSymbol andNewSymbol:newSymbol senderType:senderType];
-		if ([newSymbol respondsToSelector:@selector(isLiteral)] && [[(NTIMathAlphaNumericSymbol *)newSymbol mathSymbolValue] isEqualToString: @" "] && [senderType isEqualToString:kNTIMathTextfieldInput]) {
+	if ( isImplicitSymbol(self.currentMathSymbol, newSymbol, senderType) ) {
+		[self addImplicitSymbolBetween: self.currentMathSymbol 
+						  andNewSymbol: newSymbol 
+							senderType: senderType];
+		if (   [newSymbol respondsToSelector: @selector(isLiteral)] 
+			&& [[(NTIMathAlphaNumericSymbol *)newSymbol mathSymbolValue] isEqualToString: @" "] && [senderType isEqualToString:kNTIMathTextfieldInput]) {
 			return; 
 			//we don't want to add a space symbol, we implicitly interpret it as an implicit addition.
 		}
 	}
-	self->currentMathSymbol = [self addMathNode: newSymbol on: self->currentMathSymbol];
+	self.currentMathSymbol = [self addMathNode: newSymbol on: self.currentMathSymbol];
 }
 
 -(BOOL)shouldStringBeTreatedAsNegation: (NSString *)stringValue fromSenderType: (NSString *)senderType
@@ -297,9 +332,9 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 	if(   [senderType isEqualToString: kNTIMathTextfieldInput]
 	   && [stringValue isSubtractionSymbol] ){
 		
-		if( [self->currentMathSymbol respondsToSelector: @selector(isPlaceholder)]
-		   && (   !self->currentMathSymbol.parentMathSymbol 
-			   || [self->currentMathSymbol.parentMathSymbol respondsToSelector: @selector(isBinaryOperator)])){
+		if( [self.currentMathSymbol respondsToSelector: @selector(isPlaceholder)]
+		   && (   !self.currentMathSymbol.parentMathSymbol 
+			   || [self.currentMathSymbol.parentMathSymbol respondsToSelector: @selector(isBinaryOperator)])){
 			   return YES;
 		}
 	}
@@ -310,8 +345,8 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 -(void)addMathSymbolForString: (NSString *)stringValue fromSenderType: (NSString *)senderType
 {
 	if( [self shouldStringBeTreatedAsNegation: stringValue fromSenderType: senderType] ) {
-		if ([self->currentMathSymbol respondsToSelector:@selector(isLiteral)]) {
-			[(NTIMathAlphaNumericSymbol *)self->currentMathSymbol setIsNegative: YES];
+		if ([self.currentMathSymbol respondsToSelector:@selector(isLiteral)]) {
+			[(NTIMathAlphaNumericSymbol *)self.currentMathSymbol setIsNegative: YES];
 			return;
 		}
 		//if the user placed plusMinus when a placeholder is selected, we will create a literal and add the plus minus afterwards
@@ -407,9 +442,10 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 //We return the currentSymbol
 -(NTIMathSymbol *)closeAndAppendTree
 {
-	NTIMathSymbol* tempCurrentSymbol = self.rootMathSymbol;
+	//NTIMathSymbol* tempCurrentSymbol = self.rootMathSymbol;
 	self.rootMathSymbol = [self mergeLastTreeOnStackWith: self.rootMathSymbol];
-	return tempCurrentSymbol;
+	return self.rootMathSymbol;
+	//return tempCurrentSymbol;
 }
 
 -(NTIMathSymbol *)mergeLastTreeOnStackWith: (NTIMathSymbol *)mathSymbol
@@ -425,7 +461,7 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 	//combined both tree, and get a notification if it fails.
 	if ([plink.parentMathSymbol respondsToSelector:@selector(swapNode:withNewNode:)]) {
 		[plink.parentMathSymbol performSelector:@selector(swapNode:withNewNode:) withObject:plink withObject: mathSymbol];
-		self->currentMathSymbol = mathSymbol;
+		self.currentMathSymbol = mathSymbol;
 		return combinedTree;
 	}
 	else {
@@ -515,27 +551,20 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 }
 
 //this method gets called, when a user clicks on a leaf node( i.e literal button, placeholder button), at that point we create a new tree at the location.
--(void)setCurrentSymbolTo: (NTIMathSymbol *)mathSymbol
+-(void)selectSymbolAsNewExpression: (NTIMathSymbol *)mathSymbol
 {
 	//If we are the current symbol already, and you click on it, don't do anything.
-	if (mathSymbol == self->currentMathSymbol && ![self.rootMathSymbol respondsToSelector:@selector(isUnaryOperator)]) {
+	if (mathSymbol == self.currentMathSymbol && ![self.rootMathSymbol respondsToSelector:@selector(isUnaryOperator)]) {
 		return;
 	}
 	//Before we create a new tree at the new current symbol, we will close the tree that we were working on.
 	[self createTreeWithRoot: mathSymbol];
 }
 
-//Returns the current symbol mainly for rendering purposes
--(NTIMathSymbol *)currentMathSymbol
-{
-	return self->currentMathSymbol;
-}
-
 -(void)clearEquation
 {
 	NTIMathSymbol* pholder = [[NTIMathPlaceholderSymbol alloc] init];
-	self.rootMathSymbol= pholder;
-	self->currentMathSymbol = pholder;
+	self.currentMathSymbol = pholder;
 	[self->mathExpressionQueue removeAll];
 }
 
@@ -564,7 +593,7 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 			self.rootMathSymbol = [children objectAtIndex: 0];
 			self.rootMathSymbol.substituteSymbol = oldParent.substituteSymbol;
 			[(NTIMathPlaceholderSymbol *)self.rootMathSymbol.substituteSymbol setInPlaceOfObject: self.rootMathSymbol];
-			self->currentMathSymbol = self.rootMathSymbol;
+			self.currentMathSymbol = self.rootMathSymbol;
 		}
 		else if(children.count == 2) {
 			//old parent
@@ -572,7 +601,7 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 			self.rootMathSymbol = [children objectAtIndex: 0];
 			self.rootMathSymbol.substituteSymbol = oldParent.substituteSymbol;
 			[(NTIMathPlaceholderSymbol *)self.rootMathSymbol.substituteSymbol setInPlaceOfObject: self.rootMathSymbol];
-			self->currentMathSymbol = self.rootMathSymbol;
+			self.currentMathSymbol = self.rootMathSymbol;
 			[self addMathExpression: [children objectAtIndex: 1] senderType: kNTIMathGraphicKeyboardInput];	
 		}
 	}
@@ -617,17 +646,10 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 		NTIMathSymbol* oldroot = self.rootMathSymbol;
 		[self addChildrenOfNode: mathNode to: mathNode.parentMathSymbol];
 		//Normally after deleting the root and adding its children, we expect to have a different root 
-		if (self->currentMathSymbol == self.rootMathSymbol && self.rootMathSymbol == oldroot && ![self.rootMathSymbol respondsToSelector:@selector(isPlaceholder)]) {
+		if (self.currentMathSymbol == self.rootMathSymbol && self.rootMathSymbol == oldroot && ![self.rootMathSymbol respondsToSelector:@selector(isPlaceholder)]) {
 			self.rootMathSymbol = [[NTIMathPlaceholderSymbol alloc] init];
 			return self.rootMathSymbol;
 		}
-//		else if([self->currentMathSymbol.parentMathSymbol respondsToSelector:@selector(nonEmptyChildren)] && self->currentMathSymbol.parentMathSymbol == self.rootMathSymbol) {
-//			NSArray* children = [self->currentMathSymbol.parentMathSymbol performSelector:@selector(nonEmptyChildren)];
-//			if (children.count == 0) {
-//				self.rootMathSymbol = [[NTIMathPlaceholderSymbol alloc] init];
-//				return self.rootMathSymbol;
-//			}
-//		}
 																					
 		if (!previousNode) {
 			return self.rootMathSymbol;
@@ -640,9 +662,9 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 {
 	if (!aMathSymbol) {
 		//if nothing is selected, we assume the user wants to delete the current symbol
-		aMathSymbol = self->currentMathSymbol;
+		aMathSymbol = self.currentMathSymbol;
 	}
-	self->currentMathSymbol = [self removeMathExpression: aMathSymbol];
+	self.currentMathSymbol = [self removeMathExpression: aMathSymbol];
 }
 
 -(NTIMathSymbol *)findLastLeafNodeFrom: (NTIMathSymbol *)mathSymbol
@@ -717,86 +739,40 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 
 -(void)logCurrentAndRootSymbol
 {
-	NSLog(@"root's string: %@,\ncurrentSymbol's string: %@", [self.rootMathSymbol toString], [self->currentMathSymbol toString]);
+	NSLog(@"root's string: %@,\ncurrentSymbol's string: %@", [self.rootMathSymbol toString], [self.currentMathSymbol toString]);
 }
 
 
 #pragma mark -- Navigation through an equation. These functions should be used in the graphic math keyboard
 
--(NTIMathSymbol *)nextsymbolAfterMathSymbol: (NTIMathSymbol *)mathSymbol
-{
-	if (!mathSymbol) {
-		return nil;
-	}
-	NTIMathSymbol* parent = mathSymbol.parentMathSymbol;
-	NSArray* children = parent.children;
-	NSUInteger indexOfCurrentNode = [children indexOfObject: mathSymbol];
-	
-	//We would to start by looking at the next child
-	for (NSUInteger i = indexOfCurrentNode + 1; i<children.count; i++) {
-		return [self findFirstLeafNodeFrom: [children objectAtIndex: i]]; 
-	}
-	//mathSymbol = parent;
-	return [self nextsymbolAfterMathSymbol: parent];
-	
-}
-
+//If we have a next sibling go to that, else go to our first child
 -(void)nextKeyPressed
 {
-	NTIMathSymbol* newCurrentSymbol = [self nextsymbolAfterMathSymbol: self->currentMathSymbol];
-	if (newCurrentSymbol) {
-		self->currentMathSymbol = newCurrentSymbol;
-	}
-	else {
-		//We know we are the last node of the current tree, connect trees now
-		NTIMathSymbol* newRootSymbol = [self mergeLastTreeOnStackWith: self.rootMathSymbol];
-		//		if (newRootSymbol != self.rootMathSymbol) {
-		//			self.rootMathSymbol = newRootSymbol;
-		//			[self nextKeyPressed];	//After connect the tree, just to the next symbol
-		//		}
-		self.rootMathSymbol = newRootSymbol;
-	}
-}
-
-//NOTE: At this point, we only care about leaf nodes
--(NTIMathSymbol *)mathSymbolPriorTo: (NTIMathSymbol *)mathSymbol
-{
-	if (!mathSymbol) {
-		return nil;
-	}
-	NSUInteger indexOfCurrentNode = 0;
-	NSArray* children;
-	NTIMathSymbol* parent = mathSymbol.parentMathSymbol;
-	if (parent) {
-		children = parent.children;
-		if (children) {
-			indexOfCurrentNode = [children indexOfObject: mathSymbol];
-		}
-		int indexOfPreviousNode = indexOfCurrentNode - 1;
-		if (indexOfPreviousNode >= 0 && indexOfCurrentNode != NSNotFound) {
-			return [self findLastLeafNodeFrom: [children objectAtIndex: indexOfPreviousNode]];
-		}
+	NTIMathSymbol* current = [NTIMathSymbol followIfPlaceholder: self.currentMathSymbol];
+	
+	NTIMathSymbol* next = current.nextSibling;
+	if(!next){
+		next = current.firstChild;
 	}
 	
-	//mathSymbol = parent;
-	return [self mathSymbolPriorTo: parent];
-	
+	if(next){
+		self.currentMathSymbol = next;
+	}
 }
+	
 
+//If we have a previous sibling go there, else go to our parent
 -(void)backPressed
 {
-	NTIMathSymbol* newCurrentSymbol = [self mathSymbolPriorTo: self->currentMathSymbol];
-	if (newCurrentSymbol) {
-		self->currentMathSymbol = newCurrentSymbol;
+	NTIMathSymbol* current = [NTIMathSymbol followIfPlaceholder: self.currentMathSymbol];
+	NTIMathSymbol* previous = current.previousSibling;
+	
+	if(!previous){
+		previous = current.parentMathSymbolFollowingLinks;
 	}
-	else {
-		//We know we are the last node of the current tree, connect trees now
-		NTIMathSymbol* newRootSymbol = [self mergeLastTreeOnStackWith: self.rootMathSymbol];
-		//		if (newRootSymbol != self.rootMathSymbol) {
-		//			self.rootMathSymbol = newRootSymbol;
-		//			[self backPressed];	//After connect the tree, just to the prev symbol
-		//		}
-		self.rootMathSymbol = newRootSymbol;
+	
+	if(previous){
+		self.currentMathSymbol = previous;
 	}
 }
 

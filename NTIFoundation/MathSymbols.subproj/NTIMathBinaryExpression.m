@@ -88,6 +88,23 @@
 	self->rightMathNode.parentMathSymbol = self;
 }
 
+-(NSArray*)children
+{
+	if( !self.leftMathNode && !self.rightMathNode ){
+		return nil;
+	}
+	NSMutableArray* array = [NSMutableArray array];
+	if(self.leftMathNode){
+		[array addObject: self.leftMathNode];
+	}
+	
+	if(self.rightMathNode){
+		[array addObject: self.rightMathNode];
+	}
+	
+	return array;
+}
+
 //NOTE: NOT TO BE CONFUSED with -addSymbol, because this is only invoked in case we need to add something in between the parent node( self ) and its child( right child). We get to this case based on precedence level comparison
 -(NTIMathSymbol *)addAsChildMathSymbol: (NTIMathSymbol *)newMathSymbol
 {
@@ -183,18 +200,9 @@
 	return nil;
 }
 
-//TODO the getters for leftMathNode and rightMathNode should return after passing
-//through this function.
 static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 {
-	//helper method, for placeholder that may be pointing to expression tree.
-	if ([mathSymbol respondsToSelector:@selector(isPlaceholder)]) {
-		NTIMathSymbol* rep = [mathSymbol performSelector:@selector(inPlaceOfObject)];
-		if (rep) {
-			return rep;
-		}
-	}
-	return mathSymbol;
+	return [NTIMathSymbol followIfPlaceholder: mathSymbol];
 }
 
 -(NSString *)toStringValueForChildNode: (NTIMathSymbol *)childExpression
@@ -273,11 +281,6 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 	NSString* operatorString = [self.operatorMathNode latexValue];
 	NSString* latexVal = [NSString stringWithFormat: @"%@%@%@", leftNodeString, operatorString, rightNodeString];
 	return latexVal;
-}
-
--(NSArray *)children
-{
-	return [NSArray arrayWithObjects:self.leftMathNode, self.rightMathNode, nil];
 }
 
 -(NSArray *)nonEmptyChildren

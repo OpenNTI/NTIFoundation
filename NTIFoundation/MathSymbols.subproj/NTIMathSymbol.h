@@ -11,12 +11,21 @@
 @interface NTIMathSymbol : NSObject<NTIMathExpressionSymbolProtocol>
 
 @property(nonatomic, strong) NTIMathSymbol* parentMathSymbol;
+@property (nonatomic, readonly) NTIMathSymbol* parentMathSymbolFollowingLinks;
+@property (nonatomic, readonly) NTIMathSymbol* nextSibling;
+@property (nonatomic, readonly) NTIMathSymbol* previousSibling;
+@property (nonatomic, readonly) NTIMathSymbol* firstChild;
+@property (nonatomic, readonly) NSArray* children;
+@property (nonatomic, readonly) NSArray* childrenFollowingLinks;
+
 @property(nonatomic) NSUInteger precedenceLevel;
 @property(nonatomic, weak) NTIMathSymbol* substituteSymbol; //should only be a placeholder.
+ 
++(NTIMathSymbol*)followIfPlaceholder: (NTIMathSymbol*) symbol;
+
 //Any valid expression, can have parenthesis. They can be explicit or implicit
 //@property(nonatomic)BOOL hasParenthesis;
 
 -(NSString *)toString;
 -(NSString *)latexValue;
--(NSArray *)children;
 @end

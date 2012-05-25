@@ -30,7 +30,7 @@
 			   fromSenderType: (NSString *)senderType;
 -(void)addMathExpression: (NTIMathSymbol *)newSymbol senderType: (NSString *)senderType;
 //Selection
--(void)setCurrentSymbolTo: (NTIMathSymbol *)mathSymbol;
+-(void)selectSymbolAsNewExpression: (NTIMathSymbol *)mathSymbol;
 -(NTIMathSymbol *)currentMathSymbol;
 //Deletion
 -(void)deleteMathExpression: (NTIMathSymbol *)aMathSymbol;
