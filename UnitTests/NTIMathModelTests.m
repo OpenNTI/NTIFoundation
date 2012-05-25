@@ -330,7 +330,7 @@
 }
 
 // tests if the model stores parentheses as string correctly from a text field
--(void)testModelParenthesesToStringGraphicalKeyboard
+-(void)testModelParenthesesWithBinaryOpporatorToStringGraphicalKeyboard
 {
 	[self pushKey: @"("];
 	[self pushKey: @"4"];
