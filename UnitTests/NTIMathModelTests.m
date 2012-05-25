@@ -1039,8 +1039,8 @@
 {
 	[self pushKey: @"("];
 	[self pushKey: @"+"];
-	[self pushKey: @"->"];
-	[self pushKey: @"->"];
+	[self pushKey: @"<-"];
+	[self pushKey: @"<-"];
 	[self pushKey: @"+"];
 	assertThat([self->mathModel generateEquationString], is(@"(+)+"));
 }
@@ -1076,7 +1076,12 @@
 
 -(void)testRandomInsert_v5
 {
-	
+	[self pushKey: @"^"];
+	[self pushKey: @"("];
+	[self pushKey: @"+"];
+	[self pushKey: @"<-"];
+	[self pushKey: @"5"];
+	assertThat([self->mathModel generateEquationString], is(@"((+)5)^"));
 }
 
 -(void)testParenthesesDeletion
@@ -1111,14 +1116,6 @@
 	assertThat([self->mathModel generateEquationString], is(@"(*)"));
 }
 
--(void)testSingleEntityDeletion
-{
-	[self pushKey: @"^"];
-	[self pushKey: @"->"];
-	[self pushKey: @"bs"];
-	assertThat([self->mathModel generateEquationString], is(@""));
-}
-
 -(void)testShiftingCarrot
 {
 	[self pushKey: @"4"];
@@ -1129,6 +1126,72 @@
 	[self pushKey: @"*"];
 	[self pushKey: @"6"];
 	assertThat([self->mathModel generateEquationString], is(@"(4*6)^5"));
+}
+
+// ----------single entity deletion-------------
+
+-(void)testSingleEntityDeletionAddition
+{
+	[self pushKey: @"+"];
+	[self pushKey: @"->"];
+	[self pushKey: @"bs"];
+	assertThat([self->mathModel generateEquationString], is(@""));
+}
+
+-(void)testSingleEntityDeletionSubtraction
+{
+	[self pushKey: @"-"];
+	[self pushKey: @"->"];
+	[self pushKey: @"bs"];
+	assertThat([self->mathModel generateEquationString], is(@""));
+}
+
+-(void)testSingleEntityDeletionMultiplication
+{
+	[self pushKey: @"*"];
+	[self pushKey: @"->"];
+	[self pushKey: @"bs"];
+	assertThat([self->mathModel generateEquationString], is(@""));
+}
+
+-(void)testSingleEntityDeletionDivision
+{
+	[self pushKey: @"/"];
+	[self pushKey: @"->"];
+	[self pushKey: @"bs"];
+	assertThat([self->mathModel generateEquationString], is(@""));
+}
+
+-(void)testSingleEntityDeletionExponent
+{
+	[self pushKey: @"^"];
+	[self pushKey: @"->"];
+	[self pushKey: @"bs"];
+	assertThat([self->mathModel generateEquationString], is(@""));
+}
+
+-(void)testSingleEntityDeletionParentheses
+{
+	[self pushKey: @"("];
+	[self pushKey: @"bs"];
+	[self pushKey: @"bs"];
+	assertThat([self->mathModel generateEquationString], is(@""));
+}
+
+-(void)testSingleEntityDeletionSqrt
+{
+	[self pushKey: @"√"];
+	[self pushKey: @"bs"];
+	[self pushKey: @"bs"];
+	assertThat([self->mathModel generateEquationString], is(@""));
+}
+
+-(void)testSingleEntityDeletionNegate
+{
+	[self pushKey: @"+/-"];
+	[self pushKey: @"->"];
+	[self pushKey: @"bs"];
+	assertThat([self->mathModel generateEquationString], is(@""));
 }
 
 @end
