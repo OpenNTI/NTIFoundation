@@ -18,9 +18,4 @@
 	}
 	return self;
 }
-
--(NSString *)latexValue
-{
-	return [super latexValue];
-}
 @end

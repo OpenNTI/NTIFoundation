@@ -539,22 +539,6 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 	[self->mathExpressionQueue removeAll];
 }
 
-//Return new current
--(NTIMathSymbol *)switchTotreeInplaceOfPlaceholder: (NTIMathSymbol *)aMathSymbol;
-{
-	if ([aMathSymbol respondsToSelector:@selector(isPlaceholder)] && self.rootMathSymbol == aMathSymbol && self->mathExpressionQueue.count > 0) {
-		//We will pop the last tree off the stackTree
-		self.rootMathSymbol = [self->mathExpressionQueue pop];
-		//Now we are ready to switch to our substitute symbol.
-		NTIMathSymbol* newCurrent = aMathSymbol.substituteSymbol;
-		if (newCurrent) {
-			[(NTIMathPlaceholderSymbol *)newCurrent setInPlaceOfObject: nil];
-		}
-		return newCurrent;
-	}
-	return aMathSymbol;
-}
-
 -(void)addChildrenOfNode: (NTIMathSymbol *)mathSymbol to: (NTIMathSymbol *)parentSymbol
 {
 	NSArray* children;
@@ -734,6 +718,86 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 -(void)logCurrentAndRootSymbol
 {
 	NSLog(@"root's string: %@,\ncurrentSymbol's string: %@", [self.rootMathSymbol toString], [self->currentMathSymbol toString]);
+}
+
+
+#pragma mark -- Navigation through an equation. These functions should be used in the graphic math keyboard
+
+-(NTIMathSymbol *)nextsymbolAfterMathSymbol: (NTIMathSymbol *)mathSymbol
+{
+	if (!mathSymbol) {
+		return nil;
+	}
+	NTIMathSymbol* parent = mathSymbol.parentMathSymbol;
+	NSArray* children = parent.children;
+	NSUInteger indexOfCurrentNode = [children indexOfObject: mathSymbol];
+	
+	//We would to start by looking at the next child
+	for (NSUInteger i = indexOfCurrentNode + 1; i<children.count; i++) {
+		return [self findFirstLeafNodeFrom: [children objectAtIndex: i]]; 
+	}
+	//mathSymbol = parent;
+	return [self nextsymbolAfterMathSymbol: parent];
+	
+}
+
+-(void)nextKeyPressed
+{
+	NTIMathSymbol* newCurrentSymbol = [self nextsymbolAfterMathSymbol: self->currentMathSymbol];
+	if (newCurrentSymbol) {
+		self->currentMathSymbol = newCurrentSymbol;
+	}
+	else {
+		//We know we are the last node of the current tree, connect trees now
+		NTIMathSymbol* newRootSymbol = [self mergeLastTreeOnStackWith: self.rootMathSymbol];
+		//		if (newRootSymbol != self.rootMathSymbol) {
+		//			self.rootMathSymbol = newRootSymbol;
+		//			[self nextKeyPressed];	//After connect the tree, just to the next symbol
+		//		}
+		self.rootMathSymbol = newRootSymbol;
+	}
+}
+
+//NOTE: At this point, we only care about leaf nodes
+-(NTIMathSymbol *)mathSymbolPriorTo: (NTIMathSymbol *)mathSymbol
+{
+	if (!mathSymbol) {
+		return nil;
+	}
+	NSUInteger indexOfCurrentNode = 0;
+	NSArray* children;
+	NTIMathSymbol* parent = mathSymbol.parentMathSymbol;
+	if (parent) {
+		children = parent.children;
+		if (children) {
+			indexOfCurrentNode = [children indexOfObject: mathSymbol];
+		}
+		int indexOfPreviousNode = indexOfCurrentNode - 1;
+		if (indexOfPreviousNode >= 0 && indexOfCurrentNode != NSNotFound) {
+			return [self findLastLeafNodeFrom: [children objectAtIndex: indexOfPreviousNode]];
+		}
+	}
+	
+	//mathSymbol = parent;
+	return [self mathSymbolPriorTo: parent];
+	
+}
+
+-(void)backPressed
+{
+	NTIMathSymbol* newCurrentSymbol = [self mathSymbolPriorTo: self->currentMathSymbol];
+	if (newCurrentSymbol) {
+		self->currentMathSymbol = newCurrentSymbol;
+	}
+	else {
+		//We know we are the last node of the current tree, connect trees now
+		NTIMathSymbol* newRootSymbol = [self mergeLastTreeOnStackWith: self.rootMathSymbol];
+		//		if (newRootSymbol != self.rootMathSymbol) {
+		//			self.rootMathSymbol = newRootSymbol;
+		//			[self backPressed];	//After connect the tree, just to the prev symbol
+		//		}
+		self.rootMathSymbol = newRootSymbol;
+	}
 }
 
 @end

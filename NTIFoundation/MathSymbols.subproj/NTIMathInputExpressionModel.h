@@ -31,12 +31,14 @@
 -(void)addMathExpression: (NTIMathSymbol *)newSymbol senderType: (NSString *)senderType;
 //Selection
 -(void)setCurrentSymbolTo: (NTIMathSymbol *)mathSymbol;
+-(NTIMathSymbol *)currentMathSymbol;
 //Deletion
 -(void)deleteMathExpression: (NTIMathSymbol *)aMathSymbol;
 -(NSString *)generateEquationString;
 -(NSString *)tolaTex;
-//Selection and navigation
--(NTIMathSymbol *)currentMathSymbol;
+//Navigation
+-(void)nextKeyPressed;
+-(void)backPressed;
 
 //Helpers
 -(void)clearEquation;
