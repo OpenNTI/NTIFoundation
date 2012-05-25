@@ -43,10 +43,10 @@
 		[self->mathModel deleteMathExpression: nil];
 	}
 	
-	if( stringValue.length == 1) {
-		[self->mathModel addMathSymbolForString: stringValue 
+	
+	[self->mathModel addMathSymbolForString: stringValue 
 								 fromSenderType: kNTIMathGraphicKeyboardInput];
-	}
+	
 }
 
 // -------------checker methods---------------
