@@ -107,6 +107,9 @@
 -(void)push:(NTIMathSymbol *)aMathSymbol
 {
 	//TODO: eventually we will get to a point where we test if a math symbol is an expression or not.
+	if (!aMathSymbol) {
+		return;
+	}
 	[_mathStack addObject: aMathSymbol];
 	NSLog(@"Pushed onto Stack: %@", aMathSymbol.toString);
 }
@@ -607,55 +610,149 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 	}
 }
 
--(NTIMathSymbol *)removeMathExpression: (NTIMathSymbol *)mathNode
+-(NTIMathSymbol *)deletePlaceHolderLink: (NTIMathPlaceholderSymbol *)placeholder forNode:(NTIMathSymbol *)aNode with: (NTIMathSymbol *)replacementNode
 {
+	if (![placeholder respondsToSelector:@selector(isPlaceholder)]) {
+		return nil;
+	}
+	if ([aNode respondsToSelector:@selector(isBinaryOperator)] && aNode == [placeholder inPlaceOfObject]) {
+		//We are replacing the binary node with its left/right node. 
+		NTIMathBinaryExpression* bNode = (NTIMathBinaryExpression *)aNode;
+		OBASSERT(bNode.leftMathNode == replacementNode);
+		if (bNode.rightMathNode == replacementNode && ![replacementNode respondsToSelector:@selector(isPlaceholder)]) {
+			bNode.rightMathNode.parentMathSymbol = nil;
+			[placeholder setInPlaceOfObject: bNode.rightMathNode];
+			[bNode.rightMathNode setSubstituteSymbol: bNode.substituteSymbol];
+			return bNode.rightMathNode;
+		}
+		if (bNode.leftMathNode == replacementNode && ![replacementNode respondsToSelector:@selector(isPlaceholder)]) {
+			bNode.leftMathNode.parentMathSymbol = nil;
+			[placeholder setInPlaceOfObject: bNode.leftMathNode];
+			[bNode.leftMathNode setSubstituteSymbol: bNode.substituteSymbol];
+			return bNode.leftMathNode;
+		}
+	}
+	// here, we are disconnecting/deleting the whole tree from the thing tree structure. 
+	// FIXME: Need better documentation!
+	if ([placeholder inPlaceOfObject] == aNode) {
+		[placeholder setInPlaceOfObject:nil];
+		self.rootMathSymbol = [self->mathExpressionQueue pop];
+		return placeholder;
+	}
+	return nil;
+}
+
+-(NTIMathSymbol *)replaceNode: (NTIMathSymbol *)node withNode: (NTIMathSymbol *)replacementNode
+{
+	if (!replacementNode) {
+		//create one
+		replacementNode = [[NTIMathPlaceholderSymbol alloc] init];
+	}
+	NTIMathSymbol* parent = node.parentMathSymbolFollowingLinks;
+	if (!parent) {
+		replacementNode.parentMathSymbol = nil;
+		return replacementNode;
+	}
+	else {
+		NTIMathSymbol* result = [parent deleteSymbol: node];
+		if (result) {
+			return [parent addSymbol: replacementNode];
+		}
+		else {
+			//NOTE: if our parent could not delete us, it will be because we are linked to our parent through a placeholder. In that case, deletion simply implies to remove the placeholder link to us. 
+			for (NTIMathSymbol* child in parent.children) {
+				NTIMathSymbol* temp = [self deletePlaceHolderLink:(NTIMathPlaceholderSymbol *)child forNode:node with:replacementNode];
+				if (temp) {
+					return temp;
+				}
+			}
+		}
+	}
+	//???
+	return replacementNode;
+}
+
+-(NTIMathSymbol *)deleteFirstChild: (NTIMathSymbol *)node ofbinaryExpression: (NTIMathBinaryExpression *)parent
+{
+	if ([node respondsToSelector:@selector(isPlaceholder)]) {
+		// since it's a placeholder and it's the 1st child of a binary symbol, we should delete the grand parent, and add its left child to our parent.
+		NTIMathExpressionReverseTraversal* tree = [[NTIMathExpressionReverseTraversal alloc] initWithRoot: self.rootMathSymbol selectedNode: node];
+		NTIMathSymbol* previousNode = [tree previousNodeTo: node];
+		if (  !previousNode 
+			|| [previousNode respondsToSelector:@selector(isUnaryOperator)]
+			|| [parent isKindOfClass:[NTIMathFractionBinaryExpression class]]) {
+			//replace our parent with the right child node
+			return [self replaceNode: parent withNode: parent.rightMathNode];
+		}
+		else {
+			//Hard case, we need to delete the grand parent and add the left to be the parent.
+			if ([previousNode respondsToSelector:@selector(isBinaryOperator)]) {
+				// we know we have two binary operators.
+				NTIMathBinaryExpression* bpreviousNode = (NTIMathBinaryExpression *)previousNode;
+				//see if we should update the tree stack after the swapping
+				//BOOL result = doesTreeContainNode( self.rootMathSymbol, parent);
+				// if the parent node is not part of the current tree, then we should pop the last tree. 
+				if (node.parentMathSymbol != node.parentMathSymbolFollowingLinks){
+					self.rootMathSymbol = [self mergeLastTreeOnStackWith: self.rootMathSymbol];
+				}
+				return [parent swapNode: node withNewNode: bpreviousNode.leftMathNode];
+			}
+		}
+		//In case where we don't have a grand parent, then the right child of parent becomes the parent  
+	}
+	
+	//???
+	return parent;
+}
+
+-(NTIMathSymbol *)deleteLastChild: (NTIMathSymbol *)mathsymbol ofbinaryExpression: (NTIMathBinaryExpression *)parent
+{
+	if (parent.parentMathSymbolFollowingLinks) {
+		//NTIMathSymbol* grandpa = parent.parentMathSymbolFollowingLinks;
+		return [self replaceNode:parent withNode: parent.leftMathNode];
+	}
+	else {
+		parent.leftMathNode.parentMathSymbol = nil;
+		//we ought to become the parent
+		return parent.leftMathNode;
+	}
+}
+
+-(NTIMathSymbol *)handleDeletionOfExpression: (NTIMathSymbol *)mathNode
+{
+	//we have a literal
 	if ([mathNode respondsToSelector:@selector(isLiteral)]) {
 		NTIMathSymbol* newCurrentNode = [(NTIMathAlphaNumericSymbol *)mathNode deleteLastLiteral];
 		if (newCurrentNode) {
 			return newCurrentNode;
 		}
 	}
-	NTIMathExpressionReverseTraversal* tree = [[NTIMathExpressionReverseTraversal alloc] initWithRoot: self.rootMathSymbol selectedNode: mathNode];
-	//This will be the new selected symbol
-	NTIMathSymbol* previousNode = [tree previousNodeTo: mathNode];
-	if (!previousNode) {
-		//NOTE: we don't have a previous node. So we will check if there is any parent tree, if there is, we will merge the current tree and find the next thing to delete. This step is important because it involves popping off trees.
-		self.rootMathSymbol = [self mergeLastTreeOnStackWith: self.rootMathSymbol];
-		tree = [[NTIMathExpressionReverseTraversal alloc] initWithRoot: self.rootMathSymbol selectedNode: mathNode];
-		previousNode = [tree previousNodeTo: mathNode];
-	}
-	//Now we delete the selected symbol
-	if (mathNode.parentMathSymbol) {
-		NTIMathSymbol* parent = mathNode.parentMathSymbol;
-		NTIMathSymbol* newCurrent = [parent deleteSymbol: mathNode];
-		if (newCurrent) {
-			[self addChildrenOfNode: mathNode to: mathNode.parentMathSymbol];
-			return newCurrent;
+	if ([mathNode respondsToSelector:@selector(isPlaceholder)]) {
+		//we have a placeholder. Deleting a placeholder may imply deleting the binary expression it is associated with.
+		NTIMathSymbol* parent = mathNode.parentMathSymbolFollowingLinks;
+		if (!parent) {
+			return mathNode;
 		}
 		else {
-			//if our parent cannot delete us, then, that means we are a placeholder, so we will add the parent to be deleted
-			return [self removeMathExpression: parent];
-		}
-		//if there is no next symbol, then return the first leaf node
-		if (!previousNode) {
-			return [self findFirstLeafNodeFrom: self.rootMathSymbol];
+			if ([parent respondsToSelector:@selector(isUnaryOperator)]) {
+				return [self replaceNode: parent withNode: mathNode];
+			}
+			else {
+				// we assume it's a binary expression
+				if (parent.firstChild == mathNode) {
+					return [self deleteFirstChild: mathNode ofbinaryExpression: (NTIMathBinaryExpression *)parent];
+				}
+				else {
+					//we assume this is the last child node
+					return [self deleteLastChild: mathNode ofbinaryExpression: (NTIMathBinaryExpression *)parent];
+				}
+			}
 		}
 	}
 	else {
-		OBASSERT(mathNode == self.rootMathSymbol);
-		NTIMathSymbol* oldroot = self.rootMathSymbol;
-		[self addChildrenOfNode: mathNode to: mathNode.parentMathSymbol];
-		//Normally after deleting the root and adding its children, we expect to have a different root 
-		if (self.currentMathSymbol == self.rootMathSymbol && self.rootMathSymbol == oldroot && ![self.rootMathSymbol respondsToSelector:@selector(isPlaceholder)]) {
-			self.rootMathSymbol = [[NTIMathPlaceholderSymbol alloc] init];
-			return self.rootMathSymbol;
-		}
-																					
-		if (!previousNode) {
-			return self.rootMathSymbol;
-		}
+		//we are deleting a non-leaf node( binary or unary expression or a literal with one symbol
+		return [self replaceNode: mathNode withNode: nil];
 	}
-	return previousNode;
 }
 
 -(void)deleteMathExpression: (NTIMathSymbol *)aMathSymbol
@@ -664,7 +761,7 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 		//if nothing is selected, we assume the user wants to delete the current symbol
 		aMathSymbol = self.currentMathSymbol;
 	}
-	self.currentMathSymbol = [self removeMathExpression: aMathSymbol];
+	self.currentMathSymbol = [self handleDeletionOfExpression: aMathSymbol];
 }
 
 -(NTIMathSymbol *)findLastLeafNodeFrom: (NTIMathSymbol *)mathSymbol
@@ -754,8 +851,6 @@ static NSArray* gatherNodes(NTIMathSymbol* root, NSMutableArray* result)
 	[result addObject: root];
 	gatherNodes(root.firstChild, result);
 	gatherNodes([root.childrenFollowingLinks lastObjectOrNil], result);
-	
-	
 	return result;
 }
 

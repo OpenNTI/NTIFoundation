@@ -133,9 +133,4 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 {
 	return nil;
 }
-
--(void)setSubstituteSymbol:(NTIMathSymbol *)theSubstituteSymbol
-{
-	substituteSymbol = theSubstituteSymbol;
-}
 @end
