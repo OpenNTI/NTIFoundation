@@ -138,6 +138,10 @@
 		return self.leftMathNode;
 	}
 	else {
+		if ([self.rightMathNode respondsToSelector:@selector(isBinaryOperator)]
+			|| [self.rightMathNode respondsToSelector:@selector(isUnaryOperator)]) {
+			return [self findLastLeafNodeFrom: self.rightMathNode];
+		}
 		return self.rightMathNode;
 	}
 	//return nil;
@@ -219,6 +223,12 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 {
 	if ([mathSymbol respondsToSelector:@selector(isPlaceholder)] ||
 		[mathSymbol respondsToSelector:@selector(isLiteral) ]) {
+//		if ([mathSymbol respondsToSelector:@selector(inPlaceOfObject)]) {
+//			NTIMathSymbol* representing = [mathSymbol performSelector:@selector(inPlaceOfObject)];
+//			if (representing) {
+//				return [self findLastLeafNodeFrom:representing];
+//			}
+//		}
 		return mathSymbol;
 	}
 	else{

@@ -682,13 +682,13 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 		NTIMathSymbol* previousNode = [tree previousNodeTo: node];
 		if (  !previousNode 
 			|| [previousNode respondsToSelector:@selector(isUnaryOperator)]
-			|| [parent isKindOfClass:[NTIMathFractionBinaryExpression class]]) {
+			|| [parent isKindOfClass:[NTIMathDivisionBinaryExpression class]]) {
 			//replace our parent with the right child node
 			return [self replaceNode: parent withNode: parent.rightMathNode];
 		}
 		else {
-			//Special casing division.
-			if ( [parent isKindOfClass:[NTIMathFractionBinaryExpression class]]
+			//Special casing division and fraction.
+			if ( [parent isKindOfClass:[NTIMathDivisionBinaryExpression class]]
 				|| [[parent parentMathSymbolFollowingLinks] isKindOfClass: [NTIMathFractionBinaryExpression class]] ) {
 				NTIMathSymbol* grandpa = [parent parentMathSymbolFollowingLinks];
 				if (grandpa && [grandpa respondsToSelector:@selector(swapNode:withNewNode:)]) {
