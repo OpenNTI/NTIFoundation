@@ -861,7 +861,7 @@
 	[self pushKey: @"3"];
 	[self pushKey: @"->"];
 	[self pushKey: @"->"];
-	assertThat([[self->mathModel currentMathSymbol] toString], is(@""));
+	assertThat([[self->mathModel currentMathSymbol] toString], is(@"2 3/"));
 }
 
 // double arrow bug- needs to be fixed
@@ -1125,7 +1125,7 @@
 	[self pushKey: @"<-"];
 	[self pushKey: @"*"];
 	[self pushKey: @"6"];
-	assertThat([self->mathModel generateEquationString], is(@"(4*6)^5"));
+	assertThat([self->mathModel generateEquationString], is(@"4^(6*)5"));
 }
 
 // ----------single entity deletion-------------
@@ -1175,7 +1175,7 @@
 	[self pushKey: @"("];
 	[self pushKey: @"bs"];
 	[self pushKey: @"bs"];
-	assertThat([self->mathModel generateEquationString], is(@""));
+	assertThat([self->mathModel generateEquationString], is(@"()"));
 }
 
 -(void)testSingleEntityDeletionSqrt
@@ -1183,7 +1183,7 @@
 	[self pushKey: @"√"];
 	[self pushKey: @"bs"];
 	[self pushKey: @"bs"];
-	assertThat([self->mathModel generateEquationString], is(@""));
+	assertThat([self->mathModel generateEquationString], is(@"√"));
 }
 
 -(void)testSingleEntityDeletionNegate
