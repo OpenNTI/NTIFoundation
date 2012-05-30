@@ -672,6 +672,8 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 	return replacementNode;
 }
 
+
+
 -(NTIMathSymbol *)deleteFirstChild: (NTIMathSymbol *)node ofbinaryExpression: (NTIMathBinaryExpression *)parent
 {
 	if ([node respondsToSelector:@selector(isPlaceholder)]) {
@@ -685,6 +687,14 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 			return [self replaceNode: parent withNode: parent.rightMathNode];
 		}
 		else {
+			//Special casing division.
+			if ( [parent isKindOfClass:[NTIMathFractionBinaryExpression class]]
+				|| [[parent parentMathSymbolFollowingLinks] isKindOfClass: [NTIMathFractionBinaryExpression class]] ) {
+				NTIMathSymbol* grandpa = [parent parentMathSymbolFollowingLinks];
+				if (grandpa && [grandpa respondsToSelector:@selector(swapNode:withNewNode:)]) {
+					return [grandpa performSelector: @selector(swapNode:withNewNode:) withObject: parent withObject: parent.rightMathNode];
+				}
+			}
 			//Hard case, we need to delete the grand parent and add the left to be the parent.
 			if ([previousNode respondsToSelector:@selector(isBinaryOperator)]) {
 				// we know we have two binary operators.
@@ -695,6 +705,8 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 				if (node.parentMathSymbol != node.parentMathSymbolFollowingLinks){
 					self.rootMathSymbol = [self mergeLastTreeOnStackWith: self.rootMathSymbol];
 				}
+				//FIXME: does this generalizes? should we always want to make the new parent the root?
+				parent.parentMathSymbol = nil;
 				return [parent swapNode: node withNewNode: bpreviousNode.leftMathNode];
 			}
 		}
