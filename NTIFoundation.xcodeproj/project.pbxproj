@@ -180,6 +180,10 @@
 		4C696D0A1516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C696D091516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m */; };
 		4C8B84251541224D005BBDF2 /* NTIMathSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F4831535F1390005FECD /* NTIMathSymbol.m */; };
 		4C8CFD1D1529F712003B387D /* NTIKeyboardAdjustmentListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8CFD1C1529F712003B387D /* NTIKeyboardAdjustmentListener.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C8EAFC81578065300BF8FF7 /* NSURL-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8EAFC61578065300BF8FF7 /* NSURL-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4C8EAFC91578065300BF8FF7 /* NSURL-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8EAFC71578065300BF8FF7 /* NSURL-NTIExtensions.m */; };
+		4C8EAFE21578067500BF8FF7 /* NSURL-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8EAFC71578065300BF8FF7 /* NSURL-NTIExtensions.m */; };
+		4C8EAFE51578103F00BF8FF7 /* NSURL-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8EAFE41578103F00BF8FF7 /* NSURL-NTIExtensionsTest.m */; };
 		4C99F86A1562F9E600A26C91 /* NTIMathSymbolUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CC6847E15614D99003823E7 /* NTIMathSymbolUtils.m */; };
 		4CA4F4841535F1390005FECD /* NTIMathSymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = 4CA4F4821535F1390005FECD /* NTIMathSymbol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4CA4F4851535F1390005FECD /* NTIMathSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4F4831535F1390005FECD /* NTIMathSymbol.m */; };
@@ -741,6 +745,10 @@
 		4C696D081516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIGlobalInspectorPaneAndSliceAppTest.h; sourceTree = "<group>"; };
 		4C696D091516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIGlobalInspectorPaneAndSliceAppTest.m; sourceTree = "<group>"; };
 		4C8CFD1C1529F712003B387D /* NTIKeyboardAdjustmentListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIKeyboardAdjustmentListener.h; sourceTree = "<group>"; };
+		4C8EAFC61578065300BF8FF7 /* NSURL-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL-NTIExtensions.h"; sourceTree = "<group>"; };
+		4C8EAFC71578065300BF8FF7 /* NSURL-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL-NTIExtensions.m"; sourceTree = "<group>"; };
+		4C8EAFE31578103F00BF8FF7 /* NSURL-NTIExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL-NTIExtensionsTest.h"; sourceTree = "<group>"; };
+		4C8EAFE41578103F00BF8FF7 /* NSURL-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL-NTIExtensionsTest.m"; sourceTree = "<group>"; };
 		4CA4F4821535F1390005FECD /* NTIMathSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathSymbol.h; sourceTree = "<group>"; };
 		4CA4F4831535F1390005FECD /* NTIMathSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathSymbol.m; sourceTree = "<group>"; };
 		4CA4F4861535F3460005FECD /* NTIMathExpressionSymbolProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathExpressionSymbolProtocol.h; sourceTree = "<group>"; };
@@ -1060,6 +1068,8 @@
 			children = (
 				40F39C7F14D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.h */,
 				40F39C8014D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m */,
+				4C8EAFE31578103F00BF8FF7 /* NSURL-NTIExtensionsTest.h */,
+				4C8EAFE41578103F00BF8FF7 /* NSURL-NTIExtensionsTest.m */,
 				40F39C8514D852FE0089DCF6 /* NSString-NTIExtensionsTest.h */,
 				40F39C8614D852FE0089DCF6 /* NSString-NTIExtensionsTest.m */,
 				403C290514577A260012CBAB /* NSAttributedString-NTIExtensionsTest.h */,
@@ -1508,6 +1518,8 @@
 				72FC5D7C13D10285006CBF28 /* NSMutableArray-NTIExtensions.m */,
 				72579DF313D8B24C005437A7 /* NSString-NTIExtensions.h */,
 				72579DF413D8B24C005437A7 /* NSString-NTIExtensions.m */,
+				4C8EAFC61578065300BF8FF7 /* NSURL-NTIExtensions.h */,
+				4C8EAFC71578065300BF8FF7 /* NSURL-NTIExtensions.m */,
 				403C28E414576E160012CBAB /* NSAttributedString-NTIExtensions.h */,
 				403C28E514576E160012CBAB /* NSAttributedString-NTIExtensions.m */,
 				4029275414991DC400E4720A /* NSURL-NTIFileSystemExtensions.h */,
@@ -1615,6 +1627,7 @@
 				4CC6847F15614D99003823E7 /* NTIMathSymbolUtils.h in Headers */,
 				4C2ECDD51549D0A400C69E3A /* NTIMathInputExpressionModel.h in Headers */,
 				40A745C014DB32E90093F0D4 /* NTIBadgeCountView.h in Headers */,
+				4C8EAFC81578065300BF8FF7 /* NSURL-NTIExtensions.h in Headers */,
 				4066C81D14E1C89F006B56D3 /* WebSocketResponseBuffer.h in Headers */,
 				4066C83A14E1C95F006B56D3 /* WebSocketData.h in Headers */,
 				40A4147F1505748A0017242E /* NSDate-NTIExtensions.h in Headers */,
@@ -2173,6 +2186,7 @@
 				4CC6848015614D99003823E7 /* NTIMathSymbolUtils.m in Sources */,
 				404A67A1156D906900A81B6A /* UIDevice-NTIExtensions.m in Sources */,
 				40F72DA9156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */,
+				4C8EAFC91578065300BF8FF7 /* NSURL-NTIExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2243,6 +2257,8 @@
 				404A67A2156D906900A81B6A /* UIDevice-NTIExtensions.m in Sources */,
 				5158CA78156AE5240054CA85 /* NTIMathModelTests.m in Sources */,
 				40F72DAA156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */,
+				4C8EAFE21578067500BF8FF7 /* NSURL-NTIExtensions.m in Sources */,
+				4C8EAFE51578103F00BF8FF7 /* NSURL-NTIExtensionsTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

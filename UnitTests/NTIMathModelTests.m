@@ -849,7 +849,7 @@
 {
 	self->baseModel = [NTIMathEquationBuilder modelFromString: @"4"];
 	self->mathModel = [NTIMathEquationBuilder modelFromString: @"4+5"];
-	[self->mathModel removeMathExpression: [self->baseModel rootMathSymbol]];
+	[self->mathModel deleteMathExpression: [self->baseModel rootMathSymbol]];
 	assertThat([[self->mathModel currentMathSymbol] toString], isNot(@"4"));
 }
 

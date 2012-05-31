@@ -11,6 +11,7 @@
 
 #import "UIDevice-NTIExtensions.h"
 #import "NSDate-NTIExtensions.h"
+#import "NSURL-NTIExtensions.h"
 #import "NSData-NTIJSON.h"
 #import "NSString-NTIJSON.h"
 #import "NSObject-NTIJSON.h"
