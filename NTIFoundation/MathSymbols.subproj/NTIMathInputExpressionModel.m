@@ -651,6 +651,8 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 	NTIMathSymbol* parent = node.parentMathSymbolFollowingLinks;
 	if (!parent) {
 		replacementNode.parentMathSymbol = nil;
+		//set the new root
+		self.rootMathSymbol = replacementNode;
 		return replacementNode;
 	}
 	else {

@@ -80,7 +80,6 @@
 	//Stack it on the left
 	if ([self.childMathNode respondsToSelector:@selector(isPlaceholder)])	{
 		self.childMathNode = newSymbol;
-		self.childMathNode.parentMathSymbol = self;
 		return self.childMathNode;
 	}
 	return nil;
