@@ -1194,4 +1194,12 @@
 	assertThat([self->mathModel generateEquationString], is(@""));
 }
 
+-(void)testNonRemovingParentheses
+{
+	[self pushKey: @"("];
+	[self pushKey: @"bs"];
+	[self pushKey: @"bs"];
+	assertThat([self->mathModel generateEquationString], is(@""));
+}
+
 @end
