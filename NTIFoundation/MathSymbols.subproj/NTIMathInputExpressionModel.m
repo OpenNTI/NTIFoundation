@@ -91,6 +91,7 @@
 -(NSUInteger)count;
 -(NSArray *)stack;
 -(void)removeAll;
+-(BOOL)removeMathExpression: (NTIMathSymbol *)root;
 @end
 
 @implementation NTIMathExpressionStack
@@ -125,6 +126,15 @@
 	return lastObj;
 }
 
+-(BOOL)removeMathExpression: (NTIMathSymbol *)root
+{
+	if ([_mathStack containsObject: root]) {
+		[_mathStack removeObject: root];
+		return YES;
+	}
+	return NO;
+}
+
 -(NSUInteger)count
 {
 	return _mathStack.count;
@@ -155,6 +165,7 @@
 -(NTIMathSymbol *)newMathSymbolTreeWithRoot: (NTIMathSymbol *)newRootSymbol 
 								 firstChild: (NTIMathSymbol *)childSymbol;
 @property (nonatomic, strong) NTIMathSymbol* currentMathSymbol;
+-(void)connectSubtreesUnderneathTree: (NTIMathSymbol *)mathsymbol;
 @end
 
 @class NTIMathExpressionReverseTraversal;
@@ -202,9 +213,11 @@
 		return;
 	}
 	
-	if( [[self->mathExpressionQueue lastMathExpression] isEqual: theRootMathSymbol] ){
-		theRootMathSymbol = [self mergeLastTreeOnStackWith: self->rootMathSymbol];
-	}
+	// FIXME: we get into a problem, when the new rootMathSymbol is part of the stack but it's not the last expression on queue. Normally, we shouldn't check the last one only, we should try to connect every root beneath the the new root. 
+//	if( [[self->mathExpressionQueue lastMathExpression] isEqual: theRootMathSymbol] ){
+//		theRootMathSymbol = [self mergeLastTreeOnStackWith: self->rootMathSymbol];
+//	}
+	[self connectSubtreesUnderneathTree: theRootMathSymbol];
 	self->rootMathSymbol = theRootMathSymbol;
 	self->rootMathSymbol.parentMathSymbol = nil;
 }
@@ -287,18 +300,17 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 	self.currentMathSymbol = [self newMathSymbolTreeWithRoot:mathSymbol firstChild: nil]; 
 }
 
+
 -(void)addMathExpression: (NTIMathSymbol *)newSymbol senderType: (NSString *)senderType
 {
 	if ([senderType isEqualToString: kNTIMathGraphicKeyboardInput]) {
 		//FIXME: #HACK: we want to create a new tree under certain symbol to match user expectations. Needs to be done a better way.
-		if (   [self isLeafMathNode: self.currentMathSymbol] 
-			&& ([self.currentMathSymbol.parentMathSymbol isKindOfClass:[NTIMathSquareRootUnaryExpression class]] 
-				|| [self.currentMathSymbol.parentMathSymbol isKindOfClass: [NTIMathFractionBinaryExpression class]])) {
+		if ( ([self.currentMathSymbol.parentMathSymbol isKindOfClass:[NTIMathSquareRootUnaryExpression class]] 
+				|| [self.currentMathSymbol.parentMathSymbol isKindOfClass: [NTIMathFractionBinaryExpression class]]) ){
 			[self createTreeWithRoot: self.currentMathSymbol];
 		}
 		//NOTE: As the user navigates through the equation, the may want to insert things in between, we need to be able to distinguish inserting in the equation and adding to the end of the rootsymbol. The easy way if comparing the currentSymbol with the last leaf node of the rootSymbol, if they differ, we are inserting, else we are are adding to the end of the equation
-		if (   self.currentMathSymbol != [self findLastLeafNodeFrom: self.rootMathSymbol] 
-			&& [self isLeafMathNode: self.currentMathSymbol]) {
+		if (   self.currentMathSymbol != [self findLastLeafNodeFrom: self.rootMathSymbol] ) {
 			//Before we create a new tree at the new current symbol, we will close the tree that we were working on.
 			[self createTreeWithRoot: self.currentMathSymbol];
 		}
@@ -307,8 +319,17 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 	//If our parent is a parenthesis we create a new tree, regardless of the sender. This ensures that we stay in the parenthesis.
 	if (   [self isLeafMathNode: self.currentMathSymbol] 
 		&& [currentMathSymbol.parentMathSymbol isKindOfClass: [NTIMathParenthesisSymbol class]]) {
-		//In case of a paranthesis we don't want to close the last tree until when we come across a closing a paranthesis. 
 		self.currentMathSymbol = [self newMathSymbolTreeWithRoot: self.currentMathSymbol firstChild: nil];
+	}
+	
+	if ([self isLeafMathNode: self.currentMathSymbol] 
+		&& [self.currentMathSymbol.parentMathSymbolFollowingLinks isKindOfClass:[NTIMathSquareRootUnaryExpression class]]
+		&& [newSymbol isKindOfClass: [NTIMathParenthesisSymbol class]]
+		&& [senderType isEqualToString: kNTIMathTextfieldInput]) {
+		//FIXME: #HACK: for input coming from a textfield, they use paranths to show the beginning of a sqrt and end the of a sqrt. That's why we tree these paranths a little more different from other types. Although it works, we need to have a general way of handling paranths inside of sqrt, the same regardless of where we came from. 
+		[self.currentMathSymbol.parentMathSymbolFollowingLinks performSelector:@selector(swapNode:withNewNode:) withObject: self.currentMathSymbol withObject: newSymbol];
+		self.currentMathSymbol = [(NTIMathUnaryExpression *)newSymbol childMathNode];
+		return;
 	}
 		
 	if ( isImplicitSymbol(self.currentMathSymbol, newSymbol, senderType) ) {
@@ -776,6 +797,32 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 		aMathSymbol = self.currentMathSymbol;
 	}
 	self.currentMathSymbol = [self handleDeletionOfExpression: aMathSymbol];
+}
+
+-(void)connectSubtreesUnderneathTree: (NTIMathSymbol *)mathsymbol
+{
+	//NOTE: We want to make sure that if things are part of the current tree, are not on the stack at the same time.
+	if ([[self->mathExpressionQueue stack] containsObject: mathsymbol]) {
+		[self->mathExpressionQueue removeMathExpression: mathsymbol];
+	}
+	
+	if ( [mathsymbol respondsToSelector:@selector(isPlaceholder)]
+		&& [(NTIMathPlaceholderSymbol *)mathsymbol inPlaceOfObject]){
+		NTIMathSymbol* representedObj = [(NTIMathPlaceholderSymbol *)mathsymbol inPlaceOfObject];
+		NTIMathSymbol* parent = mathsymbol.parentMathSymbol;
+		if (parent && [parent respondsToSelector:@selector(swapNode:withNewNode:)]) {
+			[parent performSelector: @selector(swapNode:withNewNode:) withObject: mathsymbol withObject: representedObj];
+			//Remove it from stack tree
+			[self->mathExpressionQueue removeMathExpression: representedObj];
+			[self connectSubtreesUnderneathTree: representedObj];
+			return;
+		}
+	}
+	else {
+		for (NTIMathSymbol* child in mathsymbol.children) {
+			[self connectSubtreesUnderneathTree: child];
+		}
+	}
 }
 
 -(NTIMathSymbol *)findLastLeafNodeFrom: (NTIMathSymbol *)mathSymbol

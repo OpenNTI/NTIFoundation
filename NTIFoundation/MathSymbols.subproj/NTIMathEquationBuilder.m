@@ -44,7 +44,7 @@
 	}
 	
 	if( ![[self.mathModel generateEquationString] isEqualToString: stringValue] ){
-		NSLog(@"WARN Unable to build consistent model for %@.  Falling back to literal", stringValue);
+		NSLog(@"WARN Unable to build consistent model for %@. We think it's: %@  Falling back to literal", stringValue, [self.mathModel generateEquationString]);
 		[self clearModelEquation];
 		NTIMathAlphaNumericSymbol* literal = [[NTIMathAlphaNumericSymbol alloc] initWithValue: stringValue];
 		[self.mathModel addMathExpression: literal senderType: kNTIMathTextfieldInput];

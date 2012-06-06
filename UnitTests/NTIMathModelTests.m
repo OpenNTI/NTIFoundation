@@ -197,6 +197,16 @@
 	mathmodel_assertThatOutputIsInput(@"3÷4");
 }
 
+-(void)testSqrtWithParanthesesToString
+{
+	mathmodel_assertThatOutputIsInput(@"√(5-8)+2");
+}
+
+-(void)testSqrtWithNestedParanthesesToString
+{
+	mathmodel_assertThatOutputIsInput(@"4-√((2-4)*2)/45");
+}
+
 // -----------------latex tests-----------------------
 
 // tests if we can get the latex value from the model
@@ -1175,7 +1185,7 @@
 	[self pushKey: @"("];
 	[self pushKey: @"bs"];
 	[self pushKey: @"bs"];
-	assertThat([self->mathModel generateEquationString], is(@"()"));
+	assertThat([self->mathModel generateEquationString], is(@""));
 }
 
 -(void)testSingleEntityDeletionSqrt
@@ -1183,7 +1193,7 @@
 	[self pushKey: @"√"];
 	[self pushKey: @"bs"];
 	[self pushKey: @"bs"];
-	assertThat([self->mathModel generateEquationString], is(@"√"));
+	assertThat([self->mathModel generateEquationString], is(@""));
 }
 
 -(void)testSingleEntityDeletionNegate
