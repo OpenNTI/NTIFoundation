@@ -203,7 +203,7 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 {
 	self = [super initWithMathOperatorString: @"√"];
 	if (self) {
-		self->precedenceLevel = 60;
+		self->precedenceLevel = 70;
 	}
 	return self;
 }

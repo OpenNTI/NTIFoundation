@@ -306,7 +306,7 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 	if ([senderType isEqualToString: kNTIMathGraphicKeyboardInput]) {
 		//FIXME: #HACK: we want to create a new tree under certain symbol to match user expectations. Needs to be done a better way.
 		if ( ([self.currentMathSymbol.parentMathSymbol isKindOfClass:[NTIMathSquareRootUnaryExpression class]] 
-				|| [self.currentMathSymbol.parentMathSymbol isKindOfClass: [NTIMathFractionBinaryExpression class]]) ){
+				|| [self.currentMathSymbol.parentMathSymbol isKindOfClass: [NTIMathDivisionBinaryExpression class]]) ){
 			[self createTreeWithRoot: self.currentMathSymbol];
 		}
 		//NOTE: As the user navigates through the equation, the may want to insert things in between, we need to be able to distinguish inserting in the equation and adding to the end of the rootsymbol. The easy way if comparing the currentSymbol with the last leaf node of the rootSymbol, if they differ, we are inserting, else we are are adding to the end of the equation
