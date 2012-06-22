@@ -63,28 +63,40 @@
 	<array/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>MathJax_AMS-Regular.otf</string>
-		<string>MathJax_Caligraphic-Bold.otf</string>
-		<string>MathJax_Caligraphic-Regular.otf</string>
-		<string>MathJax_Fraktur-Bold.otf</string>
-		<string>MathJax_Fraktur-Regular.otf</string>
-		<string>MathJax_Main-Bold.otf</string>
-		<string>MathJax_Main-Italic.otf</string>
-		<string>MathJax_Main-Regular.otf</string>
-		<string>MathJax_Math-BoldItalic.otf</string>
-		<string>MathJax_Math-Italic.otf</string>
-		<string>MathJax_Math-Regular.otf</string>
-		<string>MathJax_SansSerif-Bold.otf</string>
-		<string>MathJax_SansSerif-Italic.otf</string>
-		<string>MathJax_SansSerif-Regular.otf</string>
-		<string>MathJax_Script-Regular.otf</string>
-		<string>MathJax_Size1-Regular.otf</string>
-		<string>MathJax_Size2-Regular.otf</string>
-		<string>MathJax_Size3-Regular.otf</string>
-		<string>MathJax_Size4-Regular.otf</string>
-		<string>MathJax_Typewriter-Regular.otf</string>
-		<string>MathJax_WinChrome-Regular.otf</string>
-		<string>MathJax_WinIE6-Regular.otf</string>
+		<string>STIX-Bold.otf</string>
+		<string>STIX-BoldItalic.otf</string>
+		<string>STIX-Italic.otf</string>
+		<string>STIX-Regular.otf</string>
+		<string>STIXMath-Regular.otf</string>
+		<string>STIXGeneral-Bold.otf</string>
+		<string>STIXGeneral-BoldItalic.otf</string>
+		<string>STIXGeneral-Italic.otf</string>
+		<string>STIXGeneral-Regular.otf</string>
+		<string>STIXIntegralsD-Bold.otf</string>
+		<string>STIXIntegralsD-Regular.otf</string>
+		<string>STIXIntegralsSm-Bold.otf</string>
+		<string>STIXIntegralsSm-Regular.otf</string>
+		<string>STIXIntegralsUp-Bold.otf</string>
+		<string>STIXIntegralsUp-Regular.otf</string>
+		<string>STIXIntegralsUpD-Bold.otf</string>
+		<string>STIXIntegralsUpD-Regular.otf</string>
+		<string>STIXIntegralsUpSm-Bold.otf</string>
+		<string>STIXIntegralsUpSm-Regular.otf</string>
+		<string>STIXNonUnicode-Bold.otf</string>
+		<string>STIXNonUnicode-BoldItalic.otf</string>
+		<string>STIXNonUnicode-Italic.otf</string>
+		<string>STIXNonUnicode-Regular.otf</string>
+		<string>STIXSizeFiveSym-Regular.otf</string>
+		<string>STIXSizeFourSym-Bold.otf</string>
+		<string>STIXSizeFourSym-Regular.otf</string>
+		<string>STIXSizeOneSym-Bold.otf</string>
+		<string>STIXSizeOneSym-Regular.otf</string>
+		<string>STIXSizeThreeSym-Bold.otf</string>
+		<string>STIXSizeThreeSym-Regular.otf</string>
+		<string>STIXSizeTwoSym-Bold.otf</string>
+		<string>STIXSizeTwoSym-Regular.otf</string>
+		<string>STIXVariants-Bold.otf</string>
+		<string>STIXVariants-Regular.otf</string>
 		<string>OpenSans-Bold.ttf</string>
 		<string>OpenSans-BoldItalic.ttf</string>
 		<string>OpenSans-ExtraBold.ttf</string>
@@ -95,36 +107,5 @@
 		<string>OpenSans-Regular.ttf</string>
 		<string>OpenSans-Semibold.ttf</string>
 		<string>OpenSans-SemiboldItalic.ttf</string>
-		<string>STIXGeneral.otf</string>
-		<string>STIXGeneralBol.otf</string>
-		<string>STIXGeneralBolIta.otf</string>
-		<string>STIXGeneralItalic.otf</string>
-		<string>STIXIntDBol.otf</string>
-		<string>STIXIntDReg.otf</string>
-		<string>STIXIntSmBol.otf</string>
-		<string>STIXIntSmReg.otf</string>
-		<string>STIXIntUpBol.otf</string>
-		<string>STIXIntUpDBol.otf</string>
-		<string>STIXIntUpDReg.otf</string>
-		<string>STIXIntUpReg.otf</string>
-		<string>STIXIntUpSmBol.otf</string>
-		<string>STIXIntUpSmReg.otf</string>
-		<string>STIXNonUni.otf</string>
-		<string>STIXNonUniBol.otf</string>
-		<string>STIXNonUniBolIta.otf</string>
-		<string>STIXNonUniIta.otf</string>
-		<string>STIXSizFiveSymReg.otf</string>
-		<string>STIXSizFourSymBol.otf</string>
-		<string>STIXSizFourSymReg.otf</string>
-		<string>STIXSizOneSymBol.otf</string>
-		<string>STIXSizOneSymReg.otf</string>
-		<string>STIXSizThreeSymBol.otf</string>
-		<string>STIXSizThreeSymReg.otf</string>
-		<string>STIXSizTwoSymBol.otf</string>
-		<string>STIXSizTwoSymReg.otf</string>
-		<string>STIXVar.otf</string>
-		<string>STIXVarBol.otf</string>
-		<string>Quivira.ttf</string>
-	</array>
-</dict>
+	</array></dict>
 </plist>
