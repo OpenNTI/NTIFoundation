@@ -10,4 +10,6 @@
 
 @protocol NTIInspectableController <NSObject>
 -(NSArray*)inspectableObjects;
+@optional
+-(void)inspectorDidDismiss;
 @end

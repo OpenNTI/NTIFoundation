@@ -1024,6 +1024,32 @@ static void searchUpVCHiererarchy(UIViewController* controller, NSMutableArray* 
 	searchUpVCHiererarchy(controller.parentViewController, objects);
 }
 
+static void searchUpResponderChainCollectingObjectsToNotifyOfDismiss(UIResponder* responder, NSMutableSet* notify)
+{
+	if(!responder){
+		return;
+	}
+	
+	if( [responder respondsToSelector: @selector(inspectorDidDismiss)] ){
+		[notify addObject: responder];
+	}
+	
+	searchUpResponderChainCollectingObjectsToNotifyOfDismiss(responder.nextResponder, notify);
+}
+
+static void searchUpVCHiererarchyChainCollectingObjectsToNotifyOfDismissd(UIViewController* controller, NSMutableSet* notify)
+{
+	if(!controller){
+		return;
+	}
+	
+	if( [controller respondsToSelector: @selector(inspectableObjects)] ){
+		[notify addObject: controller];
+	}
+	
+	searchUpVCHiererarchyChainCollectingObjectsToNotifyOfDismissd(controller.parentViewController, notify);
+}
+
 //Create an inspector if one doesn't exist, find all the objects that are inspectable, 
 //and inspect them.  If there is a first responder it will be resigned and restored when the inspector closes.
 //Our current hueristic for locating inspectable objects is as follows.  We search the view/vc heirarchy in one of two
@@ -1100,6 +1126,15 @@ makeAvailableSlicesForStackedSlicesPane: (OUIStackedSlicesInspectorPane *)pane
 
 -(void)inspectorDidDismiss:(NTIGlobalInspector *)insp
 {
+	NSMutableSet* toNotify = [NSMutableSet set];
+	searchUpResponderChainCollectingObjectsToNotifyOfDismiss(insp.shownFromFirstResponder, toNotify);
+	searchUpVCHiererarchyChainCollectingObjectsToNotifyOfDismissd(self.topLayer, toNotify);
+	
+	for(id notify in toNotify){
+		//NOTE: when we built the list toNotify we did the respondsToSelector check
+		[(id)notify inspectorDidDismiss];
+	}
+	
 	[insp.shownFromFirstResponder becomeFirstResponder];
 }
 
