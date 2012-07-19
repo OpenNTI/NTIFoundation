@@ -1043,7 +1043,7 @@ static void searchUpVCHiererarchyChainCollectingObjectsToNotifyOfDismissd(UIView
 		return;
 	}
 	
-	if( [controller respondsToSelector: @selector(inspectableObjects)] ){
+	if( [controller respondsToSelector: @selector(inspectorDidDismiss)] ){
 		[notify addObject: controller];
 	}
 	
