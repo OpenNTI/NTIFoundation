@@ -82,7 +82,6 @@
 		4076F98F14C8BC45004C6301 /* NTISampleTransientLayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4076F98D14C8BC45004C6301 /* NTISampleTransientLayerViewController.m */; };
 		4076F99014C8BC45004C6301 /* NTISampleTransientLayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4076F98E14C8BC45004C6301 /* NTISampleTransientLayerViewController.xib */; };
 		4076F99114C8FAD1004C6301 /* NTIAppNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40572C2A14C88D8E0032D2DB /* NTIAppNavigationController.m */; };
-		4080B641148692C500A8899D /* libprofile_rt.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4080B640148692C500A8899D /* libprofile_rt.dylib */; };
 		4082162E15BF03CF00E1BFE1 /* NTICoverageFix.h in Headers */ = {isa = PBXBuildFile; fileRef = 4082162C15BF03CF00E1BFE1 /* NTICoverageFix.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4082162F15BF03CF00E1BFE1 /* NTICoverageFix.m in Sources */ = {isa = PBXBuildFile; fileRef = 4082162D15BF03CF00E1BFE1 /* NTICoverageFix.m */; };
 		4082163015BF03CF00E1BFE1 /* NTICoverageFix.m in Sources */ = {isa = PBXBuildFile; fileRef = 4082162D15BF03CF00E1BFE1 /* NTICoverageFix.m */; };
@@ -928,7 +927,6 @@
 			files = (
 				40AB82451566A6F600BB7375 /* OCHamcrestIOS.framework in Frameworks */,
 				4053898C14B3FB8800B5FB46 /* CFNetwork.framework in Frameworks */,
-				4080B641148692C500A8899D /* libprofile_rt.dylib in Frameworks */,
 				72D7D44113E32F0200652DAC /* libxml2.dylib in Frameworks */,
 				72D7D43C13E32E9500652DAC /* libz.dylib in Frameworks */,
 				72D7D42B13E32D2700652DAC /* libOmniAppKit.a in Frameworks */,
@@ -2631,8 +2629,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UnitTests/UnitTests-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
 					TEST,
 					COVERAGE,
+					DEBUG,
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
