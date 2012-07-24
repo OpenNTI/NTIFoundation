@@ -9,7 +9,47 @@
 #import "NSURL-NTIFileSystemExtensionsTest.h"
 #import "NSURL-NTIFileSystemExtensions.h"
 
+@interface NSURL_NTIFileSystemExtensions()
+-(void)verifyDontBackupOldStyleXAttr: (NSURL*)file;
+-(void)verifyDontBackup: (NSURL*)file;
+@end
+
 @implementation NSURL_NTIFileSystemExtensions
+
+-(void)verifyDontBackupOldStyleXAttr: (NSURL*)file
+{
+	
+	const char* filePath = [[file path] fileSystemRepresentation];
+    const char* attrName = "com.apple.MobileBackup";
+	
+	u_int8_t attrValue;
+	int getResult = getxattr(filePath, attrName, &attrValue, sizeof(attrValue), 0, 0);
+	
+	STAssertTrue(getResult > 0, nil);
+	STAssertEquals(attrValue, (u_int8_t)1, nil);
+}
+
+-(void)verifyDontBackup: (NSURL*)file
+{
+#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_5_0 
+	//If the new excluded from backup key is defined use the new way 
+	if (&NSURLIsExcludedFromBackupKey) {		
+		NSError *error = nil;
+		NSNumber* result;
+		BOOL success = [file getResourceValue: &result
+									   forKey: NSURLIsExcludedFromBackupKey 
+										error: &error];
+		STAssertTrue(success, nil);
+		STAssertNil(error, nil);
+		STAssertTrue([result boolValue], nil);
+	}
+	else{
+		STFail(@"Excpected new style but NSURLIsExcludedFromBackupKey not defined");
+	}
+#else
+	STFail(@"Excpected new style");
+#endif
+}
 
 -(void)testDontBackupXAttr
 {
@@ -30,15 +70,20 @@
 	
 	BOOL result = [tempFile addSkipBackupAttributeToItem];
 	STAssertTrue(result, nil);
-
-	const char* filePath = [[tempFile path] fileSystemRepresentation];
-    const char* attrName = "com.apple.MobileBackup";
 	
-	u_int8_t attrValue;
-	int getResult = getxattr(filePath, attrName, &attrValue, sizeof(attrValue), 0, 0);
+	BOOL oldStyle = YES;
+#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_5_0 
+	if (&NSURLIsExcludedFromBackupKey) {
+		oldStyle = NO;
+	}
+#endif
 	
-	STAssertTrue(getResult > 0, nil);
-	STAssertEquals(attrValue, (u_int8_t)1, nil);
+	if(oldStyle){
+		[self verifyDontBackupOldStyleXAttr: tempFile];
+	}
+	else{
+		[self verifyDontBackup: tempFile];
+	}
 }
 
 @end
