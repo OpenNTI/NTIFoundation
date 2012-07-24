@@ -31,5 +31,5 @@
 #import "NSString-NTIExtensions.h"
 #import "NTIUtilities.h"
 #import "NSMutableArray-NTIExtensions.h"
-
+#import "NTICoverageFix.h"
 #endif
