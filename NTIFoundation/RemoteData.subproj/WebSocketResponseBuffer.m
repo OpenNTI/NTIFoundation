@@ -235,7 +235,7 @@ PRIVATE_STATIC_TESTABLE NSUInteger bytesToLength(uint8_t* bytes, uint8_t num)
 			self->responseSize = WebSocketResponseSizeUnknown;
 			[[NSException exceptionWithName: @"UnexpectedResponse" 
 									 reason: [NSString stringWithFormat: 
-											  @"Encounted bad size info. expected value <= 127 but found %hhd", client_len]
+											  @"Encounted bad size info. expected value <= 127 but found %d", client_len]
 								   userInfo: nil] raise];
 		}
 		
