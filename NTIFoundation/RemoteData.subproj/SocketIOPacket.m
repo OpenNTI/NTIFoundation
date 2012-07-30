@@ -258,7 +258,7 @@ static NSData* externalizeComponent(id component)
 	if( [theAck isEqualToString: @"data"] ){
 		theId = [theId stringByAppendingString: @"+"];
 	}
-	NSString* typeString = [[NSString alloc] initWithFormat: @"%ld", self.type];
+	NSString* typeString = [[NSString alloc] initWithFormat: @"%d", self.type];
 	
 	NSMutableArray* toEncode = [NSMutableArray arrayWithObjects: typeString, theId, theEndpoint , nil];
 	
@@ -289,7 +289,7 @@ static NSData* externalizeComponent(id component)
 		[data appendBytes: &second length: 1];
 		[data appendBytes: &thrid length: 1];
 		
-		NSString* lengthString = [NSString stringWithFormat: @"%lu", [packetData length]];
+		NSString* lengthString = [NSString stringWithFormat: @"%d", [packetData length]];
 		NSData* lengthData = [lengthString dataUsingEncoding: NSUTF8StringEncoding];
 		[data appendData: lengthData];
 		
@@ -343,7 +343,7 @@ static NSData* externalizeComponent(id component)
 												  range: NSMakeRange(location, payloadLength - location)];
 			if( nextSepartor.location == NSNotFound ){
 				//Uh oh
-				NSLog(@"Excpected another seperator but found none. Starting at %@ %ld", 
+				NSLog(@"Excpected another seperator but found none. Starting at%@ %@", 
 					  payload, location);
 				return nil;
 			}

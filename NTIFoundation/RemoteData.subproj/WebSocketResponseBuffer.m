@@ -235,7 +235,7 @@ PRIVATE_STATIC_TESTABLE NSUInteger bytesToLength(uint8_t* bytes, uint8_t num)
 			self->responseSize = WebSocketResponseSizeUnknown;
 			[[NSException exceptionWithName: @"UnexpectedResponse" 
 									 reason: [NSString stringWithFormat: 
-											  @"Encounted bad size info. expected value <= 127 but found %d", client_len]
+											  @"Encounted bad size info. expected value <= 127 but found %ld", client_len]
 								   userInfo: nil] raise];
 		}
 		
@@ -247,7 +247,7 @@ PRIVATE_STATIC_TESTABLE NSUInteger bytesToLength(uint8_t* bytes, uint8_t num)
 		if(self->responseSize == WebSocketResponseSizeUnknown){
 			[[NSException exceptionWithName: @"UnexpectedResponse" 
 									 reason: [NSString stringWithFormat: 
-											  @"Expected known size but had size state of %hhd", self->responseSize]
+											  @"Expected known size but had size state of %ld", self->responseSize]
 								   userInfo: nil] raise];
 		}
 		
@@ -357,7 +357,7 @@ PRIVATE_STATIC_TESTABLE NSUInteger bytesToLength(uint8_t* bytes, uint8_t num)
 	else{
 		[[NSException exceptionWithName: @"UnexpectedResponse" 
 								 reason: [NSString stringWithFormat: 
-										  @"Unknown buffer state readingpart = %hhd", 
+										  @"Unknown buffer state readingpart = %ld", 
 										  self->readingPart]
 							   userInfo: nil] raise];
 	}
