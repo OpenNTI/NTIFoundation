@@ -148,7 +148,7 @@
 		NSData* packetData = [packet encode];
 		
 		[expectedData appendBytes: separator length: 3];
-		NSString* lengthString = [NSString stringWithFormat: @"%d", [packetData length]];
+		NSString* lengthString = [NSString stringWithFormat: @"%lu", (unsigned long)[packetData length]];
 		NSData* lengthData = [lengthString dataUsingEncoding: NSUTF8StringEncoding];
 		[expectedData appendData: lengthData];
 		[expectedData appendBytes: separator length: 3];

@@ -11,6 +11,7 @@
 #import <OmniUI/OUIInspectorSlice.h>
 #import <OmniUI/OUIMinimalScrollNotifierImplementation.h>
 #import "NTIGlobalInspector.h"
+#import "NTIGlobalInspectorSlice.h"
 #import <OmniUI/OUIDetailInspectorSlice.h>
 #import <OmniUI/OUIStackedSlicesInspectorPane.h>
 #import <OmniUI/OUIColorInspectorPane.h>
@@ -193,7 +194,7 @@
 	NSArray* objects = [slice appropriateObjectsForInspection];		//Get objects our slice is inspecting.
 	
 	if ( [slice respondsToSelector:@selector(paneMaker)] ){
-		OUIDetailInspectorSlice* detailSlice = (OUIDetailInspectorSlice *)slice;
+		NTIGlobalInspectorSlice* detailSlice = (NTIGlobalInspectorSlice* )slice;
 		OUIInspectorPane* pane = detailSlice.paneMaker(detailSlice);
 		pane.parentSlice = detailSlice;
 		[self.inspector pushPane: pane inspectingObjects: objects ];

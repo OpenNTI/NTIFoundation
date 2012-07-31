@@ -75,6 +75,9 @@
 		406B23FD1533CDCA00BF691E /* WebSocketResponseBufferTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 406B23FC1533CDCA00BF691E /* WebSocketResponseBufferTest.m */; };
 		406DB42A14DB50A1008AEABF /* switch_active.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 406DB42714DB4D9B008AEABF /* switch_active.png */; };
 		406DB42B14DB50A1008AEABF /* switch_inactive.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 406DB42814DB4D9B008AEABF /* switch_inactive.png */; };
+		40716F3515C828B900430FFC /* NTIGlobalInspectorSlice.h in Headers */ = {isa = PBXBuildFile; fileRef = 40716F3315C828B900430FFC /* NTIGlobalInspectorSlice.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		40716F3615C828B900430FFC /* NTIGlobalInspectorSlice.m in Sources */ = {isa = PBXBuildFile; fileRef = 40716F3415C828B900430FFC /* NTIGlobalInspectorSlice.m */; };
+		40716F3715C828B900430FFC /* NTIGlobalInspectorSlice.m in Sources */ = {isa = PBXBuildFile; fileRef = 40716F3415C828B900430FFC /* NTIGlobalInspectorSlice.m */; };
 		4076F88E14C8A132004C6301 /* NTIAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 40572C6814C894940032D2DB /* NTIAppDelegate.m */; };
 		4076F88F14C8A151004C6301 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 40572C6414C894940032D2DB /* main.m */; };
 		4076F98514C8AFF3004C6301 /* NTISampleApplicationLayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4076F98314C8AFF3004C6301 /* NTISampleApplicationLayerViewController.m */; };
@@ -264,6 +267,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		40716EC115C8202D00430FFC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72D3610213DB6B2A00257C73 /* OmniBase.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 34EE20D114F0354300722491;
+			remoteInfo = OBUnitTests;
+		};
 		408FBF04143F627A0095DD84 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 72CBA95C1385CF1F00E3D28D /* Project object */;
@@ -672,6 +682,8 @@
 		406B23FC1533CDCA00BF691E /* WebSocketResponseBufferTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSocketResponseBufferTest.m; sourceTree = "<group>"; };
 		406DB42714DB4D9B008AEABF /* switch_active.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switch_active.png; sourceTree = "<group>"; };
 		406DB42814DB4D9B008AEABF /* switch_inactive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switch_inactive.png; sourceTree = "<group>"; };
+		40716F3315C828B900430FFC /* NTIGlobalInspectorSlice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIGlobalInspectorSlice.h; sourceTree = "<group>"; };
+		40716F3415C828B900430FFC /* NTIGlobalInspectorSlice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIGlobalInspectorSlice.m; sourceTree = "<group>"; };
 		4076F98214C8AFF3004C6301 /* NTISampleApplicationLayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTISampleApplicationLayerViewController.h; sourceTree = "<group>"; };
 		4076F98314C8AFF3004C6301 /* NTISampleApplicationLayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTISampleApplicationLayerViewController.m; sourceTree = "<group>"; };
 		4076F98414C8AFF3004C6301 /* NTISampleApplicationLayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NTISampleApplicationLayerViewController.xib; sourceTree = "<group>"; };
@@ -964,6 +976,8 @@
 				4C3DA33E14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m */,
 				4C3BDC1A14EAF87F008ED49D /* NTIInspectorSliceObjectPair.h */,
 				4C3BDC1B14EAF87F008ED49D /* NTIInspectorSliceObjectPair.m */,
+				40716F3315C828B900430FFC /* NTIGlobalInspectorSlice.h */,
+				40716F3415C828B900430FFC /* NTIGlobalInspectorSlice.m */,
 			);
 			name = Inspector;
 			path = Inspector.subproj;
@@ -1426,6 +1440,7 @@
 				72D3613213DB6B2B00257C73 /* OBLoadBundle */,
 				72D3613413DB6B2B00257C73 /* libOmniBase.a */,
 				72D3613613DB6B2B00257C73 /* libOmniBaseTouchTests.a */,
+				40716EC215C8202D00430FFC /* OBUnitTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1640,6 +1655,7 @@
 				404A67A0156D906900A81B6A /* UIDevice-NTIExtensions.h in Headers */,
 				40F72DA8156EE1C50050C93E /* NTIMathEquationBuilder.h in Headers */,
 				4082162E15BF03CF00E1BFE1 /* NTICoverageFix.h in Headers */,
+				40716F3515C828B900430FFC /* NTIGlobalInspectorSlice.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1806,6 +1822,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		40716EC215C8202D00430FFC /* OBUnitTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = OBUnitTests.octest;
+			remoteRef = 40716EC115C8202D00430FFC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		72D3604213DB5D5200257C73 /* FixStringsFile */ = {
 			isa = PBXReferenceProxy;
 			fileType = "compiled.mach-o.executable";
@@ -2194,6 +2217,7 @@
 				40F72DA9156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */,
 				4C8EAFC91578065300BF8FF7 /* NSURL-NTIExtensions.m in Sources */,
 				4082162F15BF03CF00E1BFE1 /* NTICoverageFix.m in Sources */,
+				40716F3615C828B900430FFC /* NTIGlobalInspectorSlice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2267,6 +2291,7 @@
 				4C8EAFE21578067500BF8FF7 /* NSURL-NTIExtensions.m in Sources */,
 				4C8EAFE51578103F00BF8FF7 /* NSURL-NTIExtensionsTest.m in Sources */,
 				4082163015BF03CF00E1BFE1 /* NTICoverageFix.m in Sources */,
+				40716F3715C828B900430FFC /* NTIGlobalInspectorSlice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2573,7 +2598,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_PREFIX_HEADER = "NTINavigationExample/NTINavigationExample-Info.plist";
 				INFOPLIST_PREPROCESS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PROVISIONING_PROFILE = "F300A192-2504-4E23-972A-E76EBDC2B7F0";
 				RUN_CLANG_STATIC_ANALYZER = YES;
@@ -2598,7 +2623,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_PREFIX_HEADER = "NTIFoundation/Prealgebra-Info.h";
 				INFOPLIST_PREPROCESS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "-ObjC";
 				PROVISIONING_PROFILE = "6BC9A561-9774-44C9-B6E1-1874EC8FFADC";

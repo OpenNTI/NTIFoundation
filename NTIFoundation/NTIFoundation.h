@@ -45,6 +45,7 @@
 #import "NTIAppNavigationLayer.h"
 #import "NTIInspectableObjectProtocol.h"
 #import "NTIGlobalInspectorMainPane.h"
+#import "NTIGlobalInspectorSlice.h"
 #import "NTIBadgeCountView.h"
 #import	"NTIKeyboardAdjustmentListener.h"
 
