@@ -168,6 +168,8 @@
 		40F56E8D15C8BB84001FC309 /* libNTILogicTestBase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40F56E8715C8B9C8001FC309 /* libNTILogicTestBase.a */; };
 		40F56EBB15C8BCA4001FC309 /* NTITestFixes.h in Headers */ = {isa = PBXBuildFile; fileRef = 40F56EB915C8BCA4001FC309 /* NTITestFixes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40F56EBC15C8BCA4001FC309 /* NTITestFixes.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F56EBA15C8BCA4001FC309 /* NTITestFixes.m */; };
+		40F56F1815C9D67C001FC309 /* NTIRevealViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 40F56F1615C9D67C001FC309 /* NTIRevealViewController.h */; };
+		40F56F1915C9D67C001FC309 /* NTIRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F56F1715C9D67C001FC309 /* NTIRevealViewController.m */; };
 		40F72DA8156EE1C50050C93E /* NTIMathEquationBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 40F72DA6156EE1C40050C93E /* NTIMathEquationBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40F72DA9156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */; };
 		40F72DAA156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */; };
@@ -756,6 +758,8 @@
 		40F56EB915C8BCA4001FC309 /* NTITestFixes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTITestFixes.h; sourceTree = "<group>"; };
 		40F56EBA15C8BCA4001FC309 /* NTITestFixes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTITestFixes.m; sourceTree = "<group>"; };
 		40F56EBE15C8BDB1001FC309 /* NTILogicTestsBase-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NTILogicTestsBase-Prefix.pch"; sourceTree = "<group>"; };
+		40F56F1615C9D67C001FC309 /* NTIRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIRevealViewController.h; sourceTree = "<group>"; };
+		40F56F1715C9D67C001FC309 /* NTIRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIRevealViewController.m; sourceTree = "<group>"; };
 		40F72DA6156EE1C40050C93E /* NTIMathEquationBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathEquationBuilder.h; sourceTree = "<group>"; };
 		40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathEquationBuilder.m; sourceTree = "<group>"; };
 		4C2ECDD31549D0A400C69E3A /* NTIMathInputExpressionModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathInputExpressionModel.h; sourceTree = "<group>"; };
@@ -1040,17 +1044,10 @@
 		40572C5E14C894940032D2DB /* NTINavigationExample */ = {
 			isa = PBXGroup;
 			children = (
+				40F56F1B15C9EC69001FC309 /* LayerExample */,
 				40572C6714C894940032D2DB /* NTIAppDelegate.h */,
 				40572C6814C894940032D2DB /* NTIAppDelegate.m */,
-				4076F98214C8AFF3004C6301 /* NTISampleApplicationLayerViewController.h */,
-				4076F98314C8AFF3004C6301 /* NTISampleApplicationLayerViewController.m */,
-				4076F98414C8AFF3004C6301 /* NTISampleApplicationLayerViewController.xib */,
 				40572C5F14C894940032D2DB /* Supporting Files */,
-				4076F98C14C8BC45004C6301 /* NTISampleTransientLayerViewController.h */,
-				4076F98D14C8BC45004C6301 /* NTISampleTransientLayerViewController.m */,
-				4076F98E14C8BC45004C6301 /* NTISampleTransientLayerViewController.xib */,
-				402D2F2314C92BDA00E051AF /* NTITransientNeverEndingNavController.h */,
-				402D2F2414C92BDA00E051AF /* NTITransientNeverEndingNavController.m */,
 			);
 			path = NTINavigationExample;
 			sourceTree = SOURCE_ROOT;
@@ -1227,6 +1224,21 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		40F56F1B15C9EC69001FC309 /* LayerExample */ = {
+			isa = PBXGroup;
+			children = (
+				4076F98214C8AFF3004C6301 /* NTISampleApplicationLayerViewController.h */,
+				4076F98314C8AFF3004C6301 /* NTISampleApplicationLayerViewController.m */,
+				4076F98414C8AFF3004C6301 /* NTISampleApplicationLayerViewController.xib */,
+				4076F98C14C8BC45004C6301 /* NTISampleTransientLayerViewController.h */,
+				4076F98D14C8BC45004C6301 /* NTISampleTransientLayerViewController.m */,
+				4076F98E14C8BC45004C6301 /* NTISampleTransientLayerViewController.xib */,
+				402D2F2314C92BDA00E051AF /* NTITransientNeverEndingNavController.h */,
+				402D2F2414C92BDA00E051AF /* NTITransientNeverEndingNavController.m */,
+			);
+			name = LayerExample;
+			sourceTree = "<group>";
+		};
 		4CA4F4691535DDD30005FECD /* MathSymbols */ = {
 			isa = PBXGroup;
 			children = (
@@ -1294,6 +1306,8 @@
 				728D18E713DA217600B6A332 /* NTIFoundationOSCompat.m */,
 				40A745BE14DB32E90093F0D4 /* NTIBadgeCountView.h */,
 				40A745BF14DB32E90093F0D4 /* NTIBadgeCountView.m */,
+				40F56F1615C9D67C001FC309 /* NTIRevealViewController.h */,
+				40F56F1715C9D67C001FC309 /* NTIRevealViewController.m */,
 			);
 			name = UIUtilities;
 			sourceTree = "<group>";
@@ -1698,6 +1712,7 @@
 				404A67A0156D906900A81B6A /* UIDevice-NTIExtensions.h in Headers */,
 				40F72DA8156EE1C50050C93E /* NTIMathEquationBuilder.h in Headers */,
 				40716F3515C828B900430FFC /* NTIGlobalInspectorSlice.h in Headers */,
+				40F56F1815C9D67C001FC309 /* NTIRevealViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2286,6 +2301,7 @@
 				40F72DA9156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */,
 				4C8EAFC91578065300BF8FF7 /* NSURL-NTIExtensions.m in Sources */,
 				40716F3615C828B900430FFC /* NTIGlobalInspectorSlice.m in Sources */,
+				40F56F1915C9D67C001FC309 /* NTIRevealViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
