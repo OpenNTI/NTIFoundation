@@ -85,9 +85,6 @@
 		4076F98F14C8BC45004C6301 /* NTISampleTransientLayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4076F98D14C8BC45004C6301 /* NTISampleTransientLayerViewController.m */; };
 		4076F99014C8BC45004C6301 /* NTISampleTransientLayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4076F98E14C8BC45004C6301 /* NTISampleTransientLayerViewController.xib */; };
 		4076F99114C8FAD1004C6301 /* NTIAppNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40572C2A14C88D8E0032D2DB /* NTIAppNavigationController.m */; };
-		4082162E15BF03CF00E1BFE1 /* NTICoverageFix.h in Headers */ = {isa = PBXBuildFile; fileRef = 4082162C15BF03CF00E1BFE1 /* NTICoverageFix.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4082162F15BF03CF00E1BFE1 /* NTICoverageFix.m in Sources */ = {isa = PBXBuildFile; fileRef = 4082162D15BF03CF00E1BFE1 /* NTICoverageFix.m */; };
-		4082163015BF03CF00E1BFE1 /* NTICoverageFix.m in Sources */ = {isa = PBXBuildFile; fileRef = 4082162D15BF03CF00E1BFE1 /* NTICoverageFix.m */; };
 		408494B51427DF6C0038BD31 /* WebSockets.h in Headers */ = {isa = PBXBuildFile; fileRef = 408494B31427DF6C0038BD31 /* WebSockets.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		408494B61427DF6C0038BD31 /* WebSockets.m in Sources */ = {isa = PBXBuildFile; fileRef = 408494B41427DF6C0038BD31 /* WebSockets.m */; };
 		408FBF07143F62D80095DD84 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408FBF06143F62D80095DD84 /* CoreText.framework */; };
@@ -168,6 +165,9 @@
 		40F39C8114D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8014D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m */; };
 		40F39C8414D84EF50089DCF6 /* SendRecieveQueueTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8314D84EF50089DCF6 /* SendRecieveQueueTest.m */; };
 		40F39C8714D852FE0089DCF6 /* NSString-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8614D852FE0089DCF6 /* NSString-NTIExtensionsTest.m */; };
+		40F56E8D15C8BB84001FC309 /* libNTILogicTestBase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 40F56E8715C8B9C8001FC309 /* libNTILogicTestBase.a */; };
+		40F56EBB15C8BCA4001FC309 /* NTITestFixes.h in Headers */ = {isa = PBXBuildFile; fileRef = 40F56EB915C8BCA4001FC309 /* NTITestFixes.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		40F56EBC15C8BCA4001FC309 /* NTITestFixes.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F56EBA15C8BCA4001FC309 /* NTITestFixes.m */; };
 		40F72DA8156EE1C50050C93E /* NTIMathEquationBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 40F72DA6156EE1C40050C93E /* NTIMathEquationBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40F72DA9156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */; };
 		40F72DAA156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */; };
@@ -364,6 +364,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 34D06C53125D202500CA3963;
 			remoteInfo = OmniFileStoreTouch;
+		};
+		40F56E8B15C8BACD001FC309 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72CBA95C1385CF1F00E3D28D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 40F56E0015C8B9C8001FC309;
+			remoteInfo = NTILogicTestBase;
 		};
 		726214DC145891C300BC6DE5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -691,8 +698,6 @@
 		4076F98D14C8BC45004C6301 /* NTISampleTransientLayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTISampleTransientLayerViewController.m; sourceTree = "<group>"; };
 		4076F98E14C8BC45004C6301 /* NTISampleTransientLayerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NTISampleTransientLayerViewController.xib; sourceTree = "<group>"; };
 		4080B640148692C500A8899D /* libprofile_rt.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libprofile_rt.dylib; path = usr/lib/libprofile_rt.dylib; sourceTree = DEVELOPER_DIR; };
-		4082162C15BF03CF00E1BFE1 /* NTICoverageFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTICoverageFix.h; sourceTree = "<group>"; };
-		4082162D15BF03CF00E1BFE1 /* NTICoverageFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTICoverageFix.m; sourceTree = "<group>"; };
 		408494B31427DF6C0038BD31 /* WebSockets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSockets.h; sourceTree = "<group>"; };
 		408494B41427DF6C0038BD31 /* WebSockets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSockets.m; sourceTree = "<group>"; };
 		408FBF06143F62D80095DD84 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -747,6 +752,10 @@
 		40F39C8314D84EF50089DCF6 /* SendRecieveQueueTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendRecieveQueueTest.m; sourceTree = "<group>"; };
 		40F39C8514D852FE0089DCF6 /* NSString-NTIExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString-NTIExtensionsTest.h"; sourceTree = "<group>"; };
 		40F39C8614D852FE0089DCF6 /* NSString-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString-NTIExtensionsTest.m"; sourceTree = "<group>"; };
+		40F56E8715C8B9C8001FC309 /* libNTILogicTestBase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNTILogicTestBase.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		40F56EB915C8BCA4001FC309 /* NTITestFixes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTITestFixes.h; sourceTree = "<group>"; };
+		40F56EBA15C8BCA4001FC309 /* NTITestFixes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTITestFixes.m; sourceTree = "<group>"; };
+		40F56EBE15C8BDB1001FC309 /* NTILogicTestsBase-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NTILogicTestsBase-Prefix.pch"; sourceTree = "<group>"; };
 		40F72DA6156EE1C40050C93E /* NTIMathEquationBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathEquationBuilder.h; sourceTree = "<group>"; };
 		40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathEquationBuilder.m; sourceTree = "<group>"; };
 		4C2ECDD31549D0A400C69E3A /* NTIMathInputExpressionModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathInputExpressionModel.h; sourceTree = "<group>"; };
@@ -925,6 +934,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		40F56E4115C8B9C8001FC309 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		72C0D193142529E800D526D8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -937,6 +953,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40F56E8D15C8BB84001FC309 /* libNTILogicTestBase.a in Frameworks */,
 				40AB82451566A6F600BB7375 /* OCHamcrestIOS.framework in Frameworks */,
 				4053898C14B3FB8800B5FB46 /* CFNetwork.framework in Frameworks */,
 				72D7D44113E32F0200652DAC /* libxml2.dylib in Frameworks */,
@@ -1192,6 +1209,24 @@
 			name = socket.io;
 			sourceTree = "<group>";
 		};
+		40F56E8815C8B9FB001FC309 /* NTILogicTestBase */ = {
+			isa = PBXGroup;
+			children = (
+				40F56EBD15C8BD68001FC309 /* Supporting Files */,
+				40F56EB915C8BCA4001FC309 /* NTITestFixes.h */,
+				40F56EBA15C8BCA4001FC309 /* NTITestFixes.m */,
+			);
+			path = NTILogicTestBase;
+			sourceTree = "<group>";
+		};
+		40F56EBD15C8BD68001FC309 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				40F56EBE15C8BDB1001FC309 /* NTILogicTestsBase-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		4CA4F4691535DDD30005FECD /* MathSymbols */ = {
 			isa = PBXGroup;
 			children = (
@@ -1266,6 +1301,7 @@
 		72CBA95A1385CF1F00E3D28D = {
 			isa = PBXGroup;
 			children = (
+				40F56E8815C8B9FB001FC309 /* NTILogicTestBase */,
 				40B5B49514C896CC009D5810 /* libNTIUserDataModel.a */,
 				72D360A113DB5DFF00257C73 /* Configurations */,
 				72CBA96F1385CF1F00E3D28D /* NTIFoundation */,
@@ -1284,6 +1320,7 @@
 				72C0D196142529E800D526D8 /* libNTIFoundation.a */,
 				40572C5914C894940032D2DB /* NTINavigationExample2.app */,
 				40C34CAB14D88DD5000D91A8 /* NTIFoundationApplicationTests.octest */,
+				40F56E8715C8B9C8001FC309 /* libNTILogicTestBase.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1546,8 +1583,6 @@
 				40A4147E1505748A0017242E /* NSDate-NTIExtensions.m */,
 				404A679E156D906900A81B6A /* UIDevice-NTIExtensions.h */,
 				404A679F156D906900A81B6A /* UIDevice-NTIExtensions.m */,
-				4082162C15BF03CF00E1BFE1 /* NTICoverageFix.h */,
-				4082162D15BF03CF00E1BFE1 /* NTICoverageFix.m */,
 			);
 			name = FoundationExtensions;
 			path = FoundationExtensions.subproj;
@@ -1591,6 +1626,14 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		40F56E4315C8B9C8001FC309 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40F56EBB15C8BCA4001FC309 /* NTITestFixes.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		72C0D194142529E800D526D8 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1654,7 +1697,6 @@
 				403C317A1512A5DD00C53D22 /* NSData-NTIJSON.h in Headers */,
 				404A67A0156D906900A81B6A /* UIDevice-NTIExtensions.h in Headers */,
 				40F72DA8156EE1C50050C93E /* NTIMathEquationBuilder.h in Headers */,
-				4082162E15BF03CF00E1BFE1 /* NTICoverageFix.h in Headers */,
 				40716F3515C828B900430FFC /* NTIGlobalInspectorSlice.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1708,6 +1750,23 @@
 			productReference = 40C34CAB14D88DD5000D91A8 /* NTIFoundationApplicationTests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
+		40F56E0015C8B9C8001FC309 /* NTILogicTestBase */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 40F56E8415C8B9C8001FC309 /* Build configuration list for PBXNativeTarget "NTILogicTestBase" */;
+			buildPhases = (
+				40F56E0F15C8B9C8001FC309 /* Sources */,
+				40F56E4115C8B9C8001FC309 /* Frameworks */,
+				40F56E4315C8B9C8001FC309 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NTILogicTestBase;
+			productName = NTIFoundation;
+			productReference = 40F56E8715C8B9C8001FC309 /* libNTILogicTestBase.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		72C0D195142529E800D526D8 /* NTIFoundation */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 72C0D19E142529E800D526D8 /* Build configuration list for PBXNativeTarget "NTIFoundation" */;
@@ -1746,6 +1805,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				40F56E8C15C8BACD001FC309 /* PBXTargetDependency */,
 				408FBF05143F627A0095DD84 /* PBXTargetDependency */,
 			);
 			name = NTIFoundationLogicTests;
@@ -1817,6 +1877,7 @@
 				7216D72A13CBAE6800509BDC /* GenerateDate */,
 				40572C5814C894940032D2DB /* NTINavigationExample2 */,
 				40C34CAA14D88DD5000D91A8 /* NTIFoundationApplicationTests */,
+				40F56E0015C8B9C8001FC309 /* NTILogicTestBase */,
 			);
 		};
 /* End PBXProject section */
@@ -2165,6 +2226,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		40F56E0F15C8B9C8001FC309 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40F56EBC15C8BCA4001FC309 /* NTITestFixes.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		72C0D192142529E800D526D8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2216,7 +2285,6 @@
 				404A67A1156D906900A81B6A /* UIDevice-NTIExtensions.m in Sources */,
 				40F72DA9156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */,
 				4C8EAFC91578065300BF8FF7 /* NSURL-NTIExtensions.m in Sources */,
-				4082162F15BF03CF00E1BFE1 /* NTICoverageFix.m in Sources */,
 				40716F3615C828B900430FFC /* NTIGlobalInspectorSlice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2290,7 +2358,6 @@
 				40F72DAA156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */,
 				4C8EAFE21578067500BF8FF7 /* NSURL-NTIExtensions.m in Sources */,
 				4C8EAFE51578103F00BF8FF7 /* NSURL-NTIExtensionsTest.m in Sources */,
-				4082163015BF03CF00E1BFE1 /* NTICoverageFix.m in Sources */,
 				40716F3715C828B900430FFC /* NTIGlobalInspectorSlice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2362,6 +2429,11 @@
 			isa = PBXTargetDependency;
 			name = OmniFileStoreTouch;
 			targetProxy = 40E65086148D269300276173 /* PBXContainerItemProxy */;
+		};
+		40F56E8C15C8BACD001FC309 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 40F56E0015C8B9C8001FC309 /* NTILogicTestBase */;
+			targetProxy = 40F56E8B15C8BACD001FC309 /* PBXContainerItemProxy */;
 		};
 		726214DD145891C300BC6DE5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2518,6 +2590,51 @@
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+		40F56E8515C8B9C8001FC309 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 72D360CA13DB5DFF00257C73 /* Touch-Library-Debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_OBJCPP_ARC_ABI = YES;
+				COPY_PHASE_STRIP = NO;
+				DSTROOT = /tmp/NTIFoundation.dst;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "NTILogicTestBase/NTILogicTestsBase-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = NTILogicTestBase;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		40F56E8615C8B9C8001FC309 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 72D360CB13DB5DFF00257C73 /* Touch-Library-Release.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_OBJCPP_ARC_ABI = YES;
+				COPY_PHASE_STRIP = YES;
+				DSTROOT = /tmp/NTIFoundation.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "NTILogicTestBase/NTILogicTestsBase-Prefix.pch";
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = NTILogicTestBase;
+				SKIP_INSTALL = YES;
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
@@ -2731,6 +2848,15 @@
 			buildConfigurations = (
 				40C34CBA14D88DD5000D91A8 /* Debug */,
 				40C34CBB14D88DD5000D91A8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		40F56E8415C8B9C8001FC309 /* Build configuration list for PBXNativeTarget "NTILogicTestBase" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				40F56E8515C8B9C8001FC309 /* Debug */,
+				40F56E8615C8B9C8001FC309 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
