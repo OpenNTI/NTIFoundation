@@ -36,8 +36,6 @@ makeAvailableSlicesForStackedSlicesPane: (OUIStackedSlicesInspectorPane*)pane;
 @class NTIAppNavigationToolbar;
 @interface NTIAppNavigationController : OUIViewController<OUIInspectorDelegate, UIActionSheetDelegate, UITabBarControllerDelegate>{
 	@private
-	UISplitViewController* splitViewController;
-	
 	NSMutableArray* viewControllers;
 	UINavigationController* navController;
 	NTIAppNavigationToolbar* toolBar;
@@ -59,8 +57,7 @@ makeAvailableSlicesForStackedSlicesPane: (OUIStackedSlicesInspectorPane*)pane;
 @property (nonatomic, readonly) UIViewController<NTIAppNavigationLayer>* topLayer;
 @property (nonatomic, readonly) UIViewController<NTIAppNavigationApplicationLayer>* topApplicationLayer;
 
--(id)initWithRootLayer:(UIViewController<NTIAppNavigationApplicationLayer>*)rootViewController 
-accessoryViewController: (UIViewController*)aVC;
+-(id)initWithRootLayer:(UIViewController<NTIAppNavigationApplicationLayer>*)rootViewController;
 
 -(void)pushLayer: (UIViewController<NTIAppNavigationLayer>*)layer animated: (BOOL)animated;
 -(UIViewController<NTIAppNavigationLayer>*)popLayerAnimated: (BOOL)animated;

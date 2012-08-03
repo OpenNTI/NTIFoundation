@@ -167,8 +167,6 @@
 		40F56EBC15C8BCA4001FC309 /* NTITestFixes.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F56EBA15C8BCA4001FC309 /* NTITestFixes.m */; };
 		40F56F2515CAC518001FC309 /* NTIBadgeCountView.h in Headers */ = {isa = PBXBuildFile; fileRef = 40F56F2115CAC518001FC309 /* NTIBadgeCountView.h */; };
 		40F56F2615CAC518001FC309 /* NTIBadgeCountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F56F2215CAC518001FC309 /* NTIBadgeCountView.m */; };
-		40F56F2715CAC518001FC309 /* NTIRevealViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 40F56F2315CAC518001FC309 /* NTIRevealViewController.h */; };
-		40F56F2815CAC518001FC309 /* NTIRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F56F2415CAC518001FC309 /* NTIRevealViewController.m */; };
 		40F72DA8156EE1C50050C93E /* NTIMathEquationBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 40F72DA6156EE1C40050C93E /* NTIMathEquationBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40F72DA9156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */; };
 		40F72DAA156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */; };
@@ -757,8 +755,6 @@
 		40F56EBE15C8BDB1001FC309 /* NTILogicTestsBase-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NTILogicTestsBase-Prefix.pch"; sourceTree = "<group>"; };
 		40F56F2115CAC518001FC309 /* NTIBadgeCountView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIBadgeCountView.h; sourceTree = "<group>"; };
 		40F56F2215CAC518001FC309 /* NTIBadgeCountView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIBadgeCountView.m; sourceTree = "<group>"; };
-		40F56F2315CAC518001FC309 /* NTIRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIRevealViewController.h; sourceTree = "<group>"; };
-		40F56F2415CAC518001FC309 /* NTIRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIRevealViewController.m; sourceTree = "<group>"; };
 		40F72DA6156EE1C40050C93E /* NTIMathEquationBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathEquationBuilder.h; sourceTree = "<group>"; };
 		40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathEquationBuilder.m; sourceTree = "<group>"; };
 		4C2ECDD31549D0A400C69E3A /* NTIMathInputExpressionModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathInputExpressionModel.h; sourceTree = "<group>"; };
@@ -1243,8 +1239,6 @@
 			children = (
 				40F56F2115CAC518001FC309 /* NTIBadgeCountView.h */,
 				40F56F2215CAC518001FC309 /* NTIBadgeCountView.m */,
-				40F56F2315CAC518001FC309 /* NTIRevealViewController.h */,
-				40F56F2415CAC518001FC309 /* NTIRevealViewController.m */,
 			);
 			name = UI;
 			path = UI.subproj;
@@ -1720,7 +1714,6 @@
 				40F72DA8156EE1C50050C93E /* NTIMathEquationBuilder.h in Headers */,
 				40716F3515C828B900430FFC /* NTIGlobalInspectorSlice.h in Headers */,
 				40F56F2515CAC518001FC309 /* NTIBadgeCountView.h in Headers */,
-				40F56F2715CAC518001FC309 /* NTIRevealViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2309,7 +2302,6 @@
 				4C8EAFC91578065300BF8FF7 /* NSURL-NTIExtensions.m in Sources */,
 				40716F3615C828B900430FFC /* NTIGlobalInspectorSlice.m in Sources */,
 				40F56F2615CAC518001FC309 /* NTIBadgeCountView.m in Sources */,
-				40F56F2815CAC518001FC309 /* NTIRevealViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

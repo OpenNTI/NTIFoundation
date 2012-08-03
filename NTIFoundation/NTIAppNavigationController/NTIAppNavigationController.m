@@ -193,13 +193,9 @@ static BOOL isAppLayer(id possibleLayer)
 @implementation NTIAppNavigationController
 @synthesize delegate = nr_delegate;
 
--(id)initWithRootLayer:(UIViewController<NTIAppNavigationApplicationLayer>*)rootViewController 
-accessoryViewController: (UIViewController*)aVC;
+-(id)initWithRootLayer:(UIViewController<NTIAppNavigationApplicationLayer>*)rootViewController;
 {
 	self = [super initWithNibName: nil bundle: nil];
-	
-	self->splitViewController = [[UISplitViewController alloc] initWithNibName: nil bundle: nil];
-	[self addChildViewController: self->splitViewController];
 	
 	self->activeLayerSwitcherTabIndex = 0;
 	self->layerProviders = [NSMutableArray arrayWithCapacity: 3];
@@ -207,8 +203,8 @@ accessoryViewController: (UIViewController*)aVC;
 	self->navController = [[UINavigationController alloc] initWithNibName: nil bundle: nil];
 	self->navController.navigationBarHidden = YES;
 	
-	self->splitViewController.viewControllers = [NSArray arrayWithObjects: aVC, 
-												 self->navController, nil];
+	[self addChildViewController: self->navController];
+	[self->navController didMoveToParentViewController: self];
 	
 	[self pushLayer: rootViewController animated: NO];
 	
@@ -267,8 +263,8 @@ accessoryViewController: (UIViewController*)aVC;
 	
 	self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 	
-	self->splitViewController.view.frame = CGRectMake(0, 44, self.view.frame.size.width, self.view.frame.size.height - 44);
-	[self.view addSubview: self->splitViewController.view];
+	 self->navController.view.frame = CGRectMake(0, 44, self.view.frame.size.width, self.view.frame.size.height - 44);
+	[self.view addSubview: self->navController.view];
 }
 
 -(NSString*)titleForLayer: (id)layer
