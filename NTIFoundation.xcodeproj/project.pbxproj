@@ -85,6 +85,7 @@
 		4076F98F14C8BC45004C6301 /* NTISampleTransientLayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4076F98D14C8BC45004C6301 /* NTISampleTransientLayerViewController.m */; };
 		4076F99014C8BC45004C6301 /* NTISampleTransientLayerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4076F98E14C8BC45004C6301 /* NTISampleTransientLayerViewController.xib */; };
 		4076F99114C8FAD1004C6301 /* NTIAppNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40572C2A14C88D8E0032D2DB /* NTIAppNavigationController.m */; };
+		4080A01A15CC6BA000E1EB12 /* NTIBadgeCountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F56F2215CAC518001FC309 /* NTIBadgeCountView.m */; };
 		408494B51427DF6C0038BD31 /* WebSockets.h in Headers */ = {isa = PBXBuildFile; fileRef = 408494B31427DF6C0038BD31 /* WebSockets.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		408494B61427DF6C0038BD31 /* WebSockets.m in Sources */ = {isa = PBXBuildFile; fileRef = 408494B41427DF6C0038BD31 /* WebSockets.m */; };
 		408FBF07143F62D80095DD84 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408FBF06143F62D80095DD84 /* CoreText.framework */; };
@@ -2374,6 +2375,7 @@
 				4C8EAFE21578067500BF8FF7 /* NSURL-NTIExtensions.m in Sources */,
 				4C8EAFE51578103F00BF8FF7 /* NSURL-NTIExtensionsTest.m in Sources */,
 				40716F3715C828B900430FFC /* NTIGlobalInspectorSlice.m in Sources */,
+				4080A01A15CC6BA000E1EB12 /* NTIBadgeCountView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

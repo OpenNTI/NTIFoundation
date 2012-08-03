@@ -27,8 +27,7 @@
 	NTISampleApplicationLayerViewController* rootLayer = [[NTISampleApplicationLayerViewController alloc] initWithTitle: @"Root" ];
 	
 	self.window.rootViewController = [[NTIAppNavigationController alloc] 
-									  initWithRootLayer: rootLayer 
-									  accessoryViewController: [[UITableViewController alloc] initWithNibName: nil bundle: nil]];
+									  initWithRootLayer: rootLayer];
 	;
     [self.window makeKeyAndVisible];
     return YES;

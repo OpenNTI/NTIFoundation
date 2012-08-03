@@ -32,8 +32,7 @@
 {
 	self->rootLayer = [[TestAppLayer alloc] initWithNibName: nil bundle: nil];
 	self->appNavController = [[NTIAppNavigationController alloc] 
-								initWithRootLayer: (id)self->rootLayer
-							  accessoryViewController: [[UITableViewController alloc] initWithNibName: nil bundle: nil]];
+								initWithRootLayer: (id)self->rootLayer];
 }
 
 -(void)testPushingNil
