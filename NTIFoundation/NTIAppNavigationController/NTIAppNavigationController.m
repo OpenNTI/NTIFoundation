@@ -252,18 +252,25 @@ static BOOL isAppLayer(id possibleLayer)
 	}
 }
 
+-(id)toolbarForMainViewController
+{
+	if(!self->toolBar){
+		self->toolBar = [[NTIAppNavigationToolbar alloc] initWithTarget: self andFrame: CGRectMake(0, 0, self.view.frame.size.width, 44) andDelegate: self];
+		self->toolBar.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth;
+	}
+	return self->toolBar;
+}
+
 -(void)loadView
 {
 	[super loadView];
 	
-	self->toolBar = [[NTIAppNavigationToolbar alloc] initWithTarget: self andFrame: CGRectMake(0, 0, self.view.frame.size.width, 44) andDelegate: self];
-	self->toolBar.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth;
+	
 	[self updateToolbarForTopLayer];
-	[self.view addSubview: self->toolBar];
 	
 	self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 	
-	 self->navController.view.frame = CGRectMake(0, 44, self.view.frame.size.width, self.view.frame.size.height - 44);
+	self->navController.view.frame = self.view.bounds;
 	[self.view addSubview: self->navController.view];
 }
 
