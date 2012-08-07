@@ -30,6 +30,13 @@ makeAvailableSlicesForStackedSlicesPane: (OUIStackedSlicesInspectorPane*)pane;
 		  switcherDidShowLayer: (id<NTIAppNavigationLayer>)layer
 				fromDescriptor: (id<NTIAppNavigationLayerDescriptor>)desc
 			   layerWasCreated: (BOOL)created;
+-(void)appNavigationController: (NTIAppNavigationController*)controller
+				 willPushLayer: (id<NTIAppNavigationLayer>)layer
+					isAppLayer: (BOOL) appLayer;
+-(void)appNavigationController: (NTIAppNavigationController*)controller
+				  didPushLayer: (id<NTIAppNavigationLayer>)layer
+					isAppLayer: (BOOL) appLayer;
+			
 @end
 
 @class NTIGlobalInspector;

@@ -324,6 +324,10 @@ static BOOL isAppLayer(id possibleLayer)
 		return;
 	}
 	
+	if( [self->nr_delegate respondsToSelector: @selector(appNavigationController:willPushLayer:isAppLayer:)] ){
+		[self->nr_delegate appNavigationController: self willPushLayer: layer isAppLayer: isAppLayer(layer)];
+	}
+	
 	id layerGoingAway = self.topLayer;
 	
 	if( [layer respondsToSelector: @selector(willAppearInAppNavigationControllerAsResultOfPush:)] ){
@@ -356,6 +360,10 @@ static BOOL isAppLayer(id possibleLayer)
 	}
 	
 	[self updateLayerIcon];
+	
+	if( [self->nr_delegate respondsToSelector: @selector(appNavigationController:didPushLayer:isAppLayer:)] ){
+		[self->nr_delegate appNavigationController: self didPushLayer: layer isAppLayer: isAppLayer(layer)];
+	}
 }
 
 -(UIViewController<NTIAppNavigationLayer>*)unconditionallyPopLayerAnimated: (BOOL)animated
