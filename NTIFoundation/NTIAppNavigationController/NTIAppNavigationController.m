@@ -549,6 +549,16 @@ static BOOL isAppLayer(id possibleLayer)
 											parentsViewBounds.size.height);
 	transLayer.view.frame = transientFrameStart;
 	
+	//FIXME here transLayer view ends up as a subview of the top
+	//application layer b/c containerView is was added as a subview
+	//of the application layer.  This is WRONG and it results in some
+	//potentially funny gesture behaviour.  Gesture recognizers
+	//intercept touches for that view and all of the subviews.  That means
+	//gesture recognizers on an applayers view react to touches on
+	//the transient layers. This will take a bit of work to fix and test,
+	//an I'm not sure if this will be around for long.  Therefore I went
+	//ahead and worked around this bug in the watc (the one place we
+	//were currently hitting it)
 	[containingView addSubview: transLayer.view];
 	
 	//Now animate it in
