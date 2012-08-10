@@ -1117,8 +1117,16 @@ static void searchUpVCHiererarchyChainCollectingObjectsToNotifyOfDismissd(UIView
 	[self->inspector.shownFromFirstResponder resignFirstResponder];
 	
 	//TODO what do we do if no objects are selected?
-	[self->inspector inspectObjects: inspectableObjects 
-				  fromBarButtonItem: inspectorButton];
+	if([inspectorButton respondsToSelector: @selector(customView)]){
+		[self->inspector inspectObjects: inspectableObjects
+					  fromBarButtonItem: inspectorButton];
+	}
+	else if([inspectorButton respondsToSelector: @selector(bounds)]){
+		[self->inspector inspectObjects: inspectableObjects
+							   fromRect: [inspectorButton bounds]
+								 inView: inspectorButton
+			   permittedArrowDirections: UIPopoverArrowDirectionAny];
+	}
 }
 
 #pragma mark inspector delegate
