@@ -72,9 +72,9 @@ PRIVATE_STATIC_TESTABLE void sizeToBytes(NSUInteger length, uint8_t* sizeInfoPoi
 	
 	uint8_t sizeInfoPointer[9] = {0};
 	int sizeLength;
-	
+#ifdef DEBUG_SOCKETIO_VERBOSE	
 	NSLog(@"Generating size bytes for %ld", data.length);
-	
+#endif
 	sizeToBytes(self.data.length, sizeInfoPointer, &sizeLength);
 	
 	[mutableData appendBytes: &flag_and_opcode length: 1];

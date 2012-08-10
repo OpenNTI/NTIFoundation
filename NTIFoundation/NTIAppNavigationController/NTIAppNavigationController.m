@@ -38,6 +38,16 @@
 -(void)setLayerButtonActive: (BOOL)active;
 @end
 
+static UIButton* createLayerSwitcherButton();
+static UIButton* createLayerSwitcherButton()
+{
+	UIButton* button = [[UIButton alloc] init];
+	[button setImage: [UIImage imageNamed: @"switch_inactive.png"] forState: UIControlStateNormal];
+	[button setImage: [UIImage imageNamed: @"switch_active.png"] forState: UIControlStateSelected];
+	button.frame = CGRectMake(0, 0, 24, 24);
+	return button;
+}
+
 @implementation NTIAppNavigationToolbar
 @synthesize delegate;
 @synthesize downButton;
@@ -56,13 +66,10 @@ static UILabel* titleLabelForToolbar()
 	return titleLabel;
 }
 
--(UIView*)customViewForLayerSwitcher: (BOOL)active
+-(UIControl*)switcherButton
 {
-	UIImage* image = [UIImage imageNamed: active ? @"switch_active.png" : @"switch_inactive.png"];
-	UIButton* button = [[UIButton alloc] init];
+	UIButton* button = createLayerSwitcherButton();
 	[button addTarget: self action: @selector(interceptLayer:) forControlEvents: UIControlEventTouchUpInside];
-	[button setImage: image forState: UIControlStateNormal];
-	button.frame = CGRectMake(0, 0, image.size.width, image.size.height);
 	return button;
 }
 
@@ -81,10 +88,8 @@ static UILabel* titleLabelForToolbar()
 													   target: self->target
 													   action: @selector(down:)];
 	
-	UIView* customView = [self customViewForLayerSwitcher: NO];
+	UIControl* customView = [self switcherButton];
 	self->layerSelectorButton = [[UIBarButtonItem alloc] initWithCustomView: customView];
-//	self->layerSelectorButton.action = @selector(layer:);
-//	self->layerSelectorButton.target = self->target;
 	
 	UILabel* titleLabel = titleLabelForToolbar();
 	self->titleButton = [[UIBarButtonItem alloc] initWithCustomView: titleLabel];
@@ -113,12 +118,8 @@ static UILabel* titleLabelForToolbar()
 
 -(void)setLayerButtonActive: (BOOL)active
 {
-	UIButton* buttonView = (id)self->layerSelectorButton.customView;
-	UIImage* image = [UIImage imageNamed: active ? @"switch_active.png" : @"switch_inactive.png"];
-	[buttonView setImage: image forState: UIControlStateNormal];
-	CGRect frame = buttonView.frame;
-	frame.size = image.size;
-	buttonView.frame = frame;
+	UIControl* customView = (id)self->layerSelectorButton.customView;
+	customView.selected = active;
 }
 
 -(void)setDownButtonHidden: (BOOL)hidden
@@ -235,10 +236,22 @@ static BOOL isAppLayer(id possibleLayer)
 	return NO;
 }
 
+-(UIButton*)layerButton
+{
+	if(!self->layerButton){
+		self->layerButton = createLayerSwitcherButton();
+		[self->layerButton addTarget: self
+							  action: @selector(layer:)
+					forControlEvents: UIControlEventTouchUpInside];
+	}
+	return self->layerButton;
+}
+
 -(void)updateLayerIcon
 {
-	
-	[self->toolBar setLayerButtonActive: [self anyChangeCounts]];
+	BOOL anyChanges = [self anyChangeCounts];
+	self->layerButton.selected = anyChanges;
+	[self->toolBar setLayerButtonActive: anyChanges];
 }
 
 
@@ -265,6 +278,14 @@ static BOOL isAppLayer(id possibleLayer)
 {
 	[super loadView];
 	
+	//In this weird transition we don't have any way to pop application layers that get pushed.
+	//Add a gesture to make that happen.  3 finger might be safer and lessen the chance of
+	//interaction with other gestured, but annoyingly, there is no way to do more than 2 touches in the
+	//simulator.
+	UISwipeGestureRecognizer* swipeToPop = [[UISwipeGestureRecognizer alloc] initWithTarget: self
+																					 action: @selector(swipeToPop:)];
+	swipeToPop.numberOfTouchesRequired = 2;
+	[self.view addGestureRecognizer: swipeToPop];
 	
 	[self updateToolbarForTopLayer];
 	
@@ -958,7 +979,7 @@ static BOOL isAppLayer(id possibleLayer)
 	}
 }
 
--(void)layer: (id)_
+-(void)layer: (id)sender
 {
 	if(self->popController.isPopoverVisible){
 		[[OUIAppController controller] dismissPopoverAnimated: YES];
@@ -974,10 +995,22 @@ static BOOL isAppLayer(id possibleLayer)
 	}
 	
 	self->popController = [[UIPopoverController alloc] initWithContentViewController: switcher];
-	[[OUIAppController controller] presentPopover: popController 
-								fromBarButtonItem: _ 
-						 permittedArrowDirections: UIPopoverArrowDirectionUp 
-										 animated: YES];
+	
+	if([sender respondsToSelector: @selector(customView)]){
+		[[OUIAppController controller] presentPopover: popController
+									fromBarButtonItem: sender
+							 permittedArrowDirections: UIPopoverArrowDirectionUp
+											 animated: YES];
+	}
+	else if([sender respondsToSelector: @selector(bounds)]){
+		[[OUIAppController controller] presentPopover: popController
+											 fromRect: [sender bounds]
+											   inView: sender
+							 permittedArrowDirections: UIPopoverArrowDirectionAny
+											 animated: YES];
+	}
+	
+	
 }
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
@@ -1206,6 +1239,11 @@ makeAvailableSlicesForStackedSlicesPane: (OUIStackedSlicesInspectorPane *)pane
 	if(rec.state == UIGestureRecognizerStateEnded){
 		[self down: rec];
 	}
+}
+
+-(void)swipeToPop: (UIGestureRecognizer*)rec
+{
+	[self popLayerAnimated: YES];
 }
 
 -(void)swipedToRemoveTransient: (UIGestureRecognizer*)rec

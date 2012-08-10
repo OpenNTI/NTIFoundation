@@ -58,7 +58,11 @@ makeAvailableSlicesForStackedSlicesPane: (OUIStackedSlicesInspectorPane*)pane;
 	
 	//Track the tab on the switch
 	NSUInteger activeLayerSwitcherTabIndex;
+	
+	UIButton* layerButton;
 }
+//Returns a button that can be used to activate a layer switcher
+@property (nonatomic, readonly) UIButton* layerButton;
 @property (nonatomic, weak) id delegate;
 @property (nonatomic, readonly) NSArray* layers;
 @property (nonatomic, readonly) UIViewController<NTIAppNavigationLayer>* topLayer;
