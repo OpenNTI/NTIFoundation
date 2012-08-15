@@ -19,7 +19,7 @@
 				 | NSJSONReadingAllowFragments
 												  error: &error];
 	if(!result && error){
-		NSLog(@"An error occurred when derserializing %@. %@", self, error);
+		NSLog(@"An error occurred when derserializing data of length %lu bytes. %@", (unsigned long)[self length], error);
 		return nil;
 	}
 	
