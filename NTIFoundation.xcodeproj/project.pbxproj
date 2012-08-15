@@ -66,7 +66,7 @@
 		40572C5C14C894940032D2DB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72CBA96B1385CF1F00E3D28D /* Foundation.framework */; };
 		40572C5D14C894940032D2DB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408FBF08143F636F0095DD84 /* CoreGraphics.framework */; };
 		40572C6314C894940032D2DB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 40572C6114C894940032D2DB /* InfoPlist.strings */; };
-		4059D26515DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4059D26315DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.h */; };
+		4059D26515DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4059D26315DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4059D26615DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4059D26415DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m */; };
 		4059D26715DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4059D26415DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m */; };
 		4059D28315DC4CE800C567BA /* NSMutableDictionary-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4059D28215DC4CE800C567BA /* NSMutableDictionary-NTIExtensionsTest.m */; };
