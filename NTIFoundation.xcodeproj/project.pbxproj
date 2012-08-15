@@ -66,6 +66,10 @@
 		40572C5C14C894940032D2DB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72CBA96B1385CF1F00E3D28D /* Foundation.framework */; };
 		40572C5D14C894940032D2DB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408FBF08143F636F0095DD84 /* CoreGraphics.framework */; };
 		40572C6314C894940032D2DB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 40572C6114C894940032D2DB /* InfoPlist.strings */; };
+		4059D26515DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4059D26315DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.h */; };
+		4059D26615DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4059D26415DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m */; };
+		4059D26715DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4059D26415DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m */; };
+		4059D28315DC4CE800C567BA /* NSMutableDictionary-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4059D28215DC4CE800C567BA /* NSMutableDictionary-NTIExtensionsTest.m */; };
 		4066C81D14E1C89F006B56D3 /* WebSocketResponseBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4066C81B14E1C89F006B56D3 /* WebSocketResponseBuffer.h */; };
 		4066C81E14E1C89F006B56D3 /* WebSocketResponseBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4066C81C14E1C89F006B56D3 /* WebSocketResponseBuffer.m */; };
 		4066C81F14E1C89F006B56D3 /* WebSocketResponseBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4066C81C14E1C89F006B56D3 /* WebSocketResponseBuffer.m */; };
@@ -681,6 +685,10 @@
 		40572C6614C894940032D2DB /* NTINavigationExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NTINavigationExample-Prefix.pch"; sourceTree = "<group>"; };
 		40572C6714C894940032D2DB /* NTIAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NTIAppDelegate.h; sourceTree = "<group>"; };
 		40572C6814C894940032D2DB /* NTIAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = NTIAppDelegate.m; path = NTINavigationExample/NTIAppDelegate.m; sourceTree = SOURCE_ROOT; };
+		4059D26315DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary-NTIExtensions.h"; sourceTree = "<group>"; };
+		4059D26415DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary-NTIExtensions.m"; sourceTree = "<group>"; };
+		4059D28115DC4CE800C567BA /* NSMutableDictionary-NTIExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary-NTIExtensionsTest.h"; sourceTree = "<group>"; };
+		4059D28215DC4CE800C567BA /* NSMutableDictionary-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary-NTIExtensionsTest.m"; sourceTree = "<group>"; };
 		4066C81B14E1C89F006B56D3 /* WebSocketResponseBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSocketResponseBuffer.h; sourceTree = "<group>"; };
 		4066C81C14E1C89F006B56D3 /* WebSocketResponseBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSocketResponseBuffer.m; sourceTree = "<group>"; };
 		4066C83814E1C95F006B56D3 /* WebSocketData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSocketData.h; sourceTree = "<group>"; };
@@ -1107,6 +1115,8 @@
 				4029275214986A9800E4720A /* NSMutableArray-NTIExtensionsTest.m */,
 				40AB825E1566AA0C00BB7375 /* OQColor-NTIExtensionsTest.h */,
 				40AB825F1566AA0C00BB7375 /* OQColor-NTIExtensionsTest.m */,
+				4059D28115DC4CE800C567BA /* NSMutableDictionary-NTIExtensionsTest.h */,
+				4059D28215DC4CE800C567BA /* NSMutableDictionary-NTIExtensionsTest.m */,
 			);
 			name = FoundationExtensionsTests;
 			sourceTree = "<group>";
@@ -1600,6 +1610,8 @@
 				40A4147E1505748A0017242E /* NSDate-NTIExtensions.m */,
 				404A679E156D906900A81B6A /* UIDevice-NTIExtensions.h */,
 				404A679F156D906900A81B6A /* UIDevice-NTIExtensions.m */,
+				4059D26315DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.h */,
+				4059D26415DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m */,
 			);
 			name = FoundationExtensions;
 			path = FoundationExtensions.subproj;
@@ -1715,6 +1727,7 @@
 				40F72DA8156EE1C50050C93E /* NTIMathEquationBuilder.h in Headers */,
 				40716F3515C828B900430FFC /* NTIGlobalInspectorSlice.h in Headers */,
 				40F56F2515CAC518001FC309 /* NTIBadgeCountView.h in Headers */,
+				4059D26515DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2303,6 +2316,7 @@
 				4C8EAFC91578065300BF8FF7 /* NSURL-NTIExtensions.m in Sources */,
 				40716F3615C828B900430FFC /* NTIGlobalInspectorSlice.m in Sources */,
 				40F56F2615CAC518001FC309 /* NTIBadgeCountView.m in Sources */,
+				4059D26615DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2376,6 +2390,8 @@
 				4C8EAFE51578103F00BF8FF7 /* NSURL-NTIExtensionsTest.m in Sources */,
 				40716F3715C828B900430FFC /* NTIGlobalInspectorSlice.m in Sources */,
 				4080A01A15CC6BA000E1EB12 /* NTIBadgeCountView.m in Sources */,
+				4059D26715DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m in Sources */,
+				4059D28315DC4CE800C567BA /* NSMutableDictionary-NTIExtensionsTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
