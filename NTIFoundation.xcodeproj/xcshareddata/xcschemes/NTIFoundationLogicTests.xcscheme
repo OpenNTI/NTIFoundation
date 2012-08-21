@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
+   LastUpgradeVersion = "0440"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "NO"
@@ -16,7 +17,7 @@
                BlueprintIdentifier = "72D8185813955D8C00473994"
                BuildableName = "NTIFoundationLogicTests.octest"
                BlueprintName = "NTIFoundationLogicTests"
-               ReferencedContainer = "container:../NTIWorkspace/NTIFoundation/NTIFoundation.xcodeproj">
+               ReferencedContainer = "container:NTIFoundation.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -34,7 +35,7 @@
                BlueprintIdentifier = "72D8185813955D8C00473994"
                BuildableName = "NTIFoundationLogicTests.octest"
                BlueprintName = "NTIFoundationLogicTests"
-               ReferencedContainer = "container:../NTIWorkspace/NTIFoundation/NTIFoundation.xcodeproj">
+               ReferencedContainer = "container:NTIFoundation.xcodeproj">
             </BuildableReference>
             <LocationScenarioReference
                identifier = "com.apple.dt.IDEFoundation.CurrentLocationScenarioIdentifier"
@@ -44,7 +45,7 @@
       </Testables>
    </TestAction>
    <LaunchAction
-      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.GDB"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.GDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
