@@ -47,6 +47,9 @@
 //A procedure block takes an object, returns nothing.
 typedef void(^NTIObjectProcBlock)(id);
 
+//A procedure block that takes an error.
+typedef void(^NTIErrorProcBlock)(NSError* error);
+
 #if __has_feature(objc_arc)
 #define NTI_METHOD_FAMILY_NEW __attribute__((objc_method_family(new)))
 #else
