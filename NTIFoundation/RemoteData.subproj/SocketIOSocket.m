@@ -599,7 +599,7 @@ static NSArray* implementedTransportClasses()
 		[self parseHandshakeResponse: dataString];
 	}
 	else{
-		NSError* error = [NSError errorWithDomain: @"NTIDataserverResponseDomain" 
+		NSError* error = [NSError errorWithDomain: @"NTIDataserverResponseErrorDomain" 
 											 code: d.statusCode 
 										 userInfo: nil];
 		[self downloader: d connection: c didFailWithError: error];
