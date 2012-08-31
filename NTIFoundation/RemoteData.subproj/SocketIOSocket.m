@@ -233,6 +233,17 @@ static NSArray* implementedTransportClasses()
 	
 	[self->buffer removeAllObjects];
 	
+	if(self->forceDisconnect){
+		if( [self->nr_statusDelegate respondsToSelector:@selector(socketDidDisconnect:) ] ){
+			[self->nr_statusDelegate socketDidDisconnect: self];
+		}
+	}
+	else{
+		if( [self->nr_statusDelegate respondsToSelector:@selector(socketDidDisconnectUnexpectedly:) ] ){
+			[self->nr_statusDelegate socketDidDisconnectUnexpectedly: self];
+		}
+	}
+	
 	//If we weren't asked to disconnect this was a disconnect
 	//due to a dead transport and a closeTimout.  Try to reconnect the
 	//whole socket if we need to.
@@ -242,21 +253,11 @@ static NSArray* implementedTransportClasses()
 			[self->nr_statusDelegate socketWillReconnect: self];
 		}
 		[self startReconnectTimer];
-	}
-	else{
-		if(self->forceDisconnect){
-			if( [self->nr_statusDelegate respondsToSelector:@selector(socketDidDisconnect:) ] ){
-				[self->nr_statusDelegate socketDidDisconnect: self];
-			}
-		}
-		else{
+	}else{
+		
 #ifdef DEBUG_SOCKETIO
-			NSLog(@"Maximum number or reconnects exceeded.");
+		NSLog(@"Maximum number or reconnects exceeded.");
 #endif
-			if( [self->nr_statusDelegate respondsToSelector:@selector(socketDidDisconnectUnexpectedly:) ] ){
-				[self->nr_statusDelegate socketDidDisconnectUnexpectedly: self];
-			}
-		}
 	}
 }
 
