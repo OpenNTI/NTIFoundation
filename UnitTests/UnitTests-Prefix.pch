@@ -32,4 +32,18 @@
 #import "NTIUtilities.h"
 #import "NSMutableArray-NTIExtensions.h"
 #import "NTILogicTestBase/NTITestFixes.h"
+
+
+#ifdef TEST
+#define PRIVATE_STATIC_TESTABLE
+#else
+#define PRIVATE_STATIC_TESTABLE static
 #endif
+
+#endif
+#import "NTILogicTestBase/NTITestFixes.h"
+
+#import <OCMock/OCMock.h>
+
+//#define HC_SHORTHAND //Defining this here leads to lots of issues in this project.  need to figure that out
+//#import <OCHamcrestIOS/OCHamcrestIOS.h>

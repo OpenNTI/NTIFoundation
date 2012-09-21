@@ -59,6 +59,10 @@
 		404A67A1156D906900A81B6A /* UIDevice-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 404A679F156D906900A81B6A /* UIDevice-NTIExtensions.m */; };
 		404A67A2156D906900A81B6A /* UIDevice-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 404A679F156D906900A81B6A /* UIDevice-NTIExtensions.m */; };
 		404B1CD014E2C51400A825AF /* LongWebSocketHexString.txt in Resources */ = {isa = PBXBuildFile; fileRef = 404B1CCF14E2C51400A825AF /* LongWebSocketHexString.txt */; };
+		40531BCF160A39C800252818 /* NTITextAttachmentCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 40531BCD160A39C800252818 /* NTITextAttachmentCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		40531BD0160A39C800252818 /* NTITextAttachmentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 40531BCE160A39C800252818 /* NTITextAttachmentCell.m */; };
+		40531BD1160A39C800252818 /* NTITextAttachmentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 40531BCE160A39C800252818 /* NTITextAttachmentCell.m */; };
+		40531BED160A427F00252818 /* NTITextAttachmentCellTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40531BEC160A427F00252818 /* NTITextAttachmentCellTest.m */; };
 		4053898C14B3FB8800B5FB46 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4053898B14B3FB8700B5FB46 /* CFNetwork.framework */; };
 		40572C2B14C88D8E0032D2DB /* NTIAppNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 40572C2914C88D8E0032D2DB /* NTIAppNavigationController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40572C2C14C88D8E0032D2DB /* NTIAppNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40572C2A14C88D8E0032D2DB /* NTIAppNavigationController.m */; };
@@ -675,6 +679,10 @@
 		404A679E156D906900A81B6A /* UIDevice-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice-NTIExtensions.h"; sourceTree = "<group>"; };
 		404A679F156D906900A81B6A /* UIDevice-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice-NTIExtensions.m"; sourceTree = "<group>"; };
 		404B1CCF14E2C51400A825AF /* LongWebSocketHexString.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LongWebSocketHexString.txt; sourceTree = "<group>"; };
+		40531BCD160A39C800252818 /* NTITextAttachmentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTITextAttachmentCell.h; sourceTree = "<group>"; };
+		40531BCE160A39C800252818 /* NTITextAttachmentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTITextAttachmentCell.m; sourceTree = "<group>"; };
+		40531BEB160A427F00252818 /* NTITextAttachmentCellTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTITextAttachmentCellTest.h; sourceTree = "<group>"; };
+		40531BEC160A427F00252818 /* NTITextAttachmentCellTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTITextAttachmentCellTest.m; sourceTree = "<group>"; };
 		4053898B14B3FB8700B5FB46 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		40572C2914C88D8E0032D2DB /* NTIAppNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIAppNavigationController.h; sourceTree = "<group>"; };
 		40572C2A14C88D8E0032D2DB /* NTIAppNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIAppNavigationController.m; sourceTree = "<group>"; };
@@ -1025,6 +1033,8 @@
 				40E045F2143F468D0091CE7C /* NTIHTMLWriter.m */,
 				40E04612143F47890091CE7C /* NTIHTMLReader.h */,
 				40E04613143F47890091CE7C /* NTIHTMLReader.m */,
+				40531BCD160A39C800252818 /* NTITextAttachmentCell.h */,
+				40531BCE160A39C800252818 /* NTITextAttachmentCell.m */,
 			);
 			name = RTFEditing;
 			path = RTFEditing.subproj;
@@ -1128,6 +1138,8 @@
 				40E0461B143F5F260091CE7C /* NTIHTMLReaderTest.m */,
 				403D0DCB143E38FD0049A755 /* NSAttributedString-HTMLReadingExtensionsTest.h */,
 				403D0DCC143E38FD0049A755 /* NSAttributedString-HTMLReadingExtensionsTest.m */,
+				40531BEB160A427F00252818 /* NTITextAttachmentCellTest.h */,
+				40531BEC160A427F00252818 /* NTITextAttachmentCellTest.m */,
 			);
 			name = RTFEditingTests;
 			sourceTree = "<group>";
@@ -1728,6 +1740,7 @@
 				40716F3515C828B900430FFC /* NTIGlobalInspectorSlice.h in Headers */,
 				40F56F2515CAC518001FC309 /* NTIBadgeCountView.h in Headers */,
 				4059D26515DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.h in Headers */,
+				40531BCF160A39C800252818 /* NTITextAttachmentCell.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2317,6 +2330,7 @@
 				40716F3615C828B900430FFC /* NTIGlobalInspectorSlice.m in Sources */,
 				40F56F2615CAC518001FC309 /* NTIBadgeCountView.m in Sources */,
 				4059D26615DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m in Sources */,
+				40531BD0160A39C800252818 /* NTITextAttachmentCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2392,6 +2406,8 @@
 				4080A01A15CC6BA000E1EB12 /* NTIBadgeCountView.m in Sources */,
 				4059D26715DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m in Sources */,
 				4059D28315DC4CE800C567BA /* NSMutableDictionary-NTIExtensionsTest.m in Sources */,
+				40531BD1160A39C800252818 /* NTITextAttachmentCell.m in Sources */,
+				40531BED160A427F00252818 /* NTITextAttachmentCellTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2808,11 +2824,17 @@
 					COVERAGE,
 					DEBUG,
 				);
+				HEADER_SEARCH_PATHS = (
+					"$(value)",
+					"$(OBJROOT)/UninstalledProducts/include",
+					"\"$(SRCROOT)/../NTIWorkspace/OCMock\"",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(DEVELOPER_DIR)/usr/lib\"",
 					"\"$(DEVELOPER_DIR)/Platforms/iPhoneOS.platform/Developer/usr/lib\"",
+					"\"$(SRCROOT)/../NTIWorkspace/OCMock\"",
 				);
 				LINK_PROFILE_YES = "-lprofile_rt";
 				OTHER_LDFLAGS = (
@@ -2845,10 +2867,16 @@
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "UnitTests/UnitTests-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"$(value)",
+					"$(OBJROOT)/UninstalledProducts/include",
+					"\"$(SRCROOT)/../NTIWorkspace/OCMock\"",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(DEVELOPER_DIR)/usr/lib\"",
+					"\"$(SRCROOT)/../NTIWorkspace/OCMock\"",
 				);
 				LINK_PROFILE_YES = "-lprofile_rt";
 				OTHER_LDFLAGS = (

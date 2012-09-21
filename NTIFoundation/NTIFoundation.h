@@ -37,6 +37,7 @@
 #import "OQColor-NTIExtensions.h"
 #import "NTIEditableFrame.h"
 #import "NTIEditableFrameScrollView.h"
+#import "NTITextAttachmentCell.h"
 #import "NSURL-NTIFileSystemExtensions.h"
 #import "NTIAppNavigationController.h"
 #import "NTIInspectableController.h"

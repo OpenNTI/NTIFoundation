@@ -10,6 +10,8 @@
 #import "NTIEditableFrame.h"
 #import "OmniUI/OUEFTextRange.h"
 #import "NTIFoundation.h"
+#import <OmniAppKit/NSAttributedString-OAExtensions.h>
+#import "NTITextAttachmentCell.h"
 
 @interface OUIEditableFrame(NTIActiveTapExtensions)
 - (void)_activeTap:(UITapGestureRecognizer *)r;
@@ -34,6 +36,39 @@
 		[attrs removeObjectForKey: kNTIChunkSeparatorAttributeName];
 	}
 	[super setTypingAttributes: attrs];
+}
+
+-(void)removeFromAttachmentCells: (NSAttxributedString*)attrText
+{
+	[attrText eachAttachment: ^(OATextAttachment* attachment){
+		if([attachment respondsToSelector:@selector(attachmentCell)]){
+			id cell = [attachment attachmentCell];
+			if([cell respondsToSelector: @selector(removeEditableFrame:)]){
+				[cell removeEditableFrame: self];
+			}
+		}
+	}];
+}
+
+-(void)attachToAttachmentCells: (NSAttributedString*)newAttrText
+{
+	[newAttrText eachAttachment: ^(OATextAttachment* attachment){
+		if([attachment respondsToSelector:@selector(attachmentCell)]){
+			id cell = [attachment attachmentCell];
+			if([cell respondsToSelector: @selector(attachEditableFrame:)]){
+				[cell attachEditableFrame: self];
+			}
+		}
+	}];
+}
+
+-(void)setAttributedText: (NSAttributedString *)newAttrText
+{
+	
+	[self removeFromAttachmentCells: self.attributedText];
+	[self attachToAttachmentCells: newAttrText];
+	
+	[super setAttributedText: newAttrText];
 }
 
 -(void)replaceRange: (OUEFTextRange*)range withObject: (id)object
@@ -137,6 +172,11 @@
 					  forRange: (UITextRange*)range
 {
 	OBFinishPortingLater( "Stop ignoring writing direction" );
+}
+
+-(void)dealloc
+{
+	[self removeFromAttachmentCells: self.attributedText];
 }
 
 @end
