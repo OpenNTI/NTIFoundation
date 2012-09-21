@@ -38,7 +38,7 @@
 	[super setTypingAttributes: attrs];
 }
 
--(void)removeFromAttachmentCells: (NSAttxributedString*)attrText
+-(void)removeFromAttachmentCells: (NSAttributedString*)attrText
 {
 	[attrText eachAttachment: ^(OATextAttachment* attachment){
 		if([attachment respondsToSelector:@selector(attachmentCell)]){

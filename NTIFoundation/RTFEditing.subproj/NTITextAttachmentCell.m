@@ -70,9 +70,9 @@
 -(void)setNeedsRedrawn
 {
 	[self clearZeroedWeakRefs];
-	for(id view in self->editableFrames){
-		if([view respondsToSelector: @selector(setNeedsDisplay)]){
-			[view setNeedsDisplay];
+	for(_ZeroingWeakWrapper* view in self->editableFrames){
+		if([view.wrapped respondsToSelector: @selector(setNeedsDisplay)]){
+			[view.wrapped setNeedsDisplay];
 		}
 	}
 }
