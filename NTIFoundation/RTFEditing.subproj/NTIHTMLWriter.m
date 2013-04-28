@@ -43,7 +43,7 @@
 								after: (NSString*)after;
 @end
 
-@interface NTIHTMLColorTableEntry : OFObject
+@interface NTIHTMLColorTableEntry : OFObject<NSCopying>
 {
 @private
 	int red, green, blue;
@@ -763,7 +763,7 @@ static const struct {
 -(BOOL)isEqual: (id)object;
 {
 	NTIHTMLColorTableEntry* otherEntry = object;
-	if( otherEntry->isa != isa ) {
+	if( object_getClass(otherEntry) != isa ) {
 		return NO;
 	}
 	return otherEntry->red == self->red

@@ -9,6 +9,22 @@
 #ifndef NTIFoundation_NTIFoundation_h
 #define NTIFoundation_NTIFoundation_h
 
+#if ! __has_feature(objc_arc)
+	#define NTIDispatchQueueRelease(__v) (dispatch_release(__v));
+#else
+	#if TARGET_OS_IPHONE
+		// Compiling for iOS
+		#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
+			// iOS 6.0 or later
+			#define NTIDispatchQueueRelease(__v)
+		#else
+			// iOS 5.X or earlier
+			#define NTIDispatchQueueRelease(__v) (dispatch_release(__v));
+		#endif
+	#endif
+#endif
+
+
 #import "UIDevice-NTIExtensions.h"
 #import "NSDate-NTIExtensions.h"
 #import "NSURL-NTIExtensions.h"

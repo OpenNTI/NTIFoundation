@@ -16,7 +16,7 @@
 
 +(NTIAppDelegate *)sharedDelegate
 {
-	return [OUIAppController controller];
+	return (id)[OUIAppController controller];
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions

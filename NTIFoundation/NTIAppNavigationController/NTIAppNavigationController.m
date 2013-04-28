@@ -1253,11 +1253,6 @@ makeAvailableSlicesForStackedSlicesPane: (OUIStackedSlicesInspectorPane *)pane
 
 #pragma mark layer switcher delegate
 
--(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
-{
-	return YES;
-}
-
 -(id)appNavController
 {
 	return self;

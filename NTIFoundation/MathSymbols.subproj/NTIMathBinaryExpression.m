@@ -47,12 +47,8 @@
 	if ([symbolString isEqualToString:@"≈"]) {
 		return [[NTIMathApproxExpression alloc] init];
 	}
-	NSString* notReachedString = [NSString stringWithFormat: @"%@ not supported", symbolString];
 	
-	//Get the compiler to shutup about unused variable.
-	if(notReachedString){
-		OBASSERT_NOT_REACHED([notReachedString cStringUsingEncoding: NSUTF8StringEncoding] );
-	}
+	OBASSERT_NOT_REACHED(@"%@ not supported", symbolString);
 	return nil;
 }
 
@@ -159,12 +155,7 @@
 		return self.rightMathNode;
 	}
 	
-	NSString* notReachedString = [NSString stringWithFormat: @"child node: %@ is not one of our children nodes", childNode];
-	
-	//Get the compiler to shutup about unused variable.
-	if(notReachedString){
-		OBASSERT_NOT_REACHED([notReachedString cStringUsingEncoding: NSUTF8StringEncoding] );
-	}
+	OBASSERT_NOT_REACHED(@"child node: %@ is not one of our children nodes", childNode);
 	return nil;
 }
 

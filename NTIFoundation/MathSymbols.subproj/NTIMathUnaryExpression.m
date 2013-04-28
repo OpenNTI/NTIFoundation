@@ -93,12 +93,8 @@
 		return self.childMathNode;
 	}
 	
-	NSString* notReachedString = [NSString stringWithFormat: @"child node: %@ is not one of our children nodes", childNode];
+	OBASSERT_NOT_REACHED( @"child node: %@ is not one of our children nodes", childNode);
 	
-	//Get the compiler to shutup about unused variable.
-	if(notReachedString){
-		OBASSERT_NOT_REACHED([notReachedString cStringUsingEncoding: NSUTF8StringEncoding] );
-	}
 	return nil;
 }
 

@@ -89,22 +89,5 @@
 	}
 }
 
-- (void)viewDidUnload
-{
-	[self setTitleLabel:nil];
-	[self setPushAppLayerButton:nil];
-	[self setPushTransientLayerButton:nil];
-	[self setPopSelfButton:nil];
-	[self setNextTitleField:nil];
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-	return YES;
-}
 
 @end
