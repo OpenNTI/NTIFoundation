@@ -555,7 +555,9 @@ static const struct {
 	CGColorRef blackCGColor = [blackColor rgbaCGColorRef];
 	NTIHTMLColorTableEntry* defaultColorEntry = [[NTIHTMLColorTableEntry alloc] 
 												 initWithColor: blackCGColor];
-	CFRelease( blackCGColor );
+	if(blackCGColor){
+		CFRelease( blackCGColor );
+	}
 	[self->registeredColors setObject: [NSNumber numberWithInt: colorIndex++]
 							   forKey: defaultColorEntry];
 	
