@@ -31,6 +31,13 @@
 	return [self objectAtIndex: 0];	
 }
 
+-(id)firstObjectOrNil
+{
+	return [NSArray isEmptyArray: self]
+	? nil
+	: self.firstObject;
+}
+
 -(id)secondObject
 {
 	return [self objectAtIndex: 1];
