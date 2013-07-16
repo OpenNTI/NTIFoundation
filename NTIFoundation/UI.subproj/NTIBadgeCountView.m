@@ -84,11 +84,10 @@
 			sizeOfFont += sizeOfFont*0.20;
 		}
 		UIFont *textFont = [UIFont boldSystemFontOfSize:sizeOfFont];
-		CGSize textSize = [countString sizeWithFont:textFont];
-		[countString drawAtPoint: 
-		 CGPointMake((rect.size.width/2-textSize.width/2), 
-					 (rect.size.height/2-textSize.height/2)) 
-						withFont: textFont];
+		CGSize textSize = [countString sizeWithAttributes: @{NSFontAttributeName: textFont}];
+		[countString drawAtPoint: CGPointMake((rect.size.width/2-textSize.width/2),
+											  (rect.size.height/2-textSize.height/2))
+				  withAttributes: @{NSFontAttributeName: textFont}];
 	}
 	
 }

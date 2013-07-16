@@ -575,7 +575,7 @@ static const struct {
 		CGColorRef cgColor = (__bridge CGColorRef)color;
 		NTIHTMLColorTableEntry* colorTableEntry = [[NTIHTMLColorTableEntry alloc] 
 												   initWithColor: cgColor];
-		if( ![self->registeredColors objectForKey: colorTableEntry] ) {
+		if( OFNOTNULL(colorTableEntry) && ![self->registeredColors objectForKey: colorTableEntry] ) {
 			[self->registeredColors setObject: [NSNumber numberWithInt: colorIndex++]
 									   forKey: colorTableEntry];
 		}
@@ -714,7 +714,10 @@ static const struct {
 		return self;
 	}
 	
-	//OBASSERT(CFGetTypeID(color) == CGColorGetTypeID());
+	//OBASSERT(CFGetTypeID(cgColor) == CGColorGetTypeID());
+	if(CFGetTypeID(cgColor) != CGColorGetTypeID()){
+		return nil;
+	}
 	
 	CGColorSpaceRef colorSpace = CGColorGetColorSpace(cgColor);
 	const CGFloat* components = CGColorGetComponents(cgColor);

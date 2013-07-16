@@ -61,7 +61,7 @@ static UILabel* titleLabelForToolbar()
 	titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18];
 	titleLabel.backgroundColor = [UIColor clearColor];
 	titleLabel.textColor = [UIColor colorWithRed:157.0/255.0 green:157.0/255.0 blue:157.0/255.0 alpha:1.0];
-	titleLabel.textAlignment = UITextAlignmentCenter;
+	titleLabel.textAlignment = NSTextAlignmentCenter;
 	//titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	return titleLabel;
 }
@@ -987,7 +987,7 @@ static BOOL isAppLayer(id possibleLayer)
 	//TODO probably want to stash this around or save some state so we can show the tab that was last shown.
 	NTIAppNavigationLayerSwitcher* switcher = [[NTIAppNavigationLayerSwitcher alloc] initWithDelegate: (id)self];
 	switcher.delegate = self;
-	switcher.contentSizeForViewInPopover = CGSizeMake(320, 480);
+	switcher.preferredContentSize = CGSizeMake(320, 480);
 	
 	if(   self->activeLayerSwitcherTabIndex < switcher.viewControllers.count
 	   && self->activeLayerSwitcherTabIndex != NSNotFound){
