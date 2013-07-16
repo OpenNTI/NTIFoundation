@@ -765,7 +765,7 @@ static const struct {
 -(BOOL)isEqual: (id)object;
 {
 	NTIHTMLColorTableEntry* otherEntry = object;
-	if( object_getClass(otherEntry) != isa ) {
+	if( object_getClass(otherEntry) != object_getClass(self) ) {
 		return NO;
 	}
 	return otherEntry->red == self->red

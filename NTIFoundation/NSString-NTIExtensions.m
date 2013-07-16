@@ -99,4 +99,9 @@ static NSDateFormatter* rfc3339DateFormatter()
 	return [self piecesUsingRegex: regex];
 }
 
+-(BOOL)isEqualToStringIgnoringCase: (NSString*)s
+{
+	return [self caseInsensitiveCompare: s] == NSOrderedSame;
+}
+
 @end
