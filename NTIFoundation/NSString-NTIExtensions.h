@@ -49,4 +49,5 @@
 -(NSArray*)piecesUsingRegex: (NSRegularExpression*)regex;
 -(NSArray*)piecesUsingRegexString: (NSString*)regex;
 -(BOOL)isEqualToStringIgnoringCase: (NSString*)s;
+
 @end
