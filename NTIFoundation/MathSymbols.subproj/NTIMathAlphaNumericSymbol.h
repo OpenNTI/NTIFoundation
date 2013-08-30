@@ -17,4 +17,5 @@
 -(id)initWithValue: (NSString *)value;
 -(NTIMathSymbol *)deleteLastLiteral;
 -(BOOL)isLiteral;
+-(NTIMathSymbol *)appendMathSymbol: (NTIMathSymbol *)newSymbol;
 @end

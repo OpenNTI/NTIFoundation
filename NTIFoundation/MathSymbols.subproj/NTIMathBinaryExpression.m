@@ -12,6 +12,7 @@
 #import "NTIMathExponentBinaryExpression.h"
 #import "NTIMathFractionBinaryExpression.h"
 #import "NTIMathUnaryExpression.h"
+#import "NTIMathAlphaNumericSymbol.h"
 
 @interface NTIMathBinaryExpression() 
 //-(NSUInteger)precedenceLevelForString: (NSString *)opString;

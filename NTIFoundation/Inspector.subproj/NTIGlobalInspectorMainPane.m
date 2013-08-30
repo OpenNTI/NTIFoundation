@@ -15,6 +15,7 @@
 #import <OmniUI/OUIDetailInspectorSlice.h>
 #import <OmniUI/OUIStackedSlicesInspectorPane.h>
 #import <OmniUI/OUIColorInspectorPane.h>
+#import <OmniUI/OUIColorInspectorSlice.h>
 #import "NTIInspectorSliceObjectPair.h"
 
 //FIXME move this into a better protocol that describes the slices for our main pane

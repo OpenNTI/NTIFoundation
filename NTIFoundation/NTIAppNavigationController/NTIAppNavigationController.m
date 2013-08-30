@@ -14,6 +14,20 @@
 #import "NTIGlobalInspector.h"
 #import "NTIInspectableController.h"
 
+
+@interface NTIAppNavigationController()
+-(void)pushNavController:(UIViewController*)vc animated: (BOOL)animated;
+-(void)popNavControllerAnimated: (BOOL)animated;
+-(UIViewController<NTIAppNavigationLayer>*)popApplicationLayer: (BOOL)animated;
+-(UIViewController<NTIAppNavigationLayer>*)popTransientLayer: (BOOL)animated;
+-(void)pushApplicationLayer: (UIViewController<NTIAppNavigationApplicationLayer>*)appLayer animated: (BOOL)animated;
+-(void)pushTransientLayer: (UIViewController<NTIAppNavigationTransientLayer>*)transLayer animated: (BOOL)animated;
+-(void)updateToolbarForTopLayer;
+-(void)down: (id)target;
+-(void)inspector: (id)inspector;
+-(void)layer: (id)sender;
+@end
+
 @class NTIAppNavigationToolbar;
 @protocol NTIAppNavigationToolbarDelegate
 @optional
@@ -146,6 +160,11 @@ static UILabel* titleLabelForToolbar()
 
 @end
 
+//Shut the compiler up about
+@interface UIViewController(AppNavController)
+-(id)appNavController;
+@end
+
 @implementation UIViewController(NTIAppNavigationControllerExtensions)
 -(NTIAppNavigationController*)ntiAppNavigationController
 {
@@ -175,16 +194,6 @@ static UILabel* titleLabelForToolbar()
 
 #define kTransientLayerAnimationSpeed .4
 #define kTransientLayerSize 320
-
-@interface NTIAppNavigationController()
--(void)pushNavController:(UIViewController*)vc animated: (BOOL)animated;
--(void)popNavControllerAnimated: (BOOL)animated;
--(UIViewController<NTIAppNavigationLayer>*)popApplicationLayer: (BOOL)animated;
--(UIViewController<NTIAppNavigationLayer>*)popTransientLayer: (BOOL)animated;
--(void)pushApplicationLayer: (UIViewController<NTIAppNavigationApplicationLayer>*)appLayer animated: (BOOL)animated;
--(void)pushTransientLayer: (UIViewController<NTIAppNavigationTransientLayer>*)transLayer animated: (BOOL)animated;
--(void)updateToolbarForTopLayer;
-@end
 
 static BOOL isAppLayer(id possibleLayer)
 {

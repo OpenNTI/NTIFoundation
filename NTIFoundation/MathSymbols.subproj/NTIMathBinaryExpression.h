@@ -27,6 +27,8 @@
 -(NSString *)toStringValueForChildNode: (NTIMathSymbol *)childExpression;
 +(NTIMathBinaryExpression *)binaryExpressionForString:(NSString *)symbolString;
 -(NTIMathSymbol *)findLastLeafNodeFrom: (NTIMathSymbol *)mathSymbol;
+-(void)replaceNode: (NTIMathSymbol *)newMathNode withPlaceholderFor: (NTIMathSymbol *)pointingTo;
+-(NSArray *)nonEmptyChildren;
 @end
 
 @interface NTIMathAdditionBinaryExpression : NTIMathBinaryExpression

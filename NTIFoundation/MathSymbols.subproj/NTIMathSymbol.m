@@ -7,6 +7,7 @@
 //
 
 #import "NTIMathSymbol.h"
+#import "NTIMathPlaceholderSymbol.h"
 
 @implementation NTIMathSymbol
 @synthesize parentMathSymbol, precedenceLevel,substituteSymbol;
@@ -16,8 +17,8 @@
 static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 {
 	//helper method, for placeholder that may be pointing to expression tree.
-	if ([mathSymbol respondsToSelector:@selector(isPlaceholder)]) {
-		NTIMathSymbol* rep = [mathSymbol performSelector:@selector(inPlaceOfObject)];
+	if ([mathSymbol respondsToSelector: @selector(isPlaceholder)]) {
+		NTIMathSymbol* rep = [mathSymbol performSelector: @selector(inPlaceOfObject)];
 		if (rep) {
 			return rep;
 		}

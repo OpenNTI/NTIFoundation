@@ -13,6 +13,10 @@
 #import <OmniAppKit/OATextStorage.h>
 #import <OmniAppKit/OATextAttachmentCell.h>
 
+@interface OATextAttachmentCell(NTIAttachmentCellWriterCoupling)
+-(void)htmlWriter:(id)w exportHTMLToDataBuffer: (id)b withSize: (NSUInteger)s;
+@end
+
 /*
  * Provides methods for working with chunked attributed strings (usefull for multipart note/chat bodies).
  * An attributedString is chunked if it contains any one length ranges with the kNTIChunkSeparatorAttributeName.

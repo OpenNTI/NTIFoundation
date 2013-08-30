@@ -20,7 +20,9 @@
 			   withNewNode: (NTIMathSymbol *)newNode;
 -(BOOL)isUnaryOperator;
 -(NSString *)toStringValueForChildNode: (NTIMathSymbol *)childExpression;
--(NSString *)latexValueForChildNode: (NTIMathSymbol *)childExpression;
+-(NSString *)latexValueForChildNode: (NTIMathSymbol *)childExpression;;
+-(void)replaceNode: (NTIMathSymbol *)newMathNode withPlaceholderFor: (NTIMathSymbol *)pointingTo;
+-(NSArray *)nonEmptyChildren;
 @end
 
 @interface NTIMathAprroxUnaryExpression : NTIMathUnaryExpression
