@@ -9,5 +9,6 @@
 @interface NSDate(NTIExtensions)
 
 @property (nonatomic, readonly) NSString* stringWithShortDateFormatNL;
++(NSString*) stringFromTimeIntervalWithLargestFittingTimeUnit: (NSUInteger)timeInterval;
 
 @end
