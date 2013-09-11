@@ -34,6 +34,7 @@ static NSString* shortDateStringNL( NSDate* date )
 
 +(NSString*)stringFromTimeIntervalWithLargestFittingTimeUnit:(NSUInteger)timeInterval
 {
+	//TODO: any string presnted to the user must be externalized.
 	NSString* timeUnitString;
 	NSUInteger timeSince = timeInterval;
 	if(timeInterval >= kNTISecondsInAYear){
