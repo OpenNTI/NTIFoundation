@@ -33,6 +33,7 @@
 #import "NSObject-NTIJSON.h"
 #import "NSArray-NTIExtensions.h"
 #import "NSMutableArray-NTIExtensions.h"
+#import "NSNotification-NTIExtensions.h"
 #import "NSString-NTIExtensions.h"
 #import "NSMutableDictionary-NTIExtensions.h"
 #import "OUUnzipArchive-NTIExtensions.h"

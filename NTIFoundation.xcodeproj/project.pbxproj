@@ -45,6 +45,11 @@
 		403C317A1512A5DD00C53D22 /* NSData-NTIJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 403C31781512A5DD00C53D22 /* NSData-NTIJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		403C317B1512A5DD00C53D22 /* NSData-NTIJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C31791512A5DD00C53D22 /* NSData-NTIJSON.m */; };
 		403C317C1512A5DD00C53D22 /* NSData-NTIJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C31791512A5DD00C53D22 /* NSData-NTIJSON.m */; };
+		403C8CE217EA6CE9000FC290 /* NSNotification-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 403C8CE017EA6CE9000FC290 /* NSNotification-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		403C8CE317EA6CE9000FC290 /* NSNotification-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C8CE117EA6CE9000FC290 /* NSNotification-NTIExtensions.m */; };
+		403C8CE417EA6CE9000FC290 /* NSNotification-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C8CE117EA6CE9000FC290 /* NSNotification-NTIExtensions.m */; };
+		403C8CE517EA6CE9000FC290 /* NSNotification-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C8CE117EA6CE9000FC290 /* NSNotification-NTIExtensions.m */; };
+		403C8CE617EA6CE9000FC290 /* NSNotification-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C8CE117EA6CE9000FC290 /* NSNotification-NTIExtensions.m */; };
 		403D0DC2143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 403D0DBC143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		403D0DC3143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D0DBD143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.m */; };
 		403D0DC4143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 403D0DBE143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -694,6 +699,8 @@
 		403C290614577A260012CBAB /* NSAttributedString-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString-NTIExtensionsTest.m"; sourceTree = "<group>"; };
 		403C31781512A5DD00C53D22 /* NSData-NTIJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData-NTIJSON.h"; sourceTree = "<group>"; };
 		403C31791512A5DD00C53D22 /* NSData-NTIJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData-NTIJSON.m"; sourceTree = "<group>"; };
+		403C8CE017EA6CE9000FC290 /* NSNotification-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotification-NTIExtensions.h"; sourceTree = "<group>"; };
+		403C8CE117EA6CE9000FC290 /* NSNotification-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNotification-NTIExtensions.m"; sourceTree = "<group>"; };
 		403D0DBC143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString-HTMLReadingExtensions.h"; sourceTree = "<group>"; };
 		403D0DBD143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString-HTMLReadingExtensions.m"; sourceTree = "<group>"; };
 		403D0DBE143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString-HTMLWritingExtensions.h"; sourceTree = "<group>"; };
@@ -1590,6 +1597,8 @@
 				404A679F156D906900A81B6A /* UIDevice-NTIExtensions.m */,
 				4059D26315DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.h */,
 				4059D26415DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m */,
+				403C8CE017EA6CE9000FC290 /* NSNotification-NTIExtensions.h */,
+				403C8CE117EA6CE9000FC290 /* NSNotification-NTIExtensions.m */,
 			);
 			name = FoundationExtensions;
 			path = FoundationExtensions.subproj;
@@ -1668,6 +1677,7 @@
 				40E045F3143F468D0091CE7C /* NTIHTMLWriter.h in Headers */,
 				40E04614143F47890091CE7C /* NTIHTMLReader.h in Headers */,
 				7293CB291451AA7D00CD64B8 /* NTIEditableFrame.h in Headers */,
+				403C8CE217EA6CE9000FC290 /* NSNotification-NTIExtensions.h in Headers */,
 				40E04618143F50A60091CE7C /* OQColor-NTIExtensions.h in Headers */,
 				40C0E1031443AF9C00142406 /* SocketIOPacketTest.h in Headers */,
 				403C28E614576E160012CBAB /* NSAttributedString-NTIExtensions.h in Headers */,
@@ -2248,6 +2258,7 @@
 				4076F88E14C8A132004C6301 /* NTIAppDelegate.m in Sources */,
 				4076F88F14C8A151004C6301 /* main.m in Sources */,
 				4076F98514C8AFF3004C6301 /* NTISampleApplicationLayerViewController.m in Sources */,
+				403C8CE517EA6CE9000FC290 /* NSNotification-NTIExtensions.m in Sources */,
 				4076F98F14C8BC45004C6301 /* NTISampleTransientLayerViewController.m in Sources */,
 				402D2F2514C92BDA00E051AF /* NTITransientNeverEndingNavController.m in Sources */,
 			);
@@ -2258,6 +2269,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				40C34CBF14D893DC000D91A8 /* NTIAppNavigationControllerTest.m in Sources */,
+				403C8CE617EA6CE9000FC290 /* NSNotification-NTIExtensions.m in Sources */,
 				4CEC1DB2151395F70074F3DD /* NTIGlobalInspectorAppTest.m in Sources */,
 				4C696D0A1516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m in Sources */,
 			);
@@ -2323,6 +2335,7 @@
 				4C8EAFC91578065300BF8FF7 /* NSURL-NTIExtensions.m in Sources */,
 				40716F3615C828B900430FFC /* NTIGlobalInspectorSlice.m in Sources */,
 				40F56F2615CAC518001FC309 /* NTIBadgeCountView.m in Sources */,
+				403C8CE317EA6CE9000FC290 /* NSNotification-NTIExtensions.m in Sources */,
 				4059D26615DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m in Sources */,
 				40531BD0160A39C800252818 /* NTITextAttachmentCell.m in Sources */,
 			);
@@ -2369,6 +2382,7 @@
 				40F39C8714D852FE0089DCF6 /* NSString-NTIExtensionsTest.m in Sources */,
 				40A7459B14DA30050093F0D4 /* NSObject-NTIJSONTest.m in Sources */,
 				4066C81F14E1C89F006B56D3 /* WebSocketResponseBuffer.m in Sources */,
+				403C8CE417EA6CE9000FC290 /* NSNotification-NTIExtensions.m in Sources */,
 				4066C83C14E1C95F006B56D3 /* WebSocketData.m in Sources */,
 				4C3DA34114E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m in Sources */,
 				4C3BDC1E14EAF87F008ED49D /* NTIInspectorSliceObjectPair.m in Sources */,
