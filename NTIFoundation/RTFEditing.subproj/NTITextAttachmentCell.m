@@ -7,41 +7,9 @@
 //
 
 #import "NTITextAttachmentCell.h"
-
-@interface _ZeroingWeakWrapper : OFObject
--(id)initWithObject: (id)obj;
-@property (nonatomic, weak) id wrapped;
-@end
-
-@implementation _ZeroingWeakWrapper
-@synthesize wrapped;
-
--(id)initWithObject:(id)obj
-{
-	self = [super init];
-	self.wrapped = obj;
-	return self;
-}
-
--(BOOL)isEqual: (id)object
-{
-	id other = object;
-	if([other respondsToSelector: @selector(wrapped)]){
-		other = [other wrapped];
-	}
-	
-	return [self.wrapped isEqual: other];
-}
-
--(NSUInteger)hash
-{
-	return [self.wrapped hash];
-}
-
-@end
+#import "OmniUI/OUIEditableFrame.h"
 
 @interface NTITextAttachmentCell()
--(void)clearZeroedWeakRefs;
 @end
 
 @implementation NTITextAttachmentCell
@@ -50,52 +18,32 @@
 {
 	self = [super init];
 	if(self){
-		self->editableFrames = [NSMutableSet set];
+		self->editableFrames = [NSHashTable weakObjectsHashTable];
 	}
 	return self;
 }
 
-//Its not actually clear to me when we should call this
--(void)clearZeroedWeakRefs
-{
-	NSArray* removed = [self->editableFrames.allObjects filteredArrayUsingPredicate: [NSPredicate predicateWithBlock: ^BOOL(_ZeroingWeakWrapper* obj, NSDictionary *bindings){
-		return obj.wrapped == nil;
-	}]];
-	if(removed.count > 0){
-		[self->editableFrames removeObjectsFromArray: removed];
-	}
-	
-}
 
 -(void)setNeedsRedrawn
 {
-	[self clearZeroedWeakRefs];
-	for(_ZeroingWeakWrapper* view in self->editableFrames){
-		if([view.wrapped respondsToSelector: @selector(setNeedsDisplay)]){
-			[view.wrapped setNeedsDisplay];
-		}
+	for(OUIEditableFrame* ef in self->editableFrames){
+		[ef setNeedsDisplay];
 	}
 }
 
 -(void)attachEditableFrame: (OUIEditableFrame*)frame
 {
-	[self clearZeroedWeakRefs];
-	id wrapped = [[_ZeroingWeakWrapper alloc] initWithObject: frame];
-	if(wrapped){
-		[self->editableFrames addObject: wrapped];
-	}
+	[self->editableFrames addObject: frame];
 }
 
 -(void)removeEditableFrame: (OUIEditableFrame*)frame
 {
-	[self clearZeroedWeakRefs];
 	[self->editableFrames removeObject: frame];
 }
 
 //For testing
 -(NSSet*)editableFrames
 {
-	[self clearZeroedWeakRefs];
 	return [self->editableFrames copy];
 }
 

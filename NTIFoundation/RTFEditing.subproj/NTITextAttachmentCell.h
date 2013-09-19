@@ -12,7 +12,7 @@
 
 @interface NTITextAttachmentCell : OATextAttachmentCell{
 	@private
-	NSMutableSet* editableFrames;
+	NSHashTable* editableFrames;
 }
 
 //EditableFrame should call these methods
