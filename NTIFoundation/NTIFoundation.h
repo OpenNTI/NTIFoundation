@@ -3,7 +3,7 @@
 //  NTIFoundation
 //
 //  Created by Jason Madden on 2011/09/17.
-//  Copyright (c) 2011 NextThought. All rights reserved.
+//  Copyright (c) 2011-2013 NextThought. All rights reserved.
 //
 
 #ifndef NTIFoundation_NTIFoundation_h
