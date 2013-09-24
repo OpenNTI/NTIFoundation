@@ -13,7 +13,7 @@
 
 - (void)testInspectableWrapper
 {
-	OUIEditableFrame* editor = [[OUIEditableFrame alloc] init];
+	NTIEditableFrame* editor = [[NTIEditableFrame alloc] init];
 	NSAttributedString* text = [[NSAttributedString alloc] initWithString: @"<html><body>The text</body></html>"];
 
 	NTIInspectableObjectWrapper* wrapper = [[NTIInspectableObjectWrapper alloc] initWithInspectableObject: text andOwner: editor];

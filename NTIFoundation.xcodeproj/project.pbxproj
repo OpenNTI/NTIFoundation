@@ -79,6 +79,8 @@
 		4059D26615DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4059D26415DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m */; };
 		4059D26715DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4059D26415DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m */; };
 		4059D28315DC4CE800C567BA /* NSMutableDictionary-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4059D28215DC4CE800C567BA /* NSMutableDictionary-NTIExtensionsTest.m */; };
+		406151A617F211DF004B7B0A /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 406151A517F211DF004B7B0A /* StoreKit.framework */; };
+		406151A717F211E8004B7B0A /* libOmniDAV.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4061518917F21186004B7B0A /* libOmniDAV.a */; };
 		4066C81D14E1C89F006B56D3 /* WebSocketResponseBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4066C81B14E1C89F006B56D3 /* WebSocketResponseBuffer.h */; };
 		4066C81E14E1C89F006B56D3 /* WebSocketResponseBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4066C81C14E1C89F006B56D3 /* WebSocketResponseBuffer.m */; };
 		4066C81F14E1C89F006B56D3 /* WebSocketResponseBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4066C81C14E1C89F006B56D3 /* WebSocketResponseBuffer.m */; };
@@ -120,8 +122,6 @@
 		40A7459B14DA30050093F0D4 /* NSObject-NTIJSONTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40A7459814DA30050093F0D4 /* NSObject-NTIJSONTest.m */; };
 		40AB82451566A6F600BB7375 /* OCHamcrestIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40AB82441566A6F500BB7375 /* OCHamcrestIOS.framework */; };
 		40AB82601566AA0C00BB7375 /* OQColor-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40AB825F1566AA0C00BB7375 /* OQColor-NTIExtensionsTest.m */; };
-		40AEBDD8145A5A6700028750 /* NTIEditableFrameScrollView.h in Headers */ = {isa = PBXBuildFile; fileRef = 40AEBDD6145A5A6700028750 /* NTIEditableFrameScrollView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		40AEBDD9145A5A6700028750 /* NTIEditableFrameScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40AEBDD7145A5A6700028750 /* NTIEditableFrameScrollView.m */; };
 		40B5B49414C896CC009D5810 /* libNTIFoundation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 72C0D196142529E800D526D8 /* libNTIFoundation.a */; };
 		40B5B4A914C89839009D5810 /* libOmniAppKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D3612813DB6B2B00257C73 /* libOmniAppKit.a */; };
 		40B5B4AA14C89839009D5810 /* libOmniBase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D3613413DB6B2B00257C73 /* libOmniBase.a */; };
@@ -280,12 +280,75 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		4061518617F21186004B7B0A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4006091517F2116600F75739 /* OmniDAV.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8DC2EF5B0486A6940098B216;
+			remoteInfo = OmniDAV;
+		};
+		4061518817F21186004B7B0A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4006091517F2116600F75739 /* OmniDAV.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 34D06C54125D202500CA3963;
+			remoteInfo = OmniDAVTouch;
+		};
+		4061518A17F21186004B7B0A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4006091517F2116600F75739 /* OmniDAV.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 34C017A410995278001C110D;
+			remoteInfo = odav;
+		};
+		4061518C17F21186004B7B0A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4006091517F2116600F75739 /* OmniDAV.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 349F978F15DEA87B00D7677C;
+			remoteInfo = ODAVUnitTests;
+		};
+		4061518E17F21186004B7B0A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4006091517F2116600F75739 /* OmniDAV.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 340490AC15E53DDC0044F67F;
+			remoteInfo = ODAVUnitTestsTouch;
+		};
+		406151A317F211A2004B7B0A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4006091517F2116600F75739 /* OmniDAV.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 34D06C53125D202500CA3963;
+			remoteInfo = OmniDAVTouch;
+		};
 		40716EC115C8202D00430FFC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 72D3610213DB6B2A00257C73 /* OmniBase.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 34EE20D114F0354300722491;
 			remoteInfo = OBUnitTests;
+		};
+		408600A117F1F0CC006A058B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72D3610413DB6B2A00257C73 /* OmniFoundation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 34B2F63B17188539000E45DF;
+			remoteInfo = OFXMLIdHash;
+		};
+		408600A317F1F0CC006A058B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72D3610413DB6B2A00257C73 /* OmniFoundation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 344D562417BD47110049F9E5;
+			remoteInfo = OFNetStateNotifierTest;
+		};
+		408600A517F1F0CC006A058B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72D3610413DB6B2A00257C73 /* OmniFoundation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 342691D317C578F600B1372F;
+			remoteInfo = OFNetStateNotifier;
 		};
 		408FBF04143F627A0095DD84 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -654,6 +717,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4006091517F2116600F75739 /* OmniDAV.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OmniDAV.xcodeproj; path = ../OmniGroup/Frameworks/OmniDAV/OmniDAV.xcodeproj; sourceTree = "<group>"; };
 		4006E76A149272E000D63524 /* NSObject-NTIJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject-NTIJSON.m"; sourceTree = "<group>"; };
 		40103C0614D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIAppNavigationLayerSwitcher.h; sourceTree = "<group>"; };
 		40103C0714D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIAppNavigationLayerSwitcher.m; sourceTree = "<group>"; };
@@ -711,6 +775,7 @@
 		4059D26415DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary-NTIExtensions.m"; sourceTree = "<group>"; };
 		4059D28115DC4CE800C567BA /* NSMutableDictionary-NTIExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary-NTIExtensionsTest.h"; sourceTree = "<group>"; };
 		4059D28215DC4CE800C567BA /* NSMutableDictionary-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary-NTIExtensionsTest.m"; sourceTree = "<group>"; };
+		406151A517F211DF004B7B0A /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		4066C81B14E1C89F006B56D3 /* WebSocketResponseBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSocketResponseBuffer.h; sourceTree = "<group>"; };
 		4066C81C14E1C89F006B56D3 /* WebSocketResponseBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSocketResponseBuffer.m; sourceTree = "<group>"; };
 		4066C83814E1C95F006B56D3 /* WebSocketData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSocketData.h; sourceTree = "<group>"; };
@@ -755,8 +820,6 @@
 		40AB82441566A6F500BB7375 /* OCHamcrestIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OCHamcrestIOS.framework; path = "../NTIWorkspace/OCHamcrest-1.7/OCHamcrestIOS.framework"; sourceTree = "<group>"; };
 		40AB825E1566AA0C00BB7375 /* OQColor-NTIExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OQColor-NTIExtensionsTest.h"; sourceTree = "<group>"; };
 		40AB825F1566AA0C00BB7375 /* OQColor-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OQColor-NTIExtensionsTest.m"; sourceTree = "<group>"; };
-		40AEBDD6145A5A6700028750 /* NTIEditableFrameScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIEditableFrameScrollView.h; sourceTree = "<group>"; };
-		40AEBDD7145A5A6700028750 /* NTIEditableFrameScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIEditableFrameScrollView.m; sourceTree = "<group>"; };
 		40B5B49514C896CC009D5810 /* libNTIUserDataModel.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libNTIUserDataModel.a; path = "../../../Library/Developer/Xcode/DerivedData/NTIWorkspace-fdtwmhzrtxvlxtdrcxuhoowljuey/Build/Products/Debug-iphoneos/libNTIUserDataModel.a"; sourceTree = "<group>"; };
 		40B5B4B114C89A9C009D5810 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		40B6F3B814285AF4007EDF1C /* WebSocket7Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSocket7Test.h; sourceTree = "<group>"; };
@@ -950,6 +1013,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				406151A617F211DF004B7B0A /* StoreKit.framework in Frameworks */,
+				406151A717F211E8004B7B0A /* libOmniDAV.a in Frameworks */,
 				40F56E8D15C8BB84001FC309 /* libNTILogicTestBase.a in Frameworks */,
 				40AB82451566A6F600BB7375 /* OCHamcrestIOS.framework in Frameworks */,
 				4053898C14B3FB8800B5FB46 /* CFNetwork.framework in Frameworks */,
@@ -1000,8 +1065,6 @@
 		403D0D9E143E18B80049A755 /* RTFEditing */ = {
 			isa = PBXGroup;
 			children = (
-				40AEBDD6145A5A6700028750 /* NTIEditableFrameScrollView.h */,
-				40AEBDD7145A5A6700028750 /* NTIEditableFrameScrollView.m */,
 				7293CB271451AA7D00CD64B8 /* NTIEditableFrame.h */,
 				7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */,
 				403D0DBC143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h */,
@@ -1056,6 +1119,18 @@
 				40572C6614C894940032D2DB /* NTINavigationExample-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4061517617F21186004B7B0A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4061518717F21186004B7B0A /* OmniDAV.framework */,
+				4061518917F21186004B7B0A /* libOmniDAV.a */,
+				4061518B17F21186004B7B0A /* odav */,
+				4061518D17F21186004B7B0A /* ODAVUnitTests.octest */,
+				4061518F17F21186004B7B0A /* libODAVUnitTestsTouch.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		406DB40D14DB4CFB008AEABF /* Resources */ = {
@@ -1364,6 +1439,7 @@
 		72CBA9681385CF1F00E3D28D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				406151A517F211DF004B7B0A /* StoreKit.framework */,
 				40AB82441566A6F500BB7375 /* OCHamcrestIOS.framework */,
 				40B5B4B114C89A9C009D5810 /* CoreImage.framework */,
 				4053898B14B3FB8700B5FB46 /* CFNetwork.framework */,
@@ -1431,6 +1507,7 @@
 		72D3610013DB6B2A00257C73 /* ExternalFrameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4006091517F2116600F75739 /* OmniDAV.xcodeproj */,
 				72D3610113DB6B2A00257C73 /* OmniAppKit.xcodeproj */,
 				72D3610213DB6B2A00257C73 /* OmniBase.xcodeproj */,
 				72D3610313DB6B2A00257C73 /* OmniFileStore.xcodeproj */,
@@ -1493,6 +1570,9 @@
 				72D3615C13DB6B2B00257C73 /* OFCrashOnExceptionTest */,
 				72D3615E13DB6B2B00257C73 /* OFRandomRepeatTest */,
 				40938918172C3B9800FA8AD0 /* OFXMLParsingTest */,
+				408600A217F1F0CC006A058B /* OFXMLIdHash */,
+				408600A417F1F0CC006A058B /* OFNetStateNotifierTest */,
+				408600A617F1F0CC006A058B /* OFNetStateNotifier.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1657,7 +1737,6 @@
 				40E04618143F50A60091CE7C /* OQColor-NTIExtensions.h in Headers */,
 				40C0E1031443AF9C00142406 /* SocketIOPacketTest.h in Headers */,
 				403C28E614576E160012CBAB /* NSAttributedString-NTIExtensions.h in Headers */,
-				40AEBDD8145A5A6700028750 /* NTIEditableFrameScrollView.h in Headers */,
 				4029275714991E6900E4720A /* NSURL-NTIFileSystemExtensions.h in Headers */,
 				40572C2B14C88D8E0032D2DB /* NTIAppNavigationController.h in Headers */,
 				40103C0814D07BCC004451A4 /* NTIAppNavigationLayerSwitcher.h in Headers */,
@@ -1779,6 +1858,7 @@
 				726214E1145891FB00BC6DE5 /* PBXTargetDependency */,
 				726214DD145891C300BC6DE5 /* PBXTargetDependency */,
 				72CB9ADB142540F700CE4FAA /* PBXTargetDependency */,
+				406151A417F211A2004B7B0A /* PBXTargetDependency */,
 				40E65087148D269300276173 /* PBXTargetDependency */,
 				726214DF145891C300BC6DE5 /* PBXTargetDependency */,
 			);
@@ -1841,6 +1921,10 @@
 					ProjectRef = 72D3610213DB6B2A00257C73 /* OmniBase.xcodeproj */;
 				},
 				{
+					ProductGroup = 4061517617F21186004B7B0A /* Products */;
+					ProjectRef = 4006091517F2116600F75739 /* OmniDAV.xcodeproj */;
+				},
+				{
 					ProductGroup = 72D3610D13DB6B2A00257C73 /* Products */;
 					ProjectRef = 72D3610313DB6B2A00257C73 /* OmniFileStore.xcodeproj */;
 				},
@@ -1878,11 +1962,67 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		4061518717F21186004B7B0A /* OmniDAV.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = OmniDAV.framework;
+			remoteRef = 4061518617F21186004B7B0A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4061518917F21186004B7B0A /* libOmniDAV.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libOmniDAV.a;
+			remoteRef = 4061518817F21186004B7B0A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4061518B17F21186004B7B0A /* odav */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = odav;
+			remoteRef = 4061518A17F21186004B7B0A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4061518D17F21186004B7B0A /* ODAVUnitTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ODAVUnitTests.octest;
+			remoteRef = 4061518C17F21186004B7B0A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4061518F17F21186004B7B0A /* libODAVUnitTestsTouch.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libODAVUnitTestsTouch.a;
+			remoteRef = 4061518E17F21186004B7B0A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		40716EC215C8202D00430FFC /* OBUnitTests.octest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = OBUnitTests.octest;
 			remoteRef = 40716EC115C8202D00430FFC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		408600A217F1F0CC006A058B /* OFXMLIdHash */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = OFXMLIdHash;
+			remoteRef = 408600A117F1F0CC006A058B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		408600A417F1F0CC006A058B /* OFNetStateNotifierTest */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = OFNetStateNotifierTest;
+			remoteRef = 408600A317F1F0CC006A058B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		408600A617F1F0CC006A058B /* OFNetStateNotifier.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = OFNetStateNotifier.app;
+			remoteRef = 408600A517F1F0CC006A058B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		4093890B172C3B9800FA8AD0 /* libOFSUnitTestsTouch.a */ = {
@@ -2262,7 +2402,6 @@
 				40E04619143F50A60091CE7C /* OQColor-NTIExtensions.m in Sources */,
 				7293CB2A1451AA7D00CD64B8 /* NTIEditableFrame.m in Sources */,
 				403C28E714576E160012CBAB /* NSAttributedString-NTIExtensions.m in Sources */,
-				40AEBDD9145A5A6700028750 /* NTIEditableFrameScrollView.m in Sources */,
 				4006E76B149272E000D63524 /* NSObject-NTIJSON.m in Sources */,
 				4029275B14994F0E00E4720A /* NSURL-NTIFileSystemExtensions.m in Sources */,
 				40572C2C14C88D8E0032D2DB /* NTIAppNavigationController.m in Sources */,
@@ -2377,6 +2516,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		406151A417F211A2004B7B0A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OmniDAVTouch;
+			targetProxy = 406151A317F211A2004B7B0A /* PBXContainerItemProxy */;
+		};
 		408FBF05143F627A0095DD84 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 72C0D195142529E800D526D8 /* NTIFoundation */;

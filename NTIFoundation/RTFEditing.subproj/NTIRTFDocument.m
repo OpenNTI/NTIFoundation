@@ -8,10 +8,6 @@
 
 #import "NTIRTFDocument.h"
 
-#import <OmniUI/OUIRTFReader.h>
-#import <OmniUI/OUIRTFWriter.h>
-
-
 #import "NSAttributedString-HTMLReadingExtensions.h"
 #import "NSAttributedString-HTMLWritingExtensions.h"
 
@@ -28,7 +24,9 @@
 {
 	NSAttributedString* result = nil;
 	if( [rtfString hasPrefix: @"{\\rtf1"] ) {
-		result = [OUIRTFReader parseRTFString: rtfString];
+		//This could probably be ported to the new document type stuff. There are both rtf and rtfd document types.
+		OBASSERT_NOT_REACHED("RTF no longer supported");
+//		result = [OUIRTFReader parseRTFString: rtfString];
 	}
 	else if( [rtfString hasPrefix: @"<"] || [rtfString containsString: @"</"] ) {
 		//The web app likes to send in fragments so we cannot count on the prefix
@@ -74,9 +72,12 @@
 
 -(NSString*)rtfString
 {
-    NSData* data = [OUIRTFWriter rtfDataForAttributedString: self->text];
-	return [[NSString alloc] initWithData: data 
-								 encoding: NSUTF8StringEncoding];
+	//This could probably be ported to the new document type stuff. There are both rtf and rtfd document types.
+	OBASSERT_NOT_REACHED("RTF no longer supported");
+	return nil;
+    //NSData* data = [OUIRTFWriter rtfDataForAttributedString: self->text];
+	//return [[NSString alloc] initWithData: data
+								 //encoding: NSUTF8StringEncoding];
 }
 
 -(NSString*)htmlString

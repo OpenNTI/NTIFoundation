@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OmniUI/OUIEditableFrame.h"
+#import "OmniUI/OUITextView.h"
 #import <OmniAppKit/OATextAttachmentCell.h>
 
 @class NTIEditableFrame;
@@ -22,7 +22,7 @@
  * OUIEditableFrame breaks badly when asked to handle writing directions. We
  * "fix" this by hardcoding Left-to-Right.
  */
-@interface NTIEditableFrame : OUIEditableFrame{
+@interface NTIEditableFrame : OUITextView{
 	@private
 	id __weak nr_attachmentDelegate;
 }

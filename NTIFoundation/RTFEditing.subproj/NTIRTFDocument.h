@@ -9,7 +9,7 @@
 }
 
 @property (nonatomic,copy) NSAttributedString* text;
-@property (nonatomic,readonly) NSString* rtfString;
+@property (nonatomic,readonly) NSString* rtfString __attribute__((deprecated)); 
 @property (nonatomic,readonly) NSString* htmlString;
 @property (nonatomic,readonly) NSString* plainString;
 /**

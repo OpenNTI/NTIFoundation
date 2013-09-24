@@ -7,7 +7,7 @@
 //
 
 #import "NTITextAttachmentCell.h"
-#import "OmniUI/OUIEditableFrame.h"
+#import "OmniUI/OUITextView.h"
 
 @interface NTITextAttachmentCell()
 @end
@@ -26,17 +26,17 @@
 
 -(void)setNeedsRedrawn
 {
-	for(OUIEditableFrame* ef in self->editableFrames){
+	for(OUITextView* ef in self->editableFrames){
 		[ef setNeedsDisplay];
 	}
 }
 
--(void)attachEditableFrame: (OUIEditableFrame*)frame
+-(void)attachEditableFrame: (OUITextView*)frame
 {
 	[self->editableFrames addObject: frame];
 }
 
--(void)removeEditableFrame: (OUIEditableFrame*)frame
+-(void)removeEditableFrame: (OUITextView*)frame
 {
 	[self->editableFrames removeObject: frame];
 }

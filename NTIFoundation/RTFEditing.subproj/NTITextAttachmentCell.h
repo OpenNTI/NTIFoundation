@@ -8,7 +8,7 @@
 
 #import <OmniAppKit/OATextAttachmentCell.h>
 
-@class OUIEditableFrame;
+@class OUITextView;
 
 @interface NTITextAttachmentCell : OATextAttachmentCell{
 	@private
@@ -16,8 +16,8 @@
 }
 
 //EditableFrame should call these methods
--(void)attachEditableFrame: (OUIEditableFrame*)frame;
--(void)removeEditableFrame: (OUIEditableFrame*)frame;
+-(void)attachEditableFrame: (OUITextView*)frame;
+-(void)removeEditableFrame: (OUITextView*)frame;
 
 //Subclasses should call this method to request to be redrawn.
 //Note this isn't intended to make cells live views.  Calling this is
