@@ -170,7 +170,8 @@ static UILabel* titleLabelForToolbar()
 {
 	id rootViewController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
 	if( [rootViewController respondsToSelector: @selector(appNavController)] ){
-		return objc_msgSend(rootViewController, @selector(appNavController));
+		return OBSendObjectReturnMessage(rootViewController, @selector(appNavController));
+		//return objc_msgSend(rootViewController, @selector(appNavController));
 	}
 	return nil;
 }

@@ -184,7 +184,7 @@ static inline void writeCharacter(OFDataBuffer* dataBuffer, unichar aCharacter)
 		//written in a single byte as we're about to do
 		OFDataBufferAppendByte(dataBuffer, aCharacter);
 	}
-	else if( aCharacter == OAAttachmentCharacter ) {
+	else if( aCharacter == NSAttachmentCharacter ) {
 		//An attachment. The only attachments we support are image attachments
 		//which are part of a link, so this does nothing.
 		do {} while(0);
@@ -231,9 +231,7 @@ static const struct {
  */
 -(BOOL)writeFontAttributes: (NSDictionary*)newAttributes;
 {
-	OAFontDescriptorPlatformFont newPlatformFont 
-	= (__bridge OAFontDescriptorPlatformFont)[newAttributes objectForKey: 
-									 (NSString*)kCTFontAttributeName];
+	OAPlatformFontClass* newPlatformFont = [newAttributes objectForKey: (NSString*)kCTFontAttributeName];
 	OAFontDescriptor* newFontDescriptor;
 	if( newPlatformFont == nil ) {
 		newFontDescriptor = [[OAFontDescriptor alloc] initWithFamily:@"Helvetica" size:12.0f];
@@ -347,7 +345,7 @@ static const struct {
 		self->state->foregroundColorIndex = newColorIndex;
 	}
 	
-	newColor = [newAttributes objectForKey: OABackgroundColorAttributeName];
+	newColor = [newAttributes objectForKey: NSBackgroundColorAttributeName];
 	colorTableEntry = [[NTIHTMLColorTableEntry alloc] initWithColor: (__bridge CGColorRef)newColor];
 	newColorIndexValue = [self->registeredColors objectForKey: colorTableEntry];
 	OBASSERT(newColorIndexValue != nil);
@@ -464,7 +462,7 @@ static const struct {
 
 -(BOOL)writeLinkAttributes: (NSDictionary*)newAttributes
 {
-	id linkValue = [newAttributes objectForKey: OALinkAttributeName];
+	id linkValue = [newAttributes objectForKey: NSLinkAttributeName];
 	NSString* href = nil;
 	if( [linkValue isKindOfClass: [NSString class]] ) {
 		href = linkValue;
@@ -487,7 +485,7 @@ static const struct {
 	OFDataBufferAppendCString( self->dataBuffer, "\">");
 	
 	//Is there an image attachment? If so, encode it here
-	id attachment = [newAttributes objectForKey: OAAttachmentAttributeName];
+	id attachment = [newAttributes objectForKey: NSAttachmentAttributeName];
 	if(		[attachment respondsToSelector: @selector(attachmentCell)]
 	   &&	[(id)[attachment attachmentCell] respondsToSelector: @selector(htmlWriter:exportHTMLToDataBuffer:withSize:)] ) {
 		OATextAttachmentCell* cell = [attachment attachmentCell];
@@ -566,7 +564,7 @@ static const struct {
 						 valuesOfAttribute: (NSString*)kCTForegroundColorAttributeName
 						 inRange: NSMakeRange( 0, stringLength )];
 	textColors = [textColors setByAddingObjectsFromSet:
-				  [self->attributedString valuesOfAttribute: OABackgroundColorAttributeName
+				  [self->attributedString valuesOfAttribute: NSBackgroundColorAttributeName
 													inRange: NSMakeRange( 0, stringLength)]];
 	for( id color in textColors ) {
 		if( !color || [color isNull] ) {
@@ -601,8 +599,7 @@ static const struct {
 	NSRange effectiveRange;
 	NSUInteger stringLength = [self->attributedString length];
 	for( NSUInteger textIndex = 0; textIndex < stringLength; textIndex = NSMaxRange(effectiveRange)) {
-		OAFontDescriptorPlatformFont platformFont 
-		= (__bridge OAFontDescriptorPlatformFont)[self->attributedString 
+		OAPlatformFontClass* platformFont = [self->attributedString
 										 attribute: (NSString*)kCTFontAttributeName
 										 atIndex: textIndex
 										 effectiveRange: &effectiveRange];

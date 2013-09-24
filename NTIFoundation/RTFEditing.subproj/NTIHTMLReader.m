@@ -55,10 +55,10 @@ static void commonInit( NTIHTMLReader* self )
 	//Even though we're replacing &nbsp; with resolveEntity...
 	//the parser still stops parsing when it sees it for unknown reasons.
 	//These come in from the web app.
-	string = [string stringByReplacingAllOccurrencesOfString: @"&nbsp;"
+	string = [string stringByReplacingOccurrencesOfString: @"&nbsp;"
 												  withString: @" "];
 	//Tidy up some horrible non-XML stuff the browser leaves in
-	string = [string stringByReplacingAllOccurrencesOfString: @"<br>"
+	string = [string stringByReplacingOccurrencesOfString: @"<br>"
 												  withString: @"<br/>"];
 												  
 	NSXMLParser* parser = [[NSXMLParser alloc] initWithData: 
@@ -141,8 +141,7 @@ static NSString* stringFromStyle( NSString* styleAttribute, NSString* name )
 
 static OAFontDescriptor* newCurrentFontDescriptor( NSDictionary* dict )
 {
-	OAFontDescriptorPlatformFont newPlatformFont 
-	= (__bridge OAFontDescriptorPlatformFont)[dict objectForKey: 
+	OAPlatformFontClass* newPlatformFont = [dict objectForKey:
 									 (NSString*)kCTFontAttributeName];
 	OAFontDescriptor* newFontDescriptor;
 	if( newPlatformFont == nil ) {
@@ -205,27 +204,31 @@ NS_RETURNS_RETAINED CGColorRef NTIHTMLReaderParseCreateColor( NSString* attribut
 	return [color rgbaCGColorRef];
 }
 
-static OAMutableParagraphStyle* currentParagraphStyle( NSDictionary* dict )
+static NSMutableParagraphStyle* currentParagraphStyle( NSDictionary* dict )
 {
 	CTParagraphStyleRef paraStyle 
 	= (__bridge CTParagraphStyleRef)[dict objectForKey: (id)kCTParagraphStyleAttributeName];
-	OAMutableParagraphStyle* result = nil;
+	NSMutableParagraphStyle* result = nil;
 	if( paraStyle ) {
-		result = [[OAMutableParagraphStyle alloc] initWithParagraphStyle: 
-				  [[OAParagraphStyle alloc] 
-					initWithCTParagraphStyle: paraStyle]];
+		OBFinishPortingLater("OAParagraphStyle is no more");
+		//result = [[NSMutableParagraphStyle alloc] initWithParagraphStyle:
+		//		  [[OAParagraphStyle alloc]
+		//			initWithCTParagraphStyle: paraStyle]];
+		result = (id)[NSMutableParagraphStyle defaultParagraphStyle];
 	}
 	else {
-		result = (id)[OAMutableParagraphStyle defaultParagraphStyle];	
+		result = (id)[NSMutableParagraphStyle defaultParagraphStyle];	
 	}
 	return result;
 }
 
-static void setCurrentParagraphStyle( NSMutableDictionary* dict, OAMutableParagraphStyle* style )
+static void setCurrentParagraphStyle( NSMutableDictionary* dict, NSMutableParagraphStyle* style )
 {
-	CTParagraphStyleRef ref = [style copyCTParagraphStyle];
-	[dict setObject: (__bridge id)ref forKey: (id)kCTParagraphStyleAttributeName];
-	CFRelease( ref );
+	OBFinishPortingLater("copyCTParagraphStyle is no more");
+	return;
+	//CTParagraphStyleRef ref = [style copyCTParagraphStyle];
+	//[dict setObject: (__bridge id)ref forKey: (id)kCTParagraphStyleAttributeName];
+	//CFRelease( ref );
 }
 
 -(NSMutableDictionary*)mutableDictionaryWithCurrentStyle
@@ -338,32 +341,32 @@ styleAttribute = stringFromStyle( styleAttribute, @prefix );
 		else HAS_VALUE("background-color") {
 			//See comment above
 			[self safelyParseAndSetColorAttrInAttrs: dict 
-											attrKey: (id)OABackgroundColorAttributeName 
+											attrKey: (id)NSBackgroundColorAttributeName 
 										colorString: styleAttribute];
 		} EHV
 		//Paragraph style
 		else HAS_VALUE("text-align") {
-			OATextAlignment align = OANaturalTextAlignment;
+			NSTextAlignment align = NSTextAlignmentNatural;
 			if( [styleAttribute isEqual: @"left"] ) {
-				align = OALeftTextAlignment;
+				align = NSTextAlignmentLeft;
 			}
 			else if( [styleAttribute isEqual: @"right"] ) {
-				align = OARightTextAlignment;
+				align = NSTextAlignmentRight;
 			}
 			else if( [styleAttribute isEqual: @"justify"] ) {
-				align = OAJustifiedTextAlignment;
+				align = NSTextAlignmentJustified;
 			}
 			else if( [styleAttribute isEqual: @"center"] ) {
-				align = OACenterTextAlignment;	
+				align = NSTextAlignmentCenter;
 			}
-			OAMutableParagraphStyle* s = currentParagraphStyle( dict );
+			NSMutableParagraphStyle* s = currentParagraphStyle( dict );
 			[s setAlignment: align];
 			setCurrentParagraphStyle( dict, s );
 		} EHV
 		//There may be some math on the margins that's not quite right.
 		else HAS_VALUE("margin-left") {
 			NSInteger leftpts = [styleAttribute intValue];
-			OAMutableParagraphStyle* s = currentParagraphStyle( dict );
+			NSMutableParagraphStyle* s = currentParagraphStyle( dict );
 			[s setHeadIndent: leftpts];
 			setCurrentParagraphStyle( dict, s );
 		} EHV
@@ -372,7 +375,7 @@ styleAttribute = stringFromStyle( styleAttribute, @prefix );
 			//HTML uses inset from right, CoreText uses either left or right,
 			//with negative meaning right
 			rightpts = -rightpts;
-			OAMutableParagraphStyle* s = currentParagraphStyle( dict );
+			NSMutableParagraphStyle* s = currentParagraphStyle( dict );
 			[s setTailIndent: rightpts];
 			setCurrentParagraphStyle( dict, s );
 		} EHV

@@ -108,10 +108,10 @@
 	}
 	
 	if(textPosition){
-		id attributes = [self attribute: OAAttachmentAttributeName 
+		id attributes = [self attribute: NSAttachmentAttributeName 
 							 atPosition: (UITextPosition*) textPosition
 						 effectiveRange: NULL];
-		OATextAttachment* attachment = [attributes objectForKey: OAAttachmentAttributeName];
+		OATextAttachment* attachment = [attributes objectForKey: NSAttachmentAttributeName];
 		if(attachment){
 			NSLog(@"OATextAttachment %@ was touched at point %@", attachment, NSStringFromCGPoint(convertedPoint));
 			id attachmentCell = [attachment attachmentCell];

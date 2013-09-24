@@ -294,20 +294,6 @@
 			remoteGlobalIDString = 72C0D195142529E800D526D8;
 			remoteInfo = NTIFoundation;
 		};
-		40938906172C3B9800FA8AD0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 72D3610313DB6B2A00257C73 /* OmniFileStore.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 34AEB77415BF648800B66785;
-			remoteInfo = OFSSync;
-		};
-		40938908172C3B9800FA8AD0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 72D3610313DB6B2A00257C73 /* OmniFileStore.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 349F978F15DEA87B00D7677C;
-			remoteInfo = OFSUnitTests;
-		};
 		4093890A172C3B9800FA8AD0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 72D3610313DB6B2A00257C73 /* OmniFileStore.xcodeproj */;
@@ -531,13 +517,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 34D06C54125D202500CA3963;
 			remoteInfo = OmniFileStoreTouch;
-		};
-		72D3613E13DB6B2B00257C73 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 72D3610313DB6B2A00257C73 /* OmniFileStore.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 34C017A410995278001C110D;
-			remoteInfo = ofs;
 		};
 		72D3614B13DB6B2B00257C73 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1495,9 +1474,6 @@
 			children = (
 				72D3613B13DB6B2B00257C73 /* OmniFileStore.framework */,
 				72D3613D13DB6B2B00257C73 /* libOmniFileStore.a */,
-				72D3613F13DB6B2B00257C73 /* ofs */,
-				40938907172C3B9800FA8AD0 /* OFSSync */,
-				40938909172C3B9800FA8AD0 /* OFSUnitTests.octest */,
 				4093890B172C3B9800FA8AD0 /* libOFSUnitTestsTouch.a */,
 			);
 			name = Products;
@@ -1909,20 +1885,6 @@
 			remoteRef = 40716EC115C8202D00430FFC /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		40938907172C3B9800FA8AD0 /* OFSSync */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = OFSSync;
-			remoteRef = 40938906172C3B9800FA8AD0 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		40938909172C3B9800FA8AD0 /* OFSUnitTests.octest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = OFSUnitTests.octest;
-			remoteRef = 40938908172C3B9800FA8AD0 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		4093890B172C3B9800FA8AD0 /* libOFSUnitTestsTouch.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -2026,13 +1988,6 @@
 			fileType = archive.ar;
 			path = libOmniFileStore.a;
 			remoteRef = 72D3613C13DB6B2B00257C73 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		72D3613F13DB6B2B00257C73 /* ofs */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = ofs;
-			remoteRef = 72D3613E13DB6B2B00257C73 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		72D3614C13DB6B2B00257C73 /* OmniFoundation.framework */ = {

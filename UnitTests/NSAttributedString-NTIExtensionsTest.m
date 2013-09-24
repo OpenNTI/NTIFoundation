@@ -84,11 +84,11 @@
 
 -(void)testHTMLAttributedString
 {
-	unichar attachmentCharacter = OAAttachmentCharacter;
+	unichar attachmentCharacter = NSAttachmentCharacter;
 	NSString* charString = [[NSString alloc] initWithCharacters: &attachmentCharacter length: 1];
 	
 	NSDictionary* attrs = [NSDictionary dictionaryWithObject: [[HTMLAttachmentCell alloc] initWithHtml: @"foobar"] 
-													  forKey: OAAttachmentAttributeName];
+													  forKey: NSAttachmentAttributeName];
 	
 	NSMutableAttributedString* attrString = [[NSMutableAttributedString alloc] 
 											 initWithString: charString 
@@ -117,9 +117,9 @@
 										[[AttachableObject alloc] initWithObject: [NSNumber numberWithInt: 10]]];
 	
 	STAssertTrue([objectString length] == 1, nil);
-	STAssertEquals([objectString.string characterAtIndex: 0], (unichar)OAAttachmentCharacter, nil);
+	STAssertEquals([objectString.string characterAtIndex: 0], (unichar)NSAttachmentCharacter, nil);
 	
-	id attachment = [objectString attribute: OAAttachmentAttributeName atIndex: 0 effectiveRange: NULL];
+	id attachment = [objectString attribute: NSAttachmentAttributeName atIndex: 0 effectiveRange: NULL];
 	
 	id attachmentCell = [attachment attachmentCell];
 	

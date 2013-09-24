@@ -355,7 +355,7 @@ static NSArray* implementedTransportClasses()
 	
 	SEL eventSel = NSSelectorFromString(selectorString);
 	if( [delegate respondsToSelector: eventSel] ) {
-		objc_msgSend( delegate, eventSel, packet.args );
+		OBSendVoidMessageWithObject(delegate, eventSel,  packet.args);
 		return;
 	}
 	

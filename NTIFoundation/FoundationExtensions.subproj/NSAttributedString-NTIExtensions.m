@@ -54,13 +54,13 @@
 		attachment.attachmentCell = cell;
 		OBASSERT(cell.attachment == attachment); // sets the backpointer
 		
-		unichar attachmentCharacter = OAAttachmentCharacter;
+		unichar attachmentCharacter = NSAttachmentCharacter;
 		
 		NSAttributedString* canvasAttrString = [[NSAttributedString alloc] 
 												initWithString: 
 												[NSString stringWithCharacters: &attachmentCharacter 
 																		length:1] 
-												attributeName: OAAttachmentAttributeName 
+												attributeName: NSAttachmentAttributeName 
 												attributeValue: attachment];
 		attrString = canvasAttrString;
 	}
@@ -104,7 +104,7 @@
 	NSArray* externalParts = [attrStrings arrayByPerformingBlock:^id(id obj){
 		NSAttributedString* part = obj;
 		if(   part.length == 1 ){
-		    id attachment = [part attribute: OAAttachmentAttributeName
+		    id attachment = [part attribute: NSAttachmentAttributeName
 									atIndex: 0
 							 effectiveRange: NULL];
 			
@@ -172,10 +172,10 @@ static void appendChunkToMutableAttributedString(NSMutableAttributedString* muta
 //htmlWriter:exportHTMLToDataBuffer:withSize: must be in it's own chunk.  
 static BOOL characterAtIndexRequiresOwnChunk(NSAttributedString* string, NSUInteger index)
 {
-	if([string.string characterAtIndex: index] != OAAttachmentCharacter){
+	if([string.string characterAtIndex: index] != NSAttachmentCharacter){
 		return NO;
 	}
-	OATextAttachment* textAttachment = [string attribute: OAAttachmentAttributeName 
+	OATextAttachment* textAttachment = [string attribute: NSAttachmentAttributeName 
 												 atIndex: index
 										  effectiveRange: NULL];
 	
@@ -195,7 +195,7 @@ static NSAttributedString* correctMissingChunks(NSAttributedString* toCorrect)
 	
 	NSUInteger searchStart = 0;
 	NSRange searchResult;
-	unichar markerCharacter = OAAttachmentCharacter;
+	unichar markerCharacter = NSAttachmentCharacter;
 	NSString* markerString = [NSString stringWithCharacters: &markerCharacter
 													 length: 1];
 	while(searchStart < corrected.length){
