@@ -8,6 +8,13 @@
 
 @interface NSDate(NTIExtensions)
 
+#define kNTISecondsInAYear		31540000
+#define kNTISecondsInAMonth		2628000
+#define kNTISecondsInAWeek		604800
+#define kNTISecondsInADay		86400
+#define kNTISecondsInAnHour		3600
+#define kNTISecondsInAMinute	60
+
 @property (nonatomic, readonly) NSString* stringWithShortDateFormatNL;
 +(NSString*) stringFromTimeIntervalWithLargestFittingTimeUnit: (NSUInteger)timeInterval;
 

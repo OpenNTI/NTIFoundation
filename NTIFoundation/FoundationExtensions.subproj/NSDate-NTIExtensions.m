@@ -8,13 +8,6 @@
 
 #import "NSDate-NTIExtensions.h"
 
-#define kNTISecondsInAYear		31540000
-#define kNTISecondsInAMonth		2628000
-#define kNTISecondsInAWeek		604800
-#define kNTISecondsInADay		86400
-#define kNTISecondsInAnHour		3600
-#define kNTISecondsInAMinute	60
-
 @implementation NSDate(NTIExtensions)
 
 static NSString* shortDateStringNL( NSDate* date )
@@ -32,7 +25,7 @@ static NSString* shortDateStringNL( NSDate* date )
 	return shortDateStringNL( self );
 }
 
-+(NSString*)stringFromTimeIntervalWithLargestFittingTimeUnit:(NSUInteger)timeInterval
++(NSString*)stringFromTimeIntervalWithLargestFittingTimeUnit: (NSUInteger)timeInterval
 {
 	//TODO: any string presnted to the user must be externalized.
 	NSString* timeUnitString;
@@ -71,5 +64,7 @@ static NSString* shortDateStringNL( NSDate* date )
 	
 	return [NSString stringWithFormat: @"%lu %@", timeSince, timeUnitString];
 }
+
+
 
 @end
