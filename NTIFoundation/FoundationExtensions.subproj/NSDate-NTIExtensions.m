@@ -42,20 +42,8 @@ static NSString* shortDateStringNL( NSDate* date )
 		timeSince /= kNTISecondsInAWeek;
 		timeUnitString = @"week";
 	}
-	else if(timeInterval >= kNTISecondsInADay){
-		timeSince /= kNTISecondsInADay;
-		timeUnitString = @"day";
-	}
-	else if(timeInterval >= kNTISecondsInAnHour){
-		timeSince /= kNTISecondsInAnHour;
-		timeUnitString = @"hour";
-	}
-	else if(timeInterval >= kNTISecondsInAMinute){
-		timeSince /= kNTISecondsInAMinute;
-		timeUnitString = @"minute";
-	}
-	else{
-		timeUnitString = @"second";
+	else {
+		return [NSDate stringFromTimeIntervalWithLargestFittingTimeUnitWithinDays:timeInterval];
 	}
 	
 	if(timeSince > 1){
@@ -65,6 +53,32 @@ static NSString* shortDateStringNL( NSDate* date )
 	return [NSString stringWithFormat: @"%lu %@", timeSince, timeUnitString];
 }
 
-
++ (NSString *)stringFromTimeIntervalWithLargestFittingTimeUnitWithinDays:(NSUInteger)timeInterval
+{
+    NSString *timeUnitString;
+	NSUInteger timeSince = timeInterval;
+    
+    if (timeInterval >= kNTISecondsInADay) {
+		timeSince /= kNTISecondsInADay;
+		timeUnitString = @"day";
+	}
+	else if (timeInterval >= kNTISecondsInAnHour) {
+		timeSince /= kNTISecondsInAnHour;
+		timeUnitString = @"hour";
+	}
+	else if (timeInterval >= kNTISecondsInAMinute) {
+		timeSince /= kNTISecondsInAMinute;
+		timeUnitString = @"minute";
+	}
+	else {
+		timeUnitString = @"second";
+	}
+	
+	if (timeSince > 1) {
+		timeUnitString = [timeUnitString stringByAppendingString:@"s"];
+	}
+	
+	return [NSString stringWithFormat:@"%lu %@", timeSince, timeUnitString];
+}
 
 @end

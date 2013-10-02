@@ -16,6 +16,15 @@
 #define kNTISecondsInAMinute	60
 
 @property (nonatomic, readonly) NSString* stringWithShortDateFormatNL;
+
 +(NSString*) stringFromTimeIntervalWithLargestFittingTimeUnit: (NSUInteger)timeInterval;
+
+/**
+ * Returns a string of the form "<n> <timeunit>(s)", where:<br>
+ *  - <timeunit> is the largest unit of time, up to days, which fits inside |timeInterval|<br>
+ *  - <n> is the number of <timeunit>s which fit inside |timeInterval|<br>
+ * E.g., "1 second", "8 seconds", "3 hours", "5 days", "17 days", "64 days", "562 days", etc.
+ */
++ (NSString *)stringFromTimeIntervalWithLargestFittingTimeUnitWithinDays:(NSUInteger)timeInterval;
 
 @end
