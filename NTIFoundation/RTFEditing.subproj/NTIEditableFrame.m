@@ -140,7 +140,8 @@
 	//Convert the provided point to our coordinate space
 	CGPoint convertedPoint = [self.textInputView convertPoint: point fromView: view];
 	
-	UITextRange* range = [self characterRangeAtPoint: convertedPoint]; //Ugh always nil in ios7 GM
+	//UITextRange* range = [self characterRangeAtPoint: convertedPoint]; //Ugh always nil in ios7 GM
+	UITextRange* range = [self workingCharacterRangeForPoint: convertedPoint];
 	
 	return [self attachmentCellForRange: range];
 }
