@@ -5,7 +5,6 @@
 //  Created by Jason Madden on 2011/06/29.
 //  Copyright 2011 NextThought. All rights reserved.
 //
-#import "NTIFoundationOSCompat.h"
 #import "OUUnzipArchive-NTIExtensions.h"
 
 #import <OmniUnzip/OUUnzipEntry.h>

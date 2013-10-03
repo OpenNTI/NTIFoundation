@@ -7,7 +7,6 @@
 //
 
 #import "NSString-NTIJSON.h"
-#import "NTIFoundationOSCompat.h"
 #import <objc/objc.h>
 #import <OmniBase/OmniBase.h>
 #import <OmniFoundation/OmniFoundation.h>

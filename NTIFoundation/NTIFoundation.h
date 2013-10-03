@@ -39,7 +39,6 @@
 #import "OUUnzipArchive-NTIExtensions.h"
 #import "NTIAbstractDownloader.h"
 #import "NTIUtilities.h"
-#import "NTIFoundationOSCompat.h"
 #import "SocketIOPacket.h"
 #import "SocketIOSocket.h"
 #import "SocketIOTransport.h"
