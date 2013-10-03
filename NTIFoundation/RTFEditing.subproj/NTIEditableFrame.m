@@ -16,6 +16,17 @@
 @implementation NTIEditableFrame
 @synthesize attachmentDelegate=nr_attachmentDelegate;
 
+-(id)initWithFrame:(CGRect)frame
+{
+	self = [super initWithFrame: frame];
+	if(self){
+		UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(tapped:)];
+		[self addGestureRecognizer: tap];
+	}
+	return self;
+}
+
+//TODO: Figure out if these typingAtributes messages are still needed
 -(NSDictionary*)typingAttributes
 {
 	NSMutableDictionary* attrs = [NSMutableDictionary dictionaryWithDictionary: [super typingAttributes]];
@@ -89,20 +100,58 @@
 	[self.delegate textViewDidChange: self];
 }
 
--(OATextAttachmentCell*)attachmentCellForPoint:(CGPoint)point fromView :(UIView *)view
+//The characterRangeAtPoint always returns nil in IOS7. Well thats not exactly true, after extensive searching it
+//seems like occasionally if you've made a text selection at least once before calling it you can get it to return non nil values.  I've seen
+//that happen about 10% of the time and only in text only (non attachment cell) text views.  So here we roll our own using
+//the layoutManager and textContainer.  Hopefully they can get the kinks worked out of characterRangeForPoint: soon.
+//
+//Note this probably isn't a sufficient replacement for the native function.  Empirically it works well for large attachment cells
+//and that is really what we need
+-(UITextRange*)workingCharacterRangeForPoint: (CGPoint)p
 {
-	//Convert the provided point to our coordinate space
-	CGPoint convertedPoint = [self convertPoint: point fromView: view];
 	
-	//NOTE: closestPositionToPoint is drastically simplified from what OUIEditableFrame used
-	//to be doing beneath tappedPositionForPoint.  Not entirely sure what the ramificaitons of this change
-	//are going to be.
-	UITextPosition* textPosition = [self closestPositionToPoint: convertedPoint];
-	if(!textPosition){
+	//Returns the index of the glyph CLOSEST to the touch.  Note this is not necessarily the glyph that was touched
+	NSUInteger gIndex = [self.layoutManager glyphIndexForPoint: p
+											   inTextContainer: self.textContainer
+								fractionOfDistanceThroughGlyph: NULL];
+	if(gIndex == NSNotFound){
 		return nil;
 	}
 	
-	NSRange characterRange = [self characterRangeForTextRange: [self textRangeFromPosition:textPosition toPosition: textPosition]];
+	//Now get the bounding rect for the glyph we might have touched and see if the point is within it
+	CGRect rect = [self.layoutManager boundingRectForGlyphRange: NSMakeRange(gIndex, 1)
+												inTextContainer: self.textContainer];
+	
+	if(!CGRectContainsPoint(rect, p)){
+		return nil;
+	}
+	
+	//Ok we actually touched the glyph now we turn the glyph into a UITextRange
+	NSUInteger charIdx = [self.layoutManager characterIndexForGlyphAtIndex: gIndex];
+	if(charIdx == NSNotFound){
+		return nil;
+	}
+	
+	return [self textRangeForCharacterRange: NSMakeRange(charIdx, 1)];
+}
+
+-(OATextAttachmentCell*)attachmentCellForPoint:(CGPoint)point fromView :(UIView *)view
+{
+	//Convert the provided point to our coordinate space
+	CGPoint convertedPoint = [self.textInputView convertPoint: point fromView: view];
+	
+	UITextRange* range = [self characterRangeAtPoint: convertedPoint]; //Ugh always nil in ios7 GM
+	
+	return [self attachmentCellForRange: range];
+}
+
+-(OATextAttachmentCell*)attachmentCellForRange: (UITextRange*)range
+{
+	if(!range){
+		return nil;
+	}
+	
+	NSRange characterRange = [self characterRangeForTextRange: range];
 	
 	if( characterRange.location >= self.attributedText.length ){
 		return nil;
@@ -111,68 +160,39 @@
 	id attributes = [self.attributedText attributesAtIndex: characterRange.location effectiveRange: NULL];
 	OATextAttachment* attachment = [attributes objectForKey: NSAttachmentAttributeName];
 	if(attachment){
-		NSLog(@"OATextAttachment %@ was touched at point %@", attachment, NSStringFromCGPoint(convertedPoint));
-		id attachmentCell = [attachment attachmentCell];
-		
-		return attachmentCell;
+		return [attachment attachmentCell];
 	}
 	return nil;
 }
 
-//Highjack the single tap recognizer to test if an ouattachmentcell was touched.  if
-//so forward it onto our delegate
--(void)_activeTap: (UITapGestureRecognizer*)r
+-(void)tapped: (UITapGestureRecognizer*)r
 {
-	OBFinishPortingLater("_activeTap doesnt exist anymore, need another solution for this");
-//	//If we don't have a delegate that responds to attachmentCell:wasTouchedAtPoint
-//	//there is no point in doing the work
-//	if( ![self->nr_attachmentDelegate respondsToSelector: 
-//		 @selector(editableFrame:attachmentCell:wasTouchedAtPoint:)] ){
-//		[super _activeTap: r];
-//		return;
-//	}
-//	
-//	if(r.numberOfTapsRequired == 1){
-//		CGPoint p = [r locationInView:self];
-//		//NOTE: closestPositionToPoint is drastically simplified from what OUIEditableFrame used
-//		//to be doing beneath tappedPositionForPoint.  Not entirely sure what the ramificaitons of this change
-//		//are going to be.
-//		UITextPosition* textPosition = [self closestPositionToPoint: convertedPoint];
-//		OATextAttachmentCell* attachmentCell = [self attachmentCellForPoint: p fromView: self];
-//		
-//		if(attachmentCell){			
-//			//We select the attachment cell so that any editing will replace it.
-//			[self setSelectedTextRange: [self textRangeFromPosition: textPosition 
-//														 toPosition: [self positionFromPosition: textPosition offset:1]] 
-//						   showingMenu: NO];
-//			
-//			BOOL handled = [self->nr_attachmentDelegate editableFrame: self 
-//													   attachmentCell: attachmentCell 
-//													wasTouchedAtPoint: p];
-//			if(handled){
-//				return;
-//			}
-//		}
-//	}
-//	[super _activeTap: r];
-}
+	//If we don't have a delegate that responds to attachmentCell:wasTouchedAtPoint
+	//there is no point in doing the work
+	if( ![self->nr_attachmentDelegate respondsToSelector: 
+		 @selector(editableFrame:attachmentCell:wasTouchedAtPoint:)] ){
+		return;
+	}
+	
+	CGPoint p = [r locationInView: self.textInputView];
+	
+	
+	//UITextRange* range = [self characterRangeAtPoint: p]; //Ugh always nil in ios7 GM
+	UITextRange* range = [self workingCharacterRangeForPoint: p];
+	OATextAttachmentCell* attachmentCell = [self attachmentCellForRange: range];
+	
+	if(attachmentCell){
+		//If we are editing select the attachment cell so that any editing will replace it.
+		if(self.isEditable){
+			[self setSelectedTextRange: range
+						   showingMenu: NO];
+		}
+		
+		[self->nr_attachmentDelegate editableFrame: self
+									attachmentCell: attachmentCell
+								 wasTouchedAtPoint: p];
 
-#pragma mark - Writing Direction
-//Omni no longer crashes on these selectors, but they do log
-//large stacks, which are annoying and not helpful to us.
-//We override to stop that.
-
--(UITextWritingDirection)baseWritingDirectionForPosition: (UITextPosition*)position
-											 inDirection: (UITextStorageDirection)direction
-{
-	OBFinishPortingLater( "Stop ignoring writing direction" );
-	return UITextWritingDirectionNatural;
-}
-
--(void)setBaseWritingDirection: (UITextWritingDirection)writingDirection
-					  forRange: (UITextRange*)range
-{
-	OBFinishPortingLater( "Stop ignoring writing direction" );
+	}
 }
 
 -(void)dealloc
