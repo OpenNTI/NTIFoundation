@@ -20,6 +20,7 @@
 	NSDate* lastModified;
 }
 @property (readonly) NSDate* lastModified;
+@property (readonly) NSString* ETag;
 @property (readonly) NSInteger statusCode;
 @property (readonly) long long expectedContentLength;
 

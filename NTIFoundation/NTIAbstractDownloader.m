@@ -36,6 +36,20 @@
 
 
 #define kHeaderLastModified @"LAST-MODIFIED"
+#define kHeaderETag @"ETAG"
+
+id valueForCaseInsensitiveHeader(NSString* header, NSHTTPURLResponse* response);
+id valueForCaseInsensitiveHeader(NSString* header, NSHTTPURLResponse* response)
+{
+	NSDictionary* allHeaders = [response allHeaderFields];
+	//TODO: Lousy way to be Case insensitive
+	for( NSString* key in allHeaders ) {
+		if( [[key uppercaseString] isEqual: header] ) {
+			return [allHeaders objectForKey: key];
+		}
+	}
+	return nil;
+}
 
 @implementation NTIAbstractDownloader
 @synthesize statusCode,expectedContentLength, lastModified;
@@ -46,16 +60,8 @@
 	if( [response isKindOfClass: [NSHTTPURLResponse class]] ) {
 		self->statusCode = [response statusCode];
 		
-		NSDictionary* allHeaders = [response allHeaderFields];
-		//TODO: Lousy way to be Case insensitive
-		NSString* lastMod = nil;
-		for( NSString* key in allHeaders ) {
-			if( [[key uppercaseString] isEqual: kHeaderLastModified] ) {
-				lastMod = [allHeaders objectForKey: key];
-				break;
-			}
-		}
-		self->lastModified = [lastMod httpHeaderDateValue];
+		self->lastModified = [valueForCaseInsensitiveHeader(kHeaderLastModified, response) httpHeaderDateValue];
+		self->_ETag = valueForCaseInsensitiveHeader(kHeaderETag, response);
 	}
 }
 
