@@ -10,6 +10,7 @@
 #import "NSString-NTIExtensions.h"
 #import "NSData-NTIJSON.h"
 #import "OmniUI/OUIAppController.h"
+#import <CFNetwork/CFNetwork.h>
 
 
 @interface NSData(NTIExtensions)
@@ -38,19 +39,6 @@
 #define kHeaderLastModified @"LAST-MODIFIED"
 #define kHeaderETag @"ETAG"
 
-id valueForCaseInsensitiveHeader(NSString* header, NSHTTPURLResponse* response);
-id valueForCaseInsensitiveHeader(NSString* header, NSHTTPURLResponse* response)
-{
-	NSDictionary* allHeaders = [response allHeaderFields];
-	//TODO: Lousy way to be Case insensitive
-	for( NSString* key in allHeaders ) {
-		if( [[key uppercaseString] isEqual: header] ) {
-			return [allHeaders objectForKey: key];
-		}
-	}
-	return nil;
-}
-
 @implementation NTIAbstractDownloader
 @synthesize statusCode,expectedContentLength, lastModified;
 
@@ -60,8 +48,10 @@ id valueForCaseInsensitiveHeader(NSString* header, NSHTTPURLResponse* response)
 	if( [response isKindOfClass: [NSHTTPURLResponse class]] ) {
 		self->statusCode = [response statusCode];
 		
-		self->lastModified = [valueForCaseInsensitiveHeader(kHeaderLastModified, response) httpHeaderDateValue];
-		self->_ETag = valueForCaseInsensitiveHeader(kHeaderETag, response);
+		NSDictionary* headers = [response allHeaderFields]; //This is a case insensitive dict
+		
+		self->lastModified = [[headers objectForKey: kHeaderLastModified] httpHeaderDateValue];
+		self->_ETag = [headers objectForKey: kHeaderETag];
 	}
 }
 
