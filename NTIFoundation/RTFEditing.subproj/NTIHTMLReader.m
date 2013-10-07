@@ -206,29 +206,17 @@ NS_RETURNS_RETAINED CGColorRef NTIHTMLReaderParseCreateColor( NSString* attribut
 
 static NSMutableParagraphStyle* currentParagraphStyle( NSDictionary* dict )
 {
-	CTParagraphStyleRef paraStyle 
-	= (__bridge CTParagraphStyleRef)[dict objectForKey: (id)kCTParagraphStyleAttributeName];
-	NSMutableParagraphStyle* result = nil;
-	if( paraStyle ) {
-		OBFinishPortingLater("OAParagraphStyle is no more");
-		//result = [[NSMutableParagraphStyle alloc] initWithParagraphStyle:
-		//		  [[OAParagraphStyle alloc]
-		//			initWithCTParagraphStyle: paraStyle]];
-		result = (id)[NSMutableParagraphStyle defaultParagraphStyle];
+	NSParagraphStyle* result = [dict objectForKey: (id)kCTParagraphStyleAttributeName];
+	if( !result ) {
+		result = [NSParagraphStyle defaultParagraphStyle];
 	}
-	else {
-		result = (id)[NSMutableParagraphStyle defaultParagraphStyle];	
-	}
-	return result;
+	return [result mutableCopy];
 }
 
 static void setCurrentParagraphStyle( NSMutableDictionary* dict, NSMutableParagraphStyle* style )
 {
-	OBFinishPortingLater("copyCTParagraphStyle is no more");
-	return;
-	//CTParagraphStyleRef ref = [style copyCTParagraphStyle];
-	//[dict setObject: (__bridge id)ref forKey: (id)kCTParagraphStyleAttributeName];
-	//CFRelease( ref );
+	[dict setObject: style forKey: NSParagraphStyleAttributeName];
+
 }
 
 -(NSMutableDictionary*)mutableDictionaryWithCurrentStyle

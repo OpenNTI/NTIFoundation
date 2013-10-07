@@ -377,7 +377,7 @@ static const struct {
 	
 	CTParagraphStyleGetValueForSpecifier(
 										 paragraphStyle,
-										 kCTParagraphStyleSpecifierAlignment, 
+										 kCTParagraphStyleSpecifierAlignment,
 										 sizeof(alignment),
 										 &alignment);
 	CTParagraphStyleGetValueForSpecifier(
