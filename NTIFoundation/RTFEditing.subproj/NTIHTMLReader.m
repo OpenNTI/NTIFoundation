@@ -241,7 +241,7 @@ static void setCurrentParagraphStyle( NSMutableDictionary* dict, NSMutableParagr
 		self->unparsableFormat = YES;
 	}
 	else{
-		[attrs setObject: (__bridge_transfer id)colorObject forKey: key];
+		[attrs setObject: [UIColor colorWithCGColor: colorObject] forKey: key];
 	}
 
 }
@@ -257,8 +257,8 @@ static void setCurrentParagraphStyle( NSMutableDictionary* dict, NSMutableParagr
 	for( id styleName in fontAttrs ) {
 		id styleValue = [fontAttrs objectForKey: styleName];
 		if( OFISEQUAL( styleName,  @"color") ) {
-			[self safelyParseAndSetColorAttrInAttrs: dict 
-											attrKey: (id)kCTForegroundColorAttributeName 
+			[self safelyParseAndSetColorAttrInAttrs: dict
+											attrKey: (id)NSForegroundColorAttributeName
 										colorString: styleValue];
 		}
 	}
@@ -323,7 +323,7 @@ styleAttribute = stringFromStyle( styleAttribute, @prefix );
 			//default it to white, but the background does parse to white.  If we can't parse
 			//any format data all we can be sure about is dropping all of it.
 			[self safelyParseAndSetColorAttrInAttrs: dict 
-											attrKey: (id)kCTForegroundColorAttributeName 
+											attrKey: NSForegroundColorAttributeName
 										colorString: styleAttribute];
 		} EHV
 		else HAS_VALUE("background-color") {
