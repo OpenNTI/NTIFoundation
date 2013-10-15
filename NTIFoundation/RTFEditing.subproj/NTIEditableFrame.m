@@ -11,7 +11,30 @@
 #import "NTIFoundation.h"
 #import <OmniAppKit/NSAttributedString-OAExtensions.h>
 #import "NTITextAttachmentCell.h"
+#import <OmniUI/OUITextSelectionSpan.h>
+#import <OmniAppKit/OAFontDescriptor.h>
+#import <objc/objc-class.h>
 
+@interface OUITextSelectionSpan(NTIEditableFrame)
+-(OAFontDescriptor*)_secondaryFontDescriptorForInspectorSlice:(OUIInspectorSlice*)inspector;
+@end
+
+@implementation OUITextSelectionSpan(NTIEditableFrame)
+
+-(OAFontDescriptor*)_secondaryFontDescriptorForInspectorSlice:(OUIInspectorSlice*)inspector;
+{
+	OAFontDescriptor* desc = (OAFontDescriptor*)[self.textView attribute:OAFontDescriptorAttributeName inRange:self.range];
+	if(desc)
+		return desc;
+	
+	UIFont* font = self.textView.font;
+	if(font)
+		desc = [[OAFontDescriptor alloc] initWithFont: font];
+	
+	return desc;
+}
+
+@end
 
 @implementation NTIEditableFrame
 @synthesize attachmentDelegate=nr_attachmentDelegate;
@@ -21,9 +44,41 @@
 	self = [super initWithFrame: frame];
 	if(self){
 		UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(tapped:)];
+		self.font = [UIFont systemFontOfSize: [UIFont systemFontSize]];
 		[self addGestureRecognizer: tap];
 	}
 	return self;
+}
+
+-(id)initWithCoder:(NSCoder *)aDecoder
+{
+	self = [super initWithCoder: aDecoder];
+	if(self){
+		UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(tapped:)];
+		self.font = [UIFont systemFontOfSize: [UIFont systemFontSize]];
+		[self addGestureRecognizer: tap];
+	}
+	return self;
+}
+
+-(NSArray*)inspectableTextSpans
+{
+	NSMutableArray* objects = [[super inspectableTextSpans] mutableCopy];
+	if([self isEmptyInspectableTextSpans: objects]){
+		OUITextSelectionSpan* first = [objects firstObjectOrNil];
+		if(first){
+			//Swizzling these methods if the inspectable text span is nil.
+			Method firstMethod
+				= class_getInstanceMethod([OUITextSelectionSpan class],
+										  @selector(fontDescriptorForInspectorSlice:));
+			Method secondaryMethod
+				= class_getInstanceMethod([OUITextSelectionSpan class],
+										  @selector(_secondaryFontDescriptorForInspectorSlice:));
+			
+			method_exchangeImplementations(firstMethod, secondaryMethod);
+		}
+	}
+	return objects;
 }
 
 //TODO: Figure out if these typingAtributes messages are still needed
