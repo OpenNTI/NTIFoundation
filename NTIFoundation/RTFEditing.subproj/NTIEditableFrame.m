@@ -69,26 +69,6 @@
 	return self;
 }
 
-//-(NSArray*)inspectableTextSpans
-//{
-//	NSMutableArray* objects = [[super inspectableTextSpans] mutableCopy];
-//	if([self isEmptyInspectableTextSpans: objects]){
-//		OUITextSelectionSpan* first = [objects firstObjectOrNil];
-//		if(first){
-//			//Swizzling these methods if the inspectable text span is nil.
-//			Method firstMethod
-//				= class_getInstanceMethod([OUITextSelectionSpan class],
-//										  @selector(fontDescriptorForInspectorSlice:));
-//			Method secondaryMethod
-//				= class_getInstanceMethod([OUITextSelectionSpan class],
-//										  @selector(_secondaryFontDescriptorForInspectorSlice:));
-//			
-//			method_exchangeImplementations(firstMethod, secondaryMethod);
-//		}
-//	}
-//	return objects;
-//}
-
 //TODO: Figure out if these typingAtributes messages are still needed
 -(NSDictionary*)typingAttributes
 {
