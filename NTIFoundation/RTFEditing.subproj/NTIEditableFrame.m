@@ -21,6 +21,14 @@
 
 @implementation OUITextSelectionSpan(NTIEditableFrame)
 
++(void)load
+{
+	Method originalMethod = class_getInstanceMethod([self class], @selector(fontDescriptorForInspectorSlice:));
+	Method newMethod = class_getInstanceMethod([self class], @selector(_secondaryFontDescriptorForInspectorSlice:));
+	
+	method_exchangeImplementations(originalMethod, newMethod);
+}
+
 -(OAFontDescriptor*)_secondaryFontDescriptorForInspectorSlice:(OUIInspectorSlice*)inspector;
 {
 	OAFontDescriptor* desc = (OAFontDescriptor*)[self.textView attribute:OAFontDescriptorAttributeName inRange:self.range];
@@ -61,25 +69,25 @@
 	return self;
 }
 
--(NSArray*)inspectableTextSpans
-{
-	NSMutableArray* objects = [[super inspectableTextSpans] mutableCopy];
-	if([self isEmptyInspectableTextSpans: objects]){
-		OUITextSelectionSpan* first = [objects firstObjectOrNil];
-		if(first){
-			//Swizzling these methods if the inspectable text span is nil.
-			Method firstMethod
-				= class_getInstanceMethod([OUITextSelectionSpan class],
-										  @selector(fontDescriptorForInspectorSlice:));
-			Method secondaryMethod
-				= class_getInstanceMethod([OUITextSelectionSpan class],
-										  @selector(_secondaryFontDescriptorForInspectorSlice:));
-			
-			method_exchangeImplementations(firstMethod, secondaryMethod);
-		}
-	}
-	return objects;
-}
+//-(NSArray*)inspectableTextSpans
+//{
+//	NSMutableArray* objects = [[super inspectableTextSpans] mutableCopy];
+//	if([self isEmptyInspectableTextSpans: objects]){
+//		OUITextSelectionSpan* first = [objects firstObjectOrNil];
+//		if(first){
+//			//Swizzling these methods if the inspectable text span is nil.
+//			Method firstMethod
+//				= class_getInstanceMethod([OUITextSelectionSpan class],
+//										  @selector(fontDescriptorForInspectorSlice:));
+//			Method secondaryMethod
+//				= class_getInstanceMethod([OUITextSelectionSpan class],
+//										  @selector(_secondaryFontDescriptorForInspectorSlice:));
+//			
+//			method_exchangeImplementations(firstMethod, secondaryMethod);
+//		}
+//	}
+//	return objects;
+//}
 
 //TODO: Figure out if these typingAtributes messages are still needed
 -(NSDictionary*)typingAttributes
