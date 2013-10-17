@@ -13,7 +13,7 @@
 #import "NTITextAttachmentCell.h"
 #import <OmniUI/OUITextSelectionSpan.h>
 #import <OmniAppKit/OAFontDescriptor.h>
-#import <objc/objc-class.h>
+#import <objc/runtime.h>
 
 @interface OUITextSelectionSpan(NTIEditableFrame)
 -(OAFontDescriptor*)_secondaryFontDescriptorForInspectorSlice:(OUIInspectorSlice*)inspector;
@@ -23,10 +23,13 @@
 
 +(void)load
 {
-	Method originalMethod = class_getInstanceMethod([self class], @selector(fontDescriptorForInspectorSlice:));
-	Method newMethod = class_getInstanceMethod([self class], @selector(_secondaryFontDescriptorForInspectorSlice:));
-	
-	method_exchangeImplementations(originalMethod, newMethod);
+	static dispatch_once_t once_token;
+	dispatch_once(&once_token, ^{
+		Method originalMethod = class_getInstanceMethod([self class], @selector(fontDescriptorForInspectorSlice:));
+		Method newMethod = class_getInstanceMethod([self class], @selector(_secondaryFontDescriptorForInspectorSlice:));
+		
+		method_exchangeImplementations(originalMethod, newMethod);
+	});
 }
 
 -(OAFontDescriptor*)_secondaryFontDescriptorForInspectorSlice:(OUIInspectorSlice*)inspector;
