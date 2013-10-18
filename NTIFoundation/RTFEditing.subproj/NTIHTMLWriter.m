@@ -49,7 +49,7 @@
 	int red, green, blue;
 }
 
--(id)initWithColor: (CGColorRef)color;
+-(id)initWithColor: (id)color;
 -(void)writeToDataBuffer: (OFDataBuffer*)dataBuffer;
 
 @end
@@ -324,8 +324,8 @@ static const struct {
 		   tagAlreadyOpened: (BOOL)open
 {
 	id newColor = [newAttributes objectForKey: (NSString*)kCTForegroundColorAttributeName];
-	NTIHTMLColorTableEntry* colorTableEntry = [[NTIHTMLColorTableEntry alloc] 
-											   initWithColor: (__bridge CGColorRef)newColor];
+	NTIHTMLColorTableEntry* colorTableEntry = [[NTIHTMLColorTableEntry alloc]
+											   initWithColor: newColor];
 	NSNumber* newColorIndexValue = [self->registeredColors objectForKey: colorTableEntry];
 	
 	OBASSERT(newColorIndexValue != nil);
@@ -346,7 +346,7 @@ static const struct {
 	}
 	
 	newColor = [newAttributes objectForKey: NSBackgroundColorAttributeName];
-	colorTableEntry = [[NTIHTMLColorTableEntry alloc] initWithColor: (__bridge CGColorRef)newColor];
+	colorTableEntry = [[NTIHTMLColorTableEntry alloc] initWithColor: newColor];
 	newColorIndexValue = [self->registeredColors objectForKey: colorTableEntry];
 	OBASSERT(newColorIndexValue != nil);
 	newColorIndex = [newColorIndexValue intValue];
@@ -552,7 +552,7 @@ static const struct {
 	OQColor* blackColor = [OQColor blackColor];
 	CGColorRef blackCGColor = [blackColor rgbaCGColorRef];
 	NTIHTMLColorTableEntry* defaultColorEntry = [[NTIHTMLColorTableEntry alloc] 
-												 initWithColor: blackCGColor];
+												 initWithColor: (__bridge id)blackCGColor];
 	if(blackCGColor){
 		CFRelease( blackCGColor );
 	}
@@ -572,7 +572,7 @@ static const struct {
 		}
 		CGColorRef cgColor = (__bridge CGColorRef)color;
 		NTIHTMLColorTableEntry* colorTableEntry = [[NTIHTMLColorTableEntry alloc] 
-												   initWithColor: cgColor];
+												   initWithColor: (__bridge id)cgColor];
 		if( OFNOTNULL(colorTableEntry) && ![self->registeredColors objectForKey: colorTableEntry] ) {
 			[self->registeredColors setObject: [NSNumber numberWithInt: colorIndex++]
 									   forKey: colorTableEntry];
@@ -701,17 +701,25 @@ static const struct {
 
 @implementation NTIHTMLColorTableEntry
 
--(id)initWithColor: (CGColorRef)cgColor;
+-(id)initWithColor: (id)color;
 {
 	if( !(self = [super init]) ) {
 		return nil;
 	}
 	
-	if( !cgColor ) {
+	if( !color ) {
 		return self;
 	}
 	
 	//OBASSERT(CFGetTypeID(cgColor) == CGColorGetTypeID());
+	CGColorRef cgColor;
+	if([color respondsToSelector: @selector(CGColor)]){
+		cgColor = [color CGColor];
+	}
+	else{
+		cgColor = (__bridge CGColorRef)(color);
+	}
+		
 	if(CFGetTypeID(cgColor) != CGColorGetTypeID()){
 		return nil;
 	}
