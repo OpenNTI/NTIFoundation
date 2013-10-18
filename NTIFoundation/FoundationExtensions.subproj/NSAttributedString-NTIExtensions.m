@@ -9,7 +9,7 @@
 #import "NSAttributedString-NTIExtensions.h"
 #import "NTIRTFDocument.h"
 #import "NSAttributedString-HTMLWritingExtensions.h"
-#import <OmniAppKit/OATextAttachment.h>
+#import "NTITextAttachment.h"
 #import <OmniAppKit/OATextStorage.h>
 #import <OmniAppKit/OATextAttachmentCell.h>
 
@@ -48,11 +48,8 @@
 		attrString = [NTIRTFDocument attributedStringWithString: object];
 	}
 	else if( [object respondsToSelector: @selector(attachmentCell)] ){
-		OATextAttachment* attachment = [[OATextAttachment alloc]
-										initWithFileWrapper: nil];
 		OATextAttachmentCell* cell = [object attachmentCell];
-		attachment.attachmentCell = cell;
-		OBASSERT(cell.attachment == attachment); // sets the backpointer
+		NTITextAttachment* attachment = [NTITextAttachment attachmentWithRenderer: cell];
 		
 		unichar attachmentCharacter = NSAttachmentCharacter;
 		
@@ -108,8 +105,8 @@
 									atIndex: 0
 							 effectiveRange: NULL];
 			
-			if(  [attachment respondsToSelector: @selector(attachmentCell)] ){
-				id attachmentCell = [attachment attachmentCell];
+			if(  [attachment respondsToSelector: @selector(attachmentRenderer)] ){
+				id attachmentCell = [attachment attachmentRenderer];
 				if( [attachmentCell respondsToSelector: @selector(object)]  ){
 					return [attachmentCell object];
 				}
@@ -175,12 +172,12 @@ static BOOL characterAtIndexRequiresOwnChunk(NSAttributedString* string, NSUInte
 	if([string.string characterAtIndex: index] != NSAttachmentCharacter){
 		return NO;
 	}
-	OATextAttachment* textAttachment = [string attribute: NSAttachmentAttributeName 
+	NTITextAttachment* textAttachment = [string attribute: NSAttachmentAttributeName
 												 atIndex: index
 										  effectiveRange: NULL];
 	
 	return textAttachment
-	&& ![(id)[textAttachment attachmentCell]
+	&& ![(id)[textAttachment attachmentRenderer]
 		 respondsToSelector: @selector(htmlWriter:exportHTMLToDataBuffer:withSize:)];
 }
 

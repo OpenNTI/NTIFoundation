@@ -9,8 +9,8 @@
 #import "NSAttributedString-NTIExtensionsTest.h"
 #import "NSAttributedString-NTIExtensions.h"
 #import "NSAttributedString-HTMLReadingExtensions.h"
+#import "NTITextAttachment.h"
 #import <OmniAppKit/OATextStorage.h>
-#import <OmniAppKit/OATextAttachment.h>
 #import <OmniAppKit/OATextAttachmentCell.h>
 
 @interface HTMLAttachmentCell : OATextAttachmentCell {
@@ -30,7 +30,7 @@
 	return self;
 }
 
--(id)attachmentCell
+-(id)attachmentRenderer
 {
 	return self;
 }
@@ -121,7 +121,7 @@
 	
 	id attachment = [objectString attribute: NSAttachmentAttributeName atIndex: 0 effectiveRange: NULL];
 	
-	id attachmentCell = [attachment attachmentCell];
+	id attachmentCell = [attachment attachmentRenderer];
 	
 	STAssertEqualObjects([attachmentCell object], [NSNumber numberWithInt: 10], nil);
 	

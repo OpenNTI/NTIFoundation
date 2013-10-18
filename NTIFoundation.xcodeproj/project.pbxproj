@@ -143,6 +143,9 @@
 		40B5B4BB14C89B9D009D5810 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4053898B14B3FB8700B5FB46 /* CFNetwork.framework */; };
 		40B6F3BA14285AF4007EDF1C /* WebSocket7Test.h in Headers */ = {isa = PBXBuildFile; fileRef = 40B6F3B814285AF4007EDF1C /* WebSocket7Test.h */; };
 		40B6F3D914285B38007EDF1C /* WebSocket7Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 40B6F3B914285AF4007EDF1C /* WebSocket7Test.m */; };
+		40BACD6B18108FBC0053ACC9 /* NTITextAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = 40BACD6918108FBC0053ACC9 /* NTITextAttachment.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		40BACD6C18108FBC0053ACC9 /* NTITextAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BACD6A18108FBC0053ACC9 /* NTITextAttachment.m */; };
+		40BACD6D18108FBC0053ACC9 /* NTITextAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BACD6A18108FBC0053ACC9 /* NTITextAttachment.m */; };
 		40C0E1031443AF9C00142406 /* SocketIOPacketTest.h in Headers */ = {isa = PBXBuildFile; fileRef = 40C0E1011443AF9C00142406 /* SocketIOPacketTest.h */; };
 		40C0E1051443AF9C00142406 /* SocketIOPacketTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40C0E1021443AF9C00142406 /* SocketIOPacketTest.m */; };
 		40C0E1061443AFA600142406 /* SendRecieveQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 40475AEA142A4940003323A9 /* SendRecieveQueue.m */; };
@@ -821,6 +824,8 @@
 		40B5B4B114C89A9C009D5810 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		40B6F3B814285AF4007EDF1C /* WebSocket7Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSocket7Test.h; sourceTree = "<group>"; };
 		40B6F3B914285AF4007EDF1C /* WebSocket7Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSocket7Test.m; sourceTree = "<group>"; };
+		40BACD6918108FBC0053ACC9 /* NTITextAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTITextAttachment.h; sourceTree = "<group>"; };
+		40BACD6A18108FBC0053ACC9 /* NTITextAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTITextAttachment.m; sourceTree = "<group>"; };
 		40C0E1011443AF9C00142406 /* SocketIOPacketTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketIOPacketTest.h; sourceTree = "<group>"; };
 		40C0E1021443AF9C00142406 /* SocketIOPacketTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketIOPacketTest.m; sourceTree = "<group>"; };
 		40C34CAB14D88DD5000D91A8 /* NTIFoundationApplicationTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NTIFoundationApplicationTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1074,6 +1079,8 @@
 				40E04613143F47890091CE7C /* NTIHTMLReader.m */,
 				40531BCD160A39C800252818 /* NTITextAttachmentCell.h */,
 				40531BCE160A39C800252818 /* NTITextAttachmentCell.m */,
+				40BACD6918108FBC0053ACC9 /* NTITextAttachment.h */,
+				40BACD6A18108FBC0053ACC9 /* NTITextAttachment.m */,
 			);
 			name = RTFEditing;
 			path = RTFEditing.subproj;
@@ -1745,6 +1752,7 @@
 				4CA4F48A1535F7AF0005FECD /* NTIMathAlphaNumericSymbol.h in Headers */,
 				4CA4F48F153614640005FECD /* NTIMathPlaceholderSymbol.h in Headers */,
 				4CA4F49915361E6D0005FECD /* NTIMathParenthesisSymbol.h in Headers */,
+				40BACD6B18108FBC0053ACC9 /* NTITextAttachment.h in Headers */,
 				4CA4F49E15361FDD0005FECD /* NTIMathUnaryExpression.h in Headers */,
 				4CA4F4A31536234C0005FECD /* NTIMathBinaryExpression.h in Headers */,
 				4CA4F4A8153627F00005FECD /* NTIMathExponentBinaryExpression.h in Headers */,
@@ -2405,6 +2413,7 @@
 				40A414801505748A0017242E /* NSDate-NTIExtensions.m in Sources */,
 				403C317B1512A5DD00C53D22 /* NSData-NTIJSON.m in Sources */,
 				4CA4F4851535F1390005FECD /* NTIMathSymbol.m in Sources */,
+				40BACD6C18108FBC0053ACC9 /* NTITextAttachment.m in Sources */,
 				4CA4F48B1535F7AF0005FECD /* NTIMathAlphaNumericSymbol.m in Sources */,
 				4CA4F490153614640005FECD /* NTIMathPlaceholderSymbol.m in Sources */,
 				4CA4F49A15361E6D0005FECD /* NTIMathParenthesisSymbol.m in Sources */,
@@ -2432,6 +2441,7 @@
 			files = (
 				7293CB2B1451AAB700CD64B8 /* NTIEditableFrame.m in Sources */,
 				72D7D53D13E3321800652DAC /* NTIAbstractDownloader.m in Sources */,
+				40BACD6D18108FBC0053ACC9 /* NTITextAttachment.m in Sources */,
 				72D7D54813E3321800652DAC /* NSArray-NTIExtensions.m in Sources */,
 				72D7D54913E3321800652DAC /* NSMutableArray-NTIExtensions.m in Sources */,
 				72D7D54C13E3321800652DAC /* NSString-NTIExtensions.m in Sources */,
