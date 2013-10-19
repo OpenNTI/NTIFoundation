@@ -21,6 +21,8 @@
 	self = [super initWithFrame: frame];
 	if(self){
 		UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(tapped:)];
+		
+		tap.delegate = (id)self;
 		[self addGestureRecognizer: tap];
 	}
 	return self;
@@ -164,6 +166,54 @@
 		return [attachment attachmentCell];
 	}
 	return nil;
+}
+
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+	return YES;
+}
+
+-(UIView *)hitTest: (CGPoint)point withEvent: (UIEvent *)event
+{
+	//If the point isn't even in our view just call super. Could return nil here?
+	UIView* supersResult = [super hitTest: point withEvent: event];
+	
+	if( !supersResult ){
+		return nil;
+	}
+	
+	//Shortcut, if we don't have a delegate or one that responds to our event just call super
+	if(	OFISNULL(self->nr_attachmentDelegate) ||
+	   ![self->nr_attachmentDelegate respondsToSelector:
+			@selector(editableFrame:attachmentCell:wasTouchedAtPoint:)]){
+		return supersResult;
+	}
+	
+	
+	OATextAttachmentCell* attachmentCell = [self attachmentCellForPoint: point fromView: self];
+	if(attachmentCell){
+		//If we are editing select the attachment cell so that any editing will replace it.
+		if(self.isEditable){
+			UITextRange* range = [self workingCharacterRangeForPoint: point];
+			[self setSelectedTextRange: range
+						   showingMenu: NO];
+		}
+		
+		BOOL handled = [self->nr_attachmentDelegate editableFrame: self
+												   attachmentCell: attachmentCell
+												wasTouchedAtPoint: point];
+			
+		if(handled){
+			// From the docs the return value should be
+			//"The view object that is the farthest descendent the current view and contains point. Returns nil if the point lies completely outside the receiver’s view hierarchy."
+			//we want to return the view that represents the attachment we have clicked.  We can't return the tablecell (self) or the editor as that causes those views to perform
+			//some action.
+			//TODO If we return anything besides nil the row gets touched and the accessory row pops down....
+			return nil;
+		}
+	}
+	
+	return supersResult;
 }
 
 -(void)tapped: (UITapGestureRecognizer*)r
