@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SchemeUserState</key>
+	<dict>
+		<key>GenerateDate.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>64</integer>
+		</dict>
+		<key>NTIFoundation.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>63</integer>
+		</dict>
+		<key>NTIFoundationApplicationTests.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>61</integer>
+		</dict>
+		<key>NTIFoundationLogicTests.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>62</integer>
+		</dict>
+		<key>NTILogicTestBase.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>65</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>40572C5814C894940032D2DB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>40C34CAA14D88DD5000D91A8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>40F56E0015C8B9C8001FC309</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7216D72A13CBAE6800509BDC</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>72C0D195142529E800D526D8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>72D8185813955D8C00473994</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+	</dict>
+</dict>
+</plist>

@@ -52,6 +52,7 @@
 #import "NTIHTMLReader.h"
 #import "OQColor-NTIExtensions.h"
 #import "NTIEditableFrame.h"
+#import "NTITextAttachment.h"
 #import "NTITextAttachmentCell.h"
 #import "NSURL-NTIFileSystemExtensions.h"
 #import "NTIAppNavigationController.h"
