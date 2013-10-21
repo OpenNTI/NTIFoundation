@@ -220,8 +220,6 @@ static NSAttributedString* correctMissingChunks(NSAttributedString* toCorrect)
 		searchStart = NSMaxRange(searchResult);
 	}
 	
-	
-	
 	return corrected;
 }
 
@@ -236,27 +234,37 @@ static NSAttributedString* correctMissingChunks(NSAttributedString* toCorrect)
 //on correctMissingChunks for details.
 -(NSArray*)attributedStringsFromParts;
 {
-	NSMutableArray* result = [NSMutableArray arrayWithCapacity: 5];
+	__block NSMutableArray* result = [NSMutableArray arrayWithCapacity: 5];
+	__block NSAttributedString* toSplit = correctMissingChunks(self);
+	__block NSUInteger lastAddedIndex = NSNotFound;
 	
-	NSAttributedString* toSplit = correctMissingChunks(self);
-	
-	NSUInteger inspectingIdx = 1;
-	NSUInteger partStart=0;
-	while(inspectingIdx < toSplit.length){
-		//We found a new start
-		if( [toSplit attribute: kNTIChunkSeparatorAttributeName atIndex: inspectingIdx effectiveRange: NULL] ){
-			NSRange partRange = NSMakeRange(partStart, inspectingIdx - partStart);
-			[result addObject: [toSplit attributedSubstringFromRange: partRange]];
-			partStart = inspectingIdx;
-		}
-		
-		inspectingIdx++;
-	}
-	
-	//Make sure to grab the last part
-	[result addObject: [toSplit attributedSubstringFromRange: 
-						NSMakeRange(partStart, toSplit.length - partStart)]];
-	
+	[toSplit enumerateAttributesInRange: NSMakeRange(0, toSplit.length)
+								options: 0
+							 usingBlock:^(NSDictionary *attrs, NSRange range, BOOL *stop) {
+								 if([attrs objectForKey: kNTIChunkSeparatorAttributeName]){
+									 [result addObject: [toSplit attributedSubstringFromRange: range]];
+									 lastAddedIndex = result.count - 1;
+								 }
+								 else{
+									 NSMutableAttributedString* lastAdded;
+									 if(OFNOTEQUAL(@(lastAddedIndex), @(NSNotFound))){
+										 lastAdded = [[NSMutableAttributedString alloc] initWithAttributedString:
+													  [result objectAtIndex: lastAddedIndex]];
+										 [lastAdded appendString: [toSplit attributedSubstringFromRange: range].string
+													  attributes: attrs];
+										 
+										 [result replaceObjectAtIndex: lastAddedIndex
+														   withObject: lastAdded];
+									 }
+									 else{
+										 lastAdded = [[NSMutableAttributedString alloc] init];
+										 [lastAdded appendString: [toSplit attributedSubstringFromRange: range].string
+													  attributes: attrs];
+										 
+										 [result addObject: lastAdded];
+									 }
+								 }
+							 }];
 	
 	return [NSArray arrayWithArray: result];
 }
