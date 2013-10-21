@@ -250,6 +250,37 @@
 						 @"Meat", nil);
 }
 
+-(void)testAttributedStringWithAmbiguousChunks
+{
+	NSAttributedString* one = [[NSAttributedString alloc] initWithString: @"abc"
+															  attributes: @{kNTIChunkSeparatorAttributeName:@1}];
+	
+	NSAttributedString* twoA = [[NSAttributedString alloc] initWithString: @"a"
+															attributeName: kNTIChunkSeparatorAttributeName
+														   attributeValue: @1];
+	NSAttributedString* twoB = [[NSAttributedString alloc] initWithString: @"b"
+															attributeName: @"something"
+														   attributeValue: @"here"];
+	NSAttributedString* twoC = [[NSAttributedString alloc] initWithString: @"c"
+															   attributes: @{kNTIChunkSeparatorAttributeName:@1}];
+	
+	NSMutableAttributedString* two = [[NSMutableAttributedString alloc] initWithAttributedString: twoA];
+	[two appendAttributedString: twoB];
+	[two appendAttributedString: twoC];
+	
+	NSArray* split1 = [one attributedStringsFromParts];
+	NSArray* split2 = [two attributedStringsFromParts];
+	
+	NSAttributedString* split1First = [split1 firstObject];
+	STAssertEqualObjects(split1First.string, @"abc", nil);
+	
+	NSAttributedString* split2First = [split2 firstObject];
+	STAssertEqualObjects(split2First.string, @"ab", nil);
+	
+	NSAttributedString* split2Last = [split2 lastObject];
+	STAssertEqualObjects(split2Last.string, @"c", nil);
+}
+
 static NSAttributedString* simpleAttributedString(){
 	NSAttributedString* one = [[NSAttributedString alloc] initWithString: @"I" 
 														   attributeName: @"Name" 
