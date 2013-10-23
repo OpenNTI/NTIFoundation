@@ -55,10 +55,6 @@
 	self = [super initWithFrame: frame];
 	if(self){
 		UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(tapped:)];
-<<<<<<< HEAD
-		
-		tap.delegate = (id)self;
-=======
 		self.font = [UIFont systemFontOfSize: [UIFont systemFontSize]];
 		[self addGestureRecognizer: tap];
 	}
@@ -71,7 +67,6 @@
 	if(self){
 		UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(tapped:)];
 		self.font = [UIFont systemFontOfSize: [UIFont systemFontSize]];
->>>>>>> c3e325659bae594eeb34a2cf4571f794b73bcf0c
 		[self addGestureRecognizer: tap];
 	}
 	return self;
@@ -212,7 +207,7 @@
 	id attributes = [self.attributedText attributesAtIndex: characterRange.location effectiveRange: NULL];
 	OATextAttachment* attachment = [attributes objectForKey: NSAttachmentAttributeName];
 	if(attachment){
-		return [attachment attachmentCell];
+		return [(id)attachment attachmentRenderer];
 	}
 	return nil;
 }
