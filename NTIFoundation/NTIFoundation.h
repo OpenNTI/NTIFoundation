@@ -67,6 +67,9 @@
 #import "NTIBadgeCountView.h"
 #import	"NTIKeyboardAdjustmentListener.h"
 
+#import "NTIDuration.h"
+#import "NTIISO8601DurationFormatter.h"
+
 #import "NTIMathSymbol.h"
 #import "NTIMathAlphaNumericSymbol.h"
 #import "NTIMathOperatorSymbol.h"

@@ -23,6 +23,17 @@
 /* Begin PBXBuildFile section */
 		4006E76B149272E000D63524 /* NSObject-NTIJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 4006E76A149272E000D63524 /* NSObject-NTIJSON.m */; };
 		4006E76C149272EC00D63524 /* NSObject-NTIJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 4006E76A149272E000D63524 /* NSObject-NTIJSON.m */; };
+		400D6E2C1832A1D600F07DBA /* NTIISO8601DurationFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 400D6E2A1832A1D600F07DBA /* NTIISO8601DurationFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		400D6E2D1832A1D600F07DBA /* NTIISO8601DurationFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 400D6E2A1832A1D600F07DBA /* NTIISO8601DurationFormatter.h */; };
+		400D6E2E1832A1D600F07DBA /* NTIISO8601DurationFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 400D6E2B1832A1D600F07DBA /* NTIISO8601DurationFormatter.m */; };
+		400D6E2F1832A1D600F07DBA /* NTIISO8601DurationFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 400D6E2B1832A1D600F07DBA /* NTIISO8601DurationFormatter.m */; };
+		400D6E301832A1D600F07DBA /* NTIISO8601DurationFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 400D6E2B1832A1D600F07DBA /* NTIISO8601DurationFormatter.m */; };
+		400D6E341832A9C500F07DBA /* NTIISO8601DurationFormatterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 400D6E331832A9C500F07DBA /* NTIISO8601DurationFormatterTest.m */; };
+		400D6E371832C42500F07DBA /* NTIDuration.h in Headers */ = {isa = PBXBuildFile; fileRef = 400D6E351832C42500F07DBA /* NTIDuration.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		400D6E381832C42500F07DBA /* NTIDuration.h in Headers */ = {isa = PBXBuildFile; fileRef = 400D6E351832C42500F07DBA /* NTIDuration.h */; };
+		400D6E391832C42500F07DBA /* NTIDuration.m in Sources */ = {isa = PBXBuildFile; fileRef = 400D6E361832C42500F07DBA /* NTIDuration.m */; };
+		400D6E3A1832C42500F07DBA /* NTIDuration.m in Sources */ = {isa = PBXBuildFile; fileRef = 400D6E361832C42500F07DBA /* NTIDuration.m */; };
+		400D6E3B1832C42500F07DBA /* NTIDuration.m in Sources */ = {isa = PBXBuildFile; fileRef = 400D6E361832C42500F07DBA /* NTIDuration.m */; };
 		40103C0814D07BCC004451A4 /* NTIAppNavigationLayerSwitcher.h in Headers */ = {isa = PBXBuildFile; fileRef = 40103C0614D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.h */; };
 		40103C0914D07BCC004451A4 /* NTIAppNavigationLayerSwitcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 40103C0714D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.m */; };
 		40103C0A14D07BCC004451A4 /* NTIAppNavigationLayerSwitcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 40103C0714D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.m */; };
@@ -719,6 +730,11 @@
 /* Begin PBXFileReference section */
 		4006091517F2116600F75739 /* OmniDAV.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OmniDAV.xcodeproj; path = ../OmniGroup/Frameworks/OmniDAV/OmniDAV.xcodeproj; sourceTree = "<group>"; };
 		4006E76A149272E000D63524 /* NSObject-NTIJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject-NTIJSON.m"; sourceTree = "<group>"; };
+		400D6E2A1832A1D600F07DBA /* NTIISO8601DurationFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIISO8601DurationFormatter.h; sourceTree = "<group>"; };
+		400D6E2B1832A1D600F07DBA /* NTIISO8601DurationFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIISO8601DurationFormatter.m; sourceTree = "<group>"; };
+		400D6E331832A9C500F07DBA /* NTIISO8601DurationFormatterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIISO8601DurationFormatterTest.m; sourceTree = "<group>"; };
+		400D6E351832C42500F07DBA /* NTIDuration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIDuration.h; sourceTree = "<group>"; };
+		400D6E361832C42500F07DBA /* NTIDuration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIDuration.m; sourceTree = "<group>"; };
 		40103C0614D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIAppNavigationLayerSwitcher.h; sourceTree = "<group>"; };
 		40103C0714D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIAppNavigationLayerSwitcher.m; sourceTree = "<group>"; };
 		40103C1314D2564C004451A4 /* NTIInspectableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIInspectableController.h; sourceTree = "<group>"; };
@@ -1044,6 +1060,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		400D6E0918329FDF00F07DBA /* Formatters */ = {
+			isa = PBXGroup;
+			children = (
+				400D6E2A1832A1D600F07DBA /* NTIISO8601DurationFormatter.h */,
+				400D6E2B1832A1D600F07DBA /* NTIISO8601DurationFormatter.m */,
+				400D6E351832C42500F07DBA /* NTIDuration.h */,
+				400D6E361832C42500F07DBA /* NTIDuration.m */,
+			);
+			path = Formatters;
+			sourceTree = "<group>";
+		};
+		400D6E321832A9A700F07DBA /* FormattersTests */ = {
+			isa = PBXGroup;
+			children = (
+				400D6E331832A9C500F07DBA /* NTIISO8601DurationFormatterTest.m */,
+			);
+			name = FormattersTests;
+			sourceTree = "<group>";
+		};
 		40103C1214D25605004451A4 /* Inspector */ = {
 			isa = PBXGroup;
 			children = (
@@ -1251,6 +1286,7 @@
 		40C34C5D14D88BA6000D91A8 /* LogicTests */ = {
 			isa = PBXGroup;
 			children = (
+				400D6E321832A9A700F07DBA /* FormattersTests */,
 				4CE3E612154E4F770005918E /* MathSymbolsTests */,
 				4CEC1B7315114BD10074F3DD /* GlobalInspectorTests */,
 				40A745B514DADE290093F0D4 /* RTFEditingTests */,
@@ -1469,6 +1505,7 @@
 		72CBA96F1385CF1F00E3D28D /* NTIFoundation */ = {
 			isa = PBXGroup;
 			children = (
+				400D6E0918329FDF00F07DBA /* Formatters */,
 				40F56F2015CAC4F7001FC309 /* UI */,
 				4CA4F4691535DDD30005FECD /* MathSymbols */,
 				40103C1214D25605004451A4 /* Inspector */,
@@ -1702,7 +1739,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				400D6E2D1832A1D600F07DBA /* NTIISO8601DurationFormatter.h in Headers */,
 				40F56EBB15C8BCA4001FC309 /* NTITestFixes.h in Headers */,
+				400D6E381832C42500F07DBA /* NTIDuration.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1730,6 +1769,7 @@
 				403D0DC4143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.h in Headers */,
 				403D0DC6143E193E0049A755 /* NTIRTFDocument.h in Headers */,
 				40E045F3143F468D0091CE7C /* NTIHTMLWriter.h in Headers */,
+				400D6E371832C42500F07DBA /* NTIDuration.h in Headers */,
 				40E04614143F47890091CE7C /* NTIHTMLReader.h in Headers */,
 				7293CB291451AA7D00CD64B8 /* NTIEditableFrame.h in Headers */,
 				403C8CE217EA6CE9000FC290 /* NSNotification-NTIExtensions.h in Headers */,
@@ -1750,6 +1790,7 @@
 				4CA4F4841535F1390005FECD /* NTIMathSymbol.h in Headers */,
 				4CA4F4871535F3460005FECD /* NTIMathExpressionSymbolProtocol.h in Headers */,
 				4CA4F48A1535F7AF0005FECD /* NTIMathAlphaNumericSymbol.h in Headers */,
+				400D6E2C1832A1D600F07DBA /* NTIISO8601DurationFormatter.h in Headers */,
 				4CA4F48F153614640005FECD /* NTIMathPlaceholderSymbol.h in Headers */,
 				4CA4F49915361E6D0005FECD /* NTIMathParenthesisSymbol.h in Headers */,
 				40BACD6B18108FBC0053ACC9 /* NTITextAttachment.h in Headers */,
@@ -2367,6 +2408,8 @@
 				403C8CE617EA6CE9000FC290 /* NSNotification-NTIExtensions.m in Sources */,
 				4CEC1DB2151395F70074F3DD /* NTIGlobalInspectorAppTest.m in Sources */,
 				4C696D0A1516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m in Sources */,
+				400D6E301832A1D600F07DBA /* NTIISO8601DurationFormatter.m in Sources */,
+				400D6E3B1832C42500F07DBA /* NTIDuration.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2383,6 +2426,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				72E3534114252E6F001B345A /* NTIAbstractDownloader.m in Sources */,
+				400D6E391832C42500F07DBA /* NTIDuration.m in Sources */,
+				400D6E2E1832A1D600F07DBA /* NTIISO8601DurationFormatter.m in Sources */,
 				72E3534E14252E6F001B345A /* NSArray-NTIExtensions.m in Sources */,
 				72E3534F14252E6F001B345A /* NSMutableArray-NTIExtensions.m in Sources */,
 				72E3535214252E6F001B345A /* NSString-NTIExtensions.m in Sources */,
@@ -2446,6 +2491,7 @@
 				72D7D54913E3321800652DAC /* NSMutableArray-NTIExtensions.m in Sources */,
 				72D7D54C13E3321800652DAC /* NSString-NTIExtensions.m in Sources */,
 				72D7D54E13E3321800652DAC /* NSString-NTIJSON.m in Sources */,
+				400D6E2F1832A1D600F07DBA /* NTIISO8601DurationFormatter.m in Sources */,
 				72D7D55713E3321800652DAC /* OUUnzipArchive-NTIExtensions.m in Sources */,
 				40B6F3D914285B38007EDF1C /* WebSocket7Test.m in Sources */,
 				403D0DD0143E3AE20049A755 /* NSAttributedString-HTMLReadingExtensionsTest.m in Sources */,
@@ -2453,6 +2499,7 @@
 				408FBF16143F65C00095DD84 /* NSAttributedString-HTMLReadingExtensions.m in Sources */,
 				408FBF17143F65D70095DD84 /* NTIHTMLReader.m in Sources */,
 				408FBF1A143F6E5F0095DD84 /* OQColor-NTIExtensions.m in Sources */,
+				400D6E341832A9C500F07DBA /* NTIISO8601DurationFormatterTest.m in Sources */,
 				40C0E1051443AF9C00142406 /* SocketIOPacketTest.m in Sources */,
 				40C0E1061443AFA600142406 /* SendRecieveQueue.m in Sources */,
 				40C0E1071443AFAA00142406 /* WebSockets.m in Sources */,
@@ -2510,6 +2557,7 @@
 				4059D28315DC4CE800C567BA /* NSMutableDictionary-NTIExtensionsTest.m in Sources */,
 				40531BD1160A39C800252818 /* NTITextAttachmentCell.m in Sources */,
 				40531BED160A427F00252818 /* NTITextAttachmentCellTest.m in Sources */,
+				400D6E3A1832C42500F07DBA /* NTIDuration.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
