@@ -98,12 +98,22 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 	return YES;
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
+-(NSURLCredential*)credentialForContinuingWithChallenge: (NSURLAuthenticationChallenge *)challenge
+{
 	if ( [challenge.protectionSpace.authenticationMethod isEqualToString: NSURLAuthenticationMethodServerTrust] ){
 		if ( [[self class] isHostTrusted: challenge.protectionSpace.host] ){
-			[challenge.sender useCredential: [NSURLCredential credentialForTrust: challenge.protectionSpace.serverTrust]
-				 forAuthenticationChallenge: challenge];
+			return [NSURLCredential credentialForTrust: challenge.protectionSpace.serverTrust];
 		}
+	}
+	
+	return nil;
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
+	
+	NSURLCredential* credential = [self credentialForContinuingWithChallenge: challenge];
+	if(credential){
+		[challenge.sender useCredential: credential forAuthenticationChallenge: challenge];
 	}
 	
 	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
@@ -143,6 +153,49 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 
 -(void)connectionDidFinishLoading: (NSURLConnection*)connection
 {
+}
+
+#pragma mark NSURLSession delegate
+
+//The NSURLSession callbacks happen on some background queue (using whatever NSOperationQueue the session
+//was created with.  The old NSURLConnection had all its callbacks coming across the main queue.  B/c
+//of this where appropriate through the work onto the main queue so that we can maintain parity with the old implementation
+
+-(void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler
+{
+	dispatch_async(dispatch_get_main_queue(), ^(){
+		[self connection: nil didReceiveResponse: response];
+		completionHandler(NSURLSessionResponseAllow);
+	});
+}
+
+#ifdef DEBUG
+
+-(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential *))completionHandler
+{
+	NSURLCredential* credential = [self credentialForContinuingWithChallenge: challenge];
+	completionHandler(credential ? NSURLSessionAuthChallengeUseCredential : NSURLSessionAuthChallengePerformDefaultHandling, credential);
+}
+
+#endif
+
+-(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
+{
+	dispatch_async(dispatch_get_main_queue(), ^(){
+		if(error){
+			[self connection: nil didFailWithError: error];
+		}
+		else{
+			[self connectionDidFinishLoading: nil];
+		}
+	});
+}
+
+-(void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data
+{
+	dispatch_async(dispatch_get_main_queue(), ^(){
+		[self connection: nil didReceiveData: data];
+	});
 }
 
 @end

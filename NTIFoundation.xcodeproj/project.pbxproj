@@ -114,6 +114,9 @@
 		4080A01A15CC6BA000E1EB12 /* NTIBadgeCountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F56F2215CAC518001FC309 /* NTIBadgeCountView.m */; };
 		408494B51427DF6C0038BD31 /* WebSockets.h in Headers */ = {isa = PBXBuildFile; fileRef = 408494B31427DF6C0038BD31 /* WebSockets.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		408494B61427DF6C0038BD31 /* WebSockets.m in Sources */ = {isa = PBXBuildFile; fileRef = 408494B41427DF6C0038BD31 /* WebSockets.m */; };
+		408B5D27184D37E8004A856F /* NTIURLSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 408B5D25184D37E8004A856F /* NTIURLSessionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		408B5D28184D37E8004A856F /* NTIURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 408B5D26184D37E8004A856F /* NTIURLSessionManager.m */; };
+		408B5D29184D37E8004A856F /* NTIURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 408B5D26184D37E8004A856F /* NTIURLSessionManager.m */; };
 		408FBF07143F62D80095DD84 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408FBF06143F62D80095DD84 /* CoreText.framework */; };
 		408FBF09143F636F0095DD84 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408FBF08143F636F0095DD84 /* CoreGraphics.framework */; };
 		408FBF0B143F63AA0095DD84 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408FBF0A143F63A90095DD84 /* UIKit.framework */; };
@@ -820,6 +823,8 @@
 		4080B640148692C500A8899D /* libprofile_rt.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libprofile_rt.dylib; path = usr/lib/libprofile_rt.dylib; sourceTree = DEVELOPER_DIR; };
 		408494B31427DF6C0038BD31 /* WebSockets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSockets.h; sourceTree = "<group>"; };
 		408494B41427DF6C0038BD31 /* WebSockets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSockets.m; sourceTree = "<group>"; };
+		408B5D25184D37E8004A856F /* NTIURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIURLSessionManager.h; sourceTree = "<group>"; };
+		408B5D26184D37E8004A856F /* NTIURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIURLSessionManager.m; sourceTree = "<group>"; };
 		408FBF06143F62D80095DD84 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		408FBF08143F636F0095DD84 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		408FBF0A143F63A90095DD84 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -1216,6 +1221,15 @@
 				4066C83914E1C95F006B56D3 /* WebSocketData.m */,
 			);
 			name = "Web Sockets";
+			sourceTree = "<group>";
+		};
+		408B5D04184D37C3004A856F /* Sessions */ = {
+			isa = PBXGroup;
+			children = (
+				408B5D25184D37E8004A856F /* NTIURLSessionManager.h */,
+				408B5D26184D37E8004A856F /* NTIURLSessionManager.m */,
+			);
+			name = Sessions;
 			sourceTree = "<group>";
 		};
 		40A745B414DADDD90093F0D4 /* FoundationExtensionsTests */ = {
@@ -1710,6 +1724,7 @@
 		72E353B6142532B9001B345A /* RemoteData */ = {
 			isa = PBXGroup;
 			children = (
+				408B5D04184D37C3004A856F /* Sessions */,
 				40D7548914278E4500335BEF /* socket.io */,
 				721DC9FF13BA3DBD00340540 /* NTIAbstractDownloader.h */,
 				721DCA0013BA3DBD00340540 /* NTIAbstractDownloader.m */,
@@ -1764,6 +1779,7 @@
 				40D754B1142791CE00335BEF /* SocketIOTransport.h in Headers */,
 				408494B51427DF6C0038BD31 /* WebSockets.h in Headers */,
 				40B6F3BA14285AF4007EDF1C /* WebSocket7Test.h in Headers */,
+				408B5D27184D37E8004A856F /* NTIURLSessionManager.h in Headers */,
 				40475AEB142A4940003323A9 /* SendRecieveQueue.h in Headers */,
 				403D0DC2143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h in Headers */,
 				403D0DC4143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.h in Headers */,
@@ -2475,6 +2491,7 @@
 				40716F3615C828B900430FFC /* NTIGlobalInspectorSlice.m in Sources */,
 				40F56F2615CAC518001FC309 /* NTIBadgeCountView.m in Sources */,
 				403C8CE317EA6CE9000FC290 /* NSNotification-NTIExtensions.m in Sources */,
+				408B5D28184D37E8004A856F /* NTIURLSessionManager.m in Sources */,
 				4059D26615DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m in Sources */,
 				40531BD0160A39C800252818 /* NTITextAttachmentCell.m in Sources */,
 			);
@@ -2494,6 +2511,7 @@
 				400D6E2F1832A1D600F07DBA /* NTIISO8601DurationFormatter.m in Sources */,
 				72D7D55713E3321800652DAC /* OUUnzipArchive-NTIExtensions.m in Sources */,
 				40B6F3D914285B38007EDF1C /* WebSocket7Test.m in Sources */,
+				408B5D29184D37E8004A856F /* NTIURLSessionManager.m in Sources */,
 				403D0DD0143E3AE20049A755 /* NSAttributedString-HTMLReadingExtensionsTest.m in Sources */,
 				40E0461C143F5F260091CE7C /* NTIHTMLReaderTest.m in Sources */,
 				408FBF16143F65C00095DD84 /* NSAttributedString-HTMLReadingExtensions.m in Sources */,

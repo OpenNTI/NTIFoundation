@@ -13,7 +13,7 @@
  * Intended to be a base class for implementations of 
  * a NSURLConnection delegate.
  */
-@interface NTIAbstractDownloader : OFObject {
+@interface NTIAbstractDownloader : OFObject<NSURLConnectionDataDelegate, NSURLSessionDataDelegate> {
 	@private
 	NSInteger statusCode;
 	long long expectedContentLength;
@@ -22,6 +22,7 @@
 
 #ifdef DEBUG
 +(void)addTrustedHost: (NSString*)host;
++(BOOL)isHostTrusted: (NSString*)host;
 #endif
 
 @property (readonly) NSDate* lastModified;
