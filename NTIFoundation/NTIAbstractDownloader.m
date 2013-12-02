@@ -42,6 +42,28 @@
 @implementation NTIAbstractDownloader
 @synthesize statusCode,expectedContentLength, lastModified;
 
+#ifdef DEBUG
+
+static NSMutableSet* getTrustedHosts()
+{
+	static NSMutableSet* result = nil;
+	if( result == nil){
+		result = [NSMutableSet set];
+	}
+	return result;
+}
+
++(void)addTrustedHost: (NSString*)host
+{
+	[getTrustedHosts() addObject: host];
+}
+
++(BOOL)isHostTrusted: (NSString*)host
+{
+	return [getTrustedHosts() containsObject: host];
+}
+#endif
+
 -(void)connection: (NSURLConnection*)connection didReceiveResponse: (id)response
 {
 	self->expectedContentLength = [response expectedContentLength];
@@ -75,6 +97,18 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 	//The system defaults to returning YES for everything else
 	return YES;
 }
+
+- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
+	if ( [challenge.protectionSpace.authenticationMethod isEqualToString: NSURLAuthenticationMethodServerTrust] ){
+		if ( [[self class] isHostTrusted: challenge.protectionSpace.host] ){
+			[challenge.sender useCredential: [NSURLCredential credentialForTrust: challenge.protectionSpace.serverTrust]
+				 forAuthenticationChallenge: challenge];
+		}
+	}
+	
+	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+}
+
 #endif
 
 -(BOOL)statusWasSuccess

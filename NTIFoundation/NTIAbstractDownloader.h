@@ -19,6 +19,11 @@
 	long long expectedContentLength;
 	NSDate* lastModified;
 }
+
+#ifdef DEBUG
++(void)addTrustedHost: (NSString*)host;
+#endif
+
 @property (readonly) NSDate* lastModified;
 @property (readonly) NSString* ETag;
 @property (readonly) NSInteger statusCode;
