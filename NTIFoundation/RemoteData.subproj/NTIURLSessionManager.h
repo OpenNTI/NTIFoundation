@@ -8,7 +8,7 @@
 
 #import <OmniFoundation/OmniFoundation.h>
 
-@interface NTIURLSessionManager : OFObject
+@interface NTIURLSessionManager : OFObject<NSURLSessionTaskDelegate>
 
 +(id)defaultSessionManager;
 
@@ -18,5 +18,7 @@
 
 -(void)setDelegate: (id<NSURLSessionTaskDelegate>)delegate forTask: (NSURLSessionTask*)task;
 -(void)removeDelegateForTask: (NSURLSessionTask*)task;
+
+-(void)updateSessionConfiguration: (NSURLSessionConfiguration*)conf;
 
 @end

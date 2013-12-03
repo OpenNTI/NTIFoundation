@@ -15,6 +15,7 @@
 }
 @property (nonatomic, readonly) NSMutableDictionary* taskDelegates;
 @property (nonatomic, readonly) NSOperationQueue* sessionOperationQueue;
+@property (nonatomic, strong) NSURLSession* session;
 -(id<NSURLSessionTaskDelegate>)delegateForTask: (NSURLSessionTask*)task;
 @end
 
@@ -47,15 +48,31 @@
 		self->_sessionOperationQueue = [[NSOperationQueue alloc] init];
 		self.sessionOperationQueue.maxConcurrentOperationCount = NSOperationQueueDefaultMaxConcurrentOperationCount;
 		
-		self->_session = [NSURLSession sessionWithConfiguration: configuration
-													   delegate: self
-												  delegateQueue: self.sessionOperationQueue];
+		self->_session = [self createSessionWithConf: configuration];
 		
 		self->_delegateQueue = dispatch_queue_create("com.nextthought.sessionmanagerlock", DISPATCH_QUEUE_CONCURRENT);
 		self->_taskDelegates = [NSMutableDictionary dictionary];
 	}
 	
 	return self;
+}
+
+-(NSURLSession*)createSessionWithConf: (NSURLSessionConfiguration*)conf
+{
+	return [NSURLSession sessionWithConfiguration: conf
+										 delegate: self
+									delegateQueue: self.sessionOperationQueue];
+}
+
+-(void)updateSessionConfiguration: (NSURLSessionConfiguration*)conf
+{
+	self.session = [self createSessionWithConf: conf];
+}
+
+-(void)setSession: (NSURLSession *)session
+{
+	[self.session finishTasksAndInvalidate];
+	self->_session = session;
 }
 
 -(id<NSURLSessionTaskDelegate>)delegateForTask:(NSURLSessionTask *)task
