@@ -385,6 +385,13 @@
 			remoteGlobalIDString = 349E02521649AE5400E466F5;
 			remoteInfo = OFXMLParsingTest;
 		};
+		40AF023B184EFBB800BED9BE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7271BBEC13B7DC6600241FEC /* FixStringsFile.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DD76F740486A8DE00D96B5E;
+			remoteInfo = FixStringsFile;
+		};
 		40B5B49714C89701009D5810 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 72CBA95C1385CF1F00E3D28D /* Project object */;
@@ -1937,6 +1944,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				40AF023C184EFBB800BED9BE /* PBXTargetDependency */,
 				40F56E8C15C8BACD001FC309 /* PBXTargetDependency */,
 				408FBF05143F627A0095DD84 /* PBXTargetDependency */,
 			);
@@ -2591,6 +2599,11 @@
 			isa = PBXTargetDependency;
 			target = 72C0D195142529E800D526D8 /* NTIFoundation */;
 			targetProxy = 408FBF04143F627A0095DD84 /* PBXContainerItemProxy */;
+		};
+		40AF023C184EFBB800BED9BE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FixStringsFile;
+			targetProxy = 40AF023B184EFBB800BED9BE /* PBXContainerItemProxy */;
 		};
 		40B5B49814C89701009D5810 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
