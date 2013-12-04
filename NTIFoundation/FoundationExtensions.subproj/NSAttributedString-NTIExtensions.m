@@ -262,6 +262,7 @@ static NSAttributedString* correctMissingChunks(NSAttributedString* toCorrect)
 													  attributes: attrs];
 										 
 										 [result addObject: lastAdded];
+										 lastAddedIndex = result.count - 1;
 									 }
 								 }
 							 }];
