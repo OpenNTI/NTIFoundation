@@ -161,8 +161,10 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 //was created with.  The old NSURLConnection had all its callbacks coming across the main queue.  B/c
 //of this where appropriate through the work onto the main queue so that we can maintain parity with the old implementation
 
--(void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler
+-(void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))handler
 {
+	typedef void(^Handler)(NSURLSessionResponseDisposition);
+	Handler completionHandler = [handler copy];
 	dispatch_async(dispatch_get_main_queue(), ^(){
 		[self connection: nil didReceiveResponse: response];
 		completionHandler(NSURLSessionResponseAllow);
