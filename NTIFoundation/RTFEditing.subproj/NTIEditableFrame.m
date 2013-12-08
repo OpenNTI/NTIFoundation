@@ -94,8 +94,8 @@
 -(void)removeFromAttachmentCells: (NSAttributedString*)attrText
 {
 	[attrText eachAttachment: ^(OATextAttachment* attachment, BOOL* stop){
-		if([attachment respondsToSelector:@selector(attachmentCell)]){
-			id cell = [attachment attachmentCell];
+		if([attachment respondsToSelector:@selector(attachmentRenderer)]){
+			id cell = [(id)attachment attachmentRenderer];
 			if([cell respondsToSelector: @selector(removeEditableFrame:)]){
 				[cell removeEditableFrame: self];
 			}
@@ -106,8 +106,8 @@
 -(void)attachToAttachmentCells: (NSAttributedString*)newAttrText
 {
 	[newAttrText eachAttachment: ^(OATextAttachment* attachment, BOOL* stop){
-		if([attachment respondsToSelector:@selector(attachmentCell)]){
-			id cell = [attachment attachmentCell];
+		if([attachment respondsToSelector:@selector(attachmentRenderer)]){
+			id cell = [(id)attachment attachmentRenderer];
 			if([cell respondsToSelector: @selector(attachEditableFrame:)]){
 				[cell attachEditableFrame: self];
 			}
