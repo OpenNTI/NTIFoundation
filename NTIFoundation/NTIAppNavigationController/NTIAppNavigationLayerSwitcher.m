@@ -78,7 +78,7 @@ static NSString* keyPathForChangeCount(id layer)
 		}
 	}
 	if(count > 0){
-		self.tabBarItem.badgeValue = [NSString stringWithFormat: @"%ld", count];
+		self.tabBarItem.badgeValue = [NSString stringWithFormat: @"%lu", (unsigned long)count];
 	}
 	else{
 		self.tabBarItem.badgeValue = nil;
@@ -235,7 +235,7 @@ static NSString* keyPathForChangeCount(id layer)
 		}
 	}
 	if(count > 0){
-		self.tabBarItem.badgeValue = [NSString stringWithFormat: @"%ld", count];
+		self.tabBarItem.badgeValue = [NSString stringWithFormat: @"%ld", (unsigned long)count];
 	}
 	else{
 		self.tabBarItem.badgeValue = nil;

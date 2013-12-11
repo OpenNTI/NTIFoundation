@@ -45,7 +45,7 @@
 			return self.seconds;
 	}
 	
-	[NSException raise: @"Unsupported unit" format: @"valueForUnit: called with unsupported unit %lu", unit];
+	[NSException raise: @"Unsupported unit" format: @"valueForUnit: called with unsupported unit %lu", (unsigned long)unit];
 }
 
 -(void)setValue: (double)i forUnit: (NTIDurationUnit)unit
@@ -73,7 +73,7 @@
 			self.seconds = i;
 			break;
 		default:
-			[NSException raise: @"Unsupported unit" format: @"setValue:forUnit: called with unsupported unit %lu", unit];
+			[NSException raise: @"Unsupported unit" format: @"setValue:forUnit: called with unsupported unit %lu", (unsigned long)unit];
 	}
 
 }

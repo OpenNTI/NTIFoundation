@@ -458,7 +458,7 @@ PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, N
 			[self shutdownAsResultOfError: 
 			 errorWithCodeAndMessage(300, 
 									 [NSString stringWithFormat: 
-									  @"Unable to consume data from stream.  Error code %ld", countFromSocketRead])];
+									  @"Unable to consume data from stream.  Error code %ld", (long)countFromSocketRead])];
 		}
 		else if(countFromSocketRead == 0){
 			if(self->status == WebSocketStatusDisconnecting){
@@ -470,7 +470,7 @@ PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, N
 				[self shutdownAsResultOfError: 
 				 errorWithCodeAndMessage(310, 
 										 [NSString stringWithFormat: 
-										  @"Encountered unexpexted end of stream, websocket status is %ld", self->status])];
+										  @"Encountered unexpexted end of stream, websocket status is %ld", (long)self->status])];
 			}
 		}
 		else{
@@ -517,7 +517,7 @@ PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, N
 {
 	if( eventCode == NSStreamEventErrorOccurred){
 		NSError *theError = [aStream streamError];
-		NSLog(@"%@ Error: %@ code=%ld domain=%@", aStream, [theError localizedDescription], theError.code, theError.domain);
+		NSLog(@"%@ Error: %@ code=%ld domain=%@", aStream, [theError localizedDescription], (long)theError.code, theError.domain);
 		[self shutdownAsResultOfError: theError];
 	}
 

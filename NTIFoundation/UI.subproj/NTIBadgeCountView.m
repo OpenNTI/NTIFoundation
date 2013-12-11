@@ -75,7 +75,7 @@
 	
 	[self drawPerimeterWithContext: context withRect: rect];
 	
-	NSString* countString = [NSString stringWithFormat: @"%ld" , self->count];
+	NSString* countString = [NSString stringWithFormat: @"%lu" , (unsigned long)self->count];
 	
 	if ([countString length]>0) {
 		[[UIColor whiteColor] set];

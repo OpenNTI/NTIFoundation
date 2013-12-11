@@ -554,7 +554,7 @@ static NSArray* implementedTransportClasses()
 -(void)sendPacket: (SocketIOPacket*)packet onAck: (NTISocketIOAckCallback)then
 {
 	if(then){
-		NSString* ackId = [NSString stringWithFormat: @"%ld", self->ackMessageId++];
+		NSString* ackId = [NSString stringWithFormat: @"%lu", (unsigned long)self->ackMessageId++];
 		packet.packetId = ackId;
 		packet.ack = @"data";
 		[self->ackCallbacks setObject: [then copy] forKey: ackId];

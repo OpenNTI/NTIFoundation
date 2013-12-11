@@ -289,7 +289,7 @@ static NSData* externalizeComponent(id component)
 		[data appendBytes: &second length: 1];
 		[data appendBytes: &thrid length: 1];
 		
-		NSString* lengthString = [NSString stringWithFormat: @"%lu", [packetData length]];
+		NSString* lengthString = [NSString stringWithFormat: @"%lu", (unsigned long)[packetData length]];
 		NSData* lengthData = [lengthString dataUsingEncoding: NSUTF8StringEncoding];
 		[data appendData: lengthData];
 		

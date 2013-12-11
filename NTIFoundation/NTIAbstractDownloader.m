@@ -448,7 +448,7 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 		[self->outputStream open];
 	}
 	else{
-		NSLog(@"Encountered unsuccessful response status code of %ld", self.statusCode);
+		NSLog(@"Encountered unsuccessful response status code of %ld", (long)self.statusCode);
 		if( self->onError ) {
 			self->onError();
 		}

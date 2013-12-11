@@ -50,7 +50,7 @@ static NSString* shortDateStringNL( NSDate* date )
 		timeUnitString = [timeUnitString stringByAppendingString: @"s"];
 	}
 	
-	return [NSString stringWithFormat: @"%lu %@", timeSince, timeUnitString];
+	return [NSString stringWithFormat: @"%lu %@", (unsigned long)timeSince, timeUnitString];
 }
 
 + (NSString *)stringFromTimeIntervalWithLargestFittingTimeUnitWithinDays:(NSUInteger)timeInterval
@@ -78,7 +78,7 @@ static NSString* shortDateStringNL( NSDate* date )
 		timeUnitString = [timeUnitString stringByAppendingString:@"s"];
 	}
 	
-	return [NSString stringWithFormat:@"%lu %@", timeSince, timeUnitString];
+	return [NSString stringWithFormat:@"%lu %@", (unsigned long)timeSince, timeUnitString];
 }
 
 @end
