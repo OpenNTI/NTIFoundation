@@ -98,6 +98,21 @@
 	});
 }
 
+-(void)resumeTask: (NSURLSessionTask*)task
+{
+	//When resuming a task we use a dispatch_barrier_async.  This is to
+	//make sure that we don't resume it until any of the setDelegate calls
+	//that were submitted before the task was resumed are set in the map.
+	//This is crucial to ensure that the delegates are setup and are guarenteed
+	//to be called by the time the task moves to states that need them.
+	dispatch_barrier_async(self->_delegateQueue, ^(){
+		//Still resume the task on the main queue
+		dispatch_async(dispatch_get_main_queue(), ^(){
+			[task resume];
+		});
+	});
+}
+
 
 #pragma mark session delegate
 
@@ -135,7 +150,7 @@
 }
 
 -(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
-{
+{	
 	id<NSURLSessionTaskDelegate> delegate = [self delegateForTask: task];
 	
 	if([delegate respondsToSelector: _cmd]){

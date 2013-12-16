@@ -21,4 +21,6 @@
 
 -(void)updateSessionConfiguration: (NSURLSessionConfiguration*)conf;
 
+-(void)resumeTask: (NSURLSessionTask*)task;
+
 @end
