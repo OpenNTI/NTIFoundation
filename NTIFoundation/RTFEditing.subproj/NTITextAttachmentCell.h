@@ -17,7 +17,8 @@
 
 //EditableFrame should call these methods
 -(void)attachEditableFrame: (OUITextView*)frame;
--(void)removeEditableFrame: (OUITextView*)frame;
+-(BOOL)removeEditableFrame: (OUITextView*)frame;
+-(void)detachAllEditableFrames;
 
 //Subclasses should call this method to request to be redrawn.
 //Note this isn't intended to make cells live views.  Calling this is

@@ -115,10 +115,21 @@
 	}];
 }
 
+-(void)detachFromOldFrames: (NSAttributedString*)newAttrText
+{
+	[newAttrText eachAttachment: ^(OATextAttachment* attachment, BOOL* stop){
+		if([attachment respondsToSelector:@selector(attachmentRenderer)]){
+			id cell = [(id)attachment attachmentRenderer];
+			if([cell respondsToSelector: @selector(detachAllEditableFrames)]){
+				[cell detachAllEditableFrames];
+			}
+		}
+	}];
+}
 -(void)setAttributedText: (NSAttributedString *)newAttrText
 {
-	
 	[self removeFromAttachmentCells: self.attributedText];
+	[self detachFromOldFrames: newAttrText];
 	[self attachToAttachmentCells: newAttrText];
 	
 	[super setAttributedText: newAttrText];

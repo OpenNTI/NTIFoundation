@@ -33,12 +33,27 @@
 
 -(void)attachEditableFrame: (OUITextView*)frame
 {
+	NSLog(@"Attaching editable frame %@ to cell %@", frame, self);
 	[self->editableFrames addObject: frame];
 }
 
--(void)removeEditableFrame: (OUITextView*)frame
+-(BOOL)removeEditableFrame: (OUITextView*)frame
 {
-	[self->editableFrames removeObject: frame];
+	NSLog(@"Detaching editable frame %@ to cell %@", frame, self);
+	if([self->editableFrames containsObject: frame]){
+		[self->editableFrames removeObject: frame];
+		return YES;
+	}
+	
+	//Simply calling self->editableFrames.count gets screwy depending on when the weak refs get removed from the set
+	return [self->editableFrames allObjects].count == 0;
+}
+
+-(void)detachAllEditableFrames
+{
+	for(OUITextView* frame in [self->editableFrames copy]){
+		[self removeEditableFrame: frame];
+	}
 }
 
 //For testing

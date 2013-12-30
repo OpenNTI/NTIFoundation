@@ -16,5 +16,5 @@
 //Designated initalizer
 -(id)init;
 
-@property (nonatomic, retain) id<OATextAttachmentCell> attachmentRenderer;
+@property (nonatomic, strong) id<OATextAttachmentCell> attachmentRenderer;
 @end
