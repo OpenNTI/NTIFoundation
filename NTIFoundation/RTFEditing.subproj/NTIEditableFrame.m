@@ -306,4 +306,21 @@
 	[self removeFromAttachmentCells: self.attributedText];
 }
 
+#pragma mark UIResponder
+
+- (BOOL)canPerformAction:(SEL)action
+              withSender:(id)sender
+{
+    if (action == @selector(cut:)) {
+        return self.isEditable;
+    }
+    if (action == @selector(paste:)) {
+        return self.isEditable;
+    }
+    else {
+        return [super canPerformAction:action
+                            withSender:sender];
+    }
+}
+
 @end
