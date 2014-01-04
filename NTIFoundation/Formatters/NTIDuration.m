@@ -26,6 +26,19 @@
 	return self;
 }
 
+-(NSDateComponents*)dateComponents
+{
+	NSDateComponents* comps = [[NSDateComponents alloc] init];
+	comps.year = self.years;
+	comps.month = self.monthes;
+	comps.week = self.weeks;
+	comps.day = self.days;
+	comps.hour = self.hours;
+	comps.minute = self.minutes;
+	comps.second = self.seconds;
+	return comps;
+}
+
 -(double)valueForUnit: (NTIDurationUnit)unit
 {
 	switch (unit) {
