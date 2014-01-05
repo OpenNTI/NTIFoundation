@@ -32,5 +32,6 @@ typedef NS_ENUM(NSUInteger, NTIDurationUnit){
 
 -(double)valueForUnit: (NTIDurationUnit)unit;
 -(void)setValue: (double)i forUnit: (NTIDurationUnit)unit;
+-(NSDateComponents*)dateComponents;
 
 @end
