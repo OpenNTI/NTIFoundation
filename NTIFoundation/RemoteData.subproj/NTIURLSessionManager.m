@@ -66,12 +66,13 @@
 
 -(void)updateSessionConfiguration: (NSURLSessionConfiguration*)conf
 {
+	[self.session finishTasksAndInvalidate];
 	self.session = [self createSessionWithConf: conf];
 }
 
 -(void)setSession: (NSURLSession *)session
 {
-	[self.session finishTasksAndInvalidate];
+	//[self.session finishTasksAndInvalidate];
 	self->_session = session;
 }
 
@@ -108,6 +109,7 @@
 	dispatch_barrier_async(self->_delegateQueue, ^(){
 		//Still resume the task on the main queue
 		dispatch_async(dispatch_get_main_queue(), ^(){
+			//NSLog(@"Resuming task with state %lu", task.state);
 			[task resume];
 		});
 	});

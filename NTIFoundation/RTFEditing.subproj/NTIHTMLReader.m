@@ -310,7 +310,7 @@ styleAttribute = stringFromStyle( styleAttribute, @prefix );
 			
 		} EHV
 		else HAS_VALUE("text-decoration") {
-			NSUInteger value = kCTUnderlineStyleNone;
+			CTUnderlineStyle value = kCTUnderlineStyleNone;
 			if( [styleAttribute isEqual: @"underline"] ) {
 				value = kCTUnderlineStyleSingle;
 			}
