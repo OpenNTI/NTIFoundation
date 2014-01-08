@@ -341,7 +341,7 @@ PRIVATE_STATIC_TESTABLE NSString* cookieHeaderForServer(NSURL* server)
 static NSData* hashUsingSHA1(NSData* data)
 {
     unsigned char hashBytes[CC_SHA1_DIGEST_LENGTH];
-    CC_SHA1([data bytes], [data length], hashBytes);
+    CC_SHA1([data bytes], (uint32_t)[data length], hashBytes);
 	
     return [NSData dataWithBytes:hashBytes length:CC_SHA1_DIGEST_LENGTH];
 }
