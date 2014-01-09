@@ -82,8 +82,8 @@ static OFCharacterSet* ReservedSet;
 	
 	const CGFloat* rgbComponents = CGColorGetComponents(color);
 	OBASSERT(CGColorGetNumberOfComponents(color) == 4); // Otherwise the format statement below is wrong
-	return [NSString stringWithFormat:@"%@ (components=%u, r=%3.2f g=%3.2f b=%3.2f a=%3.2f)", color,
-			CGColorGetNumberOfComponents(color),
+	return [NSString stringWithFormat:@"%@ (components=%zu, r=%3.2f g=%3.2f b=%3.2f a=%3.2f)", color,
+			(unsigned long)CGColorGetNumberOfComponents(color),
 			rgbComponents[0],
 			rgbComponents[1],
 			rgbComponents[2],
@@ -208,7 +208,7 @@ static inline void writeString(OFDataBuffer* dataBuffer, NSString* string)
 	free(characters);
 }
 
-static const struct {
+/*static const struct {
 	const char* name;
 	unsigned int ctValue;
 } underlineStyleKeywords[] = {
@@ -223,7 +223,7 @@ static const struct {
 	{ "ulthdashd", kCTUnderlineStyleThick|kCTUnderlinePatternDashDot },
 	{ "ulthdashdd", kCTUnderlineStyleThick|kCTUnderlinePatternDashDotDot },
 	{ NULL, 0 },
-};
+};*/
 
 /**
  * If we open a tag, we leave the writing position inside the style attribute,
