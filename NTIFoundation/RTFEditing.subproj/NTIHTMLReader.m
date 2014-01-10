@@ -243,7 +243,7 @@ static void setCurrentParagraphStyle( NSMutableDictionary* dict, NSMutableParagr
 	else{
 		[attrs setObject: [UIColor colorWithCGColor: colorObject] forKey: key];
 	}
-
+	CGColorRelease(colorObject);
 }
 
 -(NSDictionary*)coreTextAttrsForFontAttrs: (NSDictionary*)fontAttrs
