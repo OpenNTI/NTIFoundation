@@ -99,6 +99,8 @@
 		4066C83B14E1C95F006B56D3 /* WebSocketData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4066C83914E1C95F006B56D3 /* WebSocketData.m */; };
 		4066C83C14E1C95F006B56D3 /* WebSocketData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4066C83914E1C95F006B56D3 /* WebSocketData.m */; };
 		406B23FD1533CDCA00BF691E /* WebSocketResponseBufferTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 406B23FC1533CDCA00BF691E /* WebSocketResponseBufferTest.m */; };
+		406D24501881E0A800FA77E4 /* OUUnzipArchive-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B0E41C1880C43800A75133 /* OUUnzipArchive-NTIExtensions.m */; };
+		406D24511881E0AB00FA77E4 /* OUUnzipArchive-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B0E41C1880C43800A75133 /* OUUnzipArchive-NTIExtensions.m */; };
 		406DB42A14DB50A1008AEABF /* switch_active.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 406DB42714DB4D9B008AEABF /* switch_active.png */; };
 		406DB42B14DB50A1008AEABF /* switch_inactive.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 406DB42814DB4D9B008AEABF /* switch_inactive.png */; };
 		40716F3515C828B900430FFC /* NTIGlobalInspectorSlice.h in Headers */ = {isa = PBXBuildFile; fileRef = 40716F3315C828B900430FFC /* NTIGlobalInspectorSlice.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -258,7 +260,7 @@
 		7293CB291451AA7D00CD64B8 /* NTIEditableFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 7293CB271451AA7D00CD64B8 /* NTIEditableFrame.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7293CB2A1451AA7D00CD64B8 /* NTIEditableFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */; };
 		7293CB2B1451AAB700CD64B8 /* NTIEditableFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */; };
-		72B0E41D1880C43800A75133 /* OUUnzipArchive-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 72B0E41B1880C43800A75133 /* OUUnzipArchive-NTIExtensions.h */; };
+		72B0E41D1880C43800A75133 /* OUUnzipArchive-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 72B0E41B1880C43800A75133 /* OUUnzipArchive-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		72B0E41E1880C43800A75133 /* OUUnzipArchive-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B0E41C1880C43800A75133 /* OUUnzipArchive-NTIExtensions.m */; };
 		72C0D197142529E800D526D8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72CBA96B1385CF1F00E3D28D /* Foundation.framework */; };
 		72CB9A9E14253CD500CE4FAA /* NSObject-NTIJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 7215956A13CFE80600DCA72E /* NSObject-NTIJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -2428,6 +2430,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				40C34CBF14D893DC000D91A8 /* NTIAppNavigationControllerTest.m in Sources */,
+				406D24511881E0AB00FA77E4 /* OUUnzipArchive-NTIExtensions.m in Sources */,
 				403C8CE617EA6CE9000FC290 /* NSNotification-NTIExtensions.m in Sources */,
 				4CEC1DB2151395F70074F3DD /* NTIGlobalInspectorAppTest.m in Sources */,
 				4C696D0A1516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m in Sources */,
@@ -2552,6 +2555,7 @@
 				4C3DA34114E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m in Sources */,
 				4C3BDC1E14EAF87F008ED49D /* NTIInspectorSliceObjectPair.m in Sources */,
 				40A414811505748A0017242E /* NSDate-NTIExtensions.m in Sources */,
+				406D24501881E0A800FA77E4 /* OUUnzipArchive-NTIExtensions.m in Sources */,
 				403C317C1512A5DD00C53D22 /* NSData-NTIJSON.m in Sources */,
 				4CEC1D96151395DB0074F3DD /* NTIGlobalInspectorTest.m in Sources */,
 				4CEC1D97151395DB0074F3DD /* NTIInspectorObjectWrapperTest.m in Sources */,
