@@ -258,13 +258,14 @@
 		7293CB291451AA7D00CD64B8 /* NTIEditableFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 7293CB271451AA7D00CD64B8 /* NTIEditableFrame.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7293CB2A1451AA7D00CD64B8 /* NTIEditableFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */; };
 		7293CB2B1451AAB700CD64B8 /* NTIEditableFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */; };
+		72B0E41D1880C43800A75133 /* OUUnzipArchive-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 72B0E41B1880C43800A75133 /* OUUnzipArchive-NTIExtensions.h */; };
+		72B0E41E1880C43800A75133 /* OUUnzipArchive-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B0E41C1880C43800A75133 /* OUUnzipArchive-NTIExtensions.m */; };
 		72C0D197142529E800D526D8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72CBA96B1385CF1F00E3D28D /* Foundation.framework */; };
 		72CB9A9E14253CD500CE4FAA /* NSObject-NTIJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 7215956A13CFE80600DCA72E /* NSObject-NTIJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		72CB9A9F14253CD500CE4FAA /* NSString-NTIJSON.h in Headers */ = {isa = PBXBuildFile; fileRef = 72CC05A913DDE8E9009B2977 /* NSString-NTIJSON.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		72CB9AA114253CD500CE4FAA /* NSArray-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 72FC5D7813D0FC2A006CBF28 /* NSArray-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		72CB9AA214253CD500CE4FAA /* NSMutableArray-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 72FC5D7B13D10285006CBF28 /* NSMutableArray-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		72CB9AA314253CD500CE4FAA /* NSString-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 72579DF313D8B24C005437A7 /* NSString-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		72CB9AA414253CD500CE4FAA /* OUUnzipArchive-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 72ED697813BB7F9F00A7A0F4 /* OUUnzipArchive-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		72CB9AA514253CD500CE4FAA /* NTIAbstractDownloader.h in Headers */ = {isa = PBXBuildFile; fileRef = 721DC9FF13BA3DBD00340540 /* NTIAbstractDownloader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		72CB9AA614253CD500CE4FAA /* NTIUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 725EACB313CC90440091CE91 /* NTIUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		72D7D42B13E32D2700652DAC /* libOmniAppKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D3612813DB6B2B00257C73 /* libOmniAppKit.a */; };
@@ -281,7 +282,6 @@
 		72D7D54913E3321800652DAC /* NSMutableArray-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 72FC5D7C13D10285006CBF28 /* NSMutableArray-NTIExtensions.m */; };
 		72D7D54C13E3321800652DAC /* NSString-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 72579DF413D8B24C005437A7 /* NSString-NTIExtensions.m */; };
 		72D7D54E13E3321800652DAC /* NSString-NTIJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 72CC05AA13DDE8EA009B2977 /* NSString-NTIJSON.m */; };
-		72D7D55713E3321800652DAC /* OUUnzipArchive-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 72ED697913BB7F9F00A7A0F4 /* OUUnzipArchive-NTIExtensions.m */; };
 		72D8185B13955D8C00473994 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72CBA96B1385CF1F00E3D28D /* Foundation.framework */; };
 		72D8186213955D8C00473994 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 72D8186013955D8C00473994 /* InfoPlist.strings */; };
 		72E3534114252E6F001B345A /* NTIAbstractDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 721DCA0013BA3DBD00340540 /* NTIAbstractDownloader.m */; };
@@ -289,7 +289,6 @@
 		72E3534F14252E6F001B345A /* NSMutableArray-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 72FC5D7C13D10285006CBF28 /* NSMutableArray-NTIExtensions.m */; };
 		72E3535214252E6F001B345A /* NSString-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 72579DF413D8B24C005437A7 /* NSString-NTIExtensions.m */; };
 		72E3535414252E6F001B345A /* NSString-NTIJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 72CC05AA13DDE8EA009B2977 /* NSString-NTIJSON.m */; };
-		72E3536214252E6F001B345A /* OUUnzipArchive-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 72ED697913BB7F9F00A7A0F4 /* OUUnzipArchive-NTIExtensions.m */; };
 		72E353B9142533E7001B345A /* NTIFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 72E353B8142533E7001B345A /* NTIFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
@@ -951,6 +950,8 @@
 		7271BBEC13B7DC6600241FEC /* FixStringsFile.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FixStringsFile.xcodeproj; path = ../OmniGroup/Tools/FixStringsFile/FixStringsFile.xcodeproj; sourceTree = "<group>"; };
 		7293CB271451AA7D00CD64B8 /* NTIEditableFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIEditableFrame.h; sourceTree = "<group>"; };
 		7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIEditableFrame.m; sourceTree = "<group>"; };
+		72B0E41B1880C43800A75133 /* OUUnzipArchive-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "OUUnzipArchive-NTIExtensions.h"; path = "NTIFoundation/OUUnzipArchive-NTIExtensions.h"; sourceTree = SOURCE_ROOT; };
+		72B0E41C1880C43800A75133 /* OUUnzipArchive-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "OUUnzipArchive-NTIExtensions.m"; path = "NTIFoundation/OUUnzipArchive-NTIExtensions.m"; sourceTree = SOURCE_ROOT; };
 		72C0D196142529E800D526D8 /* libNTIFoundation.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNTIFoundation.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		72CBA96B1385CF1F00E3D28D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		72CBA9711385CF1F00E3D28D /* NTIFoundation-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NTIFoundation-Info.plist"; sourceTree = "<group>"; };
@@ -974,8 +975,6 @@
 		72D8186113955D8C00473994 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		72D8186313955D8C00473994 /* UnitTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UnitTests-Prefix.pch"; sourceTree = "<group>"; };
 		72E353B8142533E7001B345A /* NTIFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIFoundation.h; sourceTree = "<group>"; };
-		72ED697813BB7F9F00A7A0F4 /* OUUnzipArchive-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "OUUnzipArchive-NTIExtensions.h"; path = "../OUUnzipArchive-NTIExtensions.h"; sourceTree = "<group>"; };
-		72ED697913BB7F9F00A7A0F4 /* OUUnzipArchive-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "OUUnzipArchive-NTIExtensions.m"; path = "../OUUnzipArchive-NTIExtensions.m"; sourceTree = "<group>"; };
 		72FC5D7813D0FC2A006CBF28 /* NSArray-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSArray-NTIExtensions.h"; path = "../NSArray-NTIExtensions.h"; sourceTree = "<group>"; };
 		72FC5D7913D0FC2A006CBF28 /* NSArray-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSArray-NTIExtensions.m"; path = "../NSArray-NTIExtensions.m"; sourceTree = "<group>"; };
 		72FC5D7B13D10285006CBF28 /* NSMutableArray-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSMutableArray-NTIExtensions.h"; path = "../NSMutableArray-NTIExtensions.h"; sourceTree = "<group>"; };
@@ -1721,8 +1720,8 @@
 		72E353B5142532B9001B345A /* OUUnzipExtersions */ = {
 			isa = PBXGroup;
 			children = (
-				72ED697813BB7F9F00A7A0F4 /* OUUnzipArchive-NTIExtensions.h */,
-				72ED697913BB7F9F00A7A0F4 /* OUUnzipArchive-NTIExtensions.m */,
+				72B0E41B1880C43800A75133 /* OUUnzipArchive-NTIExtensions.h */,
+				72B0E41C1880C43800A75133 /* OUUnzipArchive-NTIExtensions.m */,
 			);
 			name = OUUnzipExtersions;
 			path = OUUnzipExtersions.subproj;
@@ -1777,7 +1776,6 @@
 				72CB9AA114253CD500CE4FAA /* NSArray-NTIExtensions.h in Headers */,
 				72CB9AA214253CD500CE4FAA /* NSMutableArray-NTIExtensions.h in Headers */,
 				72CB9AA314253CD500CE4FAA /* NSString-NTIExtensions.h in Headers */,
-				72CB9AA414253CD500CE4FAA /* OUUnzipArchive-NTIExtensions.h in Headers */,
 				72CB9AA514253CD500CE4FAA /* NTIAbstractDownloader.h in Headers */,
 				72CB9AA614253CD500CE4FAA /* NTIUtilities.h in Headers */,
 				72E353B9142533E7001B345A /* NTIFoundation.h in Headers */,
@@ -1796,6 +1794,7 @@
 				40E04614143F47890091CE7C /* NTIHTMLReader.h in Headers */,
 				7293CB291451AA7D00CD64B8 /* NTIEditableFrame.h in Headers */,
 				403C8CE217EA6CE9000FC290 /* NSNotification-NTIExtensions.h in Headers */,
+				72B0E41D1880C43800A75133 /* OUUnzipArchive-NTIExtensions.h in Headers */,
 				40E04618143F50A60091CE7C /* OQColor-NTIExtensions.h in Headers */,
 				40C0E1031443AF9C00142406 /* SocketIOPacketTest.h in Headers */,
 				403C28E614576E160012CBAB /* NSAttributedString-NTIExtensions.h in Headers */,
@@ -2456,7 +2455,6 @@
 				72E3534F14252E6F001B345A /* NSMutableArray-NTIExtensions.m in Sources */,
 				72E3535214252E6F001B345A /* NSString-NTIExtensions.m in Sources */,
 				72E3535414252E6F001B345A /* NSString-NTIJSON.m in Sources */,
-				72E3536214252E6F001B345A /* OUUnzipArchive-NTIExtensions.m in Sources */,
 				40D754AA14278E6900335BEF /* SocketIOPacket.m in Sources */,
 				40D754AE142791AF00335BEF /* SocketIOSocket.m in Sources */,
 				40D754B2142791CE00335BEF /* SocketIOTransport.m in Sources */,
@@ -2483,6 +2481,7 @@
 				403C317B1512A5DD00C53D22 /* NSData-NTIJSON.m in Sources */,
 				4CA4F4851535F1390005FECD /* NTIMathSymbol.m in Sources */,
 				40BACD6C18108FBC0053ACC9 /* NTITextAttachment.m in Sources */,
+				72B0E41E1880C43800A75133 /* OUUnzipArchive-NTIExtensions.m in Sources */,
 				4CA4F48B1535F7AF0005FECD /* NTIMathAlphaNumericSymbol.m in Sources */,
 				4CA4F490153614640005FECD /* NTIMathPlaceholderSymbol.m in Sources */,
 				4CA4F49A15361E6D0005FECD /* NTIMathParenthesisSymbol.m in Sources */,
@@ -2517,7 +2516,6 @@
 				72D7D54C13E3321800652DAC /* NSString-NTIExtensions.m in Sources */,
 				72D7D54E13E3321800652DAC /* NSString-NTIJSON.m in Sources */,
 				400D6E2F1832A1D600F07DBA /* NTIISO8601DurationFormatter.m in Sources */,
-				72D7D55713E3321800652DAC /* OUUnzipArchive-NTIExtensions.m in Sources */,
 				40B6F3D914285B38007EDF1C /* WebSocket7Test.m in Sources */,
 				408B5D29184D37E8004A856F /* NTIURLSessionManager.m in Sources */,
 				403D0DD0143E3AE20049A755 /* NSAttributedString-HTMLReadingExtensionsTest.m in Sources */,
