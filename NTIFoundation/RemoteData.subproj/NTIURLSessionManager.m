@@ -66,14 +66,30 @@
 
 -(void)updateSessionConfiguration: (NSURLSessionConfiguration*)conf
 {
-	[self.session finishTasksAndInvalidate];
 	self.session = [self createSessionWithConf: conf];
 }
 
 -(void)setSession: (NSURLSession *)session
 {
-	//[self.session finishTasksAndInvalidate];
-	self->_session = session;
+	//It's very important we throw this on the session manager lock.
+	//Resume task is a dispatch barrier there so that it waits for the delegates to set.
+	//We've seen crashes where a task gets created and the resume gets thrown on the barrier cue.
+	//during the time the task may sit in the queue waiting to start if the session gets changed
+	//you get an exec_bad_access when the block finally runs. Naturally the trace is entirely unhelpful
+	//but a simple test app that creates a session and task, invalidates the session and then resumes
+	//the task shows the same crash and stack.
+	//you end up with a exec_bad_access at _CFURLConnectionSessionCreateConnectionWithProperties
+	
+	//dispatch this on the queue but make it wait for other tasks so we don't jump ahead of a resume
+	dispatch_barrier_async(self->_delegateQueue, ^(){
+		//Tells the old session to finish up its tasks and invalidate itself
+		//existing tasks will be allowed to finish but new tasks cannot be created
+		//or resumed.
+		[self.session finishTasksAndInvalidate];
+		
+		//Assign the new session
+		self->_session = session;
+	});
 }
 
 -(id<NSURLSessionTaskDelegate>)delegateForTask:(NSURLSessionTask *)task
