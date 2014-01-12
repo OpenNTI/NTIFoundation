@@ -123,11 +123,7 @@
 	//This is crucial to ensure that the delegates are setup and are guarenteed
 	//to be called by the time the task moves to states that need them.
 	dispatch_barrier_async(self->_delegateQueue, ^(){
-		//Still resume the task on the main queue
-		dispatch_async(dispatch_get_main_queue(), ^(){
-			//NSLog(@"Resuming task with state %lu", task.state);
-			[task resume];
-		});
+		[task resume];
 	});
 }
 
