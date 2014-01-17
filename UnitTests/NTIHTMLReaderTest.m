@@ -121,4 +121,14 @@ CGColorRef NTIHTMLReaderParseCreateColor(NSString* color, OQColor* defaultColor)
 	STAssertEqualObjects(reader.source, @"data:foobar", nil);
 }
 
+-(void)testReadLink
+{
+	NSString* linkHtml = @"<html><body><a href=\"http://google.com\">http://google.com</a></body></html>";
+	
+	NSAttributedString* expected = [[NSAttributedString alloc] initWithString: @"http://google.com" attributeName: NSLinkAttributeName attributeValue: [NSURL URLWithString: @"http://google.com"]];
+	NTIHTMLReader* reader = [[NTIHTMLReader alloc] initWithHTML: linkHtml];
+	NSAttributedString* parts = reader.attributedString;
+	STAssertEqualObjects(parts, expected, nil);
+}
+
 @end

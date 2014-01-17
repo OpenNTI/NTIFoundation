@@ -14,6 +14,7 @@
 	NSMutableArray* nsattrStack;
 	//Assuming only one link, as per writer
 	NSString* currentHref;
+	NSUInteger linkStart;
 	NSString* currentAudioURL;
 	BOOL parsingAudio;
 	CGImageRef currentImage;

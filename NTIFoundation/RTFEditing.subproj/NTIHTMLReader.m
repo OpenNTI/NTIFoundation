@@ -45,6 +45,7 @@ static void commonInit( NTIHTMLReader* self )
 	self->unparsableFormat = NO;
 	self->attrBuffer = [[NSMutableAttributedString alloc] init];
 	self->nsattrStack = [[NSMutableArray alloc] initWithCapacity: 3];
+	self->linkStart = NSNotFound;
 }
 
 -(id)initWithHTML: (NSString*)string
@@ -66,7 +67,7 @@ static void commonInit( NTIHTMLReader* self )
 	parser.delegate = self;
 	[parser parse];
 	if( self->inError ) {
-		//OK, we often get malformed XML fragments from the web app.
+		//OK, we often get malformed XML fragments from the web app.n
 		//Is that the case here? If so, retry
 		if( ![string hasPrefix: @"<html>"] ) {
 			commonInit( self );
@@ -430,7 +431,8 @@ didStartElement: (NSString*)elementName
 	//Links only contain an image.
 	elementName = [elementName lowercaseString];
 	if( [@"a" isEqual: elementName] ) {
-		self->currentHref = [[attributeDict objectForKey: @"href"] copy];	
+		self->currentHref = [[attributeDict objectForKey: @"href"] copy];
+		self->linkStart = self->attrBuffer.length;
 	}
 	else if( [@"img" isEqual: elementName] ) {
 		if(self->currentImage){
@@ -540,11 +542,21 @@ qualifiedName: (NSString*)qName
 	//It won't have style on it, and neither will an enclosing HTML
 	//or BODY, if present, so our stack stays in sync.
 	else if(	[@"a" isEqual: elementName] 
-	   		&&	self->currentHref
-			&&	self->currentImage ) {
-		[self handleAnchorTag: self->attrBuffer 
-				  currentHref: self->currentHref		
-				 currentImage: self->currentImage];
+	   		&&	self->currentHref ) {
+		if(self->currentImage){
+			[self handleAnchorTag: self->attrBuffer
+					  currentHref: self->currentHref
+					 currentImage: self->currentImage];
+		}
+		else{
+			OBASSERT(self->linkStart != NSNotFound);
+			NSRange r = NSMakeRange(self->linkStart, self->attrBuffer.length - self->linkStart);
+			self->linkStart = NSNotFound;
+			NSURL* url = [NSURL URLWithString: [self->currentHref stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]];
+			if(url){
+				[self->attrBuffer addAttributes: @{NSLinkAttributeName: url} range: r];
+			}
+		}
 	}
 	else if( [@"audio" isEqual: elementName] ){
 		self->parsingAudio = NO;
