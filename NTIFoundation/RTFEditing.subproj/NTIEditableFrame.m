@@ -128,6 +128,10 @@
 }
 -(void)setAttributedText: (NSAttributedString *)newAttrText
 {
+	//TODO: I'm pretty sure there is a bug here.  If we are in a cell that gets reused
+	//simply resetting the attributed text doesn't seem to do the trick if there are things
+	//like video attachment cells.  Things go haywire (videos don't always show up, sometimes it wont
+	//take touches, etc).  This is probably an indication of a leak or misunderstanding in how textkit works
 	[self removeFromAttachmentCells: self.attributedText];
 	[self detachFromOldFrames: newAttrText];
 	[self attachToAttachmentCells: newAttrText];
