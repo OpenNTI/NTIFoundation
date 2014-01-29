@@ -8,6 +8,8 @@
 
 #import "NSString-NTIExtensionsTest.h"
 
+#import "NSString-NTIExtensions.h"
+
 @implementation NSString_NTIExtensionsTest
 
 -(void)testJavascriptBoolValue
@@ -19,7 +21,7 @@
 
 -(void)testLongValue
 {
-	STAssertEquals([@"123456" longValue], (long)123456, nil);
+	STAssertEquals([@"123456" longValue], 123456, nil);
 }
 
 -(void)testPiecesUsingRegex
