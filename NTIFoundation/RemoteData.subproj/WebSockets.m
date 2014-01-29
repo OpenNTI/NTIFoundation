@@ -208,20 +208,18 @@ PRIVATE_STATIC_TESTABLE NSString* cookieHeaderForServer(NSURL* server)
 
 -(NSString*)userAgentValue
 {
-	NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+	//If we have app info in our defaults lets append that.
+	NSString* appInfo = [[NSUserDefaults standardUserDefaults] objectForKey: @"NTIUserAgentInfo"];
 	
-	//TODO include build version here along with bundle version?
-    NSString* appNameVersion =  [NSString stringWithFormat:@"%@/%@", 
-								 [infoDictionary objectForKey:@"CFBundleName"], 
-								 [infoDictionary objectForKey:@"CFBundleVersion"]];
+	//If not lets default to the bundle name and version
+	if([NSString isEmptyString: appInfo]){
+		NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+		appInfo = [NSString stringWithFormat:@"%@/%@",
+				   [infoDictionary objectForKey:@"CFBundleName"],
+				   [infoDictionary objectForKey:@"CFBundleVersion"]];
+	}
 	
-	return [NSString stringWithFormat: @"%@ WebSocket "
-			"%@/%@ "
-			"%@ "
-			"(NTIFoundation WebSocket client. http://nextthought.com)", 
-			appNameVersion, [UIDevice currentDevice].systemName,
-			[UIDevice currentDevice].systemVersion, 
-			[UIDevice currentDevice].platform];
+	return [NSString stringWithFormat: @"NTIFoundation WebSocket %@", appInfo];
 }
 
 //See http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-17#page-7
