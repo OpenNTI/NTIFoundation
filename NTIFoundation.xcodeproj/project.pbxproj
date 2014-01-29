@@ -2771,7 +2771,7 @@
 		};
 		40012B60189836F900F63EA7 /* Adhoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40012B681898370D00F63EA7 /* NTI-Global-Adhoc.xcconfig */;
+			baseConfigurationReference = 40012B671898370D00F63EA7 /* NTI-Touch-Library-Adhoc.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
