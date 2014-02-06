@@ -15,38 +15,6 @@
 #import <OmniAppKit/OAFontDescriptor.h>
 #import <objc/runtime.h>
 
-@interface OUITextSelectionSpan(NTIEditableFrame)
--(OAFontDescriptor*)_secondaryFontDescriptorForInspectorSlice:(OUIInspectorSlice*)inspector;
-@end
-
-@implementation OUITextSelectionSpan(NTIEditableFrame)
-
-+(void)load
-{
-	static dispatch_once_t once_token;
-	dispatch_once(&once_token, ^{
-		Method originalMethod = class_getInstanceMethod([self class], @selector(fontDescriptorForInspectorSlice:));
-		Method newMethod = class_getInstanceMethod([self class], @selector(_secondaryFontDescriptorForInspectorSlice:));
-		
-		method_exchangeImplementations(originalMethod, newMethod);
-	});
-}
-
--(OAFontDescriptor*)_secondaryFontDescriptorForInspectorSlice:(OUIInspectorSlice*)inspector;
-{
-	OAFontDescriptor* desc = (OAFontDescriptor*)[self.textView attribute:OAFontDescriptorAttributeName inRange:self.range];
-	if(desc)
-		return desc;
-	
-	UIFont* font = self.textView.font;
-	if(font)
-		desc = [[OAFontDescriptor alloc] initWithFont: font];
-	
-	return desc;
-}
-
-@end
-
 @implementation NTIEditableFrame
 @synthesize attachmentDelegate=nr_attachmentDelegate;
 
