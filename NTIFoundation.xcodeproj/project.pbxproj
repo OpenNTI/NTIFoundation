@@ -849,8 +849,7 @@
 		40A4147E1505748A0017242E /* NSDate-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate-NTIExtensions.m"; sourceTree = "<group>"; };
 		40A7459714DA30050093F0D4 /* NSObject-NTIJSONTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject-NTIJSONTest.h"; sourceTree = "<group>"; };
 		40A7459814DA30050093F0D4 /* NSObject-NTIJSONTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject-NTIJSONTest.m"; sourceTree = "<group>"; };
-		40AB82441566A6F500BB7375 /* OCHamcrestIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework;
-		name = OCHamcrestIOS.framework; path = "../NTIWorkspace/OCHamcrest-3.0.1/OCHamcrestIOS.framework"; sourceTree = "<group>"; };
+		40AB82441566A6F500BB7375 /* OCHamcrestIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OCHamcrestIOS.framework; path = "../NTIWorkspace/OCHamcrest-3.0.1/OCHamcrestIOS.framework"; sourceTree = "<group>"; };
 		40AB825E1566AA0C00BB7375 /* OQColor-NTIExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OQColor-NTIExtensionsTest.h"; sourceTree = "<group>"; };
 		40AB825F1566AA0C00BB7375 /* OQColor-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OQColor-NTIExtensionsTest.m"; sourceTree = "<group>"; };
 		40B5B49514C896CC009D5810 /* libNTIUserDataModel.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libNTIUserDataModel.a; path = "../../../Library/Developer/Xcode/DerivedData/NTIWorkspace-fdtwmhzrtxvlxtdrcxuhoowljuey/Build/Products/Debug-iphoneos/libNTIUserDataModel.a"; sourceTree = "<group>"; };
@@ -3184,7 +3183,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(DEVELOPER_DIR)/usr/lib\"",
-					"\"$(DEVELOPER_DIR)/Platforms/iPhoneOS.platform/Developer/usr/lib\"",
 					"\"$(SRCROOT)/../NTIWorkspace/OCMock\"",
 				);
 				LINK_PROFILE_YES = "-lprofile_rt";
