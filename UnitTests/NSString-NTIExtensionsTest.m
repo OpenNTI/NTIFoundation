@@ -21,7 +21,7 @@
 
 -(void)testLongValue
 {
-	STAssertEquals([@"123456" longValue], 123456, nil);
+	STAssertEquals([@"123456" longValue], (NSInteger)123456, nil);
 }
 
 -(void)testPiecesUsingRegex
