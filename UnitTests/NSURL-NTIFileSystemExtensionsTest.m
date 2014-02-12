@@ -23,7 +23,7 @@
     const char* attrName = "com.apple.MobileBackup";
 	
 	u_int8_t attrValue;
-	int getResult = getxattr(filePath, attrName, &attrValue, sizeof(attrValue), 0, 0);
+	size_t getResult = getxattr(filePath, attrName, &attrValue, sizeof(attrValue), 0, 0);
 	
 	STAssertTrue(getResult > 0, nil);
 	STAssertEquals(attrValue, (u_int8_t)1, nil);
