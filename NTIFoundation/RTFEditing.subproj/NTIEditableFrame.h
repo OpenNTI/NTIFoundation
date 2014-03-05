@@ -25,6 +25,7 @@
 	id __weak nr_attachmentDelegate;
 }
 @property (nonatomic, weak) id attachmentDelegate;
+@property (nonatomic, assign) BOOL allowsAddingCustomObjects;
 
 -(void)replaceRange: (UITextRange*)range withObject: (id)object;
 -(OATextAttachmentCell*)attachmentCellForPoint: (CGPoint)point fromView: (UIView*)view;

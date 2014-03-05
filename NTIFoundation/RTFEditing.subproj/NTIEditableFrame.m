@@ -15,6 +15,10 @@
 #import <OmniAppKit/OAFontDescriptor.h>
 #import <objc/runtime.h>
 
+@interface NTIEditableFrame()<UIGestureRecognizerDelegate>
+@property (nonatomic, strong) UIGestureRecognizer* attachmentGestureRecognizer;
+@end
+
 @implementation NTIEditableFrame
 @synthesize attachmentDelegate=nr_attachmentDelegate;
 
@@ -22,9 +26,7 @@
 {
 	self = [super initWithFrame: frame];
 	if(self){
-		UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(tapped:)];
-		self.font = [UIFont systemFontOfSize: [UIFont systemFontSize]];
-		[self addGestureRecognizer: tap];
+		[self _commonInit];
 	}
 	return self;
 }
@@ -33,11 +35,36 @@
 {
 	self = [super initWithCoder: aDecoder];
 	if(self){
-		UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(tapped:)];
-		self.font = [UIFont systemFontOfSize: [UIFont systemFontSize]];
-		[self addGestureRecognizer: tap];
+		[self _commonInit];
 	}
 	return self;
+}
+
+<<<<<<< HEAD
+-(BOOL)becomeFirstResponder
+{
+	BOOL r = [super becomeFirstResponder];
+	
+	if(self.allowsAddingCustomObjects){
+		UIMenuController* menuController = [UIMenuController sharedMenuController];
+		UIMenuItem* item = [[UIMenuItem alloc] initWithTitle: @"Add Whiteboard" action: @selector(addWhiteboard:)];
+		NSArray* menuItems = OFISNULL(menuController.menuItems) ? @[item] : [menuController.menuItems arrayByAddingObject: item];
+		menuController.menuItems = menuItems;
+	}
+	
+	return r;
+}
+
+-(void)addWhiteboard: (id)sender
+{
+	NSLog(@"add whiteboard");
+=======
+-(void)_commonInit
+{
+	self.attachmentGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(tapped:)];
+	self.attachmentGestureRecognizer.delegate = self;
+	[self addGestureRecognizer: self.attachmentGestureRecognizer];
+>>>>>>> FETCH_HEAD
 }
 
 //TODO: Figure out if these typingAtributes messages are still needed
@@ -195,52 +222,11 @@
 	return nil;
 }
 
--(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+-(OATextAttachmentCell*)attachmentCellForPoint:(CGPoint)point
 {
-	return YES;
-}
-
--(UIView *)hitTest: (CGPoint)point withEvent: (UIEvent *)event
-{
-	//If the point isn't even in our view just call super. Could return nil here?
-	UIView* supersResult = [super hitTest: point withEvent: event];
-	
-	if( !supersResult ){
-		return nil;
-	}
-	
-	//Shortcut, if we don't have a delegate or one that responds to our event just call super
-	if(	OFISNULL(self->nr_attachmentDelegate) ||
-	   ![self->nr_attachmentDelegate respondsToSelector:
-			@selector(editableFrame:attachmentCell:wasTouchedAtPoint:)]){
-		return supersResult;
-	}
-	
-	
-	OATextAttachmentCell* attachmentCell = [self attachmentCellForPoint: point fromView: self];
-	if(attachmentCell){
-		//If we are editing select the attachment cell so that any editing will replace it.
-		if(self.isEditable){
-			UITextRange* range = [self workingCharacterRangeForPoint: point];
-			[self setSelectedTextRange: range
-						   showingMenu: NO];
-		}
-		
-		BOOL handled = [self->nr_attachmentDelegate editableFrame: self
-												   attachmentCell: attachmentCell
-												wasTouchedAtPoint: point];
-			
-		if(handled){
-			// From the docs the return value should be
-			//"The view object that is the farthest descendent the current view and contains point. Returns nil if the point lies completely outside the receiver’s view hierarchy."
-			//we want to return the view that represents the attachment we have clicked.  We can't return the tablecell (self) or the editor as that causes those views to perform
-			//some action.
-			//TODO If we return anything besides nil the row gets touched and the accessory row pops down....
-			return nil;
-		}
-	}
-	
-	return supersResult;
+	//UITextRange* range = [self characterRangeAtPoint: point]; //Ugh always nil in ios7 GM
+	UITextRange* range = [self workingCharacterRangeForPoint: point];
+	return[self attachmentCellForRange: range];
 }
 
 -(void)tapped: (UITapGestureRecognizer*)r
@@ -289,10 +275,41 @@
     if (action == @selector(paste:)) {
         return self.isEditable;
     }
-    else {
+    if (action == @selector(addWhiteboard:)) {
+		return self.allowsAddingCustomObjects && self.selectedRange.length > 0;
+	}
+	else {
         return [super canPerformAction:action
                             withSender:sender];
     }
 }
+
+#pragma mark gesture recognizer delegate
+
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+	return YES;
+}
+
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+	if(self.attachmentGestureRecognizer != gestureRecognizer){
+		return YES;
+	}
+	
+	if( ![self->nr_attachmentDelegate respondsToSelector:
+		  @selector(editableFrame:attachmentCell:wasTouchedAtPoint:)] ){
+		return NO;
+	}
+	
+	CGPoint p = [touch locationInView: gestureRecognizer.view];
+	
+	//UITextRange* range = [self characterRangeAtPoint: p]; //Ugh always nil in ios7 GM
+	UITextRange* range = [self workingCharacterRangeForPoint: p];
+	OATextAttachmentCell* attachmentCell = [self attachmentCellForRange: range];
+	
+	return OFNOTNULL(attachmentCell);
+}
+
 
 @end
