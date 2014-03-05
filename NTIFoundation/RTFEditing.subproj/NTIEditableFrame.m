@@ -40,7 +40,6 @@
 	return self;
 }
 
-<<<<<<< HEAD
 -(BOOL)becomeFirstResponder
 {
 	BOOL r = [super becomeFirstResponder];
@@ -58,13 +57,13 @@
 -(void)addWhiteboard: (id)sender
 {
 	NSLog(@"add whiteboard");
-=======
+}
+
 -(void)_commonInit
 {
 	self.attachmentGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(tapped:)];
 	self.attachmentGestureRecognizer.delegate = self;
 	[self addGestureRecognizer: self.attachmentGestureRecognizer];
->>>>>>> FETCH_HEAD
 }
 
 //TODO: Figure out if these typingAtributes messages are still needed
