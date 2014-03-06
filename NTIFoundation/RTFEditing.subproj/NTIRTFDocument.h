@@ -5,30 +5,37 @@
 @interface NTIRTFDocument : OFObject
 {
 @private
-    NSMutableAttributedString* text;
+    
+    NSMutableAttributedString *text;
 }
 
-@property (nonatomic,copy) NSAttributedString* text;
-@property (nonatomic,readonly) NSString* rtfString __attribute__((deprecated)); 
-@property (nonatomic,readonly) NSString* htmlString;
-@property (nonatomic,readonly) NSString* plainString;
+@property (nonatomic, copy) NSAttributedString *text;
+
+@property (nonatomic, readonly) NSString *rtfString __attribute__((deprecated));
+
+@property (nonatomic, readonly) NSString *htmlString;
+
+@property (nonatomic, readonly) NSString *plainString;
+
 /**
  * The preferred string for external storage. 
  */
-@property (nonatomic,readonly) NSString* externalString;
+@property (nonatomic, readonly) NSString* externalString;
 
 /**
  * Parses HTML, RTF, or plain text.
  */
-+(NSAttributedString*)attributedStringWithString: (NSString*)rtfString;
-+(NSString*)stringFromString: (NSString*)rtfOrPlain;
++ (NSAttributedString *)attributedStringWithString:(NSString *)rtfString;
 
--(id)initWithString: (NSString*)string;
++ (NSString *)stringFromString:(NSString *)rtfOrPlain;
+
+- (id)initWithString:(NSString *)string;
+
 /**
  * Designated initializer.
  */
--(id)initWithAttributedString: (NSAttributedString*)string;
+- (id)initWithAttributedString:(NSAttributedString *)string;
 
--(NSString*)htmlStringWrappedIn: (NSString*)element;
+- (NSString *)htmlStringWrappedIn:(NSString *)element;
 
 @end
