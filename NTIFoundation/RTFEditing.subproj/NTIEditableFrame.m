@@ -58,7 +58,8 @@
 {
 	NSLog(@"adding whiteboard");
 	if (![sender respondsToSelector: @selector(nextResponder)]) {
-		sender = self;
+		[self addWhiteboard: self];
+		return;
 	}
 	
 	id responder = [sender nextResponder];
