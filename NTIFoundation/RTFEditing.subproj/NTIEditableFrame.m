@@ -40,6 +40,42 @@
 	return self;
 }
 
+-(BOOL)becomeFirstResponder
+{
+	BOOL r = [super becomeFirstResponder];
+	
+	if(self.allowsAddingCustomObjects){
+		UIMenuController* menuController = [UIMenuController sharedMenuController];
+		UIMenuItem* item = [[UIMenuItem alloc] initWithTitle: @"Add Whiteboard" action: @selector(addWhiteboard:)];
+		NSArray* menuItems = OFISNULL(menuController.menuItems) ? @[item] : [menuController.menuItems arrayByAddingObject: item];
+		menuController.menuItems = menuItems;
+	}
+	
+	return r;
+}
+
+-(void)addWhiteboard: (id)sender
+{
+	NSLog(@"adding whiteboard");
+	if (![sender respondsToSelector: @selector(nextResponder)]) {
+		[self addWhiteboard: self];
+		return;
+	}
+	
+	id responder = [sender nextResponder];
+	if(OFISNULL(responder)){
+		NSLog(@"no messages to add whiteboard found in responder chain");
+		return;
+	}
+	else if([responder respondsToSelector: @selector(addWhiteboard:)]){
+		NSLog(@"message found, calling addWhiteboard: with obj: %@", sender);
+		[responder addWhiteboard: sender];
+		return;
+	}
+	
+	[self addWhiteboard: responder];
+}
+
 -(void)_commonInit
 {
 	self.attachmentGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(tapped:)];
@@ -255,7 +291,10 @@
     if (action == @selector(paste:)) {
         return self.isEditable;
     }
-    else {
+    if (action == @selector(addWhiteboard:)) {
+		return self.allowsAddingCustomObjects;
+	}
+	else {
         return [super canPerformAction:action
                             withSender:sender];
     }
