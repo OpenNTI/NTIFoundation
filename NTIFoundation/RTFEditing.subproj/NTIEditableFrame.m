@@ -288,5 +288,10 @@
 	return OFNOTNULL(attachmentCell);
 }
 
+-(UIEdgeInsets)insetsForUserDataEditor
+{
+	CGFloat inset = [[self class] oui_defaultTopAndBottomPadding];
+	return UIEdgeInsetsMake(0, 20 - inset, 0, 14 - inset);
+}
 
 @end
