@@ -54,11 +54,6 @@
 	return nil;
 }
 
--(NSUInteger)precedenceLevel
-{
-	return self->precedenceLevel;
-}
-
 //NOTE: NOT TO BE CONFUSED with -addSymbol, because this is only invoked in case we need to add something in between the parent node( self ) and its child. We get to this case based on precedence level comparison.
 -(NTIMathSymbol *)addAsChildMathSymbol: (NTIMathSymbol *)newMathSymbol
 {
@@ -137,7 +132,7 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 {
 	NSString* childStringValue = [childExpression toString];
 	childExpression = mathExpressionForSymbol(childExpression);
-	if (childExpression.precedenceLevel < self.precedenceLevel && (childExpression.precedenceLevel > 0)) {
+	if ([[childExpression class] precedenceLevel] < [[self class] precedenceLevel] && ([[childExpression class] precedenceLevel] > 0)) {
 		childStringValue = [NSString stringWithFormat: @"(%@)", childStringValue]; 
 	}
 	return childStringValue;
@@ -148,7 +143,7 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 {
 	NSString* childLatexValue = [childExpression latexValue];
 	childExpression = mathExpressionForSymbol(childExpression);
-	if (childExpression.precedenceLevel < self.precedenceLevel && (childExpression.precedenceLevel > 0)) {
+	if ([[childExpression class] precedenceLevel] < [[self class] precedenceLevel] && ([[childExpression class] precedenceLevel] > 0)) {
 		childLatexValue = [NSString stringWithFormat: @"(%@)", childLatexValue]; 
 	}
 	return childLatexValue;
@@ -183,11 +178,11 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 
 
 @implementation NTIMathAprroxUnaryExpression
+
 -(id)init
 {
 	self = [super initWithMathOperatorString: @"≈"];
 	if (self) {
-		self->precedenceLevel = 0;
 	}
 	return self;
 }
@@ -195,11 +190,15 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 
 @implementation NTIMathSquareRootUnaryExpression
 
++(NSUInteger)precedenceLevel
+{
+	return 70;
+}
+
 -(id)init
 {
 	self = [super initWithMathOperatorString: @"√"];
 	if (self) {
-		self->precedenceLevel = 70;
 	}
 	return self;
 }

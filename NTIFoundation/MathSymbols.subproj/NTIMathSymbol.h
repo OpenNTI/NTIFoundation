@@ -10,6 +10,8 @@
 #import "NTIMathExpressionSymbolProtocol.h"
 @interface NTIMathSymbol : NSObject<NTIMathExpressionSymbolProtocol>
 
++(NSUInteger)precedenceLevel;
+
 @property(nonatomic, strong) NTIMathSymbol* parentMathSymbol;
 @property (nonatomic, readonly) NTIMathSymbol* parentMathSymbolFollowingLinks;
 @property (nonatomic, readonly) NTIMathSymbol* nextSibling;
@@ -18,7 +20,6 @@
 @property (nonatomic, readonly) NSArray* children;
 @property (nonatomic, readonly) NSArray* childrenFollowingLinks;
 
-@property(nonatomic) NSUInteger precedenceLevel;
 @property(nonatomic, weak) NTIMathSymbol* substituteSymbol; //should only be a placeholder.
  
 +(NTIMathSymbol*)followIfPlaceholder: (NTIMathSymbol*) symbol;

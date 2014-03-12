@@ -542,7 +542,7 @@ static BOOL isImplicitSymbol(NTIMathSymbol* currentNode, NTIMathSymbol* newNode,
 	while ( currentNode.parentMathSymbol ) {
 		// look ahead
 		// Rule 1: if our parent's precedence is lower, we make a new tree at current.
-		if ( [currentNode.parentMathSymbol precedenceLevel] < [newNode precedenceLevel] ) {		
+		if ( [[currentNode.parentMathSymbol class] precedenceLevel] < [[newNode class] precedenceLevel] ) {
 			//Make new tree with currentNode as a childNode to newNode. Basically swapping them.
 			return [self newMathSymbolTreeWithRoot: newNode firstChild: currentNode];		
 		}
