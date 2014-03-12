@@ -9,11 +9,17 @@
 #import "NTIMathParenthesisSymbol.h"
 #import "NTIMathPlaceholderSymbol.h"
 @implementation NTIMathParenthesisSymbol
+
++(NSUInteger)precedenceLevel
+{
+	return 90; //Paranthesis have the highest precedence of all math expressions.
+}
+
+
 -(id)init
 {
 	self = [super initWithMathOperatorString:@"("];
 	if (self) {
-		precedenceLevel = 90;	//Paranthesis have the highest precedence of all math expressions.
 	}
 	return self;
 }

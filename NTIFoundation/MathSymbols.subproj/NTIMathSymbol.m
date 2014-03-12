@@ -10,7 +10,12 @@
 #import "NTIMathPlaceholderSymbol.h"
 
 @implementation NTIMathSymbol
-@synthesize parentMathSymbol, precedenceLevel,substituteSymbol;
+@synthesize parentMathSymbol,substituteSymbol;
+
++(NSUInteger)precedenceLevel
+{
+	return 0;
+}
 
 //TODO the getters for leftMathNode and rightMathNode should return after passing
 //through this function.
@@ -118,11 +123,6 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 		return [children firstObject];
 	}
 	return nil;
-}
-
--(NSUInteger)precedenceLevel
-{
-	return 0;
 }
 
 -(NSString *)toString

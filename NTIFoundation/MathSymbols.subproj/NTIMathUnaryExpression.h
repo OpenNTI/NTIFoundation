@@ -9,7 +9,6 @@
 #import "NTIMathSymbol.h"
 @interface NTIMathUnaryExpression : NTIMathSymbol {
 	NSString* symbolValue;
-	NSUInteger precedenceLevel;
 }
 @property( nonatomic, strong, readonly) NTIMathSymbol* prefix;
 @property( nonatomic, strong) NTIMathSymbol* childMathNode; 

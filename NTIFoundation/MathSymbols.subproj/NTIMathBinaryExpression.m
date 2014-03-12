@@ -67,12 +67,6 @@
 	return self;
 }
 
--(NSUInteger)precedenceLevel
-{
-	//Abstract binary pl
-	return self->precedenceLevel; 
-}
-
 -(void)setLeftMathNode:(NTIMathSymbol *)aLeftMathNode
 {
 	self->leftMathNode = aLeftMathNode;
@@ -205,7 +199,7 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 {
 	NSString* childStringValue = [childExpression toString];
 	childExpression = mathExpressionForSymbol(childExpression);
-	if (childExpression.precedenceLevel < self.precedenceLevel && (childExpression.precedenceLevel > 0)) {
+	if ([[childExpression class] precedenceLevel] < [[self class] precedenceLevel] && ([[childExpression class] precedenceLevel] > 0)) {
 		childStringValue = [NSString stringWithFormat: @"(%@)", childStringValue]; 
 	}
 	return childStringValue;
@@ -241,7 +235,7 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 {
 	NSString* childLatexValue = [childExpression latexValue];
 	childExpression = mathExpressionForSymbol(childExpression);
-	if (childExpression.precedenceLevel < self.precedenceLevel && (childExpression.precedenceLevel > 0)) {
+	if ([[childExpression class] precedenceLevel] < [[self class] precedenceLevel] && ([[childExpression class] precedenceLevel] > 0)) {
 		childLatexValue = [NSString stringWithFormat: @"(%@)", childLatexValue]; 
 	}
 	return childLatexValue;
@@ -305,11 +299,17 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 @end
 
 @implementation NTIMathMultiplicationBinaryExpression
+
++(NSUInteger)precedenceLevel
+{
+	return 50;
+}
+
+
 -(id)init
 {
 	self = [super initWithMathOperatorSymbol: @"*"];
 	if (self) {
-		self->precedenceLevel = 50;
 	}
 	return self;
 }
@@ -323,7 +323,6 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 {
 	self = [super initWithMathOperatorSymbol: @"="];
 	if (self) {
-		self->precedenceLevel = 0;
 	}
 	return self;
 }
@@ -336,7 +335,6 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 {
 	self = [super initWithMathOperatorSymbol: @"≈"];
 	if (self) {
-		self->precedenceLevel = 0;
 	}
 	return self;
 }
@@ -370,11 +368,17 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 @end
 
 @implementation NTIMathAdditionBinaryExpression
+
++(NSUInteger)precedenceLevel
+{
+	return 40;
+}
+
+
 -(id)init
 {
 	self = [super initWithMathOperatorSymbol: @"+"];
 	if (self) {
-		self->precedenceLevel = 40;
 	}
 	return self;
 }
@@ -393,22 +397,32 @@ static NTIMathSymbol* mathExpressionForSymbol(NTIMathSymbol* mathSymbol)
 @end
 
 @implementation NTIMathSubtractionBinaryExpression
+
++(NSUInteger)precedenceLevel
+{
+	return 40;
+}
+
 -(id)init
 {
 	self = [super initWithMathOperatorSymbol: @"-"];
 	if (self) {
-		self->precedenceLevel = 40;
 	}
 	return self;
 }
 @end
 
 @implementation NTIMathDivisionBinaryExpression
+
++(NSUInteger)precedenceLevel
+{
+	return 50;
+}
+
 -(id)init
 {
 	self = [super initWithMathOperatorSymbol: @"/"];
 	if (self) {
-		self->precedenceLevel = 50;
 	}
 	return self;
 }

@@ -9,7 +9,6 @@
 #import "NTIMathSymbol.h"
 @class NTIMathOperatorSymbol;
 @interface NTIMathBinaryExpression : NTIMathSymbol {
-	NSUInteger precedenceLevel;
 }
 
 @property( nonatomic, strong, readonly) NTIMathOperatorSymbol* operatorMathNode;	//Parent node
