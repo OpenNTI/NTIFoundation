@@ -7,7 +7,6 @@
 //
 #import <QuartzCore/QuartzCore.h>
 
-
 @interface NTIHTMLReader : OFObject<NSXMLParserDelegate> {
 @private
 	NSMutableAttributedString* attrBuffer;
@@ -25,6 +24,10 @@
 
 +(void)registerReaderClass: (Class)clazz;
 +(Class)readerClass;
+
+//Defaults for the font to assume if no font information is present
++(NSString*)defaultFontFamily;
++(CGFloat)defaultFontSize;
 
 -(id)initWithHTML: (NSString*)string;
 
