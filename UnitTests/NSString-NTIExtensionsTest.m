@@ -14,14 +14,14 @@
 
 -(void)testJavascriptBoolValue
 {
-	STAssertFalse([@"false" javascriptBoolValue], nil);
-	STAssertTrue([@"true" javascriptBoolValue], nil);
-	STAssertFalse([@"None" javascriptBoolValue], nil);
+	XCTAssertFalse([@"false" javascriptBoolValue]);
+	XCTAssertTrue([@"true" javascriptBoolValue]);
+	XCTAssertFalse([@"None" javascriptBoolValue]);
 }
 
 -(void)testLongValue
 {
-	STAssertEquals([@"123456" longValue], (NSInteger)123456, nil);
+	XCTAssertEqual([@"123456" longValue], (NSInteger)123456);
 }
 
 -(void)testPiecesUsingRegex
@@ -30,9 +30,9 @@
 	
 	NSArray* parts = [handshake piecesUsingRegexString: @"Sec-WebSocket-Accept:\\s+(.+?)\\s"];
 	
-	STAssertEquals((int)parts.count, 1, nil);
+	XCTAssertEqual((int)parts.count, 1);
 	
-	STAssertEqualObjects([parts firstObject], @"hrIyuqmFm4k655eTa9Ibgw8Kvss=", nil);
+	XCTAssertEqualObjects([parts firstObject], @"hrIyuqmFm4k655eTa9Ibgw8Kvss=");
 
 	
 	NSString* packet = @"3:1::blabla";
@@ -40,7 +40,7 @@
 	
 	NSArray* shouldEqual = [NSArray arrayWithObjects: @"3", @"1", @"", @"", @"blabla", nil];
 	
-	STAssertEqualObjects(pieces, shouldEqual, nil);
+	XCTAssertEqualObjects(pieces, shouldEqual);
 	
 	
 }

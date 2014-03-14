@@ -13,9 +13,9 @@
 
 -(void)testJsonObjectUnwrap
 {
-	STAssertNil([[NSNull null] jsonObjectUnwrap], nil);
-	STAssertNil(nil, nil);
-	STAssertNotNil([NSNumber numberWithInt: 10], nil);
+	XCTAssertNil([[NSNull null] jsonObjectUnwrap]);
+	XCTAssertNil(nil);
+	XCTAssertNotNil([NSNumber numberWithInt: 10]);
 }
 
 @end

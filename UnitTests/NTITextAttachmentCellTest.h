@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 NextThought. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
-@interface NTITextAttachmentCellTest : SenTestCase
+@interface NTITextAttachmentCellTest : XCTestCase
 
 @end

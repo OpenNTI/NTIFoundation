@@ -12,9 +12,9 @@
 
 @implementation SocketIOPacketTest
 
-#define STAssertPacketType(packet, theType)\
-	STAssertTrue(packet.type == theType,\
-				  @"Expected packet of type %ld but found %ld", theType, packet.type);
+#define XCTAssertPacketType(packet, theType)\
+	XCTAssertTrue(packet.type == theType,\
+				  @"Expected packet of type %lu but found %lu", (unsigned long)theType, (unsigned long)packet.type);
 
 
 -(SocketIOPacket*)packetForString: (NSString*)str
@@ -28,26 +28,26 @@
 	
 	NSArray* decoded = [SocketIOPacket decodePayload: [toDecode dataUsingEncoding: NSUTF8StringEncoding]];
 	
-	STAssertEquals((int)decoded.count, 1, @"Excpected one packet");
+	XCTAssertEqual((int)decoded.count, 1, @"Excpected one packet");
 	
 	SocketIOPacket* packet = [decoded firstObject];
 	
-	STAssertPacketType(packet, SocketIOPacketTypeMessage);
-	STAssertEqualObjects(packet.packetId, @"1", @"Wrong packet id");
-	STAssertEqualObjects(packet.data, @"blabla", @"Bad packet data");
+	XCTAssertPacketType(packet, SocketIOPacketTypeMessage);
+	XCTAssertEqualObjects(packet.packetId, @"1", @"Wrong packet id");
+	XCTAssertEqualObjects(packet.data, @"blabla", @"Bad packet data");
 }
 
 -(void)testParseSpecialDisconnect
 {
 	SocketIOPacket* disconnect = [self packetForString: @"0"];
-	STAssertPacketType(disconnect, SocketIOPacketTypeDisconnect);
+	XCTAssertPacketType(disconnect, SocketIOPacketTypeDisconnect);
 }
 
 -(void)testParseHeartbeat
 {
 	SocketIOPacket* heartbeat = [self packetForString: @"2::"];
 	
-	STAssertPacketType(heartbeat, SocketIOPacketTypeHeartbeat);
+	XCTAssertPacketType(heartbeat, SocketIOPacketTypeHeartbeat);
 }
 
 -(void)testSerializeHeartbeat
@@ -57,11 +57,11 @@
 	
 	SocketIOPacket* heartbeat = [SocketIOPacket decodePacketData: heartbeatData];
 	
-	STAssertEqualObjects([heartbeat encode], heartbeatData, nil);
+	XCTAssertEqualObjects([heartbeat encode], heartbeatData);
 	
 	heartbeat = [SocketIOPacket packetForHeartbeat];
 	
-	STAssertEqualObjects([heartbeat encode], heartbeatData, nil);
+	XCTAssertEqualObjects([heartbeat encode], heartbeatData);
 	
 }
 
@@ -69,7 +69,7 @@
 {
 	SocketIOPacket* noop = [self packetForString: @"8::"];
 	
-	STAssertPacketType(noop, SocketIOPacketTypeNoop);
+	XCTAssertPacketType(noop, SocketIOPacketTypeNoop);
 }
 
 -(void)testSerializeNoop
@@ -78,16 +78,16 @@
 	
 	SocketIOPacket* noop = [SocketIOPacket decodePacketData: noopData];
 	
-	STAssertEqualObjects([noop encode], noopData, nil);
+	XCTAssertEqualObjects([noop encode], noopData);
 }
 
 -(void)testParseMessage
 {	
 	SocketIOPacket* message = [self packetForString: @"3:1::blabla"];
 	
-	STAssertPacketType(message, SocketIOPacketTypeMessage);
+	XCTAssertPacketType(message, SocketIOPacketTypeMessage);
 	
-	STAssertEqualObjects(message.data, @"blabla",nil);
+	XCTAssertEqualObjects(message.data, @"blabla");
 }
 
 -(void)testSerializeMessage
@@ -97,11 +97,11 @@
 	
 	SocketIOPacket* message = [SocketIOPacket decodePacketData: messageData];
 	
-	STAssertEqualObjects([message encode], messageData, nil);
+	XCTAssertEqualObjects([message encode], messageData);
 	
 	message = [SocketIOPacket packetForMessageWithData: @"blabla"];
 	
-	STAssertEqualObjects([message encode], messageData, nil);
+	XCTAssertEqualObjects([message encode], messageData);
 	
 }
 
@@ -109,9 +109,9 @@
 {	
 	SocketIOPacket* event = [self packetForString: @"5:::{\"args\": [\"chris.utz@nextthought.com\"], \"name\": \"chat_enteredRoom\"}"];
 	
-	STAssertPacketType(event, SocketIOPacketTypeEvent);
-	STAssertEqualObjects(event.name, @"chat_enteredRoom", nil);
-	STAssertEqualObjects(event.args, [NSArray arrayWithObject: @"chris.utz@nextthought.com"], nil);
+	XCTAssertPacketType(event, SocketIOPacketTypeEvent);
+	XCTAssertEqualObjects(event.name, @"chat_enteredRoom");
+	XCTAssertEqualObjects(event.args, [NSArray arrayWithObject: @"chris.utz@nextthought.com"]);
 }
 
 -(void)testSerializeEvent
@@ -121,9 +121,9 @@
 	
 	SocketIOPacket* serializedAndDecoded = [SocketIOPacket decodePacketData: [eventPacket encode]];
 	
-	STAssertPacketType(serializedAndDecoded, SocketIOPacketTypeEvent);
-	STAssertEqualObjects(serializedAndDecoded.name, eventPacket.name, nil);
-	STAssertEqualObjects(serializedAndDecoded.args, eventPacket.args, nil);
+	XCTAssertPacketType(serializedAndDecoded, SocketIOPacketTypeEvent);
+	XCTAssertEqualObjects(serializedAndDecoded.name, eventPacket.name);
+	XCTAssertEqualObjects(serializedAndDecoded.args, eventPacket.args);
 	
 }
 
@@ -155,7 +155,7 @@
 		[expectedData appendData: packetData];
 	}
 	
-	STAssertEqualObjects(encodedPackets, expectedData, nil);
+	XCTAssertEqualObjects(encodedPackets, expectedData);
 }
 
 -(void)testDecodePayload
@@ -170,14 +170,14 @@
 	NSArray* decodedPackets = [SocketIOPacket decodePayload: encodedPackets];
 	
 	SocketIOPacket* p = [decodedPackets firstObject];
-	STAssertPacketType(p, SocketIOPacketTypeHeartbeat);
+	XCTAssertPacketType(p, SocketIOPacketTypeHeartbeat);
 	
 	p = [decodedPackets secondObject];
-	STAssertPacketType(p, SocketIOPacketTypeMessage);
-	STAssertEqualObjects(p.data, @"blahblahblah", nil);
+	XCTAssertPacketType(p, SocketIOPacketTypeMessage);
+	XCTAssertEqualObjects(p.data, @"blahblahblah");
 	
 	p = [decodedPackets lastObject];
-	STAssertPacketType(p, SocketIOPacketTypeNoop);
+	XCTAssertPacketType(p, SocketIOPacketTypeNoop);
 }
 
 @end

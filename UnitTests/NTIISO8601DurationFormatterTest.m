@@ -6,14 +6,14 @@
 //  Copyright (c) 2013 NextThought. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 #import "NTIISO8601DurationFormatter.h"
 #import "NTIDuration.h"
 
 #define HC_SHORTHAND
 #import <OCHamcrestIOS/OCHamcrestIOS.h>
 
-@interface NTIISO8601DurationFormatterTest : SenTestCase{
+@interface NTIISO8601DurationFormatterTest : XCTestCase{
 	@private
 	NTIISO8601DurationFormatter* formatter;
 }
@@ -82,7 +82,7 @@
 
 +(id)defaultTestSuite
 {
-	SenTestSuite* suite = [super defaultTestSuite];
+	XCTestSuite* suite = [super defaultTestSuite];
 	
 	[[self formatterIO] enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
 		SEL sel = @selector(expectDurationString:toHaveComponents:);

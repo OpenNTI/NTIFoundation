@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
-@interface NSArray_NTIExtenstionsTest : SenTestCase
+@interface NSArray_NTIExtenstionsTest : XCTestCase
 
 @end

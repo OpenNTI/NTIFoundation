@@ -27,20 +27,20 @@
 {		
 	//Serialize dict to json data 
 	NSData* data = [NSJSONSerialization dataWithJSONObject: self->userDataObject options: NSJSONWritingPrettyPrinted error: nil];
-	STAssertFalse( [NTIBufferedDownloader isPlistData: data], @"We expect to have json data, not plist data");
+	XCTAssertFalse( [NTIBufferedDownloader isPlistData: data], @"We expect to have json data, not plist data");
 	
 	//Now, we are going to serialize the same dict to plist data
 	NSData* pData = [NSPropertyListSerialization dataWithPropertyList: self->userDataObject 
 																   format: NSPropertyListXMLFormat_v1_0 
 																  options: 0 
 																	error: NULL];
-	STAssertTrue( [NTIBufferedDownloader isPlistData: pData], @"We expect to have plist data");
+	XCTAssertTrue( [NTIBufferedDownloader isPlistData: pData], @"We expect to have plist data");
 	
 	
 	id plistDict =  [NSPropertyListSerialization propertyListWithData: pData 
 														 options: NSPropertyListImmutable
 														  format: nil error: NULL];
-	STAssertTrue( [plistDict isEqualToDictionary: self->userDataObject], @"Dicts should have the same content");
+	XCTAssertTrue( [plistDict isEqualToDictionary: self->userDataObject], @"Dicts should have the same content");
 }
 
 -(void)testNilIncomingData
@@ -49,7 +49,7 @@
 	NTIBufferedDownloader* downloader = [[NTIBufferedDownloader alloc] init];
 	[downloader connection: nil didReceiveResponse: nil];
 	[downloader connection: nil didReceiveData: data];
-	STAssertNil([downloader objectFromData] , @"Expected nil object");
+	XCTAssertNil([downloader objectFromData] , @"Expected nil object");
 }
 
 -(void)testEmptyIncomingData
@@ -61,7 +61,7 @@
 	[downloader connection: nil didReceiveResponse: nil];
 	[downloader connection: nil didReceiveData: data];
 	NSLog(@"%@", [downloader stringFromData]);
-	STAssertTrue([[downloader objectFromData] isEqualToDictionary: [NSDictionary dictionary]] , @"Expected nil object");
+	XCTAssertTrue([[downloader objectFromData] isEqualToDictionary: [NSDictionary dictionary]] , @"Expected nil object");
 }
 
 -(void)testNonEmptyPlistData
@@ -73,8 +73,8 @@
 	NTIBufferedDownloader* downloader = [[NTIBufferedDownloader alloc] init];
 	[downloader connection: nil didReceiveResponse: nil];
 	[downloader connection: nil didReceiveData: data];
-	STAssertNotNil([downloader objectFromData] , @"Expected nil object");
-	STAssertTrue( [[downloader objectFromData] isEqualToDictionary: self->userDataObject] , @"Expected to have equal objects");
+	XCTAssertNotNil([downloader objectFromData] , @"Expected nil object");
+	XCTAssertTrue( [[downloader objectFromData] isEqualToDictionary: self->userDataObject] , @"Expected to have equal objects");
 }
 
 -(void)testNonEmptyJsonData
@@ -83,7 +83,7 @@
 	NTIBufferedDownloader* downloader = [[NTIBufferedDownloader alloc] init];
 	[downloader connection: nil didReceiveResponse: nil];
 	[downloader connection: nil didReceiveData: data];
-	STAssertNotNil([downloader objectFromData] , @"Expected nil object");
-	STAssertTrue( [[downloader objectFromData] isEqualToDictionary: self->userDataObject] , @"Expected to have equal objects");
+	XCTAssertNotNil([downloader objectFromData] , @"Expected nil object");
+	XCTAssertTrue( [[downloader objectFromData] isEqualToDictionary: self->userDataObject] , @"Expected to have equal objects");
 }
 @end

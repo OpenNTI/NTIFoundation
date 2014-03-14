@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
-@interface SocketIOPacketTest : SenTestCase
+@interface SocketIOPacketTest : XCTestCase
 
 @end

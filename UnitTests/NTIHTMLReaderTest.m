@@ -37,13 +37,13 @@ CGColorRef NTIHTMLReaderParseCreateColor(NSString* color, OQColor* defaultColor)
 -(void)testCSSString
 {
 	OQColor* blackColor = [OQColor blackColor];
-	STAssertEqualObjects([blackColor cssString], @"rgba(0,0,0,1.0)", nil);
+	XCTAssertEqualObjects([blackColor cssString], @"rgba(0,0,0,1.0)");
 	
 	OQColor* whiteColor = [OQColor whiteColor];
-	STAssertEqualObjects([whiteColor cssString], @"rgba(255,255,255,1.0)", nil);
+	XCTAssertEqualObjects([whiteColor cssString], @"rgba(255,255,255,1.0)");
 	
 	OQColor* color = [OQColor colorWithRed: .2 green: .5 blue: .7 alpha: .9];
-	STAssertEqualObjects([color cssString], @"rgba(51,128,178,0.9)", nil);
+	XCTAssertEqualObjects([color cssString], @"rgba(51,128,178,0.9)");
 }
 
 -(void)testColorParsing
@@ -52,14 +52,14 @@ CGColorRef NTIHTMLReaderParseCreateColor(NSString* color, OQColor* defaultColor)
 	
 	CGColorRef parsedValue = NTIHTMLReaderParseCreateColor(blackColor, nil);
 	
-	STAssertTrue(CGColorEqualToColor(parsedValue,  [[OQColor blackColor] rgbaCGColorRef]),
+	XCTAssertTrue(CGColorEqualToColor(parsedValue,  [[OQColor blackColor] rgbaCGColorRef]),
 						 @"Should be same color");
 	
 	NSString* rgbColor = @"rgb(20, 70, 200)";
 	
 	parsedValue = NTIHTMLReaderParseCreateColor(rgbColor, nil);
 	
-	STAssertTrue(CGColorEqualToColor(parsedValue,  [[OQColor colorWithRed: 20.0f/255.0f 
+	XCTAssertTrue(CGColorEqualToColor(parsedValue,  [[OQColor colorWithRed: 20.0f/255.0f 
 																	green: 70.0f/255.0f 
 																	 blue: 200.0f/255.0f
 																	alpha: 1] rgbaCGColorRef]),
@@ -70,7 +70,7 @@ CGColorRef NTIHTMLReaderParseCreateColor(NSString* color, OQColor* defaultColor)
 	
 	parsedValue = NTIHTMLReaderParseCreateColor(hexColor, nil);
 	
-	STAssertTrue(CGColorEqualToColor(parsedValue,  [[OQColor colorWithRed: 20.0f/255.0f 
+	XCTAssertTrue(CGColorEqualToColor(parsedValue,  [[OQColor colorWithRed: 20.0f/255.0f 
 																	green: 70.0f/255.0f 
 																	 blue: 200.0f/255.0f
 																	alpha: 1] rgbaCGColorRef]),
@@ -84,11 +84,11 @@ CGColorRef NTIHTMLReaderParseCreateColor(NSString* color, OQColor* defaultColor)
 	OQColor* defaultColor = [OQColor yellowColor];
 	CGColorRef parsedValue = NTIHTMLReaderParseCreateColor(gobbledegoop, defaultColor);
 	
-	STAssertTrue(CGColorEqualToColor(parsedValue, [defaultColor rgbaCGColorRef]), @"Expected default color");
+	XCTAssertTrue(CGColorEqualToColor(parsedValue, [defaultColor rgbaCGColorRef]), @"Expected default color");
 	
 	parsedValue = NTIHTMLReaderParseCreateColor(gobbledegoop, nil);
 	
-	STAssertTrue(CGColorEqualToColor(parsedValue, nil), @"Expected default color");
+	XCTAssertTrue(CGColorEqualToColor(parsedValue, nil), @"Expected default color");
 }
 
 -(void)testDropFormattingIfWeCantParseIt
@@ -99,7 +99,7 @@ CGColorRef NTIHTMLReaderParseCreateColor(NSString* color, OQColor* defaultColor)
 	
 	NSAttributedString* parsed = reader.attributedString;
 	
-	STAssertEqualObjects(parsed, [[NSAttributedString alloc] initWithString: @"blah blah blahfoo foo foo?"], 
+	XCTAssertEqualObjects(parsed, [[NSAttributedString alloc] initWithString: @"blah blah blahfoo foo foo?"], 
 						 @"Expected formatting data to be striped", nil);
 }
 
@@ -109,7 +109,7 @@ CGColorRef NTIHTMLReaderParseCreateColor(NSString* color, OQColor* defaultColor)
 	
 	NTIHTMLReader* reader = [[NTIHTMLReader alloc] initWithHTML: badFormat];
 
-	STAssertNil(reader, @"Bad xml should return nil from init");
+	XCTAssertNil(reader, @"Bad xml should return nil from init");
 }
 
 -(void)testCapturesAudio
@@ -118,7 +118,7 @@ CGColorRef NTIHTMLReaderParseCreateColor(NSString* color, OQColor* defaultColor)
 	
 	AudioCapturingHtmlReader* reader = [[AudioCapturingHtmlReader alloc] initWithHTML: audioHtml];
 	
-	STAssertEqualObjects(reader.source, @"data:foobar", nil);
+	XCTAssertEqualObjects(reader.source, @"data:foobar");
 }
 
 -(void)testReadLink
@@ -128,7 +128,7 @@ CGColorRef NTIHTMLReaderParseCreateColor(NSString* color, OQColor* defaultColor)
 	NSAttributedString* expected = [[NSAttributedString alloc] initWithString: @"http://google.com" attributeName: NSLinkAttributeName attributeValue: [NSURL URLWithString: @"http://google.com"]];
 	NTIHTMLReader* reader = [[NTIHTMLReader alloc] initWithHTML: linkHtml];
 	NSAttributedString* parts = reader.attributedString;
-	STAssertEqualObjects(parts, expected, nil);
+	XCTAssertEqualObjects(parts, expected);
 }
 
 @end
