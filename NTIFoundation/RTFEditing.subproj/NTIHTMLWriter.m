@@ -27,6 +27,8 @@
 #import "OmniQuartz/OQColor.h"
 #import "OQColor-NTIExtensions.h"
 
+#import "NTIHTMLReader.h"
+
 #ifdef DEBUG_jmadden
 #define DEBUG_RTF_WRITER
 #endif
@@ -234,7 +236,8 @@ static inline void writeString(OFDataBuffer* dataBuffer, NSString* string)
 	OAPlatformFontClass* newPlatformFont = [newAttributes objectForKey: (NSString*)kCTFontAttributeName];
 	OAFontDescriptor* newFontDescriptor;
 	if( newPlatformFont == nil ) {
-		newFontDescriptor = [[OAFontDescriptor alloc] initWithFamily:@"Helvetica" size:12.0f];
+		newFontDescriptor = [[OAFontDescriptor alloc] initWithFamily: [[NTIHTMLReader readerClass] defaultFontFamily]
+																size: [[NTIHTMLReader readerClass] defaultFontSize]];
 	}
 	else {
 		newFontDescriptor = [[OAFontDescriptor alloc] initWithFont: newPlatformFont];
@@ -276,7 +279,7 @@ static inline void writeString(OFDataBuffer* dataBuffer, NSString* string)
 		self->state->fontIndex = newFontIndex;
 		OFDataBufferAppendCString( self->dataBuffer, "<span style=\"");
 		OFDataBufferAppendCString( self->dataBuffer,  "font-family: '");
-		writeString( self->dataBuffer, [newFontDescriptor fontName]);
+		writeString( self->dataBuffer, [newFontDescriptor family]);
 		OFDataBufferAppendCString( self->dataBuffer,  "'; " );
 		if( shouldWriteNewFontSize ) {
 			OFDataBufferAppendCString( self->dataBuffer, " font-size: ");
