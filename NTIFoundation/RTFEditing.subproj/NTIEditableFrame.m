@@ -12,8 +12,9 @@
 #import <OmniAppKit/NSAttributedString-OAExtensions.h>
 #import "NTITextAttachmentCell.h"
 #import <OmniUI/OUITextSelectionSpan.h>
-#import <OmniAppKit/OAFontDescriptor.h>
 #import <objc/runtime.h>
+#import "NTIHTMLReader.h"
+#import <OmniAppKit/OAFontDescriptor.h>
 
 @interface NTIEditableFrame()<UIGestureRecognizerDelegate>
 @property (nonatomic, strong) UIGestureRecognizer* attachmentGestureRecognizer;
@@ -81,6 +82,25 @@
 	self.attachmentGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(tapped:)];
 	self.attachmentGestureRecognizer.delegate = self;
 	[self addGestureRecognizer: self.attachmentGestureRecognizer];
+	
+	//We set a default font here.  This will be the font until attributedString
+	//gets set.  Which is good for us.  THis effectively acts as the default
+	//for new editors.
+	
+	self.font = [self defaultFont];
+}
+
+//Note this matches the default that we use in the parser if no
+//font is specified.
+-(UIFont*)defaultFont
+{
+	Class readerClass = [NTIHTMLReader readerClass];
+	
+	OAFontDescriptor* fontDescriptor = [[OAFontDescriptor alloc]
+										initWithFamily: [readerClass defaultFontFamily]
+										size: [readerClass defaultFontSize]];
+	
+	return [fontDescriptor font];
 }
 
 //TODO: Figure out if these typingAtributes messages are still needed
@@ -146,6 +166,25 @@
 	[self removeFromAttachmentCells: self.attributedText];
 	[self detachFromOldFrames: newAttrText];
 	[self attachToAttachmentCells: newAttrText];
+	
+	//Sometimes we get plain text from the webapp.  When that happens we get passed an attributed
+	//string with no attributes (it obviosly doesn't go through the html parser so we don't pick up the default from there)
+	//If we have no fonts in the attributed string lets set a default.
+	__block BOOL hasFont = NO;
+	[newAttrText enumerateAttribute: NSFontAttributeName
+							inRange: NSMakeRange(0, newAttrText.length) options: 0 usingBlock:^(id value, NSRange range, BOOL *stop) {
+								hasFont = OFNOTNULL(value);
+								*stop = hasFont;
+							}];
+	
+	if(!hasFont){
+		UIFont* defaultFont = [self defaultFont];
+		if(defaultFont){
+			NSMutableAttributedString* withFont = [[NSMutableAttributedString alloc] initWithAttributedString: newAttrText];
+			[withFont setAttributes: @{NSFontAttributeName: [self defaultFont]} range: NSMakeRange(0, withFont.length)];
+			newAttrText = withFont;
+		}
+	}
 	
 	[super setAttributedText: newAttrText];
 }

@@ -39,6 +39,16 @@ static Class readerClass = nil;
 	return readerClass;
 }
 
++(NSString*)defaultFontFamily
+{
+	return @"Open Sans";
+}
+
++(CGFloat)defaultFontSize
+{
+	return 14.0f;
+}
+
 static void commonInit( NTIHTMLReader* self )
 {
 	self->inError = NO;
@@ -140,14 +150,14 @@ static NSString* stringFromStyle( NSString* styleAttribute, NSString* name )
 			[NSCharacterSet characterSetWithCharactersInString: @"'\""]];
 }
 
-static OAFontDescriptor* newCurrentFontDescriptor( NSDictionary* dict )
+static OAFontDescriptor* newCurrentFontDescriptor( NSDictionary* dict, Class clazz )
 {
 	OAPlatformFontClass* newPlatformFont = [dict objectForKey:
 									 (NSString*)kCTFontAttributeName];
 	OAFontDescriptor* newFontDescriptor;
 	if( newPlatformFont == nil ) {
 		newFontDescriptor = [[OAFontDescriptor alloc]
-							 initWithFamily: @"Helvetica" size: 12.0f];
+							 initWithFamily: [clazz defaultFontFamily] size: [clazz defaultFontSize]];
 	}
 	else {
 		newFontDescriptor = [[OAFontDescriptor alloc] initWithFont: newPlatformFont];
@@ -287,26 +297,26 @@ styleAttribute = stringFromStyle( styleAttribute, @prefix );
 		HAS_VALUE("font-family") {
 			setCurrentFontDescriptor(
 									 dict,
-									 [newCurrentFontDescriptor( dict ) 
-									  newFontDescriptorWithFamily: styleAttribute] );
+									 [newCurrentFontDescriptor( dict , [self class])
+									  newFontDescriptorWithFamily: @"Open Sans"] );
 		} EHV
 		else HAS_VALUE("font-size") {
 			setCurrentFontDescriptor( 
 									 dict,
-									 [newCurrentFontDescriptor( dict ) 
+									 [newCurrentFontDescriptor( dict , [self class])
 									  newFontDescriptorWithSize: [styleAttribute intValue]] );
 			
 		} EHV
 		else HAS_VALUE("font-weight") {
 			setCurrentFontDescriptor( 
 									 dict,
-									 [newCurrentFontDescriptor( dict ) 
+									 [newCurrentFontDescriptor( dict , [self class])
 									  newFontDescriptorWithBold: [styleAttribute isEqual: @"bold"]] );
 		} EHV
 		else HAS_VALUE("font-style") {
 			setCurrentFontDescriptor( 
 									 dict,
-									 [newCurrentFontDescriptor( dict ) 
+									 [newCurrentFontDescriptor( dict , [self class])
 									  newFontDescriptorWithItalic: [styleAttribute isEqual: @"italic"]] );
 			
 		} EHV
@@ -461,7 +471,7 @@ didStartElement: (NSString*)elementName
 		NSMutableDictionary* coreAttrs = [self mutableDictionaryWithCurrentStyle];
 		setCurrentFontDescriptor( 
 								 coreAttrs,
-								 [newCurrentFontDescriptor( coreAttrs ) 
+								 [newCurrentFontDescriptor( coreAttrs , [self class])
 								  newFontDescriptorWithItalic: YES] );
 		PUSH( coreAttrs );
 	}
@@ -476,7 +486,7 @@ didStartElement: (NSString*)elementName
 		NSMutableDictionary* coreAttrs = [self mutableDictionaryWithCurrentStyle];
 		setCurrentFontDescriptor( 
 								 coreAttrs,
-								 [newCurrentFontDescriptor( coreAttrs ) 
+								 [newCurrentFontDescriptor( coreAttrs , [self class])
 								  newFontDescriptorWithBold: YES] );
 		PUSH( coreAttrs );
 	}
@@ -492,7 +502,7 @@ didStartElement: (NSString*)elementName
 		NSMutableDictionary* coreAttrs = [self mutableDictionaryWithCurrentStyle];
 		setCurrentFontDescriptor( 
 								 coreAttrs,
-								 [newCurrentFontDescriptor( coreAttrs ) 
+								 [newCurrentFontDescriptor( coreAttrs , [self class])
 								  newFontDescriptorWithFamily: @"Courier"]);
 		PUSH( coreAttrs );
 	}
