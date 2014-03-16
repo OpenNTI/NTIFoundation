@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "72D8185813955D8C00473994"
-               BuildableName = "NTIFoundationLogicTests.octest"
+               BuildableName = "NTIFoundationLogicTests.xctest"
                BlueprintName = "NTIFoundationLogicTests"
                ReferencedContainer = "container:../NTIWorkspace/NTIFoundation/NTIFoundation.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "72D8185813955D8C00473994"
-               BuildableName = "NTIFoundationLogicTests.octest"
+               BuildableName = "NTIFoundationLogicTests.xctest"
                BlueprintName = "NTIFoundationLogicTests"
                ReferencedContainer = "container:../NTIWorkspace/NTIFoundation/NTIFoundation.xcodeproj">
             </BuildableReference>
@@ -55,13 +55,13 @@
       allowLocationSimulation = "YES">
       <AdditionalOptions>
          <AdditionalOption
-            key = "MallocScribble"
-            value = ""
+            key = "DYLD_INSERT_LIBRARIES"
+            value = "/usr/lib/libgmalloc.dylib"
             isEnabled = "YES">
          </AdditionalOption>
          <AdditionalOption
-            key = "DYLD_INSERT_LIBRARIES"
-            value = "/usr/lib/libgmalloc.dylib"
+            key = "NSZombieEnabled"
+            value = "YES"
             isEnabled = "YES">
          </AdditionalOption>
          <AdditionalOption
@@ -70,8 +70,8 @@
             isEnabled = "YES">
          </AdditionalOption>
          <AdditionalOption
-            key = "NSZombieEnabled"
-            value = "YES"
+            key = "MallocScribble"
+            value = ""
             isEnabled = "YES">
          </AdditionalOption>
       </AdditionalOptions>

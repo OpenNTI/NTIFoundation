@@ -201,6 +201,7 @@
 		40F72DA8156EE1C50050C93E /* NTIMathEquationBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 40F72DA6156EE1C40050C93E /* NTIMathEquationBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40F72DA9156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */; };
 		40F72DAA156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */; };
+		40FB28EE18D2B47B00A450FA /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40FB28B018D2AEAF00A450FA /* XCTest.framework */; };
 		4C2ECDD51549D0A400C69E3A /* NTIMathInputExpressionModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2ECDD31549D0A400C69E3A /* NTIMathInputExpressionModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2ECDD61549D0A400C69E3A /* NTIMathInputExpressionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2ECDD41549D0A400C69E3A /* NTIMathInputExpressionModel.m */; };
 		4C2ECDD71549D0A400C69E3A /* NTIMathInputExpressionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2ECDD41549D0A400C69E3A /* NTIMathInputExpressionModel.m */; };
@@ -1042,6 +1043,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40FB28EE18D2B47B00A450FA /* XCTest.framework in Frameworks */,
 				406151A617F211DF004B7B0A /* StoreKit.framework in Frameworks */,
 				406151A717F211E8004B7B0A /* libOmniDAV.a in Frameworks */,
 				40F56E8D15C8BB84001FC309 /* libNTILogicTestBase.a in Frameworks */,
@@ -2791,8 +2793,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
 					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
 					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
 					"\"$(SRCROOT)/../NTIWorkspace/OCHamcrest-3.0.1\"",
 				);
@@ -2805,7 +2807,7 @@
 					"$(OBJROOT)/UninstalledProducts/include",
 					"\"$(SRCROOT)/../NTIWorkspace/OCMock\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(DEVELOPER_DIR)/usr/lib\"",
@@ -3152,8 +3154,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
 					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
 					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
 					"\"$(SRCROOT)/../NTIWorkspace/OCHamcrest-3.0.1\"",
 				);
@@ -3172,7 +3174,7 @@
 					"$(OBJROOT)/UninstalledProducts/include",
 					"\"$(SRCROOT)/../NTIWorkspace/OCMock\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(DEVELOPER_DIR)/usr/lib\"",
@@ -3195,8 +3197,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
 					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
 					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
 					"\"$(SRCROOT)/../NTIWorkspace/OCHamcrest-3.0.1\"",
 				);
@@ -3209,7 +3211,7 @@
 					"$(OBJROOT)/UninstalledProducts/include",
 					"\"$(SRCROOT)/../NTIWorkspace/OCMock\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(DEVELOPER_DIR)/usr/lib\"",
