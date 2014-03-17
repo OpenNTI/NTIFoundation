@@ -18,7 +18,7 @@ NSUInteger bytesToLength(uint8_t* bytes, uint8_t num);
 	
 	NSUInteger smallSize = bytesToLength(&bytes, 1);
 	
-	STAssertEquals((int)smallSize, 87, @"Excpeted a length of 87");
+	XCTAssertEqual((int)smallSize, 87, @"Excpeted a length of 87");
 }
 
 -(void)testBytesToLengthMedium
@@ -27,7 +27,7 @@ NSUInteger bytesToLength(uint8_t* bytes, uint8_t num);
 	
 	NSUInteger mediumSize = bytesToLength(bytes, 2);
 
-	STAssertEquals((int)mediumSize, 312, @"Excpeted a length of 312");
+	XCTAssertEqual((int)mediumSize, 312, @"Excpeted a length of 312");
 }
 
 -(void)testBytesToLengthLong
@@ -36,7 +36,7 @@ NSUInteger bytesToLength(uint8_t* bytes, uint8_t num);
 	
 	NSUInteger longSize = bytesToLength(bytes, 8);
 	
-	STAssertEquals((int)longSize, 9876543, @"Excpeted a length of 9876543");
+	XCTAssertEqual((int)longSize, 9876543, @"Excpeted a length of 9876543");
 }
 
 

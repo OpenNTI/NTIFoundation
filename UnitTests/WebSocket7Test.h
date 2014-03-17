@@ -6,8 +6,8 @@
 //  Copyright 2011 NextThought. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
-@interface WebSocket7Test : SenTestCase
+@interface WebSocket7Test : XCTestCase
 
 @end

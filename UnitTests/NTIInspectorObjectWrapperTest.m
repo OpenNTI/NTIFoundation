@@ -17,8 +17,8 @@
 	NSAttributedString* text = [[NSAttributedString alloc] initWithString: @"<html><body>The text</body></html>"];
 
 	NTIInspectableObjectWrapper* wrapper = [[NTIInspectableObjectWrapper alloc] initWithInspectableObject: text andOwner: editor];
-	STAssertEqualObjects([wrapper belongsTo], editor, @"Owner object and editor obj should be equal");
-	STAssertEqualObjects([wrapper inspectedObject], text, @"inspected objects should be equal");	
+	XCTAssertEqualObjects([wrapper belongsTo], editor, @"Owner object and editor obj should be equal");
+	XCTAssertEqualObjects([wrapper inspectedObject], text, @"inspected objects should be equal");	
 }
 
 @end

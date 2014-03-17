@@ -18,8 +18,8 @@
 
 -(void)testDequeueNothing
 {
-	STAssertNil([self->queue dequeueDataForSending], nil);
-	STAssertNil([self->queue dequeueRecievedData], nil);
+	XCTAssertNil([self->queue dequeueDataForSending]);
+	XCTAssertNil([self->queue dequeueRecievedData]);
 }
 
 -(void)testEnqueueDequeueForSending
@@ -30,9 +30,9 @@
 	[self->queue enqueueDataForSending: toSend];
 	[self->queue enqueueDataForSending: toSend2];
 	
-	STAssertEquals( [[self->queue dequeueDataForSending] intValue], 0, nil);
-	STAssertEquals( [[self->queue dequeueDataForSending] intValue], 1, nil);
-	STAssertNil([self->queue dequeueDataForSending], nil);
+	XCTAssertEqual( [[self->queue dequeueDataForSending] intValue], 0);
+	XCTAssertEqual( [[self->queue dequeueDataForSending] intValue], 1);
+	XCTAssertNil([self->queue dequeueDataForSending]);
 }
 
 -(void)testRecieveEnqueueAndDequeue
@@ -43,9 +43,9 @@
 	[self->queue enqueueRecievedData: toSend];
 	[self->queue enqueueRecievedData: toSend2];
 	
-	STAssertEquals( [[self->queue dequeueRecievedData] intValue], 0, nil);
-	STAssertEquals( [[self->queue dequeueRecievedData] intValue], 1, nil);
-	STAssertNil([self->queue dequeueRecievedData], nil);
+	XCTAssertEqual( [[self->queue dequeueRecievedData] intValue], 0);
+	XCTAssertEqual( [[self->queue dequeueRecievedData] intValue], 1);
+	XCTAssertNil([self->queue dequeueRecievedData]);
 }
 
 @end

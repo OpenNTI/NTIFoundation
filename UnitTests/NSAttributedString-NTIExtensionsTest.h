@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
-@interface NSAttributedString_NTIExtensionsTest : SenTestCase
+@interface NSAttributedString_NTIExtensionsTest : XCTestCase
 
 @end

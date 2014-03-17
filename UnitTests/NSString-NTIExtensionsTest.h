@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 NextThought. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
-@interface NSString_NTIExtensionsTest : SenTestCase
+@interface NSString_NTIExtensionsTest : XCTestCase
 
 @end

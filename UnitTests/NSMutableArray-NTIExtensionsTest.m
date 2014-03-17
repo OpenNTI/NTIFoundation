@@ -16,11 +16,11 @@
 	NSMutableArray* array = [NSMutableArray arrayWithObjects: @"One", @"Two", @"Three", nil];
 	NSString* last = [array pop];
 	
-	STAssertEqualObjects(last, @"Three", nil);
-	STAssertEquals((int)[array count], 2, nil);
+	XCTAssertEqualObjects(last, @"Three");
+	XCTAssertEqual((int)[array count], 2);
 	
-	STAssertEqualObjects([array objectAtIndex: 0], @"One", nil);
-	STAssertEqualObjects([array objectAtIndex: 1], @"Two", nil);
+	XCTAssertEqualObjects([array objectAtIndex: 0], @"One");
+	XCTAssertEqualObjects([array objectAtIndex: 1], @"Two");
 }
 
 -(void)testRemoveAndReturnLastObject
@@ -28,19 +28,19 @@
 	NSMutableArray* array = [NSMutableArray arrayWithObjects: @"One", @"Two", @"Three", nil];
 	NSString* last = [array removeAndReturnLastObject];
 	
-	STAssertEqualObjects(last, @"Three", nil);
-	STAssertEquals((int)[array count], 2, nil);
+	XCTAssertEqualObjects(last, @"Three");
+	XCTAssertEqual((int)[array count], 2);
 	
-	STAssertEqualObjects([array objectAtIndex: 0], @"One", nil);
-	STAssertEqualObjects([array objectAtIndex: 1], @"Two", nil);
+	XCTAssertEqualObjects([array objectAtIndex: 0], @"One");
+	XCTAssertEqualObjects([array objectAtIndex: 1], @"Two");
 }
 
 -(void)testPush
 {
 	NSMutableArray* array = [NSMutableArray arrayWithObjects: @"One", @"Two", @"Three", nil];
 	[array push: @"Four"];
-	STAssertEquals((int)[array count], 4, nil);
-	STAssertEqualObjects([array lastObject], @"Four", nil);
+	XCTAssertEqual((int)[array count], 4);
+	XCTAssertEqualObjects([array lastObject], @"Four");
 }
 
 @end

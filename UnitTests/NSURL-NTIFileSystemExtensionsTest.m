@@ -25,8 +25,8 @@
 	u_int8_t attrValue;
 	size_t getResult = getxattr(filePath, attrName, &attrValue, sizeof(attrValue), 0, 0);
 	
-	STAssertTrue(getResult > 0, nil);
-	STAssertEquals(attrValue, (u_int8_t)1, nil);
+	XCTAssertTrue(getResult > 0);
+	XCTAssertEqual(attrValue, (u_int8_t)1);
 }
 
 -(void)verifyDontBackup: (NSURL*)file
@@ -39,12 +39,12 @@
 		BOOL success = [file getResourceValue: &result
 									   forKey: NSURLIsExcludedFromBackupKey 
 										error: &error];
-		STAssertTrue(success, nil);
-		STAssertNil(error, nil);
-		STAssertTrue([result boolValue], nil);
+		XCTAssertTrue(success);
+		XCTAssertNil(error);
+		XCTAssertTrue([result boolValue]);
 	}
 	else{
-		STFail(@"Excpected new style but NSURLIsExcludedFromBackupKey not defined");
+		XCTFail(@"Excpected new style but NSURLIsExcludedFromBackupKey not defined");
 	}
 #else
 	STFail(@"Excpected new style");
@@ -69,7 +69,7 @@
 										  attributes: nil];
 	
 	BOOL result = [tempFile addSkipBackupAttributeToItem];
-	STAssertTrue(result, nil);
+	XCTAssertTrue(result);
 	
 	BOOL oldStyle = YES;
 #if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_5_0 

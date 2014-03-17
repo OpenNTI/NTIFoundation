@@ -14,44 +14,44 @@
 
 -(void)testLastObjectOrNil
 {
-	STAssertNil([[NSArray array] lastObjectOrNil], nil);
+	XCTAssertNil([[NSArray array] lastObjectOrNil]);
 	
 	NSArray* array = [NSArray arrayWithObject: @"One"];
-	STAssertEqualObjects([array lastObjectOrNil], @"One", nil);
+	XCTAssertEqualObjects([array lastObjectOrNil], @"One");
 	
 	array = [NSArray arrayWithObjects: @"One", @"Two", nil];
-	STAssertEqualObjects([array lastObjectOrNil], @"Two", nil);
+	XCTAssertEqualObjects([array lastObjectOrNil], @"Two");
 }
 
 -(void)testIsEmptyArray
 {
-	STAssertTrue([NSArray isEmptyArray: nil], @"nil is empty");
-	STAssertTrue([NSArray isEmptyArray: [NSArray array]], nil);
-	STAssertFalse([NSArray isEmptyArray: [NSArray arrayWithObject: @"One"]], nil);
+	XCTAssertTrue([NSArray isEmptyArray: nil], @"nil is empty");
+	XCTAssertTrue([NSArray isEmptyArray: [NSArray array]]);
+	XCTAssertFalse([NSArray isEmptyArray: [NSArray arrayWithObject: @"One"]]);
 }
 
 -(void)testIsNotEmptyArray
 {
-	STAssertFalse([NSArray isNotEmptyArray: nil], @"nil is empty");
-	STAssertFalse([NSArray isNotEmptyArray: [NSArray array]], nil);
-	STAssertTrue([NSArray isNotEmptyArray: [NSArray arrayWithObject: @"One"]], nil);
+	XCTAssertFalse([NSArray isNotEmptyArray: nil], @"nil is empty");
+	XCTAssertFalse([NSArray isNotEmptyArray: [NSArray array]]);
+	XCTAssertTrue([NSArray isNotEmptyArray: [NSArray arrayWithObject: @"One"]]);
 }
 
 -(void)testLastNonNullObject
 {
 	NSArray* array = nil;
-	STAssertNil([array lastNonNullObject], nil);
-	STAssertNil([[NSArray array] lastNonNullObject], nil);
+	XCTAssertNil([array lastNonNullObject]);
+	XCTAssertNil([[NSArray array] lastNonNullObject]);
 	array = [NSArray arrayWithObjects: @"One", @"Two", [NSNull null], nil];
-	STAssertEqualObjects([array lastNonNullObject], @"Two", nil);
+	XCTAssertEqualObjects([array lastNonNullObject], @"Two");
 }
 
 -(void)testNotEmpty
 {
-	STAssertFalse([[NSArray array] notEmpty], nil);
+	XCTAssertFalse([[NSArray array] notEmpty]);
 	NSArray* array = nil;
-	STAssertFalse([array notEmpty], @"Nil should be empty");
-	STAssertTrue([[NSArray arrayWithObject: @"One"] notEmpty], nil);
+	XCTAssertFalse([array notEmpty], @"Nil should be empty");
+	XCTAssertTrue([[NSArray arrayWithObject: @"One"] notEmpty]);
 }
 
 @end

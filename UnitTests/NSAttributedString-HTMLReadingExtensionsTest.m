@@ -18,7 +18,7 @@
 	NSAttributedString* direct =
 	[NSAttributedString stringFromHTML: @"<html><body><p><i>The text</i></p></body></html>"];
 	
-	STAssertEqualObjects(
+	XCTAssertEqualObjects(
 		direct,
 		style,
 		@"Italics" );
@@ -27,7 +27,7 @@
 	[NSAttributedString stringFromHTML: @"<html><body><p><span style='font-weight: bold'>The text</span></p></body></html>"];	direct =
 	[NSAttributedString stringFromHTML: @"<html><body><p><strong>The text</strong></p></body></html>"];
 	
-	STAssertEqualObjects(
+	XCTAssertEqualObjects(
 		direct,
 		style,
 		@"Bold" );	

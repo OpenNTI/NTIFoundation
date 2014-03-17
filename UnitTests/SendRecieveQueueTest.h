@@ -6,10 +6,10 @@
 //  Copyright (c) 2012 NextThought. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 #import "SendRecieveQueue.h"
 
-@interface SendRecieveQueueTest : SenTestCase{
+@interface SendRecieveQueueTest : XCTestCase{
 	@private
 	SendRecieveQueue* queue;
 }

@@ -25,9 +25,9 @@
 	
 	NSString* eq = [NSString stringWithFormat:@"4+5"];
 	self->mathModel = [NTIMathEquationBuilder modelFromString: eq];
-	STAssertNotNil([self->mathModel fullEquation], @"It should contain a valid eq");
-	STAssertTrue([[[self->mathModel fullEquation] toString] isEqualToString: eq], @"Equations string should be similar");
-	STAssertTrue([[[self->mathModel fullEquation] latexValue]isEqualToString: @"4+5"], @"Equations laTex should be similar");
+	XCTAssertNotNil([self->mathModel fullEquation], @"It should contain a valid eq");
+	XCTAssertTrue([[[self->mathModel fullEquation] toString] isEqualToString: eq], @"Equations string should be similar");
+	XCTAssertTrue([[[self->mathModel fullEquation] latexValue]isEqualToString: @"4+5"], @"Equations laTex should be similar");
 }
 
 -(void)testSimplePrecedenceLogic
@@ -36,8 +36,8 @@
 	self->mathModel = [NTIMathEquationBuilder modelFromString: eq];
 	
 	NTIMathSymbol* eqMath = [self->mathModel fullEquation];
-	STAssertTrue([[eqMath toString] isEqualToString: eq], @"Equations string should be equal");
-	STAssertTrue([[[self->mathModel fullEquation] latexValue]isEqualToString: eq], @"Equations laTex should be similar");
+	XCTAssertTrue([[eqMath toString] isEqualToString: eq], @"Equations string should be equal");
+	XCTAssertTrue([[[self->mathModel fullEquation] latexValue]isEqualToString: eq], @"Equations laTex should be similar");
 }
 
 -(void)testSimpleParanthesisEquation
@@ -46,8 +46,8 @@
 	self->mathModel = [NTIMathEquationBuilder modelFromString: eq];
 	
 	NTIMathSymbol* eqMath = [self->mathModel fullEquation];
-	STAssertTrue([[eqMath toString] isEqualToString: eq], @"Equations string should be similar");
-	STAssertTrue([[eqMath latexValue] isEqualToString: @"(4+8)*2"], @"Equations laTex should be similar");
+	XCTAssertTrue([[eqMath toString] isEqualToString: eq], @"Equations string should be similar");
+	XCTAssertTrue([[eqMath latexValue] isEqualToString: @"(4+8)*2"], @"Equations laTex should be similar");
 }
 
 -(void)testFractionEquation

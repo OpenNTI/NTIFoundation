@@ -68,7 +68,6 @@
 		403D0DC6143E193E0049A755 /* NTIRTFDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 403D0DC0143E193E0049A755 /* NTIRTFDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		403D0DC7143E193E0049A755 /* NTIRTFDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D0DC1143E193E0049A755 /* NTIRTFDocument.m */; };
 		403D0DD0143E3AE20049A755 /* NSAttributedString-HTMLReadingExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D0DCC143E38FD0049A755 /* NSAttributedString-HTMLReadingExtensionsTest.m */; };
-		403FD882148D3D1400811AB5 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D7D43213E32D2700652DAC /* SenTestingKit.framework */; };
 		40475AEB142A4940003323A9 /* SendRecieveQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 40475AE9142A493F003323A9 /* SendRecieveQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40475AEC142A4940003323A9 /* SendRecieveQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 40475AEA142A4940003323A9 /* SendRecieveQueue.m */; };
 		404A67A0156D906900A81B6A /* UIDevice-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 404A679E156D906900A81B6A /* UIDevice-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -169,7 +168,6 @@
 		40C0E1081443AFAD00142406 /* SocketIOPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D754A814278E6900335BEF /* SocketIOPacket.m */; };
 		40C0E1091443AFB000142406 /* SocketIOSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D754AC142791AF00335BEF /* SocketIOSocket.m */; };
 		40C0E10A1443AFB300142406 /* SocketIOTransport.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D754B0142791CD00335BEF /* SocketIOTransport.m */; };
-		40C34CAC14D88DD5000D91A8 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72D7D43213E32D2700652DAC /* SenTestingKit.framework */; };
 		40C34CAD14D88DD5000D91A8 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408FBF0A143F63A90095DD84 /* UIKit.framework */; };
 		40C34CAE14D88DD5000D91A8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72CBA96B1385CF1F00E3D28D /* Foundation.framework */; };
 		40C34CB414D88DD5000D91A8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 40C34CB214D88DD5000D91A8 /* InfoPlist.strings */; };
@@ -203,6 +201,7 @@
 		40F72DA8156EE1C50050C93E /* NTIMathEquationBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 40F72DA6156EE1C40050C93E /* NTIMathEquationBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40F72DA9156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */; };
 		40F72DAA156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */; };
+		40FB28EE18D2B47B00A450FA /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40FB28B018D2AEAF00A450FA /* XCTest.framework */; };
 		4C2ECDD51549D0A400C69E3A /* NTIMathInputExpressionModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2ECDD31549D0A400C69E3A /* NTIMathInputExpressionModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2ECDD61549D0A400C69E3A /* NTIMathInputExpressionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2ECDD41549D0A400C69E3A /* NTIMathInputExpressionModel.m */; };
 		4C2ECDD71549D0A400C69E3A /* NTIMathInputExpressionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2ECDD41549D0A400C69E3A /* NTIMathInputExpressionModel.m */; };
@@ -894,6 +893,7 @@
 		40F56F2215CAC518001FC309 /* NTIBadgeCountView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIBadgeCountView.m; sourceTree = "<group>"; };
 		40F72DA6156EE1C40050C93E /* NTIMathEquationBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathEquationBuilder.h; sourceTree = "<group>"; };
 		40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathEquationBuilder.m; sourceTree = "<group>"; };
+		40FB28B018D2AEAF00A450FA /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		4C2ECDD31549D0A400C69E3A /* NTIMathInputExpressionModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathInputExpressionModel.h; sourceTree = "<group>"; };
 		4C2ECDD41549D0A400C69E3A /* NTIMathInputExpressionModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathInputExpressionModel.m; sourceTree = "<group>"; };
 		4C3BDC1A14EAF87F008ED49D /* NTIInspectorSliceObjectPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIInspectorSliceObjectPair.h; sourceTree = "<group>"; };
@@ -972,10 +972,9 @@
 		72D3610613DB6B2A00257C73 /* OmniQuartz.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OmniQuartz.xcodeproj; path = ../OmniGroup/Frameworks/OmniQuartz/OmniQuartz.xcodeproj; sourceTree = "<group>"; };
 		72D3610713DB6B2A00257C73 /* OmniUI.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OmniUI.xcodeproj; path = ../OmniGroup/Frameworks/OmniUI/iPad/OmniUI.xcodeproj; sourceTree = "<group>"; };
 		72D3610813DB6B2A00257C73 /* OmniUnzip.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = OmniUnzip.xcodeproj; path = ../OmniGroup/Frameworks/OmniUnzip/OmniUnzip.xcodeproj; sourceTree = "<group>"; };
-		72D7D43213E32D2700652DAC /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		72D7D43A13E32E9500652DAC /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		72D7D43E13E32F0100652DAC /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
-		72D8185913955D8C00473994 /* NTIFoundationLogicTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NTIFoundationLogicTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		72D8185913955D8C00473994 /* NTIFoundationLogicTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NTIFoundationLogicTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		72D8185F13955D8C00473994 /* UnitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnitTests-Info.plist"; sourceTree = "<group>"; };
 		72D8186113955D8C00473994 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		72D8186313955D8C00473994 /* UnitTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UnitTests-Prefix.pch"; sourceTree = "<group>"; };
@@ -1020,7 +1019,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				40C34CAC14D88DD5000D91A8 /* SenTestingKit.framework in Frameworks */,
 				40C34CAD14D88DD5000D91A8 /* UIKit.framework in Frameworks */,
 				40C34CAE14D88DD5000D91A8 /* Foundation.framework in Frameworks */,
 			);
@@ -1045,6 +1043,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40FB28EE18D2B47B00A450FA /* XCTest.framework in Frameworks */,
 				406151A617F211DF004B7B0A /* StoreKit.framework in Frameworks */,
 				406151A717F211E8004B7B0A /* libOmniDAV.a in Frameworks */,
 				40F56E8D15C8BB84001FC309 /* libNTILogicTestBase.a in Frameworks */,
@@ -1059,7 +1058,6 @@
 				72D7D42F13E32D2700652DAC /* libOmniQuartz.a in Frameworks */,
 				72D7D43013E32D2700652DAC /* libOmniUI.a in Frameworks */,
 				72D7D43113E32D2700652DAC /* libOmniUnzip.a in Frameworks */,
-				403FD882148D3D1400811AB5 /* SenTestingKit.framework in Frameworks */,
 				408FBF19143F66A40095DD84 /* ImageIO.framework in Frameworks */,
 				408FBF15143F64620095DD84 /* MessageUI.framework in Frameworks */,
 				408FBF13143F64430095DD84 /* QuartzCore.framework in Frameworks */,
@@ -1491,7 +1489,7 @@
 		72CBA9661385CF1F00E3D28D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				72D8185913955D8C00473994 /* NTIFoundationLogicTests.octest */,
+				72D8185913955D8C00473994 /* NTIFoundationLogicTests.xctest */,
 				72C0D196142529E800D526D8 /* libNTIFoundation.a */,
 				40572C5914C894940032D2DB /* NTINavigationExample2.app */,
 				40C34CAB14D88DD5000D91A8 /* NTIFoundationApplicationTests.octest */,
@@ -1503,6 +1501,7 @@
 		72CBA9681385CF1F00E3D28D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				40FB28B018D2AEAF00A450FA /* XCTest.framework */,
 				406151A517F211DF004B7B0A /* StoreKit.framework */,
 				40AB82441566A6F500BB7375 /* OCHamcrestIOS.framework */,
 				40B5B4B114C89A9C009D5810 /* CoreImage.framework */,
@@ -1519,7 +1518,6 @@
 				408FBF06143F62D80095DD84 /* CoreText.framework */,
 				72D7D43A13E32E9500652DAC /* libz.dylib */,
 				72D7D43E13E32F0100652DAC /* libxml2.dylib */,
-				72D7D43213E32D2700652DAC /* SenTestingKit.framework */,
 				72D3610013DB6B2A00257C73 /* ExternalFrameworks */,
 				7271BBEC13B7DC6600241FEC /* FixStringsFile.xcodeproj */,
 				7271BBEA13B7DC1400241FEC /* CopyLibraryResources */,
@@ -1957,8 +1955,8 @@
 			);
 			name = NTIFoundationLogicTests;
 			productName = UnitTests;
-			productReference = 72D8185913955D8C00473994 /* NTIFoundationLogicTests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productReference = 72D8185913955D8C00473994 /* NTIFoundationLogicTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -2795,8 +2793,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
 					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
 					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
 					"\"$(SRCROOT)/../NTIWorkspace/OCHamcrest-3.0.1\"",
 				);
@@ -2809,7 +2807,7 @@
 					"$(OBJROOT)/UninstalledProducts/include",
 					"\"$(SRCROOT)/../NTIWorkspace/OCMock\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(DEVELOPER_DIR)/usr/lib\"",
@@ -2819,12 +2817,9 @@
 				OTHER_LDFLAGS = (
 					"-lstdc++",
 					"-ObjC",
-					"-framework",
-					SenTestingKit,
 					"$(LINK_PROFILE_$(SHOULD_LINK_PROFILE))",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Adhoc;
 		};
@@ -3159,8 +3154,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
 					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
 					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
 					"\"$(SRCROOT)/../NTIWorkspace/OCHamcrest-3.0.1\"",
 				);
@@ -3179,7 +3174,7 @@
 					"$(OBJROOT)/UninstalledProducts/include",
 					"\"$(SRCROOT)/../NTIWorkspace/OCMock\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(DEVELOPER_DIR)/usr/lib\"",
@@ -3189,12 +3184,9 @@
 				OTHER_LDFLAGS = (
 					"-lstdc++",
 					"-ObjC",
-					"-framework",
-					SenTestingKit,
 					"$(LINK_PROFILE_$(SHOULD_LINK_PROFILE))",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Debug;
 		};
@@ -3205,8 +3197,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
 					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
 					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
 					"\"$(SRCROOT)/../NTIWorkspace/OCHamcrest-3.0.1\"",
 				);
@@ -3219,7 +3211,7 @@
 					"$(OBJROOT)/UninstalledProducts/include",
 					"\"$(SRCROOT)/../NTIWorkspace/OCMock\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(DEVELOPER_DIR)/usr/lib\"",
@@ -3229,12 +3221,9 @@
 				OTHER_LDFLAGS = (
 					"-lstdc++",
 					"-ObjC",
-					"-framework",
-					SenTestingKit,
 					"$(LINK_PROFILE_$(SHOULD_LINK_PROFILE))",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
 		};

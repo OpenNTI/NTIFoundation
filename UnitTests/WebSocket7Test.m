@@ -27,18 +27,18 @@
 	NSUInteger currentByte = 0;
 	const void* bytes = [responseBytes bytes];
 	while(currentByte < responseBytes.length - 1){
-		STAssertEquals((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
+		XCTAssertEqual((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
 											  maxLength: 1 
-									  makesFullResponse: NULL], 1, nil);
-		STAssertFalse([buffer containsFullResponse], nil);
+									  makesFullResponse: NULL], 1);
+		XCTAssertFalse([buffer containsFullResponse]);
 		currentByte++;
 	}
-	STAssertEquals((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
+	XCTAssertEqual((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
 										  maxLength: 1 
-								  makesFullResponse: NULL], 1, nil);
-	STAssertTrue([buffer containsFullResponse], nil);
+								  makesFullResponse: NULL], 1);
+	XCTAssertTrue([buffer containsFullResponse]);
 	
-	STAssertEqualObjects(buffer.dataBuffer, responseBytes, nil);
+	XCTAssertEqualObjects(buffer.dataBuffer, responseBytes);
 }
 
 -(void)testLongWebSocketResponseToData
@@ -48,16 +48,16 @@
 	NSUInteger currentByte = 0;
 	const void* bytes = [responseBytes bytes];
 	while(currentByte < responseBytes.length){
-		STAssertEquals((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
+		XCTAssertEqual((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
 											  maxLength: 1 
-									  makesFullResponse: NULL], 1, nil);
+									  makesFullResponse: NULL], 1);
 		currentByte++;
 	}
 	WebSocketData* wsData = buffer.websocketData;
 	
 	NSString* dataString = [NSString stringWithData: wsData.data encoding: NSUTF8StringEncoding];
 	
-	STAssertEqualObjects(dataString, @"1::", nil);
+	XCTAssertEqualObjects(dataString, @"1::");
 }
 
 
@@ -75,9 +75,9 @@
 	NSUInteger currentByte = 0;
 	const void* bytes = [responseBytes bytes];
 	while(currentByte < responseBytes.length){
-		STAssertEquals((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
+		XCTAssertEqual((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
 											  maxLength: 1 
-									  makesFullResponse: NULL], 1, nil);
+									  makesFullResponse: NULL], 1);
 		currentByte++;
 	}
 	WebSocketData* wsData = buffer.websocketData;
@@ -88,7 +88,7 @@
 																  URLForResource: @"LongWebSocketHexStringResult.txt" withExtension: nil]
 													   encoding: NSUTF8StringEncoding error: nil];
 	
-	STAssertEqualObjects(dataString, correctResult, nil);
+	XCTAssertEqualObjects(dataString, correctResult);
 }
 
 -(void)testWebSocketResponseBufferAllAtOnce
@@ -101,9 +101,9 @@
 											maxLength: responseBytes.length 
 									makesFullResponse: &containsFullResponse];
 	
-	STAssertTrue(containsFullResponse, nil);
-	STAssertEquals(consumed, responseBytes.length, nil);
-	STAssertEqualObjects(buffer.dataBuffer, responseBytes, nil);
+	XCTAssertTrue(containsFullResponse);
+	XCTAssertEqual(consumed, responseBytes.length);
+	XCTAssertEqualObjects(buffer.dataBuffer, responseBytes);
 }
 
 -(void)testWebSocketResponseBufferMultiplePackets
@@ -116,9 +116,9 @@
 											maxLength: responseBytes.length 
 									makesFullResponse: &containsFullResponse];
 	
-	STAssertTrue(containsFullResponse, nil);
-	STAssertEquals((int)consumed, 5, nil);
-	STAssertEqualObjects(buffer.dataBuffer, [NSData dataWithHexString: @"8103313a3a" error: nil], nil);
+	XCTAssertTrue(containsFullResponse);
+	XCTAssertEqual((int)consumed, 5);
+	XCTAssertEqualObjects(buffer.dataBuffer, [NSData dataWithHexString: @"8103313a3a" error: nil]);
 	
 	buffer = [[WebSocketResponseBuffer alloc] init];
 	containsFullResponse = NO;
@@ -126,9 +126,9 @@
 								 maxLength: responseBytes.length - consumed 
 						 makesFullResponse: &containsFullResponse];
 	
-	STAssertTrue(containsFullResponse, nil);
-	STAssertEquals((int)consumed, 5, nil);
-	STAssertEqualObjects(buffer.dataBuffer, [NSData dataWithHexString: @"8103313a3a" error: nil], nil);
+	XCTAssertTrue(containsFullResponse);
+	XCTAssertEqual((int)consumed, 5);
+	XCTAssertEqualObjects(buffer.dataBuffer, [NSData dataWithHexString: @"8103313a3a" error: nil]);
 
 }
 
@@ -139,18 +139,18 @@
 	NSUInteger currentByte = 0;
 	const void* bytes = [responseBytes bytes];
 	while(currentByte < responseBytes.length - 1){
-		STAssertEquals((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
+		XCTAssertEqual((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
 											  maxLength: 1 
-									  makesFullResponse: NULL], 1, nil);
-		STAssertFalse([buffer containsFullResponse], nil);
+									  makesFullResponse: NULL], 1);
+		XCTAssertFalse([buffer containsFullResponse]);
 		currentByte++;
 	}
-	STAssertEquals((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
+	XCTAssertEqual((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
 										  maxLength: 1 
-								  makesFullResponse: NULL], 1, nil);
-	STAssertTrue([buffer containsFullResponse], nil);
+								  makesFullResponse: NULL], 1);
+	XCTAssertTrue([buffer containsFullResponse]);
 	
-	STAssertEqualObjects(buffer.dataBuffer, responseBytes, nil);
+	XCTAssertEqualObjects(buffer.dataBuffer, responseBytes);
 }
 
 
@@ -165,18 +165,18 @@
 	NSUInteger currentByte = 0;
 	const void* bytes = [handshakeBytes bytes];
 	while(currentByte < handshakeBytes.length - 1){
-		STAssertEquals((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
+		XCTAssertEqual((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
 										maxLength: 1 
-								makesFullResponse: NULL], 1, nil);
-		STAssertFalse([buffer containsFullResponse], nil);
+								makesFullResponse: NULL], 1);
+		XCTAssertFalse([buffer containsFullResponse]);
 		currentByte++;
 	}
-	STAssertEquals((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
+	XCTAssertEqual((int)[buffer appendBytesToBuffer: (uint8_t*)bytes+currentByte 
 										  maxLength: 1 
-								  makesFullResponse: NULL], 1, nil);
-	STAssertTrue([buffer containsFullResponse], nil);
+								  makesFullResponse: NULL], 1);
+	XCTAssertTrue([buffer containsFullResponse]);
 	
-	STAssertEqualObjects(buffer.dataBuffer, handshakeBytes, nil);
+	XCTAssertEqualObjects(buffer.dataBuffer, handshakeBytes);
 					
 }
 
@@ -195,9 +195,9 @@
 											maxLength: fullLength 
 									makesFullResponse: NULL];
 	
-	STAssertEquals(fullLength, consumed, 
+	XCTAssertEqual(fullLength, consumed, 
 				   @"Expected all bytes (%ld) to be consumed but only consumed %ld", 
-				   fullLength, consumed);
+				   (unsigned long)fullLength, (unsigned long)consumed);
 	
 	NSMutableData* handshakeWithMore = [NSMutableData dataWithData: fullHandshakeData];
 	[handshakeWithMore appendData: [@"foobarfalksdfaldf" dataUsingEncoding: NSUTF8StringEncoding]];
@@ -205,10 +205,10 @@
 	consumed = [buffer appendBytesToBuffer: (uint8_t*)handshakeWithMore.bytes
 								 maxLength: handshakeWithMore.length 
 						 makesFullResponse: NULL];
-	STAssertTrue( handshakeWithMore.length > fullLength, nil);
-	STAssertEquals(fullLength, consumed, 
+	XCTAssertTrue( handshakeWithMore.length > fullLength);
+	XCTAssertEqual(fullLength, consumed, 
 				   @"Expected %ld bytes to be consumed but only consumed %ld", 
-				   fullLength, consumed);
+				   (unsigned long)fullLength, (unsigned long)consumed);
 }
 
 BOOL isSuccessfulHandshakeResponse(NSString* response, NSString* key);
@@ -218,11 +218,11 @@ BOOL isSuccessfulHandshakeResponse(NSString* response, NSString* key);
 	NSString* goodKey = @"w5jCl3LDpwc/Gj4EOgk7UsOXEMKa";
 	NSString* handshake = @"HTTP/1.1 101 Switching Protocols\nUpgrade: WebSocket\nConnection: Upgrade\nSec-WebSocket-Accept: hrIyuqmFm4k655eTa9Ibgw8Kvss=\nAccess-Control-Allow-Origin: http://ipad.nextthought.com\nAccess-Control-Allow-Credentials: true\r\n\r\n";
 	
-	STAssertTrue(isSuccessfulHandshakeResponse(handshake, goodKey), nil);
+	XCTAssertTrue(isSuccessfulHandshakeResponse(handshake, goodKey));
 	
 	NSString* badKey = @"foobar";
 	
-	STAssertFalse(isSuccessfulHandshakeResponse(handshake, badKey), nil);
+	XCTAssertFalse(isSuccessfulHandshakeResponse(handshake, badKey));
 }
 
 static NSHTTPCookie* cookieWithNameValue(NSString* domain, NSString* name, NSString* value)
@@ -255,17 +255,17 @@ NSString* cookieHeaderForServer(NSURL* server);
 		[cookieJar deleteCookie: cookie];
 	}
 	
-	STAssertEqualObjects(cookieHeaderForServer(noCookieHost), @"", @"Excpected empty cookie header", nil);
+	XCTAssertEqualObjects(cookieHeaderForServer(noCookieHost), @"", @"Excpected empty cookie header", nil);
 	
 	NSHTTPCookie* c1 = cookieWithNameValue(@"cookiehost.com", @"foo", @"bar");
 	[cookieJar setCookie: c1];
 	
-	STAssertEqualObjects(cookieHeaderForServer(cookieHost), @"Cookie: foo=bar", nil);
+	XCTAssertEqualObjects(cookieHeaderForServer(cookieHost), @"Cookie: foo=bar");
 	
 	NSHTTPCookie* c2 = cookieWithNameValue(@"cookiehost.com", @"red", @"fish");
 	[cookieJar setCookie: c2];
 	
-	STAssertEqualObjects(cookieHeaderForServer(cookieHost), @"Cookie: foo=bar; red=fish", nil);
+	XCTAssertEqualObjects(cookieHeaderForServer(cookieHost), @"Cookie: foo=bar; red=fish");
 	
 }
 
@@ -277,24 +277,24 @@ NSString* cookieHeaderForServer(NSURL* server);
 	
 	uint8_t* firstByte = (uint8_t*)closeData.bytes;
 	uint8_t* secondByte = (uint8_t*)(closeData.bytes + 1);
-	STAssertEquals(*firstByte, (uint8_t)0x88, nil);
-	STAssertEquals(*secondByte, (uint8_t)0x80, nil);
+	XCTAssertEqual(*firstByte, (uint8_t)0x88);
+	XCTAssertEqual(*secondByte, (uint8_t)0x80);
 	
-	STAssertEquals((int)closeData.length, 6, nil);
+	XCTAssertEqual((int)closeData.length, 6);
 }
 
 -(void)testCloseResponse
 {
 	NSMutableData* closeBytes = [NSMutableData dataWithHexString: @"0x8800" error: nil];
-	STAssertNotNil(closeBytes, @"Unable to parse close bytes");
+	XCTAssertNotNil(closeBytes, @"Unable to parse close bytes");
 	
 	WebSocketResponseBuffer* buffer = [[WebSocketResponseBuffer alloc] init];
 	BOOL isFull = NO;
 	[buffer appendBytesToBuffer: (uint8_t*)closeBytes.bytes maxLength: 4 makesFullResponse: &isFull];
 	
-	STAssertTrue(isFull, @"Expected full buffer");
+	XCTAssertTrue(isFull, @"Expected full buffer");
 	
-	STAssertTrue([buffer isCloseResponse], @"Expected close response");
+	XCTAssertTrue([buffer isCloseResponse], @"Expected close response");
 }
 
 NSString* generateSecWebsocketKey();
@@ -303,7 +303,7 @@ NSString* generateSecWebsocketKey();
 {
 	NSString* key = generateSecWebsocketKey();
 	NSData* data = [NSData dataWithBase64String: key];
-	STAssertEquals((int)data.length, 16, @"Expected 16 bytes of data but got");
+	XCTAssertEqual((int)data.length, 16, @"Expected 16 bytes of data but got");
 }
 
 void sizeToBytes(NSUInteger length, uint8_t* sizeInfoPointer, int* sizeLength);
@@ -316,8 +316,8 @@ void sizeToBytes(NSUInteger length, uint8_t* sizeInfoPointer, int* sizeLength);
 	
 	sizeToBytes(smallSize, bytes, &length);
 	
-	STAssertEquals(length, 1, @"Expected one byte", nil);
-	STAssertEquals((int)bytes[0], 87, @"Excpected size of 174", nil);
+	XCTAssertEqual(length, 1, @"Expected one byte", nil);
+	XCTAssertEqual((int)bytes[0], 87, @"Excpected size of 174", nil);
 }
 
 -(void)testSizeToBytesMedium
@@ -329,10 +329,10 @@ void sizeToBytes(NSUInteger length, uint8_t* sizeInfoPointer, int* sizeLength);
 	
 	sizeToBytes(smallSize, bytes, &length);
 	
-	STAssertEquals(length, 3, @"Expected one byte", nil);
-	STAssertEquals((int)bytes[0], 126, @"Excpected size control of 126", nil);
-	STAssertEquals((int)bytes[1], 1, @"Excpected most significant byte of 1", nil);
-	STAssertEquals((int)bytes[2], 56, @"Excpected least significant byte of 56", nil);
+	XCTAssertEqual(length, 3, @"Expected one byte", nil);
+	XCTAssertEqual((int)bytes[0], 126, @"Excpected size control of 126", nil);
+	XCTAssertEqual((int)bytes[1], 1, @"Excpected most significant byte of 1", nil);
+	XCTAssertEqual((int)bytes[2], 56, @"Excpected least significant byte of 56", nil);
 }
 
 -(void)testSizeToBytesLong
@@ -345,16 +345,16 @@ void sizeToBytes(NSUInteger length, uint8_t* sizeInfoPointer, int* sizeLength);
 	
 	sizeToBytes(smallSize, bytes, &length);
 	
-	STAssertEquals(length, 9, @"Expected one byte", nil);
-	STAssertEquals((int)bytes[0], 127, @"Excpected size control of 127", nil);
-	STAssertEquals((int)bytes[1], 0, @"Excpected byte 1 to be 0", nil);
-	STAssertEquals((int)bytes[2], 0, @"Excpected byte 2 to be 0", nil);
-	STAssertEquals((int)bytes[3], 0, @"Excpected byte 3 to be 0", nil);
-	STAssertEquals((int)bytes[4], 0, @"Excpected byte 4 to be 0", nil);
-	STAssertEquals((int)bytes[5], 0, @"Excpected byte 5 to be 0", nil);
-	STAssertEquals((int)bytes[6], 150, @"Excpected byte 6 to be 0", nil);
-	STAssertEquals((int)bytes[7], 180, @"Excpected byte 7 to be 0", nil);
-	STAssertEquals((int)bytes[8], 63, @"Excpected byte 8 to be 0", nil);
+	XCTAssertEqual(length, 9, @"Expected one byte", nil);
+	XCTAssertEqual((int)bytes[0], 127, @"Excpected size control of 127", nil);
+	XCTAssertEqual((int)bytes[1], 0, @"Excpected byte 1 to be 0", nil);
+	XCTAssertEqual((int)bytes[2], 0, @"Excpected byte 2 to be 0", nil);
+	XCTAssertEqual((int)bytes[3], 0, @"Excpected byte 3 to be 0", nil);
+	XCTAssertEqual((int)bytes[4], 0, @"Excpected byte 4 to be 0", nil);
+	XCTAssertEqual((int)bytes[5], 0, @"Excpected byte 5 to be 0", nil);
+	XCTAssertEqual((int)bytes[6], 150, @"Excpected byte 6 to be 0", nil);
+	XCTAssertEqual((int)bytes[7], 180, @"Excpected byte 7 to be 0", nil);
+	XCTAssertEqual((int)bytes[8], 63, @"Excpected byte 8 to be 0", nil);
 }
 
 @end
