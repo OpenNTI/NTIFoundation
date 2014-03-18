@@ -181,7 +181,7 @@
 		UIFont* defaultFont = [self defaultFont];
 		if(defaultFont){
 			NSMutableAttributedString* withFont = [[NSMutableAttributedString alloc] initWithAttributedString: newAttrText];
-			[withFont setAttributes: @{NSFontAttributeName: [self defaultFont]} range: NSMakeRange(0, withFont.length)];
+			[withFont addAttribute: NSFontAttributeName value: [self defaultFont] range: NSMakeRange(0, withFont.length)];
 			newAttrText = withFont;
 		}
 	}
