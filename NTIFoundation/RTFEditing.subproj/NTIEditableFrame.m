@@ -16,12 +16,67 @@
 #import "NTIHTMLReader.h"
 #import <OmniAppKit/OAFontDescriptor.h>
 
+static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat width, BOOL multiline)
+{
+    CGSize size = CGSizeMake(width, 0.0);
+    NSStringDrawingOptions options = NSStringDrawingUsesFontLeading;
+    if (multiline) {
+        options = options | NSStringDrawingUsesLineFragmentOrigin;
+    }
+    
+    CGRect bounds = [string boundingRectWithSize:size
+                                         options:options
+                                         context:nil];
+    return ceil(bounds.size.height + 1);
+}
+
 @interface NTIEditableFrame()<UIGestureRecognizerDelegate>
 @property (nonatomic, strong) UIGestureRecognizer* attachmentGestureRecognizer;
 @end
 
 @implementation NTIEditableFrame
 @synthesize attachmentDelegate=nr_attachmentDelegate;
+
++(UIFont*)defaultFont
+{
+	Class readerClass = [NTIHTMLReader readerClass];
+	
+	OAFontDescriptor* fontDescriptor = [[OAFontDescriptor alloc]
+										initWithFamily: [readerClass defaultFontFamily]
+										size: [readerClass defaultFontSize]];
+	
+	return [fontDescriptor font];
+}
+
++(NSAttributedString*)attributedStringMutatedForDisplay: (NSAttributedString*)str
+{
+	//Sometimes we get plain text from the webapp.  When that happens we get passed an attributed
+	//string with no attributes (it obviosly doesn't go through the html parser so we don't pick up the default from there)
+	//If we have no fonts in the attributed string lets set a default.
+	__block BOOL hasFont = NO;
+	[str enumerateAttribute: NSFontAttributeName
+					inRange: NSMakeRange(0, str.length) options: 0 usingBlock:^(id value, NSRange range, BOOL *stop) {
+						hasFont = OFNOTNULL(value);
+						*stop = hasFont;
+					}];
+	
+	if(!hasFont){
+		UIFont* defaultFont = [self defaultFont];
+		if(defaultFont){
+			NSMutableAttributedString* withFont = [[NSMutableAttributedString alloc] initWithAttributedString: str];
+			[withFont addAttribute: NSFontAttributeName value: [self defaultFont] range: NSMakeRange(0, withFont.length)];
+			str = withFont;
+		}
+	}
+	
+	return str;
+}
+
++(CGFloat)heightForAttributedString:(NSAttributedString *)str width:(CGFloat)width
+{
+	str = [self attributedStringMutatedForDisplay: str];
+	return rowHeightForAttributedString(str, width, YES);
+}
 
 -(id)initWithFrame:(CGRect)frame
 {
@@ -94,13 +149,7 @@
 //font is specified.
 -(UIFont*)defaultFont
 {
-	Class readerClass = [NTIHTMLReader readerClass];
-	
-	OAFontDescriptor* fontDescriptor = [[OAFontDescriptor alloc]
-										initWithFamily: [readerClass defaultFontFamily]
-										size: [readerClass defaultFontSize]];
-	
-	return [fontDescriptor font];
+	return [[self class] defaultFont];
 }
 
 //TODO: Figure out if these typingAtributes messages are still needed
@@ -157,6 +206,8 @@
 		}
 	}];
 }
+
+
 -(void)setAttributedText: (NSAttributedString *)newAttrText
 {
 	//TODO: I'm pretty sure there is a bug here.  If we are in a cell that gets reused
@@ -167,24 +218,7 @@
 	[self detachFromOldFrames: newAttrText];
 	[self attachToAttachmentCells: newAttrText];
 	
-	//Sometimes we get plain text from the webapp.  When that happens we get passed an attributed
-	//string with no attributes (it obviosly doesn't go through the html parser so we don't pick up the default from there)
-	//If we have no fonts in the attributed string lets set a default.
-	__block BOOL hasFont = NO;
-	[newAttrText enumerateAttribute: NSFontAttributeName
-							inRange: NSMakeRange(0, newAttrText.length) options: 0 usingBlock:^(id value, NSRange range, BOOL *stop) {
-								hasFont = OFNOTNULL(value);
-								*stop = hasFont;
-							}];
-	
-	if(!hasFont){
-		UIFont* defaultFont = [self defaultFont];
-		if(defaultFont){
-			NSMutableAttributedString* withFont = [[NSMutableAttributedString alloc] initWithAttributedString: newAttrText];
-			[withFont addAttribute: NSFontAttributeName value: [self defaultFont] range: NSMakeRange(0, withFont.length)];
-			newAttrText = withFont;
-		}
-	}
+	newAttrText = [[self class] attributedStringMutatedForDisplay: newAttrText];
 	
 	[super setAttributedText: newAttrText];
 }
