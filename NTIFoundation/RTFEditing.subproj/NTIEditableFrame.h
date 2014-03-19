@@ -24,6 +24,9 @@
 	@private
 	id __weak nr_attachmentDelegate;
 }
+
++(CGFloat)heightForAttributedString: (NSAttributedString*)str width: (CGFloat)width;
+
 @property (nonatomic, weak) id attachmentDelegate;
 @property (nonatomic, assign) BOOL allowsAddingCustomObjects;
 
