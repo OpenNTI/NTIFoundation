@@ -81,4 +81,30 @@ static NSString* shortDateStringNL( NSDate* date )
 	return [NSString stringWithFormat:@"%lu %@", (unsigned long)timeSince, timeUnitString];
 }
 
+- (NSString *)stringFromTimeIntervalWithLargestFittingTimeUnitWithinDaysUsingCutoff: (NSTimeInterval)cutoff;
+{
+	static NSDateFormatter* dateFormatter;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		dateFormatter = [[NSDateFormatter alloc] init];
+		[dateFormatter setDateStyle: NSDateFormatterMediumStyle];
+		[dateFormatter setTimeStyle: NSDateFormatterShortStyle];
+	});
+	
+	NSString* dateDisplayString = nil;
+	NSTimeInterval cutoffPoint = [[NSDate date] timeIntervalSince1970] - cutoff;
+	if( [self timeIntervalSince1970] < cutoffPoint ) {
+		//if we are older than the cutoff show the full date
+		dateDisplayString = [dateFormatter stringFromDate: self];
+	}
+	else {
+		dateDisplayString = [NSDate stringFromTimeIntervalWithLargestFittingTimeUnitWithinDays:
+							 [[NSDate date] timeIntervalSince1970] - [self timeIntervalSince1970]];
+		//TODO: externalize
+		dateDisplayString = [dateDisplayString stringByAppendingString: @" ago"];
+	}
+	
+	return dateDisplayString;
+}
+
 @end

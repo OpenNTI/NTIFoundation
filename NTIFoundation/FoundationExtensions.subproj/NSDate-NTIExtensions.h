@@ -27,4 +27,10 @@
  */
 + (NSString *)stringFromTimeIntervalWithLargestFittingTimeUnitWithinDays:(NSUInteger)timeInterval;
 
+/**
+ * Same as stringFromTimeIntervalWithLargestFittingTimeUnitWithinDays but if it is more than cutoff seconds
+ * just displays the full date.
+ */
+- (NSString *)stringFromTimeIntervalWithLargestFittingTimeUnitWithinDaysUsingCutoff: (NSTimeInterval)cutoff;
+
 @end
