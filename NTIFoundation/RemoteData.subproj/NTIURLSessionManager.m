@@ -182,5 +182,10 @@
 	}
 }
 
+-(void)dealloc{
+	//Invalidate session to avoid memory leak
+	[self.session invalidateAndCancel];
+	self.session = nil;
+}
 
 @end
