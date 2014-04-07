@@ -249,8 +249,8 @@ static inline void writeString(OFDataBuffer* dataBuffer, NSString* string)
 	int newFontIndex = [newFontIndexValue intValue];
 	BOOL newFontBold = [newFontDescriptor bold];
 	BOOL newFontItalic = [newFontDescriptor italic];
-	unsigned int newUnderline = [newAttributes unsignedIntForKey: (NSString*)kCTUnderlineStyleAttributeName 
-													defaultValue: kCTUnderlineStyleNone];
+	NSUnderlineStyle newUnderline = [newAttributes unsignedIntForKey: (NSString*)NSUnderlineStyleAttributeName
+													defaultValue: NSUnderlineStyleNone];
 	
 	BOOL shouldWriteNewFontSize;
 	BOOL shouldWriteNewFontInfo;
@@ -308,7 +308,7 @@ static inline void writeString(OFDataBuffer* dataBuffer, NSString* string)
 		
 		if( newUnderline != self->state->underline ) {
 			//Core text supports a boatload of underline styles. HTML doesn't (?)
-			if( (newUnderline & 0xFF) == kCTUnderlineStyleNone) {
+			if( newUnderline == NSUnderlineStyleNone) {
 				OFDataBufferAppendCString(self->dataBuffer, " text-decoration: none;" );
 			} 
 			else {
