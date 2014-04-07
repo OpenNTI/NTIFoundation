@@ -56,11 +56,26 @@
 
 @end
 
+static Class writerClass = nil;
+
 @implementation NTIHTMLWriter
 
 @synthesize attributedString;
 
 static OFCharacterSet* ReservedSet;
+
++(void)registerWriterClass: (Class)c
+{
+	writerClass = c;
+}
+
++(Class)writerClass
+{
+	if(!writerClass){
+		return [NTIHTMLWriter class];
+	}
+	return writerClass;
+}
 
 + (void)initialize;
 {
@@ -278,17 +293,21 @@ static inline void writeString(OFDataBuffer* dataBuffer, NSString* string)
 	if( shouldWriteNewFontInfo ) {
 		self->state->fontIndex = newFontIndex;
 		OFDataBufferAppendCString( self->dataBuffer, "<span style=\"");
-		OFDataBufferAppendCString( self->dataBuffer,  "font-family: '");
-		writeString( self->dataBuffer, [newFontDescriptor family]);
-		OFDataBufferAppendCString( self->dataBuffer,  "'; " );
+		if([self shouldWriteStyleAttribute: @"font-family"]){
+			OFDataBufferAppendCString( self->dataBuffer,  "font-family: '");
+			writeString( self->dataBuffer, [newFontDescriptor family]);
+			OFDataBufferAppendCString( self->dataBuffer,  "'; " );
+		}
 		if( shouldWriteNewFontSize ) {
-			OFDataBufferAppendCString( self->dataBuffer, " font-size: ");
-			OFDataBufferAppendInteger(self->dataBuffer, newFontSize);
-			OFDataBufferAppendCString( self->dataBuffer,  "pt;" );
+			if([self shouldWriteStyleAttribute: @"font-size"]){
+				OFDataBufferAppendCString( self->dataBuffer, " font-size: ");
+				OFDataBufferAppendInteger(self->dataBuffer, newFontSize);
+				OFDataBufferAppendCString( self->dataBuffer,  "pt;" );
+			}
 			self->state->fontSize = newFontSize;
 		}
 		
-		if( shouldWriteNewFontBold ) {
+		if( shouldWriteNewFontBold && [self shouldWriteStyleAttribute: @"font-weight"]) {
 			char* style = " font-weight: normal;";
 			if( newFontBold ) {
 				style = " font-weight: bold;";
@@ -297,7 +316,7 @@ static inline void writeString(OFDataBuffer* dataBuffer, NSString* string)
 			self->state->flags.bold = newFontBold;
 		}
 		
-		if( shouldWriteNewFontItalic ) {
+		if( shouldWriteNewFontItalic && [self shouldWriteStyleAttribute: @"font-style"]) {
 			char* style = " font-style: normal;";
 			if( newFontItalic ) {
 				style = " font-style: italic;";
@@ -306,7 +325,7 @@ static inline void writeString(OFDataBuffer* dataBuffer, NSString* string)
 			self->state->flags.italic = newFontItalic;
 		}
 		
-		if( newUnderline != self->state->underline ) {
+		if( newUnderline != self->state->underline && [self shouldWriteStyleAttribute: @"text-decoration"]) {
 			//Core text supports a boatload of underline styles. HTML doesn't (?)
 			if( newUnderline == NSUnderlineStyleNone) {
 				OFDataBufferAppendCString(self->dataBuffer, " text-decoration: none;" );
@@ -318,6 +337,11 @@ static inline void writeString(OFDataBuffer* dataBuffer, NSString* string)
 		}
 	}
 	return opened;
+}
+
+-(BOOL)shouldWriteStyleAttribute: (NSString*)attrName
+{
+	return YES;
 }
 
 /**
