@@ -321,12 +321,12 @@ styleAttribute = stringFromStyle( styleAttribute, @prefix );
 			
 		} EHV
 		else HAS_VALUE("text-decoration") {
-			CTUnderlineStyle value = kCTUnderlineStyleNone;
+			NSUnderlineStyle value = NSUnderlineStyleNone;
 			if( [styleAttribute isEqual: @"underline"] ) {
-				value = kCTUnderlineStyleSingle;
+				value = NSUnderlineStyleSingle;
 			}
 			[dict setUnsignedIntValue: value
-							   forKey: (id)kCTUnderlineStyleAttributeName];
+							   forKey: (id)NSUnderlineStyleAttributeName];
 		} EHV
 		//Colors
 		else HAS_VALUE("color") {

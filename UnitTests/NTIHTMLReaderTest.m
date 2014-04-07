@@ -8,6 +8,7 @@
 
 #import "NTIHTMLReaderTest.h"
 #import "NTIHTMLReader.h"
+#import "NTIHTMLWriter.h"
 #import "OQColor-NTIExtensions.h"
 
 @interface AudioCapturingHtmlReader : NTIHTMLReader{
@@ -33,6 +34,42 @@
 CGColorRef NTIHTMLReaderParseCreateColor(NSString* color, OQColor* defaultColor);
 
 @implementation NTIHTMLReaderTest
+
+-(void)testUnderlineString
+{
+	NSString* html = @"<html><body><p style='text-decoration: underline'>test underline</p></body></html>";
+	NTIHTMLReader* reader = [[NTIHTMLReader alloc] initWithHTML: html];
+	
+	NSAttributedString* parsed = reader.attributedString;
+	
+	NSAttributedString* underlined = [[NSAttributedString alloc] initWithString: @"test underline"
+																	 attributes: @{NSUnderlineStyleAttributeName:
+																					   @(NSUnderlineStyleSingle)}];
+	NSRange parsedRange = NSMakeRange(0, parsed.string.length);
+	NSDictionary* parsedAttrs = [parsed attributesAtIndex: 0 effectiveRange: &parsedRange];
+	
+	NSRange underlinedRange = NSMakeRange(0, underlined.string.length);
+	NSDictionary* underlinedAttrs = [underlined attributesAtIndex: 0 effectiveRange: &underlinedRange];
+	
+	XCTAssertTrue([parsedAttrs isEqual: underlinedAttrs], @"Expected underlined string");
+}
+
+-(void)testReaderWriterUnderlineCompliance
+{
+	NSAttributedString* underlined = [[NSAttributedString alloc] initWithString: @"test"
+																	 attributes: @{NSUnderlineStyleAttributeName:
+																					   @(NSUnderlineStyleSingle)}];
+	NSData* writerHTMLData = [NTIHTMLWriter htmlDataForAttributedString: underlined];
+	NSString* writerHTML = [[NSString alloc] initWithData: writerHTMLData encoding: NSUTF8StringEncoding];
+	
+	NTIHTMLReader* reader = [[NTIHTMLReader alloc] initWithHTML: writerHTML];
+	NSAttributedString* parsed = reader.attributedString;
+	
+	NSRange parsedRange = NSMakeRange(0, parsed.string.length);
+	NSDictionary* parsedAttrs = [parsed attributesAtIndex: 0 effectiveRange: &parsedRange];
+	
+	XCTAssertTrue([[parsedAttrs allKeys] containsObject: NSUnderlineStyleAttributeName], @"Expected parsed string to be underlined");
+}
 
 -(void)testCSSString
 {
