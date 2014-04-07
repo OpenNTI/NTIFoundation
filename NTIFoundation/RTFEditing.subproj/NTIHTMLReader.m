@@ -36,6 +36,9 @@ static Class readerClass = nil;
 
 +(Class)readerClass
 {
+	if(!readerClass){
+		return [NTIHTMLReader class];
+	}
 	return readerClass;
 }
 

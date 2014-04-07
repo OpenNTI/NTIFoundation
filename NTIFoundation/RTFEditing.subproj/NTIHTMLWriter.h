@@ -54,9 +54,14 @@ typedef struct {
 	state_t* state;
 }
 
++(void)registerWriterClass: (Class)clazz;
++(Class)writerClass;
+
 +(NSData*)htmlDataForAttributedString: (NSAttributedString*)attributedString;
 +(NSData*)htmlDataForAttributedString: (NSAttributedString*)attributedString
 							wrappedIn: (NSString*)element;
+
+-(BOOL)shouldWriteStyleAttribute: (NSString*)attrName;
 
 @end
 

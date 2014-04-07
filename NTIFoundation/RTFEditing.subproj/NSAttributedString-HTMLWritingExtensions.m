@@ -11,12 +11,12 @@
 @implementation NSAttributedString(HTMLWritingExtensions)
 -(NSData*)newHTMLDataFromString
 {
-	return [NTIHTMLWriter htmlDataForAttributedString: self];
+	return [[NTIHTMLWriter writerClass] htmlDataForAttributedString: self];
 }
 
 -(NSData*)newHTMLDataFromStringWrappedIn: (NSString*)element
 {
-	return [NTIHTMLWriter htmlDataForAttributedString: self
+	return [[NTIHTMLWriter writerClass] htmlDataForAttributedString: self
 											wrappedIn: element];
 }
 
