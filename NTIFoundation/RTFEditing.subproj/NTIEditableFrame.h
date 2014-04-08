@@ -25,6 +25,7 @@
 	id __weak nr_attachmentDelegate;
 }
 
++(NSAttributedString*)attributedStringMutatedForDisplay: (NSAttributedString*)str;
 +(CGFloat)heightForAttributedString: (NSAttributedString*)str width: (CGFloat)width;
 
 @property (nonatomic, weak) id attachmentDelegate;
