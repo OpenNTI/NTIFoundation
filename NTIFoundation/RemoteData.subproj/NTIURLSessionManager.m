@@ -27,6 +27,7 @@
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
 		sm = [[NTIURLSessionManager alloc] init];
+		sm->_isSharedSessionManager = YES;
 	});
 
 	return sm;
@@ -182,10 +183,20 @@
 	}
 }
 
--(void)dealloc{
-	//Invalidate session to avoid memory leak
-	[self.session invalidateAndCancel];
-	self.session = nil;
+-(void)invalidateSessionCancelTasks: (BOOL)cancel
+{
+	if(cancel){
+		[self.session invalidateAndCancel];
+	}
+	else{
+		[self.session finishTasksAndInvalidate];
+	}
+}
+
+-(void)dealloc
+{
+	[self invalidateSessionCancelTasks: YES];
+	self->_session = nil;
 }
 
 @end
