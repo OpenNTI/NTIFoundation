@@ -16,11 +16,15 @@
 
 @property (nonatomic, readonly) NSURLSession* session;
 
+@property (nonatomic, assign) BOOL isSharedSessionManager;
+
 -(void)setDelegate: (id<NSURLSessionTaskDelegate>)delegate forTask: (NSURLSessionTask*)task;
 -(void)removeDelegateForTask: (NSURLSessionTask*)task;
 
 -(void)updateSessionConfiguration: (NSURLSessionConfiguration*)conf;
 
 -(void)resumeTask: (NSURLSessionTask*)task;
+
+-(void)invalidateSessionCancelTasks: (BOOL)cancel;
 
 @end
