@@ -129,6 +129,8 @@ PRIVATE_STATIC_TESTABLE NSString* generateSecWebsocketKey()
 	[self->socketInputStream close];
 	[self->socketInputStream removeFromRunLoop: [NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 	[self->socketOutputStream removeFromRunLoop: [NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+	self->socketInputStream = nil;
+	self->socketOutputStream = nil;
 	[self updateStatus: WebSocketStatusDisconnected];
 }
 
@@ -567,8 +569,8 @@ static NSDictionary* sslProperties()
 	
 	CFStreamCreatePairWithSocketToHost(NULL, (__bridge CFStringRef)host, [port intValue], &readStream, &writeStream);
 	
-	self->socketInputStream = (__bridge NSInputStream *)readStream;
-	self->socketOutputStream = (__bridge NSOutputStream *)writeStream;
+	self->socketInputStream = (__bridge_transfer NSInputStream *)readStream;
+	self->socketOutputStream = (__bridge_transfer NSOutputStream *)writeStream;
 	
 	//Setup ssl if necessary
 	if(useSSL){
