@@ -11,6 +11,7 @@
 
 
 @implementation NSArray (NTIExtensions)
+
 +(BOOL)isEmptyArray: (id)a
 {
 	return a == nil || [a isNull] || [a count] == 0;

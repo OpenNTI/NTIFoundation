@@ -10,6 +10,7 @@
 #import <OmniFoundation/NSArray-OFExtensions.h>
 
 @interface NSArray (NTIExtensions)
+
 @property(nonatomic,readonly) id firstObject;
 @property(nonatomic,readonly) id firstObjectOrNil;
 @property(nonatomic,readonly) id secondObject;
