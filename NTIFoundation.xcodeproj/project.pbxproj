@@ -188,6 +188,11 @@
 		40E04618143F50A60091CE7C /* OQColor-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 40E04616143F50A60091CE7C /* OQColor-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40E04619143F50A60091CE7C /* OQColor-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E04617143F50A60091CE7C /* OQColor-NTIExtensions.m */; };
 		40E0461C143F5F260091CE7C /* NTIHTMLReaderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E0461B143F5F260091CE7C /* NTIHTMLReaderTest.m */; };
+		40EAF82D18FC693000A537D4 /* NSData+NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 40EAF82B18FC693000A537D4 /* NSData+NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		40EAF82E18FC693000A537D4 /* NSData+NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 40EAF82C18FC693000A537D4 /* NSData+NTIExtensions.m */; };
+		40EAF82F18FC693000A537D4 /* NSData+NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 40EAF82C18FC693000A537D4 /* NSData+NTIExtensions.m */; };
+		40EAF83018FC693000A537D4 /* NSData+NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 40EAF82C18FC693000A537D4 /* NSData+NTIExtensions.m */; };
+		40EAF83118FC693000A537D4 /* NSData+NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 40EAF82C18FC693000A537D4 /* NSData+NTIExtensions.m */; };
 		40ECB2DA147B3C4B00AF4597 /* NTIHTMLWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E045F2143F468D0091CE7C /* NTIHTMLWriter.m */; };
 		40ECB2F5147B3D7000AF4597 /* NSAttributedString-HTMLWritingExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D0DBF143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.m */; };
 		40F39C8114D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8014D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m */; };
@@ -879,6 +884,8 @@
 		40E04617143F50A60091CE7C /* OQColor-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OQColor-NTIExtensions.m"; sourceTree = "<group>"; };
 		40E0461A143F5F260091CE7C /* NTIHTMLReaderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIHTMLReaderTest.h; sourceTree = "<group>"; };
 		40E0461B143F5F260091CE7C /* NTIHTMLReaderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIHTMLReaderTest.m; sourceTree = "<group>"; };
+		40EAF82B18FC693000A537D4 /* NSData+NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+NTIExtensions.h"; sourceTree = "<group>"; };
+		40EAF82C18FC693000A537D4 /* NSData+NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+NTIExtensions.m"; sourceTree = "<group>"; };
 		40F39C7F14D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL-NTIFileSystemExtensionsTest.h"; sourceTree = "<group>"; };
 		40F39C8014D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL-NTIFileSystemExtensionsTest.m"; sourceTree = "<group>"; };
 		40F39C8214D84EF50089DCF6 /* SendRecieveQueueTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendRecieveQueueTest.h; sourceTree = "<group>"; };
@@ -1718,6 +1725,8 @@
 				4059D26415DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m */,
 				403C8CE017EA6CE9000FC290 /* NSNotification-NTIExtensions.h */,
 				403C8CE117EA6CE9000FC290 /* NSNotification-NTIExtensions.m */,
+				40EAF82B18FC693000A537D4 /* NSData+NTIExtensions.h */,
+				40EAF82C18FC693000A537D4 /* NSData+NTIExtensions.m */,
 			);
 			name = FoundationExtensions;
 			path = FoundationExtensions.subproj;
@@ -1811,6 +1820,7 @@
 				40103C1C14D28A54004451A4 /* NTIGlobalInspector.h in Headers */,
 				4C3DA33F14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.h in Headers */,
 				4CABB38D14EC28DF00A7FD7C /* NTIInspectableObjectProtocol.h in Headers */,
+				40EAF82D18FC693000A537D4 /* NSData+NTIExtensions.h in Headers */,
 				4C3BDC1C14EAF87F008ED49D /* NTIInspectorSliceObjectPair.h in Headers */,
 				40C34CC114D9AAFB000D91A8 /* NTIAppNavigationLayerProvider.h in Headers */,
 				40C34CC314D9AB9B000D91A8 /* NTIAppNavigationLayerDescriptor.h in Headers */,
@@ -2423,6 +2433,7 @@
 				4076F88E14C8A132004C6301 /* NTIAppDelegate.m in Sources */,
 				4076F88F14C8A151004C6301 /* main.m in Sources */,
 				4076F98514C8AFF3004C6301 /* NTISampleApplicationLayerViewController.m in Sources */,
+				40EAF83018FC693000A537D4 /* NSData+NTIExtensions.m in Sources */,
 				403C8CE517EA6CE9000FC290 /* NSNotification-NTIExtensions.m in Sources */,
 				4076F98F14C8BC45004C6301 /* NTISampleTransientLayerViewController.m in Sources */,
 				402D2F2514C92BDA00E051AF /* NTITransientNeverEndingNavController.m in Sources */,
@@ -2435,6 +2446,7 @@
 			files = (
 				40C34CBF14D893DC000D91A8 /* NTIAppNavigationControllerTest.m in Sources */,
 				406D24511881E0AB00FA77E4 /* OUUnzipArchive-NTIExtensions.m in Sources */,
+				40EAF83118FC693000A537D4 /* NSData+NTIExtensions.m in Sources */,
 				403C8CE617EA6CE9000FC290 /* NSNotification-NTIExtensions.m in Sources */,
 				4CEC1DB2151395F70074F3DD /* NTIGlobalInspectorAppTest.m in Sources */,
 				4C696D0A1516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m in Sources */,
@@ -2485,6 +2497,7 @@
 				4C3DA34014E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m in Sources */,
 				4C3BDC1D14EAF87F008ED49D /* NTIInspectorSliceObjectPair.m in Sources */,
 				40A414801505748A0017242E /* NSDate-NTIExtensions.m in Sources */,
+				40EAF82E18FC693000A537D4 /* NSData+NTIExtensions.m in Sources */,
 				403C317B1512A5DD00C53D22 /* NSData-NTIJSON.m in Sources */,
 				4CA4F4851535F1390005FECD /* NTIMathSymbol.m in Sources */,
 				40BACD6C18108FBC0053ACC9 /* NTITextAttachment.m in Sources */,
@@ -2549,6 +2562,7 @@
 				4076F99114C8FAD1004C6301 /* NTIAppNavigationController.m in Sources */,
 				40103C0A14D07BCC004451A4 /* NTIAppNavigationLayerSwitcher.m in Sources */,
 				40103C1E14D28A54004451A4 /* NTIGlobalInspector.m in Sources */,
+				40EAF82F18FC693000A537D4 /* NSData+NTIExtensions.m in Sources */,
 				40F39C8114D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m in Sources */,
 				40F39C8414D84EF50089DCF6 /* SendRecieveQueueTest.m in Sources */,
 				40F39C8714D852FE0089DCF6 /* NSString-NTIExtensionsTest.m in Sources */,
