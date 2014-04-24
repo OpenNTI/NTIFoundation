@@ -110,28 +110,6 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 	return r;
 }
 
--(void)addWhiteboard: (id)sender
-{
-	NSLog(@"adding whiteboard");
-	if (![sender respondsToSelector: @selector(nextResponder)]) {
-		[self addWhiteboard: self];
-		return;
-	}
-	
-	id responder = [sender nextResponder];
-	if(OFISNULL(responder)){
-		NSLog(@"no messages to add whiteboard found in responder chain");
-		return;
-	}
-	else if([responder respondsToSelector: @selector(addWhiteboard:)]){
-		NSLog(@"message found, calling addWhiteboard: with obj: %@", sender);
-		[responder addWhiteboard: sender];
-		return;
-	}
-	
-	[self addWhiteboard: responder];
-}
-
 -(void)_commonInit
 {
 	self.attachmentGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(tapped:)];
@@ -365,12 +343,30 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
         return self.isEditable;
     }
     if (action == @selector(addWhiteboard:)) {
-		return self.allowsAddingCustomObjects;
+		return NO;
 	}
 	else {
         return [super canPerformAction:action
                             withSender:sender];
     }
+}
+
+-(id)targetForAction: (SEL)action withSender: (id)sender
+{
+	if(sender != self && action == @selector(addWhiteboard:)){
+		if(self.allowsAddingCustomObjects && OFNOTNULL([self.nextResponder targetForAction: _cmd withSender: sender])){
+			return self;
+		}
+		return nil;
+	}
+	
+	return [super targetForAction: action withSender: sender];
+}
+
+-(void)addWhiteboard: (id)sender
+{
+	//Reforward as us being the sender
+	[[UIApplication sharedApplication] sendAction: _cmd to: nil from: self forEvent: nil];
 }
 
 #pragma mark gesture recognizer delegate
