@@ -50,7 +50,6 @@
 	if(!self.isViewLoaded){
 		return;
 	}
-	
 	[self addChildViewController: self.slice.detailPane];
 	[self.slice.detailPane didMoveToParentViewController: self];
 	[self.view addSubview: self.slice.detailPane.view];
@@ -67,6 +66,24 @@
 																			   metrics: nil
 																				 views: @{@"view":self.slice.detailPane.view}]];
 	[self.view addConstraints: self->sliceConstraints];
+
+	[self.slice updateInterfaceFromInspectedObjects: OUIInspectorUpdateReasonDefault];
+	[self updateInterfaceFromInspectedObjects: OUIInspectorUpdateReasonDefault];
+}
+
+-(void)updateInterfaceFromInspectedObjects:(OUIInspectorUpdateReason)reason
+{
+	[self.slice.detailPane updateInterfaceFromInspectedObjects: reason];
+}
+
+-(BOOL)respondsToSelector:(SEL)aSelector
+{
+	return [super respondsToSelector: aSelector] || [self.slice.detailPane respondsToSelector: aSelector];
+}
+
+-(id)forwardingTargetForSelector:(SEL)aSelector
+{
+	return self.slice.detailPane;
 }
 
 @end
