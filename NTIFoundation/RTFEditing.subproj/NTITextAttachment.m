@@ -55,7 +55,7 @@
 		return [(id)self.attachmentRenderer imageForBounds: imageBounds textContainer: textContainer characterIndex: charIndex];
 	}
 	
-	UIGraphicsBeginImageContext(imageBounds.size);
+	UIGraphicsBeginImageContextWithOptions(imageBounds.size, NO, 0.0);
 	[self.attachmentRenderer drawWithFrame: CGRectMake(0, 0, imageBounds.size.width, imageBounds.size.height)
 									inView: nil
 							characterIndex: charIndex
