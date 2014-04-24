@@ -8,6 +8,39 @@
 
 #import "NTITextAttachmentCell.h"
 #import "OmniUI/OUITextView.h"
+#import <OmniAppKit/NSAttributedString-OAExtensions.h>
+
+@interface NSAttributedString(NTIUtilities)
+- (void)eachAttachmentWithLocation:(void (^)(OATextAttachment *, NSRange location, BOOL *stop))applier;
+@end
+
+@implementation NSAttributedString(NTIUtilities)
+
+- (void)eachAttachmentWithLocation:(void (^)(OATextAttachment *, NSRange location, BOOL *stop))applier;
+{
+    NSString *string = [self string];
+    NSString *attachmentString = [NSAttributedString attachmentString];
+    
+    NSUInteger location = 0, end = [self length];
+    BOOL stop = NO;
+    while (location < end && !stop) {
+        NSRange attachmentRange = [string rangeOfString:attachmentString options:0 range:NSMakeRange(location,end-location)];
+        if (attachmentRange.length == 0)
+            break;
+        
+		NSRange effectiveRange;
+        OATextAttachment *attachment = [self attribute:NSAttachmentAttributeName atIndex:attachmentRange.location effectiveRange: &effectiveRange];
+        OBASSERT(attachment);
+        applier(attachment, effectiveRange, &stop);
+        
+        location = NSMaxRange(attachmentRange);
+    }
+}
+
+
+@end
+
+
 
 @interface NTITextAttachmentCell()
 @end
@@ -23,10 +56,21 @@
 	return self;
 }
 
-
 -(void)setNeedsRedrawn
 {
 	for(OUITextView* ef in self->editableFrames){
+		OATextAttachment* attachment = [self attachment];
+		if(attachment){
+			NSTextStorage* ts = ef.textStorage;
+			[ts eachAttachmentWithLocation:^(OATextAttachment* attachmentToTest, NSRange location, BOOL *stop) {
+				if(attachmentToTest == attachment){
+					[ef.layoutManager invalidateDisplayForCharacterRange: location];
+					*stop = YES;
+				}
+			}];
+		}
+		
+		
 		[ef setNeedsDisplay];
 	}
 }
