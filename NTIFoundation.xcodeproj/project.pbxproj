@@ -300,7 +300,6 @@
 		83FF9B0D190020D600F644A1 /* NTISingleSliceInspectorPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FF9B0B190020D600F644A1 /* NTISingleSliceInspectorPane.m */; };
 		83FF9B2E1900218600F644A1 /* NTISingleSliceInspectorPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FF9B0B190020D600F644A1 /* NTISingleSliceInspectorPane.m */; };
 		83FF9B2F1900218800F644A1 /* NTISingleSliceInspectorPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FF9B0B190020D600F644A1 /* NTISingleSliceInspectorPane.m */; };
-		83FF9B301900218900F644A1 /* NTISingleSliceInspectorPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FF9B0B190020D600F644A1 /* NTISingleSliceInspectorPane.m */; };
 		83FF9B311900218A00F644A1 /* NTISingleSliceInspectorPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FF9B0B190020D600F644A1 /* NTISingleSliceInspectorPane.m */; };
 /* End PBXBuildFile section */
 
@@ -2472,7 +2471,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83FF9B301900218900F644A1 /* NTISingleSliceInspectorPane.m in Sources */,
 				40F56EBC15C8BCA4001FC309 /* NTITestFixes.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

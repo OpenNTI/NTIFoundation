@@ -770,7 +770,7 @@ static inline void writeString(OFDataBuffer* dataBuffer, NSString* string)
 		}
 		default: {
 			NSLog(@"Unsupported color space colorSpace %@", colorSpace);
-			OBFinishPorting;
+			OBFinishPortingLater("Unsupported color space not yet handled");
 		}
 	}
 	return self;
