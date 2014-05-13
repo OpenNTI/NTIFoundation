@@ -30,6 +30,19 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
     return ceil(bounds.size.height + 1);
 }
 
+
+@interface OATextAttachmentCell ()
+
+/**
+ * Returns a bounding rectangle which encloses the receiver's attachment content, with the bounding rectangle itself bounded by and relative to a given rectangle. E.g., for determining the rectangle within which user interaction should be restricted.
+ * @param rect A rectangle which the attachment bounds are relative to and bounded by.
+ @return A bounding rectangle -- relative to and bounded by a given rectangle -- which encloses the cell's attachment content.
+ */
+- (CGRect)attachmentBoundsInRect:(CGRect)rect;
+
+@end
+
+
 @interface NTIEditableFrame()<UIGestureRecognizerDelegate>
 @property (nonatomic, strong) UIGestureRecognizer* attachmentGestureRecognizer;
 @end
@@ -311,6 +324,22 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 	//UITextRange* range = [self characterRangeAtPoint: p]; //Ugh always nil in ios7 GM
 	UITextRange* range = [self workingCharacterRangeForPoint: p];
 	OATextAttachmentCell* attachmentCell = [self attachmentCellForRange: range];
+	
+	// If the attachment cell defines more specific bounds for interaction, then ignore the tap if it is not within those bounds
+	if ( [attachmentCell
+		  respondsToSelector: @selector(attachmentBoundsInRect:)] ) {
+		NSRange glyphRange = [self characterRangeForTextRange:range];
+		CGRect glyphRect = [self.layoutManager
+							boundingRectForGlyphRange:glyphRange
+							inTextContainer:self.textContainer];
+		CGRect attachmentBounds = [attachmentCell attachmentBoundsInRect:glyphRect];
+		if (!(   p.x >= attachmentBounds.origin.x
+			  && p.x <= attachmentBounds.origin.x + attachmentBounds.size.width
+			  && p.y >= attachmentBounds.origin.y
+			  && p.y <= attachmentBounds.origin.y + attachmentBounds.size.height)) {
+			return;
+		}
+	}
 	
 	if(attachmentCell){
 		//If we are editing select the attachment cell so that any editing will replace it.
