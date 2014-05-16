@@ -68,6 +68,7 @@
 #import "NTIGlobalInspectorSlice.h"
 #import "NTIBadgeCountView.h"
 #import	"NTIKeyboardAdjustmentListener.h"
+#import "UIColor+NTIExtensions.h"
 
 #import "NTIDuration.h"
 #import "NTIISO8601DurationFormatter.h"

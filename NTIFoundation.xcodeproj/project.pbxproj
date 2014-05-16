@@ -207,6 +207,11 @@
 		40F72DA9156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */; };
 		40F72DAA156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */; };
 		40FB28EE18D2B47B00A450FA /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40FB28B018D2AEAF00A450FA /* XCTest.framework */; };
+		4A72F4611925AEF1004792EF /* UIColor+NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A72F45F1925AEF1004792EF /* UIColor+NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4A72F4621925AEF1004792EF /* UIColor+NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A72F4601925AEF1004792EF /* UIColor+NTIExtensions.m */; };
+		4A72F4631925AEF1004792EF /* UIColor+NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A72F4601925AEF1004792EF /* UIColor+NTIExtensions.m */; };
+		4A72F4641925AEF1004792EF /* UIColor+NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A72F4601925AEF1004792EF /* UIColor+NTIExtensions.m */; };
+		4A72F4851925B3CE004792EF /* UIColor+NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A72F45F1925AEF1004792EF /* UIColor+NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2ECDD51549D0A400C69E3A /* NTIMathInputExpressionModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2ECDD31549D0A400C69E3A /* NTIMathInputExpressionModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2ECDD61549D0A400C69E3A /* NTIMathInputExpressionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2ECDD41549D0A400C69E3A /* NTIMathInputExpressionModel.m */; };
 		4C2ECDD71549D0A400C69E3A /* NTIMathInputExpressionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2ECDD41549D0A400C69E3A /* NTIMathInputExpressionModel.m */; };
@@ -906,6 +911,8 @@
 		40F72DA6156EE1C40050C93E /* NTIMathEquationBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathEquationBuilder.h; sourceTree = "<group>"; };
 		40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathEquationBuilder.m; sourceTree = "<group>"; };
 		40FB28B018D2AEAF00A450FA /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		4A72F45F1925AEF1004792EF /* UIColor+NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+NTIExtensions.h"; sourceTree = "<group>"; };
+		4A72F4601925AEF1004792EF /* UIColor+NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NTIExtensions.m"; sourceTree = "<group>"; };
 		4C2ECDD31549D0A400C69E3A /* NTIMathInputExpressionModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathInputExpressionModel.h; sourceTree = "<group>"; };
 		4C2ECDD41549D0A400C69E3A /* NTIMathInputExpressionModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathInputExpressionModel.m; sourceTree = "<group>"; };
 		4C3BDC1A14EAF87F008ED49D /* NTIInspectorSliceObjectPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIInspectorSliceObjectPair.h; sourceTree = "<group>"; };
@@ -966,7 +973,7 @@
 		7271BBEA13B7DC1400241FEC /* CopyLibraryResources */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; name = CopyLibraryResources; path = ../OmniGroup/Scripts/CopyLibraryResources; sourceTree = "<group>"; };
 		7271BBEC13B7DC6600241FEC /* FixStringsFile.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FixStringsFile.xcodeproj; path = ../OmniGroup/Tools/FixStringsFile/FixStringsFile.xcodeproj; sourceTree = "<group>"; };
 		7293CB271451AA7D00CD64B8 /* NTIEditableFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIEditableFrame.h; sourceTree = "<group>"; };
-		7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIEditableFrame.m; sourceTree = "<group>"; };
+		7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NTIEditableFrame.m; path = RTFEditing.subproj/NTIEditableFrame.m; sourceTree = "<group>"; };
 		72B0E41B1880C43800A75133 /* OUUnzipArchive-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "OUUnzipArchive-NTIExtensions.h"; path = "NTIFoundation/OUUnzipArchive-NTIExtensions.h"; sourceTree = SOURCE_ROOT; };
 		72B0E41C1880C43800A75133 /* OUUnzipArchive-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "OUUnzipArchive-NTIExtensions.m"; path = "NTIFoundation/OUUnzipArchive-NTIExtensions.m"; sourceTree = SOURCE_ROOT; };
 		72C0D196142529E800D526D8 /* libNTIFoundation.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNTIFoundation.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1131,7 +1138,6 @@
 			isa = PBXGroup;
 			children = (
 				7293CB271451AA7D00CD64B8 /* NTIEditableFrame.h */,
-				7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */,
 				403D0DBC143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h */,
 				403D0DBD143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.m */,
 				403D0DBE143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.h */,
@@ -1547,6 +1553,7 @@
 		72CBA96F1385CF1F00E3D28D /* NTIFoundation */ = {
 			isa = PBXGroup;
 			children = (
+				7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */,
 				400D6E0918329FDF00F07DBA /* Formatters */,
 				40F56F2015CAC4F7001FC309 /* UI */,
 				4CA4F4691535DDD30005FECD /* MathSymbols */,
@@ -1736,6 +1743,8 @@
 				403C8CE117EA6CE9000FC290 /* NSNotification-NTIExtensions.m */,
 				40EAF82B18FC693000A537D4 /* NSData+NTIExtensions.h */,
 				40EAF82C18FC693000A537D4 /* NSData+NTIExtensions.m */,
+				4A72F45F1925AEF1004792EF /* UIColor+NTIExtensions.h */,
+				4A72F4601925AEF1004792EF /* UIColor+NTIExtensions.m */,
 			);
 			name = FoundationExtensions;
 			path = FoundationExtensions.subproj;
@@ -1784,6 +1793,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A72F4851925B3CE004792EF /* UIColor+NTIExtensions.h in Headers */,
 				400D6E2D1832A1D600F07DBA /* NTIISO8601DurationFormatter.h in Headers */,
 				40F56EBB15C8BCA4001FC309 /* NTITestFixes.h in Headers */,
 				400D6E381832C42500F07DBA /* NTIDuration.h in Headers */,
@@ -1822,6 +1832,7 @@
 				72B0E41D1880C43800A75133 /* OUUnzipArchive-NTIExtensions.h in Headers */,
 				40E04618143F50A60091CE7C /* OQColor-NTIExtensions.h in Headers */,
 				40C0E1031443AF9C00142406 /* SocketIOPacketTest.h in Headers */,
+				4A72F4611925AEF1004792EF /* UIColor+NTIExtensions.h in Headers */,
 				403C28E614576E160012CBAB /* NSAttributedString-NTIExtensions.h in Headers */,
 				4029275714991E6900E4720A /* NSURL-NTIFileSystemExtensions.h in Headers */,
 				40572C2B14C88D8E0032D2DB /* NTIAppNavigationController.h in Headers */,
@@ -2462,6 +2473,7 @@
 				4CEC1DB2151395F70074F3DD /* NTIGlobalInspectorAppTest.m in Sources */,
 				4C696D0A1516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m in Sources */,
 				400D6E301832A1D600F07DBA /* NTIISO8601DurationFormatter.m in Sources */,
+				4A72F4641925AEF1004792EF /* UIColor+NTIExtensions.m in Sources */,
 				400D6E3B1832C42500F07DBA /* NTIDuration.m in Sources */,
 				83FF9B2F1900218800F644A1 /* NTISingleSliceInspectorPane.m in Sources */,
 			);
@@ -2508,6 +2520,7 @@
 				4066C83B14E1C95F006B56D3 /* WebSocketData.m in Sources */,
 				4C3DA34014E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m in Sources */,
 				4C3BDC1D14EAF87F008ED49D /* NTIInspectorSliceObjectPair.m in Sources */,
+				4A72F4621925AEF1004792EF /* UIColor+NTIExtensions.m in Sources */,
 				40A414801505748A0017242E /* NSDate-NTIExtensions.m in Sources */,
 				40EAF82E18FC693000A537D4 /* NSData+NTIExtensions.m in Sources */,
 				403C317B1512A5DD00C53D22 /* NSData-NTIJSON.m in Sources */,
@@ -2588,6 +2601,7 @@
 				4C3BDC1E14EAF87F008ED49D /* NTIInspectorSliceObjectPair.m in Sources */,
 				40A414811505748A0017242E /* NSDate-NTIExtensions.m in Sources */,
 				406D24501881E0A800FA77E4 /* OUUnzipArchive-NTIExtensions.m in Sources */,
+				4A72F4631925AEF1004792EF /* UIColor+NTIExtensions.m in Sources */,
 				403C317C1512A5DD00C53D22 /* NSData-NTIJSON.m in Sources */,
 				4CEC1D96151395DB0074F3DD /* NTIGlobalInspectorTest.m in Sources */,
 				4CEC1D97151395DB0074F3DD /* NTIInspectorObjectWrapperTest.m in Sources */,
