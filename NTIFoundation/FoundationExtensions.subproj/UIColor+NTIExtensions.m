@@ -15,6 +15,11 @@
 {
 	NSUInteger hexInt = [[self class] unsignedIntegerFromHexString: hexString];
 	
+	if(hexInt == NSNotFound){
+		NSLog(@"Invalid hexString. Returning black");
+		return [UIColor blackColor];
+	}
+	
 	CGFloat r = ( (CGFloat) ((hexInt & 0xFF0000) >> 16)) / 255.0;
 	CGFloat g = ((CGFloat) ((hexInt & 0xFF00) >> 8)) / 255.0;
 	CGFloat b = ((CGFloat) (hexInt & 0xFF)) / 255.0;
@@ -27,7 +32,7 @@
 
 + (NSUInteger)unsignedIntegerFromHexString: (NSString *)hexString
 {
-	NSUInteger hexInt = 0;
+	unsigned int hexInt = 0;
 	
 	NSScanner *scanner = [NSScanner scannerWithString: hexString];
 	
@@ -35,7 +40,7 @@
 	
 	[scanner scanHexInt: &hexInt];
 	
-	return hexInt;
+	return hexInt == UINT_MAX ? NSNotFound: (NSUInteger)hexInt;
 }
 
 @end
