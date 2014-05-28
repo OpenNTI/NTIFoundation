@@ -8,7 +8,25 @@
 
 #import "UIColor+NTIExtensions.h"
 
+
 @implementation UIColor (NTIExtensions)
+
+static NSRegularExpression *hexRegex;
+
+static BOOL isHexStringValid(NSString *hexString)
+{
+	if ( !hexRegex ) {
+		hexRegex = [[NSRegularExpression alloc]
+					initWithPattern: @"#?[a-fA-F0-9]{6}"
+					options: 0
+					error: nil];
+	}
+	NSRange range = NSMakeRange(0, hexString.length);
+	NSRange matchRange = [hexRegex rangeOfFirstMatchInString: hexString
+													 options: 0
+													   range: range];
+	return NSEqualRanges(range, matchRange);
+}
 
 + (UIColor *)colorFromHexString: (NSString *)hexString
 					  withAlpha: (CGFloat)alpha
@@ -34,13 +52,17 @@
 {
 	unsigned int hexInt = 0;
 	
+	if ( !isHexStringValid( hexString ) ) {
+		return NSNotFound;
+	}
+	
 	NSScanner *scanner = [NSScanner scannerWithString: hexString];
 	
 	[scanner setCharactersToBeSkipped:[NSCharacterSet characterSetWithCharactersInString: @"#"]];
 	
 	[scanner scanHexInt: &hexInt];
 	
-	return hexInt == UINT_MAX ? NSNotFound: (NSUInteger)hexInt;
+	return ( hexInt == UINT_MAX ? NSNotFound : (NSUInteger)hexInt );
 }
 
 @end
