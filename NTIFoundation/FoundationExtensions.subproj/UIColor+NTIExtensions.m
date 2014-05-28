@@ -15,9 +15,9 @@
 {
 	NSUInteger hexInt = [[self class] unsignedIntegerFromHexString: hexString];
 	
-	if(hexInt == NSNotFound){
-		NSLog(@"Invalid hexString. Returning black");
-		return [UIColor blackColor];
+	if (hexInt == NSNotFound) {
+		NSLog(@"Invalid hexString. Returning nil.");
+		return nil;
 	}
 	
 	CGFloat r = ( (CGFloat) ((hexInt & 0xFF0000) >> 16)) / 255.0;
