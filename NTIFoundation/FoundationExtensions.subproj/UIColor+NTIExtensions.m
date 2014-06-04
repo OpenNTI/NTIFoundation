@@ -15,12 +15,13 @@ static NSRegularExpression *hexRegex;
 
 static BOOL isHexStringValid(NSString *hexString)
 {
-	if ( !hexRegex ) {
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
 		hexRegex = [[NSRegularExpression alloc]
 					initWithPattern: @"#?[a-fA-F0-9]{6}"
 					options: 0
 					error: nil];
-	}
+	});
 	NSRange range = NSMakeRange(0, hexString.length);
 	NSRange matchRange = [hexRegex rangeOfFirstMatchInString: hexString
 													 options: 0
