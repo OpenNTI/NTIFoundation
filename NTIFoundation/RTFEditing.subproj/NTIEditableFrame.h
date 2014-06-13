@@ -15,25 +15,38 @@
 @end
 
 @class NTIEditableFrame;
-@interface NTIEditableFrameTextAttachmentCellDelegate
--(BOOL)editableFrame: (NTIEditableFrame*)editableFrame 
-	  attachmentCell: (OATextAttachmentCell*) attachmentCell
+//@interface NTIEditableFrameTextAttachmentCellDelegate
+//-(BOOL)editableFrame: (NTIEditableFrame*)editableFrame 
+//	  attachmentCell: (OATextAttachmentCell*) attachmentCell
+//   wasTouchedAtPoint: (CGPoint)point;
+//@end
+@protocol NTIEditableFrameTextAttachmentCellDelegate <NSObject>
+@optional
+-(BOOL)editableFrame: (NTIEditableFrame*)editableFrame
+	  attachmentCell: (OATextAttachmentCell*)attachmentCell
    wasTouchedAtPoint: (CGPoint)point;
+
+-(BOOL)editableFrame: (NTIEditableFrame*)editableFrame
+	  attachmentCell: (OATextAttachmentCell*)attachmentCell
+ wasSelectedWithRect: (CGRect)rect;
+
+-(void)editableFrame: (NTIEditableFrame*)editableFrame
+	 attachmentCells: (NSArray*)cells
+selectionModeChangedWithRects: (NSArray*)rects;
+
 @end
 
 /**
  * Extend the OUITextView with some helpful messages (particularily around attachment handling)
  */
-@interface NTIEditableFrame : OUITextView{
-	@private
-	id __weak nr_attachmentDelegate;
-}
+@interface NTIEditableFrame : OUITextView
 
 +(NSAttributedString*)attributedStringMutatedForDisplay: (NSAttributedString*)str;
 +(CGFloat)heightForAttributedString: (NSAttributedString*)str width: (CGFloat)width;
 
-@property (nonatomic, weak) id attachmentDelegate;
+@property (nonatomic, weak) id<NTIEditableFrameTextAttachmentCellDelegate> attachmentDelegate;
 @property (nonatomic, assign) BOOL allowsAddingCustomObjects;
+@property (nonatomic, assign) BOOL shouldSelectAttachmentCells;
 
 -(void)replaceRange: (UITextRange*)range withObject: (id)object;
 -(OATextAttachmentCell*)attachmentCellForPoint: (CGPoint)point fromView: (UIView*)view;

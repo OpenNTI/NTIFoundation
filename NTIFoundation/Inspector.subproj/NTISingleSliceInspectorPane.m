@@ -55,7 +55,7 @@
 	[self.view addSubview: self.slice.detailPane.view];
 	
 	[self.view removeConstraints: self->sliceConstraints];
-	self.slice.view.translatesAutoresizingMaskIntoConstraints = NO;
+	self.slice.detailPane.view.translatesAutoresizingMaskIntoConstraints = NO;
 	
 	self->sliceConstraints = (NSMutableArray*)[NSLayoutConstraint constraintsWithVisualFormat: @"H:|[view]|"
 																					  options: 0

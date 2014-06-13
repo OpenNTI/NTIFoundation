@@ -43,12 +43,16 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 @end
 
 
-@interface NTIEditableFrame()<UIGestureRecognizerDelegate>
+@interface NTIEditableFrame()<UIGestureRecognizerDelegate>{
+@private
+	BOOL shouldSelectCells;
+}
 @property (nonatomic, strong) UIGestureRecognizer* attachmentGestureRecognizer;
+@property (nonatomic, strong) UILongPressGestureRecognizer* attachmentLongPressRecognizer;
 @end
 
 @implementation NTIEditableFrame
-@synthesize attachmentDelegate=nr_attachmentDelegate;
+@synthesize shouldSelectAttachmentCells = shouldSelectCells;
 
 +(UIFont*)defaultFont
 {
@@ -128,6 +132,10 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 	self.attachmentGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(tapped:)];
 	self.attachmentGestureRecognizer.delegate = self;
 	[self addGestureRecognizer: self.attachmentGestureRecognizer];
+	
+	self.attachmentLongPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget: self action: @selector(longPressed:)];
+	self.attachmentLongPressRecognizer.delegate = self;
+	[self addGestureRecognizer: self.attachmentLongPressRecognizer];
 	
 	//We set a default font here.  This will be the font until attributedString
 	//gets set.  Which is good for us.  THis effectively acts as the default
@@ -309,11 +317,11 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 	return[self attachmentCellForRange: range];
 }
 
--(void)tapped: (UITapGestureRecognizer*)r
+-(void)tapped: (UIGestureRecognizer*)r
 {
 	//If we don't have a delegate that responds to attachmentCell:wasTouchedAtPoint
 	//there is no point in doing the work
-	if( ![self->nr_attachmentDelegate respondsToSelector: 
+	if( ![self.attachmentDelegate respondsToSelector:
 		 @selector(editableFrame:attachmentCell:wasTouchedAtPoint:)] ){
 		return;
 	}
@@ -326,19 +334,8 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 	OATextAttachmentCell* attachmentCell = [self attachmentCellForRange: range];
 	
 	// If the attachment cell defines more specific bounds for interaction, then ignore the tap if it is not within those bounds
-	if ( [attachmentCell
-		  respondsToSelector: @selector(attachmentBoundsInRect:)] ) {
-		NSRange glyphRange = [self characterRangeForTextRange:range];
-		CGRect glyphRect = [self.layoutManager
-							boundingRectForGlyphRange:glyphRange
-							inTextContainer:self.textContainer];
-		CGRect attachmentBounds = [attachmentCell attachmentBoundsInRect:glyphRect];
-		if (!(   p.x >= attachmentBounds.origin.x
-			  && p.x <= attachmentBounds.origin.x + attachmentBounds.size.width
-			  && p.y >= attachmentBounds.origin.y
-			  && p.y <= attachmentBounds.origin.y + attachmentBounds.size.height)) {
-			return;
-		}
+	if(![self point: p insideAttachmentCell: attachmentCell withTextRange: range]){
+		return;
 	}
 	
 	if(attachmentCell){
@@ -348,11 +345,118 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 						   showingMenu: NO];
 		}
 		
-		[self->nr_attachmentDelegate editableFrame: self
+		if(self->shouldSelectCells
+		   && [self.attachmentDelegate respondsToSelector:
+			   @selector(editableFrame:attachmentCell:wasSelectedWithRect:)]){
+			[self.attachmentDelegate editableFrame: self
+									attachmentCell: attachmentCell
+							   wasSelectedWithRect: [self boundsForAttachmentCell: attachmentCell
+																	withTextRange: range]];
+		}
+		else{
+			[self.attachmentDelegate editableFrame: self
 									attachmentCell: attachmentCell
 								 wasTouchedAtPoint: p];
-
+		}
 	}
+}
+
+-(void)longPressed: (UIGestureRecognizer*)sender
+{
+	if(![self.attachmentDelegate respondsToSelector: @selector(editableFrame:attachmentCell:wasSelectedWithRect:)]){
+		return;
+	}
+	
+	CGPoint p = [sender locationInView: self.textInputView];
+	
+	UITextRange* range = [self workingCharacterRangeForPoint: p];
+	OATextAttachmentCell* attachmentCell = [self attachmentCellForRange: range];
+	
+	if(![self point: p insideAttachmentCell: attachmentCell withTextRange: range]){
+		return;
+	}
+	
+	if(sender.state == UIGestureRecognizerStateBegan){
+		self->shouldSelectCells = !self->shouldSelectCells;
+		if([self.attachmentDelegate respondsToSelector: @selector(editableFrame:attachmentCells:selectionModeChangedWithRects:)]){
+
+			[self.attachmentDelegate editableFrame: self
+								   attachmentCells: [self attachmentCells]
+					 selectionModeChangedWithRects: [self attachmentCellRects]];
+		}
+	
+		if(attachmentCell && self->shouldSelectCells){
+			[self.attachmentDelegate editableFrame: self
+									attachmentCell: attachmentCell
+							   wasSelectedWithRect: [self boundsForAttachmentCell: attachmentCell
+																	withTextRange: range]];
+		}
+	}
+}
+
+-(void)setShouldSelectAttachmentCells: (BOOL)s
+{
+	self->shouldSelectCells = s;
+}
+
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
+shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+	return [gestureRecognizer isEqual: self.attachmentGestureRecognizer]
+	&& [otherGestureRecognizer isEqual: self.attachmentLongPressRecognizer];
+}
+
+-(BOOL)point: (CGPoint)p insideAttachmentCell: (OATextAttachmentCell*)cell withTextRange: (UITextRange*)range
+{
+	if ( ![cell respondsToSelector: @selector(attachmentBoundsInRect:)] ) {
+		return NO;
+	}
+	
+	CGRect attachmentBounds = [self boundsForAttachmentCell: cell withTextRange: range];
+	
+	return (   p.x >= attachmentBounds.origin.x
+			&& p.x <= attachmentBounds.origin.x + attachmentBounds.size.width
+			&& p.y >= attachmentBounds.origin.y
+			&& p.y <= attachmentBounds.origin.y + attachmentBounds.size.height);
+}
+
+-(CGRect)boundsForAttachmentCell: (OATextAttachmentCell*)cell withTextRange: (UITextRange*)range
+{
+	NSRange glyphRange = [self characterRangeForTextRange:range];
+	CGRect glyphRect = [self.layoutManager
+						boundingRectForGlyphRange:glyphRange
+						inTextContainer:self.textContainer];
+	return [cell attachmentBoundsInRect:glyphRect];
+}
+
+-(NSArray*)attachmentCells
+{
+	NSMutableArray* cells = [NSMutableArray new];
+	[self.attributedText eachAttachment: ^(OATextAttachment* attachment, BOOL* stop){
+		if([attachment respondsToSelector:@selector(attachmentRenderer)]){
+			id cell = [(id)attachment attachmentRenderer];
+			[cells addObject: cell];
+		}
+	}];
+	
+	return [NSArray arrayWithArray: cells];
+}
+
+-(NSArray*)attachmentCellRects
+{
+	NSMutableArray* rects = [NSMutableArray new];
+
+	[self.attributedText enumerateAttribute: NSAttachmentAttributeName
+									inRange: NSMakeRange(0, self.attributedText.length)
+									options: 0
+								 usingBlock:^(id value, NSRange range, BOOL *stop) {
+									 UITextRange* textRange = [self textRangeForCharacterRange: range];
+									 OATextAttachmentCell* cell = [self attachmentCellForRange: textRange];
+									 CGRect rect = [self boundsForAttachmentCell: cell withTextRange: textRange];
+									 [rects addObject: [NSValue valueWithCGRect: rect]];
+								 }];
+
+	return [NSArray arrayWithArray: rects];
 }
 
 -(void)dealloc
@@ -411,7 +515,7 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 		return YES;
 	}
 	
-	if( ![self->nr_attachmentDelegate respondsToSelector:
+	if( ![self.attachmentDelegate respondsToSelector:
 		  @selector(editableFrame:attachmentCell:wasTouchedAtPoint:)] ){
 		return NO;
 	}
