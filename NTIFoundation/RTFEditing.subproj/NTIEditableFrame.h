@@ -50,6 +50,6 @@ selectionModeChangedWithRects: (NSArray*)rects;
 
 -(void)replaceRange: (UITextRange*)range withObject: (id)object;
 -(OATextAttachmentCell*)attachmentCellForPoint: (CGPoint)point fromView: (UIView*)view;
-
+- (UITextRange *)workingCharacterRangeForPoint: (CGPoint)p;
 @end
 
