@@ -12,6 +12,7 @@
 #import "NTITextAttachment.h"
 #import <OmniAppKit/OATextStorage.h>
 #import <OmniAppKit/OATextAttachmentCell.h>
+#import <OmniAppKit/NSAttributedString-OAExtensions.h>
 
 @interface OATextAttachmentCell(NTIAttachmentCellWriterCoupling)
 -(void)htmlWriter:(id)w exportHTMLToDataBuffer: (id)b withSize: (NSUInteger)s;
@@ -283,6 +284,38 @@ static NSAttributedString* correctMissingChunks(NSAttributedString* toCorrect)
 	appendChunkToMutableAttributedString(result, thirdPart);
 	
 	return [[NSAttributedString alloc] initWithAttributedString: result];
+}
+
+static NSRegularExpression *attachmentRegex;
+
+- (NSUInteger)indexofAttachment: (id)attachment
+{
+	NSUInteger index = NSNotFound;
+	NSString *string = [self string];
+	NSRange stringRange = NSMakeRange( 0, string.length );
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		// Matches the attachment character
+		NSString *pattern = [NSString stringWithCharacter: NSAttachmentCharacter];
+		attachmentRegex = [[NSRegularExpression alloc] initWithPattern: pattern
+															   options: 0
+																 error: nil];
+	});
+	// Find range of every attachment character index in |string|
+	NSArray *matches = [attachmentRegex matchesInString: string
+												options: 0
+												  range: stringRange];
+	// Check each attachment character index for |attachment|
+	for (NSTextCheckingResult *result in matches) {
+		NSRange matchRange = result.range;
+		NSUInteger matchIndex = matchRange.location;
+		id matchAttachment = [self attachmentAtCharacterIndex: matchIndex];
+		if ( matchAttachment == attachment ) {
+			index = matchIndex;
+			break;
+		}
+	}
+	return index;
 }
 
 @end

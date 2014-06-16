@@ -23,4 +23,11 @@
 -(NSAttributedString*)attributedStringByAppendingChunk: (NSAttributedString*)chunk;
 -(NSAttributedString*)attributedStringByAppendingChunks: (NSArray*)chunks;
 -(NSAttributedString*)attributedStringByReplacingRange: (NSRange)range withChunk: (NSAttributedString*)chunk;
+
+/** Retrieves the character index within the receiver of a given attachment.
+ * @param attachment The attachment whose character index should be retrieved.
+ * @return The character index of |attachment| if it is found in the receiver; NSNotFound otherwise.
+ */
+- (NSUInteger)indexofAttachment: (id)attachment;
+
 @end
