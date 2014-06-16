@@ -338,26 +338,37 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 		return;
 	}
 	
-	if(attachmentCell){
-		//If we are editing select the attachment cell so that any editing will replace it.
-		if(self.isEditable){
-			[self setSelectedTextRange: range
-						   showingMenu: NO];
-		}
-		
-		if(self->shouldSelectCells
-		   && [self.attachmentDelegate respondsToSelector:
-			   @selector(editableFrame:attachmentCell:wasSelectedWithRect:)]){
+	// Handle attachment tap
+	if ( attachmentCell ) {
+		[self attachmentCell: attachmentCell
+		   wasTouchedAtPoint: p
+			   withTextRange: range];
+	}
+}
+
+- (void)attachmentCell: (OATextAttachmentCell *)attachmentCell
+	 wasTouchedAtPoint: (CGPoint)point
+		 withTextRange: (UITextRange *)textRange
+{
+	//If we are editing select the attachment cell so that any editing will replace it.
+	if ( self.isEditable ) {
+		[self setSelectedTextRange: textRange
+					   showingMenu: NO];
+	}
+	
+	if (   self->shouldSelectCells
+		&& [self.attachmentDelegate respondsToSelector:
+			@selector(editableFrame:attachmentCell:wasSelectedWithRect:)] ) {
+			CGRect rect = [self boundsForAttachmentCell: attachmentCell
+										  withTextRange: textRange];
 			[self.attachmentDelegate editableFrame: self
 									attachmentCell: attachmentCell
-							   wasSelectedWithRect: [self boundsForAttachmentCell: attachmentCell
-																	withTextRange: range]];
+							   wasSelectedWithRect: rect];
 		}
-		else{
-			[self.attachmentDelegate editableFrame: self
-									attachmentCell: attachmentCell
-								 wasTouchedAtPoint: p];
-		}
+	else {
+		[self.attachmentDelegate editableFrame: self
+								attachmentCell: attachmentCell
+							 wasTouchedAtPoint: point];
 	}
 }
 
