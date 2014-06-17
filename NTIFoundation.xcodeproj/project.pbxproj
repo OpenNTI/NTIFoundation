@@ -975,7 +975,7 @@
 		7271BBEA13B7DC1400241FEC /* CopyLibraryResources */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; name = CopyLibraryResources; path = ../OmniGroup/Scripts/CopyLibraryResources; sourceTree = "<group>"; };
 		7271BBEC13B7DC6600241FEC /* FixStringsFile.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FixStringsFile.xcodeproj; path = ../OmniGroup/Tools/FixStringsFile/FixStringsFile.xcodeproj; sourceTree = "<group>"; };
 		7293CB271451AA7D00CD64B8 /* NTIEditableFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIEditableFrame.h; sourceTree = "<group>"; };
-		7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NTIEditableFrame.m; path = RTFEditing.subproj/NTIEditableFrame.m; sourceTree = "<group>"; };
+		7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIEditableFrame.m; sourceTree = "<group>"; };
 		72B0E41B1880C43800A75133 /* OUUnzipArchive-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "OUUnzipArchive-NTIExtensions.h"; path = "NTIFoundation/OUUnzipArchive-NTIExtensions.h"; sourceTree = SOURCE_ROOT; };
 		72B0E41C1880C43800A75133 /* OUUnzipArchive-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "OUUnzipArchive-NTIExtensions.m"; path = "NTIFoundation/OUUnzipArchive-NTIExtensions.m"; sourceTree = SOURCE_ROOT; };
 		72C0D196142529E800D526D8 /* libNTIFoundation.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNTIFoundation.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1140,6 +1140,7 @@
 			isa = PBXGroup;
 			children = (
 				7293CB271451AA7D00CD64B8 /* NTIEditableFrame.h */,
+				7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */,
 				403D0DBC143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h */,
 				403D0DBD143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.m */,
 				403D0DBE143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.h */,
@@ -1556,7 +1557,6 @@
 		72CBA96F1385CF1F00E3D28D /* NTIFoundation */ = {
 			isa = PBXGroup;
 			children = (
-				7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */,
 				400D6E0918329FDF00F07DBA /* Formatters */,
 				40F56F2015CAC4F7001FC309 /* UI */,
 				4CA4F4691535DDD30005FECD /* MathSymbols */,
