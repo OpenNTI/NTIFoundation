@@ -333,11 +333,6 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 	UITextRange* range = [self workingCharacterRangeForPoint: p];
 	OATextAttachmentCell* attachmentCell = [self attachmentCellForRange: range];
 	
-	// If the attachment cell defines more specific bounds for interaction, then ignore the tap if it is not within those bounds
-	if(![self point: p insideAttachmentCell: attachmentCell withTextRange: range]){
-		return;
-	}
-	
 	// Handle attachment tap
 	if ( attachmentCell ) {
 		[self attachmentCell: attachmentCell
@@ -382,10 +377,6 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 	
 	UITextRange* range = [self workingCharacterRangeForPoint: p];
 	OATextAttachmentCell* attachmentCell = [self attachmentCellForRange: range];
-	
-	if(![self point: p insideAttachmentCell: attachmentCell withTextRange: range]){
-		return;
-	}
 	
 	if(sender.state == UIGestureRecognizerStateBegan){
 		self->shouldSelectCells = !self->shouldSelectCells;
@@ -522,7 +513,7 @@ shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecog
 
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
-	if(self.attachmentGestureRecognizer != gestureRecognizer){
+	if(self.attachmentGestureRecognizer != gestureRecognizer && self.attachmentLongPressRecognizer != gestureRecognizer){
 		return YES;
 	}
 	
@@ -532,12 +523,12 @@ shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecog
 	}
 	
 	CGPoint p = [touch locationInView: gestureRecognizer.view];
-	
-	//UITextRange* range = [self characterRangeAtPoint: p]; //Ugh always nil in ios7 GM
+		
 	UITextRange* range = [self workingCharacterRangeForPoint: p];
 	OATextAttachmentCell* attachmentCell = [self attachmentCellForRange: range];
 	
-	return OFNOTNULL(attachmentCell);
+	//Ignore the tap if not in the bounds of an attachment cell
+	return [self point: p insideAttachmentCell: attachmentCell withTextRange: range];
 }
 
 -(UIEdgeInsets)insetsForUserDataEditor
