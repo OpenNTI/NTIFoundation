@@ -75,7 +75,7 @@ NSString* pathFromUrl( NSURL* url )
 +(NSURL*)extract: (NSURL*)archiveFile
 			  to: (NSString*)name
 		  within: (NSURL*)libraryDir
-		progress: (NTIUnzipArchiveProgress)progresscb
+		progress: (NSProgress**)progress
 		   error: (NSError**)outError
 {
 	NSString* path = pathFromUrl( archiveFile );
@@ -88,14 +88,22 @@ NSString* pathFromUrl( NSURL* url )
 	//errors. Deal with that by keeping an extra retain
 	BOOL result = YES;
 	NSArray* entries = [archive entries];
+	NSUInteger totalCount = [entries count];
 	__block NSInteger worked = 0;
+	
+	if(*progress){
+		(*progress).totalUnitCount = totalCount;
+	}
 	
 	for( OUUnzipEntry* entry in entries ) {
 		if( ![NSFileTypeRegular isEqual: [entry fileType]] ) {
-			progresscb( worked++, [entries count] );	
+			worked++;
+			if(*progress){
+				(*progress).completedUnitCount = worked;
+			}
 			continue;
 		}
-		//An autorelease pool around this look is critical, because each
+		//An autorelease pool around this loop is critical, because each
 		//file is loaded in memory as autoreleased data.
 		//TODO: Not sure how the auto-released out error is supposed to
 		//be able to make it out of the autorelease block. This seems to be a 
@@ -106,7 +114,10 @@ NSString* pathFromUrl( NSURL* url )
 			NSURL* dest = [self destinationFor: entry under: name within: libraryDir];
 			//Actually extract the entry
 			result = [archive extractEntry: entry to: dest error: &localError];
-			progresscb( worked++, [entries count] );
+			worked++;
+			if(*progress){
+				(*progress).completedUnitCount = worked;
+			}
 			if( localError ) {
 				outerError = localError;
 			}

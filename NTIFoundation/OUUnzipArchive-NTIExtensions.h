@@ -15,10 +15,12 @@ typedef void(^NTIUnzipArchiveProgress)(NSInteger worked, NSUInteger count);
 /**
  * @return The complete URL to the extracted directory, or nil on error.
  */
+
+//TODO get rid of the progresscb in favor of kvo-able NSProgress object
 +(NSURL*)extract: (NSURL*)archiveFile
-			to: (NSString*)name
-		within: (NSURL*)libraryDir
-		progress: (NTIUnzipArchiveProgress)progresscb
-		 error: (NSError**)error;
+			  to: (NSString*)name
+		  within: (NSURL*)libraryDir
+		progress: (NSProgress**)progress
+		   error: (NSError**)error;
 
 @end
