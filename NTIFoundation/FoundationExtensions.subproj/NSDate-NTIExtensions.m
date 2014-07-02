@@ -107,4 +107,20 @@ static NSString* shortDateStringNL( NSDate* date )
 	return dateDisplayString;
 }
 
+-(BOOL)isOnSameDayAsDate:(NSDate*)date
+{
+	NSCalendar* calendar = [[NSCalendar alloc]
+							initWithCalendarIdentifier:NSGregorianCalendar];
+	NSDateComponents* selfComponents =
+		[calendar components: (NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) fromDate: self];
+	NSDateComponents* dateComponents =
+		[calendar components: (NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) fromDate: date];
+	
+	BOOL sameDay = selfComponents.day == dateComponents.day;
+	BOOL sameMonth = selfComponents.month == dateComponents.month;
+	BOOL sameYear = selfComponents.year == dateComponents.year;
+	
+	return sameDay && sameMonth && sameYear;
+}
+
 @end

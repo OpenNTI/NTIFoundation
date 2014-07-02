@@ -33,4 +33,13 @@
  */
 - (NSString *)stringFromTimeIntervalWithLargestFittingTimeUnitWithinDaysUsingCutoff: (NSTimeInterval)cutoff;
 
+/**
+ *  Returns a boolean value that details if the given date is on the same day as this instance
+ *
+ *  @param date the date that will be compared to this instance
+ *
+ *  @return YES if date is on the same day as this instance
+ */
+-(BOOL)isOnSameDayAsDate:(NSDate*)date;
+
 @end
