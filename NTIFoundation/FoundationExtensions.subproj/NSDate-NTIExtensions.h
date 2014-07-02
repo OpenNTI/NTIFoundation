@@ -34,12 +34,23 @@
 - (NSString *)stringFromTimeIntervalWithLargestFittingTimeUnitWithinDaysUsingCutoff: (NSTimeInterval)cutoff;
 
 /**
- *  Returns a boolean value that details if the given date is on the same day as this instance
+ *  Returns a boolean value that details if the given date is on the same day as the reciever
  *
- *  @param date the date that will be compared to this instance
+ *  @param date the date that will be compared to the reciever
  *
- *  @return YES if date is on the same day as this instance
+ *  @return YES if date is on the same day as the reciever
  */
 -(BOOL)isOnSameDayAsDate:(NSDate*)date;
+
+/**
+ *  compares the reciever instance to the given time interval
+ *
+ *  @param timeInterval time interval to be compared to
+ *
+ *  @return The receiver and anotherDate are exactly equal to each other, NSOrderedSame
+			The receiver is later in time than anotherDate, NSOrderedDescending
+			The receiver is earlier in time than anotherDate, NSOrderedAscending.
+ */
+-(NSComparisonResult)compareToTimeInterval: (NSTimeInterval)timeInterval;
 
 @end

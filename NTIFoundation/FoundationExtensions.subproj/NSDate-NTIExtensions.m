@@ -123,4 +123,10 @@ static NSString* shortDateStringNL( NSDate* date )
 	return sameDay && sameMonth && sameYear;
 }
 
+-(NSComparisonResult)compareToTimeInterval: (NSTimeInterval)timeInterval
+{
+	NSDate* date = [NSDate dateWithTimeIntervalSince1970: timeInterval];
+	return [self compare: date];
+}
+
 @end
