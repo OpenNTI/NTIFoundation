@@ -379,7 +379,7 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 	OATextAttachmentCell* attachmentCell = [self attachmentCellForRange: range];
 	
 	if(sender.state == UIGestureRecognizerStateBegan){
-		self->shouldSelectCells = !self->shouldSelectCells;
+		self->shouldSelectCells = YES;
 		if([self.attachmentDelegate respondsToSelector: @selector(editableFrame:attachmentCells:selectionModeChangedWithRects:)]){
 
 			[self.attachmentDelegate editableFrame: self
@@ -393,6 +393,9 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 							   wasSelectedWithRect: [self boundsForAttachmentCell: attachmentCell
 																	withTextRange: range]];
 		}
+	}
+	if(sender.state == UIGestureRecognizerStateEnded){
+		self->shouldSelectCells = NO;
 	}
 }
 
