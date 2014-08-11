@@ -71,7 +71,7 @@
 	}
 	self->status = s;
 #ifdef DEBUG_SOCKETIO
-	NSLog(@"Transport status updated to %ld", s);
+	NSLog(@"Transport status updated to %ld", (unsigned long)s);
 #endif
 	[self->nr_socket transport: self connectionStatusDidChange: s];
 }
@@ -324,7 +324,7 @@
 -(void)websocket: (WebSocket7*)socket connectionStatusDidChange: (WebSocketStatus)wss
 {
 #ifdef DEBUG_SOCKETIO
-	NSLog(@"Websocket status updated to %ld", wss);
+	NSLog(@"Websocket status updated to %ld", (unsigned long)wss);
 #endif
 	
 	if( wss == WebSocketStatusDisconnected ){

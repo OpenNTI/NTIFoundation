@@ -123,7 +123,7 @@ static NSArray* implementedTransportClasses()
 	   [self->buffer count] > 0)
 	{
 #ifdef DEBUG_SOCKETIO
-		NSLog(@"Emptying buffer to tranport %ld packets", [self->buffer count]);
+		NSLog(@"Emptying buffer to tranport %ld packets", (unsigned long)[self->buffer count]);
 #endif
 		[self->transport sendPayload: [NSArray arrayWithArray: self->buffer]];
 		[self->buffer removeAllObjects];
@@ -274,7 +274,7 @@ static NSArray* implementedTransportClasses()
 	}
 	self->status = s;
 #ifdef DEBUG_SOCKETIO
-	NSLog(@"Socket status updated to %ld", self->status);
+	NSLog(@"Socket status updated to %ld", (unsigned long)self->status);
 #endif
 	
 	switch(self->status){
@@ -308,7 +308,7 @@ static NSArray* implementedTransportClasses()
 -(void)transport:(SocketIOTransport *)t connectionStatusDidChange:(SocketIOTransportStatus)s
 {
 #ifdef DEBUG_SOCKETIO
-	NSLog(@"transport %@ changed connection status to  %ld", t, s);
+	NSLog(@"transport %@ changed connection status to  %ld", t, (unsigned long)s);
 #endif
 	if( s == SocketIOTransportStatusOpen ){
 		[self clearCloseTimer];
@@ -408,7 +408,7 @@ static NSArray* implementedTransportClasses()
 		}
 		default:
 #ifdef DEBUG_SOCKETIO
-			NSLog(@"Recieved an unhandled packet of type %ld with encoding %@", packet.type, [packet encode]);
+			NSLog(@"Recieved an unhandled packet of type %ld with encoding %@", (unsigned long)packet.type, [packet encode]);
 #endif
 			break;
 	}
