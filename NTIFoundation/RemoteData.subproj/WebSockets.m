@@ -125,13 +125,22 @@ PRIVATE_STATIC_TESTABLE NSString* generateSecWebsocketKey()
 
 -(void)shutdownStreams
 {
+	if(!self->socketInputStream && !self->socketOutputStream){
+		return;
+	}
+	
 	[self->socketOutputStream close];
 	[self->socketInputStream close];
 	[self->socketInputStream removeFromRunLoop: [NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 	[self->socketOutputStream removeFromRunLoop: [NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+	self->socketInputStream.delegate = nil;
+	self->socketOutputStream.delegate = nil;
 	self->socketInputStream = nil;
 	self->socketOutputStream = nil;
-	[self updateStatus: WebSocketStatusDisconnected];
+	dispatch_async(dispatch_get_main_queue(), ^(){
+		[self updateStatus: WebSocketStatusDisconnected];
+	});
+	
 }
 
 
@@ -163,7 +172,7 @@ PRIVATE_STATIC_TESTABLE NSString* generateSecWebsocketKey()
 	else{
 		WebSocketData* wsdata = [responseBuffer websocketData];
 #ifdef DEBUG_SOCKETIO
-		NSLog(@"Recieved data for length %ld", wsdata.data.length);
+		NSLog(@"Recieved data for length %ld", (unsigned long)wsdata.data.length);
 #endif
 		[self enqueueRecievedData: wsdata];
 		if( [self->nr_delegate respondsToSelector: @selector(websocketDidRecieveData:)] ){
@@ -257,12 +266,12 @@ PRIVATE_STATIC_TESTABLE NSString* cookieHeaderForServer(NSURL* server)
 {
 	NSUInteger numBytesToTryAndSend = self->dataToWrite.length - self->dataToWriteOffset;
 #ifdef DEBUG_SOCKETIO
-	NSLog(@"About to send data length = %ld", numBytesToTryAndSend);
+	NSLog(@"About to send data length = %ld", (unsigned long)numBytesToTryAndSend);
 #endif
 	NSInteger bytesSent = [self->socketOutputStream write: self->dataToWrite.bytes + self->dataToWriteOffset 
 												maxLength: numBytesToTryAndSend];
 #ifdef DEBUG_SOCKETIO
-	NSLog(@"Data send complete.  Sent %ld bytes", bytesSent);
+	NSLog(@"Data send complete.  Sent %ld bytes", (unsigned long)bytesSent);
 #endif
 	self->shouldForcePumpOutputStream = NO;
 	self->dataToWriteOffset += bytesSent;
@@ -438,7 +447,7 @@ PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, N
 		else{
 #ifdef DEBUG_SOCKETIO
 			NSLog(@"Unhandled stream event NSStreamEventHasBytesAvailable for stream %@ status is %ld. Dropping %ld bytes", 
-				  self->socketInputStream, self->status, maxLength - consumed);
+				  self->socketInputStream, (unsigned long)self->status,(unsigned long) maxLength - consumed);
 #endif
 			
 			break;
@@ -515,6 +524,7 @@ PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, N
 
 -(void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode
 {
+	NSLog(@"recieved event %lu for stream %@ with status %lu", (unsigned long) eventCode, aStream, (unsigned long) aStream.streamStatus);
 	if( eventCode == NSStreamEventErrorOccurred){
 		NSError *theError = [aStream streamError];
 		NSLog(@"%@ Error: %@ code=%ld domain=%@", aStream, [theError localizedDescription], (long)theError.code, theError.domain);
@@ -522,11 +532,13 @@ PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, N
 	}
 
 	if (aStream == self->socketInputStream){
+		OBASSERT(aStream.streamStatus != NSStreamStatusClosed);
 		[self handleInputStreamEvent: eventCode];
 		return;
 	}
 	
 	if(aStream == self->socketOutputStream){
+		OBASSERT(aStream.streamStatus != NSStreamStatusClosed);
 		[self handleOutputStreamEvent: eventCode];
 		return;
 	}
