@@ -458,7 +458,9 @@ shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecog
 									 UITextRange* textRange = [self textRangeForCharacterRange: range];
 									 OATextAttachmentCell* cell = [self attachmentCellForRange: textRange];
 									 CGRect rect = [self boundsForAttachmentCell: cell withTextRange: textRange];
-									 [rects addObject: [NSValue valueWithCGRect: rect]];
+									 if(!CGRectEqualToRect(rect, CGRectZero)){
+										 [rects addObject: [NSValue valueWithCGRect: rect]];
+									 }
 								 }];
 
 	return [NSArray arrayWithArray: rects];
