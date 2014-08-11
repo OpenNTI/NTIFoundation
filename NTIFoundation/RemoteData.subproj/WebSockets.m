@@ -496,7 +496,12 @@ PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, N
 	//Stream wants us to read something
 	if( eventCode == NSStreamEventHasBytesAvailable)
 	{
-		[self consumeStreamData];
+		@try{
+			[self consumeStreamData];
+		}
+		@catch (NSException* e) {
+			NSLog(@"An exception occurred reading stream data %@", e);
+		}
 	}
 	else if( eventCode == NSStreamEventEndEncountered ){
 		if(self->status != WebSocketStatusDisconnected){
