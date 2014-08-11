@@ -867,7 +867,6 @@
 		40AB82441566A6F500BB7375 /* OCHamcrestIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OCHamcrestIOS.framework; path = "../NTIWorkspace/OCHamcrest-3.0.1/OCHamcrestIOS.framework"; sourceTree = "<group>"; };
 		40AB825E1566AA0C00BB7375 /* OQColor-NTIExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OQColor-NTIExtensionsTest.h"; sourceTree = "<group>"; };
 		40AB825F1566AA0C00BB7375 /* OQColor-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OQColor-NTIExtensionsTest.m"; sourceTree = "<group>"; };
-		40B5B49514C896CC009D5810 /* libNTIUserDataModel.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libNTIUserDataModel.a; path = "../../../Library/Developer/Xcode/DerivedData/NTIWorkspace-fdtwmhzrtxvlxtdrcxuhoowljuey/Build/Products/Debug-iphoneos/libNTIUserDataModel.a"; sourceTree = "<group>"; };
 		40B5B4B114C89A9C009D5810 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		40B6F3B814285AF4007EDF1C /* WebSocket7Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSocket7Test.h; sourceTree = "<group>"; };
 		40B6F3B914285AF4007EDF1C /* WebSocket7Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSocket7Test.m; sourceTree = "<group>"; };
@@ -1502,7 +1501,6 @@
 			children = (
 				407E670B17A05BF300178177 /* Configurations */,
 				40F56E8815C8B9FB001FC309 /* NTILogicTestBase */,
-				40B5B49514C896CC009D5810 /* libNTIUserDataModel.a */,
 				72CBA96F1385CF1F00E3D28D /* NTIFoundation */,
 				72D8185D13955D8C00473994 /* UnitTests */,
 				40572C5E14C894940032D2DB /* NTINavigationExample */,
@@ -3113,6 +3111,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
+					"DEBUG_SOCKETIO=1",
 				);
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
