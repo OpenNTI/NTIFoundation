@@ -133,10 +133,9 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 	self.attachmentGestureRecognizer.delegate = self;
 	[self addGestureRecognizer: self.attachmentGestureRecognizer];
 	
-	//Uncomment to turn on reply to whiteboard
-//	self.attachmentLongPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget: self action: @selector(longPressed:)];
-//	self.attachmentLongPressRecognizer.delegate = self;
-//	[self addGestureRecognizer: self.attachmentLongPressRecognizer];
+	self.attachmentLongPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget: self action: @selector(longPressed:)];
+	self.attachmentLongPressRecognizer.delegate = self;
+	[self addGestureRecognizer: self.attachmentLongPressRecognizer];
 	
 	//We set a default font here.  This will be the font until attributedString
 	//gets set.  Which is good for us.  THis effectively acts as the default
