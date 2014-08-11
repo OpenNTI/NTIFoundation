@@ -193,6 +193,11 @@
 	}
 }
 
+-(void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error
+{
+	NSLog(@"Session %@ became invalid. %@", session, error);
+}
+
 -(void)dealloc
 {
 	[self invalidateSessionCancelTasks: YES];
