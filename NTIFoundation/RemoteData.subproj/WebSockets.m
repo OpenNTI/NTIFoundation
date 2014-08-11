@@ -529,7 +529,7 @@ PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, N
 
 -(void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode
 {
-	NSLog(@"recieved event %lu for stream %@ with status %lu", (unsigned long) eventCode, aStream, (unsigned long) aStream.streamStatus);
+	//NSLog(@"recieved event %lu for stream %@ with status %lu", (unsigned long) eventCode, aStream, (unsigned long) aStream.streamStatus);
 	if( eventCode == NSStreamEventErrorOccurred){
 		NSError *theError = [aStream streamError];
 		NSLog(@"%@ Error: %@ code=%ld domain=%@", aStream, [theError localizedDescription], (long)theError.code, theError.domain);
