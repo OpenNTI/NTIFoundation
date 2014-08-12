@@ -188,6 +188,7 @@
 		40E04618143F50A60091CE7C /* OQColor-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 40E04616143F50A60091CE7C /* OQColor-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40E04619143F50A60091CE7C /* OQColor-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E04617143F50A60091CE7C /* OQColor-NTIExtensions.m */; };
 		40E0461C143F5F260091CE7C /* NTIHTMLReaderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E0461B143F5F260091CE7C /* NTIHTMLReaderTest.m */; };
+		40E0849C199AD81000DEE678 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40E0849B199AD81000DEE678 /* AssetsLibrary.framework */; };
 		40EAF82D18FC693000A537D4 /* NSData+NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 40EAF82B18FC693000A537D4 /* NSData+NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40EAF82E18FC693000A537D4 /* NSData+NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 40EAF82C18FC693000A537D4 /* NSData+NTIExtensions.m */; };
 		40EAF82F18FC693000A537D4 /* NSData+NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 40EAF82C18FC693000A537D4 /* NSData+NTIExtensions.m */; };
@@ -894,6 +895,7 @@
 		40E04617143F50A60091CE7C /* OQColor-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OQColor-NTIExtensions.m"; sourceTree = "<group>"; };
 		40E0461A143F5F260091CE7C /* NTIHTMLReaderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIHTMLReaderTest.h; sourceTree = "<group>"; };
 		40E0461B143F5F260091CE7C /* NTIHTMLReaderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIHTMLReaderTest.m; sourceTree = "<group>"; };
+		40E0849B199AD81000DEE678 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		40EAF82B18FC693000A537D4 /* NSData+NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+NTIExtensions.h"; sourceTree = "<group>"; };
 		40EAF82C18FC693000A537D4 /* NSData+NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+NTIExtensions.m"; sourceTree = "<group>"; };
 		40F39C7F14D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL-NTIFileSystemExtensionsTest.h"; sourceTree = "<group>"; };
@@ -1065,6 +1067,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40E0849C199AD81000DEE678 /* AssetsLibrary.framework in Frameworks */,
 				40FB28EE18D2B47B00A450FA /* XCTest.framework in Frameworks */,
 				406151A617F211DF004B7B0A /* StoreKit.framework in Frameworks */,
 				406151A717F211E8004B7B0A /* libOmniDAV.a in Frameworks */,
@@ -1525,6 +1528,7 @@
 		72CBA9681385CF1F00E3D28D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				40E0849B199AD81000DEE678 /* AssetsLibrary.framework */,
 				40FB28B018D2AEAF00A450FA /* XCTest.framework */,
 				406151A517F211DF004B7B0A /* StoreKit.framework */,
 				40AB82441566A6F500BB7375 /* OCHamcrestIOS.framework */,
