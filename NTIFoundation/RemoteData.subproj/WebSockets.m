@@ -133,14 +133,9 @@ PRIVATE_STATIC_TESTABLE NSString* generateSecWebsocketKey()
 	[self->socketInputStream close];
 	[self->socketInputStream removeFromRunLoop: [NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 	[self->socketOutputStream removeFromRunLoop: [NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
-	self->socketInputStream.delegate = nil;
-	self->socketOutputStream.delegate = nil;
 	self->socketInputStream = nil;
 	self->socketOutputStream = nil;
-	dispatch_async(dispatch_get_main_queue(), ^(){
-		[self updateStatus: WebSocketStatusDisconnected];
-	});
-	
+	[self updateStatus: WebSocketStatusDisconnected];
 }
 
 
