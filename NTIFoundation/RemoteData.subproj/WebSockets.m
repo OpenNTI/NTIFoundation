@@ -555,8 +555,8 @@ static NSDictionary* sslProperties()
 	//There is some confusion as to whether or not kCGStreamSSLAllowsAnyRoot is depricated or not.
 	//If it is, it appears we have to fall back to the more "global" kCFStreamSSLValidatesCertificateChain.
 	//It def. appears depricated in mac osx 10.6 but it doesn't appear depricated in IOS
-	[sslSettings setObject:(id)kCFBooleanTrue forKey:(NSString *)kCFStreamSSLAllowsAnyRoot];
-	//	[sslSettings setObject:(id)kCFBooleanFalse forKey:(NSString *)kCFStreamSSLValidatesCertificateChain];
+//	[sslSettings setObject:(id)kCFBooleanTrue forKey:(NSString *)kCFStreamSSLAllowsAnyRoot];
+		[sslSettings setObject:(id)kCFBooleanFalse forKey:(NSString *)kCFStreamSSLValidatesCertificateChain];
 #endif
 	return sslSettings;
 }
