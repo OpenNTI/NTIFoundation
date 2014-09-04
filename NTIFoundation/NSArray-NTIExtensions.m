@@ -27,11 +27,6 @@
 	return self.count > 0;
 }
 
--(id)firstObject
-{
-	return [self objectAtIndex: 0];	
-}
-
 -(id)firstObjectOrNil
 {
 	return [NSArray isEmptyArray: self]
