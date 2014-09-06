@@ -27,4 +27,6 @@
 
 -(void)invalidateSessionCancelTasks: (BOOL)cancel;
 
+@property (nonatomic, copy) NSString* sessionManagerDescription;
+
 @end

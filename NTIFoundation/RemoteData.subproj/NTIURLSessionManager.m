@@ -90,6 +90,7 @@
 		
 		//Assign the new session
 		self->_session = session;
+		self->_session.sessionDescription = self.sessionManagerDescription;
 	});
 }
 
@@ -195,7 +196,7 @@
 
 -(void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error
 {
-	NSLog(@"Session %@ became invalid. %@", session, error);
+	NSLog(@"Session %@ became invalid. %@", session.sessionDescription?:session, error);
 }
 
 -(void)dealloc
