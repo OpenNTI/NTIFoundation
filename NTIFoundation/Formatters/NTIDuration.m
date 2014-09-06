@@ -31,7 +31,7 @@
 	NSDateComponents* comps = [[NSDateComponents alloc] init];
 	comps.year = self.years;
 	comps.month = self.monthes;
-	comps.week = self.weeks;
+	comps.weekOfYear = self.weeks;
 	comps.day = self.days;
 	comps.hour = self.hours;
 	comps.minute = self.minutes;

@@ -112,7 +112,7 @@
 	
 	if([NSArray isEmptyArray: groups]){
 		if(*error){
-			*error = [NSError errorWithDomain: @"NTIISO8601DurationFormatter" code:-1 userInfo: nil];
+			*error = (id)[NSError errorWithDomain: @"NTIISO8601DurationFormatter" code:-1 userInfo: nil];
 			return NO;
 		}
 	}
