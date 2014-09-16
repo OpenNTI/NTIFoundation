@@ -65,7 +65,7 @@ typedef NSInteger SocketIOSocketStatus;
 	SocketIOSocketStatus status;
 	SocketIOTransport* transport;
 	id __weak nr_statusDelegate;
-	NSMutableArray* eventDelegates;
+	NSHashTable* eventDelegates;
 	NTIDelegatingDownloader* handshakeDownloader;
 	BOOL shouldBuffer;
 	NSMutableArray* buffer;

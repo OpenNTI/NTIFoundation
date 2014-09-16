@@ -71,7 +71,7 @@ static NSArray* implementedTransportClasses()
 	self.shouldBuffer = YES;	
 	self->handshakeDownloader = [[NTIDelegatingDownloader alloc] 
 								 init];
-	self->eventDelegates = [NSMutableArray arrayWithCapacity: 3];
+	self->eventDelegates = [NSHashTable hashTableWithOptions: NSHashTableWeakMemory];
 	self->baseReconnectTimeout = 3;
 	self->maxReconnectAttempts = NSIntegerMax;
 	self->maxReconnectTimeout = 120; //2minutes
@@ -85,7 +85,7 @@ static NSArray* implementedTransportClasses()
 //Returns false if the delegate already existed. else false
 -(BOOL)addEventDelegate: (id)eventDelegate
 {
-	if( [self->eventDelegates containsObjectIdenticalTo: eventDelegate] ){
+	if( [self->eventDelegates containsObject: eventDelegate] ){
 		return NO;
 	}
 	
@@ -98,11 +98,11 @@ static NSArray* implementedTransportClasses()
 //returns YES if it was removed else NO
 -(BOOL)removeEventDelegate: (id)eventDelegate
 {
-	if( [self->eventDelegates containsObjectIdenticalTo: eventDelegate] ){
+	if( [self->eventDelegates containsObject: eventDelegate] ){
 		return NO;
 	}
 	
-	[self->eventDelegates removeObjectIdenticalTo: eventDelegate];
+	[self->eventDelegates removeObject: eventDelegate];
 	
 	return YES;
 }
