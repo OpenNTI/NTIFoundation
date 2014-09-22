@@ -32,6 +32,7 @@
  * value.
  */
 -(NSDate*)httpHeaderDateValue;
+
 @end
 
 @interface NSDate(NTIHTTPHeaderConversions)
@@ -49,5 +50,10 @@
 -(NSArray*)piecesUsingRegex: (NSRegularExpression*)regex;
 -(NSArray*)piecesUsingRegexString: (NSString*)regex;
 -(BOOL)isEqualToStringIgnoringCase: (NSString*)s;
+
+/**
+ * Returns the value of the receiver after removing HTML tags.
+ */
+- (NSString *)stringByRemovingHTML;
 
 @end

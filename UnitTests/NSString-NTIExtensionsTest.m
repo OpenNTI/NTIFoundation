@@ -45,4 +45,17 @@
 	
 }
 
+- (void)testStringByRemovingHTML
+{
+	NSString *string = @"<html><b class='test'>functional group</b></html>";
+	string = [string stringByRemovingHTML];
+	// HTML is properly removed from string
+	XCTAssert([string isEqualToString: @"functional group"],
+			  @"HTML is not properly removed from string.");
+	string = [string stringByRemovingHTML];
+	// String with no HTML is not modified erroneously
+	XCTAssert([string isEqualToString: @"functional group"],
+			  @"String with no HTML is modified erroneously.");
+}
+
 @end

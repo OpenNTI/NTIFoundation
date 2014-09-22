@@ -104,4 +104,18 @@ static NSDateFormatter* rfc3339DateFormatter()
     return [self caseInsensitiveCompare: s] == NSOrderedSame;
 }
 
+- (NSString *)stringByRemovingHTML
+{
+	NSString *string = [self copy];
+	NSRange range = [string rangeOfString: @"<[^>]+>"
+								  options: NSRegularExpressionSearch];
+	while ( range.location != NSNotFound ) {
+		string = [string stringByReplacingCharactersInRange: range
+												 withString: @""];
+		range = [string rangeOfString: @"<[^>]+>"
+							  options: NSRegularExpressionSearch];
+	}
+	return string;
+}
+
 @end
