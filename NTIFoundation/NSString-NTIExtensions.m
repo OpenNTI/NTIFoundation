@@ -118,4 +118,34 @@ static NSDateFormatter* rfc3339DateFormatter()
 	return string;
 }
 
+- (NSString *)stringByReplacingAmpEscapes
+{
+	NSMutableString *string = [self mutableCopy];
+	[string replaceOccurrencesOfString: @"&amp;"
+							withString: @"&"
+									 options: 1
+								 range: NSMakeRange(0, string.length)];
+	[string replaceOccurrencesOfString: @"&lt;"
+							withString: @"<"
+									 options: 1
+								 range: NSMakeRange(0, string.length)];
+	[string replaceOccurrencesOfString: @"&gt;"
+							withString: @">"
+									 options: 1
+								 range: NSMakeRange(0, string.length)];
+	[string replaceOccurrencesOfString: @"&lrm;"
+							withString: @"\u200e"
+									 options: 1
+								 range: NSMakeRange(0, string.length)];
+	[string replaceOccurrencesOfString: @"&rlm;"
+							withString: @"\u200f"
+									 options: 1
+								 range: NSMakeRange(0, string.length)];
+	[string replaceOccurrencesOfString: @"&nbsp;"
+							withString: @"\u00a0"
+									 options: 1
+								 range: NSMakeRange(0, string.length)];
+	return [string copy];
+}
+
 @end

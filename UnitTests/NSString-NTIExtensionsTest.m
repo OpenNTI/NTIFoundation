@@ -58,4 +58,17 @@
 			  @"String with no HTML is modified erroneously.");
 }
 
+- (void)testStringByRemovingAmpEscapes
+{
+	NSString *string = @"Instructions for registering for access to the Mastering A&amp;P site.";
+	string = [string stringByReplacingAmpEscapes];
+	// Amp-escapes are property replaced in string
+	XCTAssert([string isEqualToString: @"Instructions for registering for access to the Mastering A&P site."],
+			  @"Amp-escapes are not properly replaced in string.");
+	string = [string stringByReplacingAmpEscapes];
+	// String with no amp-escapes is not modified erroneously
+	XCTAssert([string isEqualToString: @"Instructions for registering for access to the Mastering A&P site."],
+			  @"String with no amp-escapes is modified erroneously.");
+}
+
 @end

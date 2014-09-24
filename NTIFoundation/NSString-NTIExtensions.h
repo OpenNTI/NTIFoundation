@@ -56,4 +56,9 @@
  */
 - (NSString *)stringByRemovingHTML;
 
+/**
+ * Returns the value of the receiver after replacing ampersand escapes (e.g., "&amp;") with their represented values.
+ */
+- (NSString *)stringByReplacingAmpEscapes;
+
 @end
