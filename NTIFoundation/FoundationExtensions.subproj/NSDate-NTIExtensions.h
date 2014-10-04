@@ -17,6 +17,8 @@
 
 @property (nonatomic, readonly) NSString* stringWithShortDateFormatNL;
 
++(NSDate*)now;
+
 +(NSString*) stringFromTimeIntervalWithLargestFittingTimeUnit: (NSUInteger)timeInterval;
 
 /**

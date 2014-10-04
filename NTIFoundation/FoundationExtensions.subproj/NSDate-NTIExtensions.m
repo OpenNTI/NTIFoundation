@@ -10,6 +10,11 @@
 
 @implementation NSDate(NTIExtensions)
 
++(NSDate*)now
+{
+	return [NSDate new];
+}
+
 static NSString* shortDateStringNL( NSDate* date )
 {
 	static NSDateFormatter* dateFormatter;
