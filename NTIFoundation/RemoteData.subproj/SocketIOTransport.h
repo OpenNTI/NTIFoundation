@@ -53,7 +53,6 @@ typedef NSInteger SocketIOTransportStatus;
 
 @interface SocketIOXHRPollingTransport : SocketIOTransport{
 @private
-	NTIDelegatingDownloader* downloader;
 	NSMutableArray* sendBuffer;
 }
 @end

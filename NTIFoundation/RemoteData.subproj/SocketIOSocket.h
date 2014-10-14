@@ -10,7 +10,6 @@
 
 @class SocketIOPacket;
 @class SocketIOTransport;
-@class NTIDelegatingDownloader;
 
 //Callback for ack callbacks.  First argument indicates
 //whether the callback is being called because an ack was recieved.  The argument
@@ -66,7 +65,6 @@ typedef NSInteger SocketIOSocketStatus;
 	SocketIOTransport* transport;
 	id __weak nr_statusDelegate;
 	NSHashTable* eventDelegates;
-	NTIDelegatingDownloader* handshakeDownloader;
 	BOOL shouldBuffer;
 	NSMutableArray* buffer;
 	BOOL reconnecting;

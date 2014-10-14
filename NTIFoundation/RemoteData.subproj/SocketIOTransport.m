@@ -151,6 +151,10 @@
  * We likely want some complicated hueristic that polls repeatedly when
  * there are things going on and backs off to a timer based polling implementation.
  */
+@interface SocketIOXHRPollingTransport()
+@property (nonatomic, strong) NSURLSessionDataTask* currentTask;
+@end
+
 @implementation SocketIOXHRPollingTransport
 
 +(NSString*)name
@@ -180,7 +184,7 @@
 
 -(void)poll
 {
-	if(self->downloader || self.status != SocketIOTransportStatusOpen){
+	if(self.currentTask || self.status != SocketIOTransportStatusOpen){
 		return;
 	}
 #ifdef DEBUG_SOCKETIO
@@ -203,30 +207,41 @@
 #endif
 	}
 
-	self->downloader = [[NTIDelegatingDownloader alloc] init];
-	self->downloader.nr_delegate = self;
 	NSURLRequest* request = [self requestWithMethod: method andData: data];
-	NSURLConnection* connection = [NSURLConnection connectionWithRequest: request delegate: self->downloader];
-	[connection start];
+	
+	[self performTaskForRequest: request];
 }
 
-#pragma mark downloader delegate methods
-#pragma mark handshake downloader delegate
--(void)downloader:(NTIDelegatingDownloader *)d connection: (NSURLConnection*)c didFailWithError:(NSError *)error
+-(void)performTaskForRequest: (NSURLRequest*)request
 {
-	//Regardless of when we encountered the error. raise and disconnect.
+	SocketIOXHRPollingTransport* weakSelf = self;
+	
+	//TODO use our own session for this.
+	NSURLSessionDataTask* task = [[NSURLSession sharedSession] dataTaskWithRequest: request
+																 completionHandler: ^(NSData *data, NSURLResponse *response, NSError *error) {
+																	 weakSelf.currentTask = nil;
+																	 if(!data && error){
+																		 [weakSelf handleError: error];
+																	 }
+																	 else{
+																		 [weakSelf handleResponse: (id)response withData: data];
+																	 }
+																 }];
+	self.currentTask = task;
+	[self.currentTask resume];
+}
+
+-(void)handleError: (NSError*)error
+{
 	[self logAndRaiseError: error];
 	[self disconnect];
-	
 }
 
--(void)downloader: (NTIDelegatingDownloader *)d didFinishLoading:(NSURLConnection *)c
+-(void)handleResponse: (NSHTTPURLResponse*)response withData: (NSData*)dataBody
 {
-	if( [d statusWasSuccess] ){
+	if( [[NSIndexSet indexSetWithIndexesInRange: NSMakeRange(200, 100)] containsIndex: response.statusCode] ){
 		//We got a response if it was from connecting we need to start our timer.
-		NSData* dataBody = [downloader data];
-		self->downloader = nil;
-		
+
 		//We only poll if we are open.  If we are closed now just have to throw away the data
 		if( self.status == SocketIOTransportStatusClosed ){
 			return;
@@ -244,21 +259,18 @@
 		}
 	}
 	else{
-		NSError* error = [self createErrorWithCode: d.statusCode 
+		NSError* error = [self createErrorWithCode: response.statusCode
 										andMessage: @"The transport recieved an unsuccesful http response"];
-		[self downloader: d connection: c didFailWithError: error];
+		[self handleError: error];
 	}
-}
 
+}
 
 -(void)connect
 {
 	[self updateStatus: SocketIOTransportStatusOpening];
 	NSURLRequest* request = [self requestWithMethod: @"POST" andData: nil];
-	self->downloader = [[NTIDelegatingDownloader alloc] init];
-	self->downloader.nr_delegate = self;
-	NSURLConnection* connection = [NSURLConnection connectionWithRequest: request delegate: self->downloader];
-	[connection start];
+	[self performTaskForRequest: request];
 }
 
 -(void)disconnect
