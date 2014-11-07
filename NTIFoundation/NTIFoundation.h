@@ -39,7 +39,6 @@
 #import "NSMutableDictionary-NTIExtensions.h"
 #import "OUUnzipArchive-NTIExtensions.h"
 #import "NTIAbstractDownloader.h"
-#import "NTIURLSessionManager.h"
 #import "NTIUtilities.h"
 #import "SocketIOPacket.h"
 #import "SocketIOSocket.h"
