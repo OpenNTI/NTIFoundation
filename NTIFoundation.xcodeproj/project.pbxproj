@@ -1954,10 +1954,8 @@
 			buildConfigurationList = 72D8186813955D8C00473994 /* Build configuration list for PBXNativeTarget "NTIFoundationLogicTests" */;
 			buildPhases = (
 				72D8185413955D8C00473994 /* Sources */,
-				72D7D53A13E330BA00652DAC /* Copy Library Resources */,
 				72D8185513955D8C00473994 /* Frameworks */,
 				72D8185613955D8C00473994 /* Resources */,
-				72D8185713955D8C00473994 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -2397,33 +2395,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "d=`date +%F_%H:%M`\nr=`svn info | grep Revision | awk '{print $2}'`\necho \"#define NTI_CURRENT_DATE_STRING $d-$USER-r$r\" > NTIFoundation/NTIFoundation-Info.h\ntouch NTIFoundation/NTIFoundation-Info.plist";
-		};
-		72D7D53A13E330BA00652DAC /* Copy Library Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Library Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = ../OmniGroup/Scripts/CopyLibraryResources;
-		};
-		72D8185713955D8C00473994 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
