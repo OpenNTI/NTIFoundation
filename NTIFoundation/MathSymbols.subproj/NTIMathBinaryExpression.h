@@ -15,7 +15,7 @@
 @property( nonatomic, strong) NTIMathSymbol* leftMathNode;
 @property( nonatomic, strong) NTIMathSymbol* rightMathNode;
 @property( nonatomic ) BOOL isOperatorImplicit;
-@property( nonatomic, assign) NTIMathSymbol* implicitForSymbol;
+@property( nonatomic, strong) NTIMathSymbol* implicitForSymbol;
 
 -(id)initWithMathOperatorSymbol: (NSString *)operatorString;
 -(NTIMathSymbol *)swapNode: (NTIMathSymbol *)childNode 
