@@ -86,6 +86,52 @@ static NSString* shortDateStringNL( NSDate* date )
 	return [NSString stringWithFormat:@"%lu %@", (unsigned long)timeSince, timeUnitString];
 }
 
+static int const timeConstant = 60;
+
++(NSString *)stringFromTimeInterval:(NSTimeInterval)timeInterval
+{
+	CGFloat seconds = (int)timeInterval % timeConstant;
+	NSString* secondsTemplate = NSLocalizedStringWithDefaultValue(@"nsdate-ntiextension.seconds.template",
+																  @"NextThought",
+																  [NSBundle mainBundle],
+																  @"%@ SECONDS",
+																  @"string representing seconds");
+	NSString* secondsString = [NSString stringWithFormat: secondsTemplate, @(seconds)];
+	
+	int minutesTotal = (int)(timeInterval / timeConstant);
+	int minutes = (int)minutesTotal % timeConstant;
+	NSString* minutesTemplate = NSLocalizedStringWithDefaultValue(@"nsdate-ntiextension.minutes.template",
+																  @"NextThought",
+																  [NSBundle mainBundle],
+																  @"%@ MINUTES ",
+																  @"string representing minutes");
+	NSString* minutesString = [NSString stringWithFormat: minutesTemplate, @(minutes)];
+	
+	int hours = minutesTotal / timeConstant;
+	NSString* hoursTemplate = NSLocalizedStringWithDefaultValue(@"nsdate-ntiextension.hours.template",
+																  @"NextThought",
+																  [NSBundle mainBundle],
+																  @"%@ HOURS ",
+																  @"string representing hours");
+	NSString* hoursString = [NSString stringWithFormat: hoursTemplate, @(hours)];
+	
+	NSString* timeString = @"";
+	if(timeInterval < timeConstant){
+		timeString = [secondsString stringByAppendingString: timeString];
+	}
+	else{
+		if(minutes > 0 || hours > 0){
+			timeString = [minutesString stringByAppendingString: timeString];
+		}
+		if(hours > 0){
+			timeString = [hoursString stringByAppendingString: timeString];
+		}
+	}
+	
+	return [timeString stringByTrimmingCharactersInSet:
+			[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
 - (NSString *)stringFromTimeIntervalWithLargestFittingTimeUnitWithinDaysUsingCutoff: (NSTimeInterval)cutoff;
 {
 	static NSDateFormatter* dateFormatter;
