@@ -125,13 +125,13 @@ static int const timeConstant = 60;
 	else{
 		if(minutes > 0 || hours > 0){
 			if(![NSString isEmptyString: timeString]){
-				timeString = [timeString stringByAppendingString: @" "];
+				minutesString = [minutesString stringByAppendingString: @" "];
 			}
 			timeString = [minutesString stringByAppendingString: timeString];
 		}
 		if(hours > 0){
 			if(![NSString isEmptyString: timeString]){
-				timeString = [timeString stringByAppendingString: @" "];
+				hoursString = [hoursString stringByAppendingString: @" "];
 			}
 			timeString = [hoursString stringByAppendingString: timeString];
 		}
