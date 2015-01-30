@@ -115,6 +115,8 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 
 -(BOOL)becomeFirstResponder
 {
+	self->_contentOffsetBeforeBecomingFirstResponder = self.contentOffset;
+	
 	BOOL r = [super becomeFirstResponder];
 	
 	if(self.allowsAddingCustomObjects){
