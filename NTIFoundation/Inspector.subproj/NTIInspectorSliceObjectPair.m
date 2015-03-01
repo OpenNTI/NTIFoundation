@@ -22,20 +22,14 @@
 	return self;
 }
 
-NSComparisonResult compareByTitle(OUIInspectorSlice* a, OUIInspectorSlice* b, void* context);
-NSComparisonResult compareByTitle(OUIInspectorSlice* a, OUIInspectorSlice* b, void* context)
-{
-	return [[a title] caseInsensitiveCompare: [b title]];
-}
-
-
 -(void)addSlices: (NSArray *)slices
 {
 	for(id slice in slices){
 		if(![self->inspectorSlices containsObject: slice]){
 			[self->inspectorSlices insertObject: slice 
-					 inArraySortedUsingFunction: compareByTitle 
-										context: NULL];
+					 inArraySortedUsingComparator:^NSComparisonResult(OUIInspectorSlice* a, OUIInspectorSlice* b) {
+						 return [[a title] caseInsensitiveCompare: [b title]];
+					 }];
 		}
 	}
 }

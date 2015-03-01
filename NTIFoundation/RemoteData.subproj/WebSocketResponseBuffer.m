@@ -185,14 +185,8 @@
 	
 }
 
-#ifdef TEST
-#define PRIVATE_STATIC_TESTABLE
-#else
-#define PRIVATE_STATIC_TESTABLE static
-#endif
-
-PRIVATE_STATIC_TESTABLE NSUInteger bytesToLength(uint8_t* bytes, uint8_t num);
-PRIVATE_STATIC_TESTABLE NSUInteger bytesToLength(uint8_t* bytes, uint8_t num)
+static NSUInteger bytesToLength(uint8_t* bytes, uint8_t num);
+static NSUInteger bytesToLength(uint8_t* bytes, uint8_t num)
 {
 	NSUInteger theLength = 0;
 	for(int i=0; i<num; i++){
@@ -202,7 +196,11 @@ PRIVATE_STATIC_TESTABLE NSUInteger bytesToLength(uint8_t* bytes, uint8_t num)
 	return theLength;
 }
 
-#undef PRIVATE_STATIC_TESTABLE
+//For exposing the static function for testing
++(NSUInteger)_websocketResponseSizeBytes: (uint8_t*)bytes num: (uint8_t)num
+{
+	return bytesToLength(bytes, num);
+}
 
 //Reads as much data from the byte array as it can for the mask and length bits.
 //Returns the number of bytes actually consumed.
