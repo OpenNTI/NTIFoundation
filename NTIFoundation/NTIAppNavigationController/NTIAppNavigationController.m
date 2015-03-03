@@ -98,7 +98,7 @@ static UILabel* titleLabelForToolbar()
 	self.delegate = d;
 	self->target = t;
 	self->downButton = [[UIBarButtonItem alloc] initWithTitle: @"Down"
-														style: UIBarButtonItemStyleBordered 
+														style: UIBarButtonItemStylePlain
 													   target: self->target
 													   action: @selector(down:)];
 	
