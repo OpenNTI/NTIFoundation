@@ -170,11 +170,11 @@ static int const timeConstant = 60;
 -(BOOL)isOnSameDayAsDate:(NSDate*)date
 {
 	NSCalendar* calendar = [[NSCalendar alloc]
-							initWithCalendarIdentifier:NSGregorianCalendar];
+							initWithCalendarIdentifier: NSCalendarIdentifierGregorian];
 	NSDateComponents* selfComponents =
-		[calendar components: (NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) fromDate: self];
+		[calendar components: (NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate: self];
 	NSDateComponents* dateComponents =
-		[calendar components: (NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit) fromDate: date];
+		[calendar components: (NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate: date];
 	
 	BOOL sameDay = selfComponents.day == dateComponents.day;
 	BOOL sameMonth = selfComponents.month == dateComponents.month;
