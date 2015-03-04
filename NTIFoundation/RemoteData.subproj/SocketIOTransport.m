@@ -315,7 +315,7 @@
 	[self updateStatus: SocketIOTransportStatusOpening];
 	NSURL* websocketURL = [self urlForTransport];
 	
-	self->socket = [[WebSocket7 alloc] initWithURL: websocketURL];
+	self->socket = [[WebSocket7 alloc] initWithRequest: [NSURLRequest requestWithURL: websocketURL]];
 	self->socket.nr_delegate = self;
 	[self->socket connect];
 }
