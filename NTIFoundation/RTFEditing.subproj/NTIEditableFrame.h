@@ -52,5 +52,8 @@ selectionModeChangedWithRects: (NSArray*)rects;
 -(void)replaceRange: (UITextRange*)range withObject: (id)object;
 -(OATextAttachmentCell*)attachmentCellForPoint: (CGPoint)point fromView: (UIView*)view;
 
+#pragma mark keyboard handling
+- (void)nti_adjustForKeyboardHidingWithPreferedFinalBottomContentInset:(CGFloat)bottomInset animated:(BOOL)animated;
+- (void)nti_scrollRectToVisibleAboveLastKnownKeyboard:(CGRect)rect animated:(BOOL)animated completion:(void (^)(BOOL))completion;
 @end
 
