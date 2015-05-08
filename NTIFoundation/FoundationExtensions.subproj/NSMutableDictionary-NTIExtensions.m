@@ -12,10 +12,11 @@
 
 -(NSMutableDictionary*)stripKeysWithNullValues
 {
-	[self performSelector: @selector(removeObjectForKey:)
-		withEachObjectInSet: [self keysOfEntriesPassingTest: ^BOOL(id key, id obj, BOOL*stop) {
+	NSSet* nullKeys = [self keysOfEntriesPassingTest: ^BOOL(id key, id obj, BOOL*stop) {
 		return [obj isNull];
-	}]];
+	}];
+	
+	[self removeObjectsForKeys: [nullKeys allObjects]];
 	return self;
 }
 

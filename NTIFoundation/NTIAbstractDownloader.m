@@ -77,26 +77,10 @@ static NSMutableSet* getTrustedHosts()
 	}
 }
 
+#ifdef DEBUG
+
 //In debug builds, we accept ANY self-signed certificates. See comments below.
 //Later, we might make this more specific.
-#ifdef DEBUG
-- (BOOL)connection: (NSURLConnection*)connection 
-canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
-{
-	//By default (e.g., if we don't implement this), the system will
-	//use the keychain for client SSL certs or server SSL cert 
-	//authentication. To use self-signed certs, then, which won't be in the keypad,
-	//we have to take responsibility and say we will take them. 
-	if( OFISEQUAL( protectionSpace.authenticationMethod, NSURLAuthenticationMethodServerTrust ) ) {
-		return YES;
-	}
-	if( OFISEQUAL( protectionSpace.authenticationMethod, NSURLAuthenticationMethodClientCertificate ) ) {	
-		//We cannot do client certs
-		return NO;
-	}
-	//The system defaults to returning YES for everything else
-	return YES;
-}
 
 -(NSURLCredential*)credentialForContinuingWithChallenge: (NSURLAuthenticationChallenge *)challenge
 {
@@ -109,15 +93,48 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 	return nil;
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-	
-	NSURLCredential* credential = [self credentialForContinuingWithChallenge: challenge];
-	if(credential){
-		[challenge.sender useCredential: credential forAuthenticationChallenge: challenge];
+-(void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
+{
+	if( OFISEQUAL( challenge.protectionSpace.authenticationMethod,
+				  NSURLAuthenticationMethodClientCertificate ) ){
+		//We cannot do client certs
+		[challenge.sender cancelAuthenticationChallenge: challenge];
+		return;
 	}
 	
-	[challenge.sender continueWithoutCredentialForAuthenticationChallenge:challenge];
+	if( OFISEQUAL( challenge.protectionSpace.authenticationMethod,
+					   NSURLAuthenticationMethodServerTrust )){
+		NSURLCredential* credential = [self credentialForContinuingWithChallenge: challenge];
+		if(credential){
+			[challenge.sender useCredential: credential forAuthenticationChallenge: challenge];
+			return;
+		}
+	}
+	
+	[challenge.sender continueWithoutCredentialForAuthenticationChallenge: challenge];
 }
+
+-(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential *))completionHandler
+{
+	if( OFISEQUAL( challenge.protectionSpace.authenticationMethod,
+				  NSURLAuthenticationMethodClientCertificate ) ){
+		//We cannot do client certs
+		completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
+		return;
+	}
+	
+	if( OFISEQUAL( challenge.protectionSpace.authenticationMethod,
+				  NSURLAuthenticationMethodServerTrust )){
+		NSURLCredential* credential = [self credentialForContinuingWithChallenge: challenge];
+		if(credential){
+			completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
+			return;
+		}
+	}
+	
+	completionHandler(NSURLSessionAuthChallengePerformDefaultHandling, nil);
+}
+
 
 #endif
 
@@ -170,16 +187,6 @@ canAuthenticateAgainstProtectionSpace: (NSURLProtectionSpace*)protectionSpace
 		completionHandler(NSURLSessionResponseAllow);
 	});
 }
-
-#ifdef DEBUG
-
--(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential *))completionHandler
-{
-	NSURLCredential* credential = [self credentialForContinuingWithChallenge: challenge];
-	completionHandler(credential ? NSURLSessionAuthChallengeUseCredential : NSURLSessionAuthChallengePerformDefaultHandling, credential);
-}
-
-#endif
 
 -(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
 {

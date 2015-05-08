@@ -15,6 +15,8 @@
 #import <objc/runtime.h>
 #import "NTIHTMLReader.h"
 #import <OmniAppKit/OAFontDescriptor.h>
+#import <OmniUI/UIScrollView-OUIExtensions.h>
+#import <OmniUI/OUIKeyboardNotifier.h>
 
 static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat width, BOOL multiline)
 {
@@ -131,6 +133,12 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 
 -(void)_commonInit
 {
+	
+	[[NSNotificationCenter defaultCenter] addObserver: self
+											 selector: @selector(didChangeNotification:)
+												 name: UITextViewTextDidChangeNotification
+											   object: self];
+	
 	self.attachmentGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget: self action: @selector(tapped:)];
 	self.attachmentGestureRecognizer.delegate = self;
 	[self addGestureRecognizer: self.attachmentGestureRecognizer];
@@ -468,10 +476,6 @@ shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecog
 	return [NSArray arrayWithArray: rects];
 }
 
--(void)dealloc
-{
-	[self removeFromAttachmentCells: self.attributedText];
-}
 
 #pragma mark UIResponder
 
@@ -545,6 +549,82 @@ shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecog
 {
 	CGFloat inset = [[self class] oui_defaultTopAndBottomPadding];
 	return UIEdgeInsetsMake(0, 20 - inset, 0, 14 - inset);
+}
+
+//MARK: IOS8 workaround for the fact that the cursor isn't scrolled to when
+//the line goes below the frame
+-(void)didChangeNotification: (NSNotification*)notification
+{
+	OUITextView* textView = notification.object;
+	[textView scrollTextSelectionToVisibleWithAnimation: YES];
+}
+
+#pragma mark keyboard handling
+//Based on similar functions from UIScrollView-OUIExtensions
+
+//same as omnis adjustForKeyboardHidingWithPreferedFinalBottomContentInset:... but it adjusts the scroll indicator
+//insets as well.
+- (void)nti_adjustForKeyboardHidingWithPreferedFinalBottomContentInset:(CGFloat)bottomInset animated:(BOOL)animated;
+{
+	UIEdgeInsets finalInsets = UIEdgeInsetsMake(self.contentInset.top, self.contentInset.left, bottomInset, self.contentInset.right);
+	if (animated) {
+		[self animateAlongsideKeyboardHiding:^{
+			[self setContentInset:finalInsets];
+			[self setScrollIndicatorInsets: finalInsets];
+		}];
+	}
+	else {
+		[self setContentInset:finalInsets];
+		[self setScrollIndicatorInsets: finalInsets];
+	}
+}
+
+//similar to omnis  -scrollRectToVisibleAboveLastKnownKeyboard:.... differs in these ways.  Adjusts the scroll indicators appropriately.  Also, if the rect is already visible we still adjust the offset so that we can scroll all the way to the bottom, we just don't scroll automatically. We also make sure to only adjust the contentInset by the portion that would be covered by the keyboard.
+- (void)nti_scrollRectToVisibleAboveLastKnownKeyboard:(CGRect)rect animated:(BOOL)animated completion:(void (^)(BOOL))completion;
+{
+	OUIKeyboardNotifier *sharedNotifier = [OUIKeyboardNotifier sharedNotifier];
+	CGFloat yPointOfKeyboardTop = [sharedNotifier getMinYOfLastKnownKeyboardInView:self.superview];
+	CGFloat yOffset = [self minOffsetToScrollRectToVisible:rect aboveMinY:yPointOfKeyboardTop];
+	UIEdgeInsets workableInsets = self.contentInset;
+	CGFloat maxY = CGRectGetMaxY(self.frame) - yPointOfKeyboardTop;
+	if (workableInsets.bottom < maxY) {
+		workableInsets.bottom = maxY;
+	}
+	
+	CGPoint necessaryOffset = self.contentOffset;
+	if(yOffset > self.contentOffset.y){
+		necessaryOffset = CGPointMake(self.contentOffset.x, yOffset);
+	}
+	
+	
+	if (animated) {
+		UIViewAnimationOptions options = (sharedNotifier.lastAnimationCurve << 16) | UIViewAnimationOptionBeginFromCurrentState;  // http://macoscope.com/blog/working-with-keyboard-on-ios/  (Dec 20, 2013)
+		[UIView animateWithDuration:sharedNotifier.lastAnimationDuration
+							  delay:0.0f
+							options:options
+						 animations:^{
+							 [self setContentInset:workableInsets];
+							 [self setContentOffset:necessaryOffset];
+							 [self setScrollIndicatorInsets: workableInsets];
+						 } completion:completion];
+	}
+	else {
+		[self setContentInset:workableInsets];
+		[self setContentOffset:necessaryOffset animated:NO];
+		if (completion) {
+			completion(YES);
+		}
+	}
+}
+
+
+-(void)dealloc
+{
+	[self removeFromAttachmentCells: self.attributedText];
+	
+	[[NSNotificationCenter defaultCenter] removeObserver: self
+													name: UITextViewTextDidChangeNotification
+												  object: self];
 }
 
 @end

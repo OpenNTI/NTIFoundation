@@ -8,9 +8,19 @@
 
 #import "WebSocketResponseBufferTest.h"
 
-@implementation WebSocketResponseBufferTest
+#import "WebSocketResponseBuffer.h"
 
-NSUInteger bytesToLength(uint8_t* bytes, uint8_t num);
+@interface WebSocketResponseBuffer()
++(NSUInteger)_websocketResponseSizeBytes: (uint8_t*)bytes num: (uint8_t)num;
+@end
+
+static NSUInteger bytesToLength(uint8_t* bytes, uint8_t num);
+static NSUInteger bytesToLength(uint8_t* bytes, uint8_t num)
+{
+	return [WebSocketResponseBuffer _websocketResponseSizeBytes: bytes num: num];
+}
+
+@implementation WebSocketResponseBufferTest
 
 -(void)testBytesToLengthSmall
 {

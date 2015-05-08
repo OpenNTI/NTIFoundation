@@ -45,7 +45,6 @@ typedef NSInteger WebSocketStatus;
 	NSOutputStream* socketOutputStream;
 
 	WebSocketStatus status;
-	NSURL* url;
 	id __weak nr_delegate;
 	
 	//Reading data
@@ -60,7 +59,7 @@ typedef NSInteger WebSocketStatus;
 }
 @property (nonatomic, weak) id nr_delegate;
 @property (nonatomic, readonly) WebSocketStatus status;
--(id)initWithURL: (NSURL*)url;
+-(id)initWithRequest: (NSURLRequest*)request;
 -(void)connect;
 -(void)disconnect;
 -(void)kill;

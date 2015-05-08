@@ -211,64 +211,6 @@
 				   (unsigned long)fullLength, (unsigned long)consumed);
 }
 
-BOOL isSuccessfulHandshakeResponse(NSString* response, NSString* key);
-
--(void)testHandshakeParsing
-{
-	NSString* goodKey = @"w5jCl3LDpwc/Gj4EOgk7UsOXEMKa";
-	NSString* handshake = @"HTTP/1.1 101 Switching Protocols\nUpgrade: WebSocket\nConnection: Upgrade\nSec-WebSocket-Accept: hrIyuqmFm4k655eTa9Ibgw8Kvss=\nAccess-Control-Allow-Origin: http://ipad.nextthought.com\nAccess-Control-Allow-Credentials: true\r\n\r\n";
-	
-	XCTAssertTrue(isSuccessfulHandshakeResponse(handshake, goodKey));
-	
-	NSString* badKey = @"foobar";
-	
-	XCTAssertFalse(isSuccessfulHandshakeResponse(handshake, badKey));
-}
-
-static NSHTTPCookie* cookieWithNameValue(NSString* domain, NSString* name, NSString* value)
-{
-	NSMutableDictionary* cookieProps = [NSMutableDictionary dictionary];
-	[cookieProps setObject: name forKey: NSHTTPCookieName];
-	[cookieProps setObject: value 
-					forKey: NSHTTPCookieValue];
-	[cookieProps setObject: domain forKey: NSHTTPCookieDomain];
-	[cookieProps setObject: @"/" forKey: NSHTTPCookiePath];
-	[cookieProps setObject: @"60" forKey: NSHTTPCookieMaximumAge];
-	
-	return [NSHTTPCookie cookieWithProperties: cookieProps];
-}
-
-NSString* cookieHeaderForServer(NSURL* server);
-
--(void)testCookieHeader
-{
-	NSURL* noCookieHost = [NSURL URLWithString: @"http://foobar.com/"];
-	NSURL* cookieHost = [NSURL URLWithString: @"http://cookiehost.com/"];
-	
-	NSHTTPCookieStorage* cookieJar = [NSHTTPCookieStorage sharedHTTPCookieStorage];
-	
-	//Start with a clean slate
-	for(NSHTTPCookie* cookie in [cookieJar cookiesForURL: noCookieHost]){
-		[cookieJar deleteCookie: cookie];
-	}
-	for(NSHTTPCookie* cookie in [cookieJar cookiesForURL: cookieHost]){
-		[cookieJar deleteCookie: cookie];
-	}
-	
-	XCTAssertEqualObjects(cookieHeaderForServer(noCookieHost), @"", @"Excpected empty cookie header", nil);
-	
-	NSHTTPCookie* c1 = cookieWithNameValue(@"cookiehost.com", @"foo", @"bar");
-	[cookieJar setCookie: c1];
-	
-	XCTAssertEqualObjects(cookieHeaderForServer(cookieHost), @"Cookie: foo=bar");
-	
-	NSHTTPCookie* c2 = cookieWithNameValue(@"cookiehost.com", @"red", @"fish");
-	[cookieJar setCookie: c2];
-	
-	XCTAssertEqualObjects(cookieHeaderForServer(cookieHost), @"Cookie: foo=bar; red=fish");
-	
-}
-
 -(void)testCloseFrameGeneration
 {
 	WebSocketClose* close = [[WebSocketClose alloc] init];
@@ -297,64 +239,64 @@ NSString* cookieHeaderForServer(NSURL* server);
 	XCTAssertTrue([buffer isCloseResponse], @"Expected close response");
 }
 
-NSString* generateSecWebsocketKey();
-
--(void)testSecWebsocketKeyGenerationIsRightLength
-{
-	NSString* key = generateSecWebsocketKey();
-	NSData* data = [NSData dataWithBase64String: key];
-	XCTAssertEqual((int)data.length, 16, @"Expected 16 bytes of data but got");
-}
-
-void sizeToBytes(NSUInteger length, uint8_t* sizeInfoPointer, int* sizeLength);
--(void)testSizeToBytesSmall
-{
-	NSUInteger smallSize = 87;
-	
-	uint8_t bytes[8];
-	int length;
-	
-	sizeToBytes(smallSize, bytes, &length);
-	
-	XCTAssertEqual(length, 1, @"Expected one byte", nil);
-	XCTAssertEqual((int)bytes[0], 87, @"Excpected size of 174", nil);
-}
-
--(void)testSizeToBytesMedium
-{
-	NSUInteger smallSize = 312;
-	
-	uint8_t bytes[8];
-	int length;
-	
-	sizeToBytes(smallSize, bytes, &length);
-	
-	XCTAssertEqual(length, 3, @"Expected one byte", nil);
-	XCTAssertEqual((int)bytes[0], 126, @"Excpected size control of 126", nil);
-	XCTAssertEqual((int)bytes[1], 1, @"Excpected most significant byte of 1", nil);
-	XCTAssertEqual((int)bytes[2], 56, @"Excpected least significant byte of 56", nil);
-}
-
--(void)testSizeToBytesLong
-{
-	//9 876 543 = 0x96B43F
-	NSUInteger smallSize = 9876543;
-	
-	uint8_t bytes[9];
-	int length;
-	
-	sizeToBytes(smallSize, bytes, &length);
-	
-	XCTAssertEqual(length, 9, @"Expected one byte", nil);
-	XCTAssertEqual((int)bytes[0], 127, @"Excpected size control of 127", nil);
-	XCTAssertEqual((int)bytes[1], 0, @"Excpected byte 1 to be 0", nil);
-	XCTAssertEqual((int)bytes[2], 0, @"Excpected byte 2 to be 0", nil);
-	XCTAssertEqual((int)bytes[3], 0, @"Excpected byte 3 to be 0", nil);
-	XCTAssertEqual((int)bytes[4], 0, @"Excpected byte 4 to be 0", nil);
-	XCTAssertEqual((int)bytes[5], 0, @"Excpected byte 5 to be 0", nil);
-	XCTAssertEqual((int)bytes[6], 150, @"Excpected byte 6 to be 0", nil);
-	XCTAssertEqual((int)bytes[7], 180, @"Excpected byte 7 to be 0", nil);
-	XCTAssertEqual((int)bytes[8], 63, @"Excpected byte 8 to be 0", nil);
-}
+//NSString* generateSecWebsocketKey();
+//
+//-(void)testSecWebsocketKeyGenerationIsRightLength
+//{
+//	NSString* key = generateSecWebsocketKey();
+//	NSData* data = [NSData dataWithBase64String: key];
+//	XCTAssertEqual((int)data.length, 16, @"Expected 16 bytes of data but got");
+//}
+//
+//void sizeToBytes(NSUInteger length, uint8_t* sizeInfoPointer, int* sizeLength);
+//-(void)testSizeToBytesSmall
+//{
+//	NSUInteger smallSize = 87;
+//	
+//	uint8_t bytes[8];
+//	int length;
+//	
+//	sizeToBytes(smallSize, bytes, &length);
+//	
+//	XCTAssertEqual(length, 1, @"Expected one byte", nil);
+//	XCTAssertEqual((int)bytes[0], 87, @"Excpected size of 174", nil);
+//}
+//
+//-(void)testSizeToBytesMedium
+//{
+//	NSUInteger smallSize = 312;
+//	
+//	uint8_t bytes[8];
+//	int length;
+//	
+//	sizeToBytes(smallSize, bytes, &length);
+//	
+//	XCTAssertEqual(length, 3, @"Expected one byte", nil);
+//	XCTAssertEqual((int)bytes[0], 126, @"Excpected size control of 126", nil);
+//	XCTAssertEqual((int)bytes[1], 1, @"Excpected most significant byte of 1", nil);
+//	XCTAssertEqual((int)bytes[2], 56, @"Excpected least significant byte of 56", nil);
+//}
+//
+//-(void)testSizeToBytesLong
+//{
+//	//9 876 543 = 0x96B43F
+//	NSUInteger smallSize = 9876543;
+//	
+//	uint8_t bytes[9];
+//	int length;
+//	
+//	sizeToBytes(smallSize, bytes, &length);
+//	
+//	XCTAssertEqual(length, 9, @"Expected one byte", nil);
+//	XCTAssertEqual((int)bytes[0], 127, @"Excpected size control of 127", nil);
+//	XCTAssertEqual((int)bytes[1], 0, @"Excpected byte 1 to be 0", nil);
+//	XCTAssertEqual((int)bytes[2], 0, @"Excpected byte 2 to be 0", nil);
+//	XCTAssertEqual((int)bytes[3], 0, @"Excpected byte 3 to be 0", nil);
+//	XCTAssertEqual((int)bytes[4], 0, @"Excpected byte 4 to be 0", nil);
+//	XCTAssertEqual((int)bytes[5], 0, @"Excpected byte 5 to be 0", nil);
+//	XCTAssertEqual((int)bytes[6], 150, @"Excpected byte 6 to be 0", nil);
+//	XCTAssertEqual((int)bytes[7], 180, @"Excpected byte 7 to be 0", nil);
+//	XCTAssertEqual((int)bytes[8], 63, @"Excpected byte 8 to be 0", nil);
+//}
 
 @end

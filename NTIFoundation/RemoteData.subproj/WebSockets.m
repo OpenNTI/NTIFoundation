@@ -39,18 +39,13 @@
 
 //TODO we are version 13 now.
 @interface WebSocket7()
+@property (nonatomic, readonly) NSURLRequest* request;
 @property (nonatomic, readonly) HandshakeResponseBuffer* handshakeResponseBuffer;
 @property (nonatomic, readonly) WebSocketResponseBuffer* socketResponseBuffer;
 @end
 
 @implementation WebSocket7
 @synthesize status, nr_delegate;
-
-#ifdef TEST
-#define PRIVATE_STATIC_TESTABLE
-#else
-#define PRIVATE_STATIC_TESTABLE static
-#endif
 
 static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 {
@@ -77,32 +72,15 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	
 }
 
-//Generate key.
-//A "Sec-WebSocket-Key" header field with a base64-encoded (see
-//Section 4 of [RFC4648]) value that, when decoded, is 16 bytes in
-//length.
-PRIVATE_STATIC_TESTABLE NSString* generateSecWebsocketKey(void);
-PRIVATE_STATIC_TESTABLE NSString* generateSecWebsocketKey()
-{
-	NSMutableData* bytesToEncode = [NSMutableData data];
-	
-	for(NSInteger i = 0; i < 16; i++){
-		uint8_t byte = arc4random() % 256;
-		[bytesToEncode appendBytes: &byte length: 1];
-	}
-	return [bytesToEncode base64String];
-}
-
--(id)initWithURL: (NSURL *)u
+-(id)initWithRequest: (NSURLRequest*)request;
 {
 	self = [super init];
-	self->url = u;
+	self->_request = [request copy];
 	self->shouldForcePumpOutputStream = NO;
 	self->dataToWrite = nil;
 	self->dataToWriteOffset = 0;
 	
 	[self updateStatus: WebSocketStatusNew];
-	self->key = generateSecWebsocketKey();
 	
 	return self;
 }
@@ -177,41 +155,6 @@ PRIVATE_STATIC_TESTABLE NSString* generateSecWebsocketKey()
 	self->socketRespsonseBuffer = nil;
 }
 
-PRIVATE_STATIC_TESTABLE NSArray* validCookiesForServer(NSURL* server);
-PRIVATE_STATIC_TESTABLE NSArray* validCookiesForServer(NSURL* server)
-{
-	NSHTTPCookieStorage* cookieJar = [NSHTTPCookieStorage sharedHTTPCookieStorage];
-	
-	NSMutableArray* cookies = [NSMutableArray array];
-	NSDate* expiredAfter = [NSDate date];
-	for(NSHTTPCookie* cookie in [cookieJar cookiesForURL: server])
-	{
-		if(    cookie.expiresDate 
-		   && [cookie.expiresDate compare: expiredAfter] != NSOrderedDescending ){
-			continue;
-		}
-		[cookies addObject: cookie];
-	}
-	return cookies;
-}
-
-PRIVATE_STATIC_TESTABLE NSString* cookieHeaderForServer(NSURL* server);
-PRIVATE_STATIC_TESTABLE NSString* cookieHeaderForServer(NSURL* server)
-{
-	NSMutableArray* cookieStringParts = [NSMutableArray array];
-	for(NSHTTPCookie* cookie in validCookiesForServer(server)){
-		[cookieStringParts addObject: 
-		 [NSString stringWithFormat: @"%@=%@", 
-		  cookie.name, cookie.value]];
-	}
-	
-	if( [NSArray isEmptyArray: cookieStringParts] ){
-		return @"";
-	}
-	
-	return [NSString stringWithFormat: @"Cookie: %@", [cookieStringParts componentsJoinedByString: @"; "]];
-}
-
 -(NSString*)userAgentValue
 {
 	//If we have app info in our defaults lets append that.
@@ -231,28 +174,64 @@ PRIVATE_STATIC_TESTABLE NSString* cookieHeaderForServer(NSURL* server)
 //See http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-17#page-7
 -(NSData*)createHandshakeData
 {
-	//The spec indicates the origin header "may" be sent by non browser clients
-	//We go ahead and send it so we look as much like a browser client as possible (for firewall sake)
-	//and for an added layer of security should the server decide to use it.
+	OBASSERT(!self->key);
 	
-	NSString* getRequest = [NSString stringWithFormat:@"GET %@ HTTP/1.1\r\n"
-							"Upgrade: WebSocket\r\n"
-							"Connection: Upgrade\r\n"
-							"User-Agent: %@\r\n"
-							"Host: %@\r\n"
-							"Origin: %@\r\n"
-							"sec-websocket-origin: %@\r\n"
-							"Sec-WebSocket-Key: %@\r\n"
-							"Sec-WebSocket-Version: 13\r\n"
-							"%@\r\n\r\n",
-							self->url.path ? self->url.path : @"/", [self userAgentValue],
-							self->url.host, kNTIWebSocket7Origin,
-							[NSString stringWithFormat: @"http://%@",self->url.host], self->key, cookieHeaderForServer(self->url)] ;
+	//Generate the sec-websocket-key value for checking later.
+	NSMutableData* secKeyData = [NSMutableData dataWithLength: 16];
+	SecRandomCopyBytes(kSecRandomDefault, secKeyData.length, secKeyData.mutableBytes);
+	self->key = [secKeyData base64String];
+	
+	NSURL* url = self.request.URL;
+	BOOL secure = ([url.scheme isEqualToString: @"https"] || [url.scheme isEqualToString: @"wss"]);
+	
+	CFHTTPMessageRef msgRef = CFHTTPMessageCreateRequest(kCFAllocatorDefault,
+														 (__bridge CFStringRef)self.request.HTTPMethod,
+														 (__bridge CFURLRef)url,
+														 kCFHTTPVersion1_1);
+	
+	//We have a couple of default headers we want to add.  We do these first and then allow things in the
+	//request to override.
+	CFHTTPMessageSetHeaderFieldValue(msgRef, CFSTR("Upgrade"), CFSTR("WebSocket"));
+	CFHTTPMessageSetHeaderFieldValue(msgRef, CFSTR("Connection"), CFSTR("Upgrade"));
+	CFHTTPMessageSetHeaderFieldValue(msgRef, CFSTR("User-Agent"), (__bridge CFStringRef)[self userAgentValue]);
+	CFHTTPMessageSetHeaderFieldValue(msgRef, CFSTR("Sec-WebSocket-Origin"), (__bridge CFStringRef)kNTIWebSocket7Origin);
+	CFHTTPMessageSetHeaderFieldValue(msgRef, CFSTR("Sec-WebSocket-Key"), (__bridge CFStringRef)self->key);
+	CFHTTPMessageSetHeaderFieldValue(msgRef, CFSTR("Sec-WebSocket-Version"), CFSTR("13"));
+	
+	//Host has the port if it isn't default
+	NSString* host = url.host;
+	if(url.port){
+		host = [NSString stringWithFormat: @"%@:%@", host, url.port];
+	}
+	CFHTTPMessageSetHeaderFieldValue(msgRef, CFSTR("Host"), (__bridge CFStringRef)host);
+	
+	//Force the origin to be http(s) even if we are ws(s)
+	NSString *origin = [NSString stringWithFormat:@"http%@://%@", (secure) ? @"s" : @"", host];
+	CFHTTPMessageSetHeaderFieldValue(msgRef, CFSTR("Origin"), (__bridge CFStringRef)origin);
+	
+	NSMutableDictionary* headers = [self.request.allHTTPHeaderFields mutableCopy];
+	if(!headers){
+		headers = [NSMutableDictionary new];
+	}
+	
+	//Also send headers for any cookies for this host
+	NSArray* cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL: url];
+	[headers addEntriesFromDictionary: [NSHTTPCookie requestHeaderFieldsWithCookies: cookies]];
+
+	//Now any headers specified in the incoming request and those from our cookies get added
+	[headers enumerateKeysAndObjectsUsingBlock: ^(NSString* header, NSString* headerValue, BOOL *stop) {
+		CFHTTPMessageSetHeaderFieldValue(msgRef, (__bridge CFStringRef)header, (__bridge CFStringRef)headerValue);
+	}];
+	
+	NSData* requestData = CFBridgingRelease(CFHTTPMessageCopySerializedMessage(msgRef));
+	CFRelease(msgRef);
+	
 #ifdef DEBUG_SOCKETIO
-	NSLog(@"Initiating handshake with %@", getRequest);
+	NSLog(@"Initiating handshake with %@", [NSString stringWithData: requestData
+														   encoding: NSUTF8StringEncoding]);
 #endif
 	
-	return [getRequest dataUsingEncoding: NSUTF8StringEncoding];
+	return requestData;
 }
 
 //Sends as much data is possible from the dataToWrite buffer.
@@ -350,17 +329,11 @@ static NSData* hashUsingSHA1(NSData* data)
     return [NSData dataWithBytes:hashBytes length:CC_SHA1_DIGEST_LENGTH];
 }
 
-PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, NSString* key);
-PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, NSString* key)
+-(BOOL)validateResponseAcceptKey: (NSString*)acceptKey
 {
-	NSArray* parts = [response piecesUsingRegexString: @"Sec-WebSocket-Accept:\\s+(.+?)\\s"];
-	//We expect one part the accept key
-	if( [parts count] < 1  || ![parts firstObject]){
+	if(!acceptKey){
 		return NO;
 	}
-	
-	//return YES;
-	NSString* acceptKey = [parts firstObject];
 	//	NSLog(@"Accept key %@", acceptKey);
 	//The accept key should be our key concated with the secret.  Sha-1 hashed and then base64 encoded
 	NSString* concatWithSecret = [NSString stringWithFormat: @"%@%@", key, @"258EAFA5-E914-47DA-95CA-C5AB0DC85B11", nil];
@@ -375,22 +348,36 @@ PRIVATE_STATIC_TESTABLE BOOL isSuccessfulHandshakeResponse(NSString* response, N
 
 -(void)processHandshakeResponse: (HandshakeResponseBuffer*)hrBuffer
 {
-	NSString* response = [[NSString alloc] initWithData: hrBuffer.dataBuffer 
-												encoding: NSUTF8StringEncoding];
 #ifdef DEBUG_SOCKETIO
+	NSString* response = [[NSString alloc] initWithData: hrBuffer.dataBuffer
+											   encoding: NSUTF8StringEncoding];
 	NSLog(@"Handling handshake response %@", response);
 #endif
-	//FIXME actually check the accept field
-	if ( response && isSuccessfulHandshakeResponse(response, self->key) ) {
-		[self updateStatus: WebSocketStatusConnected];
-	} else {
-		[self shutdownAsResultOfError: errorWithCodeAndMessage(300, 
-															   [NSString stringWithFormat: 
-																@"Unexpected response for handshake. %@", response])];
-	}
-	//We don't need to hold onto this object anymore.
+	
+	//Parse the buffer as an http message
+	CFHTTPMessageRef responseRef = CFHTTPMessageCreateEmpty(NULL, NO);
+	CFHTTPMessageAppendBytes(responseRef, hrBuffer.dataBuffer.bytes, hrBuffer.dataBuffer.length);
+	
 	self->handshakeResponseBuffer = nil;
-
+	
+	//Make sure CF thinks we are complete
+	if(!CFHTTPMessageIsHeaderComplete(responseRef)) {
+		CFRelease(responseRef);
+		[self shutdownAsResultOfError: errorWithCodeAndMessage(300, @"Encountered end of response but CF believes there is more to come")];
+		return;
+	}
+	
+	NSInteger statusCode = CFHTTPMessageGetResponseStatusCode(responseRef);
+	NSDictionary* headers = [CFBridgingRelease(CFHTTPMessageCopyAllHeaderFields(responseRef)) copy];
+	CFRelease(responseRef);
+	
+	//we expect to be upgraded
+	if(statusCode == 101 && [self validateResponseAcceptKey: [headers objectForKey: @"Sec-Websocket-Accept"]]) {
+		[self updateStatus: WebSocketStatusConnected];
+	}
+	else{
+		[self shutdownAsResultOfError: errorWithCodeAndMessage(300, @"Handshake failed!")];
+	}
 }
 
 //Appends as many bytes as necessary to the handshake response dealing with a complete handshake if necessary
@@ -566,10 +553,12 @@ static NSDictionary* sslProperties()
 	CFReadStreamRef readStream;
 	CFWriteStreamRef writeStream;
 	
-	BOOL useSSL = [[self->url scheme] isEqual: @"https"];
+	NSURL* url = self.request.URL;
 	
-	NSString* host = [self->url host];
-	NSNumber* port = [self->url port];
+	BOOL useSSL = ([[url scheme] isEqual: @"https"] || [[url scheme] isEqual: @"wss"]);
+	
+	NSString* host = [url host];
+	NSNumber* port = [url port];
 	if(!port){
 		if(useSSL){
 			port = [NSNumber numberWithInt: 443];
@@ -624,7 +613,5 @@ static NSDictionary* sslProperties()
 {
 	[self shutdownStreams];
 }
-
-#undef PRIVATE_STATIC_TESTABLE
 
 @end

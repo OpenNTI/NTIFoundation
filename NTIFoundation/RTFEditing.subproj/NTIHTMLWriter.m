@@ -24,7 +24,7 @@
 #import <OmniFoundation/NSData-OFEncoding.h>
 #import "NSAttributedString-HTMLWritingExtensions.h"
 
-#import "OmniQuartz/OQColor.h"
+#import <OmniQuartz/OmniQuartz.h>
 #import "OQColor-NTIExtensions.h"
 
 #import "NTIHTMLReader.h"

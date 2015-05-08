@@ -442,12 +442,15 @@ static NSArray* implementedTransportClasses()
 	//Use timeout?
 	SocketIOSocket* weakSelf = self;
 	[[[NSURLSession sharedSession] dataTaskWithRequest: request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-		if(!data && error){
-			[weakSelf handleHandshakeError: error];
-		}
-		else{
-			[weakSelf handleHandshakeResponse: (id)response withData: data];
-		}
+		dispatch_async(dispatch_get_main_queue(), ^(){
+			if(!data && error){
+				[weakSelf handleHandshakeError: error];
+			}
+			else{
+				[weakSelf handleHandshakeResponse: (id)response withData: data];
+			}
+		});
+		
 	}] resume];
 								   
 }

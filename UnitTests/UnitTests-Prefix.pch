@@ -12,26 +12,13 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-#if __has_feature(objc_arc)
-#undef __strong
-#define __strong
-#define autorelease copy
-#endif
-
 #import <OmniBase/OmniBase.h>
 #import <OmniFoundation/OmniFoundation.h>
-
-#if __has_feature(objc_arc)
-#undef __strong
-#define __strong __attribute__((objc_ownership(strong)))
-#undef autorelease
-#endif
 
 #import "NSArray-NTIExtensions.h"
 #import "NSString-NTIExtensions.h"
 #import "NTIUtilities.h"
 #import "NSMutableArray-NTIExtensions.h"
-#import "NTILogicTestBase/NTITestFixes.h"
 
 
 #ifdef TEST
@@ -41,7 +28,6 @@
 #endif
 
 #endif
-#import "NTILogicTestBase/NTITestFixes.h"
 
 #import <OCMock/OCMock.h>
 

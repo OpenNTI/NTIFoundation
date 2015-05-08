@@ -98,7 +98,7 @@ static UILabel* titleLabelForToolbar()
 	self.delegate = d;
 	self->target = t;
 	self->downButton = [[UIBarButtonItem alloc] initWithTitle: @"Down"
-														style: UIBarButtonItemStyleBordered 
+														style: UIBarButtonItemStylePlain
 													   target: self->target
 													   action: @selector(down:)];
 	
@@ -1162,10 +1162,12 @@ static void searchUpVCHiererarchyChainCollectingObjectsToNotifyOfDismissd(UIView
 	//TODO what do we do if no objects are selected?
 	if([inspectorButton respondsToSelector: @selector(customView)]){
 		[self->inspector inspectObjects: inspectableObjects
+					 withViewController: self
 					  fromBarButtonItem: inspectorButton];
 	}
 	else if([inspectorButton respondsToSelector: @selector(bounds)]){
 		[self->inspector inspectObjects: inspectableObjects
+					 withViewController: self
 							   fromRect: [inspectorButton bounds]
 								 inView: inspectorButton
 			   permittedArrowDirections: UIPopoverArrowDirectionAny];
