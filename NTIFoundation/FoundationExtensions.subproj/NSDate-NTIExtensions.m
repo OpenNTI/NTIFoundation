@@ -261,11 +261,11 @@ static int const timeConstant = 60;
 	else {
 		dateDisplayString = [NSDate stringFromTimeIntervalWithLargestFittingTimeUnitWithinDays:
 							 [[NSDate date] timeIntervalSince1970] - [self timeIntervalSince1970]];
-		NSString* ago = NSLocalizedStringWithDefaultValue(@"nextthought.forum-preview-table-view.time-ago",
+		NSString *ago = NSLocalizedStringWithDefaultValue(@"nextthought.nsdate-ntiextension.time-ago",
 														  @"NextThought",
 														  [NSBundle mainBundle],
 														  @"ago",
-														  @"describes how long the most recent activity took place");
+														  @"Describes how long the most recent activity took place.");
 		dateDisplayString = [dateDisplayString stringByAppendingString: ago];
 	}
 	
