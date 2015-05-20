@@ -19,7 +19,7 @@
 
 +(NSDate*)now;
 
-+(NSString*) stringFromTimeIntervalWithLargestFittingTimeUnit: (NSUInteger)timeInterval;
++(NSString*) stringFromTimeIntervalWithLargestFittingTimeUnit: (NSTimeInterval)timeInterval;
 
 /**
  * Returns a string of the form "<n> <timeunit>(s)", where:<br>
@@ -27,7 +27,7 @@
  *  - <n> is the number of <timeunit>s which fit inside |timeInterval|<br>
  * E.g., "1 second", "8 seconds", "3 hours", "5 days", "17 days", "64 days", "562 days", etc.
  */
-+ (NSString *)stringFromTimeIntervalWithLargestFittingTimeUnitWithinDays:(NSUInteger)timeInterval;
++ (NSString *)stringFromTimeIntervalWithLargestFittingTimeUnitWithinDays:(NSTimeInterval)timeInterval;
 
 +(NSString*)stringFromTimeInterval: (NSTimeInterval)timeInterval;
 
