@@ -129,7 +129,7 @@ static NSString* shortDateStringNL( NSDate* date )
 		timeUnit = NTITimePeriodUnitMinutes;
 	}
 	else {
-		timeSince = timeInterval;
+		timeSince = round(timeInterval);
 		timeUnit = NTITimePeriodUnitSeconds;
 	}
 	return NTITimePeriodMake(timeSince, timeUnit);
