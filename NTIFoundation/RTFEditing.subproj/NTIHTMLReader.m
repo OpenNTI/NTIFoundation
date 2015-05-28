@@ -392,10 +392,14 @@ styleAttribute = stringFromStyle( styleAttribute, @prefix );
 -(CGImageRef)newImageFromURL: (NSString*)url
 {
 	//Seriously cheating here
-	NSString* dataPfx = @"data:image/png;base64,";
+	NSString* dataPfx1 = @"data:image/png;base64,";
+	NSString *dataPfx2 = @"data:<;base64,";
 	NSData* imgData = nil;
-	if( [url hasPrefix: dataPfx] ) {
-		imgData = [NSData dataWithBase64String: [url substringFromIndex: dataPfx.length]];
+	if( [url hasPrefix: dataPfx1] ) {
+		imgData = [NSData dataWithBase64String: [url substringFromIndex: dataPfx1.length]];
+	}
+	else if ([url hasPrefix: dataPfx2]) {
+		imgData = [NSData dataWithBase64String: [url substringFromIndex:dataPfx2.length]];
 	}
 	else {
 		//FIXME we are running on the main thread here.  THis may block
@@ -571,6 +575,10 @@ qualifiedName: (NSString*)qName
 			}
 		}
 	}
+	else if ([@"img" isEqualToString: elementName]) {
+		[self handleImageTag: self->attrBuffer
+				currentImage: self->currentImage];
+	}
 	else if( [@"audio" isEqual: elementName] ){
 		self->parsingAudio = NO;
 		[self handleAudioTag: self->attrBuffer
@@ -585,6 +593,17 @@ qualifiedName: (NSString*)qName
 		  currentImage: (CGImageRef) currentImage
 {
 	
+}
+
+- (void)handleImageTag: (NSMutableAttributedString *)attrBuffer
+		  currentImage: (CGImageRef)image
+{
+	NSTextAttachment *attachment = [NSTextAttachment new];
+	attachment.image = [UIImage imageWithCGImage: image];
+	unichar attachmentChar = NSAttachmentCharacter;
+	NSString *attachmentString = [NSString stringWithCharacters: &attachmentChar length:1];
+	[self->attrBuffer appendString: attachmentString
+						attributes: @{NSAttachmentAttributeName: attachment}];
 }
 
 -(void)handleAudioTag: (NSMutableAttributedString*)attrBuffer
