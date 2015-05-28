@@ -598,6 +598,7 @@ qualifiedName: (NSString*)qName
 - (void)handleImageTag: (NSMutableAttributedString *)attrBuffer
 		  currentImage: (CGImageRef)image
 {
+	// TODO: Use NTITextAttachment with an attachmentRenderer instead?
 	NSTextAttachment *attachment = [NSTextAttachment new];
 	attachment.image = [UIImage imageWithCGImage: image];
 	unichar attachmentChar = NSAttachmentCharacter;
