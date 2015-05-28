@@ -399,6 +399,7 @@ styleAttribute = stringFromStyle( styleAttribute, @prefix );
 	}
 	else {
 		//FIXME we are running on the main thread here.  THis may block
+		OBASSERT(![NSThread isMainThread]);
 		imgData = [NSData dataWithContentsOfURL: [NSURL URLWithString: url]];
 	}
 	
