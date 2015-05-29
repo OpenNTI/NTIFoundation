@@ -6,6 +6,8 @@
 //  Copyright 2011 NextThought. All rights reserved.
 //
 #import "NTIHTMLReader.h"
+#import "NTITextAttachment.h"
+
 
 #import <OmniBase/OmniBase.h>
 #import <OmniFoundation/NSMutableAttributedString-OFExtensions.h>
@@ -598,13 +600,7 @@ qualifiedName: (NSString*)qName
 - (void)handleImageTag: (NSMutableAttributedString *)attrBuffer
 		  currentImage: (CGImageRef)image
 {
-	// TODO: Use NTITextAttachment with an attachmentRenderer instead?
-	NSTextAttachment *attachment = [NSTextAttachment new];
-	attachment.image = [UIImage imageWithCGImage: image];
-	unichar attachmentChar = NSAttachmentCharacter;
-	NSString *attachmentString = [NSString stringWithCharacters: &attachmentChar length:1];
-	[self->attrBuffer appendString: attachmentString
-						attributes: @{NSAttachmentAttributeName: attachment}];
+	
 }
 
 -(void)handleAudioTag: (NSMutableAttributedString*)attrBuffer
