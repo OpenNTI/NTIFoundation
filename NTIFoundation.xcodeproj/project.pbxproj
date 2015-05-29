@@ -142,6 +142,7 @@
 		40F72DA8156EE1C50050C93E /* NTIMathEquationBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 40F72DA6156EE1C40050C93E /* NTIMathEquationBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40F72DA9156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */; };
 		40FB28EE18D2B47B00A450FA /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40FB28B018D2AEAF00A450FA /* XCTest.framework */; };
+		4A5454441B1630680033FA3A /* NSDate-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A5454431B1630680033FA3A /* NSDate-NTIExtensionsTest.m */; };
 		4A72F4611925AEF1004792EF /* UIColor+NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A72F45F1925AEF1004792EF /* UIColor+NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4A72F4621925AEF1004792EF /* UIColor+NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A72F4601925AEF1004792EF /* UIColor+NTIExtensions.m */; };
 		4A72F4641925AEF1004792EF /* UIColor+NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A72F4601925AEF1004792EF /* UIColor+NTIExtensions.m */; };
@@ -627,6 +628,7 @@
 		40F72DA6156EE1C40050C93E /* NTIMathEquationBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathEquationBuilder.h; sourceTree = "<group>"; };
 		40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathEquationBuilder.m; sourceTree = "<group>"; };
 		40FB28B018D2AEAF00A450FA /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		4A5454431B1630680033FA3A /* NSDate-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate-NTIExtensionsTest.m"; sourceTree = "<group>"; };
 		4A72F45F1925AEF1004792EF /* UIColor+NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+NTIExtensions.h"; sourceTree = "<group>"; };
 		4A72F4601925AEF1004792EF /* UIColor+NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NTIExtensions.m"; sourceTree = "<group>"; };
 		4A72F48619268DA8004792EF /* UIColor+NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NTIExtensionsTest.m"; sourceTree = "<group>"; };
@@ -1023,6 +1025,7 @@
 				4059D28115DC4CE800C567BA /* NSMutableDictionary-NTIExtensionsTest.h */,
 				4059D28215DC4CE800C567BA /* NSMutableDictionary-NTIExtensionsTest.m */,
 				4A72F48619268DA8004792EF /* UIColor+NTIExtensionsTest.m */,
+				4A5454431B1630680033FA3A /* NSDate-NTIExtensionsTest.m */,
 			);
 			name = FoundationExtensionsTests;
 			sourceTree = "<group>";
@@ -1910,6 +1913,7 @@
 				40F39C8114D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m in Sources */,
 				40F39C8414D84EF50089DCF6 /* SendRecieveQueueTest.m in Sources */,
 				40F39C8714D852FE0089DCF6 /* NSString-NTIExtensionsTest.m in Sources */,
+				4A5454441B1630680033FA3A /* NSDate-NTIExtensionsTest.m in Sources */,
 				40A7459B14DA30050093F0D4 /* NSObject-NTIJSONTest.m in Sources */,
 				4CEC1D96151395DB0074F3DD /* NTIGlobalInspectorTest.m in Sources */,
 				4CEC1D97151395DB0074F3DD /* NTIInspectorObjectWrapperTest.m in Sources */,
@@ -2203,6 +2207,7 @@
 					"$(inherited)",
 					/Users/cutz/Documents/NextThought/iPad/NTIWorkspace/OCMock,
 				);
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
