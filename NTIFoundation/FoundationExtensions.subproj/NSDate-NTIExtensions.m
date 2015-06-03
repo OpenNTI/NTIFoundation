@@ -248,6 +248,7 @@ static int const timeConstant = 60;
 														  [NSBundle mainBundle],
 														  @"ago",
 														  @"Describes how long the most recent activity took place.");
+		ago = [@" " stringByAppendingString: ago];
 		dateDisplayString = [dateDisplayString stringByAppendingString: ago];
 	}
 	
