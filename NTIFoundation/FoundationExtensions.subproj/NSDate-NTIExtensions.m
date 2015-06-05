@@ -8,6 +8,68 @@
 
 #import "NSDate-NTIExtensions.h"
 
+typedef enum : NSUInteger {
+	NTITimePeriodUnitSeconds = 0,
+	NTITimePeriodUnitMinutes,
+	NTITimePeriodUnitHours,
+	NTITimePeriodUnitDays,
+	NTITimePeriodUnitWeeks,
+	NTITimePeriodUnitMonths,
+	NTITimePeriodUnitYears
+} NTITimePeriodUnit;
+
+struct NTITimePeriod {
+	NSUInteger count;
+	NTITimePeriodUnit units;
+};
+typedef struct NTITimePeriod NTITimePeriod;
+
+static NTITimePeriod NTITimePeriodMake(NSUInteger count, NTITimePeriodUnit units)
+{
+	NTITimePeriod timePeriod;
+	timePeriod.count = count;
+	timePeriod.units = units;
+	return timePeriod;
+}
+
+static NSString *stringForTimePeriodUnit(NTITimePeriodUnit timeUnit)
+{
+	NSString *timeUnitString;
+	switch (timeUnit) {
+		case NTITimePeriodUnitSeconds:
+		timeUnitString = @"second";
+		break;
+		case NTITimePeriodUnitMinutes:
+		timeUnitString = @"minute";
+		break;
+		case NTITimePeriodUnitHours:
+		timeUnitString = @"hour";
+		break;
+		case NTITimePeriodUnitDays:
+		timeUnitString = @"day";
+		break;
+		case NTITimePeriodUnitWeeks:
+		timeUnitString = @"week";
+		break;
+		case NTITimePeriodUnitMonths:
+		timeUnitString = @"month";
+		break;
+		case NTITimePeriodUnitYears:
+		timeUnitString = @"year";
+		break;
+		default:
+		break;
+	}
+	return timeUnitString;
+}
+
+static NSString *pluralStringForTimePeriodUnit(NTITimePeriodUnit timeUnit)
+{
+	NSString *timeUnitString = stringForTimePeriodUnit(timeUnit);
+	timeUnitString = [timeUnitString stringByAppendingString: @"s"];
+	return timeUnitString;
+}
+
 @implementation NSDate(NTIExtensions)
 
 +(NSDate*)now
@@ -30,60 +92,96 @@ static NSString* shortDateStringNL( NSDate* date )
 	return shortDateStringNL( self );
 }
 
-+(NSString*)stringFromTimeIntervalWithLargestFittingTimeUnit: (NSUInteger)timeInterval
++ (NTITimePeriod)timePeriodSinceInterval: (NSTimeInterval)timeInterval
+		withLargestFittingTimePeriodUnit: (NTITimePeriodUnit)largestTimeUnit;
 {
-	//TODO: any string presnted to the user must be externalized.
-	NSString* timeUnitString;
-	NSUInteger timeSince = timeInterval;
-	if(timeInterval >= kNTISecondsInAYear){
-		timeSince /= kNTISecondsInAYear;
-		timeUnitString = @"year";
+	NSUInteger timeSince;
+	NTITimePeriodUnit timeUnit;
+	
+	if (NTITimePeriodUnitYears <= largestTimeUnit
+		&& timeInterval >= kNTISecondsInAYear) {
+		timeSince = round(timeInterval / kNTISecondsInAYear);
+		timeUnit = NTITimePeriodUnitYears;
 	}
-	else if(timeInterval >= kNTISecondsInAMonth){
-		timeSince /= kNTISecondsInAMonth;
-		timeUnitString = @"month";
+	else if (NTITimePeriodUnitMonths <= largestTimeUnit
+			 && timeInterval >= kNTISecondsInAMonth) {
+		timeSince = round(timeInterval / kNTISecondsInAMonth);
+		timeUnit = NTITimePeriodUnitMonths;
 	}
-	else if(timeInterval >= kNTISecondsInAWeek){
-		timeSince /= kNTISecondsInAWeek;
-		timeUnitString = @"week";
+	else if (NTITimePeriodUnitWeeks <= largestTimeUnit
+			 && timeInterval >= kNTISecondsInAWeek) {
+		timeSince = round(timeInterval / kNTISecondsInAWeek);
+		timeUnit = NTITimePeriodUnitWeeks;
+	}
+	else if (NTITimePeriodUnitDays <= largestTimeUnit
+			 && timeInterval >= kNTISecondsInADay) {
+		timeSince = round(timeInterval / kNTISecondsInADay);
+		timeUnit = NTITimePeriodUnitDays;
+	}
+	else if (NTITimePeriodUnitHours <= largestTimeUnit
+			 && timeInterval >= kNTISecondsInAnHour) {
+		timeSince = round(timeInterval / kNTISecondsInAnHour);
+		timeUnit = NTITimePeriodUnitHours;
+	}
+	else if (NTITimePeriodUnitMinutes <= largestTimeUnit
+			 && timeInterval >= kNTISecondsInAMinute) {
+		timeSince = round(timeInterval / kNTISecondsInAMinute);
+		timeUnit = NTITimePeriodUnitMinutes;
 	}
 	else {
-		return [NSDate stringFromTimeIntervalWithLargestFittingTimeUnitWithinDays:timeInterval];
+		timeSince = round(timeInterval);
+		timeUnit = NTITimePeriodUnitSeconds;
 	}
-	
-	if(timeSince > 1){
-		timeUnitString = [timeUnitString stringByAppendingString: @"s"];
-	}
-	
-	return [NSString stringWithFormat: @"%lu %@", (unsigned long)timeSince, timeUnitString];
+	return NTITimePeriodMake(timeSince, timeUnit);
 }
 
-+ (NSString *)stringFromTimeIntervalWithLargestFittingTimeUnitWithinDays:(NSUInteger)timeInterval
++ (NTITimePeriod)timePeriodSinceInterval: (NSTimeInterval)timeInterval
 {
-    NSString *timeUnitString;
-	NSUInteger timeSince = timeInterval;
-    
-    if (timeInterval >= kNTISecondsInADay) {
-		timeSince /= kNTISecondsInADay;
-		timeUnitString = @"day";
-	}
-	else if (timeInterval >= kNTISecondsInAnHour) {
-		timeSince /= kNTISecondsInAnHour;
-		timeUnitString = @"hour";
-	}
-	else if (timeInterval >= kNTISecondsInAMinute) {
-		timeSince /= kNTISecondsInAMinute;
-		timeUnitString = @"minute";
-	}
-	else {
-		timeUnitString = @"second";
-	}
-	
-	if (timeSince > 1) {
-		timeUnitString = [timeUnitString stringByAppendingString:@"s"];
-	}
-	
-	return [NSString stringWithFormat:@"%lu %@", (unsigned long)timeSince, timeUnitString];
+	return [self timePeriodSinceInterval: timeInterval
+		withLargestFittingTimePeriodUnit: NTITimePeriodUnitYears];
+}
+
++ (NSString *)stringTemplateForTimeUnit: (NTITimePeriodUnit)timeUnit
+						  withUnitCount: (NSUInteger)count
+{
+	NSString *metaString = pluralStringForTimePeriodUnit(timeUnit);
+	NSString *key = [NSString stringWithFormat: @"nsdate-ntiextension.%@.template", metaString];
+	NSString *valSubstring = count == 1 ? stringForTimePeriodUnit(timeUnit) : pluralStringForTimePeriodUnit(timeUnit);
+	NSString *val = [@"%@ " stringByAppendingString: valSubstring];
+	NSString *timeUnitTemplate
+	= NSLocalizedStringWithDefaultValue(key,
+										@"NextThought",
+										[NSBundle mainBundle],
+										val,
+										@"");
+	return timeUnitTemplate;
+}
+
++ (NSString *)stringForTimeUnit: (NTITimePeriodUnit)timeUnit
+				  withUnitCount: (NSUInteger)count
+{
+	NSString *template = [self stringTemplateForTimeUnit: timeUnit
+										   withUnitCount: count];
+	NSString *string = [NSString stringWithFormat: template, @(count)];
+	return string;
+}
+
++ (NSString *)stringFromTimePeriod: (NTITimePeriod)timePeriod
+{
+	return [self stringForTimeUnit: timePeriod.units
+					 withUnitCount: timePeriod.count];
+}
+
++(NSString*)stringFromTimeIntervalWithLargestFittingTimeUnit: (NSTimeInterval)timeInterval
+{
+	NTITimePeriod timePeriod = [self timePeriodSinceInterval: timeInterval];
+	return [self stringFromTimePeriod: timePeriod];
+}
+
++ (NSString *)stringFromTimeIntervalWithLargestFittingTimeUnitWithinDays:(NSTimeInterval)timeInterval
+{
+	NTITimePeriod timePeriod = [self timePeriodSinceInterval: timeInterval withLargestFittingTimePeriodUnit: NTITimePeriodUnitDays];
+	return [self stringFromTimePeriod: timePeriod];
 }
 
 static int const timeConstant = 60;
@@ -91,32 +189,17 @@ static int const timeConstant = 60;
 +(NSString *)stringFromTimeInterval:(NSTimeInterval)timeInterval
 {
 	CGFloat seconds = (int)timeInterval % timeConstant;
-	NSString* secondsTemplate
-	= NSLocalizedStringWithDefaultValue(@"nsdate-ntiextension.seconds.template",
-										@"NextThought",
-										[NSBundle mainBundle],
-										(seconds == 1 ? @"%@ second" : @"%@ seconds"),
-										@"string representing seconds");
-	NSString* secondsString = [NSString stringWithFormat: secondsTemplate, @(seconds)];
+	NSString *secondsString = [self stringForTimeUnit: NTITimePeriodUnitSeconds
+										withUnitCount: seconds];
 	
 	int minutesTotal = (int)(timeInterval / timeConstant);
 	int minutes = (int)minutesTotal % timeConstant;
-	NSString* minutesTemplate
-	= NSLocalizedStringWithDefaultValue(@"nsdate-ntiextension.minutes.template",
-										@"NextThought",
-										[NSBundle mainBundle],
-										(minutes == 1 ? @"%@ minute" : @"%@ minutes"),
-										@"string representing minutes");
-	NSString* minutesString = [NSString stringWithFormat: minutesTemplate, @(minutes)];
+	NSString *minutesString = [self stringForTimeUnit: NTITimePeriodUnitMinutes
+										withUnitCount: minutes];
 	
 	int hours = minutesTotal / timeConstant;
-	NSString* hoursTemplate
-	= NSLocalizedStringWithDefaultValue(@"nsdate-ntiextension.hours.template",
-										@"NextThought",
-										[NSBundle mainBundle],
-										(hours == 1 ? @"%@ hour" : @"%@ hours"),
-										@"string representing hours");
-	NSString* hoursString = [NSString stringWithFormat: hoursTemplate, @(hours)];
+	NSString *hoursString = [self stringForTimeUnit: NTITimePeriodUnitHours
+									  withUnitCount: hours];
 	
 	NSString* timeString = @"";
 	if(timeInterval < timeConstant){
@@ -160,8 +243,13 @@ static int const timeConstant = 60;
 	else {
 		dateDisplayString = [NSDate stringFromTimeIntervalWithLargestFittingTimeUnitWithinDays:
 							 [[NSDate date] timeIntervalSince1970] - [self timeIntervalSince1970]];
-		//TODO: externalize
-		dateDisplayString = [dateDisplayString stringByAppendingString: @" ago"];
+		NSString *ago = NSLocalizedStringWithDefaultValue(@"nextthought.nsdate-ntiextension.time-ago",
+														  @"NextThought",
+														  [NSBundle mainBundle],
+														  @"ago",
+														  @"Describes how long the most recent activity took place.");
+		ago = [@" " stringByAppendingString: ago];
+		dateDisplayString = [dateDisplayString stringByAppendingString: ago];
 	}
 	
 	return dateDisplayString;

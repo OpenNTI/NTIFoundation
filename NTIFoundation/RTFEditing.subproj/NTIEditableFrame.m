@@ -314,7 +314,8 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 	
 	id attributes = [self.attributedText attributesAtIndex: characterRange.location effectiveRange: NULL];
 	OATextAttachment* attachment = [attributes objectForKey: NSAttachmentAttributeName];
-	if(attachment){
+	if (    attachment != nil
+		&& [attachment respondsToSelector: @selector(attachmentRenderer)]) {
 		return [(id)attachment attachmentRenderer];
 	}
 	return nil;

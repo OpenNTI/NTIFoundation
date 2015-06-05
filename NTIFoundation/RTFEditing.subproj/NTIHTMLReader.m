@@ -6,6 +6,8 @@
 //  Copyright 2011 NextThought. All rights reserved.
 //
 #import "NTIHTMLReader.h"
+#import "NTITextAttachment.h"
+
 
 #import <OmniBase/OmniBase.h>
 #import <OmniFoundation/NSMutableAttributedString-OFExtensions.h>
@@ -392,13 +394,18 @@ styleAttribute = stringFromStyle( styleAttribute, @prefix );
 -(CGImageRef)newImageFromURL: (NSString*)url
 {
 	//Seriously cheating here
-	NSString* dataPfx = @"data:image/png;base64,";
+	NSString* dataPfx1 = @"data:image/png;base64,";
+	NSString *dataPfx2 = @"data:<;base64,";
 	NSData* imgData = nil;
-	if( [url hasPrefix: dataPfx] ) {
-		imgData = [NSData dataWithBase64String: [url substringFromIndex: dataPfx.length]];
+	if( [url hasPrefix: dataPfx1] ) {
+		imgData = [NSData dataWithBase64String: [url substringFromIndex: dataPfx1.length]];
+	}
+	else if ([url hasPrefix: dataPfx2]) {
+		imgData = [NSData dataWithBase64String: [url substringFromIndex:dataPfx2.length]];
 	}
 	else {
 		//FIXME we are running on the main thread here.  THis may block
+		OBASSERT(![NSThread isMainThread]);
 		imgData = [NSData dataWithContentsOfURL: [NSURL URLWithString: url]];
 	}
 	
@@ -571,6 +578,10 @@ qualifiedName: (NSString*)qName
 			}
 		}
 	}
+	else if ([@"img" isEqualToString: elementName]) {
+		[self handleImageTag: self->attrBuffer
+				currentImage: self->currentImage];
+	}
 	else if( [@"audio" isEqual: elementName] ){
 		self->parsingAudio = NO;
 		[self handleAudioTag: self->attrBuffer
@@ -583,6 +594,12 @@ qualifiedName: (NSString*)qName
 -(void)handleAnchorTag: (NSMutableAttributedString*)attrBuffer
 		   currentHref: (NSString*)currentHref 
 		  currentImage: (CGImageRef) currentImage
+{
+	
+}
+
+- (void)handleImageTag: (NSMutableAttributedString *)attrBuffer
+		  currentImage: (CGImageRef)image
 {
 	
 }

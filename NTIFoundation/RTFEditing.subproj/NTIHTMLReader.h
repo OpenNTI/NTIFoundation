@@ -36,6 +36,9 @@
 		   currentHref: (NSString*)currentHref 
 		  currentImage: (CGImageRef) currentImage;
 
+- (void)handleImageTag: (NSMutableAttributedString *)attrBuffer
+		  currentImage: (CGImageRef)image;
+
 -(void)handleAudioTag: (NSMutableAttributedString*)attrBuffer
 		 currentAudio: (NSString*)currentAudio ;
 @end
