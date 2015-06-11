@@ -203,7 +203,7 @@ static NSMutableSet* getTrustedHosts()
 -(void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data
 {
 	dispatch_async(dispatch_get_main_queue(), ^(){
-		[self connection: nil didReceiveData: data];
+		[self connection: [NSURLConnection new] didReceiveData: data];
 	});
 }
 

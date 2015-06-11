@@ -55,3 +55,30 @@ typedef void(^NTIErrorProcBlock)(NSError* error);
 #else
 #define NTI_METHOD_FAMILY_NEW
 #endif
+
+#if __has_feature(objc_generics)
+
+#define NTIArrayG(ELEMENT_TYPE) NSArray<ELEMENT_TYPE>
+#define NTIMutableArrayG(ELEMENT_TYPE) NSMutableArray<ELEMENT_TYPE>
+#define NTISetG(ELEMENT_TYPE) NSSet<ELEMENT_TYPE>
+#define NTIMutableSetG(ELEMENT_TYPE) NSMutableSet<ELEMENT_TYPE>
+#define NTIOrderedSetG(ELEMENT_TYPE) NSOrderedSet<ELEMENT_TYPE>
+#define NTIMutableOrderedSetG(ELEMENT_TYPE) NSMutableOrderedSet<ELEMENT_TYPE>
+#define NTIDictionaryG(KEY_TYPE, VALUE_TYPE) NSDictionary<KEY_TYPE, VALUE_TYPE>
+#define NTIMutableDictionaryG(KEY_TYPE, VALUE_TYPE) NSMutableDictionary<KEY_TYPE, VALUE_TYPE>
+#define NTIHashTableG(ELEMENT_TYPE) NSHashTable<ELEMENT_TYPE>
+#define NTIMapTableG(KEY_TYPE, VALUE_TYPE) NSMapTable<KEY_TYPE, VALUE_TYPE>
+
+#else
+
+#define NTIArrayG(ELEMENT_TYPE) NSArray
+#define NTIMutableArrayG(ELEMENT_TYPE) NSMutableArray
+#define NTISetG(ELEMENT_TYPE) NSSet
+#define NTIMutableSetG(ELEMENT_TYPE) NSMutableSet
+#define NTIOrderedSetG(ELEMENT_TYPE) NSOrderedSet
+#define NTIMutableOrderedSetG(ELEMENT_TYPE) NSMutableOrderedSet
+#define NTIDictionaryG(KEY_TYPE, VALUE_TYPE) NSDictionary
+#define NTIHashTableG(ELEMENT_TYPE) NSHashTable
+#define NTIMapTableG(KEY_TYPE, VALUE_TYPE) NSMapTable
+
+#endif
