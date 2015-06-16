@@ -77,6 +77,11 @@ static NSMutableSet* getTrustedHosts()
 	}
 }
 
+-(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+{
+	
+}
+
 #ifdef DEBUG
 
 //In debug builds, we accept ANY self-signed certificates. See comments below.
@@ -203,7 +208,7 @@ static NSMutableSet* getTrustedHosts()
 -(void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data
 {
 	dispatch_async(dispatch_get_main_queue(), ^(){
-		[self connection: [NSURLConnection new] didReceiveData: data];
+		[self connection: nil didReceiveData: data];
 	});
 }
 
