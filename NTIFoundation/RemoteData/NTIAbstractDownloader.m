@@ -77,6 +77,11 @@ static NSMutableSet* getTrustedHosts()
 	}
 }
 
+-(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+{
+	
+}
+
 #ifdef DEBUG
 
 //In debug builds, we accept ANY self-signed certificates. See comments below.
