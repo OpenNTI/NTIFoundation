@@ -84,7 +84,7 @@ typedef void(^NTIErrorProcBlock)(NSError* error);
 
 #endif
 
-#ifdef __IPHONE_9_0
+#if __has_feature(__kindof)
 #define NTI_kindof __kindof
 #else
 #define NTI_kindof 
