@@ -82,3 +82,9 @@ typedef void(^NTIErrorProcBlock)(NSError* error);
 #define NTIMapTableG(KEY_TYPE, VALUE_TYPE) NSMapTable
 
 #endif
+
+#ifdef __IPHONE_9_0
+#define NTI_kindof __kindof
+#else
+#define NTI_kindof 
+#endif
