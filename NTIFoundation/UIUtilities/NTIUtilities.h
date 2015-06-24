@@ -78,6 +78,7 @@ typedef void(^NTIErrorProcBlock)(NSError* error);
 #define NTIOrderedSetG(ELEMENT_TYPE) NSOrderedSet
 #define NTIMutableOrderedSetG(ELEMENT_TYPE) NSMutableOrderedSet
 #define NTIDictionaryG(KEY_TYPE, VALUE_TYPE) NSDictionary
+#define NTIMutableDictionaryG(KEY_TYPE, VALUE_TYPE) NSMutableDictionary
 #define NTIHashTableG(ELEMENT_TYPE) NSHashTable
 #define NTIMapTableG(KEY_TYPE, VALUE_TYPE) NSMapTable
 
