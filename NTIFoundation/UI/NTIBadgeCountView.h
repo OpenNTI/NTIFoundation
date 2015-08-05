@@ -9,10 +9,15 @@
 #import <UIKit/UIKit.h>
 
 @interface NTIBadgeCountView : UIView{
-	@private
-	NSUInteger count;
 }
 
 -(id)initWithCount: (NSUInteger)c andFrame: (CGRect)frame;
+
+@property (nonatomic, assign) NSUInteger count;
+
+@property (nonatomic, strong) UIColor* badgeColor;
+@property (nonatomic, strong) UIColor* borderColor;
+@property (nonatomic, strong) UIFont* font;
+@property (nonatomic, strong) UIColor* textColor;
 
 @end

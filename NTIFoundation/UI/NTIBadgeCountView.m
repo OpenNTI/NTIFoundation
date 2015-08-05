@@ -8,88 +8,104 @@
 
 #import "NTIBadgeCountView.h"
 
+@interface NTIBadgeCountView()
+@property (nonatomic, readonly) CAShapeLayer* layer;
+@property (nonatomic, readonly) UILabel* label;
+@end
+
 @implementation NTIBadgeCountView
+@synthesize count = _count;
+@dynamic layer;
+@dynamic font, textColor;
+
++(Class)layerClass
+{
+	return [CAShapeLayer class];
+}
 
 -(id)initWithCount: (NSUInteger)c andFrame: (CGRect)frame;
 {
     self = [super initWithFrame:frame];
-    self->count = c;
-	self.backgroundColor = [UIColor clearColor];
+	if(self){
+		self.layer.lineWidth = 3;
+		
+		self->_label = [[UILabel alloc] initWithFrame: self.bounds];
+		self.label.translatesAutoresizingMaskIntoConstraints = NO;
+		self.label.textAlignment = NSTextAlignmentCenter;
+		[self addSubview: self.label];
+		
+		[self.label addConstraint: [NSLayoutConstraint constraintWithItem: self.label
+														  attribute: NSLayoutAttributeWidth
+														  relatedBy: NSLayoutRelationGreaterThanOrEqual
+																   toItem: self.label
+														  attribute: NSLayoutAttributeHeight
+															   multiplier: 1
+														   constant: 0]];
+		
+		[self addConstraints: [NSLayoutConstraint constraintsWithVisualFormat: @"H:|-(6)-[l]-(6)-|"
+																	  options: 0
+																	  metrics: nil
+																		views: @{@"l": self.label}]];
+		[self addConstraints: [NSLayoutConstraint constraintsWithVisualFormat: @"V:|-(3)-[l]-(3)-|"
+																	  options: 0
+																	  metrics: nil
+																		views: @{@"l": self.label}]];
+		
+		self.backgroundColor = [UIColor clearColor];
+		self.font = [UIFont boldSystemFontOfSize: 14];
+		self.textColor = [UIColor blackColor];
+		self.badgeColor = [UIColor redColor];
+		self.borderColor = [UIColor blackColor];
+		
+		self.count = c;
+	}
     return self;
 }
 
-// Draws the Badge with Quartz
--(void)drawRoundedRectWithContext:(CGContextRef)context withRect: (CGRect)rect
+-(UIColor *)textColor
 {
-	CGContextSaveGState(context);
-	
-	CGFloat radius = CGRectGetMaxY(rect)*.5;
-	CGFloat padding = CGRectGetMaxY(rect)*0.10;
-	CGFloat maxX = CGRectGetMaxX(rect) - padding;
-	CGFloat maxY = CGRectGetMaxY(rect) - padding;
-	CGFloat minX = CGRectGetMinX(rect) + padding;
-	CGFloat minY = CGRectGetMinY(rect) + padding;
-	
-    CGContextBeginPath(context);
-	CGContextSetFillColorWithColor(context, [[UIColor redColor] CGColor]);
-	CGContextAddArc(context, maxX-radius, minY+radius, radius, M_PI+(M_PI/2), 0, 0);
-	CGContextAddArc(context, maxX-radius, maxY-radius, radius, 0, M_PI/2, 0);
-	CGContextAddArc(context, minX+radius, maxY-radius, radius, M_PI/2, M_PI, 0);
-	CGContextAddArc(context, minX+radius, minY+radius, radius, M_PI, M_PI+M_PI/2, 0);
-	CGContextSetShadowWithColor(context, CGSizeMake(1.0,1.0), 3, [[UIColor blackColor] CGColor]);
-    CGContextFillPath(context);
-	
-	CGContextRestoreGState(context);
-	
+	return self.label.textColor;
 }
 
--(void)drawPerimeterWithContext:(CGContextRef)context withRect: (CGRect)rect
+-(void)setTextColor:(UIColor *)textColor
 {
-	CGFloat radius = CGRectGetMaxY(rect)*.5;
-	CGFloat buffer = CGRectGetMaxY(rect)*0.10;
-	
-	CGFloat maxX = CGRectGetMaxX(rect) - buffer;
-	CGFloat maxY = CGRectGetMaxY(rect) - buffer;
-	CGFloat minX = CGRectGetMinX(rect) + buffer;
-	CGFloat minY = CGRectGetMinY(rect) + buffer;
-	
-	
-    CGContextBeginPath(context);
-	CGFloat lineSize = 2;
-	CGContextSetLineWidth(context, lineSize);
-	CGContextSetStrokeColorWithColor(context, [[UIColor whiteColor] CGColor]);
-	CGContextAddArc(context, maxX-radius, minY+radius, radius, M_PI+(M_PI/2), 0, 0);
-	CGContextAddArc(context, maxX-radius, maxY-radius, radius, 0, M_PI/2, 0);
-	CGContextAddArc(context, minX+radius, maxY-radius, radius, M_PI/2, M_PI, 0);
-	CGContextAddArc(context, minX+radius, minY+radius, radius, M_PI, M_PI+M_PI/2, 0);
-	CGContextClosePath(context);
-	CGContextStrokePath(context);
+	self.label.textColor = textColor;
+}
+
+-(UIFont *)font
+{
+	return self.label.font;
+}
+
+-(void)setFont:(UIFont *)font
+{
+	self.label.font = font;
+}
+
+-(void)layoutSublayersOfLayer:(CALayer *)layer
+{
+	self.layer.path = [UIBezierPath bezierPathWithRoundedRect: self.bounds
+												 cornerRadius: self.bounds.size.height / 2.0].CGPath;
+	[super layoutSublayersOfLayer: layer];
 
 }
 
-//Inspired by CustomBadge
-- (void)drawRect:(CGRect)rect {
-	
-	CGContextRef context = UIGraphicsGetCurrentContext();
-	[self drawRoundedRectWithContext: context withRect: rect];
-	
-	[self drawPerimeterWithContext: context withRect: rect];
-	
-	NSString* countString = [NSString stringWithFormat: @"%lu" , (unsigned long)self->count];
-	
-	if ([countString length]>0) {
-		[[UIColor whiteColor] set];
-		CGFloat sizeOfFont = 13.5;
-		if ([countString length]<2) {
-			sizeOfFont += sizeOfFont*0.20;
-		}
-		UIFont *textFont = [UIFont boldSystemFontOfSize:sizeOfFont];
-		CGSize textSize = [countString sizeWithAttributes: @{NSFontAttributeName: textFont}];
-		[countString drawAtPoint: CGPointMake((rect.size.width/2-textSize.width/2),
-											  (rect.size.height/2-textSize.height/2))
-				  withAttributes: @{NSFontAttributeName: textFont}];
-	}
-	
+-(void)setCount:(NSUInteger)count
+{
+	self->_count = count;
+	self.label.text = [NSString stringWithFormat: @"%lu" , (unsigned long)self.count];
+}
+
+-(void)setBadgeColor:(UIColor *)badgeColor
+{
+	self->_badgeColor = badgeColor;
+	self.layer.fillColor = [self.badgeColor CGColor];
+}
+
+-(void)setBorderColor:(UIColor *)borderColor
+{
+	self->_borderColor = borderColor;
+	self.layer.strokeColor = self.borderColor.CGColor;
 }
 
 @end
