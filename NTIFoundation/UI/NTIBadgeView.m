@@ -1,20 +1,19 @@
 //
-//  NTIBadgeCountView.m
+//  NTIBadgeView.m
 //  NTIFoundation
 //
 //  Created by Christopher Utz on 2/2/12.
 //  Copyright (c) 2012 NextThought. All rights reserved.
 //
 
-#import "NTIBadgeCountView.h"
+#import "NTIBadgeView.h"
 
-@interface NTIBadgeCountView()
+@interface NTIBadgeView()
 @property (nonatomic, readonly) CAShapeLayer* layer;
 @property (nonatomic, readonly) UILabel* label;
 @end
 
-@implementation NTIBadgeCountView
-@synthesize count = _count;
+@implementation NTIBadgeView
 @dynamic layer;
 @dynamic font, textColor;
 
@@ -23,7 +22,7 @@
 	return [CAShapeLayer class];
 }
 
--(id)initWithCount: (NSUInteger)c andFrame: (CGRect)frame;
+-(id)initWithFrame: (CGRect)frame;
 {
     self = [super initWithFrame:frame];
 	if(self){
@@ -56,8 +55,6 @@
 		self.textColor = [UIColor blackColor];
 		self.badgeColor = [UIColor redColor];
 		self.borderColor = [UIColor blackColor];
-		
-		self.count = c;
 	}
     return self;
 }
@@ -90,10 +87,10 @@
 
 }
 
--(void)setCount:(NSUInteger)count
+-(void)setBadgeText:(NSString *)badgeText
 {
-	self->_count = count;
-	self.label.text = [NSString stringWithFormat: @"%lu" , (unsigned long)self.count];
+	self->_badgeText = badgeText;
+	self.label.text = self.badgeText;
 }
 
 -(void)setBadgeColor:(UIColor *)badgeColor

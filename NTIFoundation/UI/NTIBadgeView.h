@@ -1,5 +1,5 @@
 //
-//  NTIBadgeCountView.h
+//  NTIBadgeView.h
 //  NTIFoundation
 //
 //  Created by Christopher Utz on 2/2/12.
@@ -8,12 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface NTIBadgeCountView : UIView{
+@interface NTIBadgeView : UIView{
 }
 
--(id)initWithCount: (NSUInteger)c andFrame: (CGRect)frame;
 
-@property (nonatomic, assign) NSUInteger count;
+@property (nonatomic, strong) NSString* badgeText;
 
 @property (nonatomic, strong) UIColor* badgeColor;
 @property (nonatomic, strong) UIColor* borderColor;

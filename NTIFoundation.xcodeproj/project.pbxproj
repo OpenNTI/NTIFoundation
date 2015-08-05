@@ -137,8 +137,8 @@
 		40F39C8114D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8014D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m */; };
 		40F39C8414D84EF50089DCF6 /* SendRecieveQueueTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8314D84EF50089DCF6 /* SendRecieveQueueTest.m */; };
 		40F39C8714D852FE0089DCF6 /* NSString-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8614D852FE0089DCF6 /* NSString-NTIExtensionsTest.m */; };
-		40F56F2515CAC518001FC309 /* NTIBadgeCountView.h in Headers */ = {isa = PBXBuildFile; fileRef = 40F56F2115CAC518001FC309 /* NTIBadgeCountView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		40F56F2615CAC518001FC309 /* NTIBadgeCountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F56F2215CAC518001FC309 /* NTIBadgeCountView.m */; };
+		40F56F2515CAC518001FC309 /* NTIBadgeView.h in Headers */ = {isa = PBXBuildFile; fileRef = 40F56F2115CAC518001FC309 /* NTIBadgeView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		40F56F2615CAC518001FC309 /* NTIBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F56F2215CAC518001FC309 /* NTIBadgeView.m */; };
 		40F72DA8156EE1C50050C93E /* NTIMathEquationBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 40F72DA6156EE1C40050C93E /* NTIMathEquationBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40F72DA9156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */; };
 		40FB28EE18D2B47B00A450FA /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40FB28B018D2AEAF00A450FA /* XCTest.framework */; };
@@ -623,8 +623,8 @@
 		40F39C8314D84EF50089DCF6 /* SendRecieveQueueTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendRecieveQueueTest.m; sourceTree = "<group>"; };
 		40F39C8514D852FE0089DCF6 /* NSString-NTIExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString-NTIExtensionsTest.h"; sourceTree = "<group>"; };
 		40F39C8614D852FE0089DCF6 /* NSString-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString-NTIExtensionsTest.m"; sourceTree = "<group>"; };
-		40F56F2115CAC518001FC309 /* NTIBadgeCountView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIBadgeCountView.h; sourceTree = "<group>"; };
-		40F56F2215CAC518001FC309 /* NTIBadgeCountView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIBadgeCountView.m; sourceTree = "<group>"; };
+		40F56F2115CAC518001FC309 /* NTIBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIBadgeView.h; sourceTree = "<group>"; };
+		40F56F2215CAC518001FC309 /* NTIBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIBadgeView.m; sourceTree = "<group>"; };
 		40F72DA6156EE1C40050C93E /* NTIMathEquationBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathEquationBuilder.h; sourceTree = "<group>"; };
 		40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathEquationBuilder.m; sourceTree = "<group>"; };
 		40FB28B018D2AEAF00A450FA /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -1135,8 +1135,8 @@
 		40F56F2015CAC4F7001FC309 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				40F56F2115CAC518001FC309 /* NTIBadgeCountView.h */,
-				40F56F2215CAC518001FC309 /* NTIBadgeCountView.m */,
+				40F56F2115CAC518001FC309 /* NTIBadgeView.h */,
+				40F56F2215CAC518001FC309 /* NTIBadgeView.m */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -1425,7 +1425,7 @@
 				404A67A0156D906900A81B6A /* UIDevice-NTIExtensions.h in Headers */,
 				40F72DA8156EE1C50050C93E /* NTIMathEquationBuilder.h in Headers */,
 				40716F3515C828B900430FFC /* NTIGlobalInspectorSlice.h in Headers */,
-				40F56F2515CAC518001FC309 /* NTIBadgeCountView.h in Headers */,
+				40F56F2515CAC518001FC309 /* NTIBadgeView.h in Headers */,
 				4059D26515DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.h in Headers */,
 				40531BCF160A39C800252818 /* NTITextAttachmentCell.h in Headers */,
 			);
@@ -1879,7 +1879,7 @@
 				40F72DA9156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */,
 				4C8EAFC91578065300BF8FF7 /* NSURL-NTIExtensions.m in Sources */,
 				40716F3615C828B900430FFC /* NTIGlobalInspectorSlice.m in Sources */,
-				40F56F2615CAC518001FC309 /* NTIBadgeCountView.m in Sources */,
+				40F56F2615CAC518001FC309 /* NTIBadgeView.m in Sources */,
 				403C8CE317EA6CE9000FC290 /* NSNotification-NTIExtensions.m in Sources */,
 				4059D26615DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m in Sources */,
 				40531BD0160A39C800252818 /* NTITextAttachmentCell.m in Sources */,

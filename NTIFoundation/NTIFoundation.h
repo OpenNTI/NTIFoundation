@@ -65,7 +65,7 @@
 #import "NTIInspectableObjectProtocol.h"
 #import "NTIGlobalInspectorMainPane.h"
 #import "NTIGlobalInspectorSlice.h"
-#import "NTIBadgeCountView.h"
+#import "NTIBadgeView.h"
 #import	"NTIKeyboardAdjustmentListener.h"
 #import "UIColor+NTIExtensions.h"
 
