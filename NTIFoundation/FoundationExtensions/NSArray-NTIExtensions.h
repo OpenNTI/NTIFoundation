@@ -29,7 +29,7 @@
 +(BOOL)isNotEmptyArray: (id)a;
 
 /// \c YES iff the receiver's \c count is equal to \c 0\n.
-/// @note The result of this expression should \b not be tested by explicit comparison to \c BOOL values in cases where a \c nil result should be treated as \c NO\n.
+/// @note This property should be used only when you can be sure that the receiver is not \c nil\n. Otherwise, use \c +isEmptyArray or negate the result of \c notEmpty\n.
 @property (nonatomic, readonly) BOOL isEmpty;
 
 @property (nonatomic,readonly) BOOL notEmpty; //Safe as an instance method, nil returns NO

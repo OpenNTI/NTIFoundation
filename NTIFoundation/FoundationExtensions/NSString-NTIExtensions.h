@@ -47,6 +47,15 @@
 @interface NSString (NTIExtensions)
 
 +(NSString*)uuid;
+
+/// \c YES iff the receiver contains no characters.
+/// @note This property should be used only when you can be sure that the receiver is not \c nil\n.
+@property (nonatomic, readonly) BOOL isEmpty;
+
+/// \c YES iff the receiver contains at least one character.
+/// @note The return value of this property should \b not be tested by explicit comparison to \c BOOL values in the case where \c nil should be treated as \c NO\n, unless you can be sure that the receiver is not \c nil\n.
+@property (nonatomic, readonly) BOOL notEmpty;
+
 -(NSArray*)piecesUsingRegex: (NSRegularExpression*)regex;
 -(NSArray*)piecesUsingRegexString: (NSString*)regex;
 -(BOOL)isEqualToStringIgnoringCase: (NSString*)s;
@@ -60,17 +69,5 @@
  * Returns the value of the receiver after replacing ampersand escapes (e.g., "&amp;") with their represented values.
  */
 - (NSString *)stringByReplacingAmpEscapes;
-
-@end
-
-#pragma mark - Swift Extensions
-
-/**
- A set of extensions which make some aspects of working with NSString more Swift-like (i.e., less cumbersome).
- */
-@interface NSString (NTISwiftExtensions)
-
-/// \c YES iff the receiver contains no characters.
-@property (nonatomic, readonly) BOOL isEmpty;
 
 @end

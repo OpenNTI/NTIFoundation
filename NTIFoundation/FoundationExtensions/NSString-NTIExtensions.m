@@ -63,6 +63,16 @@ static NSDateFormatter* rfc3339DateFormatter()
 	return uuidString;
 }
 
+- (BOOL)isEmpty
+{
+	return [NSString isEmptyString: self];
+}
+
+- (BOOL)notEmpty
+{
+	return !self.isEmpty;
+}
+
 -(NSArray*)piecesUsingRegex: (NSRegularExpression*)regex
 {
 	NSArray* results = [regex matchesInString: self options:0 range:NSMakeRange(0, [self length])];
@@ -146,17 +156,6 @@ static NSDateFormatter* rfc3339DateFormatter()
 									 options: 1
 								 range: NSMakeRange(0, string.length)];
 	return [string copy];
-}
-
-@end
-
-#pragma mark - Swift Extensions
-
-@implementation NSString (NTISwiftExtensions)
-
-- (BOOL)isEmpty
-{
-	return [NSString isEmptyString: self];
 }
 
 @end
