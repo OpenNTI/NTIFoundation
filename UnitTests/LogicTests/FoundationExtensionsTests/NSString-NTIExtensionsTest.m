@@ -71,4 +71,24 @@
 			  @"String with no amp-escapes is modified erroneously.");
 }
 
+- (void)testIsEmpty
+{
+	XCTAssertFalse(@"not-empty".isEmpty, @"isEmpty incorrecty computes true for a non-empty string.");
+	
+	XCTAssertTrue(@"".isEmpty, @"isEmpty incorrectly computes false for an empty string.");
+	
+	NSString *nilString = nil;
+	XCTAssertFalse(nilString.isEmpty, @"isEmpty incorrectly computes true for nil.");
+}
+
+- (void)testNotEmpty
+{
+	XCTAssertTrue(@"not-empty".notEmpty, @"notEmpty incorrectly computes false for a non-empty string.");
+	
+	XCTAssertFalse(@"".notEmpty, @"notEmpty incorrectly computes true for an empty string.");
+	
+	NSString *nilString = nil;
+	XCTAssertFalse(nilString.isEmpty, @"notEmpty incorrect computes true for nil.");
+}
+
 @end
