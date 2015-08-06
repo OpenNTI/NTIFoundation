@@ -28,5 +28,9 @@
 +(BOOL)isEmptyArray: (id)a; //Not an instance method, because nil would return NO
 +(BOOL)isNotEmptyArray: (id)a;
 
+/// \c YES iff the receiver's \c count is equal to \c 0\n.
+/// @note The result of this expression should \b not be tested by explicit comparison to \c BOOL values in cases where a \c nil result should be treated as \c NO\n.
+@property (nonatomic, readonly) BOOL isEmpty;
+
 @property (nonatomic,readonly) BOOL notEmpty; //Safe as an instance method, nil returns NO
 @end
