@@ -62,3 +62,15 @@
 - (NSString *)stringByReplacingAmpEscapes;
 
 @end
+
+#pragma mark - Swift Extensions
+
+/**
+ A set of extensions which make some aspects of working with NSString more Swift-like (i.e., less cumbersome).
+ */
+@interface NSString (NTISwiftExtensions)
+
+/// \c YES iff the receiver contains no characters.
+@property (nonatomic, readonly) BOOL isEmpty;
+
+@end

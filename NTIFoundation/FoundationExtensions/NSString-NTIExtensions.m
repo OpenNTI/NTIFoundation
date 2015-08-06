@@ -149,3 +149,14 @@ static NSDateFormatter* rfc3339DateFormatter()
 }
 
 @end
+
+#pragma mark - Swift Extensions
+
+@implementation NSString (NTISwiftExtensions)
+
+- (BOOL)isEmpty
+{
+	return [NSString isEmptyString: self];
+}
+
+@end
