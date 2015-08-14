@@ -31,7 +31,7 @@
 @property (readonly) long long expectedContentLength;
 
 -(BOOL)statusWasSuccess;
-
+-(void)connection: (NSURLConnection*)connection didReceiveData: (NSData*)data;
 -(void)connection: (NSURLConnection*)connection didReceiveResponse: (id)response;
 //-(void)connection: (NSURLConnection*)connection didReceiveAuthenticationChallenge: (NSURLAuthenticationChallenge *)challenge;
 -(void)connection: (NSURLConnection*)connection didFailWithError: (NSError*)error;

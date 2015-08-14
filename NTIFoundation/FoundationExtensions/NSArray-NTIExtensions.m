@@ -22,6 +22,11 @@
 	return ![self isEmptyArray: a];
 }
 
+- (BOOL)isEmpty
+{
+	return self.count == 0;
+}
+
 -(BOOL)notEmpty
 {
 	return self.count > 0;

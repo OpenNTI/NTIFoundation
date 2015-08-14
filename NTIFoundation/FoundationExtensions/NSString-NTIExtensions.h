@@ -47,6 +47,15 @@
 @interface NSString (NTIExtensions)
 
 +(NSString*)uuid;
+
+/// \c YES iff the receiver contains no characters.
+/// @note This property should be used only when you can be sure that the receiver is not \c nil\n.
+@property (nonatomic, readonly) BOOL isEmpty;
+
+/// \c YES iff the receiver contains at least one character.
+/// @note The return value of this property should \b not be tested by explicit comparison to \c BOOL values in the case where \c nil should be treated as \c NO\n, unless you can be sure that the receiver is not \c nil\n.
+@property (nonatomic, readonly) BOOL notEmpty;
+
 -(NSArray*)piecesUsingRegex: (NSRegularExpression*)regex;
 -(NSArray*)piecesUsingRegexString: (NSString*)regex;
 -(BOOL)isEqualToStringIgnoringCase: (NSString*)s;

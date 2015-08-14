@@ -137,8 +137,8 @@
 		40F39C8114D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8014D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m */; };
 		40F39C8414D84EF50089DCF6 /* SendRecieveQueueTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8314D84EF50089DCF6 /* SendRecieveQueueTest.m */; };
 		40F39C8714D852FE0089DCF6 /* NSString-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8614D852FE0089DCF6 /* NSString-NTIExtensionsTest.m */; };
-		40F56F2515CAC518001FC309 /* NTIBadgeCountView.h in Headers */ = {isa = PBXBuildFile; fileRef = 40F56F2115CAC518001FC309 /* NTIBadgeCountView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		40F56F2615CAC518001FC309 /* NTIBadgeCountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F56F2215CAC518001FC309 /* NTIBadgeCountView.m */; };
+		40F56F2515CAC518001FC309 /* NTIBadgeView.h in Headers */ = {isa = PBXBuildFile; fileRef = 40F56F2115CAC518001FC309 /* NTIBadgeView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		40F56F2615CAC518001FC309 /* NTIBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F56F2215CAC518001FC309 /* NTIBadgeView.m */; };
 		40F72DA8156EE1C50050C93E /* NTIMathEquationBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 40F72DA6156EE1C40050C93E /* NTIMathEquationBuilder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40F72DA9156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */; };
 		40FB28EE18D2B47B00A450FA /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40FB28B018D2AEAF00A450FA /* XCTest.framework */; };
@@ -623,8 +623,8 @@
 		40F39C8314D84EF50089DCF6 /* SendRecieveQueueTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendRecieveQueueTest.m; sourceTree = "<group>"; };
 		40F39C8514D852FE0089DCF6 /* NSString-NTIExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString-NTIExtensionsTest.h"; sourceTree = "<group>"; };
 		40F39C8614D852FE0089DCF6 /* NSString-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString-NTIExtensionsTest.m"; sourceTree = "<group>"; };
-		40F56F2115CAC518001FC309 /* NTIBadgeCountView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIBadgeCountView.h; sourceTree = "<group>"; };
-		40F56F2215CAC518001FC309 /* NTIBadgeCountView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIBadgeCountView.m; sourceTree = "<group>"; };
+		40F56F2115CAC518001FC309 /* NTIBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIBadgeView.h; sourceTree = "<group>"; };
+		40F56F2215CAC518001FC309 /* NTIBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIBadgeView.m; sourceTree = "<group>"; };
 		40F72DA6156EE1C40050C93E /* NTIMathEquationBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathEquationBuilder.h; sourceTree = "<group>"; };
 		40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathEquationBuilder.m; sourceTree = "<group>"; };
 		40FB28B018D2AEAF00A450FA /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -680,26 +680,26 @@
 		4CEC1DB1151395F70074F3DD /* NTIGlobalInspectorAppTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIGlobalInspectorAppTest.m; sourceTree = "<group>"; };
 		5158CA75156AE5240054CA85 /* NTIMathModelTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathModelTests.h; sourceTree = "<group>"; };
 		5158CA76156AE5240054CA85 /* NTIMathModelTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathModelTests.m; sourceTree = "<group>"; };
-		7215956A13CFE80600DCA72E /* NSObject-NTIJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject-NTIJSON.h"; path = "../NSObject-NTIJSON.h"; sourceTree = "<group>"; };
+		7215956A13CFE80600DCA72E /* NSObject-NTIJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject-NTIJSON.h"; sourceTree = "<group>"; };
 		7216D73113CBAF0300509BDC /* NTIFoundation-Info.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NTIFoundation-Info.h"; sourceTree = "<group>"; };
-		721DC9FF13BA3DBD00340540 /* NTIAbstractDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NTIAbstractDownloader.h; path = ../NTIAbstractDownloader.h; sourceTree = "<group>"; };
-		721DCA0013BA3DBD00340540 /* NTIAbstractDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NTIAbstractDownloader.m; path = ../NTIAbstractDownloader.m; sourceTree = "<group>"; };
+		721DC9FF13BA3DBD00340540 /* NTIAbstractDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIAbstractDownloader.h; sourceTree = "<group>"; };
+		721DCA0013BA3DBD00340540 /* NTIAbstractDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIAbstractDownloader.m; sourceTree = "<group>"; };
 		7248F9DB13BFB4A9009E784A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		7248F9DE13BFB504009E784A /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
-		72579DF313D8B24C005437A7 /* NSString-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString-NTIExtensions.h"; path = "../NSString-NTIExtensions.h"; sourceTree = "<group>"; };
-		72579DF413D8B24C005437A7 /* NSString-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString-NTIExtensions.m"; path = "../NSString-NTIExtensions.m"; sourceTree = "<group>"; };
+		72579DF313D8B24C005437A7 /* NSString-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString-NTIExtensions.h"; sourceTree = "<group>"; };
+		72579DF413D8B24C005437A7 /* NSString-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString-NTIExtensions.m"; sourceTree = "<group>"; };
 		725EACB313CC90440091CE91 /* NTIUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIUtilities.h; sourceTree = "<group>"; };
 		7293CB271451AA7D00CD64B8 /* NTIEditableFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIEditableFrame.h; sourceTree = "<group>"; };
 		7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIEditableFrame.m; sourceTree = "<group>"; };
-		72B0E41B1880C43800A75133 /* OUUnzipArchive-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "OUUnzipArchive-NTIExtensions.h"; path = "NTIFoundation/OUUnzipArchive-NTIExtensions.h"; sourceTree = SOURCE_ROOT; };
-		72B0E41C1880C43800A75133 /* OUUnzipArchive-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "OUUnzipArchive-NTIExtensions.m"; path = "NTIFoundation/OUUnzipArchive-NTIExtensions.m"; sourceTree = SOURCE_ROOT; };
+		72B0E41B1880C43800A75133 /* OUUnzipArchive-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OUUnzipArchive-NTIExtensions.h"; sourceTree = "<group>"; };
+		72B0E41C1880C43800A75133 /* OUUnzipArchive-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OUUnzipArchive-NTIExtensions.m"; sourceTree = "<group>"; };
 		72C0D196142529E800D526D8 /* libNTIFoundation.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNTIFoundation.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		72CBA96B1385CF1F00E3D28D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		72CBA9711385CF1F00E3D28D /* NTIFoundation-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NTIFoundation-Info.plist"; sourceTree = "<group>"; };
 		72CBA9731385CF1F00E3D28D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		72CBA9751385CF1F00E3D28D /* NTIFoundation-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NTIFoundation-Prefix.pch"; sourceTree = "<group>"; };
-		72CC05A913DDE8E9009B2977 /* NSString-NTIJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString-NTIJSON.h"; path = "../NSString-NTIJSON.h"; sourceTree = "<group>"; };
-		72CC05AA13DDE8EA009B2977 /* NSString-NTIJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString-NTIJSON.m"; path = "../NSString-NTIJSON.m"; sourceTree = "<group>"; };
+		72CC05A913DDE8E9009B2977 /* NSString-NTIJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString-NTIJSON.h"; sourceTree = "<group>"; };
+		72CC05AA13DDE8EA009B2977 /* NSString-NTIJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString-NTIJSON.m"; sourceTree = "<group>"; };
 		72D7D43A13E32E9500652DAC /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		72D7D43E13E32F0100652DAC /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		72D8185913955D8C00473994 /* NTIFoundationLogicTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NTIFoundationLogicTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -707,10 +707,10 @@
 		72D8186113955D8C00473994 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		72D8186313955D8C00473994 /* UnitTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UnitTests-Prefix.pch"; sourceTree = "<group>"; };
 		72E353B8142533E7001B345A /* NTIFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIFoundation.h; sourceTree = "<group>"; };
-		72FC5D7813D0FC2A006CBF28 /* NSArray-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSArray-NTIExtensions.h"; path = "../NSArray-NTIExtensions.h"; sourceTree = "<group>"; };
-		72FC5D7913D0FC2A006CBF28 /* NSArray-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSArray-NTIExtensions.m"; path = "../NSArray-NTIExtensions.m"; sourceTree = "<group>"; };
-		72FC5D7B13D10285006CBF28 /* NSMutableArray-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSMutableArray-NTIExtensions.h"; path = "../NSMutableArray-NTIExtensions.h"; sourceTree = "<group>"; };
-		72FC5D7C13D10285006CBF28 /* NSMutableArray-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSMutableArray-NTIExtensions.m"; path = "../NSMutableArray-NTIExtensions.m"; sourceTree = "<group>"; };
+		72FC5D7813D0FC2A006CBF28 /* NSArray-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray-NTIExtensions.h"; sourceTree = "<group>"; };
+		72FC5D7913D0FC2A006CBF28 /* NSArray-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray-NTIExtensions.m"; sourceTree = "<group>"; };
+		72FC5D7B13D10285006CBF28 /* NSMutableArray-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray-NTIExtensions.h"; sourceTree = "<group>"; };
+		72FC5D7C13D10285006CBF28 /* NSMutableArray-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray-NTIExtensions.m"; sourceTree = "<group>"; };
 		83FF9B0A190020D600F644A1 /* NTISingleSliceInspectorPane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTISingleSliceInspectorPane.h; sourceTree = "<group>"; };
 		83FF9B0B190020D600F644A1 /* NTISingleSliceInspectorPane.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTISingleSliceInspectorPane.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -784,7 +784,7 @@
 			children = (
 				400D6E331832A9C500F07DBA /* NTIISO8601DurationFormatterTest.m */,
 			);
-			name = FormattersTests;
+			path = FormattersTests;
 			sourceTree = "<group>";
 		};
 		40103C1214D25605004451A4 /* Inspector */ = {
@@ -803,8 +803,7 @@
 				83FF9B0A190020D600F644A1 /* NTISingleSliceInspectorPane.h */,
 				83FF9B0B190020D600F644A1 /* NTISingleSliceInspectorPane.m */,
 			);
-			name = Inspector;
-			path = Inspector.subproj;
+			path = Inspector;
 			sourceTree = "<group>";
 		};
 		403D0D9E143E18B80049A755 /* RTFEditing */ = {
@@ -827,8 +826,7 @@
 				40BACD6918108FBC0053ACC9 /* NTITextAttachment.h */,
 				40BACD6A18108FBC0053ACC9 /* NTITextAttachment.m */,
 			);
-			name = RTFEditing;
-			path = RTFEditing.subproj;
+			path = RTFEditing;
 			sourceTree = "<group>";
 		};
 		40572C2614C88CD80032D2DB /* NTIAppNavigationController */ = {
@@ -959,8 +957,7 @@
 			children = (
 				406DB42614DB4D47008AEABF /* NonFreePlaceholders */,
 			);
-			name = Resources;
-			path = NTIFoundation/Resources;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		406DB42614DB4D47008AEABF /* NonFreePlaceholders */ = {
@@ -969,7 +966,7 @@
 				406DB42714DB4D9B008AEABF /* switch_active.png */,
 				406DB42814DB4D9B008AEABF /* switch_inactive.png */,
 			);
-			name = NonFreePlaceholders;
+			path = NonFreePlaceholders;
 			sourceTree = "<group>";
 		};
 		407E670B17A05BF300178177 /* Configurations */ = {
@@ -1002,7 +999,7 @@
 				4066C83814E1C95F006B56D3 /* WebSocketData.h */,
 				4066C83914E1C95F006B56D3 /* WebSocketData.m */,
 			);
-			name = "Web Sockets";
+			path = "Web Sockets";
 			sourceTree = "<group>";
 		};
 		40A745B414DADDD90093F0D4 /* FoundationExtensionsTests */ = {
@@ -1027,7 +1024,7 @@
 				4A72F48619268DA8004792EF /* UIColor+NTIExtensionsTest.m */,
 				4A5454431B1630680033FA3A /* NSDate-NTIExtensionsTest.m */,
 			);
-			name = FoundationExtensionsTests;
+			path = FoundationExtensionsTests;
 			sourceTree = "<group>";
 		};
 		40A745B514DADE290093F0D4 /* RTFEditingTests */ = {
@@ -1040,7 +1037,7 @@
 				40531BEB160A427F00252818 /* NTITextAttachmentCellTest.h */,
 				40531BEC160A427F00252818 /* NTITextAttachmentCellTest.m */,
 			);
-			name = RTFEditingTests;
+			path = RTFEditingTests;
 			sourceTree = "<group>";
 		};
 		40A745B614DADE470093F0D4 /* RemoteDataTests */ = {
@@ -1057,7 +1054,7 @@
 				406B23FB1533CDC900BF691E /* WebSocketResponseBufferTest.h */,
 				406B23FC1533CDCA00BF691E /* WebSocketResponseBufferTest.m */,
 			);
-			name = RemoteDataTests;
+			path = RemoteDataTests;
 			sourceTree = "<group>";
 		};
 		40A745B714DADE5E0093F0D4 /* JSONTests */ = {
@@ -1069,7 +1066,7 @@
 				4C4096FB1522140C002A9445 /* JsonPlistSerializationTests.h */,
 				4C4096FC1522140C002A9445 /* JsonPlistSerializationTests.m */,
 			);
-			name = JSONTests;
+			path = JSONTests;
 			sourceTree = "<group>";
 		};
 		40C34C5D14D88BA6000D91A8 /* LogicTests */ = {
@@ -1084,7 +1081,7 @@
 				40A745B714DADE5E0093F0D4 /* JSONTests */,
 				72D8185E13955D8C00473994 /* Supporting Files */,
 			);
-			name = LogicTests;
+			path = LogicTests;
 			sourceTree = "<group>";
 		};
 		40C34C7614D88BCA000D91A8 /* ApplicationTests */ = {
@@ -1094,7 +1091,7 @@
 				401F657B14D85EBB005EADB2 /* NTIAppNavigationControllerTest.m */,
 				40C34CB014D88DD5000D91A8 /* Supporting Files */,
 			);
-			name = ApplicationTests;
+			path = ApplicationTests;
 			sourceTree = "<group>";
 		};
 		40C34CB014D88DD5000D91A8 /* Supporting Files */ = {
@@ -1104,8 +1101,7 @@
 				40C34CB214D88DD5000D91A8 /* InfoPlist.strings */,
 				40C34CB814D88DD5000D91A8 /* NTIFoundationApplicationTests-Prefix.pch */,
 			);
-			name = "Supporting Files";
-			path = ../NTIFoundationApplicationTests;
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		40D7548914278E4500335BEF /* socket.io */ = {
@@ -1121,7 +1117,7 @@
 				40D754AF142791CD00335BEF /* SocketIOTransport.h */,
 				40D754B0142791CD00335BEF /* SocketIOTransport.m */,
 			);
-			name = socket.io;
+			path = socket.io;
 			sourceTree = "<group>";
 		};
 		40D9BB881AA114A500BC6D7E /* Products */ = {
@@ -1139,11 +1135,10 @@
 		40F56F2015CAC4F7001FC309 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				40F56F2115CAC518001FC309 /* NTIBadgeCountView.h */,
-				40F56F2215CAC518001FC309 /* NTIBadgeCountView.m */,
+				40F56F2115CAC518001FC309 /* NTIBadgeView.h */,
+				40F56F2215CAC518001FC309 /* NTIBadgeView.m */,
 			);
-			name = UI;
-			path = UI.subproj;
+			path = UI;
 			sourceTree = "<group>";
 		};
 		4CA4F4691535DDD30005FECD /* MathSymbols */ = {
@@ -1175,8 +1170,7 @@
 				4CC6847D15614D99003823E7 /* NTIMathSymbolUtils.h */,
 				4CC6847E15614D99003823E7 /* NTIMathSymbolUtils.m */,
 			);
-			name = MathSymbols;
-			path = MathSymbols.subproj;
+			path = MathSymbols;
 			sourceTree = "<group>";
 		};
 		4CE3E612154E4F770005918E /* MathSymbolsTests */ = {
@@ -1187,7 +1181,7 @@
 				4CE3E62B154E4FE20005918E /* NTIMathSymbolsExternalizationTests.h */,
 				4CE3E62C154E4FE20005918E /* NTIMathSymbolsExternalizationTests.m */,
 			);
-			name = MathSymbolsTests;
+			path = MathSymbolsTests;
 			sourceTree = "<group>";
 		};
 		4CEC1B7315114BD10074F3DD /* GlobalInspectorTests */ = {
@@ -1202,7 +1196,7 @@
 				4C696D081516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.h */,
 				4C696D091516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m */,
 			);
-			name = GlobalInspectorTests;
+			path = GlobalInspectorTests;
 			sourceTree = "<group>";
 		};
 		721DC9F613BA1C4B00340540 /* UIUtilities */ = {
@@ -1210,7 +1204,7 @@
 			children = (
 				725EACB313CC90440091CE91 /* NTIUtilities.h */,
 			);
-			name = UIUtilities;
+			path = UIUtilities;
 			sourceTree = "<group>";
 		};
 		72CBA95A1385CF1F00E3D28D = {
@@ -1263,7 +1257,7 @@
 				72E353B8142533E7001B345A /* NTIFoundation.h */,
 			);
 			path = NTIFoundation;
-			sourceTree = SOURCE_ROOT;
+			sourceTree = "<group>";
 		};
 		72CBA9701385CF1F00E3D28D /* Supporting Files */ = {
 			isa = PBXGroup;
@@ -1273,7 +1267,7 @@
 				72CBA9721385CF1F00E3D28D /* InfoPlist.strings */,
 				72CBA9751385CF1F00E3D28D /* NTIFoundation-Prefix.pch */,
 			);
-			name = "Supporting Files";
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		72D8185D13955D8C00473994 /* UnitTests */ = {
@@ -1292,7 +1286,7 @@
 				72D8186013955D8C00473994 /* InfoPlist.strings */,
 				72D8186313955D8C00473994 /* UnitTests-Prefix.pch */,
 			);
-			name = "Supporting Files";
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		72E353B4142532B9001B345A /* FoundationExtensions */ = {
@@ -1325,8 +1319,7 @@
 				4A72F45F1925AEF1004792EF /* UIColor+NTIExtensions.h */,
 				4A72F4601925AEF1004792EF /* UIColor+NTIExtensions.m */,
 			);
-			name = FoundationExtensions;
-			path = FoundationExtensions.subproj;
+			path = FoundationExtensions;
 			sourceTree = "<group>";
 		};
 		72E353B5142532B9001B345A /* OUUnzipExtersions */ = {
@@ -1335,8 +1328,7 @@
 				72B0E41B1880C43800A75133 /* OUUnzipArchive-NTIExtensions.h */,
 				72B0E41C1880C43800A75133 /* OUUnzipArchive-NTIExtensions.m */,
 			);
-			name = OUUnzipExtersions;
-			path = OUUnzipExtersions.subproj;
+			path = OUUnzipExtersions;
 			sourceTree = "<group>";
 		};
 		72E353B6142532B9001B345A /* RemoteData */ = {
@@ -1346,8 +1338,7 @@
 				721DC9FF13BA3DBD00340540 /* NTIAbstractDownloader.h */,
 				721DCA0013BA3DBD00340540 /* NTIAbstractDownloader.m */,
 			);
-			name = RemoteData;
-			path = RemoteData.subproj;
+			path = RemoteData;
 			sourceTree = "<group>";
 		};
 		72E353B714253305001B345A /* JSON */ = {
@@ -1360,8 +1351,7 @@
 				403C31781512A5DD00C53D22 /* NSData-NTIJSON.h */,
 				403C31791512A5DD00C53D22 /* NSData-NTIJSON.m */,
 			);
-			name = JSON;
-			path = JSON.subproj;
+			path = JSON;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1435,7 +1425,7 @@
 				404A67A0156D906900A81B6A /* UIDevice-NTIExtensions.h in Headers */,
 				40F72DA8156EE1C50050C93E /* NTIMathEquationBuilder.h in Headers */,
 				40716F3515C828B900430FFC /* NTIGlobalInspectorSlice.h in Headers */,
-				40F56F2515CAC518001FC309 /* NTIBadgeCountView.h in Headers */,
+				40F56F2515CAC518001FC309 /* NTIBadgeView.h in Headers */,
 				4059D26515DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.h in Headers */,
 				40531BCF160A39C800252818 /* NTITextAttachmentCell.h in Headers */,
 			);
@@ -1889,7 +1879,7 @@
 				40F72DA9156EE1C50050C93E /* NTIMathEquationBuilder.m in Sources */,
 				4C8EAFC91578065300BF8FF7 /* NSURL-NTIExtensions.m in Sources */,
 				40716F3615C828B900430FFC /* NTIGlobalInspectorSlice.m in Sources */,
-				40F56F2615CAC518001FC309 /* NTIBadgeCountView.m in Sources */,
+				40F56F2615CAC518001FC309 /* NTIBadgeView.m in Sources */,
 				403C8CE317EA6CE9000FC290 /* NSNotification-NTIExtensions.m in Sources */,
 				4059D26615DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m in Sources */,
 				40531BD0160A39C800252818 /* NTITextAttachmentCell.m in Sources */,
@@ -1975,6 +1965,7 @@
 				40C34CB314D88DD5000D91A8 /* en */,
 			);
 			name = InfoPlist.strings;
+			path = .;
 			sourceTree = "<group>";
 		};
 		72CBA9721385CF1F00E3D28D /* InfoPlist.strings */ = {
@@ -1983,6 +1974,7 @@
 				72CBA9731385CF1F00E3D28D /* en */,
 			);
 			name = InfoPlist.strings;
+			path = .;
 			sourceTree = "<group>";
 		};
 		72D8186013955D8C00473994 /* InfoPlist.strings */ = {
@@ -1991,6 +1983,7 @@
 				72D8186113955D8C00473994 /* en */,
 			);
 			name = InfoPlist.strings;
+			path = .;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -2039,7 +2032,7 @@
 				COPY_PHASE_STRIP = YES;
 				DSTROOT = /tmp/NTIFoundation.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "NTIFoundation/NTIFoundation-Prefix.pch";
+				GCC_PREFIX_HEADER = "NTIFoundation/Supporting Files/NTIFoundation-Prefix.pch";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
@@ -2068,7 +2061,7 @@
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "UnitTests/UnitTests-Prefix.pch";
+				GCC_PREFIX_HEADER = "UnitTests/LogicTests/Supporting Files/UnitTests-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(value)",
 					"$(OBJROOT)/UninstalledProducts/include",
@@ -2110,9 +2103,9 @@
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "NTIFoundationApplicationTests/NTIFoundationApplicationTests-Prefix.pch";
+				GCC_PREFIX_HEADER = "UnitTests/ApplicationTests/Supporting Files/NTIFoundationApplicationTests-Prefix.pch";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				INFOPLIST_FILE = "NTIFoundationApplicationTests/NTIFoundationApplicationTests-Info.plist";
+				INFOPLIST_FILE = "UnitTests/ApplicationTests/Supporting Files/NTIFoundationApplicationTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				VALIDATE_PRODUCT = YES;
@@ -2134,14 +2127,14 @@
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "NTIFoundationApplicationTests/NTIFoundationApplicationTests-Prefix.pch";
+				GCC_PREFIX_HEADER = "UnitTests/ApplicationTests/Supporting Files/NTIFoundationApplicationTests-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					DEBUG_SOCKETIO,
 					"DEBUG=1",
 					"$(inherited)",
 				);
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				INFOPLIST_FILE = "NTIFoundationApplicationTests/NTIFoundationApplicationTests-Info.plist";
+				INFOPLIST_FILE = "UnitTests/ApplicationTests/Supporting Files/NTIFoundationApplicationTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
@@ -2161,9 +2154,9 @@
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "NTIFoundationApplicationTests/NTIFoundationApplicationTests-Prefix.pch";
+				GCC_PREFIX_HEADER = "UnitTests/ApplicationTests/Supporting Files/NTIFoundationApplicationTests-Prefix.pch";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				INFOPLIST_FILE = "NTIFoundationApplicationTests/NTIFoundationApplicationTests-Info.plist";
+				INFOPLIST_FILE = "UnitTests/ApplicationTests/Supporting Files/NTIFoundationApplicationTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				VALIDATE_PRODUCT = YES;
@@ -2196,7 +2189,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "NTIFoundation/NTIFoundation-Prefix.pch";
+				GCC_PREFIX_HEADER = "NTIFoundation/Supporting Files/NTIFoundation-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -2223,7 +2216,7 @@
 				COPY_PHASE_STRIP = YES;
 				DSTROOT = /tmp/NTIFoundation.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "NTIFoundation/NTIFoundation-Prefix.pch";
+				GCC_PREFIX_HEADER = "NTIFoundation/Supporting Files/NTIFoundation-Prefix.pch";
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
@@ -2323,7 +2316,7 @@
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "UnitTests/UnitTests-Prefix.pch";
+				GCC_PREFIX_HEADER = "UnitTests/LogicTests/Supporting Files/UnitTests-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					TEST,
@@ -2366,7 +2359,7 @@
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "UnitTests/UnitTests-Prefix.pch";
+				GCC_PREFIX_HEADER = "UnitTests/LogicTests/Supporting Files/UnitTests-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(value)",
 					"$(OBJROOT)/UninstalledProducts/include",

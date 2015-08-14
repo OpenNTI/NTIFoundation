@@ -7,7 +7,7 @@
 //
 
 #import "NTIAppNavigationLayerSwitcher.h"
-#import "NTIBadgeCountView.h"
+#import "NTIBadgeView.h"
 
 static NSString* keyPathForChangeCount(id layer)
 {
@@ -125,8 +125,10 @@ static NSString* keyPathForChangeCount(id layer)
 	}
 	
 	if(count > 0){
-		cell.accessoryView = [[NTIBadgeCountView alloc] initWithCount: count 
-															 andFrame: CGRectMake(0, 0, 25, 25)]; //TODO do we need to set the size?
+		NTIBadgeView* badgeView = [[NTIBadgeView alloc] initWithFrame: CGRectMake(0, 0, 25, 25)]; //TODO do we need to set the size?
+		badgeView.badgeText = [NSString stringWithFormat: @"%lu", (unsigned long)count];
+		cell.accessoryView = badgeView;
+		
 	}
 	else{
 		cell.accessoryView = nil;
@@ -277,8 +279,9 @@ static NSString* keyPathForChangeCount(id layer)
 		count = [[(id)descriptor valueForKeyPath: changeKP] integerValue];
 	}
 	if(count > 0){
-		cell.accessoryView = [[NTIBadgeCountView alloc] initWithCount: count 
-															 andFrame: CGRectMake(0, 0, 25, 25)]; //TODO do we need to set the size?
+		NTIBadgeView* badge = [[NTIBadgeView alloc] initWithFrame: CGRectMake(0, 0, 25, 25)]; //TODO do we need to set the size?
+		badge.badgeText = [NSString stringWithFormat: @"%lu", (unsigned long) count];
+		cell.accessoryView  = badge;
 	}
 	else{
 		cell.accessoryView = nil;

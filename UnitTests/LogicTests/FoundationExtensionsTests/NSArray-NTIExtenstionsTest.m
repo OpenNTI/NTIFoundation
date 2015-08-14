@@ -54,4 +54,14 @@
 	XCTAssertTrue([[NSArray arrayWithObject: @"One"] notEmpty]);
 }
 
+- (void)testIsEmpty
+{
+	XCTAssertFalse(@[@"not-empty"].isEmpty, @"isEmpty incorrecty computes true for a non-empty array.");
+	
+	XCTAssertTrue(@[].isEmpty, @"isEmpty incorrectly computes false for an empty array.");
+	
+	NSArray *nilArray = nil;
+	XCTAssertFalse(nilArray.isEmpty, @"isEmpty incorrectly computes true for nil.");
+}
+
 @end
