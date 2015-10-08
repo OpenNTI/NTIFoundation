@@ -26,17 +26,12 @@
 		4006E76B149272E000D63524 /* NSObject-NTIJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 4006E76A149272E000D63524 /* NSObject-NTIJSON.m */; };
 		400D6E2C1832A1D600F07DBA /* NTIISO8601DurationFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 400D6E2A1832A1D600F07DBA /* NTIISO8601DurationFormatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		400D6E2E1832A1D600F07DBA /* NTIISO8601DurationFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 400D6E2B1832A1D600F07DBA /* NTIISO8601DurationFormatter.m */; };
-		400D6E301832A1D600F07DBA /* NTIISO8601DurationFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 400D6E2B1832A1D600F07DBA /* NTIISO8601DurationFormatter.m */; };
 		400D6E341832A9C500F07DBA /* NTIISO8601DurationFormatterTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 400D6E331832A9C500F07DBA /* NTIISO8601DurationFormatterTest.m */; };
 		400D6E371832C42500F07DBA /* NTIDuration.h in Headers */ = {isa = PBXBuildFile; fileRef = 400D6E351832C42500F07DBA /* NTIDuration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		400D6E391832C42500F07DBA /* NTIDuration.m in Sources */ = {isa = PBXBuildFile; fileRef = 400D6E361832C42500F07DBA /* NTIDuration.m */; };
-		400D6E3B1832C42500F07DBA /* NTIDuration.m in Sources */ = {isa = PBXBuildFile; fileRef = 400D6E361832C42500F07DBA /* NTIDuration.m */; };
-		40103C0814D07BCC004451A4 /* NTIAppNavigationLayerSwitcher.h in Headers */ = {isa = PBXBuildFile; fileRef = 40103C0614D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.h */; };
-		40103C0914D07BCC004451A4 /* NTIAppNavigationLayerSwitcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 40103C0714D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.m */; };
 		40103C1414D2564C004451A4 /* NTIInspectableController.h in Headers */ = {isa = PBXBuildFile; fileRef = 40103C1314D2564C004451A4 /* NTIInspectableController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40103C1C14D28A54004451A4 /* NTIGlobalInspector.h in Headers */ = {isa = PBXBuildFile; fileRef = 40103C1A14D28A54004451A4 /* NTIGlobalInspector.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40103C1D14D28A54004451A4 /* NTIGlobalInspector.m in Sources */ = {isa = PBXBuildFile; fileRef = 40103C1B14D28A54004451A4 /* NTIGlobalInspector.m */; };
-		402665CE14D9BB950053CC53 /* NTIAppNavigationLayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 402665CD14D9BB950053CC53 /* NTIAppNavigationLayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		402927501498654200E4720A /* NSArray-NTIExtenstionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4029274D1498653200E4720A /* NSArray-NTIExtenstionsTest.m */; };
 		4029275314986A9800E4720A /* NSMutableArray-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4029275214986A9800E4720A /* NSMutableArray-NTIExtensionsTest.m */; };
 		4029275714991E6900E4720A /* NSURL-NTIFileSystemExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4029275414991DC400E4720A /* NSURL-NTIFileSystemExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -49,7 +44,6 @@
 		403C317B1512A5DD00C53D22 /* NSData-NTIJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C31791512A5DD00C53D22 /* NSData-NTIJSON.m */; };
 		403C8CE217EA6CE9000FC290 /* NSNotification-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 403C8CE017EA6CE9000FC290 /* NSNotification-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		403C8CE317EA6CE9000FC290 /* NSNotification-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C8CE117EA6CE9000FC290 /* NSNotification-NTIExtensions.m */; };
-		403C8CE617EA6CE9000FC290 /* NSNotification-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403C8CE117EA6CE9000FC290 /* NSNotification-NTIExtensions.m */; };
 		403D0DC2143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 403D0DBC143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		403D0DC3143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 403D0DBD143E193E0049A755 /* NSAttributedString-HTMLReadingExtensions.m */; };
 		403D0DC4143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 403D0DBE143E193E0049A755 /* NSAttributedString-HTMLWritingExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -66,8 +60,6 @@
 		40531BD0160A39C800252818 /* NTITextAttachmentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 40531BCE160A39C800252818 /* NTITextAttachmentCell.m */; };
 		40531BED160A427F00252818 /* NTITextAttachmentCellTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40531BEC160A427F00252818 /* NTITextAttachmentCellTest.m */; };
 		4053898C14B3FB8800B5FB46 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4053898B14B3FB8700B5FB46 /* CFNetwork.framework */; };
-		40572C2B14C88D8E0032D2DB /* NTIAppNavigationController.h in Headers */ = {isa = PBXBuildFile; fileRef = 40572C2914C88D8E0032D2DB /* NTIAppNavigationController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		40572C2C14C88D8E0032D2DB /* NTIAppNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40572C2A14C88D8E0032D2DB /* NTIAppNavigationController.m */; };
 		4059D26515DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4059D26315DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4059D26615DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4059D26415DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m */; };
 		4059D28315DC4CE800C567BA /* NSMutableDictionary-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4059D28215DC4CE800C567BA /* NSMutableDictionary-NTIExtensionsTest.m */; };
@@ -77,9 +69,6 @@
 		4066C83A14E1C95F006B56D3 /* WebSocketData.h in Headers */ = {isa = PBXBuildFile; fileRef = 4066C83814E1C95F006B56D3 /* WebSocketData.h */; };
 		4066C83B14E1C95F006B56D3 /* WebSocketData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4066C83914E1C95F006B56D3 /* WebSocketData.m */; };
 		406B23FD1533CDCA00BF691E /* WebSocketResponseBufferTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 406B23FC1533CDCA00BF691E /* WebSocketResponseBufferTest.m */; };
-		406D24511881E0AB00FA77E4 /* OUUnzipArchive-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B0E41C1880C43800A75133 /* OUUnzipArchive-NTIExtensions.m */; };
-		406DB42A14DB50A1008AEABF /* switch_active.png in Copy Files */ = {isa = PBXBuildFile; fileRef = 406DB42714DB4D9B008AEABF /* switch_active.png */; };
-		406DB42B14DB50A1008AEABF /* switch_inactive.png in Copy Files */ = {isa = PBXBuildFile; fileRef = 406DB42814DB4D9B008AEABF /* switch_inactive.png */; };
 		40716F3515C828B900430FFC /* NTIGlobalInspectorSlice.h in Headers */ = {isa = PBXBuildFile; fileRef = 40716F3315C828B900430FFC /* NTIGlobalInspectorSlice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40716F3615C828B900430FFC /* NTIGlobalInspectorSlice.m in Sources */ = {isa = PBXBuildFile; fileRef = 40716F3415C828B900430FFC /* NTIGlobalInspectorSlice.m */; };
 		408494B51427DF6C0038BD31 /* WebSockets.h in Headers */ = {isa = PBXBuildFile; fileRef = 408494B31427DF6C0038BD31 /* WebSockets.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -105,12 +94,6 @@
 		40BACD6C18108FBC0053ACC9 /* NTITextAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 40BACD6A18108FBC0053ACC9 /* NTITextAttachment.m */; };
 		40C0E1031443AF9C00142406 /* SocketIOPacketTest.h in Headers */ = {isa = PBXBuildFile; fileRef = 40C0E1011443AF9C00142406 /* SocketIOPacketTest.h */; };
 		40C0E1051443AF9C00142406 /* SocketIOPacketTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40C0E1021443AF9C00142406 /* SocketIOPacketTest.m */; };
-		40C34CAD14D88DD5000D91A8 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408FBF0A143F63A90095DD84 /* UIKit.framework */; };
-		40C34CAE14D88DD5000D91A8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72CBA96B1385CF1F00E3D28D /* Foundation.framework */; };
-		40C34CB414D88DD5000D91A8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 40C34CB214D88DD5000D91A8 /* InfoPlist.strings */; };
-		40C34CBF14D893DC000D91A8 /* NTIAppNavigationControllerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 401F657B14D85EBB005EADB2 /* NTIAppNavigationControllerTest.m */; };
-		40C34CC114D9AAFB000D91A8 /* NTIAppNavigationLayerProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 40C34CC014D9AAFB000D91A8 /* NTIAppNavigationLayerProvider.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		40C34CC314D9AB9B000D91A8 /* NTIAppNavigationLayerDescriptor.h in Headers */ = {isa = PBXBuildFile; fileRef = 40C34CC214D9AB9B000D91A8 /* NTIAppNavigationLayerDescriptor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40D754A914278E6900335BEF /* SocketIOPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 40D754A714278E6900335BEF /* SocketIOPacket.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40D754AA14278E6900335BEF /* SocketIOPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D754A814278E6900335BEF /* SocketIOPacket.m */; };
 		40D754AD142791AF00335BEF /* SocketIOSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 40D754AB142791AF00335BEF /* SocketIOSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -133,7 +116,6 @@
 		40E0849C199AD81000DEE678 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40E0849B199AD81000DEE678 /* AssetsLibrary.framework */; };
 		40EAF82D18FC693000A537D4 /* NSData+NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 40EAF82B18FC693000A537D4 /* NSData+NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40EAF82E18FC693000A537D4 /* NSData+NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 40EAF82C18FC693000A537D4 /* NSData+NTIExtensions.m */; };
-		40EAF83118FC693000A537D4 /* NSData+NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 40EAF82C18FC693000A537D4 /* NSData+NTIExtensions.m */; };
 		40F39C8114D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8014D7452C0089DCF6 /* NSURL-NTIFileSystemExtensionsTest.m */; };
 		40F39C8414D84EF50089DCF6 /* SendRecieveQueueTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8314D84EF50089DCF6 /* SendRecieveQueueTest.m */; };
 		40F39C8714D852FE0089DCF6 /* NSString-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F39C8614D852FE0089DCF6 /* NSString-NTIExtensionsTest.m */; };
@@ -145,7 +127,6 @@
 		4A5454441B1630680033FA3A /* NSDate-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A5454431B1630680033FA3A /* NSDate-NTIExtensionsTest.m */; };
 		4A72F4611925AEF1004792EF /* UIColor+NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A72F45F1925AEF1004792EF /* UIColor+NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4A72F4621925AEF1004792EF /* UIColor+NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A72F4601925AEF1004792EF /* UIColor+NTIExtensions.m */; };
-		4A72F4641925AEF1004792EF /* UIColor+NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A72F4601925AEF1004792EF /* UIColor+NTIExtensions.m */; };
 		4A72F48719268DA8004792EF /* UIColor+NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A72F48619268DA8004792EF /* UIColor+NTIExtensionsTest.m */; };
 		4C2ECDD51549D0A400C69E3A /* NTIMathInputExpressionModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C2ECDD31549D0A400C69E3A /* NTIMathInputExpressionModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2ECDD61549D0A400C69E3A /* NTIMathInputExpressionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2ECDD41549D0A400C69E3A /* NTIMathInputExpressionModel.m */; };
@@ -155,7 +136,6 @@
 		4C3DA34014E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C3DA33E14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.m */; };
 		4C4096FD1522140C002A9445 /* JsonPlistSerializationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C4096FC1522140C002A9445 /* JsonPlistSerializationTests.m */; };
 		4C40971815221D91002A9445 /* jsonUserData.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C40971615221D91002A9445 /* jsonUserData.json */; };
-		4C696D0A1516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C696D091516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m */; };
 		4C8CFD1D1529F712003B387D /* NTIKeyboardAdjustmentListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8CFD1C1529F712003B387D /* NTIKeyboardAdjustmentListener.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C8EAFC81578065300BF8FF7 /* NSURL-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C8EAFC61578065300BF8FF7 /* NSURL-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C8EAFC91578065300BF8FF7 /* NSURL-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C8EAFC71578065300BF8FF7 /* NSURL-NTIExtensions.m */; };
@@ -185,7 +165,6 @@
 		4CE3E62D154E4FE20005918E /* NTIMathSymbolsExternalizationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CE3E62C154E4FE20005918E /* NTIMathSymbolsExternalizationTests.m */; };
 		4CEC1D96151395DB0074F3DD /* NTIGlobalInspectorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEC1D93151395DB0074F3DD /* NTIGlobalInspectorTest.m */; };
 		4CEC1D97151395DB0074F3DD /* NTIInspectorObjectWrapperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEC1D95151395DB0074F3DD /* NTIInspectorObjectWrapperTest.m */; };
-		4CEC1DB2151395F70074F3DD /* NTIGlobalInspectorAppTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEC1DB1151395F70074F3DD /* NTIGlobalInspectorAppTest.m */; };
 		5158CA78156AE5240054CA85 /* NTIMathModelTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5158CA76156AE5240054CA85 /* NTIMathModelTests.m */; };
 		7293CB291451AA7D00CD64B8 /* NTIEditableFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = 7293CB271451AA7D00CD64B8 /* NTIEditableFrame.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7293CB2A1451AA7D00CD64B8 /* NTIEditableFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 7293CB281451AA7D00CD64B8 /* NTIEditableFrame.m */; };
@@ -211,7 +190,6 @@
 		72E353B9142533E7001B345A /* NTIFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 72E353B8142533E7001B345A /* NTIFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		83FF9B0C190020D600F644A1 /* NTISingleSliceInspectorPane.h in Headers */ = {isa = PBXBuildFile; fileRef = 83FF9B0A190020D600F644A1 /* NTISingleSliceInspectorPane.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		83FF9B0D190020D600F644A1 /* NTISingleSliceInspectorPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FF9B0B190020D600F644A1 /* NTISingleSliceInspectorPane.m */; };
-		83FF9B2F1900218800F644A1 /* NTISingleSliceInspectorPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 83FF9B0B190020D600F644A1 /* NTISingleSliceInspectorPane.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -476,8 +454,6 @@
 			dstPath = "Resources/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				406DB42A14DB50A1008AEABF /* switch_active.png in Copy Files */,
-				406DB42B14DB50A1008AEABF /* switch_inactive.png in Copy Files */,
 			);
 			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -494,14 +470,9 @@
 		400D6E331832A9C500F07DBA /* NTIISO8601DurationFormatterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIISO8601DurationFormatterTest.m; sourceTree = "<group>"; };
 		400D6E351832C42500F07DBA /* NTIDuration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIDuration.h; sourceTree = "<group>"; };
 		400D6E361832C42500F07DBA /* NTIDuration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIDuration.m; sourceTree = "<group>"; };
-		40103C0614D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIAppNavigationLayerSwitcher.h; sourceTree = "<group>"; };
-		40103C0714D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIAppNavigationLayerSwitcher.m; sourceTree = "<group>"; };
 		40103C1314D2564C004451A4 /* NTIInspectableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIInspectableController.h; sourceTree = "<group>"; };
 		40103C1A14D28A54004451A4 /* NTIGlobalInspector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIGlobalInspector.h; sourceTree = "<group>"; };
 		40103C1B14D28A54004451A4 /* NTIGlobalInspector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIGlobalInspector.m; sourceTree = "<group>"; };
-		401F657A14D85EBB005EADB2 /* NTIAppNavigationControllerTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIAppNavigationControllerTest.h; sourceTree = "<group>"; };
-		401F657B14D85EBB005EADB2 /* NTIAppNavigationControllerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIAppNavigationControllerTest.m; sourceTree = "<group>"; };
-		402665CD14D9BB950053CC53 /* NTIAppNavigationLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIAppNavigationLayer.h; sourceTree = "<group>"; };
 		4029274C1498653200E4720A /* NSArray-NTIExtenstionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray-NTIExtenstionsTest.h"; sourceTree = "<group>"; };
 		4029274D1498653200E4720A /* NSArray-NTIExtenstionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray-NTIExtenstionsTest.m"; sourceTree = "<group>"; };
 		4029275114986A9800E4720A /* NSMutableArray-NTIExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray-NTIExtensionsTest.h"; sourceTree = "<group>"; };
@@ -535,8 +506,6 @@
 		40531BEB160A427F00252818 /* NTITextAttachmentCellTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTITextAttachmentCellTest.h; sourceTree = "<group>"; };
 		40531BEC160A427F00252818 /* NTITextAttachmentCellTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTITextAttachmentCellTest.m; sourceTree = "<group>"; };
 		4053898B14B3FB8700B5FB46 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
-		40572C2914C88D8E0032D2DB /* NTIAppNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIAppNavigationController.h; sourceTree = "<group>"; };
-		40572C2A14C88D8E0032D2DB /* NTIAppNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIAppNavigationController.m; sourceTree = "<group>"; };
 		4059D26315DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary-NTIExtensions.h"; sourceTree = "<group>"; };
 		4059D26415DC4C5D00C567BA /* NSMutableDictionary-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableDictionary-NTIExtensions.m"; sourceTree = "<group>"; };
 		4059D28115DC4CE800C567BA /* NSMutableDictionary-NTIExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary-NTIExtensionsTest.h"; sourceTree = "<group>"; };
@@ -553,8 +522,6 @@
 		4066C83914E1C95F006B56D3 /* WebSocketData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSocketData.m; sourceTree = "<group>"; };
 		406B23FB1533CDC900BF691E /* WebSocketResponseBufferTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSocketResponseBufferTest.h; sourceTree = "<group>"; };
 		406B23FC1533CDCA00BF691E /* WebSocketResponseBufferTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSocketResponseBufferTest.m; sourceTree = "<group>"; };
-		406DB42714DB4D9B008AEABF /* switch_active.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switch_active.png; sourceTree = "<group>"; };
-		406DB42814DB4D9B008AEABF /* switch_inactive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switch_inactive.png; sourceTree = "<group>"; };
 		40716F3315C828B900430FFC /* NTIGlobalInspectorSlice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIGlobalInspectorSlice.h; sourceTree = "<group>"; };
 		40716F3415C828B900430FFC /* NTIGlobalInspectorSlice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIGlobalInspectorSlice.m; sourceTree = "<group>"; };
 		407E670317A05BF300178177 /* NTI-Target-Touch-Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Target-Touch-Common.xcconfig"; sourceTree = "<group>"; };
@@ -591,12 +558,6 @@
 		40BACD6A18108FBC0053ACC9 /* NTITextAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTITextAttachment.m; sourceTree = "<group>"; };
 		40C0E1011443AF9C00142406 /* SocketIOPacketTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketIOPacketTest.h; sourceTree = "<group>"; };
 		40C0E1021443AF9C00142406 /* SocketIOPacketTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketIOPacketTest.m; sourceTree = "<group>"; };
-		40C34CAB14D88DD5000D91A8 /* NTIFoundationApplicationTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NTIFoundationApplicationTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		40C34CB114D88DD5000D91A8 /* NTIFoundationApplicationTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NTIFoundationApplicationTests-Info.plist"; sourceTree = "<group>"; };
-		40C34CB314D88DD5000D91A8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		40C34CB814D88DD5000D91A8 /* NTIFoundationApplicationTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NTIFoundationApplicationTests-Prefix.pch"; sourceTree = "<group>"; };
-		40C34CC014D9AAFB000D91A8 /* NTIAppNavigationLayerProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIAppNavigationLayerProvider.h; sourceTree = "<group>"; };
-		40C34CC214D9AB9B000D91A8 /* NTIAppNavigationLayerDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIAppNavigationLayerDescriptor.h; sourceTree = "<group>"; };
 		40D754A714278E6900335BEF /* SocketIOPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketIOPacket.h; sourceTree = "<group>"; };
 		40D754A814278E6900335BEF /* SocketIOPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketIOPacket.m; sourceTree = "<group>"; };
 		40D754AB142791AF00335BEF /* SocketIOSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketIOSocket.h; sourceTree = "<group>"; };
@@ -715,15 +676,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		40C34CA714D88DD5000D91A8 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				40C34CAD14D88DD5000D91A8 /* UIKit.framework in Frameworks */,
-				40C34CAE14D88DD5000D91A8 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		72C0D193142529E800D526D8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -831,13 +783,6 @@
 		40572C2614C88CD80032D2DB /* NTIAppNavigationController */ = {
 			isa = PBXGroup;
 			children = (
-				40572C2914C88D8E0032D2DB /* NTIAppNavigationController.h */,
-				40572C2A14C88D8E0032D2DB /* NTIAppNavigationController.m */,
-				40103C0714D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.m */,
-				40C34CC014D9AAFB000D91A8 /* NTIAppNavigationLayerProvider.h */,
-				40103C0614D07BCB004451A4 /* NTIAppNavigationLayerSwitcher.h */,
-				40C34CC214D9AB9B000D91A8 /* NTIAppNavigationLayerDescriptor.h */,
-				402665CD14D9BB950053CC53 /* NTIAppNavigationLayer.h */,
 				4C8CFD1C1529F712003B387D /* NTIKeyboardAdjustmentListener.h */,
 			);
 			path = NTIAppNavigationController;
@@ -954,18 +899,8 @@
 		406DB40D14DB4CFB008AEABF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				406DB42614DB4D47008AEABF /* NonFreePlaceholders */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		406DB42614DB4D47008AEABF /* NonFreePlaceholders */ = {
-			isa = PBXGroup;
-			children = (
-				406DB42714DB4D9B008AEABF /* switch_active.png */,
-				406DB42814DB4D9B008AEABF /* switch_inactive.png */,
-			);
-			path = NonFreePlaceholders;
 			sourceTree = "<group>";
 		};
 		407E670B17A05BF300178177 /* Configurations */ = {
@@ -1080,26 +1015,6 @@
 				72D8185E13955D8C00473994 /* Supporting Files */,
 			);
 			path = LogicTests;
-			sourceTree = "<group>";
-		};
-		40C34C7614D88BCA000D91A8 /* ApplicationTests */ = {
-			isa = PBXGroup;
-			children = (
-				401F657A14D85EBB005EADB2 /* NTIAppNavigationControllerTest.h */,
-				401F657B14D85EBB005EADB2 /* NTIAppNavigationControllerTest.m */,
-				40C34CB014D88DD5000D91A8 /* Supporting Files */,
-			);
-			path = ApplicationTests;
-			sourceTree = "<group>";
-		};
-		40C34CB014D88DD5000D91A8 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				40C34CB114D88DD5000D91A8 /* NTIFoundationApplicationTests-Info.plist */,
-				40C34CB214D88DD5000D91A8 /* InfoPlist.strings */,
-				40C34CB814D88DD5000D91A8 /* NTIFoundationApplicationTests-Prefix.pch */,
-			);
-			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		40D7548914278E4500335BEF /* socket.io */ = {
@@ -1222,7 +1137,6 @@
 			children = (
 				72D8185913955D8C00473994 /* NTIFoundationLogicTests.xctest */,
 				72C0D196142529E800D526D8 /* libNTIFoundation.a */,
-				40C34CAB14D88DD5000D91A8 /* NTIFoundationApplicationTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1271,7 +1185,6 @@
 		72D8185D13955D8C00473994 /* UnitTests */ = {
 			isa = PBXGroup;
 			children = (
-				40C34C7614D88BCA000D91A8 /* ApplicationTests */,
 				40C34C5D14D88BA6000D91A8 /* LogicTests */,
 			);
 			path = UnitTests;
@@ -1389,17 +1302,12 @@
 				4A72F4611925AEF1004792EF /* UIColor+NTIExtensions.h in Headers */,
 				403C28E614576E160012CBAB /* NSAttributedString-NTIExtensions.h in Headers */,
 				4029275714991E6900E4720A /* NSURL-NTIFileSystemExtensions.h in Headers */,
-				40572C2B14C88D8E0032D2DB /* NTIAppNavigationController.h in Headers */,
-				40103C0814D07BCC004451A4 /* NTIAppNavigationLayerSwitcher.h in Headers */,
 				40103C1414D2564C004451A4 /* NTIInspectableController.h in Headers */,
 				40103C1C14D28A54004451A4 /* NTIGlobalInspector.h in Headers */,
 				4C3DA33F14E4BFB000D0DB8F /* NTIGlobalInspectorMainPane.h in Headers */,
 				4CABB38D14EC28DF00A7FD7C /* NTIInspectableObjectProtocol.h in Headers */,
 				40EAF82D18FC693000A537D4 /* NSData+NTIExtensions.h in Headers */,
 				4C3BDC1C14EAF87F008ED49D /* NTIInspectorSliceObjectPair.h in Headers */,
-				40C34CC114D9AAFB000D91A8 /* NTIAppNavigationLayerProvider.h in Headers */,
-				40C34CC314D9AB9B000D91A8 /* NTIAppNavigationLayerDescriptor.h in Headers */,
-				402665CE14D9BB950053CC53 /* NTIAppNavigationLayer.h in Headers */,
 				4CA4F4841535F1390005FECD /* NTIMathSymbol.h in Headers */,
 				4CA4F4871535F3460005FECD /* NTIMathExpressionSymbolProtocol.h in Headers */,
 				4CA4F48A1535F7AF0005FECD /* NTIMathAlphaNumericSymbol.h in Headers */,
@@ -1432,24 +1340,6 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		40C34CAA14D88DD5000D91A8 /* NTIFoundationApplicationTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 40C34CB914D88DD5000D91A8 /* Build configuration list for PBXNativeTarget "NTIFoundationApplicationTests" */;
-			buildPhases = (
-				40C34CA614D88DD5000D91A8 /* Sources */,
-				40C34CA714D88DD5000D91A8 /* Frameworks */,
-				40C34CA814D88DD5000D91A8 /* Resources */,
-				40C34CA914D88DD5000D91A8 /* ShellScript */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = NTIFoundationApplicationTests;
-			productName = NTIFoundationApplicationTests;
-			productReference = 40C34CAB14D88DD5000D91A8 /* NTIFoundationApplicationTests.octest */;
-			productType = "com.apple.product-type.bundle.ocunit-test";
-		};
 		72C0D195142529E800D526D8 /* NTIFoundation */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 72C0D19E142529E800D526D8 /* Build configuration list for PBXNativeTarget "NTIFoundation" */;
@@ -1543,7 +1433,6 @@
 				72C0D195142529E800D526D8 /* NTIFoundation */,
 				72D8185813955D8C00473994 /* NTIFoundationLogicTests */,
 				7216D72A13CBAE6800509BDC /* GenerateDate */,
-				40C34CAA14D88DD5000D91A8 /* NTIFoundationApplicationTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1755,14 +1644,6 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
-		40C34CA814D88DD5000D91A8 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				40C34CB414D88DD5000D91A8 /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		72D8185613955D8C00473994 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1777,19 +1658,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		40C34CA914D88DD5000D91A8 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
-		};
 		7216D72E13CBAE7100509BDC /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1806,23 +1674,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		40C34CA614D88DD5000D91A8 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				40C34CBF14D893DC000D91A8 /* NTIAppNavigationControllerTest.m in Sources */,
-				406D24511881E0AB00FA77E4 /* OUUnzipArchive-NTIExtensions.m in Sources */,
-				40EAF83118FC693000A537D4 /* NSData+NTIExtensions.m in Sources */,
-				403C8CE617EA6CE9000FC290 /* NSNotification-NTIExtensions.m in Sources */,
-				4CEC1DB2151395F70074F3DD /* NTIGlobalInspectorAppTest.m in Sources */,
-				4C696D0A1516BC4C00DE74B7 /* NTIGlobalInspectorPaneAndSliceAppTest.m in Sources */,
-				400D6E301832A1D600F07DBA /* NTIISO8601DurationFormatter.m in Sources */,
-				4A72F4641925AEF1004792EF /* UIColor+NTIExtensions.m in Sources */,
-				400D6E3B1832C42500F07DBA /* NTIDuration.m in Sources */,
-				83FF9B2F1900218800F644A1 /* NTISingleSliceInspectorPane.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		72C0D192142529E800D526D8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1849,8 +1700,6 @@
 				403C28E714576E160012CBAB /* NSAttributedString-NTIExtensions.m in Sources */,
 				4006E76B149272E000D63524 /* NSObject-NTIJSON.m in Sources */,
 				4029275B14994F0E00E4720A /* NSURL-NTIFileSystemExtensions.m in Sources */,
-				40572C2C14C88D8E0032D2DB /* NTIAppNavigationController.m in Sources */,
-				40103C0914D07BCC004451A4 /* NTIAppNavigationLayerSwitcher.m in Sources */,
 				40103C1D14D28A54004451A4 /* NTIGlobalInspector.m in Sources */,
 				4066C81E14E1C89F006B56D3 /* WebSocketResponseBuffer.m in Sources */,
 				4066C83B14E1C95F006B56D3 /* WebSocketData.m in Sources */,
@@ -1957,15 +1806,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		40C34CB214D88DD5000D91A8 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				40C34CB314D88DD5000D91A8 /* en */,
-			);
-			name = InfoPlist.strings;
-			path = .;
-			sourceTree = "<group>";
-		};
 		72CBA9721385CF1F00E3D28D /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -2087,80 +1927,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Adhoc;
-		};
-		40012B64189836F900F63EA7 /* Adhoc */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 407E670417A05BF300178177 /* NTI-Touch-Application-Debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/<app_name>.app/<app_name>";
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "UnitTests/ApplicationTests/Supporting Files/NTIFoundationApplicationTests-Prefix.pch";
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				INFOPLIST_FILE = "UnitTests/ApplicationTests/Supporting Files/NTIFoundationApplicationTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				VALIDATE_PRODUCT = YES;
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Adhoc;
-		};
-		40C34CBA14D88DD5000D91A8 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 407E670417A05BF300178177 /* NTI-Touch-Application-Debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/NTINavigationExample2.app/NTINavigationExample2";
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
-				);
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "UnitTests/ApplicationTests/Supporting Files/NTIFoundationApplicationTests-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					DEBUG_SOCKETIO,
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				INFOPLIST_FILE = "UnitTests/ApplicationTests/Supporting Files/NTIFoundationApplicationTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Debug;
-		};
-		40C34CBB14D88DD5000D91A8 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 407E670417A05BF300178177 /* NTI-Touch-Application-Debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/<app_name>.app/<app_name>";
-				CLANG_ENABLE_OBJC_ARC = YES;
-				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "UnitTests/ApplicationTests/Supporting Files/NTIFoundationApplicationTests-Prefix.pch";
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				INFOPLIST_FILE = "UnitTests/ApplicationTests/Supporting Files/NTIFoundationApplicationTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				VALIDATE_PRODUCT = YES;
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Release;
 		};
 		7216D72C13CBAE6800509BDC /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -2382,16 +2148,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		40C34CB914D88DD5000D91A8 /* Build configuration list for PBXNativeTarget "NTIFoundationApplicationTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				40C34CBA14D88DD5000D91A8 /* Debug */,
-				40C34CBB14D88DD5000D91A8 /* Release */,
-				40012B64189836F900F63EA7 /* Adhoc */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		7216D72B13CBAE6800509BDC /* Build configuration list for PBXAggregateTarget "GenerateDate" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
