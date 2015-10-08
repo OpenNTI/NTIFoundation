@@ -12,9 +12,6 @@
 
 NSString* pathFromUrl( NSURL* url )
 {
-	//TODO: I'm really not sure this is the right way to get a path from a URL
-	//return [NSString pathWithComponents: [url pathComponents]];
-	//return [[url absoluteURL] path];
 	return [url path];
 }
 
