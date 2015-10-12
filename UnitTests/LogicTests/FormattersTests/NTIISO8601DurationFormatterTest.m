@@ -17,6 +17,8 @@
 	@private
 	NTIISO8601DurationFormatter* formatter;
 }
+@property (nonatomic, strong) NSString* durationString;
+@property (nonatomic, strong) NSArray* cmps;
 
 @end
 
@@ -82,19 +84,26 @@
 
 +(id)defaultTestSuite
 {
-	XCTestSuite* suite = [super defaultTestSuite];
+	XCTestSuite* suite = [XCTestSuite testSuiteWithName: NSStringFromClass(self)];
 	
 	[[self formatterIO] enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-		SEL sel = @selector(expectDurationString:toHaveComponents:);
+		SEL sel = @selector(checkDuration);
 		NSInvocation* inv = [NSInvocation invocationWithMethodSignature: [self instanceMethodSignatureForSelector: sel]];
-		
 		[inv setSelector: sel];
-		[inv setArgument: &key atIndex: 2];
-		[inv setArgument: &obj atIndex: 3];
-		[inv retainArguments];
-		[suite addTest: [self testCaseWithInvocation: inv]];
+
+		NTIISO8601DurationFormatterTest* test = [self testCaseWithInvocation: inv];
+		test.durationString = key;
+		test.cmps = obj;
+		[suite addTest: test];
 		
 	}];
+	
+	NSLog(@"Generated test suite with %lu tests", (unsigned long) suite.tests.count);
+	[suite.tests enumerateObjectsUsingBlock:^(__kindof XCTest * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+		NSLog(@"%@", obj);
+	}];
+	
+	[suite addTest: [self testCaseWithSelector: @selector(testCreation)]];
 	
 	return suite;
 }
@@ -112,28 +121,38 @@
 	self->formatter = nil;
 }
 
+- (NSString *)name {
+	NSInvocation *invocation = [self invocation];
+	
+	NSString *methodName = NSStringFromSelector(invocation.selector);
+	if ([methodName hasPrefix:@"checkDuration"]) {
+		return [NSString stringWithFormat: @"%@_%@", methodName, self.durationString];
+	}
+	else {
+		return [super name];
+	}
+}
+
+-(void)checkDuration
+{
+	assertThat(self.durationString, notNilValue());
+	assertThat(self.cmps, notNilValue());
+	
+	NTIDuration* duration = nil;
+	BOOL result = [self->formatter getObjectValue: &duration forString: self.durationString
+								 errorDescription: nil];
+	assertThatBool(result, equalToBool(YES));
+	
+	NSArray* components = self.cmps;
+	
+	assertThat(duration.components, describedAs(@"expected duration %0 to parse to %1", equalTo(components), self.durationString, components, nil));
+}
+
 -(void)testCreation
 {
-	assertThat(self->formatter, notNilValue());
+	assertThat([[NTIISO8601DurationFormatter alloc] init], notNilValue());
 }
 
--(void)expectDurationString: (NSString*)str toHaveComponents: (NSArray*)components
-{
-	NTIDuration* duration = nil;
-	BOOL result = [self->formatter getObjectValue: &duration forString: str errorDescription: nil];
-	assertThatBool(result, equalToBool(YES));
-	
-	assertThat(duration.components, describedAs(@"expected duration %0 to parse to %1", equalTo(components), str, components, nil));
-}
-
--(void)expectDurationString: (NSString*)str toRoundTripTo: (NSString*)end
-{
-	NTIDuration* duration = nil;
-	BOOL result = [self->formatter getObjectValue: &duration forString: str errorDescription: nil];
-	assertThatBool(result, equalToBool(YES));
-	
-	assertThat([self->formatter stringForObjectValue: duration], describedAs(@"%0 should roundtrip to %1", equalTo(end), str, end, nil));
-}
 
 @end
 
