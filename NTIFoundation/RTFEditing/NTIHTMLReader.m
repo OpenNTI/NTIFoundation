@@ -24,8 +24,8 @@
 #import <ImageIO/CGImageSource.h>
 #import <Foundation/NSXMLParser.h>
 
-#import <OmniQuartz/OQColor.h>
-#import "OQColor-NTIExtensions.h"
+#import <OmniAppKit/OAColor.h>
+#import "OAColor-NTIExtensions.h"
 
 static Class readerClass = nil;
 
@@ -181,20 +181,20 @@ static void setCurrentFontDescriptor( NSMutableDictionary* dict,
 
 //Note things that call us stuff our result in a dictionary.  Make sure we don't return nil;
 //Returns defaultColor on unrecognized colors.  
-CGColorRef NTIHTMLReaderParseCreateColor(NSString* attribute, OQColor* defaultColor) NS_RETURNS_RETAINED;
+CGColorRef NTIHTMLReaderParseCreateColor(NSString* attribute, OAColor* defaultColor) NS_RETURNS_RETAINED;
 
-NS_RETURNS_RETAINED CGColorRef NTIHTMLReaderParseCreateColor( NSString* attribute, OQColor* defaultColor )
+NS_RETURNS_RETAINED CGColorRef NTIHTMLReaderParseCreateColor( NSString* attribute, OAColor* defaultColor )
 {	
-	OQColor* color = nil;
+	OAColor* color = nil;
 	if( [@"black" isEqual: attribute] ) {
-		color = [OQColor blackColor];
+		color = [OAColor blackColor];
 	}
 	else if( [attribute hasPrefix: @"rgb("] ) {
 		//TODO could go in the QQColor-Extensions category
 		//start after rgb( and end at before )
 		attribute = [attribute substringWithRange: NSMakeRange( 4, [attribute length] - 4 - 1)];
 		NSArray* parts = [attribute componentsSeparatedByString: @","];
-		color = [OQColor colorWithRed: [[parts firstObject] floatValue] / 255.0f
+		color = [OAColor colorWithRed: [[parts firstObject] floatValue] / 255.0f
 								green: [[parts secondObject] floatValue] / 255.0f
 								 blue: [[parts lastObject] floatValue] / 255.0f
 								alpha: 1];
@@ -205,7 +205,7 @@ NS_RETURNS_RETAINED CGColorRef NTIHTMLReaderParseCreateColor( NSString* attribut
 		NSString* r = [attribute substringWithRange: NSMakeRange( 1, 2 )];
 		NSString* g = [attribute substringWithRange: NSMakeRange( 3, 2 )];
 		NSString* b = [attribute substringWithRange: NSMakeRange( 5, 2 )];
-		color = [OQColor colorWithRed: [r hexValue] / 255.0f
+		color = [OAColor colorWithRed: [r hexValue] / 255.0f
 								green: [g hexValue] / 255.0f
 								 blue: [b hexValue] / 255.0f
 								alpha: 1];

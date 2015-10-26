@@ -1,29 +1,29 @@
 //
-//  OQColor-NTIExtensionsTest.m
+//  OAColor-NTIExtensionsTest.m
 //  NTIFoundation
 //
 //  Created by Christopher Utz on 5/18/12.
 //  Copyright (c) 2012 NextThought. All rights reserved.
 //
 
-#import "OQColor-NTIExtensionsTest.h"
+#import "OAColor-NTIExtensionsTest.h"
 #import "NTIFoundation/NTIFoundation.h"
 
 #define HC_SHORTHAND
 #import <OCHamcrestIOS/OCHamcrestIOS.h>
 
-@implementation OQColor_NTIExtensionsTest
+@implementation OAColor_NTIExtensionsTest
 
 // All code under test must be linked into the Unit Test bundle
 -(void)testCssString
 {
-    OQColor* red = [OQColor redColor];
+    OAColor* red = [OAColor redColor];
 	assertThat([red cssString], equalTo(@"rgba(255,0,0,1.0)"));
 }
 
 -(void)testCGColorRef
 {
-	OQColor* color = [OQColor colorWithRed: .52 green: .32 blue: .87 alpha: .6];
+	OAColor* color = [OAColor colorWithRed: .52 green: .32 blue: .87 alpha: .6];
 	
 	CGColorRef colorRef = [color rgbaCGColorRef];
 	

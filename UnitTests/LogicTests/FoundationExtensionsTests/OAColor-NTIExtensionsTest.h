@@ -1,5 +1,5 @@
 //
-//  OQColor-NTIExtensionsTest.h
+//  OAColor-NTIExtensionsTest.h
 //  NTIFoundation
 //
 //  Created by Christopher Utz on 5/18/12.
@@ -11,6 +11,6 @@
 
 #import <XCTest/XCTest.h>
 
-@interface OQColor_NTIExtensionsTest : XCTestCase
+@interface OAColor_NTIExtensionsTest : XCTestCase
 
 @end

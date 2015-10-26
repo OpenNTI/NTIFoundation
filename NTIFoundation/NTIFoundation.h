@@ -51,7 +51,7 @@
 #import "NTIRTFDocument.h"
 #import "NTIHTMLWriter.h"
 #import "NTIHTMLReader.h"
-#import "OQColor-NTIExtensions.h"
+#import "OAColor-NTIExtensions.h"
 #import "NTIEditableFrame.h"
 #import "NTITextAttachment.h"
 #import "NTITextAttachmentCell.h"

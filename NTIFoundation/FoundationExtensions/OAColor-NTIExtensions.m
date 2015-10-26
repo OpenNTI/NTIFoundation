@@ -1,14 +1,14 @@
 //
-//  OQColor-NTIExtensions.m
+//  OAColor-NTIExtensions.m
 //  NextThoughtApp
 //
 //  Created by Jason Madden on 2011/07/29.
 //  Copyright 2011 NextThought. All rights reserved.
 //
 
-#import "OQColor-NTIExtensions.h"
+#import "OAColor-NTIExtensions.h"
 
-@implementation OQColor (NTIExtensions)
+@implementation OAColor (NTIExtensions)
 -(NSString*)cssString
 {
 	return [NSString stringWithFormat: @"rgba(%.0f,%.0f,%.0f,%.1f)",

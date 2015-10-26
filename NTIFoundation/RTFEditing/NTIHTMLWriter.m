@@ -25,7 +25,7 @@
 #import "NSAttributedString-HTMLWritingExtensions.h"
 
 #import <OmniQuartz/OmniQuartz.h>
-#import "OQColor-NTIExtensions.h"
+#import "OAColor-NTIExtensions.h"
 
 #import "NTIHTMLReader.h"
 
@@ -576,7 +576,7 @@ static inline void writeString(OFDataBuffer* dataBuffer, NSString* string)
 	
 	int colorIndex = 0;
 	
-	OQColor* blackColor = [OQColor blackColor];
+	OAColor* blackColor = [OAColor blackColor];
 	CGColorRef blackCGColor = [blackColor rgbaCGColorRef];
 	NTIHTMLColorTableEntry* defaultColorEntry = [[NTIHTMLColorTableEntry alloc] 
 												 initWithColor: (__bridge id)blackCGColor];

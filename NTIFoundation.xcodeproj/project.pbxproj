@@ -87,7 +87,7 @@
 		40A7459914DA30050093F0D4 /* NSObject-NTIJSONTest.h in Headers */ = {isa = PBXBuildFile; fileRef = 40A7459714DA30050093F0D4 /* NSObject-NTIJSONTest.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40A7459B14DA30050093F0D4 /* NSObject-NTIJSONTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40A7459814DA30050093F0D4 /* NSObject-NTIJSONTest.m */; };
 		40AB82451566A6F600BB7375 /* OCHamcrestIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40AB82441566A6F500BB7375 /* OCHamcrestIOS.framework */; };
-		40AB82601566AA0C00BB7375 /* OQColor-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40AB825F1566AA0C00BB7375 /* OQColor-NTIExtensionsTest.m */; };
+		40AB82601566AA0C00BB7375 /* OAColor-NTIExtensionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40AB825F1566AA0C00BB7375 /* OAColor-NTIExtensionsTest.m */; };
 		40B6F3BA14285AF4007EDF1C /* WebSocket7Test.h in Headers */ = {isa = PBXBuildFile; fileRef = 40B6F3B814285AF4007EDF1C /* WebSocket7Test.h */; };
 		40B6F3D914285B38007EDF1C /* WebSocket7Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 40B6F3B914285AF4007EDF1C /* WebSocket7Test.m */; };
 		40BACD6B18108FBC0053ACC9 /* NTITextAttachment.h in Headers */ = {isa = PBXBuildFile; fileRef = 40BACD6918108FBC0053ACC9 /* NTITextAttachment.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -110,8 +110,8 @@
 		40E045F4143F468D0091CE7C /* NTIHTMLWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E045F2143F468D0091CE7C /* NTIHTMLWriter.m */; };
 		40E04614143F47890091CE7C /* NTIHTMLReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 40E04612143F47890091CE7C /* NTIHTMLReader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40E04615143F47890091CE7C /* NTIHTMLReader.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E04613143F47890091CE7C /* NTIHTMLReader.m */; };
-		40E04618143F50A60091CE7C /* OQColor-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 40E04616143F50A60091CE7C /* OQColor-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		40E04619143F50A60091CE7C /* OQColor-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E04617143F50A60091CE7C /* OQColor-NTIExtensions.m */; };
+		40E04618143F50A60091CE7C /* OAColor-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 40E04616143F50A60091CE7C /* OAColor-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		40E04619143F50A60091CE7C /* OAColor-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E04617143F50A60091CE7C /* OAColor-NTIExtensions.m */; };
 		40E0461C143F5F260091CE7C /* NTIHTMLReaderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E0461B143F5F260091CE7C /* NTIHTMLReaderTest.m */; };
 		40E0849C199AD81000DEE678 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40E0849B199AD81000DEE678 /* AssetsLibrary.framework */; };
 		40EAF82D18FC693000A537D4 /* NSData+NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 40EAF82B18FC693000A537D4 /* NSData+NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -403,6 +403,13 @@
 			remoteGlobalIDString = 72C0D195142529E800D526D8;
 			remoteInfo = NTIFoundation;
 		};
+		40AED05F1BDD5CD7001D7205 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 405F4B811A9ED42D00D6B26C /* OmniBase.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5FE81E171B62AE980056756C;
+			remoteInfo = "OmniBase-watchOS";
+		};
 		40D9BB8F1AA114A500BC6D7E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 40D9BB871AA114A500BC6D7E /* OmniAppKit.xcodeproj */;
@@ -549,8 +556,8 @@
 		40A7459714DA30050093F0D4 /* NSObject-NTIJSONTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject-NTIJSONTest.h"; sourceTree = "<group>"; };
 		40A7459814DA30050093F0D4 /* NSObject-NTIJSONTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject-NTIJSONTest.m"; sourceTree = "<group>"; };
 		40AB82441566A6F500BB7375 /* OCHamcrestIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OCHamcrestIOS.framework; path = "../NTIWorkspace/OCHamcrest-3.0.1/OCHamcrestIOS.framework"; sourceTree = "<group>"; };
-		40AB825E1566AA0C00BB7375 /* OQColor-NTIExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OQColor-NTIExtensionsTest.h"; sourceTree = "<group>"; };
-		40AB825F1566AA0C00BB7375 /* OQColor-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OQColor-NTIExtensionsTest.m"; sourceTree = "<group>"; };
+		40AB825E1566AA0C00BB7375 /* OAColor-NTIExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "OAColor-NTIExtensionsTest.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		40AB825F1566AA0C00BB7375 /* OAColor-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "OAColor-NTIExtensionsTest.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		40B5B4B114C89A9C009D5810 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		40B6F3B814285AF4007EDF1C /* WebSocket7Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSocket7Test.h; sourceTree = "<group>"; };
 		40B6F3B914285AF4007EDF1C /* WebSocket7Test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSocket7Test.m; sourceTree = "<group>"; };
@@ -570,8 +577,8 @@
 		40E045F2143F468D0091CE7C /* NTIHTMLWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIHTMLWriter.m; sourceTree = "<group>"; };
 		40E04612143F47890091CE7C /* NTIHTMLReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIHTMLReader.h; sourceTree = "<group>"; };
 		40E04613143F47890091CE7C /* NTIHTMLReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIHTMLReader.m; sourceTree = "<group>"; };
-		40E04616143F50A60091CE7C /* OQColor-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OQColor-NTIExtensions.h"; sourceTree = "<group>"; };
-		40E04617143F50A60091CE7C /* OQColor-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OQColor-NTIExtensions.m"; sourceTree = "<group>"; };
+		40E04616143F50A60091CE7C /* OAColor-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = "OAColor-NTIExtensions.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		40E04617143F50A60091CE7C /* OAColor-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = "OAColor-NTIExtensions.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		40E0461A143F5F260091CE7C /* NTIHTMLReaderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIHTMLReaderTest.h; sourceTree = "<group>"; };
 		40E0461B143F5F260091CE7C /* NTIHTMLReaderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIHTMLReaderTest.m; sourceTree = "<group>"; };
 		40E0849B199AD81000DEE678 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
@@ -845,6 +852,7 @@
 				405F4B951A9ED42E00D6B26C /* OBUnitTests.xctest */,
 				405F4B971A9ED42E00D6B26C /* OmniBase.framework */,
 				405F4B991A9ED42E00D6B26C /* OBUnitTests.xctest */,
+				40AED0601BDD5CD7001D7205 /* OmniBase.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -950,8 +958,8 @@
 				4029274D1498653200E4720A /* NSArray-NTIExtenstionsTest.m */,
 				4029275114986A9800E4720A /* NSMutableArray-NTIExtensionsTest.h */,
 				4029275214986A9800E4720A /* NSMutableArray-NTIExtensionsTest.m */,
-				40AB825E1566AA0C00BB7375 /* OQColor-NTIExtensionsTest.h */,
-				40AB825F1566AA0C00BB7375 /* OQColor-NTIExtensionsTest.m */,
+				40AB825E1566AA0C00BB7375 /* OAColor-NTIExtensionsTest.h */,
+				40AB825F1566AA0C00BB7375 /* OAColor-NTIExtensionsTest.m */,
 				4059D28115DC4CE800C567BA /* NSMutableDictionary-NTIExtensionsTest.h */,
 				4059D28215DC4CE800C567BA /* NSMutableDictionary-NTIExtensionsTest.m */,
 				4A72F48619268DA8004792EF /* UIColor+NTIExtensionsTest.m */,
@@ -1203,8 +1211,8 @@
 		72E353B4142532B9001B345A /* FoundationExtensions */ = {
 			isa = PBXGroup;
 			children = (
-				40E04616143F50A60091CE7C /* OQColor-NTIExtensions.h */,
-				40E04617143F50A60091CE7C /* OQColor-NTIExtensions.m */,
+				40E04616143F50A60091CE7C /* OAColor-NTIExtensions.h */,
+				40E04617143F50A60091CE7C /* OAColor-NTIExtensions.m */,
 				72FC5D7813D0FC2A006CBF28 /* NSArray-NTIExtensions.h */,
 				72FC5D7913D0FC2A006CBF28 /* NSArray-NTIExtensions.m */,
 				72FC5D7B13D10285006CBF28 /* NSMutableArray-NTIExtensions.h */,
@@ -1297,7 +1305,7 @@
 				7293CB291451AA7D00CD64B8 /* NTIEditableFrame.h in Headers */,
 				403C8CE217EA6CE9000FC290 /* NSNotification-NTIExtensions.h in Headers */,
 				72B0E41D1880C43800A75133 /* OUUnzipArchive-NTIExtensions.h in Headers */,
-				40E04618143F50A60091CE7C /* OQColor-NTIExtensions.h in Headers */,
+				40E04618143F50A60091CE7C /* OAColor-NTIExtensions.h in Headers */,
 				40C0E1031443AF9C00142406 /* SocketIOPacketTest.h in Headers */,
 				4A72F4611925AEF1004792EF /* UIColor+NTIExtensions.h in Headers */,
 				403C28E614576E160012CBAB /* NSAttributedString-NTIExtensions.h in Headers */,
@@ -1606,6 +1614,13 @@
 			remoteRef = 405F4C011A9EDA5300D6B26C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		40AED0601BDD5CD7001D7205 /* OmniBase.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = OmniBase.framework;
+			remoteRef = 40AED05F1BDD5CD7001D7205 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		40D9BB901AA114A500BC6D7E /* OmniAppKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -1695,7 +1710,7 @@
 				403D0DC7143E193E0049A755 /* NTIRTFDocument.m in Sources */,
 				40E045F4143F468D0091CE7C /* NTIHTMLWriter.m in Sources */,
 				40E04615143F47890091CE7C /* NTIHTMLReader.m in Sources */,
-				40E04619143F50A60091CE7C /* OQColor-NTIExtensions.m in Sources */,
+				40E04619143F50A60091CE7C /* OAColor-NTIExtensions.m in Sources */,
 				7293CB2A1451AA7D00CD64B8 /* NTIEditableFrame.m in Sources */,
 				403C28E714576E160012CBAB /* NSAttributedString-NTIExtensions.m in Sources */,
 				4006E76B149272E000D63524 /* NSObject-NTIJSON.m in Sources */,
@@ -1757,7 +1772,7 @@
 				4C4096FD1522140C002A9445 /* JsonPlistSerializationTests.m in Sources */,
 				406B23FD1533CDCA00BF691E /* WebSocketResponseBufferTest.m in Sources */,
 				4CE3E62D154E4FE20005918E /* NTIMathSymbolsExternalizationTests.m in Sources */,
-				40AB82601566AA0C00BB7375 /* OQColor-NTIExtensionsTest.m in Sources */,
+				40AB82601566AA0C00BB7375 /* OAColor-NTIExtensionsTest.m in Sources */,
 				5158CA78156AE5240054CA85 /* NTIMathModelTests.m in Sources */,
 				4C8EAFE51578103F00BF8FF7 /* NSURL-NTIExtensionsTest.m in Sources */,
 				4059D28315DC4CE800C567BA /* NSMutableDictionary-NTIExtensionsTest.m in Sources */,
