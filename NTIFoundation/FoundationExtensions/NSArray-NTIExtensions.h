@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <OmniFoundation/NSArray-OFExtensions.h>
+#import <OmniFoundation/OmniFoundation.h>
 
 @interface NSArray (NTIExtensions)
 

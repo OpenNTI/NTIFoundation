@@ -12,6 +12,7 @@
 #import "NTITextAttachment.h"
 #import <OmniAppKit/OATextStorage.h>
 #import <OmniAppKit/OATextAttachmentCell.h>
+#import "NSArray-NTIExtensions.h"
 
 @interface HTMLAttachmentCell : OATextAttachmentCell {
 @private

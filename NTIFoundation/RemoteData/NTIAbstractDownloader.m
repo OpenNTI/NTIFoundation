@@ -9,7 +9,6 @@
 #import "NTIAbstractDownloader.h"
 #import "NSString-NTIExtensions.h"
 #import "NSData-NTIJSON.h"
-#import "OmniUI/OUIAppController.h"
 #import <CFNetwork/CFNetwork.h>
 
 

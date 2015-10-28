@@ -35,7 +35,7 @@
  */
 + (NSString *)stringFromTimeIntervalWithLargestFittingTimeUnitWithinDays:(NSTimeInterval)timeInterval;
 
-+(NSString*)stringFromTimeInterval: (NSTimeInterval)timeInterval;
++ (NSString*)stringFromTimeInterval: (NSTimeInterval)timeInterval;
 
 /**
  * Same as stringFromTimeIntervalWithLargestFittingTimeUnitWithinDays but if it is more than cutoff seconds
@@ -50,7 +50,7 @@
  *
  *  @return YES if date is on the same day as the reciever
  */
--(BOOL)isOnSameDayAsDate:(NSDate*)date;
+- (BOOL)isOnSameDayAsDate:(NSDate*)date;
 
 /**
  *  compares the reciever instance to the given time interval
@@ -61,6 +61,6 @@
 			The receiver is later in time than anotherDate, NSOrderedDescending
 			The receiver is earlier in time than anotherDate, NSOrderedAscending.
  */
--(NSComparisonResult)compareToTimeInterval: (NSTimeInterval)timeInterval;
+- (NSComparisonResult)compareToTimeInterval: (NSTimeInterval)timeInterval;
 
 @end

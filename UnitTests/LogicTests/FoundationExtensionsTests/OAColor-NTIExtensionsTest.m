@@ -7,7 +7,7 @@
 //
 
 #import "OAColor-NTIExtensionsTest.h"
-#import "NTIFoundation/NTIFoundation.h"
+#import "OAColor-NTIExtensions.h"
 
 #define HC_SHORTHAND
 #import <OCHamcrestIOS/OCHamcrestIOS.h>

@@ -7,6 +7,7 @@
 //
 
 #import "OmniAppKit/OAColor.h"
+#import "NTIUtilities.h"
 
 @interface OAColor (NTIExtensions)
 @property (readonly,nonatomic) NSString* cssString;

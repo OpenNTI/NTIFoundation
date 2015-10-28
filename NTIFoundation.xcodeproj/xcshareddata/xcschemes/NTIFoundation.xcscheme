@@ -15,18 +15,18 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "72C0D195142529E800D526D8"
-               BuildableName = "libNTIFoundation.a"
-               BlueprintName = "NTIFoundation"
+               BuildableName = "libNTIFoundation-lib.a"
+               BlueprintName = "NTIFoundation-lib"
                ReferencedContainer = "container:../NTIWorkspace/NTIFoundation/NTIFoundation.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      buildConfiguration = "Debug">
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -43,27 +43,30 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "72C0D195142529E800D526D8"
-            BuildableName = "libNTIFoundation.a"
-            BlueprintName = "NTIFoundation"
+            BuildableName = "libNTIFoundation-lib.a"
+            BlueprintName = "NTIFoundation-lib"
             ReferencedContainer = "container:../NTIWorkspace/NTIFoundation/NTIFoundation.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <AdditionalOptions>
+      </AdditionalOptions>
    </TestAction>
    <LaunchAction
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "72C0D195142529E800D526D8"
-            BuildableName = "libNTIFoundation.a"
-            BlueprintName = "NTIFoundation"
+            BuildableName = "libNTIFoundation-lib.a"
+            BlueprintName = "NTIFoundation-lib"
             ReferencedContainer = "container:../NTIWorkspace/NTIFoundation/NTIFoundation.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -71,17 +74,17 @@
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
+      buildConfiguration = "Release"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "72C0D195142529E800D526D8"
-            BuildableName = "libNTIFoundation.a"
-            BlueprintName = "NTIFoundation"
+            BuildableName = "libNTIFoundation-lib.a"
+            BlueprintName = "NTIFoundation-lib"
             ReferencedContainer = "container:../NTIWorkspace/NTIFoundation/NTIFoundation.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

@@ -17,6 +17,7 @@
 #import "NTIMathParenthesisSymbol.h"
 #import "NTIMathFractionBinaryExpression.h"
 #import "NTIMathSymbolUtils.h"
+#import "NSArray-NTIExtensions.h"
 
 @interface NSString(mathSymbolExtension)
 -(BOOL)isOperatorSymbol;

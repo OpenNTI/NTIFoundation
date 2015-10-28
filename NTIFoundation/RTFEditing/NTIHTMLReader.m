@@ -7,6 +7,7 @@
 //
 #import "NTIHTMLReader.h"
 #import "NTITextAttachment.h"
+#import "NSMutableArray-NTIExtensions.h"
 
 
 #import <OmniBase/OmniBase.h>

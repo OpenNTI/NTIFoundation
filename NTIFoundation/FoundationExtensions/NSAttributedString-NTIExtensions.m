@@ -10,9 +10,7 @@
 #import "NTIRTFDocument.h"
 #import "NSAttributedString-HTMLWritingExtensions.h"
 #import "NTITextAttachment.h"
-#import <OmniAppKit/OATextStorage.h>
-#import <OmniAppKit/OATextAttachmentCell.h>
-#import <OmniAppKit/NSAttributedString-OAExtensions.h>
+#import <OmniAppKit/OmniAppKit.h>
 
 @interface OATextAttachmentCell(NTIAttachmentCellWriterCoupling)
 -(void)htmlWriter:(id)w exportHTMLToDataBuffer: (id)b withSize: (NSUInteger)s;
