@@ -494,6 +494,8 @@
 		409677451BE2B0C70039A08E /* NTI-Touch-Framework-Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Touch-Framework-Release.xcconfig"; sourceTree = "<group>"; };
 		40A145781BE5222F00E5D35E /* OmniQuartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OmniQuartz.framework; path = "../OmniGroup/Frameworks/OmniQuartz/build/Debug-iphoneos/OmniQuartz.framework"; sourceTree = "<group>"; };
 		40A145921BE5224600E5D35E /* OmniQuartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OmniQuartz.framework; path = "../OmniGroup/Frameworks/OmniQuartz/build/Debug-iphoneos/OmniQuartz.framework"; sourceTree = "<group>"; };
+		40A145BE1BE539FE00E5D35E /* NTI-Touch-Bundle-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "NTI-Touch-Bundle-Release.xcconfig"; sourceTree = "<group>"; };
+		40A145BF1BE539FE00E5D35E /* NTI-Touch-Bundle-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "NTI-Touch-Bundle-Debug.xcconfig"; sourceTree = "<group>"; };
 		40A4147D1505748A0017242E /* NSDate-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate-NTIExtensions.h"; sourceTree = "<group>"; };
 		40A4147E1505748A0017242E /* NSDate-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate-NTIExtensions.m"; sourceTree = "<group>"; };
 		40A7459714DA30050093F0D4 /* NSObject-NTIJSONTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject-NTIJSONTest.h"; sourceTree = "<group>"; };
@@ -808,6 +810,8 @@
 				407E670A17A05BF300178177 /* NTI-Global-Release.xcconfig */,
 				409677441BE2B01B0039A08E /* NTI-Touch-Framework-Debug.xcconfig */,
 				409677451BE2B0C70039A08E /* NTI-Touch-Framework-Release.xcconfig */,
+				40A145BE1BE539FE00E5D35E /* NTI-Touch-Bundle-Release.xcconfig */,
+				40A145BF1BE539FE00E5D35E /* NTI-Touch-Bundle-Debug.xcconfig */,
 			);
 			name = Configurations;
 			path = ../NTIWorkspace/Configurations;
@@ -1855,6 +1859,7 @@
 		};
 		4053FFAD1BDED6850083A477 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 40A145BF1BE539FE00E5D35E /* NTI-Touch-Bundle-Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -1888,7 +1893,6 @@
 					"\"$(SRCROOT)/../NTIWorkspace/OCHamcrest-3.0.1/\"",
 				);
 				INFOPLIST_FILE = "UnitTests/LogicTests/Supporting Files/UnitTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1899,6 +1903,7 @@
 		};
 		4053FFAE1BDED6850083A477 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 40A145BE1BE539FE00E5D35E /* NTI-Touch-Bundle-Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -1927,7 +1932,6 @@
 					"\"$(SRCROOT)/../NTIWorkspace/OCHamcrest-3.0.1/\"",
 				);
 				INFOPLIST_FILE = "UnitTests/LogicTests/Supporting Files/UnitTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nextthought.framework.NTIFoundationTests;
@@ -1966,7 +1970,6 @@
 					"\"$(SRCROOT)/../NTIWorkspace/OCHamcrest-3.0.1/\"",
 				);
 				INFOPLIST_FILE = "UnitTests/LogicTests/Supporting Files/UnitTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nextthought.framework.NTIFoundationTests;
