@@ -169,6 +169,9 @@
 		4053FFF81BDEE5F70083A477 /* NSArray-NTIExtenstionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4029274D1498653200E4720A /* NSArray-NTIExtenstionsTest.m */; settings = {ASSET_TAGS = (); }; };
 		4053FFF91BDEE6650083A477 /* NTIFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 72E353B8142533E7001B345A /* NTIFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4096771A1BE17BDC0039A08E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 409677191BE17BDC0039A08E /* Foundation.framework */; };
+		40A145791BE5222F00E5D35E /* OmniQuartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40A145781BE5222F00E5D35E /* OmniQuartz.framework */; };
+		40A145931BE5224600E5D35E /* OmniQuartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40A145921BE5224600E5D35E /* OmniQuartz.framework */; };
+		40A145941BE5233300E5D35E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 409677191BE17BDC0039A08E /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -489,6 +492,8 @@
 		409677191BE17BDC0039A08E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		409677441BE2B01B0039A08E /* NTI-Touch-Framework-Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Touch-Framework-Debug.xcconfig"; sourceTree = "<group>"; };
 		409677451BE2B0C70039A08E /* NTI-Touch-Framework-Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Touch-Framework-Release.xcconfig"; sourceTree = "<group>"; };
+		40A145781BE5222F00E5D35E /* OmniQuartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OmniQuartz.framework; path = "../OmniGroup/Frameworks/OmniQuartz/build/Debug-iphoneos/OmniQuartz.framework"; sourceTree = "<group>"; };
+		40A145921BE5224600E5D35E /* OmniQuartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OmniQuartz.framework; path = "../OmniGroup/Frameworks/OmniQuartz/build/Debug-iphoneos/OmniQuartz.framework"; sourceTree = "<group>"; };
 		40A4147D1505748A0017242E /* NSDate-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate-NTIExtensions.h"; sourceTree = "<group>"; };
 		40A4147E1505748A0017242E /* NSDate-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate-NTIExtensions.m"; sourceTree = "<group>"; };
 		40A7459714DA30050093F0D4 /* NSObject-NTIJSONTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject-NTIJSONTest.h"; sourceTree = "<group>"; };
@@ -611,6 +616,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40A145791BE5222F00E5D35E /* OmniQuartz.framework in Frameworks */,
 				4096771A1BE17BDC0039A08E /* Foundation.framework in Frameworks */,
 				402A8C0B1BDFDB0D0082B937 /* OmniBase.framework in Frameworks */,
 				402A8C051BDFD9440082B937 /* OmniUnzip.framework in Frameworks */,
@@ -624,6 +630,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40A145941BE5233300E5D35E /* Foundation.framework in Frameworks */,
+				40A145931BE5224600E5D35E /* OmniQuartz.framework in Frameworks */,
 				402A8C1D1BE064AA0082B937 /* OmniAppKit.framework in Frameworks */,
 				402A8C1E1BE064AA0082B937 /* OmniBase.framework in Frameworks */,
 				402A8C1F1BE064AA0082B937 /* OmniFoundation.framework in Frameworks */,
@@ -1026,6 +1034,8 @@
 		72CBA9681385CF1F00E3D28D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				40A145921BE5224600E5D35E /* OmniQuartz.framework */,
+				40A145781BE5222F00E5D35E /* OmniQuartz.framework */,
 				409677191BE17BDC0039A08E /* Foundation.framework */,
 				405F45C41A9ED36000D6B26C /* Other */,
 				405F45C31A9ED34100D6B26C /* Apple */,
@@ -1699,7 +1709,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_PREPROCESS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
@@ -1753,7 +1762,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "NTIFoundation/Supporting Files/NTIFoundation-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1795,7 +1803,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "NTIFoundation/Supporting Files/NTIFoundation-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nextthought.framework.NTIFoundation;
@@ -1836,7 +1843,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "NTIFoundation/Supporting Files/NTIFoundation-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nextthought.framework.NTIFoundation;
@@ -1882,7 +1888,7 @@
 					"\"$(SRCROOT)/../NTIWorkspace/OCHamcrest-3.0.1/\"",
 				);
 				INFOPLIST_FILE = "UnitTests/LogicTests/Supporting Files/UnitTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1921,7 +1927,7 @@
 					"\"$(SRCROOT)/../NTIWorkspace/OCHamcrest-3.0.1/\"",
 				);
 				INFOPLIST_FILE = "UnitTests/LogicTests/Supporting Files/UnitTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nextthought.framework.NTIFoundationTests;
@@ -1960,7 +1966,7 @@
 					"\"$(SRCROOT)/../NTIWorkspace/OCHamcrest-3.0.1/\"",
 				);
 				INFOPLIST_FILE = "UnitTests/LogicTests/Supporting Files/UnitTests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nextthought.framework.NTIFoundationTests;
@@ -2008,7 +2014,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_PREPROCESS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
@@ -2041,7 +2046,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_PREPROCESS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PROVISIONING_PROFILE = "";
 				RUN_CLANG_STATIC_ANALYZER = YES;
