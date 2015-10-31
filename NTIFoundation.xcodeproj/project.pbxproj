@@ -168,6 +168,7 @@
 		4053FFA11BDED6850083A477 /* NTIFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4053FF971BDED6830083A477 /* NTIFoundation.framework */; settings = {ASSET_TAGS = (); }; };
 		4053FFF81BDEE5F70083A477 /* NSArray-NTIExtenstionsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4029274D1498653200E4720A /* NSArray-NTIExtenstionsTest.m */; settings = {ASSET_TAGS = (); }; };
 		4053FFF91BDEE6650083A477 /* NTIFoundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 72E353B8142533E7001B345A /* NTIFoundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4096771A1BE17BDC0039A08E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 409677191BE17BDC0039A08E /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -485,6 +486,9 @@
 		407E670C17A05C0800178177 /* NTI-Global-Debug-User.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Global-Debug-User.xcconfig"; sourceTree = "<group>"; };
 		408494B31427DF6C0038BD31 /* WebSockets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSockets.h; sourceTree = "<group>"; };
 		408494B41427DF6C0038BD31 /* WebSockets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSockets.m; sourceTree = "<group>"; };
+		409677191BE17BDC0039A08E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		409677441BE2B01B0039A08E /* NTI-Touch-Framework-Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Touch-Framework-Debug.xcconfig"; sourceTree = "<group>"; };
+		409677451BE2B0C70039A08E /* NTI-Touch-Framework-Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Touch-Framework-Release.xcconfig"; sourceTree = "<group>"; };
 		40A4147D1505748A0017242E /* NSDate-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate-NTIExtensions.h"; sourceTree = "<group>"; };
 		40A4147E1505748A0017242E /* NSDate-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate-NTIExtensions.m"; sourceTree = "<group>"; };
 		40A7459714DA30050093F0D4 /* NSObject-NTIJSONTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject-NTIJSONTest.h"; sourceTree = "<group>"; };
@@ -607,6 +611,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4096771A1BE17BDC0039A08E /* Foundation.framework in Frameworks */,
 				402A8C0B1BDFDB0D0082B937 /* OmniBase.framework in Frameworks */,
 				402A8C051BDFD9440082B937 /* OmniUnzip.framework in Frameworks */,
 				402A8B661BDEEADA0082B937 /* OmniFoundation.framework in Frameworks */,
@@ -793,6 +798,8 @@
 				407E670817A05BF300178177 /* NTI-Touch-Library-Release.xcconfig */,
 				407E670917A05BF300178177 /* NTI-Global-Debug.xcconfig */,
 				407E670A17A05BF300178177 /* NTI-Global-Release.xcconfig */,
+				409677441BE2B01B0039A08E /* NTI-Touch-Framework-Debug.xcconfig */,
+				409677451BE2B0C70039A08E /* NTI-Touch-Framework-Release.xcconfig */,
 			);
 			name = Configurations;
 			path = ../NTIWorkspace/Configurations;
@@ -1019,6 +1026,7 @@
 		72CBA9681385CF1F00E3D28D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				409677191BE17BDC0039A08E /* Foundation.framework */,
 				405F45C41A9ED36000D6B26C /* Other */,
 				405F45C31A9ED34100D6B26C /* Apple */,
 				405F45C21A9ED33900D6B26C /* Omni */,
@@ -1711,6 +1719,7 @@
 		};
 		4053FFA91BDED6850083A477 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 409677441BE2B01B0039A08E /* NTI-Touch-Framework-Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -1757,6 +1766,7 @@
 		};
 		4053FFAA1BDED6850083A477 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 409677451BE2B0C70039A08E /* NTI-Touch-Framework-Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
