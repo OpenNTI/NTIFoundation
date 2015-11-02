@@ -316,4 +316,18 @@ static NSRegularExpression *attachmentRegex;
 	return index;
 }
 
+-  (CGSize)sizeForWidth:(CGFloat)width multiLine:(BOOL)isMultiLine
+{
+	CGSize size = CGSizeMake(width, 0.0);
+	NSStringDrawingOptions options = NSStringDrawingUsesFontLeading;
+	if (isMultiLine) {
+		options = options | NSStringDrawingUsesLineFragmentOrigin;
+	}
+	
+	CGRect bounds = [self boundingRectWithSize:size
+									   options:options
+									   context:nil];
+	return bounds.size;
+}
+
 @end
