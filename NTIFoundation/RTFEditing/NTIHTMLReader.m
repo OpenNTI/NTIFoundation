@@ -573,7 +573,11 @@ qualifiedName: (NSString*)qName
 			OBASSERT(self->linkStart != NSNotFound);
 			NSRange r = NSMakeRange(self->linkStart, self->attrBuffer.length - self->linkStart);
 			self->linkStart = NSNotFound;
-			NSURL* url = [NSURL URLWithString: [self->currentHref stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]];
+			
+			// Allow all legal characters until we find some we do want to escape
+			NSCharacterSet *linkCharacterSet = [[NSCharacterSet illegalCharacterSet] invertedSet];
+			
+			NSURL* url = [NSURL URLWithString: [self->currentHref stringByAddingPercentEncodingWithAllowedCharacters: linkCharacterSet]];
 			if(url){
 				[self->attrBuffer addAttributes: @{NSLinkAttributeName: url} range: r];
 			}
