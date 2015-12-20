@@ -133,6 +133,16 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 	return r;
 }
 
+-(BOOL)resignFirstResponder
+{
+	BOOL r = [super resignFirstResponder];
+	if(r){
+		UIMenuController* menuController = [UIMenuController sharedMenuController];
+		menuController.menuItems = nil;
+	}
+	return r;
+}
+
 -(void)_commonInit
 {
 	
