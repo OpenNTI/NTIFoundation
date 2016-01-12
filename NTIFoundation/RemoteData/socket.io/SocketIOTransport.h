@@ -7,7 +7,6 @@
 //
 
 #import <OmniFoundation/OmniFoundation.h>
-#import "WebSockets.h"
 #import "SocketIOPacket.h"
 #import "NTIAbstractDownloader.h"
 
@@ -45,6 +44,7 @@ typedef NSInteger SocketIOTransportStatus;
 
 @end
 
+@class WebSocket7;
 @interface SocketIOWSTransport : SocketIOTransport{
 	@private
 	WebSocket7* socket;

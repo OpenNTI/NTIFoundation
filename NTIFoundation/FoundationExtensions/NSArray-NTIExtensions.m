@@ -22,6 +22,19 @@
 	return ![self isEmptyArray: a];
 }
 
++(NSArray *)ensureArray:(id)obj
+{
+	if(!obj){
+		return nil;
+	}
+	
+	if(![obj isKindOfClass: [NSArray class]]){
+		obj = @[obj];
+	}
+	
+	return obj;
+}
+
 - (BOOL)isEmpty
 {
 	return self.count == 0;

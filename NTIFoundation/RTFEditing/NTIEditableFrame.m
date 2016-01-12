@@ -17,6 +17,8 @@
 #import <OmniAppKit/OAFontDescriptor.h>
 #import <OmniUI/UIScrollView-OUIExtensions.h>
 #import <OmniUI/OUIKeyboardNotifier.h>
+#import "NSAttributedString-NTIExtensions.h"
+#import "NTITextAttachment.h"
 
 static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat width, BOOL multiline)
 {
@@ -128,6 +130,16 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 		menuController.menuItems = menuItems;
 	}
 	
+	return r;
+}
+
+-(BOOL)resignFirstResponder
+{
+	BOOL r = [super resignFirstResponder];
+	if(r){
+		UIMenuController* menuController = [UIMenuController sharedMenuController];
+		menuController.menuItems = nil;
+	}
 	return r;
 }
 

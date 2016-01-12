@@ -33,7 +33,7 @@ typedef struct {
 	int backgroundColorIndex;
 	unsigned int underline;
 	void* fontDescriptor; //OAFontDescriptor
-	int alignment;
+	uint8_t alignment;
 	int firstLineIndent;
 	int leftIndent;
 	int rightIndent;

@@ -4,21 +4,12 @@
 
 #import <Availability.h>
 
-#ifndef __IPHONE_3_0
-#warning "This project uses features only available in iPhone SDK 3.0 and later."
-#endif
-
 #ifdef __OBJC__
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+
+@import Foundation;
+@import UIKit;
 
 #import <OmniBase/OmniBase.h>
 #import <OmniFoundation/OmniFoundation.h>
-
-
-#import "NSArray-NTIExtensions.h"
-#import "NSString-NTIExtensions.h"
-#import "NTIUtilities.h"
-#import "NSMutableArray-NTIExtensions.h"
 
 #endif

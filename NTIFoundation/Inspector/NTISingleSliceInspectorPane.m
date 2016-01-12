@@ -19,12 +19,12 @@
 
 -(id)initWithInspectorSlice:(OUIInspectorSlice *)slice
 {
-	self = [super init];
+	self = [super initWithNibName: nil bundle: nil];
 	if(self){
 		self.slice = slice;
 		self.title = slice.title;
-		
 		self->sliceConstraints = [NSMutableArray new];
+		self.slice.containingPane = (id)self;
 	}
 	return self;
 }
@@ -51,6 +51,7 @@
 		return;
 	}
 	[self addChildViewController: self.slice.detailPane];
+	self.slice.detailPane.inspector = self.inspector;
 	[self.slice.detailPane didMoveToParentViewController: self];
 	[self.view addSubview: self.slice.detailPane.view];
 	

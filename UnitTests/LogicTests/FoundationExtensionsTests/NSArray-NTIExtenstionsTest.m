@@ -64,4 +64,11 @@
 	XCTAssertFalse(nilArray.isEmpty, @"isEmpty incorrectly computes true for nil.");
 }
 
+- (void)testEnsureArray
+{
+	XCTAssertNil([NSArray ensureArray: nil], @"Ensuring nil should return nil.", nil);
+	XCTAssertEqualObjects([NSArray ensureArray: @(2)], @[@(2)], @"Non arrays get wrapped in an array.", nil);
+	XCTAssertEqualObjects([NSArray ensureArray: @[@(2)]], @[@(2)], @"Arrays won't be wrapped further.", nil);
+}
+
 @end

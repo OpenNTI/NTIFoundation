@@ -30,4 +30,7 @@
  */
 - (NSUInteger)indexofAttachment: (id)attachment;
 
+- (CGSize)sizeForWidth:(CGFloat)width
+			 multiLine:(BOOL)isMultiLine;
+
 @end

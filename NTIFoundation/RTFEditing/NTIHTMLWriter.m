@@ -24,14 +24,23 @@
 #import <OmniFoundation/NSData-OFEncoding.h>
 #import "NSAttributedString-HTMLWritingExtensions.h"
 
-#import <OmniQuartz/OmniQuartz.h>
-#import "OQColor-NTIExtensions.h"
+#import <OmniAppKit/OmniAppKit.h>
+#import "OAColor-NTIExtensions.h"
 
 #import "NTIHTMLReader.h"
 
 #ifdef DEBUG_jmadden
 #define DEBUG_RTF_WRITER
 #endif
+
+enum {
+	kNTILeftTextAlignment = 0,
+	kNTIRightTextAlignment = 1,
+	kNTICenterTextAlignment = 2,
+	kNTIJustifiedTextAlignment = 3,
+	kNTINaturalTextAlignment = 4
+};
+typedef uint8_t NTITextAlignment;
 
 @interface NTIHTMLWriter ()
 
@@ -397,7 +406,7 @@ static inline void writeString(OFDataBuffer* dataBuffer, NSString* string)
 {
 	CTParagraphStyleRef paragraphStyle = (__bridge CTParagraphStyleRef)[newAttributes objectForKey:
 															   (id)kCTParagraphStyleAttributeName];
-	CTTextAlignment alignment = kCTNaturalTextAlignment;
+	NTITextAlignment alignment = kNTINaturalTextAlignment;
 	CGFloat firstLineHeadIndent = 0.0f;
 	CGFloat headIndent = 0.0f;
 	CGFloat tailIndent = 0.0f;
@@ -445,17 +454,17 @@ static inline void writeString(OFDataBuffer* dataBuffer, NSString* string)
 		char* textAlign = NULL;
 		switch (alignment) {
 			default:
-			case kCTNaturalTextAlignment:
-			case kCTLeftTextAlignment:
+			case kNTINaturalTextAlignment:
+			case kNTILeftTextAlignment:
 				textAlign = " text-align: left;";
 				break;
-			case kCTRightTextAlignment:
+			case kNTIRightTextAlignment:
 				textAlign = " text-align: right;";
 				break;
-			case kCTCenterTextAlignment:
+			case kNTICenterTextAlignment:
 				textAlign = " text-align: center;";
 				break;
-			case kCTJustifiedTextAlignment:
+			case kNTIJustifiedTextAlignment:
 				textAlign = " text-align: justify;";
 				break;
 		}
@@ -576,7 +585,7 @@ static inline void writeString(OFDataBuffer* dataBuffer, NSString* string)
 	
 	int colorIndex = 0;
 	
-	OQColor* blackColor = [OQColor blackColor];
+	OAColor* blackColor = [OAColor blackColor];
 	CGColorRef blackCGColor = [blackColor rgbaCGColorRef];
 	NTIHTMLColorTableEntry* defaultColorEntry = [[NTIHTMLColorTableEntry alloc] 
 												 initWithColor: (__bridge id)blackCGColor];

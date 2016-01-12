@@ -9,7 +9,7 @@
 #import "NTIHTMLReaderTest.h"
 #import "NTIHTMLReader.h"
 #import "NTIHTMLWriter.h"
-#import "OQColor-NTIExtensions.h"
+#import "OAColor-NTIExtensions.h"
 
 @interface AudioCapturingHtmlReader : NTIHTMLReader{
 	NSString* source;
@@ -31,7 +31,7 @@
 
 @end
 
-CGColorRef NTIHTMLReaderParseCreateColor(NSString* color, OQColor* defaultColor);
+CGColorRef NTIHTMLReaderParseCreateColor(NSString* color, OAColor* defaultColor);
 
 @implementation NTIHTMLReaderTest
 
@@ -73,13 +73,13 @@ CGColorRef NTIHTMLReaderParseCreateColor(NSString* color, OQColor* defaultColor)
 
 -(void)testCSSString
 {
-	OQColor* blackColor = [OQColor blackColor];
+	OAColor* blackColor = [OAColor blackColor];
 	XCTAssertEqualObjects([blackColor cssString], @"rgba(0,0,0,1.0)");
 	
-	OQColor* whiteColor = [OQColor whiteColor];
+	OAColor* whiteColor = [OAColor whiteColor];
 	XCTAssertEqualObjects([whiteColor cssString], @"rgba(255,255,255,1.0)");
 	
-	OQColor* color = [OQColor colorWithRed: .2 green: .5 blue: .7 alpha: .9];
+	OAColor* color = [OAColor colorWithRed: .2 green: .5 blue: .7 alpha: .9];
 	XCTAssertEqualObjects([color cssString], @"rgba(51,128,178,0.9)");
 }
 
@@ -89,14 +89,14 @@ CGColorRef NTIHTMLReaderParseCreateColor(NSString* color, OQColor* defaultColor)
 	
 	CGColorRef parsedValue = NTIHTMLReaderParseCreateColor(blackColor, nil);
 	
-	XCTAssertTrue(CGColorEqualToColor(parsedValue,  [[OQColor blackColor] rgbaCGColorRef]),
+	XCTAssertTrue(CGColorEqualToColor(parsedValue,  [[OAColor blackColor] rgbaCGColorRef]),
 						 @"Should be same color");
 	
 	NSString* rgbColor = @"rgb(20, 70, 200)";
 	
 	parsedValue = NTIHTMLReaderParseCreateColor(rgbColor, nil);
 	
-	XCTAssertTrue(CGColorEqualToColor(parsedValue,  [[OQColor colorWithRed: 20.0f/255.0f 
+	XCTAssertTrue(CGColorEqualToColor(parsedValue,  [[OAColor colorWithRed: 20.0f/255.0f
 																	green: 70.0f/255.0f 
 																	 blue: 200.0f/255.0f
 																	alpha: 1] rgbaCGColorRef]),
@@ -107,7 +107,7 @@ CGColorRef NTIHTMLReaderParseCreateColor(NSString* color, OQColor* defaultColor)
 	
 	parsedValue = NTIHTMLReaderParseCreateColor(hexColor, nil);
 	
-	XCTAssertTrue(CGColorEqualToColor(parsedValue,  [[OQColor colorWithRed: 20.0f/255.0f 
+	XCTAssertTrue(CGColorEqualToColor(parsedValue,  [[OAColor colorWithRed: 20.0f/255.0f
 																	green: 70.0f/255.0f 
 																	 blue: 200.0f/255.0f
 																	alpha: 1] rgbaCGColorRef]),
@@ -118,7 +118,7 @@ CGColorRef NTIHTMLReaderParseCreateColor(NSString* color, OQColor* defaultColor)
 -(void)testUnparsableReturnsDefault
 {
 	NSString* gobbledegoop = @"asdlkfadlf";
-	OQColor* defaultColor = [OQColor yellowColor];
+	OAColor* defaultColor = [OAColor yellowColor];
 	CGColorRef parsedValue = NTIHTMLReaderParseCreateColor(gobbledegoop, defaultColor);
 	
 	XCTAssertTrue(CGColorEqualToColor(parsedValue, [defaultColor rgbaCGColorRef]), @"Expected default color");

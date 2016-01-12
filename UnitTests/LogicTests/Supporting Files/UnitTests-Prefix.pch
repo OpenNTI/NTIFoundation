@@ -4,10 +4,6 @@
 
 #import <Availability.h>
 
-#ifndef __IPHONE_3_0
-#warning "This project uses features only available in iPhone SDK 3.0 and later."
-#endif
-
 #ifdef __OBJC__
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
@@ -15,21 +11,5 @@
 #import <OmniBase/OmniBase.h>
 #import <OmniFoundation/OmniFoundation.h>
 
-#import "NSArray-NTIExtensions.h"
-#import "NSString-NTIExtensions.h"
-#import "NTIUtilities.h"
-#import "NSMutableArray-NTIExtensions.h"
-
-
-#ifdef TEST
-#define PRIVATE_STATIC_TESTABLE
-#else
-#define PRIVATE_STATIC_TESTABLE static
 #endif
 
-#endif
-
-#import <OCMock/OCMock.h>
-
-//#define HC_SHORTHAND //Defining this here leads to lots of issues in this project.  need to figure that out
-//#import <OCHamcrestIOS/OCHamcrestIOS.h>

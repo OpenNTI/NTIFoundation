@@ -8,6 +8,7 @@
 
 #import "NTIISO8601DurationFormatter.h"
 #import "NTIDuration.h"
+#import "NSArray-NTIExtensions.h"
 
 
 //Ported from the python isodata library isoduration.py

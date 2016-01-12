@@ -10,6 +10,8 @@
 #import "SocketIOPacket.h"
 #import "NSObject-NTIJSON.h"
 #import "NSString-NTIJSON.h"
+#import "NSString-NTIExtensions.h"
+#import "NSArray-NTIExtensions.h"
 
 @implementation SocketIOPacket
 @synthesize type, packetId, endpoint, ack, data, reason, advice, ackId, args, qs, name;

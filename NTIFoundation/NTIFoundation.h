@@ -2,86 +2,89 @@
 //  NTIFoundation.h
 //  NTIFoundation
 //
-//  Created by Jason Madden on 2011/09/17.
-//  Copyright (c) 2011-2013 NextThought. All rights reserved.
+//  Created by Christopher Utz on 10/26/15.
+//  Copyright © 2015 NextThought. All rights reserved.
 //
 
-#ifndef NTIFoundation_NTIFoundation_h
-#define NTIFoundation_NTIFoundation_h
+#import <Foundation/Foundation.h>
 
-#if ! __has_feature(objc_arc)
-	#define NTIDispatchQueueRelease(__v) (dispatch_release(__v));
-#else
-	#if TARGET_OS_IPHONE
-		// Compiling for iOS
-		#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 60000
-			// iOS 6.0 or later
-			#define NTIDispatchQueueRelease(__v)
-		#else
-			// iOS 5.X or earlier
-			#define NTIDispatchQueueRelease(__v) (dispatch_release(__v));
-		#endif
-	#endif
-#endif
+//! Project version number for NTIFoundation.
+FOUNDATION_EXPORT double NTIFoundationVersionNumber;
+
+//! Project version string for NTIFoundation.
+FOUNDATION_EXPORT const unsigned char NTIFoundationVersionString[];
+
+// In this header, you should import all the public headers of your framework using statements like #import <NTIFoundation/PublicHeader.h>
+
+#import <NTIFoundation/NTIUtilities.h>
+
+//Foundation Extensions
+#import <NTIFoundation/UIDevice-NTIExtensions.h>
+#import <NTIFoundation/NSDate-NTIExtensions.h>
+#import <NTIFoundation/NSURL-NTIExtensions.h>
+#import <NTIFoundation/NSData+NTIExtensions.h>
+#import <NTIFoundation/NSArray-NTIExtensions.h>
+#import <NTIFoundation/NSMutableArray-NTIExtensions.h>
+#import <NTIFoundation/NSNotification-NTIExtensions.h>
+#import <NTIFoundation/NSString-NTIExtensions.h>
+#import <NTIFoundation/NSMutableDictionary-NTIExtensions.h>
+#import <NTIFoundation/NTIAbstractDownloader.h>
+#import <NTIFoundation/NSURL-NTIFileSystemExtensions.h>
+
+//JSON Extensions
+#import <NTIFoundation/NSData-NTIJSON.h>
+#import <NTIFoundation/NSString-NTIJSON.h>
+#import <NTIFoundation/NSObject-NTIJSON.h>
+
+//Socket Extensions
+#import <NTIFoundation/SocketIOPacket.h>
+#import <NTIFoundation/SocketIOSocket.h>
+#import <NTIFoundation/SocketIOTransport.h>
+
+//HTML Extensions
+#import <NTIFoundation/NSAttributedString-HTMLReadingExtensions.h>
+#import <NTIFoundation/NSAttributedString-HTMLWritingExtensions.h>
+#import <NTIFoundation/NSAttributedString-NTIExtensions.h>
+#import <NTIFoundation/NTIRTFDocument.h>
+#import <NTIFoundation/NTIHTMLWriter.h>
+#import <NTIFoundation/NTIHTMLReader.h>
+
+//Omni Extensions
+#import <NTIFoundation/OAColor-NTIExtensions.h>
+#import <NTIFoundation/NTIEditableFrame.h>
+#import <NTIFoundation/NTITextAttachment.h>
+#import <NTIFoundation/NTITextAttachmentCell.h>
+#import <NTIFoundation/OUUnzipArchive-NTIExtensions.h>
+
+//Formatting
+#import <NTIFoundation/NTIDuration.h>
+#import <NTIFoundation/NTIISO8601DurationFormatter.h>
 
 
-#import "UIDevice-NTIExtensions.h"
-#import "NSDate-NTIExtensions.h"
-#import "NSURL-NTIExtensions.h"
-#import "NSData+NTIExtensions.h"
-#import "NSData-NTIJSON.h"
-#import "NSString-NTIJSON.h"
-#import "NSObject-NTIJSON.h"
-#import "NSArray-NTIExtensions.h"
-#import "NSMutableArray-NTIExtensions.h"
-#import "NSNotification-NTIExtensions.h"
-#import "NSString-NTIExtensions.h"
-#import "NSMutableDictionary-NTIExtensions.h"
-#import "OUUnzipArchive-NTIExtensions.h"
-#import "NTIAbstractDownloader.h"
-#import "NTIUtilities.h"
-#import "SocketIOPacket.h"
-#import "SocketIOSocket.h"
-#import "SocketIOTransport.h"
-#import "WebSockets.h"
-#import "SendRecieveQueue.h"
-#import "NSAttributedString-HTMLReadingExtensions.h"
-#import "NSAttributedString-HTMLWritingExtensions.h"
-#import "NSAttributedString-NTIExtensions.h"
-#import "NTIRTFDocument.h"
-#import "NTIHTMLWriter.h"
-#import "NTIHTMLReader.h"
-#import "OQColor-NTIExtensions.h"
-#import "NTIEditableFrame.h"
-#import "NTITextAttachment.h"
-#import "NTITextAttachmentCell.h"
-#import "NSURL-NTIFileSystemExtensions.h"
-#import "NTIAppNavigationController.h"
-#import "NTIInspectableController.h"
-#import "NTIGlobalInspector.h"
-#import "NTIAppNavigationLayerProvider.h"
-#import "NTIAppNavigationLayerDescriptor.h"
-#import "NTIAppNavigationLayer.h"
-#import "NTIInspectableObjectProtocol.h"
-#import "NTIGlobalInspectorMainPane.h"
-#import "NTIGlobalInspectorSlice.h"
-#import "NTIBadgeView.h"
-#import	"NTIKeyboardAdjustmentListener.h"
-#import "UIColor+NTIExtensions.h"
+//UI Utilities
+#import <NTIFoundation/NTIBadgeView.h>
+#import <NTIFoundation/UIColor+NTIExtensions.h>
+#import	<NTIFoundation/NTIKeyboardAdjustmentListener.h>
+#import <NTIFoundation/NTIInspectableController.h>
+#import <NTIFoundation/NTIGlobalInspector.h>
+#import <NTIFoundation/NTIInspectableObjectProtocol.h>
+#import <NTIFoundation/NTIGlobalInspectorMainPane.h>
+#import <NTIFoundation/NTIGlobalInspectorSlice.h>
+//
+//
+//
+//
 
-#import "NTIDuration.h"
-#import "NTIISO8601DurationFormatter.h"
+//
+//#import <NTIFoundation/NTIMathSymbol.h>
+//#import <NTIFoundation/NTIMathAlphaNumericSymbol.h>
+//#import <NTIFoundation/NTIMathOperatorSymbol.h>
+//#import <NTIFoundation/NTIMathPlaceholderSymbol.h>
+//#import <NTIFoundation/NTIMathParenthesisSymbol.h>
+//#import <NTIFoundation/NTIMathUnaryExpression.h>
+//#import <NTIFoundation/NTIMathBinaryExpression.h>
+//#import <NTIFoundation/NTIMathFractionBinaryExpression.h>
+//#import <NTIFoundation/NTIMathExponentBinaryExpression.h>
+//#import <NTIFoundation/NTIMathEquationBuilder.h>
+//#import <NTIFoundation/NTIMathInputExpressionModel.h>
 
-#import "NTIMathSymbol.h"
-#import "NTIMathAlphaNumericSymbol.h"
-#import "NTIMathOperatorSymbol.h"
-#import "NTIMathPlaceholderSymbol.h"
-#import "NTIMathParenthesisSymbol.h"
-#import "NTIMathUnaryExpression.h"
-#import "NTIMathBinaryExpression.h"
-#import "NTIMathFractionBinaryExpression.h"
-#import "NTIMathExponentBinaryExpression.h"
-#import "NTIMathEquationBuilder.h"
-#import "NTIMathInputExpressionModel.h"
-
-#endif

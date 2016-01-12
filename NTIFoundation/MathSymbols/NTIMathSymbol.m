@@ -8,6 +8,7 @@
 
 #import "NTIMathSymbol.h"
 #import "NTIMathPlaceholderSymbol.h"
+#import "NSArray-NTIExtensions.h"
 
 @implementation NTIMathSymbol
 @synthesize parentMathSymbol,substituteSymbol;

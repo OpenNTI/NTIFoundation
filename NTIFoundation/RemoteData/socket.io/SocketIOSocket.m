@@ -9,7 +9,7 @@
 #import "SocketIOSocket.h"
 #import "NTIAbstractDownloader.h"
 #import "SocketIOTransport.h"
-#import "OmniUI/OUIAppController.h"
+#import "NSArray-NTIExtensions.h"
 
 NSString* const SocketIOResource = @"socket.io";
 NSString* const SocketIOProtocol = @"1";

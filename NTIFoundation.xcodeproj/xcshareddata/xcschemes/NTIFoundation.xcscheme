@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0610"
+   LastUpgradeVersion = "0710"
    version = "1.3">
    <BuildAction
-      parallelizeBuildables = "NO"
-      buildImplicitDependencies = "NO">
+      parallelizeBuildables = "YES"
+      buildImplicitDependencies = "YES">
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
@@ -14,8 +14,8 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "72C0D195142529E800D526D8"
-               BuildableName = "libNTIFoundation.a"
+               BlueprintIdentifier = "4053FF961BDED6830083A477"
+               BuildableName = "NTIFoundation.framework"
                BlueprintName = "NTIFoundation"
                ReferencedContainer = "container:../NTIWorkspace/NTIFoundation/NTIFoundation.xcodeproj">
             </BuildableReference>
@@ -23,18 +23,18 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      buildConfiguration = "Debug">
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "72D8185813955D8C00473994"
-               BuildableName = "NTIFoundationLogicTests.xctest"
-               BlueprintName = "NTIFoundationLogicTests"
+               BlueprintIdentifier = "4053FF9F1BDED6840083A477"
+               BuildableName = "NTIFoundationTests.xctest"
+               BlueprintName = "NTIFoundationTests"
                ReferencedContainer = "container:../NTIWorkspace/NTIFoundation/NTIFoundation.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -42,27 +42,30 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "72C0D195142529E800D526D8"
-            BuildableName = "libNTIFoundation.a"
+            BlueprintIdentifier = "4053FF961BDED6830083A477"
+            BuildableName = "NTIFoundation.framework"
             BlueprintName = "NTIFoundation"
             ReferencedContainer = "container:../NTIWorkspace/NTIFoundation/NTIFoundation.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <AdditionalOptions>
+      </AdditionalOptions>
    </TestAction>
    <LaunchAction
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "72C0D195142529E800D526D8"
-            BuildableName = "libNTIFoundation.a"
+            BlueprintIdentifier = "4053FF961BDED6830083A477"
+            BuildableName = "NTIFoundation.framework"
             BlueprintName = "NTIFoundation"
             ReferencedContainer = "container:../NTIWorkspace/NTIFoundation/NTIFoundation.xcodeproj">
          </BuildableReference>
@@ -71,16 +74,16 @@
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
+      buildConfiguration = "Release"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "72C0D195142529E800D526D8"
-            BuildableName = "libNTIFoundation.a"
+            BlueprintIdentifier = "4053FF961BDED6830083A477"
+            BuildableName = "NTIFoundation.framework"
             BlueprintName = "NTIFoundation"
             ReferencedContainer = "container:../NTIWorkspace/NTIFoundation/NTIFoundation.xcodeproj">
          </BuildableReference>
