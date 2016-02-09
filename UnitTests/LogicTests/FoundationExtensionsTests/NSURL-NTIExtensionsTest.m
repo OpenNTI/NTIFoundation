@@ -10,7 +10,7 @@
 #import "NSURL-NTIExtensions.h"
 
 #define HC_SHORTHAND
-#import <OCHamcrestIOS/OCHamcrestIOS.h>
+#import <OCHamcrest/OCHamcrest.h>
 
 @implementation NSURL_NTIExtensionsTest
 

@@ -10,7 +10,7 @@
 #import "OAColor-NTIExtensions.h"
 
 #define HC_SHORTHAND
-#import <OCHamcrestIOS/OCHamcrestIOS.h>
+#import <OCHamcrest/OCHamcrest.h>
 
 @implementation OAColor_NTIExtensionsTest
 

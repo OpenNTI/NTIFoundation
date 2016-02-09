@@ -11,7 +11,7 @@
 #import "NTIDuration.h"
 
 #define HC_SHORTHAND
-#import <OCHamcrestIOS/OCHamcrestIOS.h>
+#import <OCHamcrest/OCHamcrest.h>
 
 @interface NTIISO8601DurationFormatterTest : XCTestCase{
 	@private
@@ -141,7 +141,7 @@
 	NTIDuration* duration = nil;
 	BOOL result = [self->formatter getObjectValue: &duration forString: self.durationString
 								 errorDescription: nil];
-	assertThatBool(result, equalToBool(YES));
+	assertThat(@(result), isTrue());
 	
 	NSArray* components = self.cmps;
 	

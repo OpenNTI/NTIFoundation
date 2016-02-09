@@ -10,7 +10,7 @@
 #import "NTITextAttachmentCell.h"
 
 #define HC_SHORTHAND
-#import <OCHamcrestIOS/OCHamcrestIOS.h>
+#import <OCHamcrest/OCHamcrest.h>
 
 @interface NTITextAttachmentCell(PRIVATE_TEST)
 -(NSSet*)editableFrames;

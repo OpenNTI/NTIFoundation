@@ -12,7 +12,7 @@
 #import "NTIMathEquationBuilder.h"
 
 #define HC_SHORTHAND
-#import <OCHamcrestIOS/OCHamcrestIOS.h>
+#import <OCHamcrest/OCHamcrest.h>
 
 @interface NTIMathInputExpressionModel(NTIMathInputExpressionTest)
 -(NTIMathSymbol *)findRootOfMathNode: (NTIMathSymbol *)mathSymbol;

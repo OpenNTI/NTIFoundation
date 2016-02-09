@@ -21,7 +21,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		40160CF21C626B250019D39A /* OCHamcrestIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40160CED1C626A820019D39A /* OCHamcrestIOS.framework */; };
 		40160D051C6270980019D39A /* NTI-Touch-Tests-Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 40160CF31C6270980019D39A /* NTI-Touch-Tests-Release.xcconfig */; };
 		40160D061C6270980019D39A /* NTI-Touch-Tests-Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 40160CF41C6270980019D39A /* NTI-Touch-Tests-Debug.xcconfig */; };
 		40160D071C6270980019D39A /* NTI-Touch-Tests-Common.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 40160CF51C6270980019D39A /* NTI-Touch-Tests-Common.xcconfig */; };
@@ -441,7 +440,6 @@
 		40103C1314D2564C004451A4 /* NTIInspectableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIInspectableController.h; sourceTree = "<group>"; };
 		40103C1A14D28A54004451A4 /* NTIGlobalInspector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIGlobalInspector.h; sourceTree = "<group>"; };
 		40103C1B14D28A54004451A4 /* NTIGlobalInspector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIGlobalInspector.m; sourceTree = "<group>"; };
-		40160CED1C626A820019D39A /* OCHamcrestIOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OCHamcrestIOS.framework; path = "../../OCHamcrest-3.0.1/OCHamcrestIOS.framework"; sourceTree = "<group>"; };
 		40160CF31C6270980019D39A /* NTI-Touch-Tests-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "NTI-Touch-Tests-Release.xcconfig"; path = "../../../Configurations/NTI-Touch-Tests-Release.xcconfig"; sourceTree = "<group>"; };
 		40160CF41C6270980019D39A /* NTI-Touch-Tests-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "NTI-Touch-Tests-Debug.xcconfig"; path = "../../../Configurations/NTI-Touch-Tests-Debug.xcconfig"; sourceTree = "<group>"; };
 		40160CF51C6270980019D39A /* NTI-Touch-Tests-Common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "NTI-Touch-Tests-Common.xcconfig"; path = "../../../Configurations/NTI-Touch-Tests-Common.xcconfig"; sourceTree = "<group>"; };
@@ -513,6 +511,7 @@
 		408494B31427DF6C0038BD31 /* WebSockets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSockets.h; sourceTree = "<group>"; };
 		408494B41427DF6C0038BD31 /* WebSockets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSockets.m; sourceTree = "<group>"; };
 		4090DDCB1C6925570011DB58 /* OCMock.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OCMock.framework; path = ../../Carthage/Build/iOS/OCMock.framework; sourceTree = "<group>"; };
+		4090DE9B1C6A2D8F0011DB58 /* OCHamcrest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OCHamcrest.framework; path = ../../Carthage/Build/iOS/OCHamcrest.framework; sourceTree = "<group>"; };
 		409677191BE17BDC0039A08E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		40A4147D1505748A0017242E /* NSDate-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate-NTIExtensions.h"; sourceTree = "<group>"; };
 		40A4147E1505748A0017242E /* NSDate-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate-NTIExtensions.m"; sourceTree = "<group>"; };
@@ -654,7 +653,6 @@
 				402A8C1F1BE064AA0082B937 /* OmniFoundation.framework in Frameworks */,
 				402A8C201BE064AA0082B937 /* OmniUnzip.framework in Frameworks */,
 				4053FFA11BDED6850083A477 /* NTIFoundation.framework in Frameworks */,
-				40160CF21C626B250019D39A /* OCHamcrestIOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -753,8 +751,8 @@
 		405F45C41A9ED36000D6B26C /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				4090DE9B1C6A2D8F0011DB58 /* OCHamcrest.framework */,
 				4090DDCB1C6925570011DB58 /* OCMock.framework */,
-				40160CED1C626A820019D39A /* OCHamcrestIOS.framework */,
 			);
 			name = Other;
 			sourceTree = "<group>";

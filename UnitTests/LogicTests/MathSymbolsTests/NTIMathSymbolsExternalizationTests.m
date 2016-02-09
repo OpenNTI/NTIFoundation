@@ -12,7 +12,7 @@
 #import "NTIMathEquationBuilder.h"
 
 #define HC_SHORTHAND
-#import <OCHamcrestIOS/OCHamcrestIOS.h>
+#import <OCHamcrest/OCHamcrest.h>
 
 @implementation NTIMathSymbolsExternalizationTests
 -(void)setUp
