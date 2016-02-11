@@ -7,7 +7,6 @@
 //
 
 #import "SocketIOSocket.h"
-#import "NTIAbstractDownloader.h"
 #import "SocketIOTransport.h"
 #import "NSArray-NTIExtensions.h"
 

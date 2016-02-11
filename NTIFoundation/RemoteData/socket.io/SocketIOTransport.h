@@ -8,7 +8,6 @@
 
 #import <OmniFoundation/OmniFoundation.h>
 #import "SocketIOPacket.h"
-#import "NTIAbstractDownloader.h"
 
 
 enum {

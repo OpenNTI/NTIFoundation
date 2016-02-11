@@ -52,11 +52,9 @@
 		402A8B9C1BDFD2920082B937 /* SocketIOPacket.h in Headers */ = {isa = PBXBuildFile; fileRef = 40D754A714278E6900335BEF /* SocketIOPacket.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		402A8B9D1BDFD2920082B937 /* SocketIOSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 40D754AB142791AF00335BEF /* SocketIOSocket.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		402A8B9E1BDFD2920082B937 /* SocketIOTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 40D754AF142791CD00335BEF /* SocketIOTransport.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		402A8B9F1BDFD2920082B937 /* NTIAbstractDownloader.h in Headers */ = {isa = PBXBuildFile; fileRef = 721DC9FF13BA3DBD00340540 /* NTIAbstractDownloader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		402A8BA01BDFD2A10082B937 /* SocketIOPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D754A814278E6900335BEF /* SocketIOPacket.m */; };
 		402A8BA11BDFD2A10082B937 /* SocketIOSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D754AC142791AF00335BEF /* SocketIOSocket.m */; };
 		402A8BA21BDFD2A10082B937 /* SocketIOTransport.m in Sources */ = {isa = PBXBuildFile; fileRef = 40D754B0142791CD00335BEF /* SocketIOTransport.m */; };
-		402A8BA31BDFD2A10082B937 /* NTIAbstractDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 721DCA0013BA3DBD00340540 /* NTIAbstractDownloader.m */; };
 		402A8BA41BDFD2AF0082B937 /* OUUnzipArchive-NTIExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 72B0E41B1880C43800A75133 /* OUUnzipArchive-NTIExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		402A8BA51BDFD2B40082B937 /* OUUnzipArchive-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 72B0E41C1880C43800A75133 /* OUUnzipArchive-NTIExtensions.m */; };
 		402A8BA61BDFD2C90082B937 /* OAColor-NTIExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E04617143F50A60091CE7C /* OAColor-NTIExtensions.m */; };
@@ -393,6 +391,20 @@
 			remoteGlobalIDString = 5FE81E171B62AE980056756C;
 			remoteInfo = "OmniBase-watchOS";
 		};
+		40C997741C6CDABC00D450CD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 405F4B811A9ED42D00D6B26C /* OmniBase.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 40167E321C6CCCED000C4973;
+			remoteInfo = "OmniBase-tvos";
+		};
+		40C997851C6CDABC00D450CD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 405F4B841A9ED42D00D6B26C /* OmniFoundation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 40167E661C6CD071000C4973;
+			remoteInfo = "OmniFoundation-tvos";
+		};
 		40D9BB8F1AA114A500BC6D7E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 40D9BB871AA114A500BC6D7E /* OmniAppKit.xcodeproj */;
@@ -605,8 +617,6 @@
 		5158CA75156AE5240054CA85 /* NTIMathModelTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathModelTests.h; sourceTree = "<group>"; };
 		5158CA76156AE5240054CA85 /* NTIMathModelTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathModelTests.m; sourceTree = "<group>"; };
 		7215956A13CFE80600DCA72E /* NSObject-NTIJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject-NTIJSON.h"; sourceTree = "<group>"; };
-		721DC9FF13BA3DBD00340540 /* NTIAbstractDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIAbstractDownloader.h; sourceTree = "<group>"; };
-		721DCA0013BA3DBD00340540 /* NTIAbstractDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIAbstractDownloader.m; sourceTree = "<group>"; };
 		72579DF313D8B24C005437A7 /* NSString-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString-NTIExtensions.h"; sourceTree = "<group>"; };
 		72579DF413D8B24C005437A7 /* NSString-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString-NTIExtensions.m"; sourceTree = "<group>"; };
 		725EACB313CC90440091CE91 /* NTIUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIUtilities.h; sourceTree = "<group>"; };
@@ -766,6 +776,7 @@
 				405F4B971A9ED42E00D6B26C /* OmniBase.framework */,
 				405F4B991A9ED42E00D6B26C /* OBUnitTests.xctest */,
 				40AED0601BDD5CD7001D7205 /* OmniBase.framework */,
+				40C997751C6CDABC00D450CD /* OmniBase.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -787,6 +798,7 @@
 				405F4BC01A9ED42E00D6B26C /* OFXMLIdHash */,
 				405F4BC21A9ED42E00D6B26C /* OFNetStateNotifierTest */,
 				405F4BC41A9ED42E00D6B26C /* OFNetStateNotifier.app */,
+				40C997861C6CDABC00D450CD /* OmniFoundation.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1154,8 +1166,6 @@
 			isa = PBXGroup;
 			children = (
 				40D7548914278E4500335BEF /* socket.io */,
-				721DC9FF13BA3DBD00340540 /* NTIAbstractDownloader.h */,
-				721DCA0013BA3DBD00340540 /* NTIAbstractDownloader.m */,
 			);
 			path = RemoteData;
 			sourceTree = "<group>";
@@ -1209,7 +1219,6 @@
 				402A8BCC1BDFD34F0082B937 /* NTIHTMLReader.h in Headers */,
 				402A8BEB1BDFD5100082B937 /* NTIMathUnaryExpression.h in Headers */,
 				402A8BDD1BDFD3A30082B937 /* NTIGlobalInspectorSlice.h in Headers */,
-				402A8B9F1BDFD2920082B937 /* NTIAbstractDownloader.h in Headers */,
 				402A8BC91BDFD34F0082B937 /* NSAttributedString-HTMLWritingExtensions.h in Headers */,
 				402A8BF01BDFD5100082B937 /* NTIMathSymbolUtils.h in Headers */,
 				402A8C001BDFD5420082B937 /* NTIDuration.h in Headers */,
@@ -1507,6 +1516,20 @@
 			remoteRef = 40AED05F1BDD5CD7001D7205 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		40C997751C6CDABC00D450CD /* OmniBase.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = OmniBase.framework;
+			remoteRef = 40C997741C6CDABC00D450CD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		40C997861C6CDABC00D450CD /* OmniFoundation.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = OmniFoundation.framework;
+			remoteRef = 40C997851C6CDABC00D450CD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		40D9BB901AA114A500BC6D7E /* OmniAppKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -1620,7 +1643,6 @@
 				402A8BE31BDFD4FE0082B937 /* NTISingleSliceInspectorPane.m in Sources */,
 				402A8BA01BDFD2A10082B937 /* SocketIOPacket.m in Sources */,
 				402A8BE11BDFD4FE0082B937 /* NTIInspectorSliceObjectPair.m in Sources */,
-				402A8BA31BDFD2A10082B937 /* NTIAbstractDownloader.m in Sources */,
 				402A8BD21BDFD3580082B937 /* NTIRTFDocument.m in Sources */,
 				402A8BD51BDFD3580082B937 /* NTITextAttachmentCell.m in Sources */,
 				402A8BAD1BDFD2C90082B937 /* NSDate-NTIExtensions.m in Sources */,

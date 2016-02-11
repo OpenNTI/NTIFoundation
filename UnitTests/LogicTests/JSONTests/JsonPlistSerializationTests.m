@@ -8,7 +8,6 @@
 
 #import "JsonPlistSerializationTests.h"
 #import "NSString-NTIJSON.h"
-#import "NTIAbstractDownloader.h"
 
 @interface NTIBufferedDownloader(JsonPlistTest)
 +(BOOL)isPlistData: (NSData *)data;
