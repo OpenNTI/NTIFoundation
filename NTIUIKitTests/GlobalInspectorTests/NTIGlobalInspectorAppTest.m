@@ -11,9 +11,7 @@
 #import "NTIGlobalInspectorMainPane.h"
 #import "NTIGlobalInspector.h"
 #import "NTIInspectorSliceObjectPair.h"
-#import "NTIAppNavigationController.h"
 #import "NTIFoundation/NTIFoundation.h"
-#import "NTIAppDelegate.h"
 
 @interface TestInspectorAppLayer : UIViewController<NTIAppNavigationApplicationLayer>
 @property(nonatomic, strong) NSArray* objects;
