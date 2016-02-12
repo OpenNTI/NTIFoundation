@@ -41,3 +41,4 @@ FOUNDATION_EXPORT const unsigned char NTIUIKitVersionString[];
 #import <NTIUIKit/NTIInspectableObjectProtocol.h>
 #import <NTIUIKit/NTIGlobalInspectorMainPane.h>
 #import <NTIUIKit/NTIGlobalInspectorSlice.h>
+#import <NTIUIKit/NTISingleSliceInspectorPane.h>
