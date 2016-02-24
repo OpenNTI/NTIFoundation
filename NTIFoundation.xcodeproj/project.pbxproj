@@ -615,24 +615,6 @@
 		400D6E331832A9C500F07DBA /* NTIISO8601DurationFormatterTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIISO8601DurationFormatterTest.m; sourceTree = "<group>"; };
 		400D6E351832C42500F07DBA /* NTIDuration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIDuration.h; sourceTree = "<group>"; };
 		400D6E361832C42500F07DBA /* NTIDuration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIDuration.m; sourceTree = "<group>"; };
-		40160CF31C6270980019D39A /* NTI-Touch-Tests-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "NTI-Touch-Tests-Release.xcconfig"; path = "../../../Configurations/NTI-Touch-Tests-Release.xcconfig"; sourceTree = "<group>"; };
-		40160CF41C6270980019D39A /* NTI-Touch-Tests-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "NTI-Touch-Tests-Debug.xcconfig"; path = "../../../Configurations/NTI-Touch-Tests-Debug.xcconfig"; sourceTree = "<group>"; };
-		40160CF51C6270980019D39A /* NTI-Touch-Tests-Common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "NTI-Touch-Tests-Common.xcconfig"; path = "../../../Configurations/NTI-Touch-Tests-Common.xcconfig"; sourceTree = "<group>"; };
-		40160CF61C6270980019D39A /* NTI-Global-Adhoc.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "NTI-Global-Adhoc.xcconfig"; path = "../../../Configurations/NTI-Global-Adhoc.xcconfig"; sourceTree = "<group>"; };
-		40160CF71C6270980019D39A /* NTI-Global-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "NTI-Global-Debug.xcconfig"; path = "../../../Configurations/NTI-Global-Debug.xcconfig"; sourceTree = "<group>"; };
-		40160CF81C6270980019D39A /* NTI-Global-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "NTI-Global-Release.xcconfig"; path = "../../../Configurations/NTI-Global-Release.xcconfig"; sourceTree = "<group>"; };
-		40160CF91C6270980019D39A /* NTI-Target-Touch-Common.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "NTI-Target-Touch-Common.xcconfig"; path = "../../../Configurations/NTI-Target-Touch-Common.xcconfig"; sourceTree = "<group>"; };
-		40160CFA1C6270980019D39A /* NTI-Touch-Application-Adhoc.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "NTI-Touch-Application-Adhoc.xcconfig"; path = "../../../Configurations/NTI-Touch-Application-Adhoc.xcconfig"; sourceTree = "<group>"; };
-		40160CFB1C6270980019D39A /* NTI-Touch-Bundle-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "NTI-Touch-Bundle-Debug.xcconfig"; path = "../../../Configurations/NTI-Touch-Bundle-Debug.xcconfig"; sourceTree = "<group>"; };
-		40160CFC1C6270980019D39A /* NTI-Touch-Bundle-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "NTI-Touch-Bundle-Release.xcconfig"; path = "../../../Configurations/NTI-Touch-Bundle-Release.xcconfig"; sourceTree = "<group>"; };
-		40160CFD1C6270980019D39A /* NTI-Touch-Framework-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "NTI-Touch-Framework-Debug.xcconfig"; path = "../../../Configurations/NTI-Touch-Framework-Debug.xcconfig"; sourceTree = "<group>"; };
-		40160CFE1C6270980019D39A /* NTI-Touch-Framework-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "NTI-Touch-Framework-Release.xcconfig"; path = "../../../Configurations/NTI-Touch-Framework-Release.xcconfig"; sourceTree = "<group>"; };
-		40160CFF1C6270980019D39A /* NTI-Touch-Library-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "NTI-Touch-Library-Debug.xcconfig"; path = "../../../Configurations/NTI-Touch-Library-Debug.xcconfig"; sourceTree = "<group>"; };
-		40160D001C6270980019D39A /* NTI-Touch-Application-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "NTI-Touch-Application-Debug.xcconfig"; path = "../../../Configurations/NTI-Touch-Application-Debug.xcconfig"; sourceTree = "<group>"; };
-		40160D011C6270980019D39A /* NTI-Touch-Application-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "NTI-Touch-Application-Release.xcconfig"; path = "../../../Configurations/NTI-Touch-Application-Release.xcconfig"; sourceTree = "<group>"; };
-		40160D021C6270980019D39A /* NTI-Touch-Library-Adhoc.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "NTI-Touch-Library-Adhoc.xcconfig"; path = "../../../Configurations/NTI-Touch-Library-Adhoc.xcconfig"; sourceTree = "<group>"; };
-		40160D031C6270980019D39A /* NTI-Touch-Library-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "NTI-Touch-Library-Release.xcconfig"; path = "../../../Configurations/NTI-Touch-Library-Release.xcconfig"; sourceTree = "<group>"; };
-		40160D041C6270980019D39A /* NTI-Global-Debug-User.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "NTI-Global-Debug-User.xcconfig"; path = "../../../Configurations/NTI-Global-Debug-User.xcconfig"; sourceTree = "<group>"; };
 		4029274C1498653200E4720A /* NSArray-NTIExtenstionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray-NTIExtenstionsTest.h"; sourceTree = "<group>"; };
 		4029274D1498653200E4720A /* NSArray-NTIExtenstionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray-NTIExtenstionsTest.m"; sourceTree = "<group>"; };
 		4029275114986A9800E4720A /* NSMutableArray-NTIExtensionsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray-NTIExtensionsTest.h"; sourceTree = "<group>"; };
@@ -643,6 +625,27 @@
 		403C31791512A5DD00C53D22 /* NSData-NTIJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData-NTIJSON.m"; sourceTree = "<group>"; };
 		403C8CE017EA6CE9000FC290 /* NSNotification-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotification-NTIExtensions.h"; sourceTree = "<group>"; };
 		403C8CE117EA6CE9000FC290 /* NSNotification-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNotification-NTIExtensions.m"; sourceTree = "<group>"; };
+		403F6C941C7D241B006FD0AD /* NTI-TV-Framework-Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-TV-Framework-Common.xcconfig"; sourceTree = "<group>"; };
+		403F6C951C7D241B006FD0AD /* NTI-TV-Framework-Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-TV-Framework-Debug.xcconfig"; sourceTree = "<group>"; };
+		403F6C961C7D241B006FD0AD /* NTI-TV-Framework-Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-TV-Framework-Release.xcconfig"; sourceTree = "<group>"; };
+		403F6C971C7D241B006FD0AD /* NTI-Global-Adhoc.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Global-Adhoc.xcconfig"; sourceTree = "<group>"; };
+		403F6C981C7D241B006FD0AD /* NTI-Touch-Application-Adhoc.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Touch-Application-Adhoc.xcconfig"; sourceTree = "<group>"; };
+		403F6C991C7D241B006FD0AD /* NTI-Touch-Bundle-Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Touch-Bundle-Debug.xcconfig"; sourceTree = "<group>"; };
+		403F6C9A1C7D241B006FD0AD /* NTI-Touch-Bundle-Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Touch-Bundle-Release.xcconfig"; sourceTree = "<group>"; };
+		403F6C9B1C7D241B006FD0AD /* NTI-Touch-Framework-Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Touch-Framework-Debug.xcconfig"; sourceTree = "<group>"; };
+		403F6C9C1C7D241B006FD0AD /* NTI-Touch-Framework-Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Touch-Framework-Release.xcconfig"; sourceTree = "<group>"; };
+		403F6C9D1C7D241B006FD0AD /* NTI-Touch-Library-Adhoc.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Touch-Library-Adhoc.xcconfig"; sourceTree = "<group>"; };
+		403F6C9E1C7D241B006FD0AD /* NTI-Global-Debug-User.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Global-Debug-User.xcconfig"; sourceTree = "<group>"; };
+		403F6C9F1C7D241B006FD0AD /* NTI-Target-Touch-Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Target-Touch-Common.xcconfig"; sourceTree = "<group>"; };
+		403F6CA01C7D241B006FD0AD /* NTI-Touch-Application-Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Touch-Application-Debug.xcconfig"; sourceTree = "<group>"; };
+		403F6CA11C7D241B006FD0AD /* NTI-Touch-Application-Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Touch-Application-Release.xcconfig"; sourceTree = "<group>"; };
+		403F6CA21C7D241B006FD0AD /* NTI-Touch-Library-Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Touch-Library-Debug.xcconfig"; sourceTree = "<group>"; };
+		403F6CA31C7D241B006FD0AD /* NTI-Touch-Library-Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Touch-Library-Release.xcconfig"; sourceTree = "<group>"; };
+		403F6CA41C7D241B006FD0AD /* NTI-Global-Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Global-Debug.xcconfig"; sourceTree = "<group>"; };
+		403F6CA51C7D241B006FD0AD /* NTI-Global-Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Global-Release.xcconfig"; sourceTree = "<group>"; };
+		403F6CA61C7D241B006FD0AD /* NTI-Touch-Tests-Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Touch-Tests-Debug.xcconfig"; sourceTree = "<group>"; };
+		403F6CA71C7D241B006FD0AD /* NTI-Touch-Tests-Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Touch-Tests-Release.xcconfig"; sourceTree = "<group>"; };
+		403F6CA81C7D241B006FD0AD /* NTI-Touch-Tests-Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "NTI-Touch-Tests-Common.xcconfig"; sourceTree = "<group>"; };
 		404A679E156D906900A81B6A /* UIDevice-NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice-NTIExtensions.h"; sourceTree = "<group>"; };
 		404A679F156D906900A81B6A /* UIDevice-NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice-NTIExtensions.m"; sourceTree = "<group>"; };
 		4053FF971BDED6830083A477 /* NTIFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NTIFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -762,9 +765,6 @@
 		40F39C8614D852FE0089DCF6 /* NSString-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString-NTIExtensionsTest.m"; sourceTree = "<group>"; };
 		40F72DA6156EE1C40050C93E /* NTIMathEquationBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathEquationBuilder.h; sourceTree = "<group>"; };
 		40F72DA7156EE1C40050C93E /* NTIMathEquationBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathEquationBuilder.m; sourceTree = "<group>"; };
-		40F8188F1C7CF1EB00EBE130 /* NTI-TV-Framework-Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "NTI-TV-Framework-Common.xcconfig"; path = "../../Configurations/NTI-TV-Framework-Common.xcconfig"; sourceTree = "<group>"; };
-		40F818901C7CF1EB00EBE130 /* NTI-TV-Framework-Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "NTI-TV-Framework-Debug.xcconfig"; path = "/Users/cutz/Documents/NextThought/iPad/NTIWorkspace/Configurations/../.gdm/nti.ios.xcconfigs/NTI-TV-Framework-Debug.xcconfig"; sourceTree = "<absolute>"; };
-		40F818911C7CF1EB00EBE130 /* NTI-TV-Framework-Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = "NTI-TV-Framework-Release.xcconfig"; path = "../../Configurations/NTI-TV-Framework-Release.xcconfig"; sourceTree = "<group>"; };
 		40F818B31C7D07A100EBE130 /* NTISocketIO.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NTISocketIO.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		40F818C11C7D0C7D00EBE130 /* NTIFoundation-tvos-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "NTIFoundation-tvos-Info.plist"; sourceTree = "<group>"; };
 		40F818C21C7D0D5900EBE130 /* Info-tvos.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-tvos.plist"; sourceTree = "<group>"; };
@@ -934,6 +934,35 @@
 			path = FormattersTests;
 			sourceTree = "<group>";
 		};
+		403F6CA91C7D241B006FD0AD /* Configurations */ = {
+			isa = PBXGroup;
+			children = (
+				403F6C941C7D241B006FD0AD /* NTI-TV-Framework-Common.xcconfig */,
+				403F6C951C7D241B006FD0AD /* NTI-TV-Framework-Debug.xcconfig */,
+				403F6C961C7D241B006FD0AD /* NTI-TV-Framework-Release.xcconfig */,
+				403F6C971C7D241B006FD0AD /* NTI-Global-Adhoc.xcconfig */,
+				403F6C981C7D241B006FD0AD /* NTI-Touch-Application-Adhoc.xcconfig */,
+				403F6C991C7D241B006FD0AD /* NTI-Touch-Bundle-Debug.xcconfig */,
+				403F6C9A1C7D241B006FD0AD /* NTI-Touch-Bundle-Release.xcconfig */,
+				403F6C9B1C7D241B006FD0AD /* NTI-Touch-Framework-Debug.xcconfig */,
+				403F6C9C1C7D241B006FD0AD /* NTI-Touch-Framework-Release.xcconfig */,
+				403F6C9D1C7D241B006FD0AD /* NTI-Touch-Library-Adhoc.xcconfig */,
+				403F6C9E1C7D241B006FD0AD /* NTI-Global-Debug-User.xcconfig */,
+				403F6C9F1C7D241B006FD0AD /* NTI-Target-Touch-Common.xcconfig */,
+				403F6CA01C7D241B006FD0AD /* NTI-Touch-Application-Debug.xcconfig */,
+				403F6CA11C7D241B006FD0AD /* NTI-Touch-Application-Release.xcconfig */,
+				403F6CA21C7D241B006FD0AD /* NTI-Touch-Library-Debug.xcconfig */,
+				403F6CA31C7D241B006FD0AD /* NTI-Touch-Library-Release.xcconfig */,
+				403F6CA41C7D241B006FD0AD /* NTI-Global-Debug.xcconfig */,
+				403F6CA51C7D241B006FD0AD /* NTI-Global-Release.xcconfig */,
+				403F6CA61C7D241B006FD0AD /* NTI-Touch-Tests-Debug.xcconfig */,
+				403F6CA71C7D241B006FD0AD /* NTI-Touch-Tests-Release.xcconfig */,
+				403F6CA81C7D241B006FD0AD /* NTI-Touch-Tests-Common.xcconfig */,
+			);
+			name = Configurations;
+			path = ../../Configurations;
+			sourceTree = "<group>";
+		};
 		405F45C21A9ED33900D6B26C /* Omni */ = {
 			isa = PBXGroup;
 			children = (
@@ -1015,35 +1044,6 @@
 				4004DD221B8CEF7F0053CA5B /* OmniUI.framework */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		407E670B17A05BF300178177 /* Configurations */ = {
-			isa = PBXGroup;
-			children = (
-				40160CF31C6270980019D39A /* NTI-Touch-Tests-Release.xcconfig */,
-				40160CF41C6270980019D39A /* NTI-Touch-Tests-Debug.xcconfig */,
-				40160CF51C6270980019D39A /* NTI-Touch-Tests-Common.xcconfig */,
-				40160CF61C6270980019D39A /* NTI-Global-Adhoc.xcconfig */,
-				40160CF71C6270980019D39A /* NTI-Global-Debug.xcconfig */,
-				40160CF81C6270980019D39A /* NTI-Global-Release.xcconfig */,
-				40160CF91C6270980019D39A /* NTI-Target-Touch-Common.xcconfig */,
-				40160CFA1C6270980019D39A /* NTI-Touch-Application-Adhoc.xcconfig */,
-				40160CFB1C6270980019D39A /* NTI-Touch-Bundle-Debug.xcconfig */,
-				40160CFC1C6270980019D39A /* NTI-Touch-Bundle-Release.xcconfig */,
-				40160CFD1C6270980019D39A /* NTI-Touch-Framework-Debug.xcconfig */,
-				40160CFE1C6270980019D39A /* NTI-Touch-Framework-Release.xcconfig */,
-				40160CFF1C6270980019D39A /* NTI-Touch-Library-Debug.xcconfig */,
-				40160D001C6270980019D39A /* NTI-Touch-Application-Debug.xcconfig */,
-				40160D011C6270980019D39A /* NTI-Touch-Application-Release.xcconfig */,
-				40160D021C6270980019D39A /* NTI-Touch-Library-Adhoc.xcconfig */,
-				40160D031C6270980019D39A /* NTI-Touch-Library-Release.xcconfig */,
-				40160D041C6270980019D39A /* NTI-Global-Debug-User.xcconfig */,
-				40F8188F1C7CF1EB00EBE130 /* NTI-TV-Framework-Common.xcconfig */,
-				40F818901C7CF1EB00EBE130 /* NTI-TV-Framework-Debug.xcconfig */,
-				40F818911C7CF1EB00EBE130 /* NTI-TV-Framework-Release.xcconfig */,
-			);
-			name = Configurations;
-			path = ../NTIWorkspace/Configurations;
 			sourceTree = "<group>";
 		};
 		40A745B414DADDD90093F0D4 /* FoundationExtensionsTests */ = {
@@ -1342,7 +1342,7 @@
 		72CBA95A1385CF1F00E3D28D = {
 			isa = PBXGroup;
 			children = (
-				407E670B17A05BF300178177 /* Configurations */,
+				403F6CA91C7D241B006FD0AD /* Configurations */,
 				72CBA96F1385CF1F00E3D28D /* NTIFoundation */,
 				72D8185D13955D8C00473994 /* UnitTests */,
 				40C997AA1C6CE84D00D450CD /* NTISocketIO */,
@@ -2391,7 +2391,7 @@
 /* Begin XCBuildConfiguration section */
 		40012B5F189836F900F63EA7 /* Adhoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40160CF61C6270980019D39A /* NTI-Global-Adhoc.xcconfig */;
+			baseConfigurationReference = 403F6C971C7D241B006FD0AD /* NTI-Global-Adhoc.xcconfig */;
 			buildSettings = {
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
@@ -2430,7 +2430,7 @@
 		};
 		4053FFA91BDED6850083A477 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40160CFD1C6270980019D39A /* NTI-Touch-Framework-Debug.xcconfig */;
+			baseConfigurationReference = 403F6C9B1C7D241B006FD0AD /* NTI-Touch-Framework-Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -2476,7 +2476,7 @@
 		};
 		4053FFAA1BDED6850083A477 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40160CFE1C6270980019D39A /* NTI-Touch-Framework-Release.xcconfig */;
+			baseConfigurationReference = 403F6C9C1C7D241B006FD0AD /* NTI-Touch-Framework-Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -2517,7 +2517,7 @@
 		};
 		4053FFAB1BDED6850083A477 /* Adhoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40160CFE1C6270980019D39A /* NTI-Touch-Framework-Release.xcconfig */;
+			baseConfigurationReference = 403F6C9C1C7D241B006FD0AD /* NTI-Touch-Framework-Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -2558,7 +2558,7 @@
 		};
 		4053FFAD1BDED6850083A477 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40160CF41C6270980019D39A /* NTI-Touch-Tests-Debug.xcconfig */;
+			baseConfigurationReference = 403F6CA61C7D241B006FD0AD /* NTI-Touch-Tests-Debug.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -2592,7 +2592,7 @@
 		};
 		4053FFAE1BDED6850083A477 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40160CF31C6270980019D39A /* NTI-Touch-Tests-Release.xcconfig */;
+			baseConfigurationReference = 403F6CA71C7D241B006FD0AD /* NTI-Touch-Tests-Release.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -2621,7 +2621,7 @@
 		};
 		4053FFAF1BDED6850083A477 /* Adhoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40160CF31C6270980019D39A /* NTI-Touch-Tests-Release.xcconfig */;
+			baseConfigurationReference = 403F6CA71C7D241B006FD0AD /* NTI-Touch-Tests-Release.xcconfig */;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -2650,7 +2650,7 @@
 		};
 		40C997BB1C6CE84D00D450CD /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40160CFD1C6270980019D39A /* NTI-Touch-Framework-Debug.xcconfig */;
+			baseConfigurationReference = 403F6C9B1C7D241B006FD0AD /* NTI-Touch-Framework-Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -2695,7 +2695,7 @@
 		};
 		40C997BC1C6CE84D00D450CD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40160CFE1C6270980019D39A /* NTI-Touch-Framework-Release.xcconfig */;
+			baseConfigurationReference = 403F6C9C1C7D241B006FD0AD /* NTI-Touch-Framework-Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -2735,7 +2735,7 @@
 		};
 		40C997BD1C6CE84D00D450CD /* Adhoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40160CFE1C6270980019D39A /* NTI-Touch-Framework-Release.xcconfig */;
+			baseConfigurationReference = 403F6C9C1C7D241B006FD0AD /* NTI-Touch-Framework-Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -2775,7 +2775,7 @@
 		};
 		40C997BF1C6CE84D00D450CD /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40160CF41C6270980019D39A /* NTI-Touch-Tests-Debug.xcconfig */;
+			baseConfigurationReference = 403F6CA61C7D241B006FD0AD /* NTI-Touch-Tests-Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -2811,7 +2811,7 @@
 		};
 		40C997C01C6CE84D00D450CD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40160CF31C6270980019D39A /* NTI-Touch-Tests-Release.xcconfig */;
+			baseConfigurationReference = 403F6CA71C7D241B006FD0AD /* NTI-Touch-Tests-Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -2842,7 +2842,7 @@
 		};
 		40C997C11C6CE84D00D450CD /* Adhoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40160CF31C6270980019D39A /* NTI-Touch-Tests-Release.xcconfig */;
+			baseConfigurationReference = 403F6CA71C7D241B006FD0AD /* NTI-Touch-Tests-Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -2873,7 +2873,7 @@
 		};
 		40C998301C6CEF6000D450CD /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40160CFD1C6270980019D39A /* NTI-Touch-Framework-Debug.xcconfig */;
+			baseConfigurationReference = 403F6C9B1C7D241B006FD0AD /* NTI-Touch-Framework-Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -2918,7 +2918,7 @@
 		};
 		40C998311C6CEF6000D450CD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40160CFE1C6270980019D39A /* NTI-Touch-Framework-Release.xcconfig */;
+			baseConfigurationReference = 403F6C9C1C7D241B006FD0AD /* NTI-Touch-Framework-Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -2958,7 +2958,7 @@
 		};
 		40C998321C6CEF6000D450CD /* Adhoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40160CFE1C6270980019D39A /* NTI-Touch-Framework-Release.xcconfig */;
+			baseConfigurationReference = 403F6C9C1C7D241B006FD0AD /* NTI-Touch-Framework-Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -2998,7 +2998,7 @@
 		};
 		40C998341C6CEF6000D450CD /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40160CF41C6270980019D39A /* NTI-Touch-Tests-Debug.xcconfig */;
+			baseConfigurationReference = 403F6C951C7D241B006FD0AD /* NTI-TV-Framework-Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -3034,7 +3034,7 @@
 		};
 		40C998351C6CEF6000D450CD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40160CF31C6270980019D39A /* NTI-Touch-Tests-Release.xcconfig */;
+			baseConfigurationReference = 403F6CA71C7D241B006FD0AD /* NTI-Touch-Tests-Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -3065,7 +3065,7 @@
 		};
 		40C998361C6CEF6000D450CD /* Adhoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40160CF31C6270980019D39A /* NTI-Touch-Tests-Release.xcconfig */;
+			baseConfigurationReference = 403F6CA71C7D241B006FD0AD /* NTI-Touch-Tests-Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -3096,7 +3096,7 @@
 		};
 		40EC15CA1C7CE51500D12B1A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40F818901C7CF1EB00EBE130 /* NTI-TV-Framework-Debug.xcconfig */;
+			baseConfigurationReference = 403F6C951C7D241B006FD0AD /* NTI-TV-Framework-Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -3142,7 +3142,7 @@
 		};
 		40EC15CB1C7CE51500D12B1A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40F818911C7CF1EB00EBE130 /* NTI-TV-Framework-Release.xcconfig */;
+			baseConfigurationReference = 403F6C961C7D241B006FD0AD /* NTI-TV-Framework-Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -3183,7 +3183,7 @@
 		};
 		40EC15CC1C7CE51500D12B1A /* Adhoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40F818911C7CF1EB00EBE130 /* NTI-TV-Framework-Release.xcconfig */;
+			baseConfigurationReference = 403F6C961C7D241B006FD0AD /* NTI-TV-Framework-Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -3224,7 +3224,7 @@
 		};
 		40F818B01C7D07A100EBE130 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40F818901C7CF1EB00EBE130 /* NTI-TV-Framework-Debug.xcconfig */;
+			baseConfigurationReference = 403F6C951C7D241B006FD0AD /* NTI-TV-Framework-Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -3268,7 +3268,7 @@
 		};
 		40F818B11C7D07A100EBE130 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40F818911C7CF1EB00EBE130 /* NTI-TV-Framework-Release.xcconfig */;
+			baseConfigurationReference = 403F6C961C7D241B006FD0AD /* NTI-TV-Framework-Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -3307,7 +3307,7 @@
 		};
 		40F818B21C7D07A100EBE130 /* Adhoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40F818911C7CF1EB00EBE130 /* NTI-TV-Framework-Release.xcconfig */;
+			baseConfigurationReference = 403F6C961C7D241B006FD0AD /* NTI-TV-Framework-Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -3360,7 +3360,7 @@
 		};
 		72CBA97E1385CF1F00E3D28D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40160CF71C6270980019D39A /* NTI-Global-Debug.xcconfig */;
+			baseConfigurationReference = 403F6CA41C7D241B006FD0AD /* NTI-Global-Debug.xcconfig */;
 			buildSettings = {
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
@@ -3395,7 +3395,7 @@
 		};
 		72CBA97F1385CF1F00E3D28D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 40160CF81C6270980019D39A /* NTI-Global-Release.xcconfig */;
+			baseConfigurationReference = 403F6CA51C7D241B006FD0AD /* NTI-Global-Release.xcconfig */;
 			buildSettings = {
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
