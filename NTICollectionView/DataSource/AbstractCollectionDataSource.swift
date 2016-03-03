@@ -415,6 +415,12 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 		
 		notifyWillLoadContent()
 		
+		let loadingProgress = startNewLoadingProgress()
+		
+		beginLoadingContent(with: loadingProgress)
+	}
+	
+	public func startNewLoadingProgress() -> LoadingProgress {
 		let loadingProgress = BasicLoadingProgress { (newState, error, update) in
 			guard let newState = newState else {
 				return
@@ -428,7 +434,7 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 		self.loadingProgress?.ignore()
 		self.loadingProgress = loadingProgress
 		
-		beginLoadingContent(with: loadingProgress)
+		return loadingProgress
 	}
 	
 	public func beginLoadingContent(with progress: LoadingProgress){
@@ -471,6 +477,10 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 		})
 		
 		notifyContentLoaded(with: error)
+	}
+	
+	public func canEnter(state: LoadState) -> Bool {
+		return stateMachine.canTransition(to: state)
 	}
 	
 	public func stateWillChange(to newState: LoadState) {
