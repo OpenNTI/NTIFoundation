@@ -10,6 +10,8 @@ import UIKit
 
 public protocol PagingCollectionDataSourceProtocol: CollectionDataSource, PageableContentLoading {
 	
+	var loadingDelegate: PageableContentLoading? { get set }
+	
 	func loadNextContent()
 	
 	func loadPreviousContent()
