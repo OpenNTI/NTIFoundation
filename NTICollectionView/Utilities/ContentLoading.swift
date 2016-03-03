@@ -30,6 +30,16 @@ public protocol ContentLoading: NSObjectProtocol {
 	
 }
 
+public protocol PageableContentLoading: ContentLoading {
+	
+	/// Used to begin loading the next page of content.
+	func loadNextContent(with progress: LoadingProgress)
+	
+	/// Used to begin loading the previous page of content.
+	func loadPreviousContent(with progress: LoadingProgress)
+	
+}
+
 /// A block that performs updates on the object that is loading. The object parameter is the receiver of the `-loadContentWithProgress:` message.
 public typealias LoadingUpdateBlock = AnyObject -> Void
 
