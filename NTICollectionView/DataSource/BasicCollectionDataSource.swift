@@ -13,8 +13,6 @@ A `CollectionDataSource` which manages a single section of items backed by an ar
 */
 public class BasicCollectionDataSource: AbstractCollectionDataSource {
 	
-	private var _items: [Item] = []
-	
 	public var items: [Item] {
 		get {
 			return _items
@@ -23,6 +21,7 @@ public class BasicCollectionDataSource: AbstractCollectionDataSource {
 			setItems(newValue, animated: false)
 		}
 	}
+	private var _items: [Item] = []
 	
 	public func setItems(items: [Item], animated: Bool) {
 		guard !(items as NSArray).isEqualToArray(_items) else {

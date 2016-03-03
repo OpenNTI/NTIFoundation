@@ -240,8 +240,8 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 		return _selectedDataSource.collectionView(collectionView, canEditItemAt: indexPath)
 	}
 	
-	public override func collectionView(collectionView: UICollectionView, canMoveItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-		return _selectedDataSource.collectionView?(collectionView, canMoveItemAtIndexPath: indexPath) ?? false
+	public func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath) -> Bool {
+		return _selectedDataSource.collectionView(collectionView, canMoveItemAt: indexPath)
 	}
 	
 	// MARK: - ContentLoading
@@ -289,8 +289,8 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 		return _selectedDataSource.collectionView(collectionView, canMoveItemAt: indexPath, to: destinationIndexPath)
 	}
 	
-	public func collectionView(collectionView: UICollectionView, moveItemAtIndexPath indexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
-		_selectedDataSource.collectionView?(collectionView, moveItemAtIndexPath: indexPath, toIndexPath: destinationIndexPath)
+	public func collectionView(collectionView: UICollectionView, moveItemAt sourceIndexPath: NSIndexPath, to destinationIndexPath: NSIndexPath) {
+		_selectedDataSource.collectionView(collectionView, moveItemAt: sourceIndexPath, to: destinationIndexPath)
 	}
 	
 	// MARK: - CollectionDataSourceDelegate

@@ -363,6 +363,8 @@
 		4A68ACFE1C88B0CE00849185 /* PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9D1C88B0CE00849185 /* PlaceholderView.swift */; };
 		4A68ACFF1C88B0CE00849185 /* SegmentedControlProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9E1C88B0CE00849185 /* SegmentedControlProtocol.swift */; };
 		4A68AD001C88B0CE00849185 /* SegmentedControlProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9E1C88B0CE00849185 /* SegmentedControlProtocol.swift */; };
+		4A68AD431C88BE2000849185 /* UICollectionView+SupplementaryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AD421C88BE2000849185 /* UICollectionView+SupplementaryViews.swift */; };
+		4A68AD441C88BE2000849185 /* UICollectionView+SupplementaryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AD421C88BE2000849185 /* UICollectionView+SupplementaryViews.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -866,6 +868,7 @@
 		4A68AC9C1C88B0CE00849185 /* CollectionPlaceholderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionPlaceholderView.swift; sourceTree = "<group>"; };
 		4A68AC9D1C88B0CE00849185 /* PlaceholderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceholderView.swift; sourceTree = "<group>"; };
 		4A68AC9E1C88B0CE00849185 /* SegmentedControlProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentedControlProtocol.swift; sourceTree = "<group>"; };
+		4A68AD421C88BE2000849185 /* UICollectionView+SupplementaryViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionView+SupplementaryViews.swift"; sourceTree = "<group>"; };
 		4A72F45F1925AEF1004792EF /* UIColor+NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+NTIExtensions.h"; sourceTree = "<group>"; };
 		4A72F4601925AEF1004792EF /* UIColor+NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NTIExtensions.m"; sourceTree = "<group>"; };
 		4A72F48619268DA8004792EF /* UIColor+NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NTIExtensionsTest.m"; sourceTree = "<group>"; };
@@ -1461,6 +1464,7 @@
 				4A68AC751C88B0CD00849185 /* CGGeometry-Extensions.swift */,
 				4A68AC771C88B0CD00849185 /* NSIndexPath-Extensions.swift */,
 				4A68AC781C88B0CD00849185 /* UICollectionViewLayoutInvalidationContext-Extensions.swift */,
+				4A68AD421C88BE2000849185 /* UICollectionView+SupplementaryViews.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2630,6 +2634,7 @@
 				4A68ACFD1C88B0CE00849185 /* PlaceholderView.swift in Sources */,
 				4A68ACAD1C88B0CE00849185 /* ComposedCollectionDataSourceMetricsHelper.swift in Sources */,
 				4A68ACE71C88B0CE00849185 /* LayoutMetrics.swift in Sources */,
+				4A68AD431C88BE2000849185 /* UICollectionView+SupplementaryViews.swift in Sources */,
 				4A68ACE91C88B0CE00849185 /* LayoutPlaceholder.swift in Sources */,
 				4A68ACAF1C88B0CE00849185 /* DataSourceMapping.swift in Sources */,
 				4A68ACC91C88B0CE00849185 /* CollectionViewLayout.swift in Sources */,
@@ -2662,6 +2667,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A68ACF41C88B0CE00849185 /* Debug.swift in Sources */,
+				4A68AD441C88BE2000849185 /* UICollectionView+SupplementaryViews.swift in Sources */,
 				4A68ACA01C88B0CE00849185 /* AbstractCollectionDataSource.swift in Sources */,
 				4A68ACA21C88B0CE00849185 /* BasicCollectionDataSource.swift in Sources */,
 				4A68ACF61C88B0CE00849185 /* LoadableContentStateMachine.swift in Sources */,
@@ -3768,6 +3774,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = NTICollectionView/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -3806,6 +3813,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = NTICollectionView/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = NextThought.NTICollectionView;
@@ -3843,6 +3851,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = NTICollectionView/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = NextThought.NTICollectionView;

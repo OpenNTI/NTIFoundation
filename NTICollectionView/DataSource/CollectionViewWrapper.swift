@@ -267,17 +267,20 @@ public class WrapperCollectionView: UICollectionView, CollectionViewWrapper {
 		collectionView.moveItemAtIndexPath(globalIndexPath, toIndexPath: globalNewIndexPath)
 	}
 	
+	@available(iOS 9.0, *)
 	public override func supplementaryViewForElementKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
 		let globalIndexPath = globalIndexPathForLocal(indexPath)
 		return collectionView.supplementaryViewForElementKind(elementKind, atIndexPath: globalIndexPath)
 	}
 	
+	@available(iOS 9.0, *)
 	public override func indexPathsForVisibleSupplementaryElementsOfKind(elementKind: String) -> [NSIndexPath] {
 		let globalIndexPaths = collectionView.indexPathsForVisibleSupplementaryElementsOfKind(elementKind)
 		let localIndexPaths = localIndexPathsForGlobal(globalIndexPaths)
 		return localIndexPaths
 	}
 	
+	@available(iOS 9.0, *)
 	public override func beginInteractiveMovementForItemAtIndexPath(indexPath: NSIndexPath) -> Bool {
 		let globalIndexPath = globalIndexPathForLocal(indexPath)
 		return collectionView.beginInteractiveMovementForItemAtIndexPath(globalIndexPath)

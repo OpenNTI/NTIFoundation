@@ -8,16 +8,10 @@
 
 import UIKit
 
-public protocol CollectionSupplementaryViewTracking: NSObjectProtocol {
-	
-	func collectionView(collectionView: UICollectionView, visisibleViewForSupplementaryElementOfKind kind: String, at indexPath: NSIndexPath) -> UICollectionReusableView?
-	
-}
-
 private var KVODataSourceContext = "DataSourceContext"
 private var UpdateNumber = 0
 
-public class CollectionViewController: UICollectionViewController, CollectionDataSourceDelegate, CollectionSupplementaryViewTracking {
+public class CollectionViewController: UICollectionViewController, CollectionDataSourceDelegate, CollectionViewSupplementaryViewTracking {
 	
 	private var updateCompletionHandler: dispatch_block_t?
 	private let reloadedSections = NSMutableIndexSet()
@@ -256,7 +250,7 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 	
 	// MARK: - CollectionSupplementaryViewTracking
 	
-	public func collectionView(collectionView: UICollectionView, visisibleViewForSupplementaryElementOfKind kind: String, at indexPath: NSIndexPath) -> UICollectionReusableView? {
+	public func collectionView(collectionView: UICollectionView, visibleViewForSupplementaryElementOfKind kind: String, at indexPath: NSIndexPath) -> UICollectionReusableView? {
 		if #available(iOS 9, *) {
 			return collectionView.supplementaryViewForElementKind(kind, atIndexPath: indexPath)
 		}
@@ -420,7 +414,7 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 			
 			for indexPath in indexPaths {
 				let localDataSource = dataSource.dataSourceForSectionAtIndex(indexPath.section)
-				guard let view = self.collectionView(collectionView, visisibleViewForSupplementaryElementOfKind: kind, at: indexPath) else {
+				guard let view = self.collectionView(collectionView, visibleViewForSupplementaryElementOfKind: kind, at: indexPath) else {
 					continue
 				}
 				let localIndexPath = dataSource.localIndexPathForGlobal(indexPath)

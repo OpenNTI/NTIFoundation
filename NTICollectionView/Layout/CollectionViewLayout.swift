@@ -107,10 +107,10 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	
 	public func canMoveItem(at indexPath: NSIndexPath) -> Bool {
 		guard let collectionView = self.collectionView,
-			dataSource = collectionView.dataSource else {
+			dataSource = collectionView.dataSource as? CollectionDataSource else {
 				return false
 		}
-		return dataSource.collectionView?(collectionView, canMoveItemAtIndexPath: indexPath) ?? false
+		return dataSource.collectionView(collectionView, canMoveItemAt: indexPath)
 	}
 	
 	// MARK: - UICollectionViewLayout

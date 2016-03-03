@@ -52,7 +52,9 @@ public protocol CollectionDataSource: UICollectionViewDataSource, DataSource, Co
 	
 	func collectionView(collectionView: UICollectionView, identifierForCellAt indexPath: NSIndexPath) -> String
 	func collectionView(collectionView: UICollectionView, canEditItemAt indexPath: NSIndexPath) -> Bool
+	func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath) -> Bool
 	func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath, to destinationIndexPath: NSIndexPath) -> Bool
+	func collectionView(collectionView: UICollectionView, moveItemAt sourceIndexPath: NSIndexPath, to destinationIndexPath: NSIndexPath)
 }
 
 public protocol ParentCollectionDataSource: CollectionDataSource, CollectionDataSourceDelegate {
@@ -105,6 +107,14 @@ extension CollectionDataSource {
 	
 	public func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath {
 		return globalIndexPath
+	}
+	
+	public func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath) -> Bool {
+		return false
+	}
+	
+	public func collectionView(collectionView: UICollectionView, moveItemAt sourceIndexPath: NSIndexPath, to destinationIndexPath: NSIndexPath) {
+		
 	}
 	
 }

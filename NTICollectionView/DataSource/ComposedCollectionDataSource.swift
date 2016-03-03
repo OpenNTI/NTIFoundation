@@ -256,12 +256,12 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 		return info.dataSource.collectionView(info.wrapper, cellForItemAtIndexPath: info.localIndexPath)
 	}
 	
-	public override func collectionView(collectionView: UICollectionView, canMoveItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+	public func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath) -> Bool {
 		let info = mappingInfoForGlobalIndexPath(indexPath, collectionView: collectionView)!
-		return info.dataSource.collectionView?(info.wrapper, canMoveItemAtIndexPath: info.localIndexPath) ?? false
+		return info.dataSource.collectionView(info.wrapper, canMoveItemAt: info.localIndexPath)
 	}
 	
-	public func collectionView(collectionView: UICollectionView, moveItemAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+	public func collectionView(collectionView: UICollectionView, moveItemAt sourceIndexPath: NSIndexPath, to destinationIndexPath: NSIndexPath) {
 		// Don't allow moves between data sources
 		let fromMapping = mappingForGlobalSection(sourceIndexPath.section)!
 		let toMapping = mappingForGlobalSection(destinationIndexPath.section)!
@@ -274,7 +274,7 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 		let localFromIndexPath = fromMapping.localIndexPathForGlobal(sourceIndexPath)
 		let localToIndexPath = fromMapping.localIndexPathForGlobal(destinationIndexPath)
 		
-		dataSource.collectionView?(wrapper, moveItemAtIndexPath: localFromIndexPath, toIndexPath: localToIndexPath)
+		dataSource.collectionView(wrapper, moveItemAt: localFromIndexPath, to: localToIndexPath)
 	}
 	
 	// MARK: - ContentLoading

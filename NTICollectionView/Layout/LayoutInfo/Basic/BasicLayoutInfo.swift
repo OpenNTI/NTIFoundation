@@ -258,7 +258,7 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 	}
 	
 	public func invalidateMetricsForElementOfKind(kind: String, at indexPath: NSIndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
-		guard let view = layout?.collectionView?.supplementaryViewForElementKind(kind, atIndexPath: indexPath) else {
+		guard let view = layout?.collectionView?._supplementaryViewOfKind(kind, at: indexPath) else {
 			return
 		}
 		
