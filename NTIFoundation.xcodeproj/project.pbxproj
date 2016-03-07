@@ -263,6 +263,8 @@
 		40F818C31C7D0D5900EBE130 /* Info-tvos.plist in Resources */ = {isa = PBXBuildFile; fileRef = 40F818C21C7D0D5900EBE130 /* Info-tvos.plist */; };
 		4A620CD11C88DDCF0084B0A2 /* PagingCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A620CD01C88DDCF0084B0A2 /* PagingCollectionDataSource.swift */; };
 		4A620CD21C88DDCF0084B0A2 /* PagingCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A620CD01C88DDCF0084B0A2 /* PagingCollectionDataSource.swift */; };
+		4A620D8C1C8E148D0084B0A2 /* CollectionDataSourceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A620D8B1C8E148D0084B0A2 /* CollectionDataSourceController.swift */; };
+		4A620D8D1C8E148D0084B0A2 /* CollectionDataSourceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A620D8B1C8E148D0084B0A2 /* CollectionDataSourceController.swift */; };
 		4A68ABF81C88ADC300849185 /* NTICollectionView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A68ABF71C88ADC300849185 /* NTICollectionView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4A68ABFF1C88ADC300849185 /* NTICollectionView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A68ABF51C88ADC300849185 /* NTICollectionView.framework */; };
 		4A68AC041C88ADC300849185 /* NTICollectionViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC031C88ADC300849185 /* NTICollectionViewTests.swift */; };
@@ -814,6 +816,7 @@
 		40F818C21C7D0D5900EBE130 /* Info-tvos.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-tvos.plist"; sourceTree = "<group>"; };
 		4A5454431B1630680033FA3A /* NSDate-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate-NTIExtensionsTest.m"; sourceTree = "<group>"; };
 		4A620CD01C88DDCF0084B0A2 /* PagingCollectionDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingCollectionDataSource.swift; sourceTree = "<group>"; };
+		4A620D8B1C8E148D0084B0A2 /* CollectionDataSourceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionDataSourceController.swift; sourceTree = "<group>"; };
 		4A68ABF51C88ADC300849185 /* NTICollectionView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NTICollectionView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A68ABF71C88ADC300849185 /* NTICollectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NTICollectionView.h; sourceTree = "<group>"; };
 		4A68ABF91C88ADC300849185 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1439,6 +1442,7 @@
 				4A68AC661C88B0CD00849185 /* BasicCollectionDataSource.swift */,
 				4A620CD01C88DDCF0084B0A2 /* PagingCollectionDataSource.swift */,
 				4A68AC671C88B0CD00849185 /* CollectionDataSource.swift */,
+				4A620D8B1C8E148D0084B0A2 /* CollectionDataSourceController.swift */,
 				4A68AC681C88B0CD00849185 /* CollectionDataSourceDelegate.swift */,
 				4A68AC691C88B0CD00849185 /* CollectionDataSourceMetricsHelper.swift */,
 				4A68AC6A1C88B0CD00849185 /* CollectionViewWrapper.swift */,
@@ -2631,6 +2635,7 @@
 				4A68ACE11C88B0CE00849185 /* LayoutRow.swift in Sources */,
 				4A68ACDD1C88B0CE00849185 /* GridSectionLayoutEngine.swift in Sources */,
 				4A68ACB91C88B0CE00849185 /* SegmentedCollectionDataSourceMetricsHelper.swift in Sources */,
+				4A620D8C1C8E148D0084B0A2 /* CollectionDataSourceController.swift in Sources */,
 				4A68ACF91C88B0CE00849185 /* CollectionViewController.swift in Sources */,
 				4A68ACC51C88B0CE00849185 /* CollectionLayoutEngine.swift in Sources */,
 				4A68ACF71C88B0CE00849185 /* StateMachine.swift in Sources */,
@@ -2708,6 +2713,7 @@
 				4A68ACBC1C88B0CE00849185 /* CGGeometry-Extensions.swift in Sources */,
 				4A68ACC41C88B0CE00849185 /* CollectionLayoutAnimator.swift in Sources */,
 				4A68AC601C88AEE300849185 /* DummyLayoutMeasure.swift in Sources */,
+				4A620D8D1C8E148D0084B0A2 /* CollectionDataSourceController.swift in Sources */,
 				4A68ACA81C88B0CE00849185 /* CollectionDataSourceMetricsHelper.swift in Sources */,
 				4A68ACC01C88B0CE00849185 /* NSIndexPath-Extensions.swift in Sources */,
 				4A68ACEC1C88B0CE00849185 /* LayoutSection.swift in Sources */,
