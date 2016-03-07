@@ -39,6 +39,8 @@ public protocol CollectionDataSource: UICollectionViewDataSource, DataSource, Co
 	func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath
 	func registerReusableViews(with collectionView: UICollectionView)
 	
+	var noContentPlaceholder: DataSourcePlaceholder? { get set }
+	var errorPlaceholder: DataSourcePlaceholder? { get set }
 	var placeholder: DataSourcePlaceholder? { get set }
 	func update(placeholderView: CollectionPlaceholderView?, forSectionAtIndex sectionIndex: Int)
 	
