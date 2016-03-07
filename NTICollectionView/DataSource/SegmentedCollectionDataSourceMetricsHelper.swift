@@ -23,10 +23,10 @@ public class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMet
 		return segmentedDataSource.selectedDataSource
 	}
 	
-	public override func numberOfSupplementaryItemsOfKind(kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChilDataSources: Bool) -> Int {
-		var numberOfItems = super.numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChilDataSources: false)
-		if shouldIncludeChilDataSources {
-			numberOfItems += selectedDataSource.numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChilDataSources: true)
+	public override func numberOfSupplementaryItemsOfKind(kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChildDataSources: Bool) -> Int {
+		var numberOfItems = super.numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChildDataSources: false)
+		if shouldIncludeChildDataSources {
+			numberOfItems += selectedDataSource.numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChildDataSources: true)
 		}
 		return numberOfItems
 	}
@@ -48,7 +48,7 @@ public class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMet
 			let sectionIndex = indexPath.layoutSection
 			let itemIndex = indexPath.itemIndex
 			
-			let numberOfItems = numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChilDataSources: false)
+			let numberOfItems = numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChildDataSources: false)
 			let elementIndex = itemIndex + numberOfItems
 			let newIndexPath = layoutIndexPathForItemIndex(elementIndex, sectionIndex: sectionIndex)
 			adjusted.append(newIndexPath)
@@ -60,7 +60,7 @@ public class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMet
 		let sectionIndex = indexPath.layoutSection
 		var itemIndex = indexPath.itemIndex
 		
-		let numberOfElements = numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChilDataSources: false)
+		let numberOfElements = numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChildDataSources: false)
 		if itemIndex < numberOfElements {
 			return super.findSupplementaryItemOfKind(kind, at: indexPath, using: block)
 		}

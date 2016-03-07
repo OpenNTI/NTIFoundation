@@ -78,8 +78,7 @@ public protocol CollectionDataSourceMetrics: NSObjectProtocol {
 	func metricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetrics?
 	func setMetrics(metrics: DataSourceSectionMetrics?, forSectionAtIndex sectionIndex: Int)
 	
-	// FIXME: Typo in "shouldIncludeChilDataSources"
-	func numberOfSupplementaryItemsOfKind(kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChilDataSources: Bool) -> Int
+	func numberOfSupplementaryItemsOfKind(kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChildDataSources: Bool) -> Int
 	
 	func indexPaths(`for` supplementaryItem: SupplementaryItem) -> [NSIndexPath]
 	

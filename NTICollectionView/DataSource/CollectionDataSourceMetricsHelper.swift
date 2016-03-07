@@ -66,7 +66,7 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		dataSource.setMetrics(metrics, forSectionAtIndex: sectionIndex)
 	}
 	
-	public func numberOfSupplementaryItemsOfKind(kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChilDataSources: Bool) -> Int {
+	public func numberOfSupplementaryItemsOfKind(kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChildDataSources: Bool) -> Int {
 		guard let items = supplementaryItemsByKind[kind] else {
 			return 0
 		}

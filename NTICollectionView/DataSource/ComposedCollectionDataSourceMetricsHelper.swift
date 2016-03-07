@@ -19,12 +19,12 @@ public class ComposedCollectionDataSourceMetricsHelper: CollectionDataSourceMetr
 		return dataSource as! ComposedCollectionDataSourceProtocol
 	}
 	
-	public override func numberOfSupplementaryItemsOfKind(kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChilDataSources: Bool) -> Int {
-		var numberOfElements = super.numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChilDataSources: false)
-		if shouldIncludeChilDataSources, let mapping = composedDataSource.mappingForGlobalSection(sectionIndex) {
+	public override func numberOfSupplementaryItemsOfKind(kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChildDataSources: Bool) -> Int {
+		var numberOfElements = super.numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChildDataSources: false)
+		if shouldIncludeChildDataSources, let mapping = composedDataSource.mappingForGlobalSection(sectionIndex) {
 			let localSection = mapping.localSectionForGlobalSection(sectionIndex)
 			let dataSource = mapping.dataSource
-			numberOfElements += dataSource.numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: localSection, shouldIncludeChilDataSources: true)
+			numberOfElements += dataSource.numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: localSection, shouldIncludeChildDataSources: true)
 		}
 		return numberOfElements
 	}
@@ -46,7 +46,7 @@ public class ComposedCollectionDataSourceMetricsHelper: CollectionDataSourceMetr
 				let sectionIndex = indexPath.layoutSection
 				let itemIndex = indexPath.itemIndex
 				
-				let numberOfElements = numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChilDataSources: false)
+				let numberOfElements = numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChildDataSources: false)
 				let elementIndex = itemIndex + numberOfElements
 				let newIndexPath = layoutIndexPathForItemIndex(elementIndex, sectionIndex: sectionIndex)
 				adjusted.append(newIndexPath)
@@ -64,7 +64,7 @@ public class ComposedCollectionDataSourceMetricsHelper: CollectionDataSourceMetr
 		let sectionIndex = indexPath.layoutSection
 		var itemIndex = indexPath.itemIndex
 		
-		let numberOfElements = numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChilDataSources: false)
+		let numberOfElements = numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChildDataSources: false)
 		if itemIndex < numberOfElements {
 			return super.findSupplementaryItemOfKind(kind, at: indexPath, using: block)
 		}

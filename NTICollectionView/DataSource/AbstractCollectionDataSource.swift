@@ -143,8 +143,8 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 		return CollectionDataSourceMetricsHelper(dataSource: self)
 	}
 	
-	public func numberOfSupplementaryItemsOfKind(kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChilDataSources: Bool) -> Int {
-		return metricsHelper.numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChilDataSources: shouldIncludeChilDataSources)
+	public func numberOfSupplementaryItemsOfKind(kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChildDataSources: Bool) -> Int {
+		return metricsHelper.numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChildDataSources: shouldIncludeChildDataSources)
 	}
 	
 	public func indexPaths(`for` supplementaryItem: SupplementaryItem) -> [NSIndexPath] {
