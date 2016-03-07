@@ -28,6 +28,12 @@ public protocol SegmentedControlDelegate: NSObjectProtocol {
 	
 }
 
+public protocol SegmentedControlView: SegmentedControlProtocol {
+	
+	var controlView: UIView { get }
+	
+}
+
 public protocol SegmentedControlSupplementaryItem: SupplementaryItem {
 	
 	var segmentedControl: SegmentedControlProtocol! { get }
@@ -49,7 +55,7 @@ public class GridSegmentedControlHeader: BasicGridSupplementaryItem, SegmentedCo
 	
 }
 
-public class SegmentedControl: UISegmentedControl, SegmentedControlProtocol {
+public class SegmentedControl: UISegmentedControl, SegmentedControlView {
 	
 	deinit {
 		removeTarget(self, action: "segmentedControlDidChangeValue", forControlEvents: .ValueChanged)
@@ -77,6 +83,10 @@ public class SegmentedControl: UISegmentedControl, SegmentedControlProtocol {
 	
 	@objc public func segmentedControlDidChangeValue() {
 		segmentedControlDelegate?.segmentedControlDidChangeValue(self)
+	}
+	
+	public var controlView: UIView {
+		return self
 	}
 	
 }
