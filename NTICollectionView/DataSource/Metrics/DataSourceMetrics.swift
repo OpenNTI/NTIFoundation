@@ -15,3 +15,25 @@ public protocol DataSourceSectionMetrics: DataSourceSectionInfo, SectionMetrics 
 	func copy() -> AnyObject
 	
 }
+
+extension DataSourceSectionMetrics {
+	
+	public func applyValues(from metrics: SectionMetrics) {
+		guard let dataSourceMetrics = metrics as? DataSourceSectionMetrics else {
+			return self.metrics.applyValues(from: metrics)
+		}
+		
+		self.metrics.applyValues(from: dataSourceMetrics.metrics)
+		
+		for (kind, items) in dataSourceMetrics.supplementaryItemsByKind {
+			var myItems = supplementaryItemsOfKind(kind)
+			myItems.appendContentsOf(items)
+			supplementaryItemsByKind[kind] = myItems
+		}
+		
+		if placeholder == nil {
+			placeholder = dataSourceMetrics.placeholder
+		}
+	}
+	
+}

@@ -24,10 +24,6 @@ public class GridDataSourceSectionMetrics: NSObject, DataSourceSectionMetrics {
 		return copy
 	}
 	
-	public func applyValues(from metrics: SectionMetrics) {
-		self.metrics.applyValues(from: metrics)
-	}
-	
 	public func definesMetric(metric: String) -> Bool {
 		return false
 	}
