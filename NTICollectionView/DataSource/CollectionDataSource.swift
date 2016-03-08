@@ -14,7 +14,7 @@ public func requireMainThread() {
 
 public typealias Item = AnyObject
 
-public protocol DataSource {
+public protocol DataSource: NSObjectProtocol {
 	
 	var title: String? { get set }
 	
