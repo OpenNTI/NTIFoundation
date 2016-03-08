@@ -751,7 +751,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			guard let metrics = layoutMetrics[sectionIndex] else {
 				continue
 			}
-			// TODO: Section type shouldn't be decided here
+			// FIXME: Section type shouldn't be decided here
 //			let sectionInfo = layoutInfo.newSection(sectionIndex: sectionIndex)
 			let sectionInfo = BasicGridLayoutSection()
 			layoutInfo.add(sectionInfo, sectionIndex: sectionIndex)
@@ -791,6 +791,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		section.resolveMissingValuesFromTheme()
 		
 		func setupSupplementaryMetrics(supplementaryMetrics: SupplementaryItem) {
+			// FIXME: Supplementary item kind shouldn't be decided here
 			let supplementaryItem = BasicGridSupplementaryItem(elementKind: supplementaryMetrics.elementKind)
 			supplementaryItem.applyValues(from: supplementaryMetrics)
 			section.add(supplementaryItem)

@@ -67,11 +67,9 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 	}
 	
 	public func numberOfSupplementaryItemsOfKind(kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChildDataSources: Bool) -> Int {
-		guard let items = supplementaryItemsByKind[kind] else {
-			return 0
-		}
+		let items = supplementaryItemsOfKind(kind)
 		
-		guard !isRootDataSource || sectionIndex != GlobalSectionIndex else {
+		if isRootDataSource && sectionIndex == GlobalSectionIndex {
 			return items.count
 		}
 		
@@ -91,9 +89,7 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 	
 	public func indexPaths(`for` supplementaryItem: SupplementaryItem) -> [NSIndexPath] {
 		let kind = supplementaryItem.elementKind
-		guard let supplementaryItems = supplementaryItemsByKind[kind] else {
-			return []
-		}
+		let supplementaryItems = supplementaryItemsOfKind(kind)
 		
 		if let itemIndex = supplementaryItems.indexOf({ $0 === supplementaryItem }) {
 			let indexPath = isRootDataSource ? NSIndexPath(index: itemIndex) : NSIndexPath(forItem: itemIndex, inSection: 0)
@@ -144,18 +140,15 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		assert(sectionIndex != GlobalSectionIndex || isRootDataSource, "Should only have the global section when we're the root data source")
 		
 		let items = supplementaryItemsOfKind(kind)
-		guard !items.isEmpty else {
-			return
-		}
 		
-		if sectionIndex == GlobalSectionIndex && isRootDataSource {
+		if isRootDataSource && sectionIndex == GlobalSectionIndex {
 			if itemIndex < items.count {
 				block(dataSource: dataSource, localIndexPath: indexPath, supplementaryItem: items[itemIndex])
 			}
 			return
 		}
 		
-		if sectionIndex == 0 && !isRootDataSource {
+		if !isRootDataSource && sectionIndex == 0 {
 			if itemIndex < items.count {
 				return block(dataSource: dataSource, localIndexPath: indexPath, supplementaryItem: items[itemIndex])
 			}
@@ -213,12 +206,10 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		metrics.placeholder = placeholder
 		
 		// We need to handle global items and the placeholder view for section 0
-		if sectionIndex == 0 {
-			if !isRootDataSource {
-				for (kind, items) in supplementaryItemsByKind {
-					let metricsItems = metrics.supplementaryItemsByKind[kind] ?? []
-					metrics.supplementaryItemsByKind[kind] = metricsItems + items
-				}
+		if sectionIndex == 0 && !isRootDataSource  {
+			for (kind, items) in supplementaryItemsByKind {
+				let metricsItems = metrics.supplementaryItemsOfKind(kind)
+				metrics.supplementaryItemsByKind[kind] = metricsItems + items
 			}
 		}
 		
