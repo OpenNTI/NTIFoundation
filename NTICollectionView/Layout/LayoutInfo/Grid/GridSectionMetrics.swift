@@ -171,8 +171,8 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 		copy.showsSectionSeparator = showsSectionSeparator
 		copy.showsSectionSeparatorWhenLastSection = showsSectionSeparatorWhenLastSection
 		copy.cellLayoutOrder = cellLayoutOrder
-		copy.flags = flags
 		copy.showsRowSeparator = showsRowSeparator
+		copy.flags = flags
 		
 		return copy
 	}
