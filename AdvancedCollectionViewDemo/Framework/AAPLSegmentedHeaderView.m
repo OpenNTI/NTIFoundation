@@ -88,7 +88,7 @@
 - (void)prepareForReuse
 {
     [super prepareForReuse];
-    [_segmentedControl removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+	[_segmentedControl prepareForReuse];
 }
 
 - (void)setHeaderAlignment:(AAPLSegmentedHeaderAlignment)headerAlignment
