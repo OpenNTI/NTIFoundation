@@ -64,7 +64,6 @@ public protocol ParentCollectionDataSource: CollectionDataSource, CollectionData
 	var dataSources: [CollectionDataSource] { get }
 	
 	func add(dataSource: CollectionDataSource)
-	
 	func remove(dataSource: CollectionDataSource)
 	
 }
@@ -94,30 +93,6 @@ public protocol CollectionDataSourceMetrics: NSObjectProtocol {
 	func add(supplementaryItem: SupplementaryItem, forKey key: String)
 	func supplementaryItemsOfKind(kind: String) -> [SupplementaryItem]
 	func supplementaryItemForKey(key: String) -> SupplementaryItem?
-}
-
-extension CollectionDataSource {
-	
-	public var isRootDataSource: Bool {
-		return !(delegate is CollectionDataSource)
-	}
-	
-	public func dataSourceForSectionAtIndex(sectionIndex: Int) -> CollectionDataSource {
-		return self
-	}
-	
-	public func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath {
-		return globalIndexPath
-	}
-	
-	public func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath) -> Bool {
-		return false
-	}
-	
-	public func collectionView(collectionView: UICollectionView, moveItemAt sourceIndexPath: NSIndexPath, to destinationIndexPath: NSIndexPath) {
-		
-	}
-	
 }
 
 extension CollectionDataSource {

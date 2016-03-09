@@ -97,12 +97,12 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 		return mapping?.globalSectionForLocalSection(0)
 	}
 	
-	private func dataSourceForSectionAtIndex(sectionIndex: Int) -> CollectionDataSource {
+	public override func dataSourceForSectionAtIndex(sectionIndex: Int) -> CollectionDataSource {
 		let mapping = globalSectionToMappings[sectionIndex]!
 		return mapping.dataSource
 	}
 	
-	private func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath {
+	public override func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath {
 		let mapping = mappingForGlobalSection(globalIndexPath.section)!
 		return mapping.localIndexPathForGlobal(globalIndexPath)
 	}
@@ -256,12 +256,12 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 		return info.dataSource.collectionView(info.wrapper, cellForItemAtIndexPath: info.localIndexPath)
 	}
 	
-	public func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath) -> Bool {
+	public override func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath) -> Bool {
 		let info = mappingInfoForGlobalIndexPath(indexPath, collectionView: collectionView)!
 		return info.dataSource.collectionView(info.wrapper, canMoveItemAt: info.localIndexPath)
 	}
 	
-	public func collectionView(collectionView: UICollectionView, moveItemAt sourceIndexPath: NSIndexPath, to destinationIndexPath: NSIndexPath) {
+	public override func collectionView(collectionView: UICollectionView, moveItemAt sourceIndexPath: NSIndexPath, to destinationIndexPath: NSIndexPath) {
 		// Don't allow moves between data sources
 		let fromMapping = mappingForGlobalSection(sourceIndexPath.section)!
 		let toMapping = mappingForGlobalSection(destinationIndexPath.section)!

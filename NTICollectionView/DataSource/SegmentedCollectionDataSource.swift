@@ -143,11 +143,11 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 		return _selectedDataSource.numberOfSections
 	}
 	
-	public func dataSourceForSectionAtIndex(sectionIndex: Int) -> CollectionDataSource {
+	public override func dataSourceForSectionAtIndex(sectionIndex: Int) -> CollectionDataSource {
 		return _selectedDataSource.dataSourceForSectionAtIndex(sectionIndex)
 	}
 	
-	public func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath {
+	public override func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath {
 		return _selectedDataSource.localIndexPathForGlobal(globalIndexPath)
 	}
 	
@@ -240,7 +240,7 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 		return _selectedDataSource.collectionView(collectionView, canEditItemAt: indexPath)
 	}
 	
-	public func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath) -> Bool {
+	public override func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath) -> Bool {
 		return _selectedDataSource.collectionView(collectionView, canMoveItemAt: indexPath)
 	}
 	
@@ -289,7 +289,7 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 		return _selectedDataSource.collectionView(collectionView, canMoveItemAt: indexPath, to: destinationIndexPath)
 	}
 	
-	public func collectionView(collectionView: UICollectionView, moveItemAt sourceIndexPath: NSIndexPath, to destinationIndexPath: NSIndexPath) {
+	public override func collectionView(collectionView: UICollectionView, moveItemAt sourceIndexPath: NSIndexPath, to destinationIndexPath: NSIndexPath) {
 		_selectedDataSource.collectionView(collectionView, moveItemAt: sourceIndexPath, to: destinationIndexPath)
 	}
 	

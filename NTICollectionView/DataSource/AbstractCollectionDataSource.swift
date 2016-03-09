@@ -23,6 +23,18 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 		return true
 	}
 	
+	public var isRootDataSource: Bool {
+		return !(delegate is CollectionDataSource)
+	}
+	
+	public func dataSourceForSectionAtIndex(sectionIndex: Int) -> CollectionDataSource {
+		return self
+	}
+	
+	public func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath {
+		return globalIndexPath
+	}
+	
 	/// The number of sections in this data source.
 	public var numberOfSections: Int {
 		return 1
@@ -362,9 +374,17 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 		return false
 	}
 	
+	public func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath) -> Bool {
+		return false
+	}
+	
 	/// Determine whether an item may be moved from its original location to a proposed location. Default implementation returns `false`.
 	public func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath, to destinationIndexPath: NSIndexPath) -> Bool {
 		return false
+	}
+	
+	public func collectionView(collectionView: UICollectionView, moveItemAt sourceIndexPath: NSIndexPath, to destinationIndexPath: NSIndexPath) {
+		
 	}
 	
 	// MARK: - ContentLoading
