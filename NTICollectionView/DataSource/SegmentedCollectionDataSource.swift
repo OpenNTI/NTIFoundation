@@ -147,7 +147,7 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 		return _selectedDataSource.dataSourceForSectionAtIndex(sectionIndex)
 	}
 	
-	public override func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath {
+	public override func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath? {
 		return _selectedDataSource.localIndexPathForGlobal(globalIndexPath)
 	}
 	

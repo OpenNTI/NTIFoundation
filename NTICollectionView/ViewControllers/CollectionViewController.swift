@@ -414,10 +414,10 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 			
 			for indexPath in indexPaths {
 				let localDataSource = dataSource.dataSourceForSectionAtIndex(indexPath.section)
-				guard let view = self.collectionView(collectionView, visibleViewForSupplementaryElementOfKind: kind, at: indexPath) else {
-					continue
+				guard let view = self.collectionView(collectionView, visibleViewForSupplementaryElementOfKind: kind, at: indexPath),
+					localIndexPath = dataSource.localIndexPathForGlobal(indexPath) else {
+						continue
 				}
-				let localIndexPath = dataSource.localIndexPathForGlobal(indexPath)
 				supplementaryItem.configureView?(view: view, dataSource: localDataSource, indexPath: localIndexPath)
 			}
 			

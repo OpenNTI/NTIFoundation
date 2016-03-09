@@ -36,7 +36,7 @@ public protocol CollectionDataSource: UICollectionViewDataSource, DataSource, Co
 	var allowsSelection: Bool { get }
 	var isRootDataSource: Bool { get }
 	func dataSourceForSectionAtIndex(sectionIndex: Int) -> CollectionDataSource
-	func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath
+	func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath?
 	func registerReusableViews(with collectionView: UICollectionView)
 	
 	var noContentPlaceholder: DataSourcePlaceholder? { get set }

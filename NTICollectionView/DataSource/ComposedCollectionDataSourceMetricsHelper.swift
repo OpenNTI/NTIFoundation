@@ -21,10 +21,11 @@ public class ComposedCollectionDataSourceMetricsHelper: CollectionDataSourceMetr
 	
 	public override func numberOfSupplementaryItemsOfKind(kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChildDataSources: Bool) -> Int {
 		var numberOfElements = super.numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChildDataSources: false)
-		if shouldIncludeChildDataSources, let mapping = composedDataSource.mappingForGlobalSection(sectionIndex) {
-			let localSection = mapping.localSectionForGlobalSection(sectionIndex)
-			let dataSource = mapping.dataSource
-			numberOfElements += dataSource.numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: localSection, shouldIncludeChildDataSources: true)
+		if shouldIncludeChildDataSources,
+			let mapping = composedDataSource.mappingForGlobalSection(sectionIndex),
+			localSection = mapping.localSectionForGlobalSection(sectionIndex) {
+				let dataSource = mapping.dataSource
+				numberOfElements += dataSource.numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: localSection, shouldIncludeChildDataSources: true)
 		}
 		return numberOfElements
 	}
@@ -71,10 +72,10 @@ public class ComposedCollectionDataSourceMetricsHelper: CollectionDataSourceMetr
 		
 		itemIndex -= numberOfElements
 		
-		guard let mapping = composedDataSource.mappingForGlobalSection(sectionIndex) else {
-			return
+		guard let mapping = composedDataSource.mappingForGlobalSection(sectionIndex),
+			localSection = mapping.localSectionForGlobalSection(sectionIndex) else {
+				return
 		}
-		let localSection = mapping.localSectionForGlobalSection(sectionIndex)
 		
 		let localIndexPath = NSIndexPath(forItem: itemIndex, inSection: localSection)
 		let dataSource = mapping.dataSource
@@ -90,9 +91,9 @@ public class ComposedCollectionDataSourceMetricsHelper: CollectionDataSourceMetr
 		guard let enclosingMetrics = super.snapshotMetricsForSectionAtIndex(sectionIndex) else {
 			return nil
 		}
-		let localSection = mapping.localSectionForGlobalSection(sectionIndex)
-		if let metrics = dataSource.snapshotMetricsForSectionAtIndex(localSection)  {
-			enclosingMetrics.applyValues(from: metrics)
+		if let localSection = mapping.localSectionForGlobalSection(sectionIndex),
+			metrics = dataSource.snapshotMetricsForSectionAtIndex(localSection)  {
+				enclosingMetrics.applyValues(from: metrics)
 		}
 		return enclosingMetrics
 	}

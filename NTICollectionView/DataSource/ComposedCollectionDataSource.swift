@@ -102,7 +102,7 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 		return mapping.dataSource
 	}
 	
-	public override func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath {
+	public override func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath? {
 		let mapping = mappingForGlobalSection(globalIndexPath.section)!
 		return mapping.localIndexPathForGlobal(globalIndexPath)
 	}
@@ -131,8 +131,10 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 	}
 	
 	public override func item(at indexPath: NSIndexPath) -> Item? {
-		let mapping = mappingForGlobalSection(indexPath.section)!
-		let mappedIndexPath = mapping.localIndexPathForGlobal(indexPath)
+		guard let mapping = mappingForGlobalSection(indexPath.section),
+			mappedIndexPath = mapping.localIndexPathForGlobal(indexPath) else {
+				return nil
+		}
 		return mapping.dataSource.item(at: mappedIndexPath)
 	}
 	
@@ -148,9 +150,11 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 	}
 	
 	public override func removeItem(at indexPath: NSIndexPath) {
-		let mapping = mappingForGlobalSection(indexPath.section)!
+		guard let mapping = mappingForGlobalSection(indexPath.section),
+			localIndexPath = mapping.localIndexPathForGlobal(indexPath) else {
+				return
+		}
 		let dataSource = mapping.dataSource
-		let localIndexPath = mapping.localIndexPathForGlobal(indexPath)
 		dataSource.removeItem(at: localIndexPath)
 	}
 	
@@ -189,9 +193,11 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 			return
 		}
 		
-		let mapping = mappingForGlobalSection(sectionIndex)!
+		guard let mapping = mappingForGlobalSection(sectionIndex),
+			localSectionIndex = mapping.localSectionForGlobalSection(sectionIndex) else {
+				return
+		}
 		let dataSource = mapping.dataSource
-		let localSectionIndex = mapping.localSectionForGlobalSection(sectionIndex)
 		dataSource.update(placeholderView, forSectionAtIndex: localSectionIndex)
 	}
 	
@@ -217,15 +223,14 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 	
 	public override func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath, to destinationIndexPath: NSIndexPath) -> Bool {
 		// If the move is between data sources, assume false
-		let fromMapping = mappingForGlobalSection(indexPath.section)!
-		let toMapping = mappingForGlobalSection(destinationIndexPath.section)!
-		guard fromMapping === toMapping else {
-			return false
+		guard let fromMapping = mappingForGlobalSection(indexPath.section),
+			toMapping = mappingForGlobalSection(destinationIndexPath.section),
+			localFromIndexPath = fromMapping.localIndexPathForGlobal(indexPath),
+			localToIndexPath = fromMapping.localIndexPathForGlobal(destinationIndexPath)
+			where fromMapping === toMapping else {
+				return false
 		}
 		let wrapper = WrapperCollectionView(collectionView: collectionView, mapping: fromMapping)
-		
-		let localFromIndexPath = fromMapping.localIndexPathForGlobal(indexPath)
-		let localToIndexPath = fromMapping.localIndexPathForGlobal(destinationIndexPath)
 		
 		let dataSource = fromMapping.dataSource
 		return dataSource.collectionView(wrapper, canMoveItemAt: localFromIndexPath, to: localToIndexPath)
@@ -240,9 +245,12 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 			return 0
 		}
 		
-		let mapping = mappingForGlobalSection(section)!
+		guard let mapping = mappingForGlobalSection(section),
+			localSection = mapping.localSectionForGlobalSection(section) else {
+				assertionFailure("Asked for number of items in unmapped section: \(section)")
+				return 0
+		}
 		let wrapper = WrapperCollectionView(collectionView: collectionView, mapping: mapping)
-		let localSection = mapping.localSectionForGlobalSection(section)
 		let dataSource = mapping.dataSource
 		
 		let numberOfSections = dataSource.numberOfSectionsInCollectionView!(wrapper)
@@ -263,16 +271,16 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 	
 	public override func collectionView(collectionView: UICollectionView, moveItemAt sourceIndexPath: NSIndexPath, to destinationIndexPath: NSIndexPath) {
 		// Don't allow moves between data sources
-		let fromMapping = mappingForGlobalSection(sourceIndexPath.section)!
-		let toMapping = mappingForGlobalSection(destinationIndexPath.section)!
-		guard fromMapping === toMapping else {
-			return
+		guard let fromMapping = mappingForGlobalSection(sourceIndexPath.section),
+			toMapping = mappingForGlobalSection(destinationIndexPath.section),
+			localFromIndexPath = fromMapping.localIndexPathForGlobal(sourceIndexPath),
+			localToIndexPath = fromMapping.localIndexPathForGlobal(destinationIndexPath)
+			where fromMapping === toMapping else {
+				return
 		}
 		let wrapper = WrapperCollectionView(collectionView: collectionView, mapping: fromMapping)
 		let dataSource = fromMapping.dataSource
-		
-		let localFromIndexPath = fromMapping.localIndexPathForGlobal(sourceIndexPath)
-		let localToIndexPath = fromMapping.localIndexPathForGlobal(destinationIndexPath)
+
 		
 		dataSource.collectionView(wrapper, moveItemAt: localFromIndexPath, to: localToIndexPath)
 	}
@@ -424,11 +432,11 @@ private typealias MappingInfo = (dataSource: CollectionDataSource, localIndexPat
 extension ComposedCollectionDataSource {
 	
 	private func mappingInfoForGlobalIndexPath(globalIndexPath: NSIndexPath, collectionView: UICollectionView) -> MappingInfo? {
-		guard let mapping = mappingForGlobalSection(globalIndexPath.section) else {
-			return nil
+		guard let mapping = mappingForGlobalSection(globalIndexPath.section),
+			localIndexPath = mapping.localIndexPathForGlobal(globalIndexPath) else {
+				return nil
 		}
 		let dataSource = mapping.dataSource
-		let localIndexPath = mapping.localIndexPathForGlobal(globalIndexPath)
 		let wrapper = WrapperCollectionView(collectionView: collectionView, mapping: mapping)
 		return (dataSource, localIndexPath, wrapper)
 	}

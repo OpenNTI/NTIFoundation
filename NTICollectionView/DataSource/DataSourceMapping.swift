@@ -18,7 +18,7 @@ public protocol DataSourceMapping: NSObjectProtocol {
 	var numberOfSections: Int { get }
 	
 	/// Return the local section for a global section.
-	func localSectionForGlobalSection(globalSection: Int) -> Int
+	func localSectionForGlobalSection(globalSection: Int) -> Int?
 	func localSectionsForGlobalSections(globalSections: NSIndexSet) -> NSIndexSet
 	
 	/// Return the global section for a local section.
@@ -26,7 +26,7 @@ public protocol DataSourceMapping: NSObjectProtocol {
 	func globalSectionsForLocalSections(localSections: NSIndexSet) -> NSIndexSet
 	
 	/// Return a local index path for a global index path. Returns nil when the global indexPath does not map locally.
-	func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath
+	func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath?
 	
 	/// Return a global index path for a local index path.
 	func globalIndexPathForLocal(localIndexPath: NSIndexPath) -> NSIndexPath
@@ -47,7 +47,9 @@ extension DataSourceMapping {
 	public func localSectionsForGlobalSections(globalSections: NSIndexSet) -> NSIndexSet {
 		let localSections = NSMutableIndexSet()
 		for globalSection in globalSections {
-			let localSection = localSectionForGlobalSection(globalSection)
+			guard let localSection = localSectionForGlobalSection(globalSection) else {
+				continue
+			}
 			localSections.addIndex(localSection)
 		}
 		return localSections
@@ -91,8 +93,8 @@ public class BasicDataSourceMapping: NSObject, DataSourceMapping {
 	private var globalToLocalSections: [Int: Int] = [:]
 	private var localToGlobalSections: [Int: Int] = [:]
 	
-	public func localSectionForGlobalSection(globalSection: Int) -> Int {
-		return globalToLocalSections[globalSection]!
+	public func localSectionForGlobalSection(globalSection: Int) -> Int? {
+		return globalToLocalSections[globalSection]
 	}
 	
 	public func globalSectionForLocalSection(localSection: Int) -> Int {
@@ -102,8 +104,10 @@ public class BasicDataSourceMapping: NSObject, DataSourceMapping {
 		return globalSection
 	}
 	
-	public func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath {
-		let section = localSectionForGlobalSection(globalIndexPath.section)
+	public func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath? {
+		guard let section = localSectionForGlobalSection(globalIndexPath.section) else {
+			return nil
+		}
 		return NSIndexPath(forItem: globalIndexPath.item, inSection: section)
 	}
 	

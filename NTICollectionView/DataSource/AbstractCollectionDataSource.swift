@@ -31,7 +31,7 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 		return self
 	}
 	
-	public func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath {
+	public func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath? {
 		return globalIndexPath
 	}
 	
