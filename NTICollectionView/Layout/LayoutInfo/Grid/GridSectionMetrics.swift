@@ -104,7 +104,11 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 	public var layoutMargins = UIEdgeInsetsZero
 	
 	/// Whether a column separator should be drawn. Default is `true`.
-	public var showsColumnSeparator = true
+	public var showsColumnSeparator = true {
+		didSet {
+			setFlag("showsColumnSeparator")
+		}
+	}
 	
 	/// Whether a row separator should be drawn. Default is `false`.
 	public var showsRowSeparator = false {
@@ -225,6 +229,9 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 		if metrics.definesMetric("padding") {
 			padding = gridMetrics.padding
 		}
+		if metrics.definesMetric("showsColumnSeparator") {
+			showsColumnSeparator = gridMetrics.showsColumnSeparator
+		}
 		if metrics.definesMetric("showsRowSeparator") {
 			showsRowSeparator = gridMetrics.showsRowSeparator
 		}
@@ -265,6 +272,7 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 		"numberOfColumns": false,
 		"theme": false,
 		"padding": false,
+		"showsColumnSeparator": false,
 		"showsRowSeparator": false
 	]
 	
