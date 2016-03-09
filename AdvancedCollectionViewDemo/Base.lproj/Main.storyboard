@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15E61b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="dk8-7A-4s9">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="n4Y-ou-ZLK">
+            <objects>
+                <navigationController id="dk8-7A-4s9" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="7sV-ft-iZe">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="vvr-Hk-oiP" kind="relationship" relationship="rootViewController" id="uPe-qr-5Nh"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="r4e-o2-3nH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="265" y="374"/>
+        </scene>
+        <!--Big Cats-->
+        <scene sceneID="w54-kL-oXE">
+            <objects>
+                <collectionViewController id="vvr-Hk-oiP" userLabel="Big Cats" customClass="CatListViewController" customModule="AdvancedCollectionViewDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="YuS-1s-JGH">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <collectionViewLayout key="collectionViewLayout" id="8aM-sJ-GaR" customClass="CollectionViewLayout" customModule="NTICollectionView"/>
+                        <cells/>
+                        <connections>
+                            <outlet property="delegate" destination="vvr-Hk-oiP" id="btV-14-uC4"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="HZ8-kj-nEe"/>
+                    <connections>
+                        <segue destination="UWw-y2-drD" kind="push" identifier="detail" id="jiN-KJ-NQW"/>
+                    </connections>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="y50-14-C1K" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="965" y="374"/>
+        </scene>
+        <!--Cat Detail-->
+        <scene sceneID="Mwq-pY-P4N">
+            <objects>
+                <collectionViewController id="UWw-y2-drD" userLabel="Cat Detail" customClass="CatDetailViewController" customModule="AdvancedCollectionViewDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="t67-HH-km2">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <collectionViewLayout key="collectionViewLayout" id="ECW-y3-thk" customClass="CollectionViewLayout" customModule="NTICollectionView"/>
+                        <cells/>
+                        <connections>
+                            <outlet property="delegate" destination="UWw-y2-drD" id="McA-mh-SIH"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" id="mfk-NP-3g0"/>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aJP-Iw-hja" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1686" y="374"/>
+        </scene>
+    </scenes>
+</document>
