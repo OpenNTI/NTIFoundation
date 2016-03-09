@@ -89,4 +89,8 @@ public class SegmentedControl: UISegmentedControl, SegmentedControlView {
 		return self
 	}
 	
+	public func prepareForReuse() {
+		segmentedControlDelegate = nil
+	}
+	
 }
