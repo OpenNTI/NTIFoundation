@@ -356,6 +356,7 @@
 		4A1BE8601C8F9B3200790B3A /* KeyValueItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1BE85F1C8F9B3200790B3A /* KeyValueItem.swift */; };
 		4A1BE8611C8F9B3200790B3A /* KeyValueItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1BE85F1C8F9B3200790B3A /* KeyValueItem.swift */; };
 		4A1BE8641C8FA26300790B3A /* NTICollectionView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A68ABF51C88ADC300849185 /* NTICollectionView.framework */; };
+		4A1BE89E1C8FE03200790B3A /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4A1BE89D1C8FE03200790B3A /* LICENSE.txt */; };
 		4A620CD11C88DDCF0084B0A2 /* PagingCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A620CD01C88DDCF0084B0A2 /* PagingCollectionDataSource.swift */; };
 		4A620CD21C88DDCF0084B0A2 /* PagingCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A620CD01C88DDCF0084B0A2 /* PagingCollectionDataSource.swift */; };
 		4A620D8C1C8E148D0084B0A2 /* CollectionDataSourceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A620D8B1C8E148D0084B0A2 /* CollectionDataSourceController.swift */; };
@@ -998,6 +999,7 @@
 		4A1BE8491C8F9AD200790B3A /* CatListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CatListViewController.swift; sourceTree = "<group>"; };
 		4A1BE84A1C8F9AD200790B3A /* CatSightingsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CatSightingsDataSource.swift; sourceTree = "<group>"; };
 		4A1BE85F1C8F9B3200790B3A /* KeyValueItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyValueItem.swift; sourceTree = "<group>"; };
+		4A1BE89D1C8FE03200790B3A /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		4A5454431B1630680033FA3A /* NSDate-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate-NTIExtensionsTest.m"; sourceTree = "<group>"; };
 		4A620CD01C88DDCF0084B0A2 /* PagingCollectionDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingCollectionDataSource.swift; sourceTree = "<group>"; };
 		4A620D8B1C8E148D0084B0A2 /* CollectionDataSourceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionDataSourceController.swift; sourceTree = "<group>"; };
@@ -1611,6 +1613,7 @@
 				4A1BE7721C8F85B800790B3A /* LaunchScreen.storyboard */,
 				4A1BE7751C8F85B800790B3A /* Info.plist */,
 				4A1BE7F41C8F9A4000790B3A /* AdvancedCollectionViewDemo-Bridging-Header.h */,
+				4A1BE89D1C8FE03200790B3A /* LICENSE.txt */,
 				4A1BE7A81C8F863500790B3A /* Resources */,
 			);
 			path = AdvancedCollectionViewDemo;
@@ -2787,6 +2790,7 @@
 				4A1BE7C71C8F863500790B3A /* detail-lion.json in Resources */,
 				4A1BE7BD1C8F863500790B3A /* detail-caracal.json in Resources */,
 				4A1BE7CF1C8F863500790B3A /* detail-ocelot.json in Resources */,
+				4A1BE89E1C8FE03200790B3A /* LICENSE.txt in Resources */,
 				4A1BE7D31C8F863500790B3A /* detail-serval.json in Resources */,
 				4A1BE7BB1C8F863500790B3A /* detail-bobcat.json in Resources */,
 				4A1BE7C31C8F863500790B3A /* detail-jaguar.json in Resources */,
