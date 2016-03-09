@@ -16,6 +16,9 @@ public protocol GridSectionMetrics: SectionMetrics {
 	/// The estimated height of each row in the section. The default value is 44pts. The closer the estimatedRowHeight value matches the actual value of the row height, the less change will be noticed when rows are resized.
 	var estimatedRowHeight: CGFloat { get set }
 	
+	/// An optional fixed width that can be used to size each column.
+	var fixedColumnWidth: CGFloat? { get set }
+	
 	/// Number of columns in this section. Sections will inherit a default of 1 from the data source.
 	var numberOfColumns: Int { get set }
 	
@@ -73,6 +76,13 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 	public var estimatedRowHeight: CGFloat = 44 {
 		didSet {
 			setFlag("estimatedRowHeight")
+		}
+	}
+	
+	/// An optional fixed width that can be used to size each column.
+	public var fixedColumnWidth: CGFloat? {
+		didSet {
+			setFlag("fixedColumnWidth")
 		}
 	}
 	
@@ -159,6 +169,7 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 		
 		copy.rowHeight = rowHeight
 		copy.estimatedRowHeight = estimatedRowHeight
+		copy.fixedColumnWidth = fixedColumnWidth
 		copy.numberOfColumns = numberOfColumns
 		copy.padding = padding
 		copy.showsColumnSeparator = showsColumnSeparator
@@ -189,6 +200,9 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 		}
 		if metrics.definesMetric("estimatedRowHeight") {
 			estimatedRowHeight = gridMetrics.estimatedRowHeight
+		}
+		if metrics.definesMetric("fixedColumnWidth") {
+			fixedColumnWidth = gridMetrics.fixedColumnWidth
 		}
 		if metrics.definesMetric("numberOfColumns") {
 			numberOfColumns = gridMetrics.numberOfColumns
@@ -241,6 +255,7 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 	private var flags = [
 		"rowHeight": false,
 		"estimatedRowHeight": false,
+		"fixedColumnWidth": false,
 		"showsSectionSeparator": false,
 		"showsSectionSeparatorWhenLastSection": false,
 		"backgroundColor": false,
