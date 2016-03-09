@@ -261,6 +261,7 @@
 		40F818AD1C7D07A100EBE130 /* NTISocketIO.h in Headers */ = {isa = PBXBuildFile; fileRef = 40C997AB1C6CE84D00D450CD /* NTISocketIO.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		40F818BD1C7D093000EBE130 /* NTIFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40EC15CD1C7CE51500D12B1A /* NTIFoundation.framework */; };
 		40F818C31C7D0D5900EBE130 /* Info-tvos.plist in Resources */ = {isa = PBXBuildFile; fileRef = 40F818C21C7D0D5900EBE130 /* Info-tvos.plist */; };
+		4A0582DC1C90C8F800F3D0E0 /* CollectionSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0582DB1C90C8F800F3D0E0 /* CollectionSupplementaryView.swift */; };
 		4A1BE76A1C8F85B800790B3A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1BE7691C8F85B800790B3A /* AppDelegate.swift */; };
 		4A1BE76C1C8F85B800790B3A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1BE76B1C8F85B800790B3A /* ViewController.swift */; };
 		4A1BE76F1C8F85B800790B3A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A1BE76D1C8F85B800790B3A /* Main.storyboard */; };
@@ -924,6 +925,7 @@
 		40F818B31C7D07A100EBE130 /* NTISocketIO.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NTISocketIO.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		40F818C11C7D0C7D00EBE130 /* NTIFoundation-tvos-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "NTIFoundation-tvos-Info.plist"; sourceTree = "<group>"; };
 		40F818C21C7D0D5900EBE130 /* Info-tvos.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-tvos.plist"; sourceTree = "<group>"; };
+		4A0582DB1C90C8F800F3D0E0 /* CollectionSupplementaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionSupplementaryView.swift; sourceTree = "<group>"; };
 		4A1BE7671C8F85B800790B3A /* AdvancedCollectionViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AdvancedCollectionViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A1BE7691C8F85B800790B3A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4A1BE76B1C8F85B800790B3A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -1869,6 +1871,7 @@
 				4A68AC9C1C88B0CE00849185 /* CollectionPlaceholderView.swift */,
 				4A68AC9D1C88B0CE00849185 /* PlaceholderView.swift */,
 				4A68AC9E1C88B0CE00849185 /* SegmentedControlProtocol.swift */,
+				4A0582DB1C90C8F800F3D0E0 /* CollectionSupplementaryView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3131,6 +3134,7 @@
 				4A68AD431C88BE2000849185 /* UICollectionView+SupplementaryViews.swift in Sources */,
 				4A68ACE91C88B0CE00849185 /* LayoutPlaceholder.swift in Sources */,
 				4A68ACAF1C88B0CE00849185 /* DataSourceMapping.swift in Sources */,
+				4A0582DC1C90C8F800F3D0E0 /* CollectionSupplementaryView.swift in Sources */,
 				4A68ACC91C88B0CE00849185 /* CollectionViewLayout.swift in Sources */,
 				4A68ACEB1C88B0CE00849185 /* LayoutSection.swift in Sources */,
 				4A68ACA31C88B0CE00849185 /* CollectionDataSource.swift in Sources */,
