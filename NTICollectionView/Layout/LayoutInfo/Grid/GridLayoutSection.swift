@@ -22,7 +22,13 @@ public protocol GridLayoutSection: LayoutSection {
 	var leftAuxiliaryItems: [LayoutSupplementaryItem] { get set }
 	var rightAuxiliaryItems: [LayoutSupplementaryItem] { get set }
 	
+	/// The width used to size each column.
+	///
+	/// When `fixedColumnWidth` is `nil`, the value returned will maximize the width of each column.
+	/// Otherwise, `fixedColumnWidth` is returned.
 	var columnWidth: CGFloat { get }
+	/// An optional fixed width that can be used to size each column.
+	var fixedColumnWidth: CGFloat? { get set }
 	var leftAuxiliaryColumnWidth: CGFloat { get }
 	var rightAuxiliaryColumnWidth: CGFloat { get }
 	
@@ -57,12 +63,16 @@ public class BasicGridLayoutSection: AbstractLayoutSection, GridLayoutSection {
 	public var rightAuxiliaryItems: [LayoutSupplementaryItem] = []
 	
 	public var columnWidth: CGFloat {
-		let width = layoutInfo?.width ?? 0
+		return fixedColumnWidth ?? maximizedColumnWidth
+	}
+	private var maximizedColumnWidth: CGFloat {
+		let layoutWidth = layoutInfo?.width ?? 0
 		let margins = metrics.padding
 		let numberOfColumns = metrics.numberOfColumns
-		let columnWidth = (width - margins.left - margins.right) / CGFloat(numberOfColumns)
+		let columnWidth = (layoutWidth - margins.left - margins.right) / CGFloat(numberOfColumns)
 		return columnWidth
 	}
+	public var fixedColumnWidth: CGFloat?
 	public var leftAuxiliaryColumnWidth: CGFloat = 0
 	public var rightAuxiliaryColumnWidth: CGFloat = 0
 	
