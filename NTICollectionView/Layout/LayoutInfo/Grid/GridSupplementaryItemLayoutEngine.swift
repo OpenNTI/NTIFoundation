@@ -8,6 +8,13 @@
 
 import UIKit
 
+public protocol SupplementaryLayoutEngine: LayoutEngine {
+	var pinnableHeaders: [LayoutSupplementaryItem] { get }
+	var nonPinnableHeaders: [LayoutSupplementaryItem] { get }
+}
+
+public typealias SupplementaryLayoutEngineFactory = (layoutSection: LayoutSection, supplementaryItems: [LayoutSupplementaryItem]) -> SupplementaryLayoutEngine
+
 public class GridSupplementaryItemLayoutEngine: NSObject, LayoutEngine {
 
 	public init(layoutSection: GridLayoutSection, innerLayoutEngine: LayoutEngine) {
@@ -18,6 +25,8 @@ public class GridSupplementaryItemLayoutEngine: NSObject, LayoutEngine {
 	
 	public weak var layoutSection: GridLayoutSection!
 	public weak var innerLayoutEngine: LayoutEngine!
+	
+	public var factory: SupplementaryLayoutEngineFactory?
 	
 	public var pinnableHeaders: [LayoutSupplementaryItem] = []
 	public var nonPinnableHeaders: [LayoutSupplementaryItem] = []
@@ -161,10 +170,17 @@ public class GridSupplementaryItemLayoutEngine: NSObject, LayoutEngine {
 	}
 	
 	private func layout(supplementaryItems: [LayoutSupplementaryItem], using sizing: LayoutSizing) {
-		let engine = GridSectionColumnLayoutEngine(layoutSection: layoutSection, supplementaryItems: supplementaryItems)
+		let engine = makeSupplementaryLayoutEngine(`for`: layoutSection, with: supplementaryItems)
 		position = engine.layoutWithOrigin(position, layoutSizing: sizing, invalidationContext: invalidationContext)
 		pinnableHeaders += engine.pinnableHeaders
 		nonPinnableHeaders += engine.nonPinnableHeaders
+	}
+	
+	private func makeSupplementaryLayoutEngine(`for` layoutSection: GridLayoutSection, with supplementaryItems: [LayoutSupplementaryItem]) -> SupplementaryLayoutEngine {
+		if let factory = self.factory {
+			return factory(layoutSection: layoutSection, supplementaryItems: supplementaryItems)
+		}
+		return GridSectionColumnLayoutEngine(layoutSection: layoutSection, supplementaryItems: supplementaryItems)
 	}
 	
 	private func layoutInnerContent() {
