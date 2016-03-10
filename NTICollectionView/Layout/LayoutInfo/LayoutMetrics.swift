@@ -37,6 +37,9 @@ public protocol LayoutMetrics: NSObjectProtocol {
 
 public protocol SectionMetrics: LayoutMetrics {
 	
+	/// The distance that the section content is inset from the enclosing content.
+	var contentInset: UIEdgeInsets { get set }
+	
 }
 
 public protocol SectionMetricsOwning: NSObjectProtocol, SectionMetrics {
@@ -52,6 +55,15 @@ public protocol SectionMetricsOwning: NSObjectProtocol, SectionMetrics {
 }
 
 extension SectionMetricsOwning {
+	
+	public var contentInset: UIEdgeInsets {
+		get {
+			return metrics.contentInset
+		}
+		set {
+			metrics.contentInset = newValue
+		}
+	}
 	
 	public func applyValues(from metrics: LayoutMetrics) {
 		self.metrics.applyValues(from: metrics)
