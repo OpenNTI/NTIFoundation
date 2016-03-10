@@ -243,7 +243,7 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 	}
 	
 	public func definesMetric(metric: String) -> Bool {
-		return flags[metric] ?? false
+		return flags.contains(metric)
 	}
 	
 	public func resolveMissingValuesFromTheme() {
@@ -261,25 +261,10 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 		}
 	}
 	
-	private var flags = [
-		"rowHeight": false,
-		"estimatedRowHeight": false,
-		"fixedColumnWidth": false,
-		"showsSectionSeparator": false,
-		"showsSectionSeparatorWhenLastSection": false,
-		"backgroundColor": false,
-		"selectedBackgroundColor": false,
-		"separatorColor": false,
-		"sectionSeparatorColor": false,
-		"numberOfColumns": false,
-		"theme": false,
-		"padding": false,
-		"showsColumnSeparator": false,
-		"showsRowSeparator": false
-	]
+	private var flags: Set<String> = []
 	
 	private func setFlag(flag: String) {
-		flags[flag] = true
+		flags.insert(flag)
 	}
 	
 }
