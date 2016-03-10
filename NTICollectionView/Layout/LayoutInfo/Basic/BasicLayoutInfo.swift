@@ -91,22 +91,16 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 		if sectionIndex == GlobalSectionIndex {
 			globalSection = section
 		} else {
-//			precondition(sectionIndex == _sections.count, "Number of sections out-of-sync with the section index")
+			precondition(sectionIndex == _sections.count, "Number of sections out-of-sync with the section index")
 			_sections.insert(section, atIndex: sectionIndex)
 		}
 	}
 	
+	// This isn't currently being called -- see FIXME
 	public func newSection(sectionIndex index: Int) -> LayoutSection {
 		// FIXME: The type of section should be determined elsewhere
 		let section = AbstractLayoutSection()
-		section.layoutInfo = self
-		section.sectionIndex = index
-		if index == GlobalSectionIndex {
-			globalSection = section
-		} else {
-			precondition(index == sections.count, "Number of sections out-of-sync with the section index")
-			_sections.append(section)
-		}
+		add(section, sectionIndex: index)
 		return section
 	}
 	
@@ -177,7 +171,7 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 		let sectionInfo = _sections[sectionIndex]
 		
 		let offset = sectionInfo.setSize(size, forItemAt: indexPath.item, invalidationContext: invalidationContext)
-		offsetSectionsByDistance(offset, afterSectionAtIndex: sectionIndex, invalidationContext: invalidationContext)
+		offsetSections(afterSectionAt: sectionIndex, by: offset, invalidationContext: invalidationContext)
 	}
 	
 	public func setSize(size: CGSize, forElementOfKind kind: String, at indexPath: NSIndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
@@ -192,11 +186,11 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 			offset = sectionInfo?.setSize(size, forSupplementaryElementOfKind: kind, at: itemIndex, invalidationContext: invalidationContext) ?? CGPointZero
 		}
 		
-		offsetSectionsByDistance(offset, afterSectionAtIndex: sectionIndex, invalidationContext: invalidationContext)
+		offsetSections(afterSectionAt: sectionIndex, by: offset, invalidationContext: invalidationContext)
 		invalidationContext?.contentSizeAdjustment = CGSize(width: offset.x, height: offset.y)
 	}
 	
-	private func offsetSectionsByDistance(offset: CGPoint, afterSectionAtIndex sectionIndex: Int, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
+	private func offsetSections(afterSectionAt sectionIndex: Int, by offset: CGPoint,  invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
 		var sectionIndex = sectionIndex
 		if sectionIndex == GlobalSectionIndex {
 			sectionIndex = 0

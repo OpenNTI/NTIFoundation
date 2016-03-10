@@ -33,4 +33,3 @@ public class GridDataSourceSectionMetrics: NSObject, DataSourceSectionMetrics {
 	}
 	
 }
-

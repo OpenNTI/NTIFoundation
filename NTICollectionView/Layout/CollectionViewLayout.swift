@@ -797,7 +797,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			section.add(supplementaryItem)
 		}
 		
-		for (_, supplementaryItems) in metrics.supplementaryItemsByKind {
+		for supplementaryItems in metrics.supplementaryItemsByKind.values {
 			for supplementaryItem in supplementaryItems {
 				setupSupplementaryMetrics(supplementaryItem)
 			}

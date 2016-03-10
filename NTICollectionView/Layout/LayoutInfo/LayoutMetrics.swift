@@ -31,6 +31,8 @@ public protocol SectionMetrics: NSObjectProtocol {
 	
 	func resolveMissingValuesFromTheme()
 	
+	func copy() -> AnyObject
+	
 }
 
 public protocol SectionMetricsOwning: NSObjectProtocol, SectionMetrics {
