@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol LayoutSection: SectionMetrics, LayoutAttributesResolving {
+public protocol LayoutSection: LayoutMetrics, LayoutAttributesResolving {
 	
 	var frame: CGRect { get set }
 	var sectionIndex: Int { get set }
@@ -234,7 +234,7 @@ public class AbstractLayoutSection: NSObject, LayoutSection {
 		_backgroundAttribute = nil
 	}
 	
-	public func applyValues(from metrics: SectionMetrics) {
+	public func applyValues(from metrics: LayoutMetrics) {
 		// Subclasses should override
 	}
 	

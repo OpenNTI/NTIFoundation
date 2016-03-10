@@ -181,7 +181,7 @@ public class BasicGridLayoutSection: AbstractLayoutSection, GridLayoutSection {
 		columnSeparatorLayoutAttributes.removeAll(keepCapacity: true)
 	}
 	
-	public override func applyValues(from metrics: SectionMetrics) {
+	public override func applyValues(from metrics: LayoutMetrics) {
 		super.applyValues(from: metrics)
 		self.metrics.applyValues(from: metrics)
 		if let gridMetrics = metrics as? GridSectionMetrics {

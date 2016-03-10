@@ -192,7 +192,7 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 		return copy
 	}
 	
-	public func applyValues(from metrics: SectionMetrics) {
+	public func applyValues(from metrics: LayoutMetrics) {
 		guard let gridMetrics = metrics as? GridSectionMetrics else {
 			return
 		}
