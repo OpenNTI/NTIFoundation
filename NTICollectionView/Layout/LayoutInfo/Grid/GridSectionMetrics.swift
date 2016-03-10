@@ -22,10 +22,12 @@ public protocol GridSectionMetrics: SectionMetrics {
 	/// Number of columns in this section. Sections will inherit a default of 1 from the data source.
 	var numberOfColumns: Int { get set }
 	
-	/// Padding around the cells for this section. The top & bottom padding will be applied between the headers & footers and the cells. The left & right padding will be applied between the view edges and the cells.
+	/// Padding around the cells for this section. 
+	///
+	/// The top/bottom padding will be applied between the headers/footers and the cells. The left/right padding will be applied between the left/right auxiliary columns and the cells.
 	var padding: UIEdgeInsets { get set }
 	
-	/// Layout margins for cells in this section. When not set (e.g. UIEdgeInsetsZero), the default value of the theme will be used, listLayoutMargins.
+	/// Layout margins for cells in this section.
 	var layoutMargins: UIEdgeInsets { get set }
 	
 	/// Whether a column separator should be drawn. Default is `true`.

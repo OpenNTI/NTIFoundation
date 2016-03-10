@@ -25,7 +25,7 @@ extension DataSourceSectionInfo {
 	}
 	
 	public func supplementaryItemsOfKind(kind: String) -> [SupplementaryItem] {
-	return supplementaryItemsByKind[kind] ?? []
+		return supplementaryItemsByKind[kind] ?? []
 	}
 	
 	public func add(supplementaryItem: SupplementaryItem) {

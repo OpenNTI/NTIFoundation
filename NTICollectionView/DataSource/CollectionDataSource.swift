@@ -70,10 +70,18 @@ public protocol ParentCollectionDataSource: CollectionDataSource, CollectionData
 
 public protocol CollectionDataSourceMetrics: NSObjectProtocol {
 	
+	/// The default metrics for all sections in `self`.
 	var defaultMetrics: DataSourceSectionMetrics? { get set }
+	/// The metrics for the global section (supplementary items) for `self`. 
+	/// 
+	/// - note: This is only meaningful when `self` is the root or top-level data source.
 	var globalMetrics: DataSourceSectionMetrics? { get set }
 	var sectionMetrics: [Int: DataSourceSectionMetrics] { get }
+	/// Supplementary items organized by element kind which appear prior to the supplementary items in the first section.
 	var supplementaryItemsByKind: [String: [SupplementaryItem]] { get }
+	
+	/// Returns the supplementary item for the given *key*, or `nil` if no such item is found.
+	func supplementaryItem(`for` key: String) -> SupplementaryItem?
 	
 	
 	func metricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetrics?

@@ -141,6 +141,10 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	public private(set) var supplementaryItemsByKind: [String: [SupplementaryItem]] = [:]
 	private var supplementaryItemsByKey: [String: SupplementaryItem] = [:]
 	
+	public func supplementaryItem(`for` key: String) -> SupplementaryItem? {
+		return supplementaryItemsByKey[key]
+	}
+	
 	/// Retrieve the layout metrics for a specific section within this data source.
 	public func metricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetrics? {
 		return sectionMetrics[sectionIndex]

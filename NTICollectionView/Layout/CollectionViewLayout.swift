@@ -855,8 +855,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		let contentInset = collectionView.contentInset
 		var contentOffset = collectionView.contentOffset
 		let bounds = collectionView.bounds
-		let width = bounds.width - contentInset.left - contentInset.right
-		let height = bounds.height - contentInset.bottom - contentInset.top
+		let width = bounds.width - contentInset.width
+		let height = bounds.height - contentInset.height
 		
 		layoutInfo.width = width
 		layoutInfo.height = height

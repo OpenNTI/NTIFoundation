@@ -35,8 +35,6 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 	public var sectionMetrics: [Int: DataSourceSectionMetrics] {
 		return dataSource.sectionMetrics
 	}
-	
-	/// The default metrics for all sections in this data source.
 	public var defaultMetrics: DataSourceSectionMetrics? {
 		get {
 			return dataSource.defaultMetrics
@@ -45,8 +43,6 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 			dataSource.defaultMetrics = newValue
 		}
 	}
-	
-	/// The metrics for the global section (headers and footers) for this data source. This is only meaningful when this is the root or top-level data source.
 	public var globalMetrics: DataSourceSectionMetrics? {
 		get {
 			return dataSource.metricsForSectionAtIndex(GlobalSectionIndex)
@@ -54,6 +50,10 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		set {
 			dataSource.setMetrics(newValue, forSectionAtIndex: GlobalSectionIndex)
 		}
+	}
+	
+	public func supplementaryItem(`for` key: String) -> SupplementaryItem? {
+		return dataSource.supplementaryItem(`for`: key)
 	}
 	
 	/// Retrieve the layout metrics for a specific section within this data source.
@@ -73,11 +73,13 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 			return items.count
 		}
 		
-		var numberOfItems = defaultMetrics?.supplementaryItemsByKind[kind]?.count ?? 0
+		var numberOfItems = 0
 		
 		if !isRootDataSource && sectionIndex == 0 {
 			numberOfItems += items.count
 		}
+		
+		numberOfItems += defaultMetrics?.supplementaryItemsByKind[kind]?.count ?? 0
 		
 		if let sectionMetrics = self.sectionMetrics[sectionIndex],
 			metricsItems = sectionMetrics.supplementaryItemsByKind[kind] {
@@ -201,17 +203,16 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		if isRootDataSource && sectionIndex == GlobalSectionIndex {
 			metrics.supplementaryItemsByKind = supplementaryItemsByKind
 		}
-		
-		// Stash the placeholder in the metrics; this is really only used so we can determine the range of the placeholders
-		metrics.placeholder = placeholder
-		
-		// We need to handle global items and the placeholder view for section 0
-		if sectionIndex == 0 && !isRootDataSource  {
+		else if !isRootDataSource && sectionIndex == 0 {
+			// We need to handle global items and the placeholder view for section 0
 			for (kind, items) in supplementaryItemsByKind {
 				let metricsItems = metrics.supplementaryItemsOfKind(kind)
 				metrics.supplementaryItemsByKind[kind] = metricsItems + items
 			}
 		}
+		
+		// Stash the placeholder in the metrics; this is really only used so we can determine the range of the placeholders
+		metrics.placeholder = placeholder
 		
 		return metrics
 	}
