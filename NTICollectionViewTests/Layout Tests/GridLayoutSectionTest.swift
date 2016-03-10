@@ -64,7 +64,7 @@ class GridLayoutSectionTest: XCTestCase {
 		frame: (0, 0, 375, 757.5)
 		*/
 		
-		let end = layoutSection.layoutWithOrigin(start)
+		let end = layoutSection.layoutWithOrigin(start, layoutSizing: layoutInfo)
 		
 		XCTAssertEqual(layoutSection.rows.count, itemCount)
 		

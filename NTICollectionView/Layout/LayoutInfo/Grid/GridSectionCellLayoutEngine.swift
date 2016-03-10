@@ -31,7 +31,7 @@ public class GridSectionCellLayoutEngine: NSObject {
 	}
 	
 	private var width: CGFloat! {
-		return layoutInfo.width
+		return layoutSizing.width
 	}
 	
 	private var columnWidth: CGFloat {
@@ -54,16 +54,15 @@ public class GridSectionCellLayoutEngine: NSObject {
 	private var row: GridLayoutRow!
 	private var height: CGFloat = 0
 	
-	private var layoutInfo: LayoutInfo!
+	private var layoutSizing: LayoutSizing!
 	private var layoutMeasure: CollectionViewLayoutMeasuring!
 	private var invalidationContext: UICollectionViewLayoutInvalidationContext?
 	
-	public func layoutWithOrigin(start: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
-		guard let layoutInfo = layoutSection.layoutInfo,
-			layoutMeasure = layoutInfo.layoutMeasure else {
+	public func layoutWithOrigin(start: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
+		guard let layoutMeasure = layoutSizing.layoutMeasure else {
 				return CGPointZero
 		}
-		self.layoutInfo = layoutInfo
+		self.layoutSizing = layoutSizing
 		self.layoutMeasure = layoutMeasure
 		self.invalidationContext = invalidationContext
 		

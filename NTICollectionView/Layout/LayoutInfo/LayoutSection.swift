@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol LayoutSection: LayoutMetrics, LayoutAttributesResolving {
+public protocol LayoutSection: LayoutMetrics, LayoutEngine, LayoutAttributesResolving {
 	
 	var frame: CGRect { get set }
 	var sectionIndex: Int { get set }
@@ -42,9 +42,6 @@ public protocol LayoutSection: LayoutMetrics, LayoutAttributesResolving {
 	/// Update the frame of this grouped object and any child objects. Use the invalidation context to mark layout objects as invalid.
 	func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
-	/// Layout this section with the given starting origin and using the invalidation context to record cells and supplementary views that should be redrawn.
-	func layoutWithOrigin(origin: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
-	
 	/// Reset the content of this section.
 	func reset()
 	
@@ -65,6 +62,13 @@ extension LayoutSection {
 	public var numberOfItems: Int {
 		return items.count
 	}
+	
+}
+
+public protocol LayoutEngine: NSObjectProtocol {
+	
+	/// Layout this section with the given starting origin and using the invalidation context to record cells and supplementary views that should be redrawn.
+	func layoutWithOrigin(origin: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
 	
 }
 
@@ -222,7 +226,7 @@ public class AbstractLayoutSection: NSObject, LayoutSection {
 		self.frame = frame
 	}
 	
-	public func layoutWithOrigin(origin: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
+	public func layoutWithOrigin(origin: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
 		// Subclasses should override to layout the section
 		return CGPointZero
 	}

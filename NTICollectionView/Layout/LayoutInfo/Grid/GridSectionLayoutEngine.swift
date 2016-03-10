@@ -23,6 +23,9 @@ public class GridSectionLayoutEngine: NSObject {
 	private var metrics: GridSectionMetrics {
 		return layoutSection.metrics
 	}
+	private var contentInset: UIEdgeInsets {
+		return metrics.contentInset
+	}
 	private var margins: UIEdgeInsets {
 		return metrics.padding
 	}
@@ -47,12 +50,12 @@ public class GridSectionLayoutEngine: NSObject {
 //	private var height: CGFloat = 0
 	
 	
-	var layoutInfo: LayoutInfo!
+	var layoutSizing: LayoutSizing!
 	var layoutMeasure: CollectionViewLayoutMeasuring!
 	var invalidationContext: UICollectionViewLayoutInvalidationContext?
 	
 	private var width: CGFloat! {
-		return layoutInfo.width
+		return layoutSizing.width - contentInset.width
 	}
 	
 	private var leftAuxiliaryColumnWidth: CGFloat {
@@ -63,17 +66,18 @@ public class GridSectionLayoutEngine: NSObject {
 		return layoutSection.rightAuxiliaryColumnWidth
 	}
 	
-	public func layoutWithOrigin(start: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
-		guard let layoutInfo = layoutSection.layoutInfo,
-			layoutMeasure = layoutInfo.layoutMeasure else {
+	public func layoutWithOrigin(start: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
+		guard let layoutMeasure = layoutSizing.layoutMeasure else {
 				return CGPointZero
 		}
-		self.layoutInfo = layoutInfo
+		self.layoutSizing = layoutSizing
 		self.layoutMeasure = layoutMeasure
 		self.invalidationContext = invalidationContext
 		
 		reset()
-		origin.y = start.y
+		origin = start
+		
+		applyLeadingContentInset()
 		
 		layoutHeaders()
 		
@@ -86,7 +90,9 @@ public class GridSectionLayoutEngine: NSObject {
 		
 		layoutFooters()
 		
-		layoutSection.frame = CGRect(x: 0, y: start.y, width: width, height: origin.y - start.y)
+		applyContentInsetBottom()
+		
+		layoutSection.frame = CGRect(x: start.x, y: start.y, width: width, height: origin.y - start.y)
 		
 		return origin
 	}
@@ -96,6 +102,15 @@ public class GridSectionLayoutEngine: NSObject {
 		pinnableHeaders = []
 		nonPinnableHeaders = []
 		layoutSection.removeAllRows()
+	}
+	
+	private func applyLeadingContentInset() {
+		origin.x += contentInset.left
+		origin.y += contentInset.top
+	}
+	
+	private func applyContentInsetBottom() {
+		origin.y += contentInset.bottom
 	}
 	
 	private func layoutHeaders() {
@@ -155,7 +170,7 @@ public class GridSectionLayoutEngine: NSObject {
 	
 	private func layoutRows() {
 		let cellLayoutEngine = GridSectionCellLayoutEngine(layoutSection: layoutSection)
-		let newPosition = cellLayoutEngine.layoutWithOrigin(origin, invalidationContext: invalidationContext)
+		let newPosition = cellLayoutEngine.layoutWithOrigin(origin, layoutSizing: layoutSizing, invalidationContext: invalidationContext)
 		origin.y = newPosition.y
 	}
 	

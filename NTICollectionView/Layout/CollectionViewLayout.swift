@@ -869,7 +869,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		var globalNonPinningHeight: CGFloat = 0
 		if let globalSection = sectionInfoForSectionAtIndex(GlobalSectionIndex) {
-			start = globalSection.layoutWithOrigin(start, invalidationContext: nil)
+			start = globalSection.layoutWithOrigin(start, layoutSizing: layoutInfo, invalidationContext: nil)
 			globalNonPinningHeight = globalSection.heightOfNonPinningHeaders
 		}
 		
@@ -879,7 +879,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			guard let section = sectionInfoForSectionAtIndex(sectionIndex) else {
 				continue
 			}
-			start = section.layoutWithOrigin(start, invalidationContext: nil)
+			start = section.layoutWithOrigin(start, layoutSizing: layoutInfo, invalidationContext: nil)
 		}
 		
 		// TODO: Generalize to include width

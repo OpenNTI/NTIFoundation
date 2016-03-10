@@ -34,11 +34,9 @@ func invalidateLayoutAttributes(attributes: UICollectionViewLayoutAttributes, in
 }
 
 
-public protocol LayoutInfo: LayoutAttributesResolving {
+public protocol LayoutInfo: LayoutSizing, LayoutAttributesResolving {
 	
 	var collectionViewSize: CGSize { get set }
-	
-	var width: CGFloat { get set }
 	
 	var height: CGFloat { get set }
 	
@@ -46,8 +44,6 @@ public protocol LayoutInfo: LayoutAttributesResolving {
 	var heightAvailableForPlaceholders: CGFloat { get set }
 	
 	var contentOffset: CGPoint { get set }
-	
-	var layoutMeasure: CollectionViewLayoutMeasuring? { get }
 	
 	var isEditing: Bool { get }
 	
@@ -90,7 +86,28 @@ public protocol LayoutInfo: LayoutAttributesResolving {
 	
 }
 
+public protocol LayoutSizing: NSObjectProtocol {
+	
+	/// The width of the portion of the layout represented by `self`.
+	var width: CGFloat { get set }
+	
+	var layoutMeasure: CollectionViewLayoutMeasuring? { get }
+	
+}
 
+public class LayoutSizingInfo: NSObject, LayoutSizing {
+	
+	public init(width: CGFloat, layoutMeasure: CollectionViewLayoutMeasuring?) {
+		self.width = width
+		self.layoutMeasure = layoutMeasure
+		super.init()
+	}
+	
+	public var width: CGFloat
+	
+	public var layoutMeasure: CollectionViewLayoutMeasuring?
+	
+}
 
 public protocol LayoutElement: NSObjectProtocol {
 	

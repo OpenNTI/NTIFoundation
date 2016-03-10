@@ -195,8 +195,8 @@ public class BasicGridLayoutSection: AbstractLayoutSection, GridLayoutSection {
 		metrics.resolveMissingValuesFromTheme()
 	}
 	
-	public override func layoutWithOrigin(start: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
-		let origin = layoutHelper.layoutWithOrigin(start, invalidationContext: invalidationContext)
+	public override func layoutWithOrigin(start: CGPoint, layoutSizing: LayoutSizing,  invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
+		let origin = layoutHelper.layoutWithOrigin(start, layoutSizing: layoutSizing, invalidationContext: invalidationContext)
 		pinnableHeaders = layoutHelper.pinnableHeaders
 		nonPinnableHeaders = layoutHelper.nonPinnableHeaders
 		return origin
