@@ -109,6 +109,8 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 		
 		layoutHeaders()
 		
+		layoutSectionPlaceholder()
+		
 		layoutLeftAuxiliaryItems()
 		
 		layoutInnerContent()
@@ -117,8 +119,8 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 		
 		layoutFooters()
 		
-		layoutSection.pinnableHeaders += pinnableHeaders
-		layoutSection.nonPinnableHeaders += nonPinnableHeaders
+		layoutSection.pinnableHeaders = pinnableHeaders
+		layoutSection.nonPinnableHeaders = nonPinnableHeaders
 		
 		position.x = origin.x + layoutSizing.width
 		position.y = max(footersMaxY, leftAuxiliaryItemsMaxY, rightAuxiliaryItemsMaxY)
@@ -191,6 +193,38 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 			return factory(layoutSection: layoutSection, supplementaryItems: supplementaryItems)
 		}
 		return GridSectionColumnLayoutEngine(layoutSection: layoutSection, supplementaryItems: supplementaryItems)
+	}
+	
+	private func layoutSectionPlaceholder() {
+		guard let placeholderInfo = layoutSection.placeholderInfo
+			where placeholderInfo.startsAt(layoutSection) else {
+				return
+		}
+		layout(placeholderInfo)
+	}
+	private func layout(placeholderInfo: LayoutPlaceholder) {
+		updateFrame(of: placeholderInfo)
+		checkEstimatedHeight(of: placeholderInfo)
+		updateOrigin(with: placeholderInfo)
+	}
+	private func updateFrame(of placeholderInfo: LayoutPlaceholder) {
+		placeholderInfo.frame = CGRect(x: 0, y: position.y, width: width, height: placeholderInfo.height)
+	}
+	private func checkEstimatedHeight(of placeholderInfo: LayoutPlaceholder) {
+		guard placeholderInfo.hasEstimatedHeight else {
+			return
+		}
+		measureHeight(of: placeholderInfo)
+		updateFrame(of: placeholderInfo)
+	}
+	private func measureHeight(of placeholderInfo: LayoutPlaceholder) {
+		let measuredSize = layoutMeasure.measuredSizeForPlaceholder(placeholderInfo)
+		// We'll add in the shared height in `finalizeLayout`
+		placeholderInfo.height = measuredSize.height
+		placeholderInfo.hasEstimatedHeight = false
+	}
+	private func updateOrigin(with placeholderInfo: LayoutPlaceholder) {
+		position.y += placeholderInfo.height
 	}
 	
 	private func layoutInnerContent() {

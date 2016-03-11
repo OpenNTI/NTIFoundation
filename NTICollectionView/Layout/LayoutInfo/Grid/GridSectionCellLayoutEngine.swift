@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class GridSectionCellLayoutEngine: NSObject {
+public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	
 	public init(layoutSection: GridLayoutSection) {
 		self.layoutSection = layoutSection

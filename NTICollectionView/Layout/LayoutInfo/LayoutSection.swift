@@ -368,9 +368,3 @@ public class AbstractLayoutSection: NSObject, LayoutSection {
 	}
 	
 }
-
-public protocol SectionLayoutHelper: NSObjectProtocol {
-	
-	func layoutWithOrigin(start: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
-	
-}

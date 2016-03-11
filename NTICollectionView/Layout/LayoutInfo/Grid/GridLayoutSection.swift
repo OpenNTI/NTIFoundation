@@ -50,13 +50,6 @@ public class BasicGridLayoutSection: AbstractLayoutSection, GridLayoutSection {
 	
 	static let hairline: CGFloat = 1.0 / UIScreen.mainScreen().scale
 	
-	public override init() {
-		super.init()
-		layoutHelper = GridSectionLayoutEngine(layoutSection: self)
-	}
-	
-	var layoutHelper: GridSectionLayoutEngine!
-	
 	public let metrics: GridSectionMetrics = BasicGridSectionMetrics()
 	
 	public var rows: [LayoutRow] = []
@@ -213,10 +206,11 @@ public class BasicGridLayoutSection: AbstractLayoutSection, GridLayoutSection {
 	}
 	
 	public override func layoutWithOrigin(start: CGPoint, layoutSizing: LayoutSizing,  invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
-		let origin = layoutHelper.layoutWithOrigin(start, layoutSizing: layoutSizing, invalidationContext: invalidationContext)
-		pinnableHeaders = layoutHelper.pinnableHeaders
-		nonPinnableHeaders = layoutHelper.nonPinnableHeaders
-		return origin
+		let layoutEngine = GridSectionLayoutEngine(layoutSection: self)
+		let endPoint = layoutEngine.layoutWithOrigin(start, layoutSizing: layoutSizing, invalidationContext: invalidationContext)
+		pinnableHeaders = layoutEngine.pinnableHeaders
+		nonPinnableHeaders = layoutEngine.nonPinnableHeaders
+		return endPoint
 	}
 	
 	// FIXME: Code duplication with super
