@@ -282,7 +282,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			|| newOrigin.y != origin.y
 			|| newBounds.height > layoutSize.height
 		
-		if isRotation || boundsChanged {
+		if isRotation || !boundsChanged {
 			return context
 		}
 		
@@ -290,6 +290,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		var contentOffset = collectionView.contentOffset
 		contentOffset.y += newOrigin.y - origin.y
 		contentOffset.x += newOrigin.x - origin.x
+		
 		updateSpecialItemsWithContentOffset(contentOffset, invalidationContext: context)
 		
 		return context
