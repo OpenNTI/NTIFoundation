@@ -14,6 +14,9 @@ private let sectionSeparatorBottom = 1
 let separatorZIndex = 100
 let sectionSeparatorZIndex = 2000
 
+public let collectionElementKindLeftAuxiliaryItem = "collectionElementKindLeftAuxiliaryItem"
+public let collectionElementKindRightAuxiliaryItem = "collectionElementKindRightAuxiliaryItem"
+
 public protocol GridLayoutSection: LayoutSection {
 	
 	var metrics: GridSectionMetrics { get }
@@ -143,6 +146,20 @@ public class BasicGridLayoutSection: AbstractLayoutSection, GridLayoutSection {
 			backgroundAttribute.backgroundColor = backgroundColor
 		}
 		return backgroundAttribute
+	}
+	
+	public override func add(supplementaryItem: LayoutSupplementaryItem) {
+		switch supplementaryItem.elementKind {
+		case collectionElementKindLeftAuxiliaryItem:
+			supplementaryItem.itemIndex = leftAuxiliaryItems.count
+			leftAuxiliaryItems.append(supplementaryItem)
+		case collectionElementKindRightAuxiliaryItem:
+			supplementaryItem.itemIndex = rightAuxiliaryItems.count
+			rightAuxiliaryItems.append(supplementaryItem)
+		default:
+			super.add(supplementaryItem)
+		}
+		supplementaryItem.section = self
 	}
 	
 	public func add(row: LayoutRow) {

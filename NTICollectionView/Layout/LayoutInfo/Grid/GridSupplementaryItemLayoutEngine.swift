@@ -117,9 +117,8 @@ public class GridSupplementaryItemLayoutEngine: NSObject, LayoutEngine {
 		
 		layoutFooters()
 		
-		position.x = layoutSizing.width
+		position.x = origin.x + layoutSizing.width
 		position.y = max(footersMaxY, leftAuxiliaryItemsMaxY, rightAuxiliaryItemsMaxY)
-		
 		applyBottomContentInset()
 		
 		return position
@@ -148,25 +147,33 @@ public class GridSupplementaryItemLayoutEngine: NSObject, LayoutEngine {
 	}
 	
 	private func layoutLeftAuxiliaryItems() {
+		position = leftAuxiliaryItemsOrigin
 		let sizing = LayoutSizingInfo(width: leftAuxiliaryColumnWidth, layoutMeasure: layoutMeasure)
 		layout(layoutSection.leftAuxiliaryItems, using: sizing)
 		leftAuxiliaryItemsMaxY = position.y
 	}
+	private var leftAuxiliaryItemsOrigin: CGPoint {
+		return CGPoint(x: origin.x + metrics.contentInset.left, y: headersMaxY)
+	}
 	
 	private func layoutRightAuxiliaryItems() {
-		position.x = rightAuxiliaryItemsMinX
-		position.y = headersMaxY
+		position = rightAuxiliaryItemsOrigin
 		let sizing = LayoutSizingInfo(width: rightAuxiliaryColumnWidth, layoutMeasure: layoutMeasure)
 		layout(layoutSection.rightAuxiliaryItems, using: sizing)
 		rightAuxiliaryItemsMaxY = position.y
 	}
+	private var rightAuxiliaryItemsOrigin: CGPoint {
+		return CGPoint(x: rightAuxiliaryItemsMinX, y: headersMaxY)
+	}
 	
 	private func layoutFooters() {
-		position.x = headerFooterMinX
-		position.y = footersMinY
+		position = footersOrigin
 		let sizing = LayoutSizingInfo(width: width, layoutMeasure: layoutMeasure)
 		layout(layoutSection.footers, using: sizing)
 		footersMaxY = position.y
+	}
+	private var footersOrigin: CGPoint {
+		return CGPoint(x: headerFooterMinX, y: footersMinY)
 	}
 	
 	private func layout(supplementaryItems: [LayoutSupplementaryItem], using sizing: LayoutSizing) {
@@ -184,12 +191,23 @@ public class GridSupplementaryItemLayoutEngine: NSObject, LayoutEngine {
 	}
 	
 	private func layoutInnerContent() {
-		let innerWidth = width - leftAuxiliaryColumnWidth - rightAuxiliaryColumnWidth
-		let innerSizing = LayoutSizingInfo(width: innerWidth, layoutMeasure: layoutMeasure)
-		let innerStartPoint = CGPoint(x: leftAuxiliaryItemsMaxX, y: headersMaxY)
-		let innerEndPoint = innerLayoutEngine.layoutWithOrigin(innerStartPoint, layoutSizing: innerSizing, invalidationContext: invalidationContext)
-		rightAuxiliaryItemsMinX = innerEndPoint.x
-		footersMinY = innerEndPoint.y
+		let innerSizing = LayoutSizingInfo(width: innerContentWidth, layoutMeasure: layoutMeasure)
+		position = innerContentOrigin
+		position = innerLayoutEngine.layoutWithOrigin(position, layoutSizing: innerSizing, invalidationContext: invalidationContext)
+		rightAuxiliaryItemsMinX = position.x + metrics.padding.right
+		footersMinY = position.y + metrics.padding.bottom
+	}
+	private var innerContentWidth: CGFloat {
+		return width - leftAuxiliaryColumnWidth - rightAuxiliaryColumnWidth - metrics.padding.width
+	}
+	private var innerContentOrigin: CGPoint {
+		return CGPoint(x: innerContentMinX, y: innerContentMinY)
+	}
+	private var innerContentMinX: CGFloat {
+		return leftAuxiliaryItemsMaxX + metrics.padding.left
+	}
+	private var innerContentMinY: CGFloat {
+		return headersMaxY + metrics.padding.top
 	}
 	
 }

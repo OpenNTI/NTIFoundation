@@ -8,6 +8,21 @@
 
 import UIKit
 
+class MockLayoutEngine: NSObject, LayoutEngine {
+	
+	init(mockHeight: CGFloat) {
+		layoutHeight = mockHeight
+		super.init()
+	}
+	
+	var layoutHeight: CGFloat
+	
+	func layoutWithOrigin(origin: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
+		return CGPoint(x: origin.x + layoutSizing.width, y: origin.y + layoutHeight)
+	}
+	
+}
+
 class MockSupplementaryLayoutEngine: NSObject, SupplementaryLayoutEngine {
 	
 	init(supplementaryItems: [LayoutSupplementaryItem]) {
@@ -20,11 +35,30 @@ class MockSupplementaryLayoutEngine: NSObject, SupplementaryLayoutEngine {
 	
 	var pinnableHeaders: [LayoutSupplementaryItem] = []
 	var nonPinnableHeaders: [LayoutSupplementaryItem] = []
+	
+	var position: CGPoint!
+	var sizing: LayoutSizing!
 
 	func layoutWithOrigin(origin: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
-		let x = origin.x + layoutSizing.width
-		let y = origin.y + mockHeight * CGFloat(supplementaryItems.count)
-		return CGPoint(x: x, y: y)
+		position = origin
+		sizing = layoutSizing
+		for item in supplementaryItems {
+			layout(item)
+		}
+		position.x += sizing.width
+		return position
+	}
+	
+	private func layout(supplementaryItem: LayoutSupplementaryItem) {
+		let size = self.size(of: supplementaryItem)
+		supplementaryItem.frame = CGRect(origin: position, size: size)
+		position.y += size.height
+	}
+	
+	private func size(of supplementaryItem: LayoutSupplementaryItem) -> CGSize {
+		let w = sizing.width
+		let h = sizing.layoutMeasure?.measuredSizeForSupplementaryItem(supplementaryItem).height ?? mockHeight
+		return CGSize(width: w, height: h)
 	}
 	
 }
