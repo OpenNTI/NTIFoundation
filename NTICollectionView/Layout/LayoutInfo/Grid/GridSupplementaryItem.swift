@@ -153,7 +153,7 @@ public class BasicGridSupplementaryItem: NSObject, NSCopying, GridSupplementaryI
 		let layoutInfo = section?.layoutInfo
 		
 		attributes.frame = frame
-		attributes.unpinnedOffset = frame.origin
+		attributes.unpinnedOrigin = frame.origin
 		attributes.zIndex = headerZIndex
 		attributes.isPinned = false
 		attributes.backgroundColor = backgroundColor ?? metrics?.backgroundColor

@@ -112,7 +112,7 @@ public class AbstractLayoutSection: NSObject, LayoutSection {
 		
 		// This will be updated by -filterSpecialAttributes
 		backgroundAttribute.frame = frame
-		backgroundAttribute.unpinnedOffset.y = frame.minY
+		backgroundAttribute.unpinnedOrigin.y = frame.minY
 		backgroundAttribute.zIndex = defaultZIndex
 		backgroundAttribute.isPinned = false
 		backgroundAttribute.hidden = false

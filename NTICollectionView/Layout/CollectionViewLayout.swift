@@ -905,11 +905,11 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 				continue
 			}
 			var frame = attributes.frame
-			if frame.origin.y != attributes.unpinnedOffset.y {
+			if frame.origin.y != attributes.unpinnedOrigin.y {
 				invalidationContext?.invalidateSupplementaryElement(with: attributes)
 			}
 			attributes.isPinned = false
-			frame.origin.y = attributes.unpinnedOffset.y
+			frame.origin.y = attributes.unpinnedOrigin.y
 			attributes.frame = frame
 		}
 	}
@@ -966,7 +966,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			
 			if let pinnableAttributes = attributes as? CollectionViewLayoutAttributes {
 				let frame = pinnableAttributes.frame
-				pinnableAttributes.isPinned = frame.origin.y != pinnableAttributes.unpinnedOffset.y
+				pinnableAttributes.isPinned = frame.origin.y != pinnableAttributes.unpinnedOrigin.y
 			}
 			
 			let depth = itemIndex + 1
@@ -1059,9 +1059,9 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		var frame = attributes.frame
 		if let attributes = attributes as? CollectionViewLayoutAttributes
 			where attributes.isPinned {
-				let newX = max(attributes.unpinnedOffset.x, frame.minX + deltaX)
+				let newX = max(attributes.unpinnedOrigin.x, frame.minX + deltaX)
 				frame.origin.x = newX
-				let newY = max(attributes.unpinnedOffset.y, frame.minY + deltaY)
+				let newY = max(attributes.unpinnedOrigin.y, frame.minY + deltaY)
 				frame.origin.y = newY
 		} else {
 			frame.offsetInPlace(dx: deltaX, dy: deltaY)

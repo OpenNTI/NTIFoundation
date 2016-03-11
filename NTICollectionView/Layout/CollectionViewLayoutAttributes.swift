@@ -55,8 +55,8 @@ public class CollectionViewLayoutAttributes: UICollectionViewLayoutAttributes {
 	public var pinnedSeparatorColor: UIColor?
 	public var showsSeparator = false
 	public var simulatesSelection = false
-	/// Offset when not pinned.
-	public var unpinnedOffset = CGPointZero
+	/// Origin when not pinned.
+	public var unpinnedOrigin = CGPointZero
 	/// Whether the correct fitting size should be calculated in `-preferredLayoutAttributesFittingAttributes:` or if the value is already correct.
 	public var shouldCalculateFittingSize = true
 	
@@ -69,7 +69,7 @@ public class CollectionViewLayoutAttributes: UICollectionViewLayoutAttributes {
 		copy.layoutMargins = layoutMargins
 		copy.isEditing = isEditing
 		copy.isMovable = isMovable
-		copy.unpinnedOffset = unpinnedOffset
+		copy.unpinnedOrigin = unpinnedOrigin
 		copy.shouldCalculateFittingSize = shouldCalculateFittingSize
 		copy.simulatesSelection = simulatesSelection
 		copy.separatorColor = separatorColor

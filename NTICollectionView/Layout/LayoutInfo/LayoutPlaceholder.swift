@@ -60,7 +60,7 @@ public class BasicLayoutPlaceholder: NSObject, LayoutPlaceholder {
 		let attributes = CollectionViewLayoutAttributes(forSupplementaryViewOfKind: CollectionElementKindPlaceholder, withIndexPath: indexPath)
 		
 		attributes.frame = frame
-		attributes.unpinnedOffset = frame.origin
+		attributes.unpinnedOrigin = frame.origin
 		attributes.zIndex = headerZIndex
 		attributes.isPinned = false
 		attributes.backgroundColor = backgroundColor
