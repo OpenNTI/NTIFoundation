@@ -15,7 +15,7 @@ public protocol SupplementaryLayoutEngine: LayoutEngine {
 
 public typealias SupplementaryLayoutEngineFactory = (layoutSection: LayoutSection, supplementaryItems: [LayoutSupplementaryItem]) -> SupplementaryLayoutEngine
 
-public class GridSupplementaryItemLayoutEngine: NSObject, LayoutEngine {
+public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEngine {
 
 	public init(layoutSection: GridLayoutSection, innerLayoutEngine: LayoutEngine) {
 		self.layoutSection = layoutSection
@@ -23,8 +23,8 @@ public class GridSupplementaryItemLayoutEngine: NSObject, LayoutEngine {
 		super.init()
 	}
 	
-	public weak var layoutSection: GridLayoutSection!
-	public weak var innerLayoutEngine: LayoutEngine!
+	public var layoutSection: GridLayoutSection
+	public var innerLayoutEngine: LayoutEngine
 	
 	public var factory: SupplementaryLayoutEngineFactory?
 	
@@ -116,6 +116,9 @@ public class GridSupplementaryItemLayoutEngine: NSObject, LayoutEngine {
 		layoutRightAuxiliaryItems()
 		
 		layoutFooters()
+		
+		layoutSection.pinnableHeaders += pinnableHeaders
+		layoutSection.nonPinnableHeaders += nonPinnableHeaders
 		
 		position.x = origin.x + layoutSizing.width
 		position.y = max(footersMaxY, leftAuxiliaryItemsMaxY, rightAuxiliaryItemsMaxY)

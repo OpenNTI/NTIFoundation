@@ -26,8 +26,8 @@ public protocol LayoutSection: LayoutMetrics, LayoutEngine, LayoutAttributesReso
 	
 	var placeholderInfo: LayoutPlaceholder? { get set }
 	
-	var pinnableHeaders: [LayoutSupplementaryItem] { get }
-	var nonPinnableHeaders: [LayoutSupplementaryItem] { get }
+	var pinnableHeaders: [LayoutSupplementaryItem] { get set }
+	var nonPinnableHeaders: [LayoutSupplementaryItem] { get set }
 	
 	var heightOfNonPinningHeaders: CGFloat { get }
 	

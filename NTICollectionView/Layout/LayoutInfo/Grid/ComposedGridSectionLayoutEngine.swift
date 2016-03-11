@@ -10,20 +10,22 @@ import UIKit
 
 public class ComposedGridSectionLayoutEngine: NSObject, SupplementaryLayoutEngine {
 
-	public init(sections: [GridLayoutSection]) {
+	public init(sections: [LayoutSection]) {
 		self.sections = sections
 	}
 	
-	public var sections: [GridLayoutSection]
+	public var sections: [LayoutSection]
 	
 	public var pinnableHeaders: [LayoutSupplementaryItem] = []
 	public var nonPinnableHeaders: [LayoutSupplementaryItem] = []
 	
+	private var origin: CGPoint!
 	private var position: CGPoint!
 	private var sizing: LayoutSizing!
 	private var invalidationContext: UICollectionViewLayoutInvalidationContext?
 	
 	public func layoutWithOrigin(origin: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
+		self.origin = origin
 		position = origin
 		sizing = layoutSizing
 		self.invalidationContext = invalidationContext
@@ -39,7 +41,8 @@ public class ComposedGridSectionLayoutEngine: NSObject, SupplementaryLayoutEngin
 		}
 	}
 	
-	private func layout(section: GridLayoutSection) {
+	private func layout(section: LayoutSection) {
+		position.x = origin.x
 		position = section.layoutWithOrigin(position, layoutSizing: sizing, invalidationContext: invalidationContext)
 		pinnableHeaders += section.pinnableHeaders
 		nonPinnableHeaders += section.nonPinnableHeaders
