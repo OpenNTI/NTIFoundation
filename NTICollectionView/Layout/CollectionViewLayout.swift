@@ -868,18 +868,12 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		pinnableItems.removeAll(keepCapacity: true)
 		
 		var globalNonPinningHeight: CGFloat = 0
+		
+		let layoutEngine = GridLayoutEngine(layoutInfo: layoutInfo)
+		start = layoutEngine.layoutWithOrigin(start, layoutSizing: layoutInfo, invalidationContext: nil)
+		
 		if let globalSection = sectionInfoForSectionAtIndex(GlobalSectionIndex) {
-			start = globalSection.layoutWithOrigin(start, layoutSizing: layoutInfo, invalidationContext: nil)
 			globalNonPinningHeight = globalSection.heightOfNonPinningHeaders
-		}
-		
-		let numberOfSections = collectionView.numberOfSections()
-		
-		for sectionIndex in 0..<numberOfSections {
-			guard let section = sectionInfoForSectionAtIndex(sectionIndex) else {
-				continue
-			}
-			start = section.layoutWithOrigin(start, layoutSizing: layoutInfo, invalidationContext: nil)
 		}
 		
 		// TODO: Generalize to include width
