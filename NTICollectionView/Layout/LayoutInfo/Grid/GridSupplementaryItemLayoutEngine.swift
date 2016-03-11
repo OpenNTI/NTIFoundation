@@ -194,6 +194,10 @@ public class GridSupplementaryItemLayoutEngine: NSObject, LayoutEngine {
 		let innerSizing = LayoutSizingInfo(width: innerContentWidth, layoutMeasure: layoutMeasure)
 		position = innerContentOrigin
 		position = innerLayoutEngine.layoutWithOrigin(position, layoutSizing: innerSizing, invalidationContext: invalidationContext)
+		if let engine = innerLayoutEngine as? SupplementaryLayoutEngine {
+			pinnableHeaders += engine.pinnableHeaders
+			nonPinnableHeaders += engine.nonPinnableHeaders
+		}
 		rightAuxiliaryItemsMinX = position.x + metrics.padding.right
 		footersMinY = position.y + metrics.padding.bottom
 	}
