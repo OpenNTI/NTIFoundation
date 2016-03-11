@@ -48,7 +48,8 @@ public class GridSectionCellLayoutEngine: NSObject {
 		return layoutSection.placeholderInfo == nil && numberOfItems > 0
 	}
 	
-	var origin: CGPoint!
+	private var origin: CGPoint!
+	private var position: CGPoint!
 	private var columnIndex: Int = 0
 	private var rowHeight: CGFloat!
 	private var row: GridLayoutRow!
@@ -68,10 +69,11 @@ public class GridSectionCellLayoutEngine: NSObject {
 		
 		reset()
 		origin = start
+		position = start
 		
 		layoutRows()
 		
-		return origin
+		return position
 	}
 	
 	private func layoutRows() {
@@ -91,7 +93,7 @@ public class GridSectionCellLayoutEngine: NSObject {
 	}
 	
 	private func advancePositionForTopMargin() {
-		origin.y += margins.top
+		position.y += margins.top
 	}
 	
 	private func startNewRow() {
@@ -100,7 +102,7 @@ public class GridSectionCellLayoutEngine: NSObject {
 	}
 	
 	private func updateRowFrame() {
-		row.frame = CGRect(x: margins.left, y: origin.y, width: width, height: rowHeight)
+		row.frame = CGRect(x: margins.left, y: position.y, width: width, height: rowHeight)
 	}
 	
 	private func layoutItems() {
@@ -149,7 +151,7 @@ public class GridSectionCellLayoutEngine: NSObject {
 	}
 	
 	private func updateFrame(of item: LayoutItem) {
-		item.frame = CGRect(x: origin.x, y: origin.y, width: columnWidth, height: height)
+		item.frame = CGRect(x: position.x, y: position.y, width: columnWidth, height: height)
 	}
 	
 	private func checkEstimatedHeight(of item: LayoutItem) {
@@ -170,7 +172,7 @@ public class GridSectionCellLayoutEngine: NSObject {
 	}
 	
 	private func advancePositionForBottomMargin() {
-		origin.y += margins.bottom
+		position.y += margins.bottom
 	}
 	
 	// Advance to the next column and if necessary the next row. Takes into account the phantom cell index.
@@ -199,9 +201,9 @@ public class GridSectionCellLayoutEngine: NSObject {
 	private func advanceLayoutPositionToNextColumn() {
 		switch metrics.cellLayoutOrder {
 		case .LeadingToTrailing:
-			origin.x += columnWidth
+			position.x += columnWidth
 		case .TrailingToLeading:
-			origin.x -= columnWidth
+			position.x -= columnWidth
 		}
 	}
 	
@@ -236,15 +238,15 @@ public class GridSectionCellLayoutEngine: NSObject {
 	}
 	
 	private func advanceYPositionToNextRow() {
-		origin.y += rowHeight
+		position.y += rowHeight
 	}
 	
 	private func resetXPositionToColumnStart() {
 		switch metrics.cellLayoutOrder {
 		case .LeadingToTrailing:
-			origin.x = margins.left
+			position.x = origin.x + margins.left
 		case .TrailingToLeading:
-			origin.x = width - margins.right - columnWidth
+			position.x = width - margins.right - columnWidth
 		}
 	}
 	
@@ -268,7 +270,7 @@ public class GridSectionCellLayoutEngine: NSObject {
 	private func commitCurrentRow() {
 		layoutSection.add(row)
 		// Update the origin based on the actual frame of the row
-		origin.y = row.frame.maxY
+		position.y = row.frame.maxY
 	}
 	
 }
