@@ -60,6 +60,8 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 		
 		layoutSupplementaryItems()
 		
+		position.x = origin.x + width
+		
 		return position
 	}
 	
