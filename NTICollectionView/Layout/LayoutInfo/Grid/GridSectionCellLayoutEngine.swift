@@ -80,7 +80,7 @@ public class GridSectionCellLayoutEngine: NSObject {
 		guard shouldLayoutItems else {
 			return
 		}
-		advancePositionForTopMargin()
+		applyLeadingMargins()
 		startNewRow()
 		updateRowFrame()
 		layoutItems()
@@ -92,8 +92,22 @@ public class GridSectionCellLayoutEngine: NSObject {
 		advancePositionForBottomMargin()
 	}
 	
-	private func advancePositionForTopMargin() {
+	private func applyLeadingMargins() {
+		applyTopMargin()
+		applyLeadingHorizontalMargin()
+	}
+	
+	private func applyTopMargin() {
 		position.y += margins.top
+	}
+	
+	private func applyLeadingHorizontalMargin() {
+		switch metrics.cellLayoutOrder {
+		case .LeadingToTrailing:
+			position.x += margins.left
+		case .TrailingToLeading:
+			position.x -= margins.right
+		}
 	}
 	
 	private func startNewRow() {
@@ -102,7 +116,7 @@ public class GridSectionCellLayoutEngine: NSObject {
 	}
 	
 	private func updateRowFrame() {
-		row.frame = CGRect(x: margins.left, y: position.y, width: width, height: rowHeight)
+		row.frame = CGRect(x: origin.x + margins.left, y: position.y, width: width, height: rowHeight)
 	}
 	
 	private func layoutItems() {
