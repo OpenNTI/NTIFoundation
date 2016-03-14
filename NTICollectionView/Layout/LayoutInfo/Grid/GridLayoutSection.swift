@@ -131,15 +131,33 @@ public class BasicGridLayoutSection: AbstractLayoutSection, GridLayoutSection {
 	}
 	
 	public override var backgroundAttribute: UICollectionViewLayoutAttributes? {
+		if let backgroundAttribute = _backgroundAttribute {
+			return backgroundAttribute
+		}
+		
+		// Only have background attribute on global section
+		guard sectionIndex == GlobalSectionIndex else {
+			return nil
+		}
+		
 		guard let backgroundColor = metrics.backgroundColor else {
 			return nil
 		}
-		let backgroundAttribute = super.backgroundAttribute
-		if let backgroundAttribute = backgroundAttribute as? CollectionViewLayoutAttributes {
-			backgroundAttribute.backgroundColor = backgroundColor
-		}
-		return backgroundAttribute
+		
+		let indexPath = NSIndexPath(index: 0)
+		let backgroundAttribute = CollectionViewLayoutAttributes(forDecorationViewOfKind: collectionElementKindGlobalHeaderBackground, withIndexPath: indexPath)
+		
+		// This will be updated by -updateSpecialItemsWithContentOffset
+		backgroundAttribute.frame = frame
+		backgroundAttribute.unpinnedOrigin = frame.origin
+		backgroundAttribute.zIndex = defaultZIndex
+		backgroundAttribute.isPinned = false
+		backgroundAttribute.hidden = false
+		backgroundAttribute.backgroundColor = backgroundColor
+		
+		return _backgroundAttribute
 	}
+	private var _backgroundAttribute: UICollectionViewLayoutAttributes?
 	
 	public override func add(supplementaryItem: LayoutSupplementaryItem) {
 		switch supplementaryItem.elementKind {
@@ -186,7 +204,10 @@ public class BasicGridLayoutSection: AbstractLayoutSection, GridLayoutSection {
 	}
 	
 	public override func reset() {
-		super.reset()
+		items.removeAll(keepCapacity: true)
+		headers.removeAll(keepCapacity: true)
+		footers.removeAll(keepCapacity: true)
+		_backgroundAttribute = nil
 		rows.removeAll(keepCapacity: true)
 		columnSeparatorLayoutAttributes.removeAll(keepCapacity: true)
 	}

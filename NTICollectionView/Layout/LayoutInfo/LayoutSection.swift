@@ -99,30 +99,8 @@ public class AbstractLayoutSection: NSObject, LayoutSection {
 	private var otherSupplementaryItems: [LayoutSupplementaryItem] = []
 	
 	public var backgroundAttribute: UICollectionViewLayoutAttributes? {
-		if let backgroundAttribute = _backgroundAttribute {
-			return backgroundAttribute
-		}
-		
-		// Only have background attribute on global section
-		guard sectionIndex == GlobalSectionIndex else {
-			return nil
-		}
-		
-		let indexPath = NSIndexPath(index: 0)
-		let backgroundAttribute = CollectionViewLayoutAttributes(forDecorationViewOfKind: collectionElementKindGlobalHeaderBackground, withIndexPath: indexPath)
-		
-		// This will be updated by -filterSpecialAttributes
-		backgroundAttribute.frame = frame
-		backgroundAttribute.unpinnedOrigin.y = frame.minY
-		backgroundAttribute.zIndex = defaultZIndex
-		backgroundAttribute.isPinned = false
-		backgroundAttribute.hidden = false
-		
-		_backgroundAttribute = backgroundAttribute
-		return _backgroundAttribute
+		return nil
 	}
-	
-	private var _backgroundAttribute: UICollectionViewLayoutAttributes?
 	
 	public var placeholderInfo: LayoutPlaceholder? {
 		didSet {
@@ -241,10 +219,6 @@ public class AbstractLayoutSection: NSObject, LayoutSection {
 	}
 	
 	public func reset() {
-		items.removeAll(keepCapacity: true)
-		headers.removeAll(keepCapacity: true)
-		footers.removeAll(keepCapacity: true)
-		_backgroundAttribute = nil
 	}
 	
 	public func applyValues(from metrics: LayoutMetrics) {
