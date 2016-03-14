@@ -46,6 +46,9 @@ public protocol SectionMetrics: LayoutMetrics {
 	/// The color to use when a cell becomes highlighted or selected.
 	var selectedBackgroundColor: UIColor? { get set }
 	
+	/// The corner radius to apply to items in this section.
+	var cornerRadius: CGFloat { get set }
+	
 }
 
 public protocol SectionMetricsOwning: NSObjectProtocol, SectionMetrics {

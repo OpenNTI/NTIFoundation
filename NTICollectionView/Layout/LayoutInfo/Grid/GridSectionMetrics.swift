@@ -69,6 +69,12 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 			setFlag("contentInset")
 		}
 	}
+	
+	public var cornerRadius: CGFloat = 0 {
+		didSet {
+			setFlag("cornerRadius")
+		}
+	}
 
 	/// The height of each row in the section. The default value is `nil`. Setting this property to a concrete value will prevent rows from being sized automatically using autolayout.
 	public var rowHeight: CGFloat? = nil {
@@ -183,6 +189,7 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 		let copy = BasicGridSectionMetrics()
 		
 		copy.contentInset = contentInset
+		copy.cornerRadius = cornerRadius
 		copy.rowHeight = rowHeight
 		copy.estimatedRowHeight = estimatedRowHeight
 		copy.fixedColumnWidth = fixedColumnWidth
@@ -214,6 +221,9 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 		
 		if metrics.definesMetric("contentInset") {
 			contentInset = gridMetrics.contentInset
+		}
+		if metrics.definesMetric("cornerRadius") {
+			cornerRadius = gridMetrics.cornerRadius
 		}
 		if metrics.definesMetric("rowHeight") {
 			rowHeight = gridMetrics.rowHeight
