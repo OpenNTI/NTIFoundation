@@ -48,7 +48,7 @@ public class GridLayoutItem: NSObject, LayoutItem, NSCopying {
 			attributes.columnIndex = columnIndex
 			
 			if let layoutInfo = section.layoutInfo as? BasicLayoutInfo,
-				layout = layoutInfo.layout	{
+				layout = layoutInfo.layout {
 					attributes.isEditing = layout.isEditing ? layout.canEditItem(at: indexPath) : false
 					attributes.isMovable = layout.isEditing ? layout.canMoveItem(at: indexPath) : false
 			}

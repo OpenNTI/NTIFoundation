@@ -32,6 +32,7 @@ public class GridSectionLayoutEngine: NSObject, SupplementaryLayoutEngine {
 		position = start
 		self.layoutSizing = layoutSizing
 		self.invalidationContext = invalidationContext
+		layoutSection.frame.size.width = layoutSizing.width
 		
 		performLayout()
 		
@@ -47,7 +48,9 @@ public class GridSectionLayoutEngine: NSObject, SupplementaryLayoutEngine {
 	
 	private func performLayout() {
 		let layoutEngine = makeSupplementaryLayoutEngine()
-		position = layoutEngine.layoutWithOrigin(position, layoutSizing: layoutSizing, invalidationContext: invalidationContext)
+		position = layoutEngine.layoutWithOrigin(origin, layoutSizing: layoutSizing, invalidationContext: invalidationContext)
+		let size = CGSize(width: layoutSizing.width, height: position.y - origin.y)
+		layoutSection.frame = CGRect(origin: origin, size: size)
 		pinnableHeaders += layoutEngine.pinnableHeaders
 		nonPinnableHeaders += layoutEngine.nonPinnableHeaders
 	}

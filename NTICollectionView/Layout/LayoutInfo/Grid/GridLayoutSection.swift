@@ -60,7 +60,7 @@ public class BasicGridLayoutSection: AbstractLayoutSection, GridLayoutSection {
 		return metrics.fixedColumnWidth ?? maximizedColumnWidth
 	}
 	private var maximizedColumnWidth: CGFloat {
-		let layoutWidth = layoutInfo?.width ?? 0
+		let layoutWidth = frame.width
 		let margins = metrics.padding
 		let numberOfColumns = metrics.numberOfColumns
 		let columnWidth = (layoutWidth - margins.left - margins.right) / CGFloat(numberOfColumns)
