@@ -34,6 +34,11 @@ public class GridLayoutEngine: NSObject, SupplementaryLayoutEngine {
 		
 		layoutSectionInfo()
 		
+		if let globalSection = layoutInfo.sectionAtIndex(GlobalSectionIndex) {
+			let globalSize = CGSize(width: layoutInfo.width, height: position.y - origin.y)
+			globalSection.frame = CGRect(origin: origin, size: globalSize)
+		}
+		
 		return position
 	}
 	
