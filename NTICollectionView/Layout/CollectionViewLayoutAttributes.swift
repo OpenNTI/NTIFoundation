@@ -18,23 +18,15 @@ public class CollectionViewLayoutAttributes: UICollectionViewLayoutAttributes {
 		result = prime * result + columnIndex
 		result = prime * result + (backgroundColor?.hashValue ?? 0)
 		result = prime * result + (selectedBackgroundColor?.hashValue ?? 0)
-		result = prime * result + Int(layoutMargins.top)
-		result = prime * result + Int(layoutMargins.left)
-		result = prime * result + Int(layoutMargins.bottom)
-		result = prime * result + Int(layoutMargins.right)
+		result = prime * result + layoutMargins.top.hashValue
+		result = prime * result + layoutMargins.left.hashValue
+		result = prime * result + layoutMargins.bottom.hashValue
+		result = prime * result + layoutMargins.right.hashValue
 		result = prime * result + (isEditing ? 1 : 0)
 		result = prime * result + (isMovable ? 1 : 0)
 		result = prime * result + (shouldCalculateFittingSize ? 1 : 0)
+		result = prime * result + cornerRadius.hashValue
 		return result
-	}
-	
-	public override var alpha: CGFloat {
-		get {
-			return super.alpha
-		}
-		set {
-			super.alpha = newValue
-		}
 	}
 	
 	// If this is a supplementary view, is it pinned in place?
@@ -60,6 +52,9 @@ public class CollectionViewLayoutAttributes: UICollectionViewLayoutAttributes {
 	/// Whether the correct fitting size should be calculated in `-preferredLayoutAttributesFittingAttributes:` or if the value is already correct.
 	public var shouldCalculateFittingSize = true
 	
+	/// The corner radius of the view's layer.
+	public var cornerRadius: CGFloat = 0
+	
 	public override func copyWithZone(zone: NSZone) -> AnyObject {
 		let copy = super.copyWithZone(zone) as! CollectionViewLayoutAttributes
 		copy.isPinned = isPinned
@@ -76,6 +71,7 @@ public class CollectionViewLayoutAttributes: UICollectionViewLayoutAttributes {
 		copy.pinnedSeparatorColor = pinnedSeparatorColor
 		copy.pinnedBackgroundColor = pinnedBackgroundColor
 		copy.showsSeparator = showsSeparator
+		copy.cornerRadius = cornerRadius
 		return copy
 	}
 	
@@ -92,6 +88,7 @@ public class CollectionViewLayoutAttributes: UICollectionViewLayoutAttributes {
 			&& selectedBackgroundColor == object.selectedBackgroundColor
 			&& layoutMargins == object.layoutMargins
 			&& shouldCalculateFittingSize == object.shouldCalculateFittingSize
+			&& cornerRadius == object.cornerRadius
 	}
 	
 }
