@@ -316,12 +316,10 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		targetContentOffset.y = min(targetContentOffset.y, max(0, layoutSize.height - availableHeight))
 		
 		if let firstInsertedIndex = insertedSections.first,
-			sectionInfo = sectionInfoForSectionAtIndex(firstInsertedIndex) {
-				let globalSection = sectionInfoForSectionAtIndex(GlobalSectionIndex)
-				let globalNonPinnableHeight = globalSection?.heightOfNonPinningHeaders ?? 0
-				let globalFrame = globalSection?.frame ?? CGRectZero
-				let globalPinnableHeight = globalFrame.height - globalNonPinnableHeight
-				
+			sectionInfo = sectionInfoForSectionAtIndex(firstInsertedIndex),
+			globalSection = sectionInfoForSectionAtIndex(GlobalSectionIndex) {
+				let globalNonPinnableHeight = globalSection.heightOfNonPinningHeaders
+				let globalPinnableHeight = globalSection.heightOfPinningHeaders
 				let minY = sectionInfo.frame.minY
 				if targetContentOffset.y + globalPinnableHeight > minY {
 					// Need to make the section visible
