@@ -51,12 +51,6 @@ public protocol GridSectionMetrics: SectionMetrics {
 	/// Insets for the section separator drawn below this section.
 	var sectionSeparatorInsets: UIEdgeInsets { get set }
 	
-	/// The color to use for the background of a cell in this section.
-	var backgroundColor: UIColor? { get set }
-	
-	/// The color to use when a cell becomes highlighted or selected.
-	var selectedBackgroundColor: UIColor? { get set }
-	
 	/// The color to use when drawing the row separators (and column separators when `numberOfColumns > 1 && showsColumnSeparator == true`).
 	var separatorColor: UIColor? { get set }
 	

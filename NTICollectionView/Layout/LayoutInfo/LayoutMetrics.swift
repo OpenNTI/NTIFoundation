@@ -40,6 +40,12 @@ public protocol SectionMetrics: LayoutMetrics {
 	/// The distance that the section content is inset from the enclosing content.
 	var contentInset: UIEdgeInsets { get set }
 	
+	/// The color to use for the background of a cell in this section.
+	var backgroundColor: UIColor? { get set }
+	
+	/// The color to use when a cell becomes highlighted or selected.
+	var selectedBackgroundColor: UIColor? { get set }
+	
 }
 
 public protocol SectionMetricsOwning: NSObjectProtocol, SectionMetrics {
