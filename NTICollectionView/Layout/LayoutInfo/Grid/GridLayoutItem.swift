@@ -46,6 +46,7 @@ public class GridLayoutItem: NSObject, LayoutItem, NSCopying {
 			attributes.backgroundColor = metrics.backgroundColor
 			attributes.selectedBackgroundColor = metrics.selectedBackgroundColor
 			attributes.columnIndex = columnIndex
+			attributes.cornerRadius = metrics.cornerRadius
 			
 			if let layoutInfo = section.layoutInfo as? BasicLayoutInfo,
 				layout = layoutInfo.layout {

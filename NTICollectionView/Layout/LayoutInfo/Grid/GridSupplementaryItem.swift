@@ -166,6 +166,7 @@ public class BasicGridSupplementaryItem: NSObject, NSCopying, GridSupplementaryI
 		attributes.pinnedSeparatorColor = pinnedSeparatorColor ?? metrics?.separatorColor
 		attributes.pinnedBackgroundColor = pinnedBackgroundColor ?? metrics?.backgroundColor
 		attributes.showsSeparator = showsSeparator
+		attributes.cornerRadius = metrics?.cornerRadius ?? 0
 		
 		_layoutAttributes = attributes
 		return attributes
