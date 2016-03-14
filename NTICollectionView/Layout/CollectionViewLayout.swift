@@ -496,7 +496,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		let section = decorationIndexPath.layoutSection
 		
 		if let direction = operationDirectionForSectionAtIndex(section) {
-			return finalLayoutAttributewsForAttributes(result, slidingAwayFrom: direction)
+			return finalLayoutAttributesForAttributes(result, slidingAwayFrom: direction)
 		}
 		
 		let isRemoved = removedSections.contains(section)
@@ -555,7 +555,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 				result.alpha = 0
 				return finalLayoutAttributesForAttributes(result)
 			}
-			return finalLayoutAttributewsForAttributes(result, slidingAwayFrom: direction)
+			return finalLayoutAttributesForAttributes(result, slidingAwayFrom: direction)
 		}
 		
 		let isRemoved = removedSections.contains(section)
@@ -603,7 +603,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		let section = itemIndexPath.layoutSection
 		
 		if let direction = operationDirectionForSectionAtIndex(section) {
-			return finalLayoutAttributewsForAttributes(result, slidingAwayFrom: direction)
+			return finalLayoutAttributesForAttributes(result, slidingAwayFrom: direction)
 		}
 		
 		let isDeletedItem = removedIndexPaths.contains(itemIndexPath)
@@ -1083,7 +1083,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return initialLayoutAttributesForAttributes(attributes)
 	}
 	
-	private func finalLayoutAttributewsForAttributes(attributes: UICollectionViewLayoutAttributes, slidingAwayFrom direction: SectionOperationDirection) -> UICollectionViewLayoutAttributes {
+	private func finalLayoutAttributesForAttributes(attributes: UICollectionViewLayoutAttributes, slidingAwayFrom direction: SectionOperationDirection) -> UICollectionViewLayoutAttributes {
 		var frame = attributes.frame
 		let cvBounds = collectionView?.bounds ?? CGRectZero
 		switch direction {
