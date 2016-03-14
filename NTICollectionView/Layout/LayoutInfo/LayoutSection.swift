@@ -30,6 +30,7 @@ public protocol LayoutSection: LayoutMetrics, LayoutEngine, LayoutAttributesReso
 	var nonPinnableHeaders: [LayoutSupplementaryItem] { get set }
 	
 	var heightOfNonPinningHeaders: CGFloat { get }
+	var heightOfPinningHeaders: CGFloat { get }
 	
 	/// All the layout attributes associated with this section.
 	var layoutAttributes: [UICollectionViewLayoutAttributes] { get }
@@ -137,13 +138,21 @@ public class AbstractLayoutSection: NSObject, LayoutSection {
 	public var nonPinnableHeaders: [LayoutSupplementaryItem] = []
 	
 	public var heightOfNonPinningHeaders: CGFloat {
-		guard !nonPinnableHeaders.isEmpty else {
+		return height(of: nonPinnableHeaders)
+	}
+	
+	public var heightOfPinningHeaders: CGFloat {
+		return height(of: pinnableHeaders)
+	}
+	
+	private func height(of supplementaryItems: [LayoutSupplementaryItem]) -> CGFloat {
+		guard !supplementaryItems.isEmpty else {
 			return 0
 		}
 		var minY = CGFloat.max
 		var maxY = CGFloat.min
 		
-		for supplementaryItem in nonPinnableHeaders {
+		for supplementaryItem in supplementaryItems {
 			let frame = supplementaryItem.frame
 			minY = min(minY, frame.minY)
 			maxY = max(maxY, frame.maxY)

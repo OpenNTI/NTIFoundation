@@ -373,7 +373,7 @@ public class BasicGridLayoutSection: AbstractLayoutSection, GridLayoutSection {
 		let previousSectionIndexWithContent = sectionsWithContent.indexLessThanIndex(sectionIndex)
 		let hasPreviousSectionWithContent = previousSectionIndexWithContent != NSNotFound
 		if hasPreviousSectionWithContent,
-		let previousSectionWithContent = layoutInfo?.sectionAtIndex(previousSectionIndexWithContent) as? GridLayoutSection
+			let previousSectionWithContent = layoutInfo?.sectionAtIndex(previousSectionIndexWithContent) as? GridLayoutSection
 			where !previousSectionWithContent.hasBottomSectionSeparator {
 				return true
 		}
