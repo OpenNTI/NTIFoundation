@@ -19,6 +19,9 @@ public protocol GridSectionMetrics: SectionMetrics {
 	/// An optional fixed width that can be used to size each column.
 	var fixedColumnWidth: CGFloat? { get set }
 	
+	/// The spacing between rows
+	var rowSpacing: CGFloat { get set }
+	
 	/// Number of columns in this section. Sections will inherit a default of 1 from the data source.
 	var numberOfColumns: Int { get set }
 	
@@ -91,6 +94,12 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 	public var fixedColumnWidth: CGFloat? {
 		didSet {
 			setFlag("fixedColumnWidth")
+		}
+	}
+	
+	public var rowSpacing: CGFloat = 0 {
+		didSet {
+			setFlag("rowSpacing")
 		}
 	}
 	
@@ -183,6 +192,7 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 		copy.rowHeight = rowHeight
 		copy.estimatedRowHeight = estimatedRowHeight
 		copy.fixedColumnWidth = fixedColumnWidth
+		copy.rowSpacing = rowSpacing
 		copy.numberOfColumns = numberOfColumns
 		copy.padding = padding
 		copy.showsColumnSeparator = showsColumnSeparator
@@ -219,6 +229,9 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 		}
 		if metrics.definesMetric("fixedColumnWidth") {
 			fixedColumnWidth = gridMetrics.fixedColumnWidth
+		}
+		if metrics.definesMetric("rowSpacing") {
+			rowSpacing = gridMetrics.rowSpacing
 		}
 		if metrics.definesMetric("numberOfColumns") {
 			numberOfColumns = gridMetrics.numberOfColumns

@@ -252,7 +252,7 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	}
 	
 	private func advanceYPositionToNextRow() {
-		position.y += rowHeight
+		position.y += metrics.rowSpacing + rowHeight
 	}
 	
 	private func resetXPositionToColumnStart() {
@@ -284,7 +284,7 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	private func commitCurrentRow() {
 		layoutSection.add(row)
 		// Update the origin based on the actual frame of the row
-		position.y = row.frame.maxY
+		position.y = row.frame.maxY + metrics.rowSpacing
 	}
 	
 }
