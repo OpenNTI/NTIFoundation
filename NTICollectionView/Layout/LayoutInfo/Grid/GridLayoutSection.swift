@@ -629,4 +629,34 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 		return metrics.definesMetric(metric)
 	}
 	
+	public func additionalLayoutAttributesToInsertForInsertionOfItem(at indexPath: NSIndexPath) -> [UICollectionViewLayoutAttributes] {
+		return []
+	}
+	
+	public func additionalLayoutAttributesToDeleteForDeletionOfItem(at indexPath: NSIndexPath) -> [UICollectionViewLayoutAttributes] {
+		var attributes: [UICollectionViewLayoutAttributes] = []
+		
+		if let rowSeparator = rowSeparatorAttributesToDeleteForDeletionOfItem(at: indexPath) {
+			attributes.append(rowSeparator)
+		}
+		
+		return attributes
+	}
+	
+	private func rowSeparatorAttributesToDeleteForDeletionOfItem(at indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+		guard metrics.showsRowSeparator else {
+			return nil
+		}
+		
+		let itemInfo = items[indexPath.item]
+		
+		guard let rowInfo = itemInfo.row,
+			rowSeparatorAttributes = rowInfo.rowSeparatorLayoutAttributes
+			where rowInfo.items.count == 1 else {
+				return nil
+		}
+		
+		return rowSeparatorAttributes
+	}
+	
 }
