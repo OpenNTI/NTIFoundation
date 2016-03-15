@@ -414,31 +414,34 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 		return sizeDelta
 	}
 	
-	// FIXME: Code duplication
 	func offsetContentAfterPosition(origin: CGPoint, offset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+		func shouldOffsetAttributes(with frame: CGRect) -> Bool {
+			return frame.minY >= origin.y
+		}
+		
+		func conditionallyOffsetDecoration(attributes: UICollectionViewLayoutAttributes) {
+			let frame = attributes.frame
+			guard shouldOffsetAttributes(with: frame),
+				let kind = attributes.representedElementKind else {
+					return
+			}
+			attributes.frame = CGRectOffset(frame, offset.x, offset.y)
+			invalidationContext?.invalidateDecorationElementsOfKind(kind, atIndexPaths: [attributes.indexPath])
+		}
+		
 		layoutSection(self, offsetContentAfter: origin, with: offset, invalidationContext: invalidationContext)
 		
 		for attributes in columnSeparatorLayoutAttributes {
-			let separatorFrame = attributes.frame
-			guard separatorFrame.minY >= origin.y else {
-				continue
-			}
-			attributes.frame = CGRectOffset(separatorFrame, offset.x, offset.y)
-			invalidationContext?.invalidateDecorationElementsOfKind(attributes.representedElementKind ?? "", atIndexPaths: [attributes.indexPath])
+			conditionallyOffsetDecoration(attributes)
 		}
 		
-		for (_, attributes) in sectionSeparatorLayoutAttributes {
-			let separatorFrame = attributes.frame
-			guard separatorFrame.minY >= origin.y else {
-				continue
-			}
-			attributes.frame = CGRectOffset(separatorFrame, offset.x, offset.y)
-			invalidationContext?.invalidateDecorationElementsOfKind(attributes.representedElementKind ?? "", atIndexPaths: [attributes.indexPath])
+		for attributes in sectionSeparatorLayoutAttributes.values {
+			conditionallyOffsetDecoration(attributes)
 		}
 		
 		for row in rows {
 			var rowFrame = row.frame
-			guard rowFrame.minY >= origin.y else {
+			guard shouldOffsetAttributes(with: rowFrame) else {
 				continue
 			}
 			rowFrame = CGRectOffset(rowFrame, offset.x, offset.y)
