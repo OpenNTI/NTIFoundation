@@ -397,6 +397,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			insertedSections.insert(indexPath.section)
 		} else {
 			insertedIndexPaths.insert(indexPath)
+			recordAdditionalInsertedAttributesForItemInsertion(at: indexPath)
 		}
 	}
 	
@@ -408,6 +409,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			removedSections.insert(indexPath.section)
 		} else {
 			removedIndexPaths.insert(indexPath)
+			recordAdditionalDeletedAttributesForItemDeletion(at: indexPath)
 		}
 	}
 	
@@ -430,7 +432,50 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		if oldIndexPath.isSection {
 			removedSections.insert(oldIndexPath.section)
 			insertedSections.insert(newIndexPath.section)
+		} else {
+			recordAdditionalDeletedAttributesForItemDeletion(at: oldIndexPath)
+			recordAdditionalInsertedAttributesForItemInsertion(at: newIndexPath)
 		}
+	}
+	
+	private func recordAdditionalInsertedAttributesForItemInsertion(at indexPath: NSIndexPath) {
+		guard let sectionInfo = layoutInfo?.sectionAtIndex(indexPath.section) else {
+			return
+		}
+		
+		let additionalInsertions = sectionInfo.additionalLayoutAttributesToInsertForInsertionOfItem(at: indexPath)
+		for attributes in additionalInsertions {
+			guard let kind = attributes.representedElementKind else {
+				continue
+			}
+			recordAdditionalInsertedIndexPath(attributes.indexPath, forElementOf: kind)
+		}
+	}
+	
+	private func recordAdditionalInsertedIndexPath(indexPath: NSIndexPath, forElementOf kind: String) {
+		var insertedPaths = additionalInsertedIndexPaths[kind] ?? []
+		insertedPaths.append(indexPath)
+		additionalInsertedIndexPaths[kind] = insertedPaths
+	}
+	
+	private func recordAdditionalDeletedAttributesForItemDeletion(at indexPath: NSIndexPath) {
+		guard let sectionInfo = oldLayoutInfo?.sectionAtIndex(indexPath.section) else {
+			return
+		}
+		
+		let additionalDeletions = sectionInfo.additionalLayoutAttributesToDeleteForDeletionOfItem(at: indexPath)
+		for attributes in additionalDeletions {
+			guard let kind = attributes.representedElementKind else {
+				continue
+			}
+			recordAdditionalDeletedIndexPath(attributes.indexPath, forElementOf: kind)
+		}
+	}
+	
+	private func recordAdditionalDeletedIndexPath(indexPath: NSIndexPath, forElementOf kind: String) {
+		var deletedPaths = additionalDeletedIndexPaths[kind] ?? []
+		deletedPaths.append(indexPath)
+		additionalDeletedIndexPaths[kind] = deletedPaths
 	}
 	
 	private func adjustContentOffsetDelta() {
@@ -994,6 +1039,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return result
 	}
 	
+	// TODO: Encapsulate elsewhere
 	func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
 		guard let collectionView = self.collectionView else {
 			return
