@@ -22,8 +22,8 @@ public protocol GridLayoutSection: LayoutSection {
 	var metrics: GridSectionMetrics { get }
 	
 	var rows: [LayoutRow] { get }
-	var leftAuxiliaryItems: [LayoutSupplementaryItem] { get set }
-	var rightAuxiliaryItems: [LayoutSupplementaryItem] { get set }
+	var leftAuxiliaryItems: [LayoutSupplementaryItem] { get }
+	var rightAuxiliaryItems: [LayoutSupplementaryItem] { get }
 	
 	/// The width used to size each column.
 	///
@@ -63,12 +63,22 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 	public var items: [LayoutItem] = []
 	
 	public var supplementaryItems: [LayoutSupplementaryItem] {
-		return headers + footers + otherSupplementaryItems
+		var allItems: [LayoutSupplementaryItem] = []
+		for items in supplementaryItemsByKind.values {
+			allItems += items
+		}
+		return allItems
 	}
 	
-	public var headers: [LayoutSupplementaryItem] = []
+	public var supplementaryItemsByKind: [String: [LayoutSupplementaryItem]] = [:]
 	
-	public var footers: [LayoutSupplementaryItem] = []
+	public var headers: [LayoutSupplementaryItem] {
+		return supplementaryItems(of: UICollectionElementKindSectionHeader)
+	}
+	
+	public var footers: [LayoutSupplementaryItem] {
+		return supplementaryItems(of: UICollectionElementKindSectionFooter)
+	}
 	
 	private var otherSupplementaryItems: [LayoutSupplementaryItem] = []
 	
@@ -116,8 +126,14 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 	public let metrics: GridSectionMetrics = BasicGridSectionMetrics()
 	
 	public var rows: [LayoutRow] = []
-	public var leftAuxiliaryItems: [LayoutSupplementaryItem] = []
-	public var rightAuxiliaryItems: [LayoutSupplementaryItem] = []
+	
+	public var leftAuxiliaryItems: [LayoutSupplementaryItem] {
+		return supplementaryItems(of: collectionElementKindLeftAuxiliaryItem)
+	}
+	
+	public var rightAuxiliaryItems: [LayoutSupplementaryItem] {
+		return supplementaryItems(of: collectionElementKindRightAuxiliaryItem)
+	}
 	
 	public var columnWidth: CGFloat {
 		return metrics.fixedColumnWidth ?? maximizedColumnWidth
@@ -228,23 +244,16 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 	}
 	
 	public func add(supplementaryItem: LayoutSupplementaryItem) {
-		switch supplementaryItem.elementKind {
-		case UICollectionElementKindSectionHeader:
-			supplementaryItem.itemIndex = headers.count
-			headers.append(supplementaryItem)
-		case UICollectionElementKindSectionFooter:
-			supplementaryItem.itemIndex = footers.count
-			footers.append(supplementaryItem)
-		case collectionElementKindLeftAuxiliaryItem:
-			supplementaryItem.itemIndex = leftAuxiliaryItems.count
-			leftAuxiliaryItems.append(supplementaryItem)
-		case collectionElementKindRightAuxiliaryItem:
-			supplementaryItem.itemIndex = rightAuxiliaryItems.count
-			rightAuxiliaryItems.append(supplementaryItem)
-		default:
-			break
-		}
+		let kind = supplementaryItem.elementKind
+		var items = supplementaryItems(of: kind)
+		supplementaryItem.itemIndex = items.count
 		supplementaryItem.section = self
+		items.append(supplementaryItem)
+		supplementaryItemsByKind[kind] = items
+	}
+	
+	public func supplementaryItems(of kind: String) -> [LayoutSupplementaryItem] {
+		return supplementaryItemsByKind[kind] ?? []
 	}
 	
 	public func add(row: LayoutRow) {
@@ -279,8 +288,7 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 	
 	public func reset() {
 		items.removeAll(keepCapacity: true)
-		headers.removeAll(keepCapacity: true)
-		footers.removeAll(keepCapacity: true)
+		supplementaryItemsByKind = [:]
 		_backgroundAttribute = nil
 		rows.removeAll(keepCapacity: true)
 		columnSeparatorLayoutAttributes.removeAll(keepCapacity: true)
