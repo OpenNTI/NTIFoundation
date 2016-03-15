@@ -61,7 +61,7 @@ public protocol LayoutInfo: LayoutSizing, LayoutAttributesResolving {
 	func add(section: LayoutSection, sectionIndex: Int)
 	
 	/// Creates and adds a new section.
-	func newSection(sectionIndex index: Int) -> LayoutSection
+//	func newSection(sectionIndex index: Int) -> LayoutSection
 	
 	/// Create a new placeholder covering the specified range of sections.
 	func newPlaceholderStartingAtSectionIndex(sectionIndex: Int) -> LayoutPlaceholder

@@ -97,12 +97,12 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 	}
 	
 	// This isn't currently being called -- see FIXME
-	public func newSection(sectionIndex index: Int) -> LayoutSection {
-		// FIXME: The type of section should be determined elsewhere
-		let section = AbstractLayoutSection()
-		add(section, sectionIndex: index)
-		return section
-	}
+//	public func newSection(sectionIndex index: Int) -> LayoutSection {
+//		// FIXME: The type of section should be determined elsewhere
+//		let section = AbstractLayoutSection()
+//		add(section, sectionIndex: index)
+//		return section
+//	}
 	
 	public func newPlaceholderStartingAtSectionIndex(sectionIndex: Int) -> LayoutPlaceholder {
 		let placeholder = BasicLayoutPlaceholder(sectionIndexes: NSIndexSet(index: sectionIndex))

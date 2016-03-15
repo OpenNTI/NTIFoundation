@@ -46,9 +46,72 @@ public protocol GridLayoutSection: LayoutSection {
 	
 }
 
-public class BasicGridLayoutSection: AbstractLayoutSection, GridLayoutSection {
+public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 	
 	static let hairline: CGFloat = 1.0 / UIScreen.mainScreen().scale
+	
+	public var frame = CGRectZero
+	
+	public var sectionIndex = 0
+	
+	public var isGlobalSection: Bool {
+		return sectionIndex == GlobalSectionIndex
+	}
+	
+	public weak var layoutInfo: LayoutInfo?
+	
+	public var items: [LayoutItem] = []
+	
+	public var supplementaryItems: [LayoutSupplementaryItem] {
+		return headers + footers + otherSupplementaryItems
+	}
+	
+	public var headers: [LayoutSupplementaryItem] = []
+	
+	public var footers: [LayoutSupplementaryItem] = []
+	
+	private var otherSupplementaryItems: [LayoutSupplementaryItem] = []
+	
+	public var placeholderInfo: LayoutPlaceholder? {
+		didSet {
+			guard placeholderInfo !== oldValue else {
+				return
+			}
+			placeholderInfo?.wasAddedToSection(self)
+		}
+	}
+	
+	public var pinnableHeaders: [LayoutSupplementaryItem] = []
+	
+	public var nonPinnableHeaders: [LayoutSupplementaryItem] = []
+	
+	public var heightOfNonPinningHeaders: CGFloat {
+		return height(of: nonPinnableHeaders)
+	}
+	
+	public var heightOfPinningHeaders: CGFloat {
+		return height(of: pinnableHeaders)
+	}
+	
+	private func height(of supplementaryItems: [LayoutSupplementaryItem]) -> CGFloat {
+		guard !supplementaryItems.isEmpty else {
+			return 0
+		}
+		var minY = CGFloat.max
+		var maxY = CGFloat.min
+		
+		for supplementaryItem in supplementaryItems {
+			let frame = supplementaryItem.frame
+			minY = min(minY, frame.minY)
+			maxY = max(maxY, frame.maxY)
+		}
+		
+		return maxY - minY
+	}
+	
+	public var decorationViewClassesByKind: [String: AnyClass] {
+		return [:]
+	}
 	
 	public let metrics: GridSectionMetrics = BasicGridSectionMetrics()
 	
@@ -72,7 +135,7 @@ public class BasicGridLayoutSection: AbstractLayoutSection, GridLayoutSection {
 	public var phantomCellIndex: Int?
 	public var phantomCellSize = CGSizeZero
 	
-	public override var layoutAttributes: [UICollectionViewLayoutAttributes] {
+	public var layoutAttributes: [UICollectionViewLayoutAttributes] {
 		var layoutAttributes: [UICollectionViewLayoutAttributes] = []
 		
 		if let backgroundAttribute = self.backgroundAttribute {
@@ -130,7 +193,7 @@ public class BasicGridLayoutSection: AbstractLayoutSection, GridLayoutSection {
 		return sectionSeparatorLayoutAttributes[sectionSeparatorBottom] != nil
 	}
 	
-	public override var backgroundAttribute: UICollectionViewLayoutAttributes? {
+	public var backgroundAttribute: UICollectionViewLayoutAttributes? {
 		if let backgroundAttribute = _backgroundAttribute {
 			return backgroundAttribute
 		}
@@ -159,8 +222,19 @@ public class BasicGridLayoutSection: AbstractLayoutSection, GridLayoutSection {
 	}
 	private var _backgroundAttribute: UICollectionViewLayoutAttributes?
 	
-	public override func add(supplementaryItem: LayoutSupplementaryItem) {
+	public func add(item: LayoutItem) {
+		item.itemIndex = items.count
+		items.append(item)
+	}
+	
+	public func add(supplementaryItem: LayoutSupplementaryItem) {
 		switch supplementaryItem.elementKind {
+		case UICollectionElementKindSectionHeader:
+			supplementaryItem.itemIndex = headers.count
+			headers.append(supplementaryItem)
+		case UICollectionElementKindSectionFooter:
+			supplementaryItem.itemIndex = footers.count
+			footers.append(supplementaryItem)
 		case collectionElementKindLeftAuxiliaryItem:
 			supplementaryItem.itemIndex = leftAuxiliaryItems.count
 			leftAuxiliaryItems.append(supplementaryItem)
@@ -168,7 +242,7 @@ public class BasicGridLayoutSection: AbstractLayoutSection, GridLayoutSection {
 			supplementaryItem.itemIndex = rightAuxiliaryItems.count
 			rightAuxiliaryItems.append(supplementaryItem)
 		default:
-			super.add(supplementaryItem)
+			break
 		}
 		supplementaryItem.section = self
 	}
@@ -203,7 +277,7 @@ public class BasicGridLayoutSection: AbstractLayoutSection, GridLayoutSection {
 		rows.removeAll(keepCapacity: true)
 	}
 	
-	public override func reset() {
+	public func reset() {
 		items.removeAll(keepCapacity: true)
 		headers.removeAll(keepCapacity: true)
 		footers.removeAll(keepCapacity: true)
@@ -212,8 +286,7 @@ public class BasicGridLayoutSection: AbstractLayoutSection, GridLayoutSection {
 		columnSeparatorLayoutAttributes.removeAll(keepCapacity: true)
 	}
 	
-	public override func applyValues(from metrics: LayoutMetrics) {
-		super.applyValues(from: metrics)
+	public func applyValues(from metrics: LayoutMetrics) {
 		self.metrics.applyValues(from: metrics)
 		if let gridMetrics = metrics as? GridSectionMetrics {
 			self.metrics.applyValues(from: gridMetrics)
@@ -222,11 +295,11 @@ public class BasicGridLayoutSection: AbstractLayoutSection, GridLayoutSection {
 		}
 	}
 	
-	public override func resolveMissingValuesFromTheme() {
+	public func resolveMissingValuesFromTheme() {
 		metrics.resolveMissingValuesFromTheme()
 	}
 	
-	public override func layoutWithOrigin(start: CGPoint, layoutSizing: LayoutSizing,  invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
+	public func layoutWithOrigin(start: CGPoint, layoutSizing: LayoutSizing,  invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
 		let layoutEngine = GridSectionLayoutEngine(layoutSection: self)
 		let endPoint = layoutEngine.layoutWithOrigin(start, layoutSizing: layoutSizing, invalidationContext: invalidationContext)
 		pinnableHeaders = layoutEngine.pinnableHeaders
@@ -234,11 +307,12 @@ public class BasicGridLayoutSection: AbstractLayoutSection, GridLayoutSection {
 		return endPoint
 	}
 	
-	// FIXME: Code duplication with super
-	public override func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	// FIXME: Code duplication
+	public func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		guard frame != self.frame else {
 			return
 		}
+		
 		let offset = CGPoint(x: frame.origin.x - self.frame.origin.x, y: frame.origin.y - self.frame.origin.y)
 		
 		for row in rows {
@@ -256,10 +330,10 @@ public class BasicGridLayoutSection: AbstractLayoutSection, GridLayoutSection {
 			invalidationContext?.invalidateDecorationElementsOfKind(attributes.representedElementKind ?? "", atIndexPaths: [attributes.indexPath])
 		}
 		
-		super.setFrame(frame, invalidationContext: invalidationContext)
+		layoutSection(self, setFrame: frame, invalidationContext: invalidationContext)
 	}
 	
-	public override func setSize(size: CGSize, forItemAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
+	public func setSize(size: CGSize, forItemAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
 		let itemInfo = items[index]
 		var itemFrame = itemInfo.frame
 		guard size != itemFrame.size, let rowInfo = itemInfo.row else {
@@ -296,8 +370,46 @@ public class BasicGridLayoutSection: AbstractLayoutSection, GridLayoutSection {
 		return sizeDelta
 	}
 	
+	public func setSize(size: CGSize, forSupplementaryElementOfKind kind: String, at index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
+		if kind == UICollectionElementKindSectionHeader {
+			return setSize(size, forHeaderAt: index, invalidationContext: invalidationContext)
+		} else if kind == UICollectionElementKindSectionFooter {
+			return setSize(size, forFooterAt: index, invalidationContext: invalidationContext)
+		} else {
+			return CGPointZero
+		}
+	}
+	
+	public func setSize(size: CGSize, forHeaderAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
+		let headerInfo = headers[index]
+		return setSize(size, of: headerInfo, invalidationContext: invalidationContext)
+	}
+	
+	public func setSize(size: CGSize, forFooterAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
+		let footerInfo = footers[index]
+		return setSize(size, of: footerInfo, invalidationContext: invalidationContext)
+	}
+	
+	func setSize(size: CGSize, of supplementaryItem: LayoutSupplementaryItem, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
+		var frame = supplementaryItem.frame
+		let after = CGPoint(x: 0, y: frame.maxY)
+		
+		let sizeDelta = CGPoint(x: 0, y: size.height - frame.height)
+		frame.size = size
+		supplementaryItem.setFrame(frame, invalidationContext: invalidationContext)
+		
+		guard sizeDelta != CGPointZero else {
+			return CGPointZero
+		}
+		
+		offsetContentAfterPosition(after, offset: sizeDelta, invalidationContext: invalidationContext)
+		return sizeDelta
+	}
+	
 	// FIXME: Code duplication
-	override func offsetContentAfterPosition(origin: CGPoint, offset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	func offsetContentAfterPosition(origin: CGPoint, offset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+		layoutSection(self, offsetContentAfter: origin, with: offset, invalidationContext: invalidationContext)
+		
 		for attributes in columnSeparatorLayoutAttributes {
 			let separatorFrame = attributes.frame
 			guard separatorFrame.minY >= origin.y else {
@@ -361,7 +473,7 @@ public class BasicGridLayoutSection: AbstractLayoutSection, GridLayoutSection {
 	}
 	
 	/// Create any additional layout attributes, this requires knowing what sections actually have any content.
-	public override func finalizeLayoutAttributesForSectionsWithContent(sectionsWithContent: NSIndexSet) {
+	public func finalizeLayoutAttributesForSectionsWithContent(sectionsWithContent: NSIndexSet) {
 		let shouldShowSectionSeparators = metrics.showsSectionSeparator && items.count > 0
 		
 		// Hide the row separator for the last row in the section
@@ -442,28 +554,71 @@ public class BasicGridLayoutSection: AbstractLayoutSection, GridLayoutSection {
 		return CGRect(x: x, y: y, width: width, height: height)
 	}
 	
-	public override func layoutAttributesForDecorationViewOfKind(kind: String, at indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+	public func layoutAttributesForCell(at indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
 		let itemIndex = indexPath.itemIndex
-		if kind == collectionElementKindColumnSeparator {
+		guard placeholderInfo != nil || itemIndex < items.count else {
+			return nil
+		}
+		let itemInfo = items[itemIndex]
+		return itemInfo.layoutAttributes
+	}
+	
+	public func layoutAttributesForSupplementaryElementOfKind(kind: String, at indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+		if kind == CollectionElementKindPlaceholder {
+			return placeholderInfo?.layoutAttributes
+		}
+		
+		let itemIndex = indexPath.itemIndex
+		let supplementaryItem: LayoutSupplementaryItem
+		
+		if kind == UICollectionElementKindSectionHeader {
+			guard itemIndex < headers.count else {
+				return nil
+			}
+			supplementaryItem = headers[itemIndex]
+		} else if kind == UICollectionElementKindSectionFooter {
+			guard itemIndex < footers.count else {
+				return nil
+			}
+			supplementaryItem = footers[itemIndex]
+		} else {
+			// TODO: Handle other kinds
+			return nil
+		}
+		
+		// There's no layout attributes if this section isn't the global section, there are no items and the supplementary item shouldn't be shown when the placeholder is visible (e.g. no items)
+		guard isGlobalSection || items.count > 0 || supplementaryItem.isVisibleWhileShowingPlaceholder else {
+			return nil
+		}
+		
+		return supplementaryItem.layoutAttributes
+	}
+	
+	public func layoutAttributesForDecorationViewOfKind(kind: String, at indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+		let itemIndex = indexPath.itemIndex
+		switch kind {
+		case collectionElementKindColumnSeparator:
 			guard itemIndex < columnSeparatorLayoutAttributes.count else {
 				return nil
 			}
 			return columnSeparatorLayoutAttributes[itemIndex]
-		}
-		
-		if kind == collectionElementKindSectionSeparator {
+		case collectionElementKindSectionSeparator:
 			return sectionSeparatorLayoutAttributes[itemIndex]
-		}
-		
-		if kind == collectionElementKindRowSeparator {
+		case collectionElementKindRowSeparator:
 			guard itemIndex < rows.count else {
 				return nil
 			}
 			let rowInfo = rows[itemIndex]
 			return rowInfo.rowSeparatorLayoutAttributes
+		case collectionElementKindGlobalHeaderBackground:
+			return backgroundAttribute
+		default:
+			return nil
 		}
-		
-		return nil
+	}
+	
+	public func definesMetric(metric: String) -> Bool {
+		return metrics.definesMetric(metric)
 	}
 	
 }
