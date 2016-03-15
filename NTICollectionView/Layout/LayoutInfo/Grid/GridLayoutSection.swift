@@ -315,7 +315,6 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 		return endPoint
 	}
 	
-	// FIXME: Code duplication
 	public func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		guard frame != self.frame else {
 			return
@@ -328,14 +327,17 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 			row.setFrame(rowFrame, invalidationContext: invalidationContext)
 		}
 		
-		for attributes in columnSeparatorLayoutAttributes {
+		func offsetDecoration(attributes: UICollectionViewLayoutAttributes) {
 			attributes.frame = CGRectOffset(attributes.frame, offset.x, offset.y)
-			invalidationContext?.invalidateDecorationElementsOfKind(attributes.representedElementKind ?? "", atIndexPaths: [attributes.indexPath])
+			invalidationContext?.invalidateDecorationElement(with: attributes)
+		}
+		
+		for attributes in columnSeparatorLayoutAttributes {
+			offsetDecoration(attributes)
 		}
 		
 		for (_, attributes) in sectionSeparatorLayoutAttributes {
-			attributes.frame = CGRectOffset(attributes.frame, offset.x, offset.y)
-			invalidationContext?.invalidateDecorationElementsOfKind(attributes.representedElementKind ?? "", atIndexPaths: [attributes.indexPath])
+			offsetDecoration(attributes)
 		}
 		
 		layoutSection(self, setFrame: frame, invalidationContext: invalidationContext)
