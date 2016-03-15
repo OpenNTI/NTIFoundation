@@ -479,6 +479,8 @@
 		4A68AD001C88B0CE00849185 /* SegmentedControlProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9E1C88B0CE00849185 /* SegmentedControlProtocol.swift */; };
 		4A68AD431C88BE2000849185 /* UICollectionView+SupplementaryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AD421C88BE2000849185 /* UICollectionView+SupplementaryViews.swift */; };
 		4A68AD441C88BE2000849185 /* UICollectionView+SupplementaryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AD421C88BE2000849185 /* UICollectionView+SupplementaryViews.swift */; };
+		4ADEE74C1C98950400DE9B0D /* Dictionary-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADEE74B1C98950300DE9B0D /* Dictionary-Extensions.swift */; };
+		4ADEE74D1C98950400DE9B0D /* Dictionary-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADEE74B1C98950300DE9B0D /* Dictionary-Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1088,6 +1090,7 @@
 		4A72F45F1925AEF1004792EF /* UIColor+NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+NTIExtensions.h"; sourceTree = "<group>"; };
 		4A72F4601925AEF1004792EF /* UIColor+NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NTIExtensions.m"; sourceTree = "<group>"; };
 		4A72F48619268DA8004792EF /* UIColor+NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NTIExtensionsTest.m"; sourceTree = "<group>"; };
+		4ADEE74B1C98950300DE9B0D /* Dictionary-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary-Extensions.swift"; sourceTree = "<group>"; };
 		4C2ECDD31549D0A400C69E3A /* NTIMathInputExpressionModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathInputExpressionModel.h; sourceTree = "<group>"; };
 		4C2ECDD41549D0A400C69E3A /* NTIMathInputExpressionModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathInputExpressionModel.m; sourceTree = "<group>"; };
 		4C40971615221D91002A9445 /* jsonUserData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = jsonUserData.json; sourceTree = "<group>"; };
@@ -1815,6 +1818,7 @@
 				4A0582F91C91E80200F3D0E0 /* UIEdgeInsets-Extensions.swift */,
 				4A68AC781C88B0CD00849185 /* UICollectionViewLayoutInvalidationContext-Extensions.swift */,
 				4A68AD421C88BE2000849185 /* UICollectionView+SupplementaryViews.swift */,
+				4ADEE74B1C98950300DE9B0D /* Dictionary-Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3144,6 +3148,7 @@
 				4A68ACB51C88B0CE00849185 /* DataSourceSectionInfo.swift in Sources */,
 				4A68ACB11C88B0CE00849185 /* DataSourcePlaceholder.swift in Sources */,
 				4A0583341C934BCF00F3D0E0 /* ComposedGridSectionLayoutEngine.swift in Sources */,
+				4ADEE74C1C98950400DE9B0D /* Dictionary-Extensions.swift in Sources */,
 				4A68ACA51C88B0CE00849185 /* CollectionDataSourceDelegate.swift in Sources */,
 				4A0582FF1C9211A200F3D0E0 /* GridLayoutEngine.swift in Sources */,
 				4A68AC9F1C88B0CE00849185 /* AbstractCollectionDataSource.swift in Sources */,
@@ -3242,6 +3247,7 @@
 				4A68ACBC1C88B0CE00849185 /* CGGeometry-Extensions.swift in Sources */,
 				4A68ACC41C88B0CE00849185 /* CollectionLayoutAnimator.swift in Sources */,
 				4A68AC601C88AEE300849185 /* DummyLayoutMeasure.swift in Sources */,
+				4ADEE74D1C98950400DE9B0D /* Dictionary-Extensions.swift in Sources */,
 				4A620D8D1C8E148D0084B0A2 /* CollectionDataSourceController.swift in Sources */,
 				4A68ACA81C88B0CE00849185 /* CollectionDataSourceMetricsHelper.swift in Sources */,
 				4A68ACC01C88B0CE00849185 /* NSIndexPath-Extensions.swift in Sources */,
