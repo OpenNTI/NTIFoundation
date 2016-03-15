@@ -453,9 +453,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	}
 	
 	private func recordAdditionalInsertedIndexPath(indexPath: NSIndexPath, forElementOf kind: String) {
-		var insertedPaths = additionalInsertedIndexPaths[kind] ?? []
-		insertedPaths.append(indexPath)
-		additionalInsertedIndexPaths[kind] = insertedPaths
+		additionalInsertedIndexPaths.append(indexPath, to: kind)
 	}
 	
 	private func recordAdditionalDeletedAttributesForItemDeletion(at indexPath: NSIndexPath) {
@@ -473,9 +471,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	}
 	
 	private func recordAdditionalDeletedIndexPath(indexPath: NSIndexPath, forElementOf kind: String) {
-		var deletedPaths = additionalDeletedIndexPaths[kind] ?? []
-		deletedPaths.append(indexPath)
-		additionalDeletedIndexPaths[kind] = deletedPaths
+		additionalDeletedIndexPaths.append(indexPath, to: kind)
 	}
 	
 	private func adjustContentOffsetDelta() {
