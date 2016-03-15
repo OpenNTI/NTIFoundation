@@ -323,21 +323,15 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 		let offset = CGPoint(x: frame.origin.x - self.frame.origin.x, y: frame.origin.y - self.frame.origin.y)
 		
 		for row in rows {
-			let rowFrame = CGRectOffset(row.frame, offset.x, offset.y)
-			row.setFrame(rowFrame, invalidationContext: invalidationContext)
-		}
-		
-		func offsetDecoration(attributes: UICollectionViewLayoutAttributes) {
-			attributes.frame = CGRectOffset(attributes.frame, offset.x, offset.y)
-			invalidationContext?.invalidateDecorationElement(with: attributes)
+			self.offset(row, by: offset, invalidationContext: invalidationContext)
 		}
 		
 		for attributes in columnSeparatorLayoutAttributes {
-			offsetDecoration(attributes)
+			offsetDecorationElement(with: attributes, by: offset, invalidationContext: invalidationContext)
 		}
 		
-		for (_, attributes) in sectionSeparatorLayoutAttributes {
-			offsetDecoration(attributes)
+		for attributes in sectionSeparatorLayoutAttributes.values {
+			offsetDecorationElement(with: attributes, by: offset, invalidationContext: invalidationContext)
 		}
 		
 		layoutSection(self, setFrame: frame, invalidationContext: invalidationContext)
@@ -417,38 +411,33 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 	}
 	
 	func offsetContentAfterPosition(origin: CGPoint, offset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
-		func shouldOffsetAttributes(with frame: CGRect) -> Bool {
+		func shouldOffsetElement(with frame: CGRect) -> Bool {
 			return frame.minY >= origin.y
-		}
-		
-		func conditionallyOffsetDecoration(attributes: UICollectionViewLayoutAttributes) {
-			let frame = attributes.frame
-			guard shouldOffsetAttributes(with: frame),
-				let kind = attributes.representedElementKind else {
-					return
-			}
-			attributes.frame = CGRectOffset(frame, offset.x, offset.y)
-			invalidationContext?.invalidateDecorationElementsOfKind(kind, atIndexPaths: [attributes.indexPath])
 		}
 		
 		layoutSection(self, offsetContentAfter: origin, with: offset, invalidationContext: invalidationContext)
 		
-		for attributes in columnSeparatorLayoutAttributes {
-			conditionallyOffsetDecoration(attributes)
+		for attributes in columnSeparatorLayoutAttributes where shouldOffsetElement(with: attributes.frame) {
+			offsetDecorationElement(with: attributes, by: offset, invalidationContext: invalidationContext)
 		}
 		
-		for attributes in sectionSeparatorLayoutAttributes.values {
-			conditionallyOffsetDecoration(attributes)
+		for attributes in sectionSeparatorLayoutAttributes.values where shouldOffsetElement(with: attributes.frame) {
+			offsetDecorationElement(with: attributes, by: offset, invalidationContext: invalidationContext)
 		}
 		
-		for row in rows {
-			var rowFrame = row.frame
-			guard shouldOffsetAttributes(with: rowFrame) else {
-				continue
-			}
-			rowFrame = CGRectOffset(rowFrame, offset.x, offset.y)
-			row.setFrame(rowFrame, invalidationContext: invalidationContext)
+		for row in rows where shouldOffsetElement(with: row.frame) {
+			self.offset(row, by: offset, invalidationContext: invalidationContext)
 		}
+	}
+	
+	private func offsetDecorationElement(with attributes: UICollectionViewLayoutAttributes, by offset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+		attributes.frame = CGRectOffset(attributes.frame, offset.x, offset.y)
+		invalidationContext?.invalidateDecorationElement(with: attributes)
+	}
+	
+	private func offset(row: LayoutRow, by offset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+		let offsetFrame = CGRectOffset(row.frame, offset.x, offset.y)
+		row.setFrame(offsetFrame, invalidationContext: invalidationContext)
 	}
 	
 	func updateColumnSeparators(with invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
