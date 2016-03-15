@@ -42,10 +42,6 @@ class DummyLayoutInfo: NSObject, LayoutInfo {
 		sections.insert(section, atIndex: sectionIndex)
 	}
 	
-	func newSection(sectionIndex index: Int) -> LayoutSection {
-		return AbstractLayoutSection()
-	}
-	
 	func newPlaceholderStartingAtSectionIndex(sectionIndex: Int) -> LayoutPlaceholder {
 		return BasicLayoutPlaceholder(sectionIndexes: NSIndexSet())
 	}
