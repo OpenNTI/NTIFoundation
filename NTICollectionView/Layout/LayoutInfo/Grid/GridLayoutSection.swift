@@ -571,22 +571,13 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 		}
 		
 		let itemIndex = indexPath.itemIndex
-		let supplementaryItem: LayoutSupplementaryItem
+		let items = supplementaryItems(of: kind)
 		
-		if kind == UICollectionElementKindSectionHeader {
-			guard itemIndex < headers.count else {
-				return nil
-			}
-			supplementaryItem = headers[itemIndex]
-		} else if kind == UICollectionElementKindSectionFooter {
-			guard itemIndex < footers.count else {
-				return nil
-			}
-			supplementaryItem = footers[itemIndex]
-		} else {
-			// TODO: Handle other kinds
+		guard itemIndex < items.count else {
 			return nil
 		}
+		
+		let supplementaryItem = items[itemIndex]
 		
 		// There's no layout attributes if this section isn't the global section, there are no items and the supplementary item shouldn't be shown when the placeholder is visible (e.g. no items)
 		guard isGlobalSection || items.count > 0 || supplementaryItem.isVisibleWhileShowingPlaceholder else {
