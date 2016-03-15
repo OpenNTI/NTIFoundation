@@ -14,4 +14,11 @@ extension UICollectionViewLayoutInvalidationContext {
 		invalidateSupplementaryElementsOfKind(attributes.representedElementKind!, atIndexPaths: [attributes.indexPath])
 	}
 	
+	public func invalidateDecorationElement(with attributes: UICollectionViewLayoutAttributes) {
+		guard let kind = attributes.representedElementKind else {
+			return
+		}
+		invalidateDecorationElementsOfKind(kind, atIndexPaths: [attributes.indexPath])
+	}
+	
 }
