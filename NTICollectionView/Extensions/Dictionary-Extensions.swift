@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Dictionary where Value: Array<Any> {
+extension Dictionary where Value: protocol<RangeReplaceableCollectionType, ArrayLiteralConvertible> {
 	
 	public mutating func append(x: Value.Generator.Element, to key: Key) {
 		var items = self[key] ?? []
