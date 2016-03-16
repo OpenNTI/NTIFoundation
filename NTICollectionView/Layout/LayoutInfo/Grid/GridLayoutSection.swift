@@ -374,24 +374,18 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 		return sizeDelta
 	}
 	
-	public func setSize(size: CGSize, forSupplementaryElementOfKind kind: String, at index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
-		if kind == UICollectionElementKindSectionHeader {
-			return setSize(size, forHeaderAt: index, invalidationContext: invalidationContext)
-		} else if kind == UICollectionElementKindSectionFooter {
-			return setSize(size, forFooterAt: index, invalidationContext: invalidationContext)
-		} else {
-			return CGPointZero
-		}
-	}
-	
 	public func setSize(size: CGSize, forHeaderAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
-		let headerInfo = headers[index]
-		return setSize(size, of: headerInfo, invalidationContext: invalidationContext)
+		return setSize(size, forSupplementaryElementOfKind: UICollectionElementKindSectionHeader, at: index, invalidationContext: invalidationContext)
 	}
 	
 	public func setSize(size: CGSize, forFooterAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
-		let footerInfo = footers[index]
-		return setSize(size, of: footerInfo, invalidationContext: invalidationContext)
+		return setSize(size, forSupplementaryElementOfKind: UICollectionElementKindSectionFooter, at: index, invalidationContext: invalidationContext)
+	}
+	
+	public func setSize(size: CGSize, forSupplementaryElementOfKind kind: String, at index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
+		let items = supplementaryItems(of: kind)
+		let supplementaryItem = items[index]
+		return setSize(size, of: supplementaryItem, invalidationContext: invalidationContext)
 	}
 	
 	func setSize(size: CGSize, of supplementaryItem: LayoutSupplementaryItem, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
