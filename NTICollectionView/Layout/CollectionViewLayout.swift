@@ -346,24 +346,12 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	}
 	
 	private func resetUpdates() {
-		resetUpdatedIndexPaths()
-		resetUpdatedSections()
-		resetAdditionalUpdatedIndexPaths()
-	}
-	
-	private func resetUpdatedIndexPaths() {
 		insertedIndexPaths = []
 		removedIndexPaths = []
 		reloadedIndexPaths = []
-	}
-	
-	private func resetUpdatedSections() {
 		insertedSections = []
 		removedSections = []
 		reloadedSections = []
-	}
-	
-	private func resetAdditionalUpdatedIndexPaths() {
 		additionalDeletedIndexPaths = [:]
 		additionalInsertedIndexPaths = [:]
 	}
@@ -478,16 +466,9 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		guard let collectionView = self.collectionView else {
 			return
 		}
-		adjustContentOffsetDeltaForContentOffset(collectionView.contentOffset)
-	}
-	
-	private func adjustContentOffsetDeltaForContentOffset(contentOffset: CGPoint) {
-		contentOffsetDelta = newContentOffsetDeltaForContentOffset(contentOffset)
-	}
-	
-	private func newContentOffsetDeltaForContentOffset(contentOffset: CGPoint) -> CGPoint {
+		let contentOffset = collectionView.contentOffset
 		let newContentOffset = targetContentOffsetForProposedContentOffset(contentOffset)
-		return CGPoint(x: newContentOffset.x - contentOffset.x, y: newContentOffset.y - contentOffset.y)
+		contentOffsetDelta = CGPoint(x: newContentOffset.x - contentOffset.x, y: newContentOffset.y - contentOffset.y)
 	}
 	
 	public override func finalizeCollectionViewUpdates() {
