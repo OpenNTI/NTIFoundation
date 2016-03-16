@@ -480,6 +480,8 @@
 		4A68AD431C88BE2000849185 /* UICollectionView+SupplementaryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AD421C88BE2000849185 /* UICollectionView+SupplementaryViews.swift */; };
 		4A68AD441C88BE2000849185 /* UICollectionView+SupplementaryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AD421C88BE2000849185 /* UICollectionView+SupplementaryViews.swift */; };
 		4ADEE74C1C98950400DE9B0D /* Dictionary-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADEE74B1C98950300DE9B0D /* Dictionary-Extensions.swift */; };
+		4ADEE7691C98DBB900DE9B0D /* Decoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADEE7681C98DBB900DE9B0D /* Decoration.swift */; };
+		4ADEE76A1C98DBB900DE9B0D /* Decoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADEE7681C98DBB900DE9B0D /* Decoration.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1090,6 +1092,7 @@
 		4A72F4601925AEF1004792EF /* UIColor+NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NTIExtensions.m"; sourceTree = "<group>"; };
 		4A72F48619268DA8004792EF /* UIColor+NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NTIExtensionsTest.m"; sourceTree = "<group>"; };
 		4ADEE74B1C98950300DE9B0D /* Dictionary-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary-Extensions.swift"; sourceTree = "<group>"; };
+		4ADEE7681C98DBB900DE9B0D /* Decoration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Decoration.swift; sourceTree = "<group>"; };
 		4C2ECDD31549D0A400C69E3A /* NTIMathInputExpressionModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathInputExpressionModel.h; sourceTree = "<group>"; };
 		4C2ECDD41549D0A400C69E3A /* NTIMathInputExpressionModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathInputExpressionModel.m; sourceTree = "<group>"; };
 		4C40971615221D91002A9445 /* jsonUserData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = jsonUserData.json; sourceTree = "<group>"; };
@@ -1848,6 +1851,7 @@
 				4A68AC901C88B0CE00849185 /* LayoutPlaceholder.swift */,
 				4A68AC911C88B0CE00849185 /* LayoutSection.swift */,
 				4A68AC921C88B0CE00849185 /* SupplementaryItem.swift */,
+				4ADEE7681C98DBB900DE9B0D /* Decoration.swift */,
 			);
 			path = LayoutInfo;
 			sourceTree = "<group>";
@@ -3148,6 +3152,7 @@
 				4A68ACB11C88B0CE00849185 /* DataSourcePlaceholder.swift in Sources */,
 				4A0583341C934BCF00F3D0E0 /* ComposedGridSectionLayoutEngine.swift in Sources */,
 				4ADEE74C1C98950400DE9B0D /* Dictionary-Extensions.swift in Sources */,
+				4ADEE7691C98DBB900DE9B0D /* Decoration.swift in Sources */,
 				4A68ACA51C88B0CE00849185 /* CollectionDataSourceDelegate.swift in Sources */,
 				4A0582FF1C9211A200F3D0E0 /* GridLayoutEngine.swift in Sources */,
 				4A68AC9F1C88B0CE00849185 /* AbstractCollectionDataSource.swift in Sources */,
@@ -3256,6 +3261,7 @@
 				4A68ACAA1C88B0CE00849185 /* CollectionViewWrapper.swift in Sources */,
 				4A68ACCE1C88B0CE00849185 /* CollectionViewLayoutMeasuring.swift in Sources */,
 				4A68ACB41C88B0CE00849185 /* DataSourceMetrics.swift in Sources */,
+				4ADEE76A1C98DBB900DE9B0D /* Decoration.swift in Sources */,
 				4A68ACEE1C88B0CE00849185 /* SupplementaryItem.swift in Sources */,
 				4A05830E1C923B7D00F3D0E0 /* GridSectionColumnLayoutEngineTest.swift in Sources */,
 				4A68ACDA1C88B0CE00849185 /* GridSectionCellLayoutEngine.swift in Sources */,
