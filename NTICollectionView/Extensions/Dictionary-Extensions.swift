@@ -10,6 +10,14 @@ import Foundation
 
 extension Dictionary where Value: protocol<RangeReplaceableCollectionType, ArrayLiteralConvertible> {
 	
+	public var contents: [Value.Generator.Element] {
+		var allContents: [Value.Generator.Element] = []
+		for contents in values {
+			allContents += contents
+		}
+		return allContents
+	}
+	
 	public mutating func append(x: Value.Generator.Element, to key: Key) {
 		var items = self[key] ?? []
 		items.append(x)
