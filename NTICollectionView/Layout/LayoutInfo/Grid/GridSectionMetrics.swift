@@ -60,6 +60,9 @@ public protocol GridSectionMetrics: SectionMetrics {
 	/// How the cells should be laid out when there are multiple columns.
 	var cellLayoutOrder: ItemLayoutOrder { get set }
 	
+	/// Attributes of the background of the content area (i.e., the cells).
+	var contentBackgroundAttributes: BackgroundDecorationAttributes { get set }
+	
 }
 
 public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
@@ -182,6 +185,12 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 		}
 	}
 	
+	public var contentBackgroundAttributes = BackgroundDecorationAttributes() {
+		didSet {
+			setFlag("contentBackgroundAttributes")
+		}
+	}
+	
 	/// How the cells should be laid out when there are multiple columns. The current default is `.LeadingToTrailing`.
 	public var cellLayoutOrder: ItemLayoutOrder = .LeadingToTrailing
 	
@@ -207,6 +216,7 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 		copy.showsSectionSeparatorWhenLastSection = showsSectionSeparatorWhenLastSection
 		copy.cellLayoutOrder = cellLayoutOrder
 		copy.showsRowSeparator = showsRowSeparator
+		copy.contentBackgroundAttributes = contentBackgroundAttributes
 		copy.flags = flags
 		
 		return copy
@@ -266,6 +276,9 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 		}
 		if metrics.definesMetric("showsSectionSeparator") {
 			showsSectionSeparator = gridMetrics.showsSectionSeparator
+		}
+		if metrics.definesMetric("contentBackgroundAttributes") {
+			contentBackgroundAttributes = gridMetrics.contentBackgroundAttributes
 		}
 	}
 	
