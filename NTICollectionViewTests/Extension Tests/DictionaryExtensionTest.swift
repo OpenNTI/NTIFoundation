@@ -74,13 +74,14 @@ class DictionaryExtensionTest: XCTestCase {
 	}
 	
 	func testCountDiff() {
-		let other = ["a": [1, 2], "b": [0], "c": [4, 5, 6]]
+		let other = ["a": [1, 2], "b": [0], "c": [4, 5, 6], "d": []]
 		let countDiff = dict.countDiff(with: other)
-		let expected = ["a": 0, "b": -1, "c": -2]
+		let expected = ["a": 0, "b": -1, "c": -2, "d": 0]
 		let aIsCorrect = countDiff["a"] ?? .max == expected["a"] ?? -.max
 		let bIsCorrect = countDiff["b"] ?? .max == expected["b"] ?? -.max
 		let cIsCorrect = countDiff["c"] ?? .max == expected["c"] ?? -.max
-		XCTAssert(aIsCorrect && bIsCorrect && cIsCorrect, "Incorrect countDiff: expected \(expected) but found \(countDiff)")
+		let dIsCorrect = countDiff["d"] ?? .max == expected["d"] ?? -.max
+		XCTAssert(aIsCorrect && bIsCorrect && cIsCorrect && dIsCorrect, "Incorrect countDiff: expected \(expected) but found \(countDiff)")
 	}
 	
 }
