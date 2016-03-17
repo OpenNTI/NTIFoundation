@@ -256,7 +256,7 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 			return
 		}
 		
-		let attributes = layoutAttributesForCell(at: indexPath)?.copy() as! UICollectionViewLayoutAttributes
+		let attributes = layoutAttributesForSupplementaryElementOfKind(kind, at: indexPath)?.copy() as! UICollectionViewLayoutAttributes
 		if let attributes = attributes as? CollectionViewLayoutAttributes {
 			attributes.shouldCalculateFittingSize = true
 		}
