@@ -223,13 +223,17 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 		let backgroundAttribute = CollectionViewLayoutAttributes(forDecorationViewOfKind: collectionElementKindGlobalHeaderBackground, withIndexPath: indexPath)
 		
 		// This will be updated by -updateSpecialItemsWithContentOffset
-		backgroundAttribute.frame = frame
-		backgroundAttribute.unpinnedOrigin = frame.origin
+		var backgroundInset = metrics.contentInset
+		backgroundInset.bottom = 0
+		let backgroundFrame = UIEdgeInsetsInsetRect(frame, backgroundInset)
+		backgroundAttribute.frame = backgroundFrame
+		backgroundAttribute.unpinnedOrigin = backgroundFrame.origin
 		backgroundAttribute.zIndex = defaultZIndex
 		backgroundAttribute.isPinned = false
 		backgroundAttribute.hidden = false
 		backgroundAttribute.backgroundColor = backgroundColor
 		
+		_backgroundAttribute = backgroundAttribute
 		return _backgroundAttribute
 	}
 	private var _backgroundAttribute: UICollectionViewLayoutAttributes?
@@ -301,7 +305,7 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 		metrics.resolveMissingValuesFromTheme()
 	}
 	
-	public func layoutWithOrigin(start: CGPoint, layoutSizing: LayoutSizing,  invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
+	public func layoutWithOrigin(start: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
 		let layoutEngine = GridSectionLayoutEngine(layoutSection: self)
 		let endPoint = layoutEngine.layoutWithOrigin(start, layoutSizing: layoutSizing, invalidationContext: invalidationContext)
 		pinnableHeaders = layoutEngine.pinnableHeaders
