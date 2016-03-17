@@ -644,6 +644,16 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 		}
 	}
 	
+	public var decorationAttributesByKind: [String: [UICollectionViewLayoutAttributes]] {
+		var attributes: [String: [UICollectionViewLayoutAttributes]] = [:]
+		attributes[collectionElementKindColumnSeparator] = columnSeparatorLayoutAttributes
+		attributes[collectionElementKindSectionSeparator] = Array(sectionSeparatorLayoutAttributes.values)
+		attributes[collectionElementKindRowSeparator] = rows.flatMap { $0.rowSeparatorLayoutAttributes }
+		attributes[collectionElementKindGlobalHeaderBackground] = [backgroundAttribute].flatMap { $0 }
+		attributes[collectionElementKindContentBackground] = [contentBackgroundAttributes].flatMap { $0 }
+		return attributes
+	}
+	
 	public func definesMetric(metric: String) -> Bool {
 		return metrics.definesMetric(metric)
 	}

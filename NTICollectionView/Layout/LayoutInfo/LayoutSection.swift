@@ -35,7 +35,7 @@ public protocol LayoutSection: LayoutMetrics, LayoutEngine, LayoutAttributesReso
 	/// All the layout attributes associated with this section.
 	var layoutAttributes: [UICollectionViewLayoutAttributes] { get }
 	
-	var decorationViewClassesByKind: [String: AnyClass] { get }
+	var decorationAttributesByKind: [String: [UICollectionViewLayoutAttributes]] { get }
 	
 	func add(supplementaryItem: LayoutSupplementaryItem)
 	func add(item: LayoutItem)
