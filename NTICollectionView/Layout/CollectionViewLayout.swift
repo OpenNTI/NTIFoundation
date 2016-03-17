@@ -23,6 +23,7 @@ public class CollectionViewSeparatorView: UICollectionReusableView {
 			return
 		}
 		backgroundColor = layoutAttributes.backgroundColor
+		layer.cornerRadius = layoutAttributes.cornerRadius
 	}
 	
 }
@@ -93,6 +94,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		registerClass(CollectionViewSeparatorView.self, forDecorationViewOfKind: collectionElementKindColumnSeparator)
 		registerClass(CollectionViewSeparatorView.self, forDecorationViewOfKind: collectionElementKindSectionSeparator)
 		registerClass(CollectionViewSeparatorView.self, forDecorationViewOfKind: collectionElementKindGlobalHeaderBackground)
+		registerClass(CollectionViewSeparatorView.self, forDecorationViewOfKind: collectionElementKindContentBackground)
 	}
 	
 	// MARK: - Editing helpers

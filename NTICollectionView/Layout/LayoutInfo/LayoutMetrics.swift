@@ -16,6 +16,7 @@ public let collectionElementKindRowSeparator = "collectionElementKindRowSeparato
 public let collectionElementKindColumnSeparator = "collectionElementKindColumnSeparator"
 public let collectionElementKindSectionSeparator = "collectionElementKindSectionSeparator"
 public let collectionElementKindGlobalHeaderBackground = "collectionElementKindGlobalHeaderBackground"
+public let collectionElementKindContentBackground = "collectionElementKindContentBackground"
 
 public enum ItemLayoutOrder: String {
 	
