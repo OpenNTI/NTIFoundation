@@ -42,7 +42,7 @@ extension Dictionary where Value: protocol<RangeReplaceableCollectionType, Array
 		for key in allKeys {
 			let items = Array(self[key] ?? [])
 			let otherItems = Array(other[key] ?? [])
-			let countDiff = abs(items.count - otherItems.count)
+			let countDiff = items.count - otherItems.count
 			countDiffs[key] = countDiff
 		}
 		return countDiffs
