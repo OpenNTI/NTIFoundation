@@ -26,11 +26,11 @@ extension Dictionary where Value: protocol<RangeReplaceableCollectionType, Array
 	
 	public mutating func appendContents(of dictionary: [Key: Value]) {
 		for (key, value) in dictionary {
-			appendContentsOf(value, to: key)
+			appendContents(of: value, to: key)
 		}
 	}
 	
-	public mutating func appendContentsOf(newElements: Value, to key: Key) {
+	public mutating func appendContents(of newElements: Value, to key: Key) {
 		var items = self[key] ?? []
 		items.appendContentsOf(newElements)
 		self[key] = items

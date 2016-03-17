@@ -40,19 +40,19 @@ class DictionaryExtensionTest: XCTestCase {
 	}
 	
 	func testAppendContentsOfToExisting() {
-		dict.appendContentsOf([3, 4], to: "a")
+		dict.appendContents(of: [3, 4], to: "a")
 		let expected = [1, 2, 3, 4]
 		XCTAssert(dict["a"] ?? [] == expected, "Incorrect result appending contents to existing container: expected \(expected) but found \(dict["a"])")
 	}
 	
 	func testAppendContentsOfToNew() {
-		dict.appendContentsOf([0, 1], to: "b")
+		dict.appendContents(of: [0, 1], to: "b")
 		let expected = [0, 1]
 		XCTAssert(dict["b"] ?? [] == expected, "Incorrect result appending contents to new container: expected \(expected) but found \(dict["b"])")
 	}
 	
 	func testAppendContentsOfEmptyToNew() {
-		dict.appendContentsOf([], to: "b")
+		dict.appendContents(of: [], to: "b")
 		let expected: [Int] = []
 		XCTAssert(dict["b"] ?? [-1] == expected, "Incorrect result appending contents to new container: expected \(expected) but found \(dict["b"])")
 	}
