@@ -65,5 +65,12 @@ class DictionaryExtensionTest: XCTestCase {
 		let cIsCorrect = dict["c"] ?? [] == expected["c"] ?? [-1]
 		XCTAssert(aIsCorrect && bIsCorrect && cIsCorrect, "Incorrect result appending contents of dictionary: expected \(expected) but found \(dict)")
 	}
+	
+	func testContents() {
+		let contents = dict.contents
+		let countIsCorrect = contents.count == 3
+		let contentIsCorrect = contents.contains(1) && contents.contains(2) && contents.contains(4)
+		XCTAssert(countIsCorrect && contentIsCorrect, "Incorrect contents: expected \([1, 2, 4]) but found \(contents)")
+	}
     
 }
