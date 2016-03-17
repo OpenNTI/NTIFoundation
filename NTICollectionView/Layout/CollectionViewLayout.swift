@@ -818,10 +818,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			section.add(supplementaryItem)
 		}
 		
-		for supplementaryItems in metrics.supplementaryItemsByKind.values {
-			for supplementaryItem in supplementaryItems {
-				setupSupplementaryMetrics(supplementaryItem)
-			}
+		for supplementaryItem in metrics.supplementaryItemsByKind.contents {
+			setupSupplementaryMetrics(supplementaryItem)
 		}
 		
 		let isGlobalSection = sectionIndex == GlobalSectionIndex
