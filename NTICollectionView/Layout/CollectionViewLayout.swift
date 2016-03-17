@@ -343,6 +343,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	public override func prepareForCollectionViewUpdates(updateItems: [UICollectionViewUpdateItem]) {
 		resetUpdates()
 		processCollectionViewUpdates(updateItems)
+		processGlobalSectionUpdate()
 		adjustContentOffsetDelta()
 		super.prepareForCollectionViewUpdates(updateItems)
 	}
@@ -361,6 +362,30 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	private func processCollectionViewUpdates(updateItems: [UICollectionViewUpdateItem]) {
 		for updateItem in updateItems {
 			processCollectionViewUpdate(updateItem)
+		}
+	}
+	
+	/// Finds any global decorations that disappeared during the update and records them for deletion.
+	///
+	/// This becomes necessary when the selected data source of a segmented data source contributes a kind of global decoration, and then a new data source is selected which does not contribute that kind of global decoration.
+	private func processGlobalSectionUpdate() {
+		guard let layoutInfo = self.layoutInfo,
+			globalSection = layoutInfo.sectionAtIndex(GlobalSectionIndex),
+			oldLayoutInfo = self.oldLayoutInfo,
+			oldGlobalSection = oldLayoutInfo.sectionAtIndex(GlobalSectionIndex) else {
+				return
+		}
+		let decorationAttributes = globalSection.decorationAttributesByKind
+		let oldDecorationAttributes = oldGlobalSection.decorationAttributesByKind
+		let decorationDiff = decorationAttributes.countDiff(with: oldDecorationAttributes)
+		for (kind, countDiff) in decorationDiff {
+			guard countDiff < 0 else {
+				continue
+			}
+			let count = (decorationAttributes[kind] ?? []).count
+			let oldCount = oldDecorationAttributes[kind]!.count
+			let indexPaths = (count..<oldCount).map { NSIndexPath(index: $0) }
+			recordAdditionalDeletedIndexPaths(indexPaths, forElementOf: kind)
 		}
 	}
 	
@@ -457,6 +482,12 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 				continue
 			}
 			recordAdditionalDeletedIndexPath(attributes.indexPath, forElementOf: kind)
+		}
+	}
+	
+	private func recordAdditionalDeletedIndexPaths(indexPaths: [NSIndexPath], forElementOf kind: String) {
+		for indexPath in indexPaths {
+			recordAdditionalDeletedIndexPath(indexPath, forElementOf: kind)
 		}
 	}
 	
