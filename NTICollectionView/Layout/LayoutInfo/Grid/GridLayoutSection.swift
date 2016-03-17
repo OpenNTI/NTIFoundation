@@ -154,6 +154,10 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 			layoutAttributes.append(backgroundAttribute)
 		}
 		
+		if let contentBackgroundAttributes = self.contentBackgroundAttributes {
+			layoutAttributes.append(contentBackgroundAttributes)
+		}
+		
 		for (_, attributes) in sectionSeparatorLayoutAttributes {
 			layoutAttributes.append(attributes)
 		}
@@ -237,6 +241,36 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 		return _backgroundAttribute
 	}
 	private var _backgroundAttribute: UICollectionViewLayoutAttributes?
+	
+	public var contentBackgroundAttributes: UICollectionViewLayoutAttributes? {
+		if let attributes = _contentBackgroundAttributes {
+			return attributes
+		}
+		
+		guard metrics.contentBackgroundAttributes.color != nil else {
+			return nil
+		}
+		
+		let indexPath = isGlobalSection ? NSIndexPath(index: 0) : NSIndexPath(forItem: 0, inSection: sectionIndex)
+		let attributes = CollectionViewLayoutAttributes(forDecorationViewOfKind: collectionElementKindContentBackground, withIndexPath: indexPath)
+		
+		attributes.frame = contentFrame
+		attributes.zIndex = defaultZIndex
+		attributes.hidden = false
+		attributes.backgroundColor = metrics.contentBackgroundAttributes.color
+		attributes.cornerRadius = metrics.contentBackgroundAttributes.cornerRadius
+		
+		_contentBackgroundAttributes = attributes
+		return _contentBackgroundAttributes
+	}
+	private var _contentBackgroundAttributes: UICollectionViewLayoutAttributes?
+	
+	public var contentFrame: CGRect {
+		var frame = UIEdgeInsetsInsetRect(self.frame, metrics.contentInset)
+		let insets = UIEdgeInsets(top: height(of: headers), left: leftAuxiliaryColumnWidth, bottom: height(of: footers), right: rightAuxiliaryColumnWidth)
+		frame = UIEdgeInsetsInsetRect(frame, insets)
+		return UIEdgeInsetsInsetRect(frame, metrics.padding)
+	}
 	
 	public func add(item: LayoutItem) {
 		item.itemIndex = items.count
@@ -333,6 +367,12 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 		}
 		
 		layoutSection(self, setFrame: frame, invalidationContext: invalidationContext)
+		
+		if let contentBackgroundAttributes = self.contentBackgroundAttributes {
+			offsetDecorationElement(with: contentBackgroundAttributes, by: offset, invalidationContext: invalidationContext)
+		}
+		
+		updateDecorations(with: invalidationContext)
 	}
 	
 	public func setSize(size: CGSize, forItemAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
@@ -597,6 +637,8 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 			return rowInfo.rowSeparatorLayoutAttributes
 		case collectionElementKindGlobalHeaderBackground:
 			return backgroundAttribute
+		case collectionElementKindContentBackground:
+			return contentBackgroundAttributes
 		default:
 			return nil
 		}
