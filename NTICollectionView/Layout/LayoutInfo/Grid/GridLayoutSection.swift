@@ -63,11 +63,7 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 	public var items: [LayoutItem] = []
 	
 	public var supplementaryItems: [LayoutSupplementaryItem] {
-		var allItems: [LayoutSupplementaryItem] = []
-		for items in supplementaryItemsByKind.values {
-			allItems += items
-		}
-		return allItems
+		return supplementaryItemsByKind.contents
 	}
 	
 	public var supplementaryItemsByKind: [String: [LayoutSupplementaryItem]] = [:]
@@ -245,11 +241,9 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 	
 	public func add(supplementaryItem: LayoutSupplementaryItem) {
 		let kind = supplementaryItem.elementKind
-		var items = supplementaryItems(of: kind)
-		supplementaryItem.itemIndex = items.count
+		supplementaryItem.itemIndex = supplementaryItems(of: kind).count
 		supplementaryItem.section = self
-		items.append(supplementaryItem)
-		supplementaryItemsByKind[kind] = items
+		supplementaryItemsByKind.append(supplementaryItem, to: kind)
 	}
 	
 	public func supplementaryItems(of kind: String) -> [LayoutSupplementaryItem] {
