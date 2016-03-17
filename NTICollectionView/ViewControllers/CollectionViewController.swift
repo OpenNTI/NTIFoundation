@@ -206,6 +206,24 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		}
 	}
 	
+	public override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+		clearCalculatedInsetInfo()
+		super.willTransitionToTraitCollection(newCollection, withTransitionCoordinator: coordinator)
+	}
+	
+	public override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+		clearCalculatedInsetInfo()
+		super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+	}
+	
+	private func clearCalculatedInsetInfo() {
+		guard !hasAssignedContentInsets else {
+			return
+		}
+		orientationForCalculatedInsets = .Unknown
+		applicationFrameForCalculatedInsets = CGRectZero
+	}
+	
 	// MARK: - UICollectionViewDelegate
 	
 	public override func collectionView(collectionView: UICollectionView, shouldHighlightItemAtIndexPath indexPath: NSIndexPath) -> Bool {
