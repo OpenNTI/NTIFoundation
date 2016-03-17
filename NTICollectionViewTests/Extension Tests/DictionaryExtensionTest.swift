@@ -72,5 +72,15 @@ class DictionaryExtensionTest: XCTestCase {
 		let contentIsCorrect = contents.contains(1) && contents.contains(2) && contents.contains(4)
 		XCTAssert(countIsCorrect && contentIsCorrect, "Incorrect contents: expected \([1, 2, 4]) but found \(contents)")
 	}
-    
+	
+	func testCountDiff() {
+		let other = ["a": [1, 2], "b": [0], "c": [4, 5, 6]]
+		let countDiff = dict.countDiff(with: other)
+		let expected = ["a": 0, "b": 1, "c": 2]
+		let aIsCorrect = countDiff["a"] ?? -1 == expected["a"] ?? -2
+		let bIsCorrect = countDiff["b"] ?? -1 == expected["b"] ?? -2
+		let cIsCorrect = countDiff["c"] ?? -1 == expected["c"] ?? -2
+		XCTAssert(aIsCorrect && bIsCorrect && cIsCorrect, "Incorrect countDiff: expected \(expected) but found \(countDiff)")
+	}
+	
 }
