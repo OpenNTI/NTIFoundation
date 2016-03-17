@@ -74,10 +74,19 @@ public class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMet
 		guard let enclosingMetrics = super.snapshotMetricsForSectionAtIndex(sectionIndex) else {
 			return nil
 		}
-		if let metrics = selectedDataSource.snapshotMetricsForSectionAtIndex(sectionIndex) {
+		if let metrics = snapshotChildMetrics(forSectionAt: sectionIndex) {
 			enclosingMetrics.applyValues(from: metrics)
 		}
 		return enclosingMetrics
+	}
+	
+	private func snapshotChildMetrics(forSectionAt sectionIndex: Int) -> DataSourceSectionMetrics? {
+		if sectionIndex == GlobalSectionIndex {
+			return selectedDataSource.snapshotContributedGlobalMetrics()
+		}
+		else {
+			return selectedDataSource.snapshotMetricsForSectionAtIndex(sectionIndex)
+		}
 	}
 	
 }

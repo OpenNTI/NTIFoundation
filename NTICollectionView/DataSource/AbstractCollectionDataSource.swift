@@ -179,6 +179,12 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 		return metricsHelper.snapshotMetricsForSectionAtIndex(sectionIndex)
 	}
 	
+	public var contributesGlobalMetrics = true
+	
+	public func snapshotContributedGlobalMetrics() -> DataSourceSectionMetrics? {
+		return metricsHelper.snapshotContributedGlobalMetrics()
+	}
+	
 	public func add(supplementaryItem: SupplementaryItem) {
 		let kind = supplementaryItem.elementKind
 		var items = supplementaryItemsOfKind(kind)

@@ -83,7 +83,6 @@ public protocol CollectionDataSourceMetrics: NSObjectProtocol {
 	/// Returns the supplementary item for the given *key*, or `nil` if no such item is found.
 	func supplementaryItem(`for` key: String) -> SupplementaryItem?
 	
-	
 	func metricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetrics?
 	func setMetrics(metrics: DataSourceSectionMetrics?, forSectionAtIndex sectionIndex: Int)
 	
@@ -95,6 +94,9 @@ public protocol CollectionDataSourceMetrics: NSObjectProtocol {
 	
 	func snapshotMetrics() -> [Int: DataSourceSectionMetrics]
 	func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetrics?
+	
+	var contributesGlobalMetrics: Bool { get set }
+	func snapshotContributedGlobalMetrics() -> DataSourceSectionMetrics?
 	
 	func add(supplementaryItem: SupplementaryItem)
 	func add(supplementaryItem: SupplementaryItem, forSectionAtIndex sectionIndex: Int)

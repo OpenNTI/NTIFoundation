@@ -52,6 +52,15 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		}
 	}
 	
+	public var contributesGlobalMetrics: Bool {
+		get {
+			return dataSource.contributesGlobalMetrics
+		}
+		set {
+			dataSource.contributesGlobalMetrics = newValue
+		}
+	}
+	
 	public func supplementaryItem(`for` key: String) -> SupplementaryItem? {
 		return dataSource.supplementaryItem(`for`: key)
 	}
@@ -191,12 +200,8 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 	}
 	
 	public func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetrics? {
-		guard let metrics = defaultMetrics?.copy() as? DataSourceSectionMetrics else {
+		guard let metrics = appliedMetricsForSection(at: sectionIndex) else {
 			return nil
-		}
-		
-		if let sectionMetrics = self.sectionMetrics[sectionIndex] {
-			metrics.applyValues(from: sectionMetrics)
 		}
 		
 		 // The root data source puts its items into the special global section; other data sources put theirs into their 0 section
@@ -212,6 +217,25 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		metrics.placeholder = placeholder
 		
 		return metrics
+	}
+	
+	private func appliedMetricsForSection(at sectionIndex: Int) -> DataSourceSectionMetrics? {
+		guard let metrics = defaultMetrics?.copy() as? DataSourceSectionMetrics else {
+			return sectionMetrics[sectionIndex]
+		}
+		
+		if let sectionMetrics = self.sectionMetrics[sectionIndex] {
+			metrics.applyValues(from: sectionMetrics)
+		}
+		
+		return metrics
+	}
+	
+	public func snapshotContributedGlobalMetrics() -> DataSourceSectionMetrics? {
+		guard contributesGlobalMetrics else {
+			return nil
+		}
+		return sectionMetrics[GlobalSectionIndex]?.copy() as? DataSourceSectionMetrics
 	}
 	
 	public func layoutIndexPathForItemIndex(itemIndex: Int, sectionIndex: Int) -> NSIndexPath {
