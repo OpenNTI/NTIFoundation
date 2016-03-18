@@ -371,6 +371,8 @@
 		4A1BE8611C8F9B3200790B3A /* KeyValueItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1BE85F1C8F9B3200790B3A /* KeyValueItem.swift */; };
 		4A1BE8641C8FA26300790B3A /* NTICollectionView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A68ABF51C88ADC300849185 /* NTICollectionView.framework */; };
 		4A1BE89E1C8FE03200790B3A /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4A1BE89D1C8FE03200790B3A /* LICENSE.txt */; };
+		4A562ACB1C9C689B0072A570 /* ViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A562ACA1C9C689B0072A570 /* ViewControllerDelegate.swift */; };
+		4A562ACC1C9C689C0072A570 /* ViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A562ACA1C9C689B0072A570 /* ViewControllerDelegate.swift */; };
 		4A5ABD411C9B0D30008D292E /* DictionaryExtensionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5ABD401C9B0D30008D292E /* DictionaryExtensionTest.swift */; };
 		4A620CD11C88DDCF0084B0A2 /* PagingCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A620CD01C88DDCF0084B0A2 /* PagingCollectionDataSource.swift */; };
 		4A620CD21C88DDCF0084B0A2 /* PagingCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A620CD01C88DDCF0084B0A2 /* PagingCollectionDataSource.swift */; };
@@ -1029,6 +1031,7 @@
 		4A1BE85F1C8F9B3200790B3A /* KeyValueItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyValueItem.swift; sourceTree = "<group>"; };
 		4A1BE89D1C8FE03200790B3A /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		4A5454431B1630680033FA3A /* NSDate-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate-NTIExtensionsTest.m"; sourceTree = "<group>"; };
+		4A562ACA1C9C689B0072A570 /* ViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerDelegate.swift; sourceTree = "<group>"; };
 		4A5ABD401C9B0D30008D292E /* DictionaryExtensionTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DictionaryExtensionTest.swift; path = "Extension Tests/DictionaryExtensionTest.swift"; sourceTree = "<group>"; };
 		4A620CD01C88DDCF0084B0A2 /* PagingCollectionDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingCollectionDataSource.swift; sourceTree = "<group>"; };
 		4A620D8B1C8E148D0084B0A2 /* CollectionDataSourceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionDataSourceController.swift; sourceTree = "<group>"; };
@@ -1909,6 +1912,7 @@
 			isa = PBXGroup;
 			children = (
 				4A68AC9A1C88B0CE00849185 /* CollectionViewController.swift */,
+				4A562ACA1C9C689B0072A570 /* ViewControllerDelegate.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -3160,6 +3164,7 @@
 				4A0582FA1C91E80200F3D0E0 /* UIEdgeInsets-Extensions.swift in Sources */,
 				4A68ACD51C88B0CE00849185 /* GridLayoutItem.swift in Sources */,
 				4A68ACB51C88B0CE00849185 /* DataSourceSectionInfo.swift in Sources */,
+				4A562ACB1C9C689B0072A570 /* ViewControllerDelegate.swift in Sources */,
 				4A68ACB11C88B0CE00849185 /* DataSourcePlaceholder.swift in Sources */,
 				4A0583341C934BCF00F3D0E0 /* ComposedGridSectionLayoutEngine.swift in Sources */,
 				4ADEE74C1C98950400DE9B0D /* Dictionary-Extensions.swift in Sources */,
@@ -3286,6 +3291,7 @@
 				4A0582FB1C91E80200F3D0E0 /* UIEdgeInsets-Extensions.swift in Sources */,
 				4A68ACBA1C88B0CE00849185 /* SegmentedCollectionDataSourceMetricsHelper.swift in Sources */,
 				4A0582FD1C9205CB00F3D0E0 /* SectionMetricsTest.swift in Sources */,
+				4A562ACC1C9C689C0072A570 /* ViewControllerDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
