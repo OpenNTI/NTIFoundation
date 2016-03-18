@@ -143,8 +143,12 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 		let columnWidth = (layoutWidth - margins.left - margins.right) / CGFloat(numberOfColumns)
 		return columnWidth
 	}
-	public var leftAuxiliaryColumnWidth: CGFloat = 0
-	public var rightAuxiliaryColumnWidth: CGFloat = 0
+	public var leftAuxiliaryColumnWidth: CGFloat {
+		return metrics.leftAuxiliaryColumnWidth
+	}
+	public var rightAuxiliaryColumnWidth: CGFloat {
+		return metrics.rightAuxiliaryColumnWidth
+	}
 	
 	public var phantomCellIndex: Int?
 	public var phantomCellSize = CGSizeZero
