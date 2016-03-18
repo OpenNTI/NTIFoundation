@@ -216,7 +216,7 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 	
 	public override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
 		clearCalculatedInsetInfo()
-		delegate?.viewController(self, willTransitionTo: size, with: coordinator)
+		delegate?.viewController(self, viewWillTransitionTo: size, with: coordinator)
 		super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
 	}
 	

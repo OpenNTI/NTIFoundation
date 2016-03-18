@@ -12,6 +12,6 @@ public protocol ViewControllerDelegate: class {
 	
 	func viewController(viewController: UIViewController, willTransitionTo newCollection: UITraitCollection, with transitionCoordinator: UIViewControllerTransitionCoordinator)
 	
-	func viewController(viewController: UIViewController, willTransitionTo size: CGSize, with transitionCoordinator: UIViewControllerTransitionCoordinator)
+	func viewController(viewController: UIViewController, viewWillTransitionTo size: CGSize, with transitionCoordinator: UIViewControllerTransitionCoordinator)
 	
 }
