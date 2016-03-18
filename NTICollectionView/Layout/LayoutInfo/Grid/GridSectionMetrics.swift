@@ -22,6 +22,12 @@ public protocol GridSectionMetrics: SectionMetrics {
 	/// The spacing between rows
 	var rowSpacing: CGFloat { get set }
 	
+	/// The width of the left auxiliary column.
+	var leftAuxiliaryColumnWidth: CGFloat { get }
+	
+	/// The width of the right auxiliary column.
+	var rightAuxiliaryColumnWidth: CGFloat { get }
+	
 	/// Number of columns in this section. Sections will inherit a default of 1 from the data source.
 	var numberOfColumns: Int { get set }
 	
@@ -103,6 +109,18 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 	public var rowSpacing: CGFloat = 0 {
 		didSet {
 			setFlag("rowSpacing")
+		}
+	}
+	
+	public var leftAuxiliaryColumnWidth: CGFloat = 0 {
+		didSet {
+			setFlag("leftAuxiliaryColumnWidth")
+		}
+	}
+	
+	public var rightAuxiliaryColumnWidth: CGFloat = 0 {
+		didSet {
+			setFlag("rightAuxiliaryColumnWidth")
 		}
 	}
 	
@@ -203,6 +221,8 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 		copy.estimatedRowHeight = estimatedRowHeight
 		copy.fixedColumnWidth = fixedColumnWidth
 		copy.rowSpacing = rowSpacing
+		copy.leftAuxiliaryColumnWidth = leftAuxiliaryColumnWidth
+		copy.rightAuxiliaryColumnWidth = rightAuxiliaryColumnWidth
 		copy.numberOfColumns = numberOfColumns
 		copy.padding = padding
 		copy.showsColumnSeparator = showsColumnSeparator
@@ -246,6 +266,12 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 		}
 		if metrics.definesMetric("rowSpacing") {
 			rowSpacing = gridMetrics.rowSpacing
+		}
+		if metrics.definesMetric("leftAuxiliaryColumnWidth") {
+			leftAuxiliaryColumnWidth = gridMetrics.leftAuxiliaryColumnWidth
+		}
+		if metrics.definesMetric("rightAuxiliaryColumnWidth") {
+			rightAuxiliaryColumnWidth = gridMetrics.rightAuxiliaryColumnWidth
 		}
 		if metrics.definesMetric("numberOfColumns") {
 			numberOfColumns = gridMetrics.numberOfColumns
