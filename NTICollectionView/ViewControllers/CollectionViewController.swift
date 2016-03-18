@@ -13,8 +13,6 @@ private var UpdateNumber = 0
 
 public class CollectionViewController: UICollectionViewController, CollectionDataSourceDelegate, CollectionViewSupplementaryViewTracking {
 	
-	public weak var delegate: ViewControllerDelegate?
-	
 	private var updateCompletionHandler: dispatch_block_t?
 	private let reloadedSections = NSMutableIndexSet()
 	private let deletedSections = NSMutableIndexSet()
@@ -210,13 +208,11 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 	
 	public override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
 		clearCalculatedInsetInfo()
-		delegate?.viewController(self, willTransitionTo: newCollection, with: coordinator)
 		super.willTransitionToTraitCollection(newCollection, withTransitionCoordinator: coordinator)
 	}
 	
 	public override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
 		clearCalculatedInsetInfo()
-		delegate?.viewController(self, viewWillTransitionTo: size, with: coordinator)
 		super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
 	}
 	
