@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol ViewControllerDelegate {
+public protocol ViewControllerDelegate: class {
 	
 	func viewController(viewController: UIViewController, willTransitionTo newCollection: UITraitCollection, with transitionCoordinator: UIViewControllerTransitionCoordinator)
 	
