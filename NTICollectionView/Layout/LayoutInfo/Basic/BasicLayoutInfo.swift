@@ -114,7 +114,7 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 		if sectionIndex == GlobalSectionIndex {
 			return globalSection
 		}
-		guard sectionIndex >= 0 && sectionIndex < numberOfSections else {
+		guard (0..<numberOfSections).contains(sectionIndex) else {
 			return nil
 		}
 		return _sections[sectionIndex]

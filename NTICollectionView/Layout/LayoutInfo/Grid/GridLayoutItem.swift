@@ -23,12 +23,14 @@ public class GridLayoutItem: NSObject, LayoutItem, NSCopying {
 	public var isDragging = false
 	
 	public var indexPath: NSIndexPath {
-		guard let sectionInfo = section
-			where !sectionInfo.isGlobalSection else {
-				return NSIndexPath(index: itemIndex)
+		guard let sectionInfo = section else {
+			preconditionFailure("Items must be assigned to a section to provide an index path.")
 		}
-		
-		return NSIndexPath(forItem: itemIndex, inSection: sectionInfo.sectionIndex)
+		if sectionInfo.isGlobalSection {
+			return NSIndexPath(index: itemIndex)
+		} else {
+			return NSIndexPath(forItem: itemIndex, inSection: sectionInfo.sectionIndex)
+		}
 	}
 	
 	public var layoutAttributes: UICollectionViewLayoutAttributes {

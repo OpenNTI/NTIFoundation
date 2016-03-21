@@ -417,7 +417,7 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 		}
 		
 		// If the height of the row hasn't changed, then nothing else needs to move
-		guard newRowHeight != originalRowHeight else {
+		if newRowHeight == originalRowHeight {
 			return CGPointZero
 		}
 		
@@ -701,12 +701,15 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 		let itemInfo = items[indexPath.item]
 		
 		guard let rowInfo = itemInfo.row,
-			rowSeparatorAttributes = rowInfo.rowSeparatorLayoutAttributes
-			where rowInfo.items.count == 1 else {
+			rowSeparatorAttributes = rowInfo.rowSeparatorLayoutAttributes else {
 				return nil
 		}
 		
-		return rowSeparatorAttributes
+		if rowInfo.items.count == 1 {
+			return rowSeparatorAttributes
+		} else {
+			return nil
+		}
 	}
 	
 }
