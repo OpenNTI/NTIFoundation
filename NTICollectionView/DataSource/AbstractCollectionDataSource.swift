@@ -19,6 +19,8 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	
 	public weak var delegate: CollectionDataSourceDelegate?
 	
+	public weak var controller: CollectionDataSourceController?
+	
 	public var allowsSelection: Bool {
 		return true
 	}
@@ -472,6 +474,9 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	}
 	
 	public func loadContent(with progress: LoadingProgress) {
+		if let controller = self.controller {
+			return controller.loadContent(with: progress)
+		}
 		// This default implementation just signals that the load completed
 		progress.done()
 	}

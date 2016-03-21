@@ -52,6 +52,8 @@ public protocol CollectionDataSource: UICollectionViewDataSource, DataSource, Co
 	func loadContent()
 	func whenLoaded(onLoad: () -> Void)
 	
+	var controller: CollectionDataSourceController? { get set }
+	
 	func collectionView(collectionView: UICollectionView, identifierForCellAt indexPath: NSIndexPath) -> String
 	func collectionView(collectionView: UICollectionView, canEditItemAt indexPath: NSIndexPath) -> Bool
 	func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath) -> Bool
