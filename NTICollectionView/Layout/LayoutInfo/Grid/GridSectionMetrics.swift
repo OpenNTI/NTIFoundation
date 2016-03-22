@@ -23,10 +23,10 @@ public protocol GridSectionMetrics: SectionMetrics {
 	var rowSpacing: CGFloat { get set }
 	
 	/// The width of the left auxiliary column.
-	var leftAuxiliaryColumnWidth: CGFloat { get }
+	var leftAuxiliaryColumnWidth: CGFloat { get set }
 	
 	/// The width of the right auxiliary column.
-	var rightAuxiliaryColumnWidth: CGFloat { get }
+	var rightAuxiliaryColumnWidth: CGFloat { get set }
 	
 	/// Number of columns in this section. Sections will inherit a default of 1 from the data source.
 	var numberOfColumns: Int { get set }
