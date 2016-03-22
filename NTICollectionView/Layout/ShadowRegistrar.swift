@@ -94,10 +94,10 @@ public class ShadowRegistrar: NSObject {
 	}
 	
 	private func dequeReusableView(`for` shadowRegistration: ShadowRegistration, identifier: ReuseIdentifier, layoutAttributes: UICollectionViewLayoutAttributes, collectionView: UICollectionView) -> UICollectionReusableView {
-		var view: UICollectionReusableView! = shadowRegistration.reusableView
+		var view = shadowRegistration.reusableView
 		
 		if view != nil {
-			view.prepareForReuse()
+			view?.prepareForReuse()
 		} else if let viewClass = shadowRegistration.viewClass {
 			var frame = layoutAttributes.frame
 			frame.size = layoutAttributes.size
@@ -108,22 +108,26 @@ public class ShadowRegistrar: NSObject {
 				preconditionFailure("Invalid nib registered for identifier (\(identifier)) - nib must contain exactly one top level object which must be a UICollectionReusableView instance")
 			}
 			view = nibView
-			let viewReuseIdentifier = view.reuseIdentifier
+			let viewReuseIdentifier = view?.reuseIdentifier
 			guard (viewReuseIdentifier?.characters.count ?? 0) == 0 || viewReuseIdentifier == identifier else {
 				preconditionFailure("View reuse identifier in nib (\(viewReuseIdentifier)) does not match the identifier used to register the ")
 			}
 		}
 		
-		shadowRegistration.reusableView = view
-		view.autoresizingMask = .None
-		view.translatesAutoresizingMaskIntoConstraints = true
-		
-		UIView.performWithoutAnimation {
-			collectionView.addSubview(view)
-			self.apply(layoutAttributes, to: view)
+		guard let reusableView = view else {
+			preconditionFailure("We must have a view by this point.")
 		}
 		
-		return view
+		shadowRegistration.reusableView = reusableView
+		reusableView.autoresizingMask = .None
+		reusableView.translatesAutoresizingMaskIntoConstraints = true
+		
+		UIView.performWithoutAnimation {
+			collectionView.addSubview(reusableView)
+			self.apply(layoutAttributes, to: reusableView)
+		}
+		
+		return reusableView
 	}
 	
 	private func apply(layoutAttributes: UICollectionViewLayoutAttributes, to view: UICollectionReusableView) {
