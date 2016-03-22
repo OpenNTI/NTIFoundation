@@ -32,7 +32,7 @@ public class PagingCollectionDataSource: BasicCollectionDataSource, PagingCollec
 	
 	// MARK: - PagingCollectionDataSourceProtocol
 	
-	public func loadNextContent() {
+	public override func loadNextContent() {
 		guard canEnter(.LoadingNextContent) else {
 			return
 		}
@@ -44,14 +44,14 @@ public class PagingCollectionDataSource: BasicCollectionDataSource, PagingCollec
 		beginLoadingNextContent(with: loadingProgress)
 	}
 	
-	public func beginLoadingNextContent(with progress: LoadingProgress) {
+	public override func beginLoadingNextContent(with progress: LoadingProgress) {
 		if let loadingDelegate = self.loadingDelegate {
 			return loadingDelegate.loadNextContent(with: progress)
 		}
 		loadNextContent(with: progress)
 	}
 	
-	public func loadPreviousContent() {
+	public override func loadPreviousContent() {
 		guard canEnter(.LoadingPreviousContent) else {
 			return
 		}
@@ -63,7 +63,7 @@ public class PagingCollectionDataSource: BasicCollectionDataSource, PagingCollec
 		beginLoadingPreviousContent(with: loadingProgress)
 	}
 	
-	public func beginLoadingPreviousContent(with progress: LoadingProgress) {
+	public override func beginLoadingPreviousContent(with progress: LoadingProgress) {
 		if let loadingDelegate = self.loadingDelegate {
 			return loadingDelegate.loadPreviousContent(with: progress)
 		}
@@ -72,11 +72,11 @@ public class PagingCollectionDataSource: BasicCollectionDataSource, PagingCollec
 	
 	// MARK: - PageableContentLoading
 	
-	public func loadNextContent(with progress: LoadingProgress) {
+	public override func loadNextContent(with progress: LoadingProgress) {
 		// This is never called if a `loadingDelegate` is set
 	}
 	
-	public func loadPreviousContent(with progress: LoadingProgress) {
+	public override func loadPreviousContent(with progress: LoadingProgress) {
 		// This is never called if a `loadingDelegate` is set
 	}
 	

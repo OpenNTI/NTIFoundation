@@ -514,6 +514,52 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 		notifyContentLoaded(with: error)
 	}
 	
+	public func loadNextContent() {
+		guard canEnter(.LoadingNextContent) else {
+			return
+		}
+		
+		loadingState = .LoadingNextContent
+		
+		let loadingProgress = startNewLoadingProgress()
+		
+		beginLoadingNextContent(with: loadingProgress)
+	}
+	
+	public func beginLoadingNextContent(with progress: LoadingProgress) {
+		if let controller = self.controller {
+			return controller.loadNextContent(with: progress)
+		}
+		loadNextContent(with: progress)
+	}
+	
+	public func loadNextContent(with progress: LoadingProgress) {
+		progress.done()
+	}
+	
+	public func loadPreviousContent() {
+		guard canEnter(.LoadingPreviousContent) else {
+			return
+		}
+		
+		loadingState = .LoadingPreviousContent
+		
+		let loadingProgress = startNewLoadingProgress()
+		
+		beginLoadingPreviousContent(with: loadingProgress)
+	}
+	
+	public func beginLoadingPreviousContent(with progress: LoadingProgress) {
+		if let controller = self.controller {
+			return controller.loadPreviousContent(with: progress)
+		}
+		loadPreviousContent(with: progress)
+	}
+	
+	public func loadPreviousContent(with progress: LoadingProgress) {
+		progress.done()
+	}
+	
 	public func canEnter(state: LoadState) -> Bool {
 		return stateMachine.canTransition(to: state)
 	}
