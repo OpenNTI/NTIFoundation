@@ -514,6 +514,11 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 		notifyContentLoaded(with: error)
 	}
 	
+	public func setNeedsLoadNextContent() {
+		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(AbstractCollectionDataSource.loadNextContent as (AbstractCollectionDataSource) -> () -> ()), object: nil)
+		performSelector(#selector(AbstractCollectionDataSource.loadNextContent as (AbstractCollectionDataSource) -> () -> ()), withObject: nil, afterDelay: 0)
+	}
+	
 	public func loadNextContent() {
 		guard canEnter(.LoadingNextContent) else {
 			return
@@ -535,6 +540,11 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	
 	public func loadNextContent(with progress: LoadingProgress) {
 		progress.done()
+	}
+	
+	public func setNeedsLoadPreviousContent() {
+		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(AbstractCollectionDataSource.loadPreviousContent as (AbstractCollectionDataSource) -> () -> ()), object: nil)
+		performSelector(#selector(AbstractCollectionDataSource.loadPreviousContent as (AbstractCollectionDataSource) -> () -> ()), withObject: nil, afterDelay: 0)
 	}
 	
 	public func loadPreviousContent() {
