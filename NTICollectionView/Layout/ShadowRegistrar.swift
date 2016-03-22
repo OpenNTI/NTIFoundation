@@ -83,14 +83,14 @@ public class ShadowRegistrar: NSObject {
 		let layout = collectionView.collectionViewLayout
 		let layoutAttributes = layout.layoutAttributesForItemAtIndexPath(indexPath)!
 		let shadowRegistration = shadowRegistrationForCell(with: identifier)
-		return dequeReusableView(`for`: shadowRegistration, identifier: identifier, layoutAttributes: layoutAttributes, collectionView: collectionView)
+		return dequeReusableView(for: shadowRegistration, identifier: identifier, layoutAttributes: layoutAttributes, collectionView: collectionView)
 	}
 	
 	public func dequeReusableSupplementaryView(of elementKind: ElementKind, with identifier: ReuseIdentifier, `for` indexPath: NSIndexPath, collectionView: UICollectionView) -> UICollectionReusableView {
 		let layout = collectionView.collectionViewLayout
 		let layoutAttributes = layout.layoutAttributesForSupplementaryViewOfKind(elementKind, atIndexPath: indexPath)!
 		let shadowRegistration = shadowRegistrationForSupplementaryView(of: elementKind, with: identifier)
-		return dequeReusableView(`for`: shadowRegistration, identifier: identifier, layoutAttributes: layoutAttributes, collectionView: collectionView)
+		return dequeReusableView(for: shadowRegistration, identifier: identifier, layoutAttributes: layoutAttributes, collectionView: collectionView)
 	}
 	
 	private func dequeReusableView(`for` shadowRegistration: ShadowRegistration, identifier: ReuseIdentifier, layoutAttributes: UICollectionViewLayoutAttributes, collectionView: UICollectionView) -> UICollectionReusableView {

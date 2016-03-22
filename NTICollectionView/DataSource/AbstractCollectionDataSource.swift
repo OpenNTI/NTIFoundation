@@ -166,7 +166,7 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	}
 	
 	public func indexPaths(`for` supplementaryItem: SupplementaryItem) -> [NSIndexPath] {
-		return metricsHelper.indexPaths(`for`: supplementaryItem)
+		return metricsHelper.indexPaths(for: supplementaryItem)
 	}
 	
 	public func findSupplementaryItemOfKind(kind: String, at indexPath: NSIndexPath, using block: (dataSource: CollectionDataSource, localIndexPath: NSIndexPath, supplementaryItem: SupplementaryItem) -> Void) {
@@ -421,8 +421,8 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	
 	/// Signal that the datasource should reload its content.
 	public func setNeedsLoadContent() {
-		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: "loadContent", object: nil)
-		performSelector("loadContent", withObject: nil, afterDelay: 0)
+		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(AbstractCollectionDataSource.loadContent as (AbstractCollectionDataSource) -> () -> ()), object: nil)
+		performSelector(#selector(AbstractCollectionDataSource.loadContent as (AbstractCollectionDataSource) -> () -> ()), withObject: nil, afterDelay: 0)
 	}
 	
 	/// Reset the content and loading state.
@@ -607,7 +607,7 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
 		let identifier = self.collectionView(collectionView, identifierForCellAt: indexPath)
 		let cell = collectionView.dequeueReusableCellWithReuseIdentifier(identifier, forIndexPath: indexPath)
-		self.collectionView(collectionView, configure: cell, `for`: indexPath)
+		self.collectionView(collectionView, configure: cell, for: indexPath)
 		return cell
 	}
 	
@@ -617,7 +617,7 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	
 	public func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
 		if kind == CollectionElementKindPlaceholder {
-			return dequePlaceholderView(`for`: collectionView, at: indexPath)
+			return dequePlaceholderView(for: collectionView, at: indexPath)
 		}
 		
 		var metrics: SupplementaryItem?

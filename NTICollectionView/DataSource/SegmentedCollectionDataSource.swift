@@ -156,7 +156,7 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 	}
 	
 	public override func indexPath(`for` item: Item) -> NSIndexPath? {
-		return _selectedDataSource.indexPath(`for`: item)
+		return _selectedDataSource.indexPath(for: item)
 	}
 	
 	public override func removeItem(at indexPath: NSIndexPath) {
@@ -392,7 +392,7 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 		guard dataSource === _selectedDataSource else {
 			return
 		}
-		notifyContentUpdated(`for`: supplementaryItem, at: indexPaths)
+		notifyContentUpdated(for: supplementaryItem, at: indexPaths)
 	}
 	
 }

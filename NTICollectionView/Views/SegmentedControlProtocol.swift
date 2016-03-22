@@ -58,7 +58,7 @@ public class GridSegmentedControlHeader: BasicGridSupplementaryItem, SegmentedCo
 public class SegmentedControl: UISegmentedControl, SegmentedControlView {
 	
 	deinit {
-		removeTarget(self, action: "segmentedControlDidChangeValue", forControlEvents: .ValueChanged)
+		removeTarget(self, action: #selector(SegmentedControl.segmentedControlDidChangeValue), forControlEvents: .ValueChanged)
 	}
 	
 	public override init(frame: CGRect) {
@@ -76,7 +76,7 @@ public class SegmentedControl: UISegmentedControl, SegmentedControlView {
 	}
 	
 	private func registerSelfAsTarget() {
-		addTarget(self, action: "segmentedControlDidChangeValue", forControlEvents: .ValueChanged)
+		addTarget(self, action: #selector(SegmentedControl.segmentedControlDidChangeValue), forControlEvents: .ValueChanged)
 	}
 	
 	public weak var segmentedControlDelegate: SegmentedControlDelegate?

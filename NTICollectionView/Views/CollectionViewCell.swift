@@ -14,8 +14,8 @@ public class CollectionViewCell: UICollectionViewCell {
 	
 	/// Informs the containing collection view that `self` needs to be redrawn.
 	public func invalidateCollectionViewLayout() {
-		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: "_invalidateCollectionViewLayout", object: nil)
-		performSelector("_invalidateCollectionViewLayout", withObject: nil, afterDelay: 0)
+		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(CollectionViewCell._invalidateCollectionViewLayout), object: nil)
+		performSelector(#selector(CollectionViewCell._invalidateCollectionViewLayout), withObject: nil, afterDelay: 0)
 	}
 	
 	func _invalidateCollectionViewLayout() {

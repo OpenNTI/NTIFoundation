@@ -10,13 +10,13 @@ import UIKit
 
 public protocol DecorationProvider {
 	
-	typealias SectionType: LayoutSection
+	associatedtype SectionType: LayoutSection
 	
 }
 
 public protocol LayoutDecoration {
 	
-	typealias SectionType: LayoutSection
+	associatedtype SectionType: LayoutSection
 	
 	var elementKind: String { get }
 	

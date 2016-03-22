@@ -62,7 +62,7 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 	}
 	
 	public func supplementaryItem(`for` key: String) -> SupplementaryItem? {
-		return dataSource.supplementaryItem(`for`: key)
+		return dataSource.supplementaryItem(for: key)
 	}
 	
 	/// Retrieve the layout metrics for a specific section within this data source.

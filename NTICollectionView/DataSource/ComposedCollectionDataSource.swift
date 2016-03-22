@@ -38,7 +38,7 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 	public func add(dataSource: CollectionDataSource) {
 		dataSource.delegate = self
 		
-		assert(mapping(`for`: dataSource) == nil, "Tried to add data source more than once: \(dataSource)")
+		assert(mapping(for: dataSource) == nil, "Tried to add data source more than once: \(dataSource)")
 		
 		let mappingForDataSource = BasicDataSourceMapping(dataSource: dataSource)
 		mappings.append(mappingForDataSource)
@@ -56,7 +56,7 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 	
 	/// Remove the specified data source from this data source.
 	public func remove(dataSource: CollectionDataSource) {
-		guard let mappingForDataSoure = mapping(`for`: dataSource) else {
+		guard let mappingForDataSoure = mapping(for: dataSource) else {
 			preconditionFailure("Data source not found in mapping")
 		}
 		
@@ -93,7 +93,7 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 	}
 	
 	private func section(`for` dataSource: CollectionDataSource) -> Int? {
-		let mapping = self.mapping(`for`: dataSource)
+		let mapping = self.mapping(for: dataSource)
 		return mapping?.globalSectionForLocalSection(0)
 	}
 	
@@ -117,14 +117,14 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 	}
 	
 	private func globalSectionsForLocal(localSections: NSIndexSet, dataSource: CollectionDataSource) -> [Int] {
-		guard let mapping = self.mapping(`for`: dataSource) else {
+		guard let mapping = self.mapping(for: dataSource) else {
 			return []
 		}
 		return localSections.flatMap { mapping.globalSectionForLocalSection($0) }
 	}
 	
 	private func globalIndexPathsForLocal(localIndexPaths: [NSIndexPath], dataSource: CollectionDataSource) -> [NSIndexPath] {
-		guard let mapping = self.mapping(`for`: dataSource) else {
+		guard let mapping = self.mapping(for: dataSource) else {
 			return []
 		}
 		return localIndexPaths.flatMap { mapping.globalIndexPathForLocal($0) }
@@ -140,8 +140,8 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 	
 	public override func indexPath(`for` item: Item) -> NSIndexPath? {
 		for dataSource in dataSources {
-			guard let indexPath = dataSource.indexPath(`for`: item),
-				mapping = self.mapping(`for`: dataSource) else {
+			guard let indexPath = dataSource.indexPath(for: item),
+				mapping = self.mapping(for: dataSource) else {
 					continue
 			}
 			return mapping.globalIndexPathForLocal(indexPath)
@@ -337,54 +337,54 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 	// MARK: - CollectionDataSourceDelegate
 	
 	public func dataSource(dataSource: CollectionDataSource, didInsertItemsAt indexPaths: [NSIndexPath]) {
-		let globalIndexPaths = self.globalIndexPaths(`for`: dataSource, localIndexPaths: indexPaths)
+		let globalIndexPaths = self.globalIndexPaths(for: dataSource, localIndexPaths: indexPaths)
 		notifyItemsInserted(at: globalIndexPaths)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didRemoveItemsAt indexPaths: [NSIndexPath]) {
-		let globalIndexPaths = self.globalIndexPaths(`for`: dataSource, localIndexPaths: indexPaths)
+		let globalIndexPaths = self.globalIndexPaths(for: dataSource, localIndexPaths: indexPaths)
 		notifyItemsRemoved(at: globalIndexPaths)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didRefreshItemsAt indexPaths: [NSIndexPath]) {
-		let globalIndexPaths = self.globalIndexPaths(`for`: dataSource, localIndexPaths: indexPaths)
+		let globalIndexPaths = self.globalIndexPaths(for: dataSource, localIndexPaths: indexPaths)
 		notifyItemsRefreshed(at: globalIndexPaths)
 	}
 	
 	private func globalIndexPaths(`for` dataSource: CollectionDataSource, localIndexPaths: [NSIndexPath]) -> [NSIndexPath] {
-		return mapping(`for`: dataSource)!.globalIndexPathsForLocal(localIndexPaths)
+		return mapping(for: dataSource)!.globalIndexPathsForLocal(localIndexPaths)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didMoveItemAt oldIndexPath: NSIndexPath, to newIndexPath: NSIndexPath) {
-		let mapping = self.mapping(`for`: dataSource)!
+		let mapping = self.mapping(for: dataSource)!
 		let globalFromIndexPath = mapping.globalIndexPathForLocal(oldIndexPath)
 		let globalToIndexPath = mapping.globalIndexPathForLocal(newIndexPath)
 		notifyItemMoved(from: globalFromIndexPath, to: globalToIndexPath)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didInsertSections sections: NSIndexSet, direction: SectionOperationDirection?) {
-		let mapping = self.mapping(`for`: dataSource)!
+		let mapping = self.mapping(for: dataSource)!
 		updateMappings()
 		let globalSections = mapping.globalSectionsForLocalSections(sections)
 		notifySectionsInserted(globalSections, direction: direction)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didRemoveSections sections: NSIndexSet, direction: SectionOperationDirection?) {
-		let mapping = self.mapping(`for`: dataSource)!
+		let mapping = self.mapping(for: dataSource)!
 		updateMappings()
 		let globalSections = mapping.globalSectionsForLocalSections(sections)
 		notifySectionsRemoved(globalSections, direction: direction)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didRefreshSections sections: NSIndexSet) {
-		let mapping = self.mapping(`for`: dataSource)!
+		let mapping = self.mapping(for: dataSource)!
 		let globalSections = mapping.globalSectionsForLocalSections(sections)
 		notifySectionsRefreshed(globalSections)
 		updateMappings()
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didMoveSectionFrom oldSection: Int, to newSection: Int, direction: SectionOperationDirection?) {
-		let mapping = self.mapping(`for`: dataSource)!
+		let mapping = self.mapping(for: dataSource)!
 		let globalOldSection = mapping.globalSectionForLocalSection(oldSection)
 		let globalNewSection = mapping.globalSectionForLocalSection(newSection)
 		updateMappings()
@@ -400,27 +400,27 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didPresentActivityIndicatorForSections sections: NSIndexSet) {
-		let mapping = self.mapping(`for`: dataSource)!
+		let mapping = self.mapping(for: dataSource)!
 		let globalSections = mapping.globalSectionsForLocalSections(sections)
 		presentActivityIndicator(forSections: globalSections)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didPresentPlaceholderForSections sections: NSIndexSet) {
-		let mapping = self.mapping(`for`: dataSource)!
+		let mapping = self.mapping(for: dataSource)!
 		let globalSections = mapping.globalSectionsForLocalSections(sections)
 		present(nil, forSections: globalSections)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didDismissPlaceholderForSections sections: NSIndexSet) {
-		let mapping = self.mapping(`for`: dataSource)!
+		let mapping = self.mapping(for: dataSource)!
 		let globalSections = mapping.globalSectionsForLocalSections(sections)
 		dismissPlaceholder(forSections: globalSections)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didUpdate supplementaryItem: SupplementaryItem, at indexPaths: [NSIndexPath]) {
-		let mapping = self.mapping(`for`: dataSource)!
+		let mapping = self.mapping(for: dataSource)!
 		let globalIndexPaths = mapping.globalIndexPathsForLocal(indexPaths)
-		notifyContentUpdated(`for`: supplementaryItem, at: globalIndexPaths)
+		notifyContentUpdated(for: supplementaryItem, at: globalIndexPaths)
 	}
 	
 }

@@ -137,7 +137,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			invalidateEverything = true
 		}
 		
-		layoutLog("\(__FUNCTION__) invalidateDataSourceCounts = \(invalidateDataSourceCounts.debugLogDescription) invalidateEverything = \(invalidateEverything.debugLogDescription)")
+		layoutLog("\(#function) invalidateDataSourceCounts = \(invalidateDataSourceCounts.debugLogDescription) invalidateEverything = \(invalidateEverything.debugLogDescription)")
 		
 		if invalidateEverything || (layoutDataIsValid && invalidateDataSourceCounts) {
 			layoutDataIsValid = false
@@ -164,13 +164,13 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			for (kind, indexPaths) in context.invalidatedSupplementaryIndexPaths ?? [:] {
 				let result = indexPaths.map { $0.debugLogDescription }
 				let resultStr = result.joinWithSeparator(", ")
-				debugPrint("\(__FUNCTION__) \(kind) invalidated supplementary indexPaths: \(resultStr)")
+				debugPrint("\(#function) \(kind) invalidated supplementary indexPaths: \(resultStr)")
 			}
 		}
 	}
 	
 	public override func prepareLayout() {
-		layoutLog("\(__FUNCTION__) bounds=\(collectionView!.bounds)")
+		layoutLog("\(#function) bounds=\(collectionView!.bounds)")
 		if let bounds = collectionView?.bounds where !bounds.isEmpty {
 			buildLayout()
 		}
@@ -178,7 +178,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	}
 	
 	public override func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-		layoutLog("\(__FUNCTION__) rect=\(rect)")
+		layoutLog("\(#function) rect=\(rect)")
 		guard let collectionView = self.collectionView,
 			layoutInfo = self.layoutInfo else {
 				return nil
@@ -194,7 +194,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		if LayoutDebugging {
 			for attr in result {
-				print("\(__FUNCTION__) \(attr.debugLogDescription)")
+				print("\(#function) \(attr.debugLogDescription)")
 			}
 		}
 		
@@ -221,14 +221,14 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		if let measuringAttributes = self.measuringAttributes
 			where measuringAttributes.indexPath == indexPath
 				&& measuringAttributes.representedElementKind == elementKind {
-					layoutLog("\(__FUNCTION__) measuringAttributes=\(measuringAttributes)")
+					layoutLog("\(#function) measuringAttributes=\(measuringAttributes)")
 					return measuringAttributes
 		}
 		
 		guard let attributes = layoutInfo?.layoutAttributesForSupplementaryElementOfKind(elementKind, at: indexPath) else {
 			preconditionFailure("We should ALWAYS find layout attributes.")
 		}
-		layoutLog("\(__FUNCTION__) indexPath=\(indexPath.debugLogDescription) attributes=\(attributes)")
+		layoutLog("\(#function) indexPath=\(indexPath.debugLogDescription) attributes=\(attributes)")
 		return attributes
 	}
 	
@@ -242,7 +242,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	}
 	
 	public override func invalidationContextForPreferredLayoutAttributes(preferredAttributes: UICollectionViewLayoutAttributes, withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutInvalidationContext {
-		layoutLog("\(__FUNCTION__) originalAttributes=\(originalAttributes) preferredAttributes=\(preferredAttributes)")
+		layoutLog("\(#function) originalAttributes=\(originalAttributes) preferredAttributes=\(preferredAttributes)")
 		
 		let indexPath = preferredAttributes.indexPath
 		let size = preferredAttributes.frame.size
@@ -331,12 +331,12 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		targetContentOffset.y -= insets.top
 		
-		layoutLog("\(__FUNCTION__) proposedContentOffset=\(proposedContentOffset) layoutSize=\(layoutSize) availableHeight=\(availableHeight) targetContentOffset=\(targetContentOffset)")
+		layoutLog("\(#function) proposedContentOffset=\(proposedContentOffset) layoutSize=\(layoutSize) availableHeight=\(availableHeight) targetContentOffset=\(targetContentOffset)")
 		return targetContentOffset
 	}
 	
 	public override func collectionViewContentSize() -> CGSize {
-		layoutLog("\(__FUNCTION__) \(layoutSize)")
+		layoutLog("\(#function) \(layoutSize)")
 		return layoutSize
 	}
 	
@@ -780,7 +780,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		let numberOfSections = collectionView.numberOfSections()
 		
-		layoutLog("\(__FUNCTION__) numberOfSections = \(numberOfSections)")
+		layoutLog("\(#function) numberOfSections = \(numberOfSections)")
 		
 		layoutInfo.collectionViewSize = bounds.size
 		layoutInfo.width = width
@@ -858,7 +858,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		let isGlobalSection = sectionIndex == GlobalSectionIndex
 		let numberOfItemsInSection = isGlobalSection ? 0 : collectionView.numberOfItemsInSection(sectionIndex)
 		
-		layoutLog("\(__FUNCTION__) section \(sectionIndex): numberOfItems=\(numberOfItemsInSection) hasPlaceholder=\(metrics.placeholder != nil)")
+		layoutLog("\(#function) section \(sectionIndex): numberOfItems=\(numberOfItemsInSection) hasPlaceholder=\(metrics.placeholder != nil)")
 		
 		var rowHeight = gridMetrics.rowHeight ?? AutomaticLength
 		let isVariableRowHeight = rowHeight == AutomaticLength
@@ -891,7 +891,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		// Create the collection view wrapper that will be used for measuring
 		collectionViewWrapper = WrapperCollectionView(collectionView: collectionView, mapping: nil, isUsedForMeasuring: true)
 		
-		layoutLog("\(__FUNCTION__)")
+		layoutLog("\(#function)")
 		
 		updateFlagsFromCollectionView()
 		
@@ -947,7 +947,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		collectionViewWrapper = nil
 		
-		layoutLog("\(__FUNCTION__) Final layout height: \(layoutHeight)")
+		layoutLog("\(#function) Final layout height: \(layoutHeight)")
 	}
 	
 	private func resetPinnableSupplementaryItems(supplementaryItems: [LayoutSupplementaryItem], invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
@@ -1073,7 +1073,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		if !pinnableHeaders.isEmpty {
 			pinnableY = applyTopPinning(to: pinnableHeaders, minY: pinnableY, invalidationContext: invalidationContext)
-			finalizePinning(`for`: pinnableHeaders, zIndex: pinnedHeaderZIndex)
+			finalizePinning(for: pinnableHeaders, zIndex: pinnedHeaderZIndex)
 		}
 		
 		let nonPinnableHeaders = section.nonPinnableHeaders
@@ -1082,7 +1082,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			resetPinnableSupplementaryItems(nonPinnableHeaders, invalidationContext: invalidationContext)
 			nonPinnableY = applyBottomPinning(to: nonPinnableHeaders, maxY: nonPinnableY, invalidationContext: invalidationContext)
 			// FIXME: Should this really be `pinnedHeaderZIndex`?
-			finalizePinning(`for`: nonPinnableHeaders, zIndex: pinnedHeaderZIndex)
+			finalizePinning(for: nonPinnableHeaders, zIndex: pinnedHeaderZIndex)
 		}
 		
 		if let backgroundAttributes = section.backgroundAttribute {
@@ -1097,7 +1097,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			let overlappingPinnableHeaders = overlappingSection.pinnableHeaders
 			applyTopPinning(to: overlappingPinnableHeaders, minY: pinnableY, invalidationContext: invalidationContext)
 			// FIXME: Magic number
-			finalizePinning(`for`: overlappingSection.pinnableHeaders, zIndex: pinnedHeaderZIndex - 100)
+			finalizePinning(for: overlappingSection.pinnableHeaders, zIndex: pinnedHeaderZIndex - 100)
 		}
 	}
 	

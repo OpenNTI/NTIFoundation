@@ -32,13 +32,13 @@ public class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMet
 	}
 	
 	public override func indexPaths(`for` supplementaryItem: SupplementaryItem) -> [NSIndexPath] {
-		var result = super.indexPaths(`for`: supplementaryItem)
+		var result = super.indexPaths(for: supplementaryItem)
 		if !result.isEmpty {
 			return result
 		}
 		
 		// If the metrics aren't defined on this data source, check the selected data source
-		result = selectedDataSource.indexPaths(`for`: supplementaryItem)
+		result = selectedDataSource.indexPaths(for: supplementaryItem)
 		
 		// Need to update the index paths of the selected data source to reflect any items defined in this data source
 		var adjusted: [NSIndexPath] = []

@@ -284,27 +284,27 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didInsertItemsAt indexPaths: [NSIndexPath]) {
-		updateLog("\(__FUNCTION__) INSERT ITEMS: \(indexPaths)")
+		updateLog("\(#function) INSERT ITEMS: \(indexPaths)")
 		collectionView!.insertItemsAtIndexPaths(indexPaths)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didRemoveItemsAt indexPaths: [NSIndexPath]) {
-		updateLog("\(__FUNCTION__) REMOVE ITEMS: \(indexPaths)")
+		updateLog("\(#function) REMOVE ITEMS: \(indexPaths)")
 		collectionView!.deleteItemsAtIndexPaths(indexPaths)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didRefreshItemsAt indexPaths: [NSIndexPath]) {
-		updateLog("\(__FUNCTION__) REFRESH ITEMS: \(indexPaths)")
+		updateLog("\(#function) REFRESH ITEMS: \(indexPaths)")
 		collectionView!.reloadItemsAtIndexPaths(indexPaths)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didMoveItemAt oldIndexPath: NSIndexPath, to newIndexPath: NSIndexPath) {
-		updateLog("\(__FUNCTION__) MOVE ITEM: \(oldIndexPath.debugLogDescription) TO: \(newIndexPath.debugLogDescription)")
+		updateLog("\(#function) MOVE ITEM: \(oldIndexPath.debugLogDescription) TO: \(newIndexPath.debugLogDescription)")
 		collectionView!.moveItemAtIndexPath(oldIndexPath, toIndexPath: newIndexPath)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didInsertSections sections: NSIndexSet, direction: SectionOperationDirection?) {
-		updateLog("\(__FUNCTION__) INSERT SECTIONS: \(sections.debugLogDescription)")
+		updateLog("\(#function) INSERT SECTIONS: \(sections.debugLogDescription)")
 		let layout = collectionView!.collectionViewLayout
 		if let collectionLayout = layout as? CollectionViewLayout {
 			collectionLayout.dataSource(dataSource, didInsertSections: sections, direction: direction)
@@ -314,7 +314,7 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didRemoveSections sections: NSIndexSet, direction: SectionOperationDirection?) {
-		updateLog("\(__FUNCTION__) REMOVE SECTIONS: \(sections.debugLogDescription)")
+		updateLog("\(#function) REMOVE SECTIONS: \(sections.debugLogDescription)")
 		let layout = collectionView!.collectionViewLayout
 		if let collectionLayout = layout as? CollectionViewLayout {
 			collectionLayout.dataSource(dataSource, didRemoveSections: sections, direction: direction)
@@ -324,7 +324,7 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didRefreshSections sections: NSIndexSet) {
-		updateLog("\(__FUNCTION__) REFRESH SECTIONS: \(sections.debugLogDescription)")
+		updateLog("\(#function) REFRESH SECTIONS: \(sections.debugLogDescription)")
 		// It's not "legal" to reload a section if you also delete the section later in the same batch update. So we'll just remember that we want to reload these sections when we're performing a batch update and reload them only if they weren't also deleted.
 		if isPerformingUpdates {
 			reloadedSections.addIndexes(sections)
@@ -334,7 +334,7 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didMoveSectionFrom oldSection: Int, to newSection: Int, direction: SectionOperationDirection?) {
-		updateLog("\(__FUNCTION__) MOVE SECTION: \(oldSection) TO: \(newSection)")
+		updateLog("\(#function) MOVE SECTION: \(oldSection) TO: \(newSection)")
 		let layout = collectionView!.collectionViewLayout
 		if let collectionLayout = layout as? CollectionViewLayout {
 			collectionLayout.dataSource(dataSource, didMoveSectionFrom: oldSection, to: newSection, direction: direction)
@@ -343,7 +343,7 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 	}
 	
 	public func dataSourceDidReloadData(dataSource: CollectionDataSource) {
-		updateLog("\(__FUNCTION__) RELOAD")
+		updateLog("\(#function) RELOAD")
 		collectionView!.reloadData()
 	}
 	
@@ -355,7 +355,7 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		requireMainThread()
 		// We're currently updating the collection view, so we can't call -performBatchUpdates:completion: on it
 		guard !isPerformingUpdates else {
-			updateLog("\(__FUNCTION__) PERFORMING UPDATES IMMEDIATELy")
+			updateLog("\(#function) PERFORMING UPDATES IMMEDIATELy")
 			// Chain the completion handler if one was given
 			if completion != nil {
 				let oldCompletion = updateCompletionHandler
@@ -371,7 +371,7 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		
 		if UpdateDebugging {
 			UpdateNumber += 1
-			updateLog("\(__FUNCTION__) \(UpdateNumber): PERFORMING BATCH UPDATE")
+			updateLog("\(#function) \(UpdateNumber): PERFORMING BATCH UPDATE")
 		}
 		
 		clearSectionUpdateInfo()
@@ -379,7 +379,7 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		var completionHandler: dispatch_block_t?
 		
 		collectionView!.performBatchUpdates({
-			updateLog("\(__FUNCTION__) \(UpdateNumber): BEGIN UPDATE")
+			updateLog("\(#function) \(UpdateNumber): BEGIN UPDATE")
 			self.isPerformingUpdates = true
 			self.updateCompletionHandler = completion
 			
@@ -393,32 +393,32 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 			sectionsToReload.removeIndexes(self.insertedSections)
 			
 			self.collectionView!.reloadSections(sectionsToReload)
-			updateLog("\(__FUNCTION__) \(UpdateNumber): RELOADED SECTIONS: \(sectionsToReload.debugLogDescription)")
+			updateLog("\(#function) \(UpdateNumber): RELOADED SECTIONS: \(sectionsToReload.debugLogDescription)")
 			
-			updateLog("\(__FUNCTION__) \(UpdateNumber): END UPDATE")
+			updateLog("\(#function) \(UpdateNumber): END UPDATE")
 			self.isPerformingUpdates = false
 			completionHandler = self.updateCompletionHandler
 			self.updateCompletionHandler = nil
 			self.clearSectionUpdateInfo()
 			}) { (_: Bool) in
-				updateLog("\(__FUNCTION__) \(UpdateNumber): BEGIN COMPLETION HANDLER")
+				updateLog("\(#function) \(UpdateNumber): BEGIN COMPLETION HANDLER")
 				completionHandler?()
-				updateLog("\(__FUNCTION__) \(UpdateNumber): END COMPLETION HANDLER")
+				updateLog("\(#function) \(UpdateNumber): END COMPLETION HANDLER")
 		}
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didPresentActivityIndicatorForSections sections: NSIndexSet) {
-		updateLog("\(__FUNCTION__) Present activity indicator: sections=\(sections.debugLogDescription)")
+		updateLog("\(#function) Present activity indicator: sections=\(sections.debugLogDescription)")
 		reloadedSections.addIndexes(sections)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didPresentPlaceholderForSections sections: NSIndexSet) {
-		updateLog("\(__FUNCTION__) Present placeholder: sections=\(sections.debugLogDescription)")
+		updateLog("\(#function) Present placeholder: sections=\(sections.debugLogDescription)")
 		reloadedSections.addIndexes(sections)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didDismissPlaceholderForSections sections: NSIndexSet) {
-		updateLog("\(__FUNCTION__) Dismiss placeholder: sections=\(sections.debugLogDescription)")
+		updateLog("\(#function) Dismiss placeholder: sections=\(sections.debugLogDescription)")
 		reloadedSections.addIndexes(sections)
 	}
 	

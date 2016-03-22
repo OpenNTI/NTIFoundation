@@ -119,7 +119,7 @@ public class PlaceholderView: UIView {
 	}
 	
 	private func configureActionButton() {
-		actionButton.addTarget(self, action: "actionButtonPressed:", forControlEvents: .TouchUpInside)
+		actionButton.addTarget(self, action: #selector(PlaceholderView.actionButtonPressed(_:)), forControlEvents: .TouchUpInside)
 		actionButton.frame = CGRect(x: 0, y: 0, width: 124, height: 29)
 		actionButton.titleLabel?.font = UIFont.systemFontOfSize(14)
 		actionButton.translatesAutoresizingMaskIntoConstraints = false

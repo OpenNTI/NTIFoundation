@@ -31,7 +31,7 @@ public class ComposedCollectionDataSourceMetricsHelper: CollectionDataSourceMetr
 	}
 	
 	public override func indexPaths(`for` supplementaryItem: SupplementaryItem) -> [NSIndexPath] {
-		var result = super.indexPaths(`for`: supplementaryItem)
+		var result = super.indexPaths(for: supplementaryItem)
 		if !result.isEmpty {
 			return result
 		}
@@ -39,7 +39,7 @@ public class ComposedCollectionDataSourceMetricsHelper: CollectionDataSourceMetr
 		let kind = supplementaryItem.elementKind
 		for mapping in composedDataSource.mappings {
 			let dataSource = mapping.dataSource
-			result = dataSource.indexPaths(`for`: supplementaryItem)
+			result = dataSource.indexPaths(for: supplementaryItem)
 			result = mapping.globalIndexPathsForLocal(result)
 			
 			var adjusted: [NSIndexPath] = []

@@ -134,7 +134,7 @@ public class WrapperCollectionView: UICollectionView, CollectionViewWrapper {
 	public override func dequeueReusableCellWithReuseIdentifier(identifier: String, forIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
 		let globalIndexPath = globalIndexPathForLocal(indexPath)
 		if isUsedForMeasuring, let shadowRegistrar = shadowRegistrar {
-			return shadowRegistrar.dequeReusableCell(with: identifier, `for`: globalIndexPath, collectionView: collectionView) as! UICollectionViewCell
+			return shadowRegistrar.dequeReusableCell(with: identifier, for: globalIndexPath, collectionView: collectionView) as! UICollectionViewCell
 		}
 		return collectionView.dequeueReusableCellWithReuseIdentifier(identifier, forIndexPath: globalIndexPath)
 	}
@@ -142,7 +142,7 @@ public class WrapperCollectionView: UICollectionView, CollectionViewWrapper {
 	public override func dequeueReusableSupplementaryViewOfKind(elementKind: String, withReuseIdentifier identifier: String, forIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
 		let globalIndexPath = globalIndexPathForLocal(indexPath)
 		if isUsedForMeasuring, let shadowRegistrar = shadowRegistrar {
-			return shadowRegistrar.dequeReusableSupplementaryView(of: elementKind, with: identifier, `for`: globalIndexPath, collectionView: collectionView)
+			return shadowRegistrar.dequeReusableSupplementaryView(of: elementKind, with: identifier, for: globalIndexPath, collectionView: collectionView)
 		}
 		return collectionView.dequeueReusableSupplementaryViewOfKind(elementKind, withReuseIdentifier: identifier, forIndexPath: globalIndexPath)
 	}
