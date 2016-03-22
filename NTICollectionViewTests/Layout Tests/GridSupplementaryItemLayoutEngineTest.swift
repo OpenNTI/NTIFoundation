@@ -19,8 +19,8 @@ class GridSupplementaryItemLayoutEngineTest: XCTestCase {
 		// V:[headers][rightAux]-(>=0)-[footers]
 		let section = BasicGridLayoutSection()
 		section.metrics.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-		section.leftAuxiliaryColumnWidth = 20
-		section.rightAuxiliaryColumnWidth = 20
+		section.metrics.leftAuxiliaryColumnWidth = 20
+		section.metrics.rightAuxiliaryColumnWidth = 20
 		section.metrics.padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
 		
 		let headers = makeItems(of: UICollectionElementKindSectionHeader, count: 1)
