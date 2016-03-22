@@ -37,6 +37,9 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	private var columnWidth: CGFloat {
 		return layoutSection.columnWidth
 	}
+	private var fixedColumnWidth: CGFloat? {
+		return metrics.fixedColumnWidth
+	}
 	private var phantomCellIndex: Int? {
 		return layoutSection.phantomCellIndex
 	}
@@ -165,6 +168,7 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	}
 	
 	private func updateFrame(of item: LayoutItem) {
+		let columnWidth = fixedColumnWidth ?? row.columnWidth(forNumberOfColumns: numberOfColumns)
 		item.frame = CGRect(x: position.x, y: position.y, width: columnWidth, height: height)
 	}
 	

@@ -132,11 +132,11 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 		
 		layoutLeftAuxiliaryItems()
 		
+		layoutRightAuxiliaryItems()
+		
 		layoutSectionPlaceholder()
 		
 		layoutInnerContent()
-		
-		layoutRightAuxiliaryItems()
 		
 		layoutFooters()
 		
@@ -186,8 +186,8 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 		let orders = supplementaryOrders
 		
 		let insetX = insetOrigin.x
-		headersMinX = orders.leftAux < orders.headers ? leftAuxiliaryColumnWidth : insetX
-		footersMinX = orders.leftAux < orders.footers ? leftAuxiliaryColumnWidth : insetX
+		headersMinX = orders.leftAux < orders.headers ? insetX + leftAuxiliaryColumnWidth : insetX
+		footersMinX = orders.leftAux < orders.footers ? insetX + leftAuxiliaryColumnWidth : insetX
 		
 		let maxX = insetX + width
 		headersMaxX = orders.rightAux < orders.headers ? maxX - rightAuxiliaryColumnWidth : maxX
@@ -197,7 +197,7 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 	private func layoutHeaders() {
 		position = headersOrigin
 		headerFooterMinX = position.x
-		let headersSizing = LayoutSizingInfo(width: width, layoutMeasure: layoutMeasure)
+		let headersSizing = LayoutSizingInfo(width: headersWidth, layoutMeasure: layoutMeasure)
 		layout(layoutSection.headers, using: headersSizing)
 		headersMaxY = position.y
 	}

@@ -23,6 +23,18 @@ public protocol LayoutRow: NSObjectProtocol {
 	
 	func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
+	func columnWidth(forNumberOfColumns columns: Int) -> CGFloat
+	
+}
+
+extension LayoutRow {
+	
+	public func columnWidth(forNumberOfColumns columns: Int) -> CGFloat {
+		let layoutWidth = frame.width
+		let columnWidth = layoutWidth / CGFloat(columns)
+		return columnWidth
+	}
+	
 }
 
 public class GridLayoutRow: NSObject, LayoutRow, NSCopying {
