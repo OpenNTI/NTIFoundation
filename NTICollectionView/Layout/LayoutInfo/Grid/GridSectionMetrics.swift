@@ -10,6 +10,9 @@ import UIKit
 
 public protocol GridSectionMetrics: SectionMetrics {
 	
+	/// The type-default order in which each grid supplementary element kind is laid out.
+	static var defaultSupplementaryOrdering: Set<GridSectionSupplementaryItemOrder> { get }
+	
 	/// The height of each row in the section. The default value is `nil`. Setting this property to a concrete value will prevent rows from being sized automatically using autolayout.
 	var rowHeight: CGFloat? { get set }
 	
@@ -69,9 +72,14 @@ public protocol GridSectionMetrics: SectionMetrics {
 	/// Attributes of the background of the content area (i.e., the cells).
 	var contentBackgroundAttributes: BackgroundDecorationAttributes { get set }
 	
+	/// The order in which each grid supplementary element kind is laid out.
+	var supplementaryOrdering: Set<GridSectionSupplementaryItemOrder> { get set }
+	
 }
 
 public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
+	
+	public static var defaultSupplementaryOrdering: Set<GridSectionSupplementaryItemOrder> = [.header(order: 0), .footer(order: 1), .leftAuxiliary(order: 2), .rightAuxiliary(order: 3)]
 	
 	public var contentInset = UIEdgeInsetsZero {
 		didSet {
@@ -209,6 +217,12 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 		}
 	}
 	
+	public var supplementaryOrdering: Set<GridSectionSupplementaryItemOrder> = defaultSupplementaryOrdering {
+		didSet {
+			setFlag("supplementaryOrdering")
+		}
+	}
+	
 	/// How the cells should be laid out when there are multiple columns. The current default is `.LeadingToTrailing`.
 	public var cellLayoutOrder: ItemLayoutOrder = .LeadingToTrailing
 	
@@ -237,6 +251,7 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 		copy.cellLayoutOrder = cellLayoutOrder
 		copy.showsRowSeparator = showsRowSeparator
 		copy.contentBackgroundAttributes = contentBackgroundAttributes
+		copy.supplementaryOrdering = supplementaryOrdering
 		copy.flags = flags
 		
 		return copy
@@ -305,6 +320,9 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 		}
 		if metrics.definesMetric("contentBackgroundAttributes") {
 			contentBackgroundAttributes = gridMetrics.contentBackgroundAttributes
+		}
+		if metrics.definesMetric("supplementaryOrdering") {
+			supplementaryOrdering = gridMetrics.supplementaryOrdering
 		}
 	}
 	
@@ -487,4 +505,82 @@ extension GridSectionMetricsOwning {
 		}
 	}
 	
+}
+
+public enum GridSectionSupplementaryItem: String {
+	
+	case header
+	
+	case footer
+	
+	case leftAuxiliary
+	
+	case rightAuxiliary
+	
+	var elementKind: String {
+		switch self {
+		case .header:
+			return UICollectionElementKindSectionHeader
+		case .footer:
+			return UICollectionElementKindSectionFooter
+		case .leftAuxiliary:
+			return collectionElementKindLeftAuxiliaryItem
+		case .rightAuxiliary:
+			return collectionElementKindRightAuxiliaryItem
+		}
+	}
+	
+}
+
+/// A set containing `GridSectionSupplementaryItemOrder` values describes the order in which each kind of supplementary item should be laid out.
+///
+/// Values are hashable solely by their case membership, so as to prevent duplicates in a set.
+///
+/// Values are ordered solely by their associated `order` value.
+///
+/// - note: As a result of the above two points, the `Hashable` axiom "`x == y` implies `x.hashValue == y.hashValue`" is violated.
+public enum GridSectionSupplementaryItemOrder: Hashable, Comparable {
+	
+	case header(order: Int)
+	
+	case footer(order: Int)
+	
+	case leftAuxiliary(order: Int)
+	
+	case rightAuxiliary(order: Int)
+	
+	public var hashValue: Int {
+		switch self {
+		case .header:
+			return 0
+		case .footer:
+			return 1
+		case .leftAuxiliary:
+			return 2
+		case .rightAuxiliary:
+			return 3
+		}
+	}
+	
+	public var order: Int {
+		switch self {
+		case .header(order: let order):
+			return order
+		case .footer(order: let order):
+			return order
+		case .leftAuxiliary(order: let order):
+			return order
+		case .rightAuxiliary(order: let order):
+			return order
+		}
+	}
+	
+}
+
+public func ==(lhs: GridSectionSupplementaryItemOrder, rhs: GridSectionSupplementaryItemOrder) -> Bool {
+	return lhs.order == rhs.order
+}
+
+public func <(lhs: GridSectionSupplementaryItemOrder, rhs: GridSectionSupplementaryItemOrder) -> Bool {
+	return lhs.order < rhs.order
 }
