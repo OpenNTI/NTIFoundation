@@ -52,6 +52,9 @@ public protocol CollectionDataSource: UICollectionViewDataSource, DataSource, Pa
 	func loadContent()
 	func whenLoaded(onLoad: () -> Void)
 	
+	func setNeedsLoadNextContent()
+	func setNeedsLoadPreviousContent()
+	
 	var controller: CollectionDataSourceController? { get set }
 	
 	func collectionView(collectionView: UICollectionView, identifierForCellAt indexPath: NSIndexPath) -> String
