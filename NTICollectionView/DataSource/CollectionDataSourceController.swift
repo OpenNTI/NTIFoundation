@@ -28,7 +28,7 @@ extension CollectionDataSourceController {
 	}
 	
 	
-	public var contributedGlobalSupplementaryItemsByKey: [String: SupplementaryItem] {
+	public var contributionalGlobalSupplementaryItemsByKey: [String: SupplementaryItem] {
 		return [:]
 	}
 	
