@@ -19,6 +19,10 @@ public protocol CollectionDataSourceController: class {
 	
 	func loadContent(with progress: LoadingProgress)
 	
+	func loadNextContent(with progress: LoadingProgress)
+	
+	func loadPreviousContent(with progress: LoadingProgress)
+	
 }
 
 extension CollectionDataSourceController {
@@ -27,6 +31,13 @@ extension CollectionDataSourceController {
 		progress.done()
 	}
 	
+	public func loadNextContent(with progress: LoadingProgress) {
+		progress.done()
+	}
+	
+	public func loadPreviousContent(with progress: LoadingProgress) {
+		progress.done()
+	}
 	
 	public var contributionalGlobalSupplementaryItemsByKey: [String: SupplementaryItem] {
 		return [:]
