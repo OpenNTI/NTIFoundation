@@ -19,6 +19,7 @@ public protocol LayoutSection: LayoutMetrics, LayoutEngine, LayoutAttributesReso
 	
 	var items: [LayoutItem] { get }
 	var supplementaryItems: [LayoutSupplementaryItem] { get }
+	var supplementaryItemsByKind: [String: [LayoutSupplementaryItem]] { get }
 	var headers: [LayoutSupplementaryItem] { get }
 	var footers: [LayoutSupplementaryItem] { get }
 	

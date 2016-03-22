@@ -148,7 +148,8 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		let sectionIndex = indexPath.layoutSection
 		var itemIndex = indexPath.itemIndex
 		
-		assert(sectionIndex != GlobalSectionIndex || isRootDataSource, "Should only have the global section when we're the root data source")
+		// Disable this assertion to allow contributed global supplementary views, unless it breaks
+//		assert(sectionIndex != GlobalSectionIndex || isRootDataSource, "Should only have the global section when we're the root data source")
 		
 		let items = supplementaryItemsOfKind(kind)
 		

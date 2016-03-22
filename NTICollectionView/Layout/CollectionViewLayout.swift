@@ -365,9 +365,9 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		}
 	}
 	
-	/// Finds any global decorations that disappeared during the update and records them for deletion.
+	/// Finds any global elements that disappeared during the update and records them for deletion.
 	///
-	/// This becomes necessary when the selected data source of a segmented data source contributes a kind of global decoration, and then a new data source is selected which does not contribute that kind of global decoration.
+	/// This becomes necessary when the selected data source of a segmented data source contributes a kind of global element, and then a new data source is selected which does not contribute that kind of global element.
 	private func processGlobalSectionUpdate() {
 		guard let layoutInfo = self.layoutInfo,
 			globalSection = layoutInfo.sectionAtIndex(GlobalSectionIndex),
@@ -375,6 +375,12 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			oldGlobalSection = oldLayoutInfo.sectionAtIndex(GlobalSectionIndex) else {
 				return
 		}
+		
+		processGlobalSectionDecorationUpdate(from: oldGlobalSection, to: globalSection)
+		processGlobalSectionSupplementaryUpdate(from: oldGlobalSection, to: globalSection)
+	}
+	
+	private func processGlobalSectionDecorationUpdate(from oldGlobalSection: LayoutSection, to globalSection: LayoutSection) {
 		let decorationAttributes = globalSection.decorationAttributesByKind
 		let oldDecorationAttributes = oldGlobalSection.decorationAttributesByKind
 		let decorationDiff = decorationAttributes.countDiff(with: oldDecorationAttributes)
@@ -384,6 +390,21 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			}
 			let count = (decorationAttributes[kind] ?? []).count
 			let oldCount = oldDecorationAttributes[kind]!.count
+			let indexPaths = (count..<oldCount).map { NSIndexPath(index: $0) }
+			recordAdditionalDeletedIndexPaths(indexPaths, forElementOf: kind)
+		}
+	}
+	
+	private func processGlobalSectionSupplementaryUpdate(from oldGlobalSection: LayoutSection, to globalSection: LayoutSection) {
+		let supplementaryItems = globalSection.supplementaryItemsByKind
+		let oldSupplementaryItems = oldGlobalSection.supplementaryItemsByKind
+		let supplementaryDiff = supplementaryItems.countDiff(with: oldSupplementaryItems)
+		for (kind, countDiff) in supplementaryDiff {
+			guard countDiff < 0 else {
+				continue
+			}
+			let count = (supplementaryItems[kind] ?? []).count
+			let oldCount = (oldSupplementaryItems[kind] ?? []).count
 			let indexPaths = (count..<oldCount).map { NSIndexPath(index: $0) }
 			recordAdditionalDeletedIndexPaths(indexPaths, forElementOf: kind)
 		}
