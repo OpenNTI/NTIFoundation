@@ -30,7 +30,7 @@ public protocol DataSource: NSObjectProtocol {
 	
 }
 
-public protocol CollectionDataSource: UICollectionViewDataSource, DataSource, ContentLoading, CollectionDataSourceMetrics {
+public protocol CollectionDataSource: UICollectionViewDataSource, DataSource, PageableContentLoading, CollectionDataSourceMetrics {
 	
 	var delegate: CollectionDataSourceDelegate? { get set }
 	var allowsSelection: Bool { get }
