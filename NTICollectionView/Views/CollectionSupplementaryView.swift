@@ -10,6 +10,12 @@ import UIKit
 
 public class CollectionSupplementaryView: UICollectionReusableView {
 	
+	/// May be called by `UICollectionViewDelegate` when this view will be displayed.
+	public var onWillDisplay: (() -> Void)?
+	
+	/// May be called by `UICollectionViewDelegate` when this view will end being displayed.
+	public var onWillEndDisplaying: (() -> Void)?
+	
 	/// Set when tracking a touch in `self`.
 	public var isHighlighted: Bool {
 		get {
