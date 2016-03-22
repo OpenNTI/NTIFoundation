@@ -93,7 +93,7 @@ public class BasicCollectionDataSource: AbstractCollectionDataSource {
 		return items[itemIndex]
 	}
 	
-	public override func indexPath(`for` item: Item) -> NSIndexPath? {
+	public override func indexPath(for item: Item) -> NSIndexPath? {
 		guard let itemIndex = items.indexOf({ $0 === item }) else {
 			return nil
 		}

@@ -51,7 +51,7 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 		return nil
 	}
 	
-	public func indexPath(`for` item: Item) -> NSIndexPath? {
+	public func indexPath(for item: Item) -> NSIndexPath? {
 		return nil
 	}
 	
@@ -143,7 +143,7 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	public private(set) var supplementaryItemsByKind: [String: [SupplementaryItem]] = [:]
 	private var supplementaryItemsByKey: [String: SupplementaryItem] = [:]
 	
-	public func supplementaryItem(`for` key: String) -> SupplementaryItem? {
+	public func supplementaryItem(for key: String) -> SupplementaryItem? {
 		return supplementaryItemsByKey[key]
 	}
 	
@@ -165,7 +165,7 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 		return metricsHelper.numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChildDataSources: shouldIncludeChildDataSources)
 	}
 	
-	public func indexPaths(`for` supplementaryItem: SupplementaryItem) -> [NSIndexPath] {
+	public func indexPaths(for supplementaryItem: SupplementaryItem) -> [NSIndexPath] {
 		return metricsHelper.indexPaths(for: supplementaryItem)
 	}
 	
@@ -345,7 +345,7 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 		}
 	}
 	
-	public func dequePlaceholderView(`for` collectionView: UICollectionView, at indexPath: NSIndexPath) -> CollectionPlaceholderView {
+	public func dequePlaceholderView(for collectionView: UICollectionView, at indexPath: NSIndexPath) -> CollectionPlaceholderView {
 		let placeholderView = collectionView.dequeueReusableSupplementaryViewOfKind(CollectionElementKindPlaceholder, withReuseIdentifier: NSStringFromClass(CollectionPlaceholderView.self), forIndexPath: indexPath) as! CollectionPlaceholderView
 		update(placeholderView, forSectionAtIndex: indexPath.section)
 		return placeholderView
@@ -353,7 +353,7 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	
 	// MARK: - Subclass hooks
 	
-	public func collectionView(collectionView: UICollectionView, configure cell: UICollectionViewCell, `for` indexPath: NSIndexPath) {
+	public func collectionView(collectionView: UICollectionView, configure cell: UICollectionViewCell, for indexPath: NSIndexPath) {
 		// Subclasses should override
 	}
 	

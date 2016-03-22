@@ -61,7 +61,7 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		}
 	}
 	
-	public func supplementaryItem(`for` key: String) -> SupplementaryItem? {
+	public func supplementaryItem(for key: String) -> SupplementaryItem? {
 		return dataSource.supplementaryItem(for: key)
 	}
 	
@@ -98,7 +98,7 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		return numberOfItems
 	}
 	
-	public func indexPaths(`for` supplementaryItem: SupplementaryItem) -> [NSIndexPath] {
+	public func indexPaths(for supplementaryItem: SupplementaryItem) -> [NSIndexPath] {
 		let kind = supplementaryItem.elementKind
 		let supplementaryItems = supplementaryItemsOfKind(kind)
 		

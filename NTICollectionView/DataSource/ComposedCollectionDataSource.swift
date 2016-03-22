@@ -92,7 +92,7 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 		}
 	}
 	
-	private func section(`for` dataSource: CollectionDataSource) -> Int? {
+	private func section(for dataSource: CollectionDataSource) -> Int? {
 		let mapping = self.mapping(for: dataSource)
 		return mapping?.globalSectionForLocalSection(0)
 	}
@@ -112,7 +112,7 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 		return mapping
 	}
 	
-	private func mapping(`for` dataSource: CollectionDataSource) -> DataSourceMapping? {
+	private func mapping(for dataSource: CollectionDataSource) -> DataSourceMapping? {
 		return dataSourceToMappings.objectForKey(dataSource) as? DataSourceMapping
 	}
 	
@@ -138,7 +138,7 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 		return mapping.dataSource.item(at: mappedIndexPath)
 	}
 	
-	public override func indexPath(`for` item: Item) -> NSIndexPath? {
+	public override func indexPath(for item: Item) -> NSIndexPath? {
 		for dataSource in dataSources {
 			guard let indexPath = dataSource.indexPath(for: item),
 				mapping = self.mapping(for: dataSource) else {
@@ -351,7 +351,7 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 		notifyItemsRefreshed(at: globalIndexPaths)
 	}
 	
-	private func globalIndexPaths(`for` dataSource: CollectionDataSource, localIndexPaths: [NSIndexPath]) -> [NSIndexPath] {
+	private func globalIndexPaths(for dataSource: CollectionDataSource, localIndexPaths: [NSIndexPath]) -> [NSIndexPath] {
 		return mapping(for: dataSource)!.globalIndexPathsForLocal(localIndexPaths)
 	}
 	

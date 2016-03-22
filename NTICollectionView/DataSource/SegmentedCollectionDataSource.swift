@@ -155,7 +155,7 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 		return _selectedDataSource.item(at: indexPath)
 	}
 	
-	public override func indexPath(`for` item: Item) -> NSIndexPath? {
+	public override func indexPath(for item: Item) -> NSIndexPath? {
 		return _selectedDataSource.indexPath(for: item)
 	}
 	

@@ -31,7 +31,7 @@ public class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMet
 		return numberOfItems
 	}
 	
-	public override func indexPaths(`for` supplementaryItem: SupplementaryItem) -> [NSIndexPath] {
+	public override func indexPaths(for supplementaryItem: SupplementaryItem) -> [NSIndexPath] {
 		var result = super.indexPaths(for: supplementaryItem)
 		if !result.isEmpty {
 			return result

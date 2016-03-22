@@ -24,7 +24,7 @@ public protocol DataSource: NSObjectProtocol {
 	
 	func item(at indexPath: NSIndexPath) -> Item?
 	
-	func indexPath(`for` item: Item) -> NSIndexPath?
+	func indexPath(for item: Item) -> NSIndexPath?
 	
 	func removeItem(at indexPath: NSIndexPath)
 	
@@ -86,14 +86,14 @@ public protocol CollectionDataSourceMetrics: NSObjectProtocol {
 	var supplementaryItemsByKind: [String: [SupplementaryItem]] { get }
 	
 	/// Returns the supplementary item for the given *key*, or `nil` if no such item is found.
-	func supplementaryItem(`for` key: String) -> SupplementaryItem?
+	func supplementaryItem(for key: String) -> SupplementaryItem?
 	
 	func metricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetrics?
 	func setMetrics(metrics: DataSourceSectionMetrics?, forSectionAtIndex sectionIndex: Int)
 	
 	func numberOfSupplementaryItemsOfKind(kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChildDataSources: Bool) -> Int
 	
-	func indexPaths(`for` supplementaryItem: SupplementaryItem) -> [NSIndexPath]
+	func indexPaths(for supplementaryItem: SupplementaryItem) -> [NSIndexPath]
 	
 	func findSupplementaryItemOfKind(kind: String, at indexPath: NSIndexPath, using block: (dataSource: CollectionDataSource, localIndexPath: NSIndexPath, supplementaryItem: SupplementaryItem) -> Void)
 	
@@ -176,7 +176,7 @@ extension CollectionDataSource {
 		delegate?.dataSourceWillLoadContent(self)
 	}
 	
-	public func notifyContentUpdated(`for` supplementaryItem: SupplementaryItem, at indexPaths: [NSIndexPath]) {
+	public func notifyContentUpdated(for supplementaryItem: SupplementaryItem, at indexPaths: [NSIndexPath]) {
 		requireMainThread()
 		delegate?.dataSource(self, didUpdate: supplementaryItem, at: indexPaths)
 	}

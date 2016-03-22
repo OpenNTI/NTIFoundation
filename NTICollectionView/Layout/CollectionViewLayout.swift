@@ -1032,7 +1032,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return minY
 	}
 	
-	private func finalizePinning(`for` supplementaryItems: [LayoutSupplementaryItem], zIndex: Int) {
+	private func finalizePinning(for supplementaryItems: [LayoutSupplementaryItem], zIndex: Int) {
 		for (itemIndex, supplementaryItem) in supplementaryItems.enumerate() {
 			let attributes = supplementaryItem.layoutAttributes
 			

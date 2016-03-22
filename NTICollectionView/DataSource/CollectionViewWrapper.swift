@@ -149,7 +149,7 @@ public class WrapperCollectionView: UICollectionView, CollectionViewWrapper {
 	
 	// MARK: - UICollectionView helper methods
 	
-	public func dequeueReusableCellWithClass(viewClass: UICollectionReusableView.Type, `for` indexPath: NSIndexPath) -> UICollectionViewCell {
+	public func dequeueReusableCellWithClass(viewClass: UICollectionReusableView.Type, for indexPath: NSIndexPath) -> UICollectionViewCell {
 		let reuseIdentifier = NSStringFromClass(viewClass)
 		return dequeueReusableCellWithReuseIdentifier(reuseIdentifier, forIndexPath: indexPath)
 	}
