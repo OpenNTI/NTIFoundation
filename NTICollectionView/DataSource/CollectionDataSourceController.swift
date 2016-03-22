@@ -15,7 +15,7 @@ public protocol CollectionDataSourceController: class {
 	var dataSource: CollectionDataSource { get }
 	
 	/// `SupplementaryItem`s which may be contributed to the global section -- or, if `self` is the root controller, the supplementary items which have been contributed by child controllers.
-	var contributionalGlobalSupplementaryItemsByKey: [String: SupplementaryItem] { get set }
+	var contributionalGlobalSupplementaryItemsByKey: [String: SupplementaryItem] { get }
 	
 	func loadContent(with progress: LoadingProgress)
 	
