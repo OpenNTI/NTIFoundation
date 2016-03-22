@@ -250,6 +250,10 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 	}
 	
 	public override func collectionView(collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, atIndexPath indexPath: NSIndexPath) {
+		if let supplementaryView = view as? CollectionSupplementaryView {
+			supplementaryView.onWillDisplay?()
+		}
+		
 		if #available(iOS 9, *) {
 			return
 		}
@@ -260,6 +264,10 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 	}
 	
 	public override func collectionView(collectionView: UICollectionView, didEndDisplayingSupplementaryView view: UICollectionReusableView, forElementOfKind elementKind: String, atIndexPath indexPath: NSIndexPath) {
+		if let supplementaryView = view as? CollectionSupplementaryView {
+			supplementaryView.onWillEndDisplaying?()
+		}
+		
 		if #available(iOS 9, *) {
 			return
 		}
