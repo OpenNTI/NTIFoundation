@@ -473,7 +473,6 @@
 		4A68ACF71C88B0CE00849185 /* StateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC981C88B0CE00849185 /* StateMachine.swift */; };
 		4A68ACF81C88B0CE00849185 /* StateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC981C88B0CE00849185 /* StateMachine.swift */; };
 		4A68ACF91C88B0CE00849185 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9A1C88B0CE00849185 /* CollectionViewController.swift */; };
-		4A68ACFA1C88B0CE00849185 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9A1C88B0CE00849185 /* CollectionViewController.swift */; };
 		4A68ACFB1C88B0CE00849185 /* CollectionPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9C1C88B0CE00849185 /* CollectionPlaceholderView.swift */; };
 		4A68ACFC1C88B0CE00849185 /* CollectionPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9C1C88B0CE00849185 /* CollectionPlaceholderView.swift */; };
 		4A68ACFD1C88B0CE00849185 /* PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9D1C88B0CE00849185 /* PlaceholderView.swift */; };
@@ -3288,7 +3287,6 @@
 				4A68ACDA1C88B0CE00849185 /* GridSectionCellLayoutEngine.swift in Sources */,
 				4A68ACF21C88B0CE00849185 /* ContentLoading.swift in Sources */,
 				4A68ACF01C88B0CE00849185 /* ShadowRegistrar.swift in Sources */,
-				4A68ACFA1C88B0CE00849185 /* CollectionViewController.swift in Sources */,
 				4A68AC621C88AEE300849185 /* GridLayoutSectionTest.swift in Sources */,
 				4A68ACCA1C88B0CE00849185 /* CollectionViewLayout.swift in Sources */,
 				4A68ACF81C88B0CE00849185 /* StateMachine.swift in Sources */,
