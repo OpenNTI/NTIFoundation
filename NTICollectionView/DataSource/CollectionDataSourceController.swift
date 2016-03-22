@@ -33,3 +33,17 @@ extension CollectionDataSourceController {
 	}
 	
 }
+
+public protocol ParentCollectionDataSourceController: CollectionDataSourceController {
+	
+	var childControllers: [CollectionDataSourceController] { get }
+	
+}
+
+extension ParentCollectionDataSourceController {
+	
+	public var childControllers: [CollectionDataSourceController] {
+		return []
+	}
+	
+}
