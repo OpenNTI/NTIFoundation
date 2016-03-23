@@ -381,6 +381,18 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 		}
 		
 		collectionView.registerClass(CollectionPlaceholderView.self, forSupplementaryViewOfKind: CollectionElementKindPlaceholder, withReuseIdentifier: NSStringFromClass(CollectionPlaceholderView.self))
+		
+		registerControllerReusableViews(with: collectionView)
+	}
+	
+	private func registerControllerReusableViews(with collectionView: UICollectionView) {
+		guard let controller = self.controller else {
+			return
+		}
+		
+		for registration in controller.supplementaryViewRegistrations {
+			collectionView.registerClass(registration.viewClass, forSupplementaryViewOfKind: registration.elementKind, withReuseIdentifier: registration.identifier)
+		}
 	}
 	
 	/// Determine whether or not a cell is editable. Default implementation returns `false`.
