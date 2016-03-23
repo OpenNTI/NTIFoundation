@@ -49,11 +49,14 @@ public protocol CollectionDataSource: UICollectionViewDataSource, DataSource, Pa
 	func willResignActive()
 	
 	func setNeedsLoadContent()
+	func setNeedsLoadContent(delay: NSTimeInterval)
 	func loadContent()
 	func whenLoaded(onLoad: () -> Void)
 	
 	func setNeedsLoadNextContent()
+	func setNeedsLoadNextContent(delay: NSTimeInterval)
 	func setNeedsLoadPreviousContent()
+	func setNeedsLoadPreviousContent(delay: NSTimeInterval)
 	
 	var controller: CollectionDataSourceController? { get set }
 	

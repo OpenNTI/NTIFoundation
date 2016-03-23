@@ -421,8 +421,12 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	
 	/// Signal that the datasource should reload its content.
 	public func setNeedsLoadContent() {
+		setNeedsLoadContent(0)
+	}
+	
+	public func setNeedsLoadContent(delay: NSTimeInterval) {
 		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(AbstractCollectionDataSource.loadContent as (AbstractCollectionDataSource) -> () -> ()), object: nil)
-		performSelector(#selector(AbstractCollectionDataSource.loadContent as (AbstractCollectionDataSource) -> () -> ()), withObject: nil, afterDelay: 0)
+		performSelector(#selector(AbstractCollectionDataSource.loadContent as (AbstractCollectionDataSource) -> () -> ()), withObject: nil, afterDelay: delay)
 	}
 	
 	/// Reset the content and loading state.
@@ -515,8 +519,12 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	}
 	
 	public func setNeedsLoadNextContent() {
+		setNeedsLoadNextContent(0)
+	}
+	
+	public func setNeedsLoadNextContent(delay: NSTimeInterval) {
 		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(AbstractCollectionDataSource.loadNextContent as (AbstractCollectionDataSource) -> () -> ()), object: nil)
-		performSelector(#selector(AbstractCollectionDataSource.loadNextContent as (AbstractCollectionDataSource) -> () -> ()), withObject: nil, afterDelay: 0)
+		performSelector(#selector(AbstractCollectionDataSource.loadNextContent as (AbstractCollectionDataSource) -> () -> ()), withObject: nil, afterDelay: delay)
 	}
 	
 	public func loadNextContent() {
@@ -543,8 +551,12 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	}
 	
 	public func setNeedsLoadPreviousContent() {
+		setNeedsLoadPreviousContent(0)
+	}
+	
+	public func setNeedsLoadPreviousContent(delay: NSTimeInterval) {
 		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(AbstractCollectionDataSource.loadPreviousContent as (AbstractCollectionDataSource) -> () -> ()), object: nil)
-		performSelector(#selector(AbstractCollectionDataSource.loadPreviousContent as (AbstractCollectionDataSource) -> () -> ()), withObject: nil, afterDelay: 0)
+		performSelector(#selector(AbstractCollectionDataSource.loadPreviousContent as (AbstractCollectionDataSource) -> () -> ()), withObject: nil, afterDelay: delay)
 	}
 	
 	public func loadPreviousContent() {
