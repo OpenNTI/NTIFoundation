@@ -249,6 +249,32 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		return false
 	}
 	
+	public override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+		guard let cell = collectionView.cellForItemAtIndexPath(indexPath) as? CollectionViewCell else {
+			return
+		}
+		cell.onDidSelect?()
+	}
+	
+	public override func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+		guard let cell = collectionView.cellForItemAtIndexPath(indexPath) as? CollectionViewCell else {
+			return
+		}
+		cell.onDidDeselect?()
+	}
+	
+	public override func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+		if let cell = cell as? CollectionViewCell {
+			cell.onWillDisplay?()
+		}
+	}
+	
+	public override func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+		if let cell = cell as? CollectionViewCell {
+			cell.onDidEndDisplaying?()
+		}
+	}
+	
 	public override func collectionView(collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, atIndexPath indexPath: NSIndexPath) {
 		if let supplementaryView = view as? CollectionSupplementaryView {
 			supplementaryView.onWillDisplay?()
