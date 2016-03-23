@@ -106,6 +106,8 @@ public protocol CollectionDataSourceMetrics: NSObjectProtocol {
 	func add(supplementaryItem: SupplementaryItem)
 	func add(supplementaryItem: SupplementaryItem, forSectionAtIndex sectionIndex: Int)
 	func add(supplementaryItem: SupplementaryItem, forKey key: String)
+	func removeSupplementaryItemForKey(key: String)
+	func replaceSupplementaryItemForKey(key: String, with supplementaryItem: SupplementaryItem)
 	func supplementaryItemsOfKind(kind: String) -> [SupplementaryItem]
 	func supplementaryItemForKey(key: String) -> SupplementaryItem?
 }

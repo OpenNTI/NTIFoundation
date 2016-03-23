@@ -260,6 +260,14 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		dataSource.add(supplementaryItem, forKey: key)
 	}
 	
+	public func removeSupplementaryItemForKey(key: String) {
+		dataSource.removeSupplementaryItemForKey(key)
+	}
+	
+	public func replaceSupplementaryItemForKey(key: String, with supplementaryItem: SupplementaryItem) {
+		dataSource.replaceSupplementaryItemForKey(key, with: supplementaryItem)
+	}
+	
 	public func supplementaryItemsOfKind(kind: String) -> [SupplementaryItem] {
 		return dataSource.supplementaryItemsOfKind(kind)
 	}
