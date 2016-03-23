@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class CollectionViewCell: UICollectionViewCell {
+public class CollectionViewCell: UICollectionViewCell, Selectable {
 	
 	/// May be called by `UICollectionViewDelegate` when this cell becomes selected.
 	public var onDidSelect: (() -> Void)?
@@ -85,6 +85,16 @@ public class CollectionViewCell: UICollectionViewCell {
 		let newAttributes = attributes.copy() as! CollectionViewLayoutAttributes
 		newAttributes.frame = frame
 		return newAttributes
+	}
+	
+	// MARK: - Selectable
+	
+	public func didBecomeSelected() {
+		onDidSelect?()
+	}
+	
+	public func didBecomeDeselected() {
+		onDidDeselect?()
 	}
     
 }
