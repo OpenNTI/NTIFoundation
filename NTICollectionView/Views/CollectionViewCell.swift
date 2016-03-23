@@ -10,6 +10,18 @@ import UIKit
 
 public class CollectionViewCell: UICollectionViewCell {
 	
+	/// May be called by `UICollectionViewDelegate` when this cell becomes selected.
+	public var onDidSelect: (() -> Void)?
+	
+	/// May be called by `UICollectionViewDelegate` when this cell becomes deselected.
+	public var onDidDeselect: (() -> Void)?
+	
+	/// May be called by `UICollectionViewDelegate` when this cell will be displayed.
+	public var onWillDisplay: (() -> Void)?
+	
+	/// May be called by `UICollectionViewDelegate` when this cell will end being displayed.
+	public var onDidEndDisplaying: (() -> Void)?
+	
 	public var isEditing = false
 	
 	/// Informs the containing collection view that `self` needs to be redrawn.
