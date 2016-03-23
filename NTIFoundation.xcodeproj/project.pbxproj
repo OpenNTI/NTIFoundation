@@ -484,6 +484,8 @@
 		4ADEE74C1C98950400DE9B0D /* Dictionary-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADEE74B1C98950300DE9B0D /* Dictionary-Extensions.swift */; };
 		4ADEE7691C98DBB900DE9B0D /* Decoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADEE7681C98DBB900DE9B0D /* Decoration.swift */; };
 		4ADEE76A1C98DBB900DE9B0D /* Decoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADEE7681C98DBB900DE9B0D /* Decoration.swift */; };
+		4AF3835F1CA3186A006D13D4 /* CollectionPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9C1C88B0CE00849185 /* CollectionPlaceholderView.swift */; };
+		4AF383601CA3187C006D13D4 /* CollectionSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0582DB1C90C8F800F3D0E0 /* CollectionSupplementaryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -3240,11 +3242,13 @@
 				4A5ABD411C9B0D30008D292E /* DictionaryExtensionTest.swift in Sources */,
 				4A68ACB21C88B0CE00849185 /* DataSourcePlaceholder.swift in Sources */,
 				4A68AD001C88B0CE00849185 /* SegmentedControlProtocol.swift in Sources */,
+				4AF3835F1CA3186A006D13D4 /* CollectionPlaceholderView.swift in Sources */,
 				4A68ACD21C88B0CE00849185 /* GridSupplementaryItem.swift in Sources */,
 				4A68AC5E1C88AEE300849185 /* DummyLayoutInfo.swift in Sources */,
 				4A0583001C9211A200F3D0E0 /* GridLayoutEngine.swift in Sources */,
 				4A68ACB01C88B0CE00849185 /* DataSourceMapping.swift in Sources */,
 				4A68ACE81C88B0CE00849185 /* LayoutMetrics.swift in Sources */,
+				4AF383601CA3187C006D13D4 /* CollectionSupplementaryView.swift in Sources */,
 				4A68ACC21C88B0CE00849185 /* UICollectionViewLayoutInvalidationContext-Extensions.swift in Sources */,
 				4A68ACC61C88B0CE00849185 /* CollectionLayoutEngine.swift in Sources */,
 				4A68ACE41C88B0CE00849185 /* LayoutInfo.swift in Sources */,
