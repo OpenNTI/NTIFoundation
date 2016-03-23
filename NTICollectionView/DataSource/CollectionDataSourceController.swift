@@ -31,6 +31,10 @@ public protocol CollectionDataSourceController: class {
 
 extension CollectionDataSourceController {
 	
+	public var supplementaryViewRegistrations: [SupplementaryViewRegistration] {
+		return []
+	}
+	
 	public func loadContent(with progress: LoadingProgress) {
 		progress.done()
 	}
