@@ -425,8 +425,12 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	}
 	
 	public func setNeedsLoadContent(delay: NSTimeInterval) {
-		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(AbstractCollectionDataSource.loadContent as (AbstractCollectionDataSource) -> () -> ()), object: nil)
+		cancelNeedsLoadContent()
 		performSelector(#selector(AbstractCollectionDataSource.loadContent as (AbstractCollectionDataSource) -> () -> ()), withObject: nil, afterDelay: delay)
+	}
+	
+	public func cancelNeedsLoadContent() {
+		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(AbstractCollectionDataSource.loadContent as (AbstractCollectionDataSource) -> () -> ()), object: nil)
 	}
 	
 	/// Reset the content and loading state.
@@ -523,8 +527,12 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	}
 	
 	public func setNeedsLoadNextContent(delay: NSTimeInterval) {
-		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(AbstractCollectionDataSource.loadNextContent as (AbstractCollectionDataSource) -> () -> ()), object: nil)
+		cancelNeedsLoadNextContent()
 		performSelector(#selector(AbstractCollectionDataSource.loadNextContent as (AbstractCollectionDataSource) -> () -> ()), withObject: nil, afterDelay: delay)
+	}
+	
+	public func cancelNeedsLoadNextContent() {
+		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(AbstractCollectionDataSource.loadNextContent as (AbstractCollectionDataSource) -> () -> ()), object: nil)
 	}
 	
 	public func loadNextContent() {
@@ -555,8 +563,12 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	}
 	
 	public func setNeedsLoadPreviousContent(delay: NSTimeInterval) {
-		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(AbstractCollectionDataSource.loadPreviousContent as (AbstractCollectionDataSource) -> () -> ()), object: nil)
+		cancelNeedsLoadPreviousContent()
 		performSelector(#selector(AbstractCollectionDataSource.loadPreviousContent as (AbstractCollectionDataSource) -> () -> ()), withObject: nil, afterDelay: delay)
+	}
+	
+	public func cancelNeedsLoadPreviousContent() {
+		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(AbstractCollectionDataSource.loadPreviousContent as (AbstractCollectionDataSource) -> () -> ()), object: nil)
 	}
 	
 	public func loadPreviousContent() {

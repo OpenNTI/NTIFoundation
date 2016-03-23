@@ -50,13 +50,17 @@ public protocol CollectionDataSource: UICollectionViewDataSource, DataSource, Pa
 	
 	func setNeedsLoadContent()
 	func setNeedsLoadContent(delay: NSTimeInterval)
+	func cancelNeedsLoadContent()
 	func loadContent()
 	func whenLoaded(onLoad: () -> Void)
 	
 	func setNeedsLoadNextContent()
 	func setNeedsLoadNextContent(delay: NSTimeInterval)
+	func cancelNeedsLoadNextContent()
+	
 	func setNeedsLoadPreviousContent()
 	func setNeedsLoadPreviousContent(delay: NSTimeInterval)
+	func cancelNeedsLoadPreviousContent()
 	
 	var controller: CollectionDataSourceController? { get set }
 	
