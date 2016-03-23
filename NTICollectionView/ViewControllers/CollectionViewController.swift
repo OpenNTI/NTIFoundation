@@ -250,17 +250,21 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 	}
 	
 	public override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-		guard let cell = collectionView.cellForItemAtIndexPath(indexPath) as? CollectionViewCell else {
+		guard let cell = collectionView.cellForItemAtIndexPath(indexPath) else {
 			return
 		}
-		cell.onDidSelect?()
+		if let selectableCell = cell as? Selectable {
+			selectableCell.didBecomeSelected()
+		}
 	}
 	
 	public override func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
-		guard let cell = collectionView.cellForItemAtIndexPath(indexPath) as? CollectionViewCell else {
+		guard let cell = collectionView.cellForItemAtIndexPath(indexPath) else {
 			return
 		}
-		cell.onDidDeselect?()
+		if let selectableCell = cell as? Selectable {
+			selectableCell.didBecomeDeselected()
+		}
 	}
 	
 	public override func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
