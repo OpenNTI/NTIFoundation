@@ -63,6 +63,7 @@ public protocol CollectionDataSource: UICollectionViewDataSource, DataSource, Pa
 	func cancelNeedsLoadPreviousContent()
 	
 	var controller: CollectionDataSourceController? { get set }
+	var delegatesLoadingToController: Bool { get set }
 	
 	func collectionView(collectionView: UICollectionView, identifierForCellAt indexPath: NSIndexPath) -> String
 	func collectionView(collectionView: UICollectionView, canEditItemAt indexPath: NSIndexPath) -> Bool

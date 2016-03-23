@@ -21,6 +21,8 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	
 	public weak var controller: CollectionDataSourceController?
 	
+	public var delegatesLoadingToController = false
+	
 	public var allowsSelection: Bool {
 		return true
 	}
@@ -477,14 +479,15 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 		return loadingProgress
 	}
 	
-	public func beginLoadingContent(with progress: LoadingProgress){
+	public func beginLoadingContent(with progress: LoadingProgress) {
+		if delegatesLoadingToController,
+			let controller = self.controller {
+			return controller.loadContent(with: progress)
+		}
 		loadContent(with: progress)
 	}
 	
 	public func loadContent(with progress: LoadingProgress) {
-		if let controller = self.controller {
-			return controller.loadContent(with: progress)
-		}
 		// This default implementation just signals that the load completed
 		progress.done()
 	}
@@ -548,7 +551,8 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	}
 	
 	public func beginLoadingNextContent(with progress: LoadingProgress) {
-		if let controller = self.controller {
+		if delegatesLoadingToController,
+			let controller = self.controller {
 			return controller.loadNextContent(with: progress)
 		}
 		loadNextContent(with: progress)
@@ -584,7 +588,8 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	}
 	
 	public func beginLoadingPreviousContent(with progress: LoadingProgress) {
-		if let controller = self.controller {
+		if delegatesLoadingToController,
+			let controller = self.controller {
 			return controller.loadPreviousContent(with: progress)
 		}
 		loadPreviousContent(with: progress)
