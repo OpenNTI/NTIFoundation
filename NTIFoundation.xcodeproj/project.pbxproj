@@ -474,7 +474,6 @@
 		4A68ACF81C88B0CE00849185 /* StateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC981C88B0CE00849185 /* StateMachine.swift */; };
 		4A68ACF91C88B0CE00849185 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9A1C88B0CE00849185 /* CollectionViewController.swift */; };
 		4A68ACFB1C88B0CE00849185 /* CollectionPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9C1C88B0CE00849185 /* CollectionPlaceholderView.swift */; };
-		4A68ACFC1C88B0CE00849185 /* CollectionPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9C1C88B0CE00849185 /* CollectionPlaceholderView.swift */; };
 		4A68ACFD1C88B0CE00849185 /* PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9D1C88B0CE00849185 /* PlaceholderView.swift */; };
 		4A68ACFE1C88B0CE00849185 /* PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9D1C88B0CE00849185 /* PlaceholderView.swift */; };
 		4A68ACFF1C88B0CE00849185 /* SegmentedControlProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9E1C88B0CE00849185 /* SegmentedControlProtocol.swift */; };
@@ -3253,7 +3252,6 @@
 				4A68ACEA1C88B0CE00849185 /* LayoutPlaceholder.swift in Sources */,
 				4A620CD21C88DDCF0084B0A2 /* PagingCollectionDataSource.swift in Sources */,
 				4A68ACDE1C88B0CE00849185 /* GridSectionLayoutEngine.swift in Sources */,
-				4A68ACFC1C88B0CE00849185 /* CollectionPlaceholderView.swift in Sources */,
 				4A68ACC81C88B0CE00849185 /* CollectionUpdateInfo.swift in Sources */,
 				4A68ACAC1C88B0CE00849185 /* ComposedCollectionDataSource.swift in Sources */,
 				4A0583031C9213C700F3D0E0 /* GridSupplementaryItemLayoutEngine.swift in Sources */,
