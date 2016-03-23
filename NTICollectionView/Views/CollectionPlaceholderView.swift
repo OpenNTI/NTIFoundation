@@ -9,7 +9,7 @@
 import UIKit
 
 /// A placeholder view for use in a collection view. This placeholder includes a loading indicator.
-public class CollectionPlaceholderView: UICollectionReusableView {
+public class CollectionPlaceholderView: CollectionSupplementaryView {
 	
 	private var activityIndicatorView: UIActivityIndicatorView!
 	private var placeholderView: PlaceholderView!
