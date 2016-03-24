@@ -324,7 +324,7 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 		for dataSource in dataSources {
 			dataSource.loadContent()
 		}
-		loadContent(with: progress)
+		super.beginLoadingContent(with: progress)
 	}
 	
 	public override func resetContent() {
