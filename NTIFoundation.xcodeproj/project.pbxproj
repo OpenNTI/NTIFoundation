@@ -481,6 +481,7 @@
 		4A68AD431C88BE2000849185 /* UICollectionView+SupplementaryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AD421C88BE2000849185 /* UICollectionView+SupplementaryViews.swift */; };
 		4A68AD441C88BE2000849185 /* UICollectionView+SupplementaryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AD421C88BE2000849185 /* UICollectionView+SupplementaryViews.swift */; };
 		4A9D2C301C9CCA3D00D75BBD /* DelegatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9D2C2F1C9CCA3D00D75BBD /* DelegatingViewController.swift */; };
+		4AB6BE541CA4774700A86233 /* PagingPlaceholderDataSourceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB6BE531CA4774700A86233 /* PagingPlaceholderDataSourceController.swift */; };
 		4ADEE74C1C98950400DE9B0D /* Dictionary-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADEE74B1C98950300DE9B0D /* Dictionary-Extensions.swift */; };
 		4ADEE7691C98DBB900DE9B0D /* Decoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADEE7681C98DBB900DE9B0D /* Decoration.swift */; };
 		4ADEE76A1C98DBB900DE9B0D /* Decoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADEE7681C98DBB900DE9B0D /* Decoration.swift */; };
@@ -1099,6 +1100,7 @@
 		4A72F4601925AEF1004792EF /* UIColor+NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NTIExtensions.m"; sourceTree = "<group>"; };
 		4A72F48619268DA8004792EF /* UIColor+NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NTIExtensionsTest.m"; sourceTree = "<group>"; };
 		4A9D2C2F1C9CCA3D00D75BBD /* DelegatingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DelegatingViewController.swift; sourceTree = "<group>"; };
+		4AB6BE531CA4774700A86233 /* PagingPlaceholderDataSourceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingPlaceholderDataSourceController.swift; sourceTree = "<group>"; };
 		4ADEE74B1C98950300DE9B0D /* Dictionary-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary-Extensions.swift"; sourceTree = "<group>"; };
 		4ADEE7681C98DBB900DE9B0D /* Decoration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Decoration.swift; sourceTree = "<group>"; };
 		4AF3836E1CA35C5D006D13D4 /* UICollectionReusableView-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionReusableView-Extensions.swift"; sourceTree = "<group>"; };
@@ -1807,6 +1809,7 @@
 				4A620CD01C88DDCF0084B0A2 /* PagingCollectionDataSource.swift */,
 				4A68AC671C88B0CD00849185 /* CollectionDataSource.swift */,
 				4A620D8B1C8E148D0084B0A2 /* CollectionDataSourceController.swift */,
+				4AB6BE531CA4774700A86233 /* PagingPlaceholderDataSourceController.swift */,
 				4A68AC681C88B0CD00849185 /* CollectionDataSourceDelegate.swift */,
 				4A68AC691C88B0CD00849185 /* CollectionDataSourceMetricsHelper.swift */,
 				4A68AC6A1C88B0CD00849185 /* CollectionViewWrapper.swift */,
@@ -3168,6 +3171,7 @@
 				4A68ACCD1C88B0CE00849185 /* CollectionViewLayoutMeasuring.swift in Sources */,
 				4A68ACA71C88B0CE00849185 /* CollectionDataSourceMetricsHelper.swift in Sources */,
 				4A0582FA1C91E80200F3D0E0 /* UIEdgeInsets-Extensions.swift in Sources */,
+				4AB6BE541CA4774700A86233 /* PagingPlaceholderDataSourceController.swift in Sources */,
 				4A68ACD51C88B0CE00849185 /* GridLayoutItem.swift in Sources */,
 				4A68ACB51C88B0CE00849185 /* DataSourceSectionInfo.swift in Sources */,
 				4A562ACB1C9C689B0072A570 /* ViewControllerDelegate.swift in Sources */,
