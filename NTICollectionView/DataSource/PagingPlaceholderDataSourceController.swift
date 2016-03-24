@@ -15,6 +15,7 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 	
 	public init(dataSource: CollectionDataSource) {
 		self.dataSource = dataSource
+		configureDataSource()
 	}
 	
 	public let dataSource: CollectionDataSource
