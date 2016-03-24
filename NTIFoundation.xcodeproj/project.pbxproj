@@ -371,6 +371,7 @@
 		4A1BE8611C8F9B3200790B3A /* KeyValueItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1BE85F1C8F9B3200790B3A /* KeyValueItem.swift */; };
 		4A1BE8641C8FA26300790B3A /* NTICollectionView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A68ABF51C88ADC300849185 /* NTICollectionView.framework */; };
 		4A1BE89E1C8FE03200790B3A /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4A1BE89D1C8FE03200790B3A /* LICENSE.txt */; };
+		4A51FF8D1CA49DBE000C6FE3 /* TabularControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A51FF8C1CA49DBE000C6FE3 /* TabularControlView.swift */; };
 		4A562ACB1C9C689B0072A570 /* ViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A562ACA1C9C689B0072A570 /* ViewControllerDelegate.swift */; };
 		4A562ACC1C9C689C0072A570 /* ViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A562ACA1C9C689B0072A570 /* ViewControllerDelegate.swift */; };
 		4A5ABD411C9B0D30008D292E /* DictionaryExtensionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5ABD401C9B0D30008D292E /* DictionaryExtensionTest.swift */; };
@@ -1033,6 +1034,7 @@
 		4A1BE84A1C8F9AD200790B3A /* CatSightingsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CatSightingsDataSource.swift; sourceTree = "<group>"; };
 		4A1BE85F1C8F9B3200790B3A /* KeyValueItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyValueItem.swift; sourceTree = "<group>"; };
 		4A1BE89D1C8FE03200790B3A /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		4A51FF8C1CA49DBE000C6FE3 /* TabularControlView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabularControlView.swift; sourceTree = "<group>"; };
 		4A5454431B1630680033FA3A /* NSDate-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate-NTIExtensionsTest.m"; sourceTree = "<group>"; };
 		4A562ACA1C9C689B0072A570 /* ViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerDelegate.swift; sourceTree = "<group>"; };
 		4A5ABD401C9B0D30008D292E /* DictionaryExtensionTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DictionaryExtensionTest.swift; path = "Extension Tests/DictionaryExtensionTest.swift"; sourceTree = "<group>"; };
@@ -1932,6 +1934,7 @@
 				4A68AC9C1C88B0CE00849185 /* CollectionPlaceholderView.swift */,
 				4A68AC9D1C88B0CE00849185 /* PlaceholderView.swift */,
 				4A68AC9E1C88B0CE00849185 /* SegmentedControlProtocol.swift */,
+				4A51FF8C1CA49DBE000C6FE3 /* TabularControlView.swift */,
 				4A0582DB1C90C8F800F3D0E0 /* CollectionSupplementaryView.swift */,
 				4A0582F71C90CF3200F3D0E0 /* CollectionViewCell.swift */,
 			);
@@ -3226,6 +3229,7 @@
 				4A68ACA91C88B0CE00849185 /* CollectionViewWrapper.swift in Sources */,
 				4A68ACED1C88B0CE00849185 /* SupplementaryItem.swift in Sources */,
 				4A68ACEF1C88B0CE00849185 /* ShadowRegistrar.swift in Sources */,
+				4A51FF8D1CA49DBE000C6FE3 /* TabularControlView.swift in Sources */,
 				4A68ACD11C88B0CE00849185 /* GridSupplementaryItem.swift in Sources */,
 				4A0583021C9213C700F3D0E0 /* GridSupplementaryItemLayoutEngine.swift in Sources */,
 				4A68ACE31C88B0CE00849185 /* LayoutInfo.swift in Sources */,
