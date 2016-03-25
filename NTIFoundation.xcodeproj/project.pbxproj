@@ -490,6 +490,7 @@
 		4AF3835F1CA3186A006D13D4 /* CollectionPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9C1C88B0CE00849185 /* CollectionPlaceholderView.swift */; };
 		4AF383601CA3187C006D13D4 /* CollectionSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0582DB1C90C8F800F3D0E0 /* CollectionSupplementaryView.swift */; };
 		4AF3836F1CA35C5D006D13D4 /* UICollectionReusableView-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF3836E1CA35C5D006D13D4 /* UICollectionReusableView-Extensions.swift */; };
+		4AFECA051CA5E0E400AF2D09 /* ActionSheetControlButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFECA041CA5E0E400AF2D09 /* ActionSheetControlButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1108,6 +1109,7 @@
 		4ADEE74B1C98950300DE9B0D /* Dictionary-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary-Extensions.swift"; sourceTree = "<group>"; };
 		4ADEE7681C98DBB900DE9B0D /* Decoration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Decoration.swift; sourceTree = "<group>"; };
 		4AF3836E1CA35C5D006D13D4 /* UICollectionReusableView-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionReusableView-Extensions.swift"; sourceTree = "<group>"; };
+		4AFECA041CA5E0E400AF2D09 /* ActionSheetControlButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionSheetControlButton.swift; sourceTree = "<group>"; };
 		4C2ECDD31549D0A400C69E3A /* NTIMathInputExpressionModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathInputExpressionModel.h; sourceTree = "<group>"; };
 		4C2ECDD41549D0A400C69E3A /* NTIMathInputExpressionModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NTIMathInputExpressionModel.m; sourceTree = "<group>"; };
 		4C40971615221D91002A9445 /* jsonUserData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = jsonUserData.json; sourceTree = "<group>"; };
@@ -1938,6 +1940,7 @@
 				4A68AC9E1C88B0CE00849185 /* SegmentedControlProtocol.swift */,
 				4A51FF8C1CA49DBE000C6FE3 /* TabularControlView.swift */,
 				4A11C9FB1CA5949500CCDD2B /* ActionSheetControl.swift */,
+				4AFECA041CA5E0E400AF2D09 /* ActionSheetControlButton.swift */,
 				4A0582DB1C90C8F800F3D0E0 /* CollectionSupplementaryView.swift */,
 				4A0582F71C90CF3200F3D0E0 /* CollectionViewCell.swift */,
 			);
@@ -3183,6 +3186,7 @@
 				4A562ACB1C9C689B0072A570 /* ViewControllerDelegate.swift in Sources */,
 				4A68ACB11C88B0CE00849185 /* DataSourcePlaceholder.swift in Sources */,
 				4A0583341C934BCF00F3D0E0 /* ComposedGridSectionLayoutEngine.swift in Sources */,
+				4AFECA051CA5E0E400AF2D09 /* ActionSheetControlButton.swift in Sources */,
 				4ADEE74C1C98950400DE9B0D /* Dictionary-Extensions.swift in Sources */,
 				4ADEE7691C98DBB900DE9B0D /* Decoration.swift in Sources */,
 				4A68ACA51C88B0CE00849185 /* CollectionDataSourceDelegate.swift in Sources */,
