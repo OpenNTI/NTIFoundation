@@ -22,6 +22,17 @@ public protocol SegmentedControlProtocol: class {
 	
 }
 
+extension SegmentedControlProtocol {
+	
+	public func setSegments(with titles: [String], animated: Bool) {
+		removeAllSegments()
+		for (index, title) in titles.enumerate() {
+			insertSegmentWithTitle(title, atIndex: index, animated: animated)
+		}
+	}
+	
+}
+
 public protocol SegmentedControlDelegate: class {
 	
 	func segmentedControlDidChangeValue(segmentedControl: SegmentedControlProtocol)
