@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol SegmentedControlProtocol: NSObjectProtocol {
+public protocol SegmentedControlProtocol: class {
 	
 	var selectedSegmentIndex: Int { get set }
 	
@@ -22,7 +22,7 @@ public protocol SegmentedControlProtocol: NSObjectProtocol {
 	
 }
 
-public protocol SegmentedControlDelegate: NSObjectProtocol {
+public protocol SegmentedControlDelegate: class {
 	
 	func segmentedControlDidChangeValue(segmentedControl: SegmentedControlProtocol)
 	
@@ -30,7 +30,7 @@ public protocol SegmentedControlDelegate: NSObjectProtocol {
 
 public protocol SegmentedControlView: SegmentedControlProtocol {
 	
-	var controlView: UIView { get }
+	var controlView: UIControl { get }
 	
 }
 
@@ -85,7 +85,7 @@ public class SegmentedControl: UISegmentedControl, SegmentedControlView {
 		segmentedControlDelegate?.segmentedControlDidChangeValue(self)
 	}
 	
-	public var controlView: UIView {
+	public var controlView: UIControl {
 		return self
 	}
 	
