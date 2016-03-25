@@ -217,12 +217,9 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 	}
 	
 	public func configure(segmentedControl: SegmentedControlProtocol) {
-		let titles = dataSources.map { $0.title }
+		let titles = dataSources.map { $0.title ?? "" }
 		
-		segmentedControl.removeAllSegments()
-		for (segmentIndex, segmentTitle) in titles.enumerate() {
-			segmentedControl.insertSegmentWithTitle(segmentTitle, atIndex: segmentIndex, animated: false)
-		}
+		segmentedControl.setSegments(with: titles, animated: false)
 		
 		segmentedControl.segmentedControlDelegate = self
 		segmentedControl.selectedSegmentIndex = selectedDataSourceIndex
