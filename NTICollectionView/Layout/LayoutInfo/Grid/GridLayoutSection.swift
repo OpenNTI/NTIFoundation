@@ -272,10 +272,23 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 	private var _contentBackgroundAttributes: UICollectionViewLayoutAttributes?
 	
 	public var contentFrame: CGRect {
-		var frame = UIEdgeInsetsInsetRect(self.frame, metrics.contentInset)
-		let insets = UIEdgeInsets(top: height(of: headers), left: leftAuxiliaryColumnWidth, bottom: height(of: footers), right: rightAuxiliaryColumnWidth)
-		frame = UIEdgeInsetsInsetRect(frame, insets)
-		return UIEdgeInsetsInsetRect(frame, metrics.padding)
+		let frame = UIEdgeInsetsInsetRect(self.frame, metrics.contentInset)
+		return UIEdgeInsetsInsetRect(frame, contentFrameInset)
+	}
+	public var contentFrameInset: UIEdgeInsets {
+		var t = height(of: headers)
+		if t > 0 {
+			t += metrics.padding.top
+		}
+		let l = leftAuxiliaryColumnWidth
+			+ (leftAuxiliaryColumnWidth > 0 ? metrics.padding.left : 0)
+		let r = rightAuxiliaryColumnWidth
+			+ (rightAuxiliaryColumnWidth > 0 ? metrics.padding.right : 0)
+		var b = height(of: footers)
+		if b > 0 {
+			b += metrics.padding.bottom
+		}
+		return UIEdgeInsets(top: t, left: l, bottom: b, right: r)
 	}
 	
 	public func add(item: LayoutItem) {

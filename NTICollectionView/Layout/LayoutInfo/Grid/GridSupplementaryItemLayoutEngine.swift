@@ -218,7 +218,7 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 	}
 	private var leftAuxiliaryItemsOrigin: CGPoint {
 		let orders = supplementaryOrders
-		let y = orders.headers < orders.leftAux ? headersMaxY : insetOrigin.y
+		let y = orders.headers < orders.leftAux ? (headersMaxY + metrics.padding.top) : insetOrigin.y
 		return CGPoint(x: insetOrigin.x, y: y)
 	}
 	
@@ -236,7 +236,7 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 	private var rightAuxiliaryItemsOrigin: CGPoint {
 		let x = insetOrigin.x + width - rightAuxiliaryColumnWidth
 		let orders = supplementaryOrders
-		let y = orders.headers < orders.rightAux ? headersMaxY : insetOrigin.y
+		let y = orders.headers < orders.rightAux ? (headersMaxY + metrics.padding.top) : insetOrigin.y
 		return CGPoint(x: x, y: y)
 	}
 	
@@ -305,13 +305,21 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 		footersMinY = position.y + metrics.padding.bottom
 	}
 	private var innerContentWidth: CGFloat {
-		return width - leftAuxiliaryColumnWidth - rightAuxiliaryColumnWidth - metrics.padding.width
+		var innerContentWidth = width - leftAuxiliaryColumnWidth - rightAuxiliaryColumnWidth// - metrics.padding.width
+		if leftAuxiliaryColumnWidth > 0 {
+			innerContentWidth -= metrics.padding.left
+		}
+		if rightAuxiliaryColumnWidth > 0 {
+			innerContentWidth -= metrics.padding.right
+		}
+		return innerContentWidth
 	}
 	private var innerContentOrigin: CGPoint {
 		return CGPoint(x: innerContentMinX, y: innerContentMinY)
 	}
 	private var innerContentMinX: CGFloat {
-		return leftAuxiliaryItemsMaxX + metrics.padding.left
+		return leftAuxiliaryItemsMaxX
+			+ (leftAuxiliaryColumnWidth > 0 ? metrics.padding.left : 0)
 	}
 	private var innerContentMinY: CGFloat {
 		return headersMaxY + metrics.padding.top
