@@ -52,10 +52,8 @@ public final class TabularControlView: UITableView, UITableViewDataSource, UITab
 	public weak var segmentedControlDelegate: SegmentedControlDelegate?
 	
 	public func removeAllSegments() {
-		beginUpdates()
 		segments.removeAll(keepCapacity: true)
 		reloadData()
-		endUpdates()
 	}
 	
 	public func insertSegmentWithTitle(title: String?, atIndex segment: Int, animated: Bool) {
@@ -64,6 +62,11 @@ public final class TabularControlView: UITableView, UITableViewDataSource, UITab
 		let indexPath = NSIndexPath(forRow: segment, inSection: 0)
 		insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
 		endUpdates()
+	}
+	
+	public func setSegments(with titles: [String], animated: Bool) {
+		segments = titles
+		reloadData()
 	}
 	
 	// MARK: - UITableViewDataSource
