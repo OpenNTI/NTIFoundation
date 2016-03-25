@@ -25,6 +25,8 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 	public var pinnableHeaders: [LayoutSupplementaryItem] = []
 	public var nonPinnableHeaders: [LayoutSupplementaryItem] = []
 	
+	public var spacing: CGFloat = 0
+	
 	private var metrics: GridSectionMetrics {
 		return layoutSection.metrics
 	}
@@ -113,6 +115,10 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 	
 	private func updatePosition(with supplementaryItem: LayoutSupplementaryItem) {
 		position.y += supplementaryItem.fixedHeight
+		
+		if supplementaryItem !== supplementaryItems.last {
+			position.y += spacing
+		}
 	}
 	
 	private func checkPinning(of supplementaryItem: LayoutSupplementaryItem) {

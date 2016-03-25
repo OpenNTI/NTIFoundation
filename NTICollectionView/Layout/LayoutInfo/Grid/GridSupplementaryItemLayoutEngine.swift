@@ -214,7 +214,7 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 		}
 		position = leftAuxiliaryItemsOrigin
 		let sizing = LayoutSizingInfo(width: leftAuxiliaryColumnWidth, layoutMeasure: layoutMeasure)
-		layout(layoutSection.leftAuxiliaryItems, using: sizing)
+		layout(layoutSection.leftAuxiliaryItems, using: sizing, spacing: metrics.auxiliaryColumnSpacing)
 	}
 	private var leftAuxiliaryItemsOrigin: CGPoint {
 		let orders = supplementaryOrders
@@ -231,7 +231,7 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 		}
 		position = rightAuxiliaryItemsOrigin
 		let sizing = LayoutSizingInfo(width: rightAuxiliaryColumnWidth, layoutMeasure: layoutMeasure)
-		layout(layoutSection.rightAuxiliaryItems, using: sizing)
+		layout(layoutSection.rightAuxiliaryItems, using: sizing, spacing: metrics.auxiliaryColumnSpacing)
 	}
 	private var rightAuxiliaryItemsOrigin: CGPoint {
 		let x = insetOrigin.x + width - rightAuxiliaryColumnWidth
@@ -250,18 +250,20 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 		return CGPoint(x: footersMinX, y: footersMinY)
 	}
 	
-	private func layout(supplementaryItems: [LayoutSupplementaryItem], using sizing: LayoutSizing) {
-		let engine = makeSupplementaryLayoutEngine(for: layoutSection, with: supplementaryItems)
+	private func layout(supplementaryItems: [LayoutSupplementaryItem], using sizing: LayoutSizing, spacing: CGFloat = 0) {
+		let engine = makeSupplementaryLayoutEngine(for: layoutSection, with: supplementaryItems, spacing: spacing)
 		position = engine.layoutWithOrigin(position, layoutSizing: sizing, invalidationContext: invalidationContext)
 		pinnableHeaders += engine.pinnableHeaders
 		nonPinnableHeaders += engine.nonPinnableHeaders
 	}
 	
-	private func makeSupplementaryLayoutEngine(`for` layoutSection: GridLayoutSection, with supplementaryItems: [LayoutSupplementaryItem]) -> SupplementaryLayoutEngine {
+	private func makeSupplementaryLayoutEngine(`for` layoutSection: GridLayoutSection, with supplementaryItems: [LayoutSupplementaryItem], spacing: CGFloat = 0) -> SupplementaryLayoutEngine {
 		if let factory = self.factory {
 			return factory(layoutSection: layoutSection, supplementaryItems: supplementaryItems)
 		}
-		return GridSectionColumnLayoutEngine(layoutSection: layoutSection, supplementaryItems: supplementaryItems)
+		let engine = GridSectionColumnLayoutEngine(layoutSection: layoutSection, supplementaryItems: supplementaryItems)
+		engine.spacing = spacing
+		return engine
 	}
 	
 	private func layoutSectionPlaceholder() {
