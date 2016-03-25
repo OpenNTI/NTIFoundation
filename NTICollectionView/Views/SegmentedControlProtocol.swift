@@ -20,6 +20,8 @@ public protocol SegmentedControlProtocol: class {
 	
 	func insertSegmentWithTitle(title: String?, atIndex segment: Int, animated: Bool)
 	
+	func setSegments(with titles: [String], animated: Bool)
+	
 }
 
 extension SegmentedControlProtocol {
