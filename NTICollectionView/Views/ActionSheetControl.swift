@@ -29,7 +29,7 @@ public final class ActionSheetControl: SegmentedControlView {
 	public var animatesPresentation = true
 	
 	@objc public func controlPressed(control: UIControl) {
-		isActionSheetPresenting ? presentActionSheet() : dismissActionSheet()
+		isActionSheetPresenting ? dismissActionSheet() : presentActionSheet()
 	}
 	
 	private weak var actionSheetController: UIAlertController?
@@ -42,7 +42,12 @@ public final class ActionSheetControl: SegmentedControlView {
 	}
 	
 	private func presentActionSheet() {
-		presentActionSheet()
+		guard let viewController = self.viewController else {
+			return
+		}
+		let actionSheet = makeActionSheetController()
+		actionSheetController = actionSheet
+		viewController.presentViewController(actionSheet, animated: animatesPresentation, completion: nil)
 	}
 	
 	private func dismissActionSheet() {
@@ -67,12 +72,9 @@ public final class ActionSheetControl: SegmentedControlView {
 	}
 	
 	private func makeActionSheetSourceRect() -> CGRect {
-		let width: CGFloat = 2
-		let height = controlView.bounds.height
-		let center = controlView.center
-		let x = center.x - width / 2
-		let y = center.y - height / 2
-		return CGRect(x: x, y: y, width: width, height: height)
+		let x = controlView.bounds.midX
+		let y = controlView.bounds.midY
+		return CGRect(x: x, y: y, width: 1, height: 1)
 	}
 	
 	private func configureActions(of sheetController: UIAlertController) {
