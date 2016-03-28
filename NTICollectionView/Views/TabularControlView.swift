@@ -31,6 +31,15 @@ public final class TabularControlView: UITableView, UITableViewDataSource, UITab
 	
 	public var font: UIFont?
 	
+	public override func intrinsicContentSize() -> CGSize {
+		let superSize = super.intrinsicContentSize()
+		guard !segments.isEmpty else {
+			return superSize
+		}
+		let h = rowHeight * CGFloat(segments.count)
+		return CGSize(width: superSize.width, height: h)
+	}
+	
 	// MARK: - SegmentedControlProtocol
 	
 	public var selectedSegmentIndex: Int {
@@ -55,6 +64,7 @@ public final class TabularControlView: UITableView, UITableViewDataSource, UITab
 	
 	public func removeAllSegments() {
 		segments.removeAll(keepCapacity: true)
+		invalidateIntrinsicContentSize()
 		reloadData()
 	}
 	
@@ -63,11 +73,13 @@ public final class TabularControlView: UITableView, UITableViewDataSource, UITab
 		segments.insert(title ?? "", atIndex: segment)
 		let indexPath = NSIndexPath(forRow: segment, inSection: 0)
 		insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+		invalidateIntrinsicContentSize()
 		endUpdates()
 	}
 	
 	public func setSegments(with titles: [String], animated: Bool) {
 		segments = titles
+		invalidateIntrinsicContentSize()
 		reloadData()
 	}
 	
