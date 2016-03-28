@@ -31,6 +31,12 @@ public final class TabularControlView: UITableView, UITableViewDataSource, UITab
 	
 	public var font: UIFont?
 	
+	public var textColor: UIColor?
+	
+	public var cellBackgroundColor: UIColor?
+	
+	public var cellSelectedBackgroundColor: UIColor?
+	
 	public override func intrinsicContentSize() -> CGSize {
 		let superSize = super.intrinsicContentSize()
 		guard !segments.isEmpty else {
@@ -106,6 +112,18 @@ public final class TabularControlView: UITableView, UITableViewDataSource, UITab
 	public func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
 		if let font = self.font {
 			cell.textLabel?.font = font
+		}
+		
+		if let textColor = self.textColor {
+			cell.textLabel?.textColor = textColor
+		}
+		
+		cell.backgroundColor = cellBackgroundColor
+		
+		if let selectedBackgroundColor = cellSelectedBackgroundColor {
+			let selectedBackgroundView = UIView()
+			selectedBackgroundView.backgroundColor = selectedBackgroundColor
+			cell.selectedBackgroundView = selectedBackgroundView
 		}
 	}
 
