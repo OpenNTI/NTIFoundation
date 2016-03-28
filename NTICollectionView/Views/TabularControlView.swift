@@ -14,6 +14,8 @@ public final class TabularControlView: UITableView, UITableViewDataSource, UITab
 	
 	public init(frame: CGRect) {
 		super.init(frame: frame, style: .Plain)
+		dataSource = self
+		delegate = self
 		registerClass(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
 	}
 	
