@@ -25,6 +25,9 @@ public protocol GridSectionMetrics: SectionMetrics {
 	/// The spacing between rows
 	var rowSpacing: CGFloat { get set }
 	
+	/// The minimum horizontal spacing between items.
+	var minimumInteritemSpacing: CGFloat { get set }
+	
 	/// The width of the left auxiliary column.
 	var leftAuxiliaryColumnWidth: CGFloat { get set }
 	
@@ -120,6 +123,12 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 	public var rowSpacing: CGFloat = 0 {
 		didSet {
 			setFlag("rowSpacing")
+		}
+	}
+	
+	public var minimumInteritemSpacing: CGFloat = 0 {
+		didSet {
+			setFlag("minimumInteritemSpacing")
 		}
 	}
 	
@@ -244,6 +253,7 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 		copy.estimatedRowHeight = estimatedRowHeight
 		copy.fixedColumnWidth = fixedColumnWidth
 		copy.rowSpacing = rowSpacing
+		copy.minimumInteritemSpacing = minimumInteritemSpacing
 		copy.leftAuxiliaryColumnWidth = leftAuxiliaryColumnWidth
 		copy.rightAuxiliaryColumnWidth = rightAuxiliaryColumnWidth
 		copy.auxiliaryColumnSpacing = auxiliaryColumnSpacing
@@ -291,6 +301,9 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 		}
 		if metrics.definesMetric("rowSpacing") {
 			rowSpacing = gridMetrics.rowSpacing
+		}
+		if metrics.definesMetric("minimumInteritemSpacing") {
+			minimumInteritemSpacing = gridMetrics.minimumInteritemSpacing
 		}
 		if metrics.definesMetric("leftAuxiliaryColumnWidth") {
 			leftAuxiliaryColumnWidth = gridMetrics.leftAuxiliaryColumnWidth
