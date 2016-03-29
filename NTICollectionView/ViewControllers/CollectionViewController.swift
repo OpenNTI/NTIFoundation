@@ -180,7 +180,9 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 	public override func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(animated)
 		
-		let collectionView = self.collectionView!
+		guard let collectionView = self.collectionView else {
+			return
+		}
 		
 		if let dataSource = collectionView.dataSource as? CollectionDataSource {
 			let wrapper = WrapperCollectionView(collectionView: collectionView, mapping: nil)
@@ -478,8 +480,15 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 			}
 			
 			context.invalidateSupplementaryElementsOfKind(kind, atIndexPaths: indexPaths)
-			// XXX: Do we need to invalidate the layout here?
+			// FIXME: Do we need to invalidate the layout here?
 		})
+	}
+	
+	public func dataSource(dataSource: CollectionDataSource, didAddChild childDataSource: CollectionDataSource) {
+		guard let collectionView = self.collectionView else {
+			return
+		}
+		childDataSource.registerReusableViews(with: collectionView)
 	}
 	
 }

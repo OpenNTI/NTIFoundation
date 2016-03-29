@@ -30,6 +30,7 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 		}
 		dataSources.append(dataSource)
 		dataSource.delegate = self
+		notifyDidAddChild(dataSource)
 	}
 	
 	public func remove(dataSource: CollectionDataSource) {

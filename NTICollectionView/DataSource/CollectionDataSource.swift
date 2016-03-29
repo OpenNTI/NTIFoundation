@@ -191,6 +191,10 @@ extension CollectionDataSource {
 		delegate?.dataSource(self, didUpdate: supplementaryItem, at: indexPaths)
 	}
 	
+	public func notifyDidAddChild(childDataSource: CollectionDataSource) {
+		delegate?.dataSource(self, didAddChild: childDataSource)
+	}
+	
 }
 
 extension CollectionDataSource {

@@ -45,6 +45,8 @@ public protocol CollectionDataSourceDelegate: NSObjectProtocol {
 	/// Update the view or views associated with supplementary item at given index paths.
 	func dataSource(dataSource: CollectionDataSource, didUpdate supplementaryItem: SupplementaryItem, at indexPaths: [NSIndexPath])
 	
+	func dataSource(dataSource: CollectionDataSource, didAddChild childDataSource: CollectionDataSource)
+	
 }
 
 extension CollectionDataSourceDelegate {
@@ -73,5 +75,7 @@ extension CollectionDataSourceDelegate {
 	public func dataSource(dataSource: CollectionDataSource, didDismissPlaceholderForSections sections: NSIndexSet) {}
 	
 	public func dataSource(dataSource: CollectionDataSource, didUpdate supplementaryItem: SupplementaryItem, at indexPaths: [NSIndexPath]) {}
+	
+	public func dataSource(dataSource: CollectionDataSource, didAddChild childDataSource: CollectionDataSource) { }
 	
 }

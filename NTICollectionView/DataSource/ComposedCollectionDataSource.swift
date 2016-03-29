@@ -43,6 +43,7 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 		let mappingForDataSource = BasicDataSourceMapping(dataSource: dataSource)
 		mappings.append(mappingForDataSource)
 		dataSourceToMappings.setObject(mappingForDataSource, forKey: dataSource)
+		notifyDidAddChild(dataSource)
 		
 		updateMappings()
 		let addedSections = NSMutableIndexSet()
