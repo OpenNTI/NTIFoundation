@@ -53,7 +53,7 @@ static id fromExternalData(NSString* external)
 //	NSLog(@"Decoded to %@", dataString);
 	NSArray* pieces = [dataString piecesUsingRegexString: @"([^:]+):([0-9]+)?(\\+)?:([^:]+)?:?([\\s\\S]*)?"];
 //	NSLog(@"split to %@", pieces);
-	if( !pieces || ![pieces count] > 0){
+	if( !pieces || !([pieces count] > 0)){
 		//The spec allows for a simple 0 to be passed back.
 		//FIXME special cased.
 		if( [dataString isEqualToString: @"0"] ){
