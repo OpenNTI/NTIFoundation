@@ -25,7 +25,11 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 			guard hasNextPage != oldValue else {
 				return
 			}
-			nextPagePlaceholder.isHidden = !hasNextPage
+			if hasNextPage {
+				dataSource.add(nextPagePlaceholder, forKey: nextPagePlaceholderKey)
+			} else {
+				dataSource.removeSupplementaryItemForKey(nextPagePlaceholderKey)
+			}
 		}
 	}
 	
@@ -34,7 +38,11 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 			guard hasPrevPage != oldValue else {
 				return
 			}
-			prevPagePlaceholder.isHidden = !hasPrevPage
+			if hasPrevPage {
+				dataSource.add(prevPagePlaceholder, forKey: prevPagePlaceholderKey)
+			} else {
+				dataSource.removeSupplementaryItemForKey(prevPagePlaceholderKey)
+			}
 		}
 	}
 	
@@ -72,7 +80,6 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 				placeholderView.showActivityIndicator(false)
 			}
 		}
-		dataSource.add(nextPagePlaceholder, forKey: nextPagePlaceholderKey)
 	}
 	
 	private func configurePrevPagePlaceholder() {
@@ -91,11 +98,9 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 				placeholderView.showActivityIndicator(false)
 			}
 		}
-		dataSource.add(prevPagePlaceholder, forKey: prevPagePlaceholderKey)
 	}
 	
 	private func configurePagingPlaceholder(pagingPlaceholder: GridSupplementaryItem) {
-		pagingPlaceholder.isHidden = true
 		pagingPlaceholder.backgroundColor = nil
 		pagingPlaceholder.height = 100
 		pagingPlaceholder.supplementaryViewClass = CollectionPlaceholderView.self
