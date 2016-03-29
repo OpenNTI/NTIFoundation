@@ -29,7 +29,7 @@ class CatListDataSource: BasicCollectionDataSource {
 			setNeedsLoadContent()
 			
 			if isShowingFavorites {
-				NSNotificationCenter.defaultCenter().addObserver(self, selector: "observeFavoriteToggledNotification:", name: AAPLCatFavoriteToggledNotificationName, object: nil)
+				NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(CatListDataSource.observeFavoriteToggledNotification(_:)), name: AAPLCatFavoriteToggledNotificationName, object: nil)
 			}
 		}
 	}

@@ -68,18 +68,18 @@ class CatListViewController: CollectionViewController, SegmentedCollectionDataSo
 			editing = false
 			navigationItem.rightBarButtonItem = nil
 		} else {
-			navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "beginEditing")
+			navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(CatListViewController.beginEditing))
 		}
 	}
 	
 	func beginEditing() {
 		editing = true
-		navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "endEditing")
+		navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(CatListViewController.endEditing))
 	}
 	
 	func endEditing() {
 		editing = false
-		navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "beginEditing")
+		navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(CatListViewController.beginEditing))
 	}
 	
 	override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
