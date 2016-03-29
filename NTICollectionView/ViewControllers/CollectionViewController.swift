@@ -488,7 +488,8 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		guard let collectionView = self.collectionView else {
 			return
 		}
-		childDataSource.registerReusableViews(with: collectionView)
+		let wrapper = WrapperCollectionView(collectionView: collectionView, mapping: nil)
+		childDataSource.registerReusableViews(with: wrapper)
 	}
 	
 }
