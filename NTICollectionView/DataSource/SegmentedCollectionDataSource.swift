@@ -10,9 +10,9 @@ import UIKit
 
 public protocol SegmentedCollectionDataSourceProtocol: ParentCollectionDataSource {
 	
-	var selectedDataSource: CollectionDataSource { get set }
+	var selectedDataSource: CollectionDataSource? { get set }
 	
-	var selectedDataSourceIndex: Int { get set }
+	var selectedDataSourceIndex: Int? { get set }
 	
 	func removeAllDataSources()
 	
@@ -58,7 +58,7 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 		return dataSources.contains({ $0 === selectedDataSource })
 	}
 	
-	public var selectedDataSource: CollectionDataSource {
+	public var selectedDataSource: CollectionDataSource? {
 		get {
 			return _selectedDataSource
 		}
@@ -66,7 +66,7 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 			setSelectedDataSource(newValue, isAnimated: false)
 		}
 	}
-	private var _selectedDataSource: CollectionDataSource! {
+	private var _selectedDataSource: CollectionDataSource? {
 		didSet {
 			segmentedCollectionDataSourceDelegate?.segmentedCollectionDataSourceDidChangeSelectedDataSource(self)
 		}
@@ -74,33 +74,37 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 	
 	public weak var segmentedCollectionDataSourceDelegate: SegmentedCollectionDataSourceDelegate?
 	
-	public func setSelectedDataSource(selectedDataSource: CollectionDataSource, isAnimated: Bool) {
+	public func setSelectedDataSource(selectedDataSource: CollectionDataSource?, isAnimated: Bool) {
 		setSelectedDataSource(selectedDataSource, isAnimated: isAnimated, completionHandler: nil)
 	}
 	
-	public func setSelectedDataSource(selectedDataSource: CollectionDataSource, isAnimated: Bool, completionHandler: dispatch_block_t?) {
-		guard selectedDataSource !== _selectedDataSource else {
+	public func setSelectedDataSource(selectedDataSource: CollectionDataSource?, isAnimated: Bool, completionHandler: dispatch_block_t?) {
+		guard selectedDataSource !== self.selectedDataSource else {
 			completionHandler?()
 			return
 		}
-		precondition(dataSourcesContains(selectedDataSource), "Selected data source must be contained in this data source")
+		if selectedDataSource != nil {
+			precondition(dataSourcesContains(selectedDataSource!), "Selected data source must be contained in this data source")
+		}
 		
-		let oldDataSource = _selectedDataSource
+		let oldDataSource = self.selectedDataSource
 		
 		var direction: SectionOperationDirection?
-		if isAnimated {
-			let oldIndex = dataSourcesIndexOf(oldDataSource)!
-			let newIndex = dataSourcesIndexOf(selectedDataSource)!
+		if isAnimated,
+			let oldSelectedDataSource = oldDataSource,
+			newSelectedDataSource = selectedDataSource {
+			let oldIndex = dataSourcesIndexOf(oldSelectedDataSource)!
+			let newIndex = dataSourcesIndexOf(newSelectedDataSource)!
 			direction = (oldIndex < newIndex) ? .Right : .Left
 		}
 		
-		let numberOfOldSections = oldDataSource.numberOfSections
-		let numberOfNewSections = selectedDataSource.numberOfSections
+		let numberOfOldSections = oldDataSource?.numberOfSections ?? 0
+		let numberOfNewSections = selectedDataSource?.numberOfSections ?? 0
 		let removedSet = NSIndexSet(indexesInRange: NSMakeRange(0, numberOfOldSections))
 		let insertedSet = NSIndexSet(indexesInRange: NSMakeRange(0, numberOfNewSections))
 		
 		performUpdate({
-			oldDataSource.willResignActive()
+			oldDataSource?.willResignActive()
 			
 			if removedSet.count > 0 {
 				self.notifySectionsRemoved(removedSet, direction: direction)
@@ -118,20 +122,27 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 				self.notifySectionsInserted(insertedSet, direction: direction)
 			}
 			
-			selectedDataSource.didBecomeActive()
+			selectedDataSource?.didBecomeActive()
 			}, complete: completionHandler)
 	}
 	
-	public var selectedDataSourceIndex: Int {
+	public var selectedDataSourceIndex: Int? {
 		get {
-			return dataSourcesIndexOf(_selectedDataSource)!
+			guard let selectedDataSource = self.selectedDataSource else {
+				return nil
+			}
+			return dataSourcesIndexOf(selectedDataSource)!
 		}
 		set {
 			setSelectedDataSourceIndex(newValue, isAnimated: false)
 		}
 	}
-	public func setSelectedDataSourceIndex(selectedDataSourceIndex: Int, isAnimated: Bool) {
-		let dataSource = dataSources[selectedDataSourceIndex]
+	public func setSelectedDataSourceIndex(selectedDataSourceIndex: Int?, isAnimated: Bool) {
+		guard let index = selectedDataSourceIndex else {
+			selectedDataSource = nil
+			return
+		}
+		let dataSource = dataSources[index]
 		selectedDataSource = dataSource
 	}
 	
@@ -140,27 +151,27 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 	}
 	
 	public override var numberOfSections: Int {
-		return _selectedDataSource.numberOfSections
+		return selectedDataSource?.numberOfSections ?? 0
 	}
 	
 	public override func dataSourceForSectionAtIndex(sectionIndex: Int) -> CollectionDataSource {
-		return _selectedDataSource.dataSourceForSectionAtIndex(sectionIndex)
+		return selectedDataSource?.dataSourceForSectionAtIndex(sectionIndex) ?? super.dataSourceForSectionAtIndex(sectionIndex)
 	}
 	
 	public override func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath? {
-		return _selectedDataSource.localIndexPathForGlobal(globalIndexPath)
+		return selectedDataSource?.localIndexPathForGlobal(globalIndexPath)
 	}
 	
 	public override func item(at indexPath: NSIndexPath) -> Item? {
-		return _selectedDataSource.item(at: indexPath)
+		return selectedDataSource?.item(at: indexPath)
 	}
 	
 	public override func indexPath(for item: Item) -> NSIndexPath? {
-		return _selectedDataSource.indexPath(for: item)
+		return selectedDataSource?.indexPath(for: item)
 	}
 	
 	public override func removeItem(at indexPath: NSIndexPath) {
-		_selectedDataSource.removeItem(at: indexPath)
+		selectedDataSource?.removeItem(at: indexPath)
 	}
 	
 	public override func registerReusableViews(with collectionView: UICollectionView) {
@@ -174,16 +185,16 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 	
 	public override func didBecomeActive() {
 		super.didBecomeActive()
-		_selectedDataSource.didBecomeActive()
+		selectedDataSource?.didBecomeActive()
 	}
 	
 	public override func willResignActive() {
 		super.willResignActive()
-		_selectedDataSource.willResignActive()
+		selectedDataSource?.willResignActive()
 	}
 	
 	public override var allowsSelection: Bool {
-		return _selectedDataSource.allowsSelection
+		return selectedDataSource?.allowsSelection ?? super.allowsSelection
 	}
 	
 	// TODO: Make computed property for item-by-key?
@@ -222,7 +233,7 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 		segmentedControl.setSegments(with: titles, animated: false)
 		
 		segmentedControl.segmentedControlDelegate = self
-		segmentedControl.selectedSegmentIndex = selectedDataSourceIndex
+		segmentedControl.selectedSegmentIndex = selectedDataSourceIndex ?? UISegmentedControlNoSegment
 	}
 	
 	// MARK: - Metrics
@@ -234,17 +245,17 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 	// MARK: - Subclass hooks
 	
 	public override func collectionView(collectionView: UICollectionView, canEditItemAt indexPath: NSIndexPath) -> Bool {
-		return _selectedDataSource.collectionView(collectionView, canEditItemAt: indexPath)
+		return selectedDataSource?.collectionView(collectionView, canEditItemAt: indexPath) ?? super.collectionView(collectionView, canEditItemAt: indexPath)
 	}
 	
 	public override func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath) -> Bool {
-		return _selectedDataSource.collectionView(collectionView, canMoveItemAt: indexPath)
+		return selectedDataSource?.collectionView(collectionView, canMoveItemAt: indexPath) ?? super.collectionView(collectionView, canMoveItemAt: indexPath)
 	}
 	
 	// MARK: - ContentLoading
 	
 	public override func beginLoadingContent(with progress: LoadingProgress) {
-		_selectedDataSource.loadContent()
+		selectedDataSource?.loadContent()
 		super.beginLoadingContent(with: progress)
 	}
 	
@@ -258,7 +269,7 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 	// MARK: - Placeholders
 	
 	public override func update(placeholderView: CollectionPlaceholderView?, forSectionAtIndex sectionIndex: Int) {
-		selectedDataSource.update(placeholderView, forSectionAtIndex: sectionIndex)
+		selectedDataSource?.update(placeholderView, forSectionAtIndex: sectionIndex)
 	}
 	
 	// MARK: - SegmentedControlDelegate
@@ -275,88 +286,88 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 	// MARK: - UICollectionViewDataSource
 	
 	public override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		return shouldShowPlaceholder ? 0 : _selectedDataSource.collectionView(collectionView, numberOfItemsInSection: section)
+		return shouldShowPlaceholder ? 0 : selectedDataSource?.collectionView(collectionView, numberOfItemsInSection: section) ?? super.collectionView(collectionView, numberOfItemsInSection: section)
 	}
 	
 	public override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-		return _selectedDataSource.collectionView(collectionView, cellForItemAtIndexPath: indexPath)
+		return selectedDataSource?.collectionView(collectionView, cellForItemAtIndexPath: indexPath) ?? super.collectionView(collectionView, cellForItemAtIndexPath: indexPath)
 	}
 	
 	public override func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath, to destinationIndexPath: NSIndexPath) -> Bool {
-		return _selectedDataSource.collectionView(collectionView, canMoveItemAt: indexPath, to: destinationIndexPath)
+		return selectedDataSource?.collectionView(collectionView, canMoveItemAt: indexPath, to: destinationIndexPath) ?? super.collectionView(collectionView, canMoveItemAt: indexPath, to: destinationIndexPath)
 	}
 	
 	public override func collectionView(collectionView: UICollectionView, moveItemAt sourceIndexPath: NSIndexPath, to destinationIndexPath: NSIndexPath) {
-		_selectedDataSource.collectionView(collectionView, moveItemAt: sourceIndexPath, to: destinationIndexPath)
+		selectedDataSource?.collectionView(collectionView, moveItemAt: sourceIndexPath, to: destinationIndexPath)
 	}
 	
 	// MARK: - CollectionDataSourceDelegate
 	
 	public func dataSource(dataSource: CollectionDataSource, didInsertItemsAt indexPaths: [NSIndexPath]) {
-		guard dataSource === _selectedDataSource else {
+		guard dataSource === selectedDataSource else {
 			return
 		}
 		notifyItemsInserted(at: indexPaths)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didRemoveItemsAt indexPaths: [NSIndexPath]) {
-		guard dataSource === _selectedDataSource else {
+		guard dataSource === selectedDataSource else {
 			return
 		}
 		notifyItemsRemoved(at: indexPaths)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didRefreshItemsAt indexPaths: [NSIndexPath]) {
-		guard dataSource === _selectedDataSource else {
+		guard dataSource === selectedDataSource else {
 			return
 		}
 		notifyItemsRefreshed(at: indexPaths)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didMoveItemAt oldIndexPath: NSIndexPath, to newIndexPath: NSIndexPath) {
-		guard dataSource === _selectedDataSource else {
+		guard dataSource === selectedDataSource else {
 			return
 		}
 		notifyItemMoved(from: oldIndexPath, to: newIndexPath)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didInsertSections sections: NSIndexSet, direction: SectionOperationDirection?) {
-		guard dataSource === _selectedDataSource else {
+		guard dataSource === selectedDataSource else {
 			return
 		}
 		notifySectionsInserted(sections, direction: direction)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didRemoveSections sections: NSIndexSet, direction: SectionOperationDirection?) {
-		guard dataSource === _selectedDataSource else {
+		guard dataSource === selectedDataSource else {
 			return
 		}
 		notifySectionsRemoved(sections, direction: direction)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didRefreshSections sections: NSIndexSet) {
-		guard dataSource === _selectedDataSource else {
+		guard dataSource === selectedDataSource else {
 			return
 		}
 		notifySectionsRefreshed(sections)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didMoveSectionFrom oldSection: Int, to newSection: Int, direction: SectionOperationDirection?) {
-		guard dataSource === _selectedDataSource else {
+		guard dataSource === selectedDataSource else {
 			return
 		}
 		notifySectionsMoved(from: oldSection, to: newSection, direction: direction)
 	}
 	
 	public func dataSourceDidReloadData(dataSource: CollectionDataSource) {
-		guard dataSource === _selectedDataSource else {
+		guard dataSource === selectedDataSource else {
 			return
 		}
 		notifyDidReloadData()
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, performBatchUpdate update: () -> Void, complete: (() -> Void)?) {
-		guard dataSource === _selectedDataSource else {
+		guard dataSource === selectedDataSource else {
 			update()
 			complete?()
 			return
@@ -365,28 +376,28 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didPresentActivityIndicatorForSections sections: NSIndexSet) {
-		guard dataSource === _selectedDataSource else {
+		guard dataSource === selectedDataSource else {
 			return
 		}
 		presentActivityIndicator(forSections: sections)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didPresentPlaceholderForSections sections: NSIndexSet) {
-		guard dataSource === _selectedDataSource else {
+		guard dataSource === selectedDataSource else {
 			return
 		}
 		present(nil, forSections: sections)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didDismissPlaceholderForSections sections: NSIndexSet) {
-		guard dataSource === _selectedDataSource else {
+		guard dataSource === selectedDataSource else {
 			return
 		}
 		dismissPlaceholder(forSections: sections)
 	}
 	
 	public func dataSource(dataSource: CollectionDataSource, didUpdate supplementaryItem: SupplementaryItem, at indexPaths: [NSIndexPath]) {
-		guard dataSource === _selectedDataSource else {
+		guard dataSource === selectedDataSource else {
 			return
 		}
 		notifyContentUpdated(for: supplementaryItem, at: indexPaths)

@@ -19,14 +19,14 @@ public class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMet
 		return dataSource as! SegmentedCollectionDataSourceProtocol
 	}
 	
-	var selectedDataSource: CollectionDataSource {
+	var selectedDataSource: CollectionDataSource? {
 		return segmentedDataSource.selectedDataSource
 	}
 	
 	public override func numberOfSupplementaryItemsOfKind(kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChildDataSources: Bool) -> Int {
 		var numberOfItems = super.numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChildDataSources: false)
 		if shouldIncludeChildDataSources {
-			numberOfItems += selectedDataSource.numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChildDataSources: true)
+			numberOfItems += selectedDataSource?.numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChildDataSources: true) ?? 0
 		}
 		return numberOfItems
 	}
@@ -38,6 +38,9 @@ public class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMet
 		}
 		
 		// If the metrics aren't defined on this data source, check the selected data source
+		guard let selectedDataSource = self.selectedDataSource else {
+			return []
+		}
 		result = selectedDataSource.indexPaths(for: supplementaryItem)
 		
 		// Need to update the index paths of the selected data source to reflect any items defined in this data source
@@ -67,7 +70,7 @@ public class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMet
 		
 		itemIndex -= numberOfElements
 		let childIndexPath = layoutIndexPathForItemIndex(itemIndex, sectionIndex: sectionIndex)
-		selectedDataSource.findSupplementaryItemOfKind(kind, at: childIndexPath, using: block)
+		selectedDataSource?.findSupplementaryItemOfKind(kind, at: childIndexPath, using: block)
 	}
 	
 	public override func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetrics? {
@@ -81,6 +84,9 @@ public class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMet
 	}
 	
 	private func snapshotChildMetrics(forSectionAt sectionIndex: Int) -> DataSourceSectionMetrics? {
+		guard let selectedDataSource = self.selectedDataSource else {
+			return nil
+		}
 		if sectionIndex == GlobalSectionIndex {
 			return selectedDataSource.snapshotContributedGlobalMetrics()
 		}
