@@ -116,6 +116,7 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	private func startNewRow() {
 		row = GridLayoutRow()
 		row.section = layoutSection
+		row.metrics.applyValues(from: metrics)
 	}
 	
 	private func updateRowFrame() {
@@ -219,9 +220,9 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	private func advanceLayoutPositionToNextColumn() {
 		switch metrics.cellLayoutOrder {
 		case .LeadingToTrailing:
-			position.x += columnWidth
+			position.x += columnWidth + metrics.minimumInteritemSpacing
 		case .TrailingToLeading:
-			position.x -= columnWidth
+			position.x -= columnWidth + metrics.minimumInteritemSpacing
 		}
 	}
 	

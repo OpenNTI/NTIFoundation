@@ -39,6 +39,8 @@ extension LayoutRow {
 
 public class GridLayoutRow: NSObject, LayoutRow, NSCopying {
 	
+	public var metrics = BasicGridSectionMetrics()
+	
 	public var frame = CGRectZero
 	
 	public private(set) var items: [LayoutItem] = []
@@ -73,11 +75,25 @@ public class GridLayoutRow: NSObject, LayoutRow, NSCopying {
 		self.frame = frame
 	}
 	
+	public func columnWidth(forNumberOfColumns columns: Int) -> CGFloat {
+		return metrics.fixedColumnWidth ?? maximizedColumnWidth(forNumberOfColumns: columns)
+	}
+	
+	private func maximizedColumnWidth(forNumberOfColumns columns: Int) -> CGFloat {
+		let layoutWidth = frame.width
+		let spacing = metrics.minimumInteritemSpacing
+		let numberOfColumns = CGFloat(columns)
+		let totalSpacing = max(numberOfColumns - 1, 0) * spacing
+		let columnWidth = (layoutWidth - totalSpacing) / numberOfColumns
+		return columnWidth
+	}
+	
 	public func copyWithZone(zone: NSZone) -> AnyObject {
 		let copy = GridLayoutRow()
 		copy.section = section
 		copy.frame = frame
 		copy.items = items.map { $0.copy() as! LayoutItem }
+		copy.metrics = metrics.copy() as! BasicGridSectionMetrics
 		return copy
 	}
 	
