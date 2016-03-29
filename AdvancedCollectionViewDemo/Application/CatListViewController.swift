@@ -58,7 +58,9 @@ class CatListViewController: CollectionViewController, SegmentedCollectionDataSo
 	}
 	
 	func segmentedCollectionDataSourceDidChangeSelectedDataSource(segmentedCollectionDataSource: SegmentedCollectionDataSourceProtocol) {
-		let dataSource = segmentedCollectionDataSource.selectedDataSource
+		guard let dataSource = segmentedCollectionDataSource.selectedDataSource else {
+			return
+		}
 		
 		title = dataSource.title
 		
