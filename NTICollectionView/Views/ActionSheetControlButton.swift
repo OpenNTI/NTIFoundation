@@ -37,6 +37,15 @@ public final class ActionSheetControlButton: UIButton, SegmentedControlView, Seg
 		return "\(title) ▼"
 	}
 	
+	public var presentationDelegate: ActionSheetPresentationDelegate? {
+		get {
+			return actionSheetControl.presentationDelegate
+		}
+		set {
+			actionSheetControl.presentationDelegate = newValue
+		}
+	}
+	
 	public var viewController: UIViewController? {
 		get {
 			return actionSheetControl.viewController
