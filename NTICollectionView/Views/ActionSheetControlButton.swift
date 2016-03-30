@@ -46,15 +46,6 @@ public final class ActionSheetControlButton: UIButton, SegmentedControlView, Seg
 		}
 	}
 	
-	public var viewController: UIViewController? {
-		get {
-			return actionSheetControl.viewController
-		}
-		set {
-			actionSheetControl.viewController = newValue
-		}
-	}
-	
 	// MARK: - SegmentedControlView
 	
 	public var segmentedControlDelegate: SegmentedControlDelegate?
