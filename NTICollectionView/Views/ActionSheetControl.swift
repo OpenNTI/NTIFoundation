@@ -24,6 +24,8 @@ public final class ActionSheetControl: SegmentedControlView {
 	/// The view controller which will present the action sheet.
 	public var viewController: UIViewController?
 	
+	public weak var presentationDelegate: ActionSheetPresentationDelegate?
+	
 	public var segments: [String] = []
 	
 	public var animatesPresentation = true
@@ -42,16 +44,24 @@ public final class ActionSheetControl: SegmentedControlView {
 	}
 	
 	private func presentActionSheet() {
-		guard let viewController = self.viewController else {
-			return
-		}
 		let actionSheet = makeActionSheetController()
 		actionSheetController = actionSheet
-		viewController.presentViewController(actionSheet, animated: animatesPresentation, completion: nil)
+		
+		if let viewController = self.viewController {
+			viewController.presentViewController(actionSheet, animated: animatesPresentation, completion: nil)
+		}
+		else if let presenter = presentationDelegate {
+			presenter.presentActionSheet(actionSheet)
+		}
 	}
 	
 	private func dismissActionSheet() {
-		viewController?.dismissViewControllerAnimated(animatesPresentation, completion: nil)
+		if let viewController = self.viewController {
+			viewController.dismissViewControllerAnimated(animatesPresentation, completion: nil)
+		}
+		else if let presenter = presentationDelegate {
+			presenter.dismissActionSheet()
+		}
 	}
 	
 	private func makeActionSheetController() -> UIAlertController {
@@ -114,5 +124,13 @@ public final class ActionSheetControl: SegmentedControlView {
 	public func removeAllSegments() {
 		segments.removeAll(keepCapacity: true)
 	}
+	
+}
+
+public protocol ActionSheetPresentationDelegate: class {
+	
+	func presentActionSheet(actionSheet: UIAlertController)
+	
+	func dismissActionSheet()
 	
 }
