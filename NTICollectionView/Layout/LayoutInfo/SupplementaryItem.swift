@@ -73,4 +73,8 @@ extension SupplementaryItem {
 		return elementKind == UICollectionElementKindSectionHeader
 	}
 	
+	public var registration: SupplementaryViewRegistration {
+		return (viewClass: supplementaryViewClass, elementKind: elementKind, identifier: reuseIdentifier)
+	}
+	
 }
