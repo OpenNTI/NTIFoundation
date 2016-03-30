@@ -54,8 +54,8 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 	
 	public var supplementaryViewRegistrations: [SupplementaryViewRegistration] {
 		return [
-			(viewClass: CollectionPlaceholderView.self, elementKind: UICollectionElementKindSectionFooter, identifier: nextPagePlaceholderKey),
-			(viewClass: CollectionPlaceholderView.self, elementKind: UICollectionElementKindSectionHeader, identifier: prevPagePlaceholderKey)
+			nextPagePlaceholder.registration,
+			prevPagePlaceholder.registration
 		]
 	}
 	
