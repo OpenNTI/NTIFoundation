@@ -67,6 +67,9 @@ public class CollectionViewCell: UICollectionViewCell, Selectable {
 		
 		backgroundColor = attributes.backgroundColor
 		isEditing = attributes.isEditing
+		
+		contentView.layer.masksToBounds = true
+		contentView.layer.cornerRadius = attributes.cornerRadius
 	}
 	
 	public override func preferredLayoutAttributesFittingAttributes(layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
