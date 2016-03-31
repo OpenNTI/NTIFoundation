@@ -73,6 +73,9 @@ public class CollectionSupplementaryView: UICollectionReusableView, Selectable {
 		selectedBackgroundColor = layoutAttributes.selectedBackgroundColor
 		simulatesSelection = layoutAttributes.simulatesSelection
 		updateBackgroundColor()
+		
+		layer.masksToBounds = true
+		layer.cornerRadius = layoutAttributes.cornerRadius
 	}
 	
 	private func updateBackgroundColor() {
