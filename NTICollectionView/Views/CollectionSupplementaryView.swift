@@ -8,7 +8,13 @@
 
 import UIKit
 
-public class CollectionSupplementaryView: UICollectionReusableView {
+public class CollectionSupplementaryView: UICollectionReusableView, Selectable {
+	
+	/// May be called by `UICollectionViewDelegate` when this view becomes selected.
+	public var onDidSelect: (() -> Void)?
+	
+	/// May be called by `UICollectionViewDelegate` when this view becomes deselected.
+	public var onDidDeselect: (() -> Void)?
 	
 	/// May be called by `UICollectionViewDelegate` when this view will be displayed.
 	public var onWillDisplay: (() -> Void)?
@@ -88,6 +94,16 @@ public class CollectionSupplementaryView: UICollectionReusableView {
 		let newAttributes = attributes.copy() as! CollectionViewLayoutAttributes
 		newAttributes.frame = frame
 		return newAttributes
+	}
+	
+	// MARK: - Selectable
+	
+	public func didBecomeSelected() {
+		onDidSelect?()
+	}
+	
+	public func didBecomeDeselected() {
+		onDidDeselect?()
 	}
         
 }
