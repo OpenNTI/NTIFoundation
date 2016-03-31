@@ -226,6 +226,14 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		applicationFrameForCalculatedInsets = CGRectZero
 	}
 	
+	public func register(supplementaryItem: SupplementaryItem) {
+		guard let collectionView = self.collectionView else {
+			return
+		}
+		let wrapper = WrapperCollectionView(collectionView: collectionView, mapping: nil)
+		wrapper.registerClass(supplementaryItem.supplementaryViewClass, forSupplementaryViewOfKind: supplementaryItem.elementKind, withReuseIdentifier: supplementaryItem.reuseIdentifier)
+	}
+	
 	// MARK: - UICollectionViewDelegate
 	
 	public override func collectionView(collectionView: UICollectionView, shouldHighlightItemAtIndexPath indexPath: NSIndexPath) -> Bool {
