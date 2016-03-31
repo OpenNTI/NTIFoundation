@@ -232,7 +232,7 @@ public class BasicGridSupplementaryItem: NSObject, NSCopying, GridSupplementaryI
 	}
 	
 	public func definesMetric(metric: String) -> Bool {
-		return flags[metric] ?? false
+		return flags.contains(metric)
 	}
 	
 	public func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
@@ -265,23 +265,10 @@ public class BasicGridSupplementaryItem: NSObject, NSCopying, GridSupplementaryI
 		return copy
 	}
 	
-	private var flags = [
-		"height": false,
-		"estimatedHeight": false,
-		"isHidden": false,
-		"shouldPin": false,
-		"isVisibleWhileShowingPlaceholder": false,
-		"backgroundColor": false,
-		"pinnedBackgroundColor": false,
-		"pinnedSeparatorColor": false,
-		"separatorColor": false,
-		"selectedBackgroundColor": false,
-		"layoutMargins": false,
-		"showsSeparator": false
-	]
+	private var flags: Set<String> = []
 	
 	private func setFlag(flag: String) {
-		flags[flag] = true
+		flags.insert(flag)
 	}
 	
 }
