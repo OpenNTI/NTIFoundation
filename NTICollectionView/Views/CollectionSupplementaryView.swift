@@ -32,10 +32,27 @@ public class CollectionSupplementaryView: UICollectionReusableView, Selectable {
 				return
 			}
 			_isHighlighted = newValue
-			updateBackgroundColor()
+			updateDisplayForHighlighting()
 		}
 	}
 	private var _isHighlighted = false
+	
+	public func updateDisplayForHighlighting() {
+		updateBackgroundColor()
+	}
+	
+	public var isSelected = false {
+		didSet {
+			guard isSelected != oldValue else {
+				return
+			}
+			updateDisplayForSelection()
+		}
+	}
+	
+	public func updateDisplayForSelection() {
+		updateBackgroundColor()
+	}
 	
 	private var normalBackgroundColor: UIColor?
 	private var selectedBackgroundColor: UIColor?
@@ -59,7 +76,7 @@ public class CollectionSupplementaryView: UICollectionReusableView, Selectable {
 	}
 	
 	private func updateBackgroundColor() {
-		if simulatesSelection && _isHighlighted {
+		if (simulatesSelection && _isHighlighted) || isSelected {
 			backgroundColor = selectedBackgroundColor
 		} else {
 			backgroundColor = normalBackgroundColor
@@ -99,10 +116,12 @@ public class CollectionSupplementaryView: UICollectionReusableView, Selectable {
 	// MARK: - Selectable
 	
 	public func didBecomeSelected() {
+		isSelected = true
 		onDidSelect?()
 	}
 	
 	public func didBecomeDeselected() {
+		isSelected = false
 		onDidDeselect?()
 	}
         
