@@ -80,7 +80,11 @@ public class BasicGridSupplementaryItem: NSObject, NSCopying, GridSupplementaryI
 			setFlag("pinnedSeparatorColor")
 		}
 	}
-	public var simulatesSelection: Bool = false
+	public var simulatesSelection: Bool = false {
+		didSet {
+			setFlag("simulatesSelection")
+		}
+	}
 	
 	public var section: LayoutSection?
 	
@@ -206,6 +210,9 @@ public class BasicGridSupplementaryItem: NSObject, NSCopying, GridSupplementaryI
 		}
 		if metrics.definesMetric("selectedBackgroundColor") {
 			selectedBackgroundColor = metrics.selectedBackgroundColor
+		}
+		if metrics.definesMetric("simulatesSelection") {
+			simulatesSelection = metrics.simulatesSelection
 		}
 		if metrics.definesMetric("height") {
 			height = metrics.height
