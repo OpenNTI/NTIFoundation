@@ -486,11 +486,12 @@
 		4AB6BE541CA4774700A86233 /* PagingPlaceholderDataSourceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB6BE531CA4774700A86233 /* PagingPlaceholderDataSourceController.swift */; };
 		4AD56EE41CAC274C00482393 /* Array-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD56EE31CAC274C00482393 /* Array-Extensions.swift */; };
 		4AD56EE51CAC274C00482393 /* Array-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD56EE31CAC274C00482393 /* Array-Extensions.swift */; };
+		4AD56F431CAC8BB300482393 /* CollectionSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0582DB1C90C8F800F3D0E0 /* CollectionSupplementaryView.swift */; };
+		4AD56F441CAC8BC300482393 /* UICollectionReusableView-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF3836E1CA35C5D006D13D4 /* UICollectionReusableView-Extensions.swift */; };
 		4ADEE74C1C98950400DE9B0D /* Dictionary-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADEE74B1C98950300DE9B0D /* Dictionary-Extensions.swift */; };
 		4ADEE7691C98DBB900DE9B0D /* Decoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADEE7681C98DBB900DE9B0D /* Decoration.swift */; };
 		4ADEE76A1C98DBB900DE9B0D /* Decoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADEE7681C98DBB900DE9B0D /* Decoration.swift */; };
 		4AF3835F1CA3186A006D13D4 /* CollectionPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9C1C88B0CE00849185 /* CollectionPlaceholderView.swift */; };
-		4AF383601CA3187C006D13D4 /* CollectionSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0582DB1C90C8F800F3D0E0 /* CollectionSupplementaryView.swift */; };
 		4AF3836F1CA35C5D006D13D4 /* UICollectionReusableView-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF3836E1CA35C5D006D13D4 /* UICollectionReusableView-Extensions.swift */; };
 		4AFECA051CA5E0E400AF2D09 /* ActionSheetControlButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFECA041CA5E0E400AF2D09 /* ActionSheetControlButton.swift */; };
 /* End PBXBuildFile section */
@@ -3273,7 +3274,6 @@
 				4A0583001C9211A200F3D0E0 /* GridLayoutEngine.swift in Sources */,
 				4A68ACB01C88B0CE00849185 /* DataSourceMapping.swift in Sources */,
 				4A68ACE81C88B0CE00849185 /* LayoutMetrics.swift in Sources */,
-				4AF383601CA3187C006D13D4 /* CollectionSupplementaryView.swift in Sources */,
 				4A68ACC21C88B0CE00849185 /* UICollectionViewLayoutInvalidationContext-Extensions.swift in Sources */,
 				4A68ACC61C88B0CE00849185 /* CollectionLayoutEngine.swift in Sources */,
 				4A68ACE41C88B0CE00849185 /* LayoutInfo.swift in Sources */,
@@ -3317,6 +3317,8 @@
 				4A68ACF01C88B0CE00849185 /* ShadowRegistrar.swift in Sources */,
 				4A68AC621C88AEE300849185 /* GridLayoutSectionTest.swift in Sources */,
 				4A68ACCA1C88B0CE00849185 /* CollectionViewLayout.swift in Sources */,
+				4AD56F441CAC8BC300482393 /* UICollectionReusableView-Extensions.swift in Sources */,
+				4AD56F431CAC8BB300482393 /* CollectionSupplementaryView.swift in Sources */,
 				4A68ACF81C88B0CE00849185 /* StateMachine.swift in Sources */,
 				4A0582FB1C91E80200F3D0E0 /* UIEdgeInsets-Extensions.swift in Sources */,
 				4A68ACBA1C88B0CE00849185 /* SegmentedCollectionDataSourceMetricsHelper.swift in Sources */,
