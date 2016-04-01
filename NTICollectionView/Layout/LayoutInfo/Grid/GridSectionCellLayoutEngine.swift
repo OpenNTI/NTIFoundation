@@ -120,7 +120,7 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	}
 	
 	private func updateRowFrame() {
-		row.frame = CGRect(x: origin.x + margins.left, y: position.y, width: width, height: rowHeight)
+		row.frame = CGRect(x: origin.x + margins.left, y: position.y, width: width - margins.width, height: rowHeight)
 	}
 	
 	private func layoutItems() {
