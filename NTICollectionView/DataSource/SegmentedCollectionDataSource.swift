@@ -119,6 +119,8 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 			self.didChangeValueForKey("selectedDataSource")
 			self.didChangeValueForKey("selectedDataSourceIndex")
 			
+			self.segmentedCollectionDataSourceDelegate?.segmentedCollectionDataSourceDidChangeSelectedDataSource(self)
+			
 			if insertedSet.count > 0 {
 				self.notifySectionsInserted(insertedSet, direction: direction)
 			}
@@ -406,7 +408,7 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 	
 }
 
-public protocol SegmentedCollectionDataSourceDelegate: NSObjectProtocol {
+public protocol SegmentedCollectionDataSourceDelegate: class {
 	
 	func segmentedCollectionDataSourceDidChangeSelectedDataSource(segmentedCollectionDataSource: SegmentedCollectionDataSourceProtocol)
 	
