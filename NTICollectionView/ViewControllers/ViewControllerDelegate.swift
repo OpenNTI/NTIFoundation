@@ -14,6 +14,8 @@ public protocol ViewControllerDelegate: class {
 	
 	func viewControllerViewWillAppear(viewController: UIViewController)
 	
+	func viewControllerViewDidDisappear(viewController: UIViewController)
+	
 	func viewController(viewController: UIViewController, willTransitionTo newCollection: UITraitCollection, with transitionCoordinator: UIViewControllerTransitionCoordinator)
 	
 	func viewController(viewController: UIViewController, viewWillTransitionTo size: CGSize, with transitionCoordinator: UIViewControllerTransitionCoordinator)
@@ -25,6 +27,8 @@ extension ViewControllerDelegate {
 	public func viewControllerViewDidLoad(viewController: UIViewController) { }
 	
 	public func viewControllerViewWillAppear(viewController: UIViewController) { }
+	
+	public func viewControllerViewDidDisappear(viewController: UIViewController) { }
 	
 	public func viewController(viewController: UIViewController, willTransitionTo newCollection: UITraitCollection, with transitionCoordinator: UIViewControllerTransitionCoordinator) { }
 	
