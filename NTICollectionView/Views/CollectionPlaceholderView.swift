@@ -68,15 +68,15 @@ public class CollectionPlaceholderView: CollectionSupplementaryView {
 		if isAnimated {
 			UIView.animateWithDuration(0.25, animations: {
 				self.placeholderView.alpha = 1
-				oldPlaceholder.alpha = 0
+				oldPlaceholder?.alpha = 0
 				}, completion: { _ in
-					oldPlaceholder.removeFromSuperview()
+					oldPlaceholder?.removeFromSuperview()
 			})
 		} else {
 			UIView.performWithoutAnimation {
 				self.placeholderView.alpha = 1
-				oldPlaceholder.alpha = 0
-				oldPlaceholder.removeFromSuperview()
+				oldPlaceholder?.alpha = 0
+				oldPlaceholder?.removeFromSuperview()
 			}
 		}
 	}
