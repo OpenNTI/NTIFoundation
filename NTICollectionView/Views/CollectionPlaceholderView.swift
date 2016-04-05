@@ -11,6 +11,9 @@ import UIKit
 /// A placeholder view for use in a collection view. This placeholder includes a loading indicator.
 public class CollectionPlaceholderView: CollectionSupplementaryView {
 	
+	/// Whether `self` is a section placeholder with special behavior.
+	public var isSectionPlaceholder = true
+	
 	private var activityIndicatorView: UIActivityIndicatorView!
 	private var placeholderView: PlaceholderView!
 	
@@ -110,7 +113,11 @@ public class CollectionPlaceholderView: CollectionSupplementaryView {
 			return layoutAttributes
 		}
 		
-		layoutSubviews()
+		guard isSectionPlaceholder || attributes.shouldCalculateFittingSize else {
+			return attributes
+		}
+		
+		layoutIfNeeded()
 		var frame = attributes.frame
 		
 		let fittingSize = CGSize(width: frame.width, height: UILayoutFittingCompressedSize.height)
