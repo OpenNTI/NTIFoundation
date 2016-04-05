@@ -88,6 +88,7 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 			guard let placeholderView = view as? CollectionPlaceholderView else {
 				return
 			}
+			placeholderView.isSectionPlaceholder = false
 			placeholderView.onWillDisplay = { [unowned placeholderView, unowned self] in
 				placeholderView.showActivityIndicator(true)
 				self.dataSource.setNeedsLoadNextContent(self.pageLoadDelay)
@@ -110,6 +111,7 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 			guard let placeholderView = view as? CollectionPlaceholderView else {
 				return
 			}
+			placeholderView.isSectionPlaceholder = false
 			placeholderView.onWillDisplay = { [unowned placeholderView, unowned self] in
 				placeholderView.showActivityIndicator(true)
 				self.dataSource.setNeedsLoadPreviousContent(self.pageLoadDelay)
