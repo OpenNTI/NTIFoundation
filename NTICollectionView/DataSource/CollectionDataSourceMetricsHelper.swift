@@ -211,7 +211,9 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		}
 		else if !isRootDataSource && sectionIndex == 0 {
 			// We need to handle global items and the placeholder view for section 0
-			metrics.supplementaryItemsByKind.appendContents(of: supplementaryItemsByKind)
+			var newSupplementaryItemsByKind = supplementaryItemsByKind
+			newSupplementaryItemsByKind.appendContents(of: metrics.supplementaryItemsByKind)
+			metrics.supplementaryItemsByKind = newSupplementaryItemsByKind
 		}
 		
 		// Stash the placeholder in the metrics; this is really only used so we can determine the range of the placeholders
