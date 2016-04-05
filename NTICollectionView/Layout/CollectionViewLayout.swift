@@ -259,6 +259,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		}
 		
 		layoutSize.height += context.contentSizeAdjustment.height
+		layoutLog("\(#function) contentSizeAdjustment=\(context.contentSizeAdjustment)")
 		return context
 	}
 	
