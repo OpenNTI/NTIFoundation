@@ -731,6 +731,8 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 			preconditionFailure("Couldn't find metrics for the supplementary view of kind \(kind) at indexPath \(indexPath.debugLogDescription)")
 		}
 		
+		layoutLog("\(#function) \(kind) \(indexPath) \(viewMetrics.reuseIdentifier) \(viewMetrics.supplementaryViewClass)")
+		
 		let view = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: viewMetrics.reuseIdentifier, forIndexPath: indexPath)
 		
 		viewMetrics.configureView?(view: view, dataSource: dataSource, indexPath: localIndexPath!)
