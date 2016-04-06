@@ -6,7 +6,7 @@
 //  Copyright © 2016 NextThought. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 private let nextPagePlaceholderKey = "nextPagePlaceholder"
 private let prevPagePlaceholderKey = "prevPagePlaceholder"
