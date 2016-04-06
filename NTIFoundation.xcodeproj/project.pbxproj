@@ -4584,6 +4584,7 @@
 		};
 		4A68AC061C88ADC300849185 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 403F6C9B1C7D241B006FD0AD /* NTI-Touch-Framework-Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -4628,6 +4629,7 @@
 		};
 		4A68AC071C88ADC300849185 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 403F6C9C1C7D241B006FD0AD /* NTI-Touch-Framework-Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -4666,6 +4668,7 @@
 		};
 		4A68AC081C88ADC300849185 /* Adhoc */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 403F6C9C1C7D241B006FD0AD /* NTI-Touch-Framework-Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -4704,6 +4707,7 @@
 		};
 		4A68AC091C88ADC300849185 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 403F6CA61C7D241B006FD0AD /* NTI-Touch-Tests-Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -4739,6 +4743,7 @@
 		};
 		4A68AC0A1C88ADC300849185 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 403F6CA71C7D241B006FD0AD /* NTI-Touch-Tests-Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -4768,6 +4773,7 @@
 		};
 		4A68AC0B1C88ADC300849185 /* Adhoc */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 403F6CA71C7D241B006FD0AD /* NTI-Touch-Tests-Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
