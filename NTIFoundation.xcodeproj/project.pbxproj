@@ -380,7 +380,6 @@
 		4A620CD21C88DDCF0084B0A2 /* PagingCollectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A620CD01C88DDCF0084B0A2 /* PagingCollectionDataSource.swift */; };
 		4A620D8C1C8E148D0084B0A2 /* CollectionDataSourceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A620D8B1C8E148D0084B0A2 /* CollectionDataSourceController.swift */; };
 		4A620D8D1C8E148D0084B0A2 /* CollectionDataSourceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A620D8B1C8E148D0084B0A2 /* CollectionDataSourceController.swift */; };
-		4A68ABF81C88ADC300849185 /* NTICollectionView.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A68ABF71C88ADC300849185 /* NTICollectionView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4A68ABFF1C88ADC300849185 /* NTICollectionView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A68ABF51C88ADC300849185 /* NTICollectionView.framework */; };
 		4A68AC041C88ADC300849185 /* NTICollectionViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC031C88ADC300849185 /* NTICollectionViewTests.swift */; };
 		4A68AC5E1C88AEE300849185 /* DummyLayoutInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC5A1C88AEE300849185 /* DummyLayoutInfo.swift */; };
@@ -2287,7 +2286,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A68ABF81C88ADC300849185 /* NTICollectionView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
