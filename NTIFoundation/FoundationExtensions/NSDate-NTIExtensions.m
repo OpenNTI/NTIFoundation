@@ -100,36 +100,36 @@ static NSString* shortDateStringNL( NSDate* date )
 	
 	if (NTITimePeriodUnitYears <= largestTimeUnit
 		&& timeInterval >= kNTISecondsInAYear) {
-		timeSince = round(timeInterval / kNTISecondsInAYear);
+		timeSince = (NSUInteger)round(timeInterval / kNTISecondsInAYear);
 		timeUnit = NTITimePeriodUnitYears;
 	}
 	else if (NTITimePeriodUnitMonths <= largestTimeUnit
 			 && timeInterval >= kNTISecondsInAMonth) {
-		timeSince = round(timeInterval / kNTISecondsInAMonth);
+		timeSince = (NSUInteger)round(timeInterval / kNTISecondsInAMonth);
 		timeUnit = NTITimePeriodUnitMonths;
 	}
 	else if (NTITimePeriodUnitWeeks <= largestTimeUnit
 			 && timeInterval >= kNTISecondsInAWeek) {
-		timeSince = round(timeInterval / kNTISecondsInAWeek);
+		timeSince = (NSUInteger)round(timeInterval / kNTISecondsInAWeek);
 		timeUnit = NTITimePeriodUnitWeeks;
 	}
 	else if (NTITimePeriodUnitDays <= largestTimeUnit
 			 && timeInterval >= kNTISecondsInADay) {
-		timeSince = round(timeInterval / kNTISecondsInADay);
+		timeSince = (NSUInteger)round(timeInterval / kNTISecondsInADay);
 		timeUnit = NTITimePeriodUnitDays;
 	}
 	else if (NTITimePeriodUnitHours <= largestTimeUnit
 			 && timeInterval >= kNTISecondsInAnHour) {
-		timeSince = round(timeInterval / kNTISecondsInAnHour);
+		timeSince = (NSUInteger)round(timeInterval / kNTISecondsInAnHour);
 		timeUnit = NTITimePeriodUnitHours;
 	}
 	else if (NTITimePeriodUnitMinutes <= largestTimeUnit
 			 && timeInterval >= kNTISecondsInAMinute) {
-		timeSince = round(timeInterval / kNTISecondsInAMinute);
+		timeSince = (NSUInteger)round(timeInterval / kNTISecondsInAMinute);
 		timeUnit = NTITimePeriodUnitMinutes;
 	}
 	else {
-		timeSince = round(timeInterval);
+		timeSince = (NSUInteger)round(timeInterval);
 		timeUnit = NTITimePeriodUnitSeconds;
 	}
 	return NTITimePeriodMake(timeSince, timeUnit);
@@ -190,7 +190,7 @@ static int const timeConstant = 60;
 {
 	CGFloat seconds = (int)timeInterval % timeConstant;
 	NSString *secondsString = [self stringForTimeUnit: NTITimePeriodUnitSeconds
-										withUnitCount: seconds];
+										withUnitCount: (NSUInteger)seconds];
 	
 	int minutesTotal = (int)(timeInterval / timeConstant);
 	int minutes = (int)minutesTotal % timeConstant;

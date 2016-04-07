@@ -29,10 +29,10 @@
 	
 	const CGFloat* components = CGColorGetComponents(colorRef);
 	
-	assertThatFloat(components[0], is(equalToFloat(.52)));
-	assertThatFloat(components[1], is(equalToFloat(.32)));
-	assertThatFloat(components[2], is(equalToFloat(.87)));
-	assertThatFloat(components[3], is(equalToFloat(.6)));
+	assertThat(@(components[0]), is(equalTo(@(.52))));
+	assertThat(@(components[1]), is(equalTo(@(.32))));
+	assertThat(@(components[2]), is(equalTo(@(.87))));
+	assertThat(@(components[3]), is(equalTo(@(.6))));
 }
 
 @end

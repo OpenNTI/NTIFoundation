@@ -29,7 +29,7 @@ PRIVATE_STATIC_TESTABLE void sizeToBytes(NSUInteger length, uint8_t* sizeInfoPoi
 PRIVATE_STATIC_TESTABLE void sizeToBytes(NSUInteger length, uint8_t* sizeInfoPointer, int* sizeLength)
 {
 	if( length < 126 ){
-		*sizeInfoPointer = length;
+		*sizeInfoPointer = (uint8_t)length;
 		*sizeLength = 1;
 	}
 	else{

@@ -208,7 +208,7 @@ static inline void writeCharacter(OFDataBuffer* dataBuffer, unichar aCharacter)
 		OBASSERT(aCharacter < 128); 
 		//Or it should have been in the reserved set: it can't be
 		//written in a single byte as we're about to do
-		OFDataBufferAppendByte(dataBuffer, aCharacter);
+		OFDataBufferAppendByte(dataBuffer, (OFByte) aCharacter);
 	}
 	else if( aCharacter == NSAttachmentCharacter ) {
 		//An attachment. The only attachments we support are image attachments
@@ -442,12 +442,12 @@ static inline void writeString(OFDataBuffer* dataBuffer, NSString* string)
 	int rightIndent = 0;
 	if( tailIndent < 0 ) {
 		//Distance from trailing margin.
-		rightIndent = -tailIndent;
+		rightIndent = (int)-tailIndent;
 	}
 	else if( tailIndent > 0 ) {
 		//Distance from leading margin.
 		//FIXME: What? I guess we're compensating for the suspected width?
-		rightIndent = 8640 - tailIndent;	
+		rightIndent = (int)(8640 - tailIndent);
 	}
 	
 	if( alignment != self->state->alignment) {

@@ -39,9 +39,9 @@ static BOOL isHexStringValid(NSString *hexString)
 		return nil;
 	}
 	
-	CGFloat r = ( (CGFloat) ((hexInt & 0xFF0000) >> 16)) / 255.0;
-	CGFloat g = ((CGFloat) ((hexInt & 0xFF00) >> 8)) / 255.0;
-	CGFloat b = ((CGFloat) (hexInt & 0xFF)) / 255.0;
+	CGFloat r = ( (CGFloat) ((hexInt & 0xFF0000) >> 16)) / (CGFloat) 255.0;
+	CGFloat g = ((CGFloat) ((hexInt & 0xFF00) >> 8)) / (CGFloat) 255.0;
+	CGFloat b = ((CGFloat) (hexInt & 0xFF)) / (CGFloat) 255.0;
 	UIColor *color = [UIColor colorWithRed: r
 									 green: g
 									  blue: b

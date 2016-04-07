@@ -249,7 +249,7 @@ static NSUInteger bytesToLength(uint8_t* bytes, uint8_t num)
 								   userInfo: nil] raise];
 		}
 		
-		int sizeBytesRequired = 0;
+		uint8_t sizeBytesRequired = 0;
 		if(self->responseSize == WebSocketResponseSize32bit){
 			sizeBytesRequired = 2;
 		}

@@ -28,27 +28,27 @@
 	
 	NSSet* editableFrames = [cell editableFrames];
 	
-	assertThatInteger(editableFrames.count, equalToInteger(1));
+	assertThat(@(editableFrames.count), equalTo(@(1)));
 	assertThat([editableFrames anyObject], equalTo(frame1));
 	
 	//Adding the same one does nothing
 	
 	[cell attachEditableFrame: frame1];
 	editableFrames = [cell editableFrames];
-	assertThatInteger(editableFrames.count, equalToInteger(1));
+	assertThat(@(editableFrames.count), equalTo(@(1)));
 	
 	//We can add another
 	id frame2 = [[OFObject alloc] init];
 	
 	[cell attachEditableFrame: frame2];
 	editableFrames = [cell editableFrames];
-	assertThatInteger(editableFrames.count, equalToInteger(2));
+	assertThat(@(editableFrames.count), equalTo(@(2)));
 	
 	[cell removeEditableFrame: frame1];
 	[cell removeEditableFrame: frame2];
 	
 	editableFrames = [cell editableFrames];
-	assertThatInteger(editableFrames.count, equalToInteger(0));
+	assertThat(@(editableFrames.count), equalTo(@(0)));
 	
 }
 
@@ -64,7 +64,7 @@
 	
 	NSSet* editableFrames = [cell editableFrames];
 	
-	assertThatInteger(editableFrames.count, equalToInteger(0));
+	assertThat(@(editableFrames.count), equalTo(@(0)));
 	
 }
 
