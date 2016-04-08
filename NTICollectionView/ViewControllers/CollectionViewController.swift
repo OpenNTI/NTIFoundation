@@ -500,4 +500,14 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		childDataSource.registerReusableViews(with: wrapper)
 	}
 	
+	public func dataSource(dataSource: CollectionDataSource, perform update: UICollectionView -> Void) {
+		guard let collectionView = self.collectionView else {
+			return
+		}
+		
+		dataSource.performUpdate({
+			update(collectionView)
+		}, complete: nil)
+	}
+	
 }

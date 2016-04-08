@@ -47,6 +47,8 @@ public protocol CollectionDataSourceDelegate: NSObjectProtocol {
 	
 	func dataSource(dataSource: CollectionDataSource, didAddChild childDataSource: CollectionDataSource)
 	
+	func dataSource(dataSource: CollectionDataSource, perform update: UICollectionView -> Void)
+	
 }
 
 extension CollectionDataSourceDelegate {
@@ -77,5 +79,7 @@ extension CollectionDataSourceDelegate {
 	public func dataSource(dataSource: CollectionDataSource, didUpdate supplementaryItem: SupplementaryItem, at indexPaths: [NSIndexPath]) {}
 	
 	public func dataSource(dataSource: CollectionDataSource, didAddChild childDataSource: CollectionDataSource) { }
+	
+	public func dataSource(dataSource: CollectionDataSource, perform update: UICollectionView -> Void) { }
 	
 }

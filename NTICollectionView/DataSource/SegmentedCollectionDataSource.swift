@@ -406,6 +406,10 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 		notifyContentUpdated(for: supplementaryItem, at: indexPaths)
 	}
 	
+	public func dataSource(dataSource: CollectionDataSource, perform update: UICollectionView -> Void) {
+		delegate?.dataSource(dataSource, perform: update)
+	}
+	
 }
 
 public protocol SegmentedCollectionDataSourceDelegate: class {

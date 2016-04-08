@@ -195,6 +195,10 @@ extension CollectionDataSource {
 		delegate?.dataSource(self, didAddChild: childDataSource)
 	}
 	
+	public func notifyPerform(update: (collectionView: UICollectionView) -> Void) {
+		delegate?.dataSource(self, perform: update)
+	}
+	
 }
 
 extension CollectionDataSource {

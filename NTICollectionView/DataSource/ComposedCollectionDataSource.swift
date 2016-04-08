@@ -424,6 +424,10 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 		notifyContentUpdated(for: supplementaryItem, at: globalIndexPaths)
 	}
 	
+	public func dataSource(dataSource: CollectionDataSource, perform update: UICollectionView -> Void) {
+		delegate?.dataSource(dataSource, perform: update)
+	}
+	
 }
 
 // MARK: - Helpers
