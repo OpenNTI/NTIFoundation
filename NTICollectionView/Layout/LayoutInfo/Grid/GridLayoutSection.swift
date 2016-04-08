@@ -115,12 +115,6 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		return maxY - minY
 	}
 	
-	public var decorationsByKind: [String: [GridLayoutDecoration<BasicGridLayoutSection>]] = [:]
-	
-	public func add(decoration: GridLayoutDecoration<BasicGridLayoutSection>) {
-		decorationsByKind.append(decoration, to: decoration.elementKind)
-	}
-	
 	public let metrics: GridSectionMetrics = BasicGridSectionMetrics()
 	
 	public var rows: [LayoutRow] = []
@@ -389,23 +383,6 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		
 		if let contentBackgroundAttributes = self.contentBackgroundAttributes {
 			offsetDecorationElement(with: contentBackgroundAttributes, by: offset, invalidationContext: invalidationContext)
-		}
-		
-		updateDecorations(with: invalidationContext)
-	}
-	
-	private func updateDecorations(with invalidationContext: UICollectionViewLayoutInvalidationContext?) {
-		for (kind, decorations) in decorationsByKind {
-			var updatedDecorations = decorations
-			update(&updatedDecorations, invalidationContext: invalidationContext)
-			decorationsByKind[kind] = updatedDecorations
-		}
-	}
-	
-	private func update(inout decorations: [GridLayoutDecoration<BasicGridLayoutSection>], invalidationContext: UICollectionViewLayoutInvalidationContext?) {
-		for index in decorations.indices {
-			let indexPath = isGlobalSection ? NSIndexPath(index: index) : NSIndexPath(forItem: index, inSection: sectionIndex)
-			decorations[index].update(with: self, indexPath: indexPath, invalidationContext: invalidationContext)
 		}
 	}
 	
