@@ -10,6 +10,8 @@ import UIKit
 
 public class GridDataSourceSectionMetrics: DataSourceSectionMetrics {
 	
+	public init() { }
+	
 	public var metrics: SectionMetrics = BasicGridSectionMetrics()
 	
 	public var placeholder: AnyObject?
