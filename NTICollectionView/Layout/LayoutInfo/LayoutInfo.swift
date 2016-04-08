@@ -108,18 +108,28 @@ public class LayoutSizingInfo: LayoutSizing {
 	
 }
 
-public protocol LayoutElement: class {
+/// A two-dimensional region in a collection view layout.
+///
+/// An adopting type may represent a single layout element or a composition of layout elements.
+public protocol LayoutArea: class {
 	
 	var frame: CGRect { get set }
+	
+	/// Update the frame of `self` and any child areas. 
+	///
+	/// If the frame has changed, mark objects as invalid in the invalidation context as necessary.
+	func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
+	
+}
+
+
+public protocol LayoutElement: LayoutArea {
 	
 	var itemIndex: Int { get set }
 	
 	var indexPath: NSIndexPath { get }
 	
 	var layoutAttributes: UICollectionViewLayoutAttributes { get }
-	
-	/// Update the frame of this object. If the frame has changed, mark the object as invalid in the invalidation context.
-	func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
 	func resetLayoutAttributes()
 	
