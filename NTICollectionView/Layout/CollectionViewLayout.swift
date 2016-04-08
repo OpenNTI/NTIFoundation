@@ -1008,7 +1008,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return maxY
 	}
 	
-	/// Pins the attributes starting at *minY* -- as long as they don't cross `maxY` -- and return the new *minY*.
+	/// Pins the attributes starting at `minY` -- as long as they don't cross `minY` -- and returns the new `minY`.
 	private func applyTopPinning(to supplementaryItems: [LayoutSupplementaryItem], minY: CGFloat, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGFloat {
 		var minY = minY
 		
