@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class GridLayoutItem: NSObject, LayoutItem, NSCopying {
+public class GridLayoutItem: LayoutItem {
 	
 	public var frame = CGRectZero {
 		didSet {
@@ -86,18 +86,6 @@ public class GridLayoutItem: NSObject, LayoutItem, NSCopying {
 	
 	public func resetLayoutAttributes() {
 		_layoutAttributes = nil
-	}
-	
-	public func copyWithZone(zone: NSZone) -> AnyObject {
-		let copy = GridLayoutItem()
-		copy.row = row
-		copy.itemIndex = itemIndex
-		copy.isDragging = isDragging
-		copy.columnIndex = columnIndex
-		copy.hasEstimatedHeight = hasEstimatedHeight
-		copy._layoutAttributes = (layoutAttributes.copy() as! UICollectionViewLayoutAttributes)
-		copy.frame = frame
-		return copy
 	}
 	
 	public func copy() -> LayoutItem {
