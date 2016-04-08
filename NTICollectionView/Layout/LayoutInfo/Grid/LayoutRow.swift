@@ -17,7 +17,9 @@ public protocol LayoutRow: class {
 	
 	var section: LayoutSection? { get set }
 	
-	var rowSeparatorLayoutAttributes: UICollectionViewLayoutAttributes? { get set }
+	var rowSeparatorLayoutAttributes: UICollectionViewLayoutAttributes? { get }
+	
+	var rowSeparatorDecoration: HorizontalSeparatorDecoration? { get set }
 	
 	func add(item: LayoutItem)
 	
@@ -49,7 +51,11 @@ public class GridLayoutRow: LayoutRow {
 	
 	public weak var section: LayoutSection?
 	
-	public var rowSeparatorLayoutAttributes: UICollectionViewLayoutAttributes?
+	public var rowSeparatorLayoutAttributes: UICollectionViewLayoutAttributes? {
+		return rowSeparatorDecoration?.layoutAttributes
+	}
+	
+	public var rowSeparatorDecoration: HorizontalSeparatorDecoration?
 	
 	public func add(item: LayoutItem) {
 		items.append(item)
@@ -61,12 +67,7 @@ public class GridLayoutRow: LayoutRow {
 			return
 		}
 		// Setting the frame on a row needs to update the items within the row and the row separator
-		if let rowSeparatorLayoutAttributes = self.rowSeparatorLayoutAttributes {
-			var separatorFrame = rowSeparatorLayoutAttributes.frame
-			separatorFrame.origin.y = frame.maxY
-			rowSeparatorLayoutAttributes.frame = separatorFrame
-			invalidateLayoutAttributes(rowSeparatorLayoutAttributes, invalidationContext: invalidationContext)
-		}
+		rowSeparatorDecoration?.setContainerFrame(frame, invalidationContext: invalidationContext)
 		
 		for itemInfo in items {
 			var itemFrame = itemInfo.frame

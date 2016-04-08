@@ -304,23 +304,21 @@ public class BasicGridLayoutSection: GridLayoutSection {
 	public func add(row: LayoutRow) {
 		row.section = self
 		
-		let rowIndex = rows.count
-		let separatorColor = metrics.separatorColor
-		
 		// Create the row separator if there isn't already one
-		if metrics.showsRowSeparator && row.rowSeparatorLayoutAttributes == nil {
-			let indexPath = NSIndexPath(forItem: rowIndex, inSection: sectionIndex)
-			var rowFrame = row.frame
-			let bottomY = rowFrame.maxY
-			
-			let separatorAttributes = CollectionViewLayoutAttributes(forDecorationViewOfKind: collectionElementKindRowSeparator, withIndexPath: indexPath)
+		if metrics.showsRowSeparator && row.rowSeparatorDecoration == nil {
+			var separatorDecoration = HorizontalSeparatorDecoration(elementKind: collectionElementKindRowSeparator, position: .bottom)
+			separatorDecoration.itemIndex = rows.count
+			separatorDecoration.sectionIndex = sectionIndex
+			separatorDecoration.color = metrics.separatorColor
+			separatorDecoration.zIndex = separatorZIndex
 			let separatorInsets = metrics.separatorInsets
-			let hairline = self.dynamicType.hairline
-			separatorAttributes.frame = CGRect(x: separatorInsets.left, y: bottomY, width: rowFrame.width - separatorInsets.width, height: hairline)
-			separatorAttributes.backgroundColor = separatorColor
-			separatorAttributes.zIndex = separatorZIndex
-			row.rowSeparatorLayoutAttributes = separatorAttributes
-			rowFrame.size.height += hairline
+			separatorDecoration.leftMargin = separatorInsets.left
+			separatorDecoration.rightMargin = separatorInsets.right
+			var rowFrame = row.frame
+			separatorDecoration.setContainerFrame(rowFrame, invalidationContext: nil)
+			
+			row.rowSeparatorDecoration = separatorDecoration
+			rowFrame.size.height += separatorDecoration.thickness
 			row.frame = rowFrame
 		}
 		
@@ -523,7 +521,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		
 		// Hide the row separator for the last row in the section
 		if metrics.showsRowSeparator, let row = rows.last {
-			row.rowSeparatorLayoutAttributes?.hidden = true
+			row.rowSeparatorDecoration?.isHidden = true
 		}
 		
 		if shouldShowSectionSeparators {
