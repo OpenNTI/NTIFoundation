@@ -54,7 +54,8 @@ public enum HorizontalSeparatorPosition {
 
 public struct HorizontalSeparatorDecoration: LayoutDecoration, DecorationAttributesWrapper {
 	
-	public init(position: HorizontalSeparatorPosition) {
+	public init(elementKind: String, position: HorizontalSeparatorPosition) {
+		self.elementKind = elementKind
 		self.position = position
 	}
 	
@@ -66,7 +67,7 @@ public struct HorizontalSeparatorDecoration: LayoutDecoration, DecorationAttribu
 	
 	public var position: HorizontalSeparatorPosition
 	
-	public let elementKind = collectionElementKindHorizontalSeparator
+	public let elementKind: String
 	
 	public var indexPath: NSIndexPath {
 		return NSIndexPath(forItem: itemIndex, inSection: sectionIndex)
@@ -134,7 +135,8 @@ public enum VerticalSeparatorPosition {
 
 public struct VerticalSeparatorDecoration: LayoutDecoration, DecorationAttributesWrapper {
 	
-	public init(position: VerticalSeparatorPosition) {
+	public init(elementKind: String, position: VerticalSeparatorPosition) {
+		self.elementKind = elementKind
 		self.position = position
 	}
 	
@@ -146,7 +148,7 @@ public struct VerticalSeparatorDecoration: LayoutDecoration, DecorationAttribute
 	
 	public var position: VerticalSeparatorPosition
 	
-	public let elementKind = collectionElementKindVerticalSeparator
+	public let elementKind: String
 	
 	public var indexPath: NSIndexPath {
 		return NSIndexPath(forItem: itemIndex, inSection: sectionIndex)
