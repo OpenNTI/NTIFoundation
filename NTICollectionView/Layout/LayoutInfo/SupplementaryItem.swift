@@ -18,7 +18,7 @@ public let AutomaticLength: CGFloat = -1
 public typealias SupplementaryItemConfiguration = (view: UICollectionReusableView, dataSource: CollectionDataSource, indexPath: NSIndexPath) -> Void
 
 /// Definition of how supplementary views should be created and presented in a collection view.
-public protocol SupplementaryItem: NSObjectProtocol {
+public protocol SupplementaryItem: class {
 	
 	/// Should this supplementary view be displayed while the placeholder is visible?
 	var isVisibleWhileShowingPlaceholder: Bool { get set }
