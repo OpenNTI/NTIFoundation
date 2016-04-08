@@ -92,7 +92,7 @@ public class GridLayoutRow: NSObject, LayoutRow, NSCopying {
 		let copy = GridLayoutRow()
 		copy.section = section
 		copy.frame = frame
-		copy.items = items.map { $0.copy() as! LayoutItem }
+		copy.items = items.map { $0.copy() }
 		copy.metrics = metrics.copy() as! BasicGridSectionMetrics
 		return copy
 	}

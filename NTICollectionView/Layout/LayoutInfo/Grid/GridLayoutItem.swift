@@ -100,4 +100,16 @@ public class GridLayoutItem: NSObject, LayoutItem, NSCopying {
 		return copy
 	}
 	
+	public func copy() -> LayoutItem {
+		let copy = GridLayoutItem()
+		copy.row = row
+		copy.itemIndex = itemIndex
+		copy.isDragging = isDragging
+		copy.columnIndex = columnIndex
+		copy.hasEstimatedHeight = hasEstimatedHeight
+		copy._layoutAttributes = (layoutAttributes.copy() as! UICollectionViewLayoutAttributes)
+		copy.frame = frame
+		return copy
+	}
+	
 }
