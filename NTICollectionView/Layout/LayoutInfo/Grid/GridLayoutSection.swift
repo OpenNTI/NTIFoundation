@@ -316,7 +316,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 			let separatorAttributes = CollectionViewLayoutAttributes(forDecorationViewOfKind: collectionElementKindRowSeparator, withIndexPath: indexPath)
 			let separatorInsets = metrics.separatorInsets
 			let hairline = self.dynamicType.hairline
-			separatorAttributes.frame = CGRect(x: separatorInsets.left, y: bottomY, width: rowFrame.width - separatorInsets.left - separatorInsets.right, height: hairline)
+			separatorAttributes.frame = CGRect(x: separatorInsets.left, y: bottomY, width: rowFrame.width - separatorInsets.width, height: hairline)
 			separatorAttributes.backgroundColor = separatorColor
 			separatorAttributes.zIndex = separatorZIndex
 			row.rowSeparatorLayoutAttributes = separatorAttributes
