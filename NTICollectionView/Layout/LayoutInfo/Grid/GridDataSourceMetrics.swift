@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class GridDataSourceSectionMetrics: NSObject, DataSourceSectionMetrics {
+public class GridDataSourceSectionMetrics: DataSourceSectionMetrics {
 	
 	public var metrics: SectionMetrics = BasicGridSectionMetrics()
 	
@@ -16,7 +16,7 @@ public class GridDataSourceSectionMetrics: NSObject, DataSourceSectionMetrics {
 	
 	public var supplementaryItemsByKind: [String: [SupplementaryItem]] = [:]
 	
-	public override func copy() -> AnyObject {
+	public func copy() -> LayoutMetrics {
 		let copy = GridDataSourceSectionMetrics()
 		copy.metrics = (metrics as! BasicGridSectionMetrics).copy() as! BasicGridSectionMetrics
 		copy.placeholder = placeholder?.copy()

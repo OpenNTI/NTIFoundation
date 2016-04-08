@@ -83,7 +83,7 @@ public protocol GridSectionMetrics: SectionMetrics {
 	
 }
 
-public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
+public class BasicGridSectionMetrics: GridSectionMetrics {
 	
 	public static var defaultSupplementaryOrdering: Set<GridSectionSupplementaryItemOrder> = [.header(order: 0), .footer(order: 1), .leftAuxiliary(order: 2), .rightAuxiliary(order: 3)]
 	
@@ -244,7 +244,7 @@ public class BasicGridSectionMetrics: NSObject, GridSectionMetrics, NSCopying {
 	/// How the cells should be laid out when there are multiple columns. The current default is `.LeadingToTrailing`.
 	public var cellLayoutOrder: ItemLayoutOrder = .LeadingToTrailing
 	
-	public func copyWithZone(zone: NSZone) -> AnyObject {
+	public func copy() -> LayoutMetrics {
 		let copy = BasicGridSectionMetrics()
 		
 		copy.contentInset = contentInset

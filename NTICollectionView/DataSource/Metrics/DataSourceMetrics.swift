@@ -12,8 +12,6 @@ public protocol DataSourceSectionMetrics: DataSourceSectionInfo, LayoutMetrics {
 	
 	var metrics: SectionMetrics { get set }
 	
-	func copy() -> AnyObject
-	
 }
 
 extension DataSourceSectionMetrics {

@@ -65,6 +65,8 @@ public protocol SupplementaryItem: class {
 	
 	func definesMetric(metric: String) -> Bool
 	
+	func copy() -> SupplementaryItem
+	
 }
 
 extension SupplementaryItem {

@@ -24,7 +24,7 @@ public enum ItemLayoutOrder: String {
 	
 }
 
-public protocol LayoutMetrics: NSObjectProtocol {
+public protocol LayoutMetrics: class {
 	
 	func applyValues(from metrics: LayoutMetrics)
 	
@@ -32,7 +32,7 @@ public protocol LayoutMetrics: NSObjectProtocol {
 	
 	func resolveMissingValuesFromTheme()
 	
-	func copy() -> AnyObject
+	func copy() -> LayoutMetrics
 	
 }
 
@@ -52,7 +52,7 @@ public protocol SectionMetrics: LayoutMetrics {
 	
 }
 
-public protocol SectionMetricsOwning: NSObjectProtocol, SectionMetrics {
+public protocol SectionMetricsOwning: SectionMetrics {
 	
 	var metrics: SectionMetrics { get }
 	

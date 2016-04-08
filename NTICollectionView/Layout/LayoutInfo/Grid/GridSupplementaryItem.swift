@@ -38,11 +38,10 @@ public protocol GridSupplementaryItem: LayoutSupplementaryItem {
 
 private let DefaultEstimatedHeight: CGFloat = 44
 
-public class BasicGridSupplementaryItem: NSObject, NSCopying, GridSupplementaryItem {
+public class BasicGridSupplementaryItem: GridSupplementaryItem {
 	
 	public init(elementKind: String) {
 		self.elementKind = elementKind
-		super.init()
 	}
 	
 	public var layoutMargins: UIEdgeInsets = UIEdgeInsetsZero {
@@ -250,7 +249,7 @@ public class BasicGridSupplementaryItem: NSObject, NSCopying, GridSupplementaryI
 		_layoutAttributes = nil
 	}
 	
-	public func copyWithZone(zone: NSZone) -> AnyObject {
+	public func copy() -> SupplementaryItem {
 		let copy = BasicGridSupplementaryItem(elementKind: elementKind)
 		
 		copy.reuseIdentifier = reuseIdentifier

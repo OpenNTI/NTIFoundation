@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol DataSourceSectionInfo: NSObjectProtocol {
+public protocol DataSourceSectionInfo: class {
 	
 	var placeholder: AnyObject? { get set }
 	

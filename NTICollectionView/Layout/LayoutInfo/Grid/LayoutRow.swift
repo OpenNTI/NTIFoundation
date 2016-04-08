@@ -9,7 +9,7 @@
 import UIKit
 
 /// Layout information about a row.
-public protocol LayoutRow: NSObjectProtocol {
+public protocol LayoutRow: class {
 	
 	var frame: CGRect { get set }
 	
@@ -25,6 +25,8 @@ public protocol LayoutRow: NSObjectProtocol {
 	
 	func columnWidth(forNumberOfColumns columns: Int) -> CGFloat
 	
+	func copy() -> LayoutRow
+	
 }
 
 extension LayoutRow {
@@ -37,7 +39,7 @@ extension LayoutRow {
 	
 }
 
-public class GridLayoutRow: NSObject, LayoutRow, NSCopying {
+public class GridLayoutRow: LayoutRow {
 	
 	public var metrics = BasicGridSectionMetrics()
 	
@@ -88,7 +90,7 @@ public class GridLayoutRow: NSObject, LayoutRow, NSCopying {
 		return columnWidth
 	}
 	
-	public func copyWithZone(zone: NSZone) -> AnyObject {
+	public func copy() -> LayoutRow {
 		let copy = GridLayoutRow()
 		copy.section = section
 		copy.frame = frame

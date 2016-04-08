@@ -46,7 +46,7 @@ public protocol GridLayoutSection: LayoutSection {
 	
 }
 
-public class BasicGridLayoutSection: NSObject, GridLayoutSection {
+public class BasicGridLayoutSection: GridLayoutSection {
 	
 	static let hairline: CGFloat = 1.0 / UIScreen.mainScreen().scale
 	
@@ -723,6 +723,51 @@ public class BasicGridLayoutSection: NSObject, GridLayoutSection {
 		} else {
 			return nil
 		}
+	}
+	
+	public func copy() -> LayoutMetrics {
+		let copy = BasicGridLayoutSection()
+		
+		// Copy the rows first, then add the items from the copied rows; this should preserve the object graph of the copy
+		var items = [LayoutItem]()
+		
+		for oldRow in rows {
+			let newRow = oldRow.copy()
+			copy.add(newRow)
+			items += newRow.items
+		}
+		
+		for (idx, itemInfo) in items.enumerate() {
+			itemInfo.itemIndex = idx
+		}
+		
+		copy.items = items
+		
+		for (kind, supplementaryItems) in supplementaryItemsByKind {
+			var copiedSupplementaryItems = [LayoutSupplementaryItem]()
+			for supplementaryItem in supplementaryItems {
+				copiedSupplementaryItems.append(supplementaryItem.copy() as! LayoutSupplementaryItem)
+			}
+			copy.supplementaryItemsByKind[kind] = copiedSupplementaryItems
+		}
+		
+		for layoutAttributes in columnSeparatorLayoutAttributes {
+			copy.columnSeparatorLayoutAttributes.append(layoutAttributes.copy() as! UICollectionViewLayoutAttributes)
+		}
+		
+		for (itemIndex, layoutAttributes) in sectionSeparatorLayoutAttributes {
+			copy.sectionSeparatorLayoutAttributes[itemIndex] = layoutAttributes.copy() as? UICollectionViewLayoutAttributes
+		}
+		
+		copy._backgroundAttribute = _backgroundAttribute?.copy() as? UICollectionViewLayoutAttributes
+		
+		copy.sectionIndex = sectionIndex
+		copy.phantomCellIndex = phantomCellIndex
+		copy.phantomCellSize = phantomCellSize
+		
+		copy.frame = frame
+		
+		return copy
 	}
 	
 }

@@ -71,7 +71,7 @@ extension LayoutSection {
 	
 }
 
-public protocol LayoutEngine: NSObjectProtocol {
+public protocol LayoutEngine: class {
 	
 	/// Layout this section with the given starting origin and using the invalidation context to record cells and supplementary views that should be redrawn.
 	func layoutWithOrigin(origin: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
