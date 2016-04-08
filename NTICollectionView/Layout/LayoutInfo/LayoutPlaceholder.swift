@@ -35,11 +35,10 @@ extension LayoutPlaceholder {
 	
 }
 
-public class BasicLayoutPlaceholder: NSObject, LayoutPlaceholder {
+public class BasicLayoutPlaceholder: LayoutPlaceholder {
 	
 	public init(sectionIndexes: NSIndexSet) {
 		self.sectionIndexes = sectionIndexes.mutableCopy() as! NSMutableIndexSet
-		super.init()
 	}
 	
 	private let sectionIndexes: NSMutableIndexSet

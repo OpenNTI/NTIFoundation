@@ -86,7 +86,7 @@ public protocol LayoutInfo: LayoutSizing, LayoutAttributesResolving {
 	
 }
 
-public protocol LayoutSizing: NSObjectProtocol {
+public protocol LayoutSizing: class {
 	
 	/// The width of the portion of the layout represented by `self`.
 	var width: CGFloat { get set }
@@ -95,12 +95,11 @@ public protocol LayoutSizing: NSObjectProtocol {
 	
 }
 
-public class LayoutSizingInfo: NSObject, LayoutSizing {
+public class LayoutSizingInfo: LayoutSizing {
 	
 	public init(width: CGFloat, layoutMeasure: CollectionViewLayoutMeasuring?) {
 		self.width = width
 		self.layoutMeasure = layoutMeasure
-		super.init()
 	}
 	
 	public var width: CGFloat
