@@ -109,7 +109,7 @@ public class LayoutSizingInfo: NSObject, LayoutSizing {
 	
 }
 
-public protocol LayoutElement: NSObjectProtocol {
+public protocol LayoutElement: class {
 	
 	var frame: CGRect { get set }
 	
