@@ -195,6 +195,46 @@ public struct VerticalSeparatorDecoration: LayoutDecoration, DecorationAttribute
 	
 }
 
+public struct BackgroundDecoration: LayoutDecoration, DecorationAttributesWrapper {
+	
+	public init(elementKind: String) {
+		self.elementKind = elementKind
+	}
+	
+	public var margins = UIEdgeInsetsZero
+	
+	public var cornerRadius: CGFloat = 0
+	
+	public let elementKind: String
+	
+	public var indexPath: NSIndexPath {
+		return NSIndexPath(forItem: itemIndex, inSection: sectionIndex)
+	}
+	
+	public var itemIndex: Int = 0
+	
+	public var sectionIndex: Int = 0
+	
+	public var attributes = DecorationAttributes()
+	
+	public var layoutAttributes: UICollectionViewLayoutAttributes {
+		let layoutAttributes = CollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, withIndexPath: indexPath)
+		layoutAttributes.frame = frame
+		layoutAttributes.backgroundColor = color
+		layoutAttributes.zIndex = zIndex
+		layoutAttributes.hidden = isHidden
+		layoutAttributes.cornerRadius = cornerRadius
+		return layoutAttributes
+	}
+	
+	public mutating func setContainerFrame(containerFrame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+		frame = UIEdgeInsetsInsetRect(containerFrame, margins)
+		
+		invalidationContext?.invalidateDecorationElement(with: layoutAttributes)
+	}
+	
+}
+
 public protocol DecorationAttributeProvider {
 	
 	var frame: CGRect { get set }
