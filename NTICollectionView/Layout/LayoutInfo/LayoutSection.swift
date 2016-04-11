@@ -36,10 +36,12 @@ public protocol LayoutSection: LayoutMetrics, LayoutEngine, LayoutAttributesReso
 	/// All the layout attributes associated with this section.
 	var layoutAttributes: [UICollectionViewLayoutAttributes] { get }
 	
+	var decorationsByKind: [String: [LayoutDecoration]] { get }
 	var decorationAttributesByKind: [String: [UICollectionViewLayoutAttributes]] { get }
 	
 	func add(supplementaryItem: LayoutSupplementaryItem)
 	func add(item: LayoutItem)
+	func add(decoration: LayoutDecoration)
 	
 	/// Update the frame of this grouped object and any child objects. Use the invalidation context to mark layout objects as invalid.
 	func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)

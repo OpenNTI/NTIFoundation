@@ -115,6 +115,8 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		return maxY - minY
 	}
 	
+	public var decorationsByKind: [String: [LayoutDecoration]] = [:]
+	
 	public let metrics: GridSectionMetrics = BasicGridSectionMetrics()
 	
 	public var rows: [LayoutRow] = []
@@ -301,6 +303,28 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		return supplementaryItemsByKind[kind] ?? []
 	}
 	
+	public func add(decoration: LayoutDecoration) {
+		var decoration = decoration
+		let kind = decoration.elementKind
+		decoration.itemIndex = decorations(of: kind).count
+		decoration.sectionIndex = sectionIndex
+		decorationsByKind.append(decoration, to: kind)
+	}
+	
+	public func decorations(of kind: String) -> [LayoutDecoration] {
+		return decorationsByKind[kind] ?? []
+	}
+	
+	public func enumerateDecorations(using visitor: (inout LayoutDecoration) -> Void) {
+		for (kind, decorations) in decorationsByKind {
+			var decorations = decorations
+			for index in decorations.indices {
+				visitor(&decorations[index])
+			}
+			decorationsByKind[kind] = decorations
+		}
+	}
+	
 	public func add(row: LayoutRow) {
 		row.section = self
 		
@@ -375,6 +399,10 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		
 		for attributes in sectionSeparatorLayoutAttributes.values {
 			offsetDecorationElement(with: attributes, by: offset, invalidationContext: invalidationContext)
+		}
+		
+		enumerateDecorations { (inout decoration: LayoutDecoration) in
+			decoration.setContainerFrame(frame, invalidationContext: invalidationContext)
 		}
 		
 		layoutSection(self, setFrame: frame, invalidationContext: invalidationContext)
