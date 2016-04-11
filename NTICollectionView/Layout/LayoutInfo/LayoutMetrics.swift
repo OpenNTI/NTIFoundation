@@ -50,6 +50,9 @@ public protocol SectionMetrics: LayoutMetrics {
 	/// The corner radius to apply to items in this section.
 	var cornerRadius: CGFloat { get set }
 	
+	/// The decorations to add to the section represented by `self`.
+	var decorationsByKind: [String: [LayoutDecoration]] { get set }
+	
 }
 
 public protocol SectionMetricsOwning: SectionMetrics {

@@ -89,6 +89,8 @@ public class BasicGridSectionMetrics: GridSectionMetrics {
 	
 	public init() {}
 	
+	public var decorationsByKind: [String: [LayoutDecoration]] = [:]
+	
 	public var contentInset = UIEdgeInsetsZero {
 		didSet {
 			setFlag("contentInset")
@@ -249,6 +251,7 @@ public class BasicGridSectionMetrics: GridSectionMetrics {
 	public func copy() -> LayoutMetrics {
 		let copy = BasicGridSectionMetrics()
 		
+		copy.decorationsByKind = decorationsByKind
 		copy.contentInset = contentInset
 		copy.cornerRadius = cornerRadius
 		copy.rowHeight = rowHeight
@@ -280,18 +283,31 @@ public class BasicGridSectionMetrics: GridSectionMetrics {
 	}
 	
 	public func applyValues(from metrics: LayoutMetrics) {
+		guard let sectionMetrics = metrics as? SectionMetrics else {
+			return
+		}
+		
+		decorationsByKind.appendContents(of: sectionMetrics.decorationsByKind)
+		
+		if metrics.definesMetric("contentInset") {
+			contentInset = sectionMetrics.contentInset
+		}
+		if metrics.definesMetric("backgroundColor") {
+			backgroundColor = sectionMetrics.backgroundColor
+		}
+		if metrics.definesMetric("selectedBackgroundColor") {
+			selectedBackgroundColor = sectionMetrics.selectedBackgroundColor
+		}
+		if metrics.definesMetric("cornerRadius") {
+			cornerRadius = sectionMetrics.cornerRadius
+		}
+		
 		guard let gridMetrics = metrics as? GridSectionMetrics else {
 			return
 		}
 		separatorInsets = gridMetrics.separatorInsets
 		sectionSeparatorInsets = gridMetrics.sectionSeparatorInsets
 		
-		if metrics.definesMetric("contentInset") {
-			contentInset = gridMetrics.contentInset
-		}
-		if metrics.definesMetric("cornerRadius") {
-			cornerRadius = gridMetrics.cornerRadius
-		}
 		if metrics.definesMetric("rowHeight") {
 			rowHeight = gridMetrics.rowHeight
 		}
@@ -318,12 +334,6 @@ public class BasicGridSectionMetrics: GridSectionMetrics {
 		}
 		if metrics.definesMetric("numberOfColumns") {
 			numberOfColumns = gridMetrics.numberOfColumns
-		}
-		if metrics.definesMetric("backgroundColor") {
-			backgroundColor = gridMetrics.backgroundColor
-		}
-		if metrics.definesMetric("selectedBackgroundColor") {
-			selectedBackgroundColor = gridMetrics.selectedBackgroundColor
 		}
 		if metrics.definesMetric("sectionSeparatorColor") {
 			sectionSeparatorColor = gridMetrics.sectionSeparatorColor
