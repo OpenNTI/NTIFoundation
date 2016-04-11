@@ -172,7 +172,7 @@ public struct VerticalSeparatorDecoration: LayoutDecoration, DecorationAttribute
 	public mutating func setContainerFrame(containerFrame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		
 		frame.origin.x = computeXCoordinate(for: containerFrame)
-		frame.origin.y = topMargin
+		frame.origin.y = containerFrame.minY + topMargin
 		frame.size.width = thickness
 		frame.size.height = containerFrame.height - topMargin - bottomMargin
 		
