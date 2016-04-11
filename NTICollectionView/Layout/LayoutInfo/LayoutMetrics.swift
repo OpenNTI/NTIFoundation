@@ -53,6 +53,17 @@ public protocol SectionMetrics: LayoutMetrics {
 	/// The decorations to add to the section represented by `self`.
 	var decorationsByKind: [String: [LayoutDecoration]] { get set }
 	
+	func add(decoration: LayoutDecoration)
+	
+}
+
+extension SectionMetrics {
+	
+	public func add(decoration: LayoutDecoration) {
+		let kind = decoration.elementKind
+		decorationsByKind.append(decoration, to: kind)
+	}
+	
 }
 
 public protocol SectionMetricsOwning: SectionMetrics {

@@ -812,6 +812,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			return
 		}
 		
+		registerDecorations(from: layoutMetrics)
+		
 		if let globalMetrics = layoutMetrics[GlobalSectionIndex] {
 			// TODO: Section type shouldn't be decided here
 //			let sectionInfo = layoutInfo.newSection(sectionIndex: GlobalSectionIndex)
@@ -851,6 +853,18 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		}
 	}
 	
+	private func registerDecorations(from layoutMetrics: [Int: DataSourceSectionMetrics]) {
+		for sectionMetrics in layoutMetrics.values {
+			registerDecorations(from: sectionMetrics.metrics)
+		}
+	}
+	
+	private func registerDecorations(from sectionMetrics: SectionMetrics) {
+		for kind in sectionMetrics.decorationsByKind.keys {
+			registerClass(CollectionViewSeparatorView.self, forDecorationViewOfKind: kind)
+		}
+	}
+
 	// TODO: Encapsulate
 	/// Subclasses should override to create new sections from the metrics.
 	public func populate(section: LayoutSection, from metrics: DataSourceSectionMetrics) {

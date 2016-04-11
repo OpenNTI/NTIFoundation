@@ -115,7 +115,14 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		return maxY - minY
 	}
 	
-	public var decorationsByKind: [String: [LayoutDecoration]] = [:]
+	public var decorationsByKind: [String: [LayoutDecoration]] {
+		get {
+			return metrics.decorationsByKind
+		}
+		set {
+			metrics.decorationsByKind = newValue
+		}
+	}
 	
 	public let metrics: GridSectionMetrics = BasicGridSectionMetrics()
 	
@@ -165,6 +172,10 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		}
 		
 		layoutAttributes += columnSeparatorLayoutAttributes
+		
+		for attributes in attributesForDecorationsByKind.values {
+			layoutAttributes += attributes
+		}
 		
 		for supplementaryItem in supplementaryItems {
 			// Don't enumerate hidden or 0 height supplementary items
@@ -303,18 +314,6 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		return supplementaryItemsByKind[kind] ?? []
 	}
 	
-	public func add(decoration: LayoutDecoration) {
-		var decoration = decoration
-		let kind = decoration.elementKind
-		decoration.itemIndex = decorations(of: kind).count
-		decoration.sectionIndex = sectionIndex
-		decorationsByKind.append(decoration, to: kind)
-	}
-	
-	public func decorations(of kind: String) -> [LayoutDecoration] {
-		return decorationsByKind[kind] ?? []
-	}
-	
 	public func enumerateDecorations(using visitor: (inout LayoutDecoration) -> Void) {
 		for (kind, decorations) in decorationsByKind {
 			var decorations = decorations
@@ -362,11 +361,11 @@ public class BasicGridLayoutSection: GridLayoutSection {
 	}
 	
 	public func applyValues(from metrics: LayoutMetrics) {
-		self.metrics.applyValues(from: metrics)
-		if let gridMetrics = metrics as? GridSectionMetrics {
-			self.metrics.applyValues(from: gridMetrics)
-		} else if let gridSection = metrics as? GridLayoutSection {
+		if let gridSection = metrics as? GridLayoutSection {
 			self.metrics.applyValues(from: gridSection.metrics)
+		}
+		else {
+			self.metrics.applyValues(from: metrics)
 		}
 	}
 	
@@ -677,18 +676,44 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		case collectionElementKindContentBackground:
 			return contentBackgroundAttributes
 		default:
-			return nil
+			guard let attributes = attributesForDecorationsByKind[kind] else {
+				return nil
+			}
+			return attributes[indexPath.item]
 		}
 	}
 	
 	public var decorationAttributesByKind: [String: [UICollectionViewLayoutAttributes]] {
 		var attributes: [String: [UICollectionViewLayoutAttributes]] = [:]
+		
 		attributes[collectionElementKindColumnSeparator] = columnSeparatorLayoutAttributes
 		attributes[collectionElementKindSectionSeparator] = Array(sectionSeparatorLayoutAttributes.values)
 		attributes[collectionElementKindRowSeparator] = rows.flatMap { $0.rowSeparatorLayoutAttributes }
 		attributes[collectionElementKindGlobalHeaderBackground] = [backgroundAttribute].flatMap { $0 }
 		attributes[collectionElementKindContentBackground] = [contentBackgroundAttributes].flatMap { $0 }
+		
+		attributes.appendContents(of: attributesForDecorationsByKind)
+		
 		return attributes
+	}
+	
+	// O(n^2)
+	private var attributesForDecorationsByKind: [String: [UICollectionViewLayoutAttributes]] {
+		var attributesByKind: [String: [UICollectionViewLayoutAttributes]] = [:]
+		let insetFrame = UIEdgeInsetsInsetRect(frame, metrics.contentInset)
+		
+		for (kind, decorations) in decorationsByKind {
+			for (index, decoration) in decorations.enumerate() {
+				var decoration = decoration
+				decoration.itemIndex = index
+				decoration.sectionIndex = sectionIndex
+				decoration.setContainerFrame(insetFrame, invalidationContext: nil)
+				let attributes = decoration.layoutAttributes
+				attributesByKind.append(attributes, to: kind)
+			}
+		}
+		
+		return attributesByKind
 	}
 	
 	public func definesMetric(metric: String) -> Bool {
