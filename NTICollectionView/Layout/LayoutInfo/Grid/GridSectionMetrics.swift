@@ -87,6 +87,8 @@ public class BasicGridSectionMetrics: GridSectionMetrics {
 	
 	public static var defaultSupplementaryOrdering: Set<GridSectionSupplementaryItemOrder> = [.header(order: 0), .footer(order: 1), .leftAuxiliary(order: 2), .rightAuxiliary(order: 3)]
 	
+	public init() {}
+	
 	public var contentInset = UIEdgeInsetsZero {
 		didSet {
 			setFlag("contentInset")
