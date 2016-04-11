@@ -346,6 +346,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		processCollectionViewUpdates(updateItems)
 		processGlobalSectionUpdate()
 		adjustContentOffsetDelta()
+		
 		super.prepareForCollectionViewUpdates(updateItems)
 	}
 	
@@ -386,13 +387,16 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		let oldDecorationAttributes = oldGlobalSection.decorationAttributesByKind
 		let decorationDiff = decorationAttributes.countDiff(with: oldDecorationAttributes)
 		for (kind, countDiff) in decorationDiff {
-			guard countDiff < 0 else {
-				continue
-			}
 			let count = (decorationAttributes[kind] ?? []).count
-			let oldCount = oldDecorationAttributes[kind]!.count
-			let indexPaths = (count..<oldCount).map { NSIndexPath(index: $0) }
-			recordAdditionalDeletedIndexPaths(indexPaths, forElementOf: kind)
+			let oldCount = (oldDecorationAttributes[kind] ?? []).count
+			if countDiff < 0 {
+				let indexPaths = (count..<oldCount).map { NSIndexPath(index: $0) }
+				recordAdditionalDeletedIndexPaths(indexPaths, forElementOf: kind)
+			}
+			else if countDiff > 0 {
+				let indexPaths = (oldCount..<count).map { NSIndexPath(index: $0) }
+				recordAdditionalInsertedIndexPaths(indexPaths, forElementOf: kind)
+			}
 		}
 	}
 	
@@ -401,13 +405,16 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		let oldSupplementaryItems = oldGlobalSection.supplementaryItemsByKind
 		let supplementaryDiff = supplementaryItems.countDiff(with: oldSupplementaryItems)
 		for (kind, countDiff) in supplementaryDiff {
-			guard countDiff < 0 else {
-				continue
-			}
 			let count = (supplementaryItems[kind] ?? []).count
 			let oldCount = (oldSupplementaryItems[kind] ?? []).count
-			let indexPaths = (count..<oldCount).map { NSIndexPath(index: $0) }
-			recordAdditionalDeletedIndexPaths(indexPaths, forElementOf: kind)
+			if countDiff < 0 {
+				let indexPaths = (count..<oldCount).map { NSIndexPath(index: $0) }
+				recordAdditionalDeletedIndexPaths(indexPaths, forElementOf: kind)
+			}
+			else if countDiff > 0 {
+				let indexPaths = (oldCount..<count).map { NSIndexPath(index: $0) }
+				recordAdditionalInsertedIndexPaths(indexPaths, forElementOf: kind)
+			}
 		}
 	}
 	
@@ -491,6 +498,12 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	
 	private func recordAdditionalInsertedIndexPath(indexPath: NSIndexPath, forElementOf kind: String) {
 		additionalInsertedIndexPaths.append(indexPath, to: kind)
+	}
+	
+	private func recordAdditionalInsertedIndexPaths(indexPaths: [NSIndexPath], forElementOf kind: String) {
+		for indexPath in indexPaths {
+			recordAdditionalInsertedIndexPath(indexPath, forElementOf: kind)
+		}
 	}
 	
 	private func recordAdditionalDeletedAttributesForItemDeletion(at indexPath: NSIndexPath) {
