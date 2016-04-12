@@ -776,6 +776,26 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		return proposedHeight
 	}
 	
+	public func targetContentOffsetForProposedContentOffset(proposedContentOffset: CGPoint, firstInsertedSectionMinY: CGFloat) -> CGPoint {
+		guard isGlobalSection else {
+			return proposedContentOffset
+		}
+		
+		var targetContentOffset = proposedContentOffset
+		
+		let globalNonPinnableHeight = heightOfNonPinningHeaders
+		let globalPinnableHeight = heightOfPinningHeaders
+		
+		let isFirstInsertedSectionHidden = targetContentOffset.y + globalPinnableHeight > firstInsertedSectionMinY
+		
+		if isFirstInsertedSectionHidden {
+			// Need to scroll the section into view
+			targetContentOffset.y = max(globalNonPinnableHeight, firstInsertedSectionMinY - globalPinnableHeight)
+		}
+		
+		return targetContentOffset
+	}
+	
 	public func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
 		guard let layoutInfo = self.layoutInfo else {
 			return

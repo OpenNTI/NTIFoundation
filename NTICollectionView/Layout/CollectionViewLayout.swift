@@ -321,20 +321,13 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		let availableHeight = UIEdgeInsetsInsetRect(collectionView.bounds, insets).height
 		targetContentOffset.y = min(targetContentOffset.y, max(0, layoutSize.height - availableHeight))
 		
-		// TODO: Abstract into layout sections
 		if let firstInsertedIndex = insertedSections.first,
 			sectionInfo = sectionInfoForSectionAtIndex(firstInsertedIndex),
 			globalSection = sectionInfoForSectionAtIndex(GlobalSectionIndex)
 			where operationDirectionForSectionAtIndex(firstInsertedIndex) != nil {
 			
-			let globalNonPinnableHeight = globalSection.heightOfNonPinningHeaders
-			let globalPinnableHeight = globalSection.heightOfPinningHeaders
 			let minY = sectionInfo.frame.minY
-			
-			if targetContentOffset.y + globalPinnableHeight > minY {
-				// Need to make the section visible
-				targetContentOffset.y = max(globalNonPinnableHeight, minY - globalPinnableHeight)
-			}
+			targetContentOffset = globalSection.targetContentOffsetForProposedContentOffset(targetContentOffset, firstInsertedSectionMinY: minY)
 		}
 		
 		targetContentOffset.y -= insets.top
