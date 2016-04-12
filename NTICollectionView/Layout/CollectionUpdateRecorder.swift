@@ -96,7 +96,7 @@ public struct CollectionUpdateRecorder: CollectionUpdateInfoWrapper {
 		}
 	}
 	
-	private mutating func recordAdditionalInsertedAttributesForItemInsertion(at indexPath: NSIndexPath) {
+	public mutating func recordAdditionalInsertedAttributesForItemInsertion(at indexPath: NSIndexPath) {
 		guard let sectionInfo = sectionProvider?.sectionAtIndex(indexPath.section) else {
 			return
 		}
@@ -110,17 +110,17 @@ public struct CollectionUpdateRecorder: CollectionUpdateInfoWrapper {
 		}
 	}
 	
-	private mutating func recordAdditionalInsertedIndexPath(indexPath: NSIndexPath, forElementOf kind: String) {
+	public mutating func recordAdditionalInsertedIndexPath(indexPath: NSIndexPath, forElementOf kind: String) {
 		additionalInsertedIndexPathsByKind.append(indexPath, to: kind)
 	}
 	
-	private mutating func recordAdditionalInsertedIndexPaths(indexPaths: [NSIndexPath], forElementOf kind: String) {
+	public mutating func recordAdditionalInsertedIndexPaths(indexPaths: [NSIndexPath], forElementOf kind: String) {
 		for indexPath in indexPaths {
 			recordAdditionalInsertedIndexPath(indexPath, forElementOf: kind)
 		}
 	}
 	
-	private mutating func recordAdditionalDeletedAttributesForItemDeletion(at indexPath: NSIndexPath) {
+	public mutating func recordAdditionalDeletedAttributesForItemDeletion(at indexPath: NSIndexPath) {
 		guard let sectionInfo = oldSectionProvider?.sectionAtIndex(indexPath.section) else {
 			return
 		}
@@ -134,13 +134,13 @@ public struct CollectionUpdateRecorder: CollectionUpdateInfoWrapper {
 		}
 	}
 	
-	private mutating func recordAdditionalDeletedIndexPaths(indexPaths: [NSIndexPath], forElementOf kind: String) {
+	public mutating func recordAdditionalDeletedIndexPaths(indexPaths: [NSIndexPath], forElementOf kind: String) {
 		for indexPath in indexPaths {
 			recordAdditionalDeletedIndexPath(indexPath, forElementOf: kind)
 		}
 	}
 	
-	private mutating func recordAdditionalDeletedIndexPath(indexPath: NSIndexPath, forElementOf kind: String) {
+	public mutating func recordAdditionalDeletedIndexPath(indexPath: NSIndexPath, forElementOf kind: String) {
 		additionalDeletedIndexPathsByKind.append(indexPath, to: kind)
 	}
 	
