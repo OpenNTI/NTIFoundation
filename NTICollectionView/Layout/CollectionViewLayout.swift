@@ -46,16 +46,9 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	private var oldLayoutInfo: LayoutInfo?
 	
 	private var updateSectionDirections: [Int: SectionOperationDirection] = [:]
-	private var insertedIndexPaths: Set<NSIndexPath> = []
-	private var removedIndexPaths: Set<NSIndexPath> = []
-	private var reloadedIndexPaths: Set<NSIndexPath> = []
-	private var insertedSections: Set<Int> = []
-	private var removedSections: Set<Int> = []
-	private var reloadedSections: Set<Int> = []
-	/// Additional index paths for element kinds to delete during updates.
-	private var additionalDeletedIndexPaths: [String: [NSIndexPath]] = [:]
-	/// Additional index paths for element kinds to insert during updates.
-	private var additionalInsertedIndexPaths: [String: [NSIndexPath]] = [:]
+	
+	private var updateRecorder = CollectionUpdateRecorder()
+	
 	private var contentOffsetDelta = CGPointZero
 	
 	/// A duplicate registry of all the cell & supplementary view class/nibs used in this layout. These will be used to create views while measuring the layout instead of dequeueing reusable views, because that causes consternation in UICollectionView.
@@ -357,7 +350,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	
 	public override func prepareForCollectionViewUpdates(updateItems: [UICollectionViewUpdateItem]) {
 		resetUpdates()
-		processCollectionViewUpdates(updateItems)
+		updateRecorder.record(updateItems, sectionProvider: layoutInfo, oldSectionProvider: oldLayoutInfo)
 		processGlobalSectionUpdate()
 		adjustContentOffsetDelta()
 		
@@ -365,20 +358,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	}
 	
 	private func resetUpdates() {
-		insertedIndexPaths = []
-		removedIndexPaths = []
-		reloadedIndexPaths = []
-		insertedSections = []
-		removedSections = []
-		reloadedSections = []
-		additionalDeletedIndexPaths = [:]
-		additionalInsertedIndexPaths = [:]
-	}
-	
-	private func processCollectionViewUpdates(updateItems: [UICollectionViewUpdateItem]) {
-		for updateItem in updateItems {
-			processCollectionViewUpdate(updateItem)
-		}
+		updateRecorder.reset()
 	}
 	
 	/// Finds any global elements that disappeared during the update and records them for deletion.
@@ -405,11 +385,11 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			let oldCount = (oldDecorationAttributes[kind] ?? []).count
 			if countDiff < 0 {
 				let indexPaths = (count..<oldCount).map { NSIndexPath(index: $0) }
-				recordAdditionalDeletedIndexPaths(indexPaths, forElementOf: kind)
+				updateRecorder.recordAdditionalDeletedIndexPaths(indexPaths, forElementOf: kind)
 			}
 			else if countDiff > 0 {
 				let indexPaths = (oldCount..<count).map { NSIndexPath(index: $0) }
-				recordAdditionalInsertedIndexPaths(indexPaths, forElementOf: kind)
+				updateRecorder.recordAdditionalInsertedIndexPaths(indexPaths, forElementOf: kind)
 			}
 		}
 	}
@@ -423,125 +403,13 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			let oldCount = (oldSupplementaryItems[kind] ?? []).count
 			if countDiff < 0 {
 				let indexPaths = (count..<oldCount).map { NSIndexPath(index: $0) }
-				recordAdditionalDeletedIndexPaths(indexPaths, forElementOf: kind)
+				updateRecorder.recordAdditionalDeletedIndexPaths(indexPaths, forElementOf: kind)
 			}
 			else if countDiff > 0 {
 				let indexPaths = (oldCount..<count).map { NSIndexPath(index: $0) }
-				recordAdditionalInsertedIndexPaths(indexPaths, forElementOf: kind)
+				updateRecorder.recordAdditionalInsertedIndexPaths(indexPaths, forElementOf: kind)
 			}
 		}
-	}
-	
-	private func processCollectionViewUpdate(updateItem: UICollectionViewUpdateItem) {
-		switch updateItem.updateAction {
-		case .Insert:
-			processCollectionViewInsert(updateItem)
-		case .Delete:
-			processCollectionViewDelete(updateItem)
-		case .Reload:
-			processCollectionViewReload(updateItem)
-		case .Move:
-			processCollectionViewMove(updateItem)
-		case .None:
-			break
-		}
-	}
-	
-	func processCollectionViewInsert(updateItem: UICollectionViewUpdateItem) {
-		guard let indexPath = updateItem.indexPathAfterUpdate else {
-			return
-		}
-		if indexPath.isSection {
-			insertedSections.insert(indexPath.section)
-		} else {
-			insertedIndexPaths.insert(indexPath)
-			recordAdditionalInsertedAttributesForItemInsertion(at: indexPath)
-		}
-	}
-	
-	func processCollectionViewDelete(updateItem: UICollectionViewUpdateItem) {
-		guard let indexPath = updateItem.indexPathBeforeUpdate else {
-			return
-		}
-		if indexPath.isSection {
-			removedSections.insert(indexPath.section)
-		} else {
-			removedIndexPaths.insert(indexPath)
-			recordAdditionalDeletedAttributesForItemDeletion(at: indexPath)
-		}
-	}
-	
-	func processCollectionViewReload(updateItem: UICollectionViewUpdateItem) {
-		guard let indexPath = updateItem.indexPathAfterUpdate else {
-			return
-		}
-		if indexPath.isSection {
-			reloadedSections.insert(indexPath.section)
-		} else {
-			reloadedIndexPaths.insert(indexPath)
-		}
-	}
-	
-	func processCollectionViewMove(updateItem: UICollectionViewUpdateItem) {
-		guard let oldIndexPath = updateItem.indexPathBeforeUpdate,
-			newIndexPath = updateItem.indexPathAfterUpdate else {
-				return
-		}
-		if oldIndexPath.isSection {
-			removedSections.insert(oldIndexPath.section)
-			insertedSections.insert(newIndexPath.section)
-		} else {
-			recordAdditionalDeletedAttributesForItemDeletion(at: oldIndexPath)
-			recordAdditionalInsertedAttributesForItemInsertion(at: newIndexPath)
-		}
-	}
-	
-	private func recordAdditionalInsertedAttributesForItemInsertion(at indexPath: NSIndexPath) {
-		guard let sectionInfo = layoutInfo?.sectionAtIndex(indexPath.section) else {
-			return
-		}
-		
-		let additionalInsertions = sectionInfo.additionalLayoutAttributesToInsertForInsertionOfItem(at: indexPath)
-		for attributes in additionalInsertions {
-			guard let kind = attributes.representedElementKind else {
-				continue
-			}
-			recordAdditionalInsertedIndexPath(attributes.indexPath, forElementOf: kind)
-		}
-	}
-	
-	private func recordAdditionalInsertedIndexPath(indexPath: NSIndexPath, forElementOf kind: String) {
-		additionalInsertedIndexPaths.append(indexPath, to: kind)
-	}
-	
-	private func recordAdditionalInsertedIndexPaths(indexPaths: [NSIndexPath], forElementOf kind: String) {
-		for indexPath in indexPaths {
-			recordAdditionalInsertedIndexPath(indexPath, forElementOf: kind)
-		}
-	}
-	
-	private func recordAdditionalDeletedAttributesForItemDeletion(at indexPath: NSIndexPath) {
-		guard let sectionInfo = oldLayoutInfo?.sectionAtIndex(indexPath.section) else {
-			return
-		}
-		
-		let additionalDeletions = sectionInfo.additionalLayoutAttributesToDeleteForDeletionOfItem(at: indexPath)
-		for attributes in additionalDeletions {
-			guard let kind = attributes.representedElementKind else {
-				continue
-			}
-			recordAdditionalDeletedIndexPath(attributes.indexPath, forElementOf: kind)
-		}
-	}
-	
-	private func recordAdditionalDeletedIndexPaths(indexPaths: [NSIndexPath], forElementOf kind: String) {
-		for indexPath in indexPaths {
-			recordAdditionalDeletedIndexPath(indexPath, forElementOf: kind)
-		}
-	}
-	
-	private func recordAdditionalDeletedIndexPath(indexPath: NSIndexPath, forElementOf kind: String) {
-		additionalDeletedIndexPaths.append(indexPath, to: kind)
 	}
 	
 	private func adjustContentOffsetDelta() {
@@ -561,7 +429,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	
 	public override func indexPathsToDeleteForDecorationViewOfKind(elementKind: String) -> [NSIndexPath] {
 		var superValue = super.indexPathsToDeleteForDecorationViewOfKind(elementKind)
-		if let additionalValues = additionalDeletedIndexPaths[elementKind] {
+		if let additionalValues = additionalDeletedIndexPathsByKind[elementKind] {
 			superValue += additionalValues
 		}
 		layoutLog("\(#function) kind=\(elementKind) value=\(superValue)")
@@ -1093,6 +961,21 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	public func dataSource(dataSource: CollectionDataSource, didMoveSectionFrom oldSection: Int, to newSection: Int, direction: SectionOperationDirection?) {
 		updateSectionDirections[oldSection] = direction
 		updateSectionDirections[newSection] = direction
+	}
+	
+}
+
+// MARK: - CollectionUpdateInfoWrapper
+
+extension CollectionViewLayout: CollectionUpdateInfoWrapper {
+	
+	public var updateInfo: CollectionUpdateInfo {
+		get {
+			return updateRecorder.updateInfo
+		}
+		set {
+			updateRecorder.updateInfo = newValue
+		}
 	}
 	
 }
