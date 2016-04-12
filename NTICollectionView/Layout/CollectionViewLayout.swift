@@ -940,7 +940,10 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		default:
 			frame.origin.x -= bounds.size.width
 		}
+		
+		frame.offsetInPlace(dx: contentOffsetDelta.x, dy: contentOffsetDelta.y)
 		attributes.frame = frame
+		
 		attributes.alpha = 0
 		return attributes
 	}
