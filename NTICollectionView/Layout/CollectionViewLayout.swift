@@ -672,9 +672,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		guard !UIAccessibilityIsReduceMotionEnabled() else {
 			return nil
 		}
-		if sectionIndex == GlobalSectionIndex && updateSectionDirections[sectionIndex] == nil {
-			return updateSectionDirections[0]
-		}
+		
 		return updateSectionDirections[sectionIndex]
 	}
 	
