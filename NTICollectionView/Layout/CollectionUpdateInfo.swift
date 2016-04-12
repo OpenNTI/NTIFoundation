@@ -144,8 +144,4 @@ extension CollectionUpdateInfoWrapper {
 		}
 	}
 	
-	public mutating func reset() {
-		updateInfo.reset()
-	}
-	
 }
