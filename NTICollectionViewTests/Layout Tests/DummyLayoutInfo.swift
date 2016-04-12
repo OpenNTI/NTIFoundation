@@ -20,6 +20,10 @@ class DummyLayoutInfo: NSObject, LayoutInfo {
 	
 	var contentOffset = CGPointZero
 	
+	var contentInset = UIEdgeInsetsZero
+	
+	var bounds = CGRectZero
+	
 	var layoutMeasure: CollectionViewLayoutMeasuring?
 	
 	var isEditing = false
@@ -80,6 +84,14 @@ class DummyLayoutInfo: NSObject, LayoutInfo {
 	
 	func layoutAttributesForSupplementaryElementOfKind(kind: String, at indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
 		return nil
+	}
+	
+	func prepareForLayout() {
+		
+	}
+	
+	func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+		
 	}
 	
 }
