@@ -932,12 +932,13 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	
 	private func finalLayoutAttributesForAttributes(attributes: UICollectionViewLayoutAttributes, slidingAwayFrom direction: SectionOperationDirection) -> UICollectionViewLayoutAttributes {
 		var frame = attributes.frame
-		let cvBounds = collectionView?.bounds ?? CGRectZero
+		let bounds = collectionView?.bounds ?? CGRectZero
+		
 		switch direction {
 		case .Left:
-			frame.origin.x += cvBounds.size.width
+			frame.origin.x += bounds.size.width
 		default:
-			frame.origin.x -= cvBounds.size.width
+			frame.origin.x -= bounds.size.width
 		}
 		attributes.frame = frame
 		attributes.alpha = 0
