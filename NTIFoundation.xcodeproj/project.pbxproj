@@ -300,6 +300,8 @@
 		4A0583351C934BD000F3D0E0 /* ComposedGridSectionLayoutEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0583331C934BCF00F3D0E0 /* ComposedGridSectionLayoutEngine.swift */; };
 		4A11C9FC1CA5949500CCDD2B /* ActionSheetControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A11C9FB1CA5949500CCDD2B /* ActionSheetControl.swift */; };
 		4A1B77BD1CBD54E600C977A6 /* CollectionUpdateRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1B77BC1CBD54E600C977A6 /* CollectionUpdateRecorder.swift */; };
+		4A1B77D81CBD64A600C977A6 /* CollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC7D1C88B0CE00849185 /* CollectionViewLayout.swift */; };
+		4A1B77D91CBD64B400C977A6 /* CollectionUpdateRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1B77BC1CBD54E600C977A6 /* CollectionUpdateRecorder.swift */; };
 		4A1BE76A1C8F85B800790B3A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1BE7691C8F85B800790B3A /* AppDelegate.swift */; };
 		4A1BE76C1C8F85B800790B3A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1BE76B1C8F85B800790B3A /* ViewController.swift */; };
 		4A1BE76F1C8F85B800790B3A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A1BE76D1C8F85B800790B3A /* Main.storyboard */; };
@@ -450,7 +452,6 @@
 		4A68ACC71C88B0CE00849185 /* CollectionUpdateInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC7C1C88B0CE00849185 /* CollectionUpdateInfo.swift */; };
 		4A68ACC81C88B0CE00849185 /* CollectionUpdateInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC7C1C88B0CE00849185 /* CollectionUpdateInfo.swift */; };
 		4A68ACC91C88B0CE00849185 /* CollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC7D1C88B0CE00849185 /* CollectionViewLayout.swift */; };
-		4A68ACCA1C88B0CE00849185 /* CollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC7D1C88B0CE00849185 /* CollectionViewLayout.swift */; };
 		4A68ACCB1C88B0CE00849185 /* CollectionViewLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC7E1C88B0CE00849185 /* CollectionViewLayoutAttributes.swift */; };
 		4A68ACCC1C88B0CE00849185 /* CollectionViewLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC7E1C88B0CE00849185 /* CollectionViewLayoutAttributes.swift */; };
 		4A68ACCD1C88B0CE00849185 /* CollectionViewLayoutMeasuring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC7F1C88B0CE00849185 /* CollectionViewLayoutMeasuring.swift */; };
@@ -3524,6 +3525,7 @@
 				4A620CD21C88DDCF0084B0A2 /* PagingCollectionDataSource.swift in Sources */,
 				4A68ACDE1C88B0CE00849185 /* GridSectionLayoutEngine.swift in Sources */,
 				4A68ACC81C88B0CE00849185 /* CollectionUpdateInfo.swift in Sources */,
+				4A1B77D81CBD64A600C977A6 /* CollectionViewLayout.swift in Sources */,
 				4A68ACAC1C88B0CE00849185 /* ComposedCollectionDataSource.swift in Sources */,
 				4A0583031C9213C700F3D0E0 /* GridSupplementaryItemLayoutEngine.swift in Sources */,
 				4A68ACE21C88B0CE00849185 /* LayoutRow.swift in Sources */,
@@ -3540,6 +3542,7 @@
 				4A68ACBC1C88B0CE00849185 /* CGGeometry-Extensions.swift in Sources */,
 				4A68ACC41C88B0CE00849185 /* CollectionLayoutAnimator.swift in Sources */,
 				4A68AC601C88AEE300849185 /* DummyLayoutMeasure.swift in Sources */,
+				4A1B77D91CBD64B400C977A6 /* CollectionUpdateRecorder.swift in Sources */,
 				4A620D8D1C8E148D0084B0A2 /* CollectionDataSourceController.swift in Sources */,
 				4A68ACA81C88B0CE00849185 /* CollectionDataSourceMetricsHelper.swift in Sources */,
 				4A68ACC01C88B0CE00849185 /* NSIndexPath-Extensions.swift in Sources */,
@@ -3558,7 +3561,6 @@
 				4A68ACF21C88B0CE00849185 /* ContentLoading.swift in Sources */,
 				4A68ACF01C88B0CE00849185 /* ShadowRegistrar.swift in Sources */,
 				4A68AC621C88AEE300849185 /* GridLayoutSectionTest.swift in Sources */,
-				4A68ACCA1C88B0CE00849185 /* CollectionViewLayout.swift in Sources */,
 				4AD56F441CAC8BC300482393 /* UICollectionReusableView-Extensions.swift in Sources */,
 				4AD56F431CAC8BB300482393 /* CollectionSupplementaryView.swift in Sources */,
 				4A68ACF81C88B0CE00849185 /* StateMachine.swift in Sources */,
