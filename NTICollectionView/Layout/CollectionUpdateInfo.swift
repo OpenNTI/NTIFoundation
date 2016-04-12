@@ -8,6 +8,8 @@
 
 import UIKit
 
+// MARK: - CollectionUpdateProvider
+
 /// A container for keeping track of collection view updates.
 public protocol CollectionUpdateProvider {
 	
@@ -42,6 +44,8 @@ extension CollectionUpdateProvider {
 	
 }
 
+// MARK: - CollectionUpdateInfo
+
 /// A container for keeping track of collection view updates.
 public struct CollectionUpdateInfo: CollectionUpdateProvider {
 	
@@ -55,5 +59,93 @@ public struct CollectionUpdateInfo: CollectionUpdateProvider {
 	
 	public var additionalDeletedIndexPathsByKind: [String: [NSIndexPath]] = [:]
 	public var additionalInsertedIndexPathsByKind: [String: [NSIndexPath]] = [:]
+	
+}
+
+// MARK: - CollectionUpdateInfoWrapper
+
+public protocol CollectionUpdateInfoWrapper: CollectionUpdateProvider {
+	
+	var updateInfo: CollectionUpdateInfo { get set }
+	
+}
+
+extension CollectionUpdateInfoWrapper {
+	
+	public var insertedIndexPaths: Set<NSIndexPath> {
+		get {
+			return updateInfo.insertedIndexPaths
+		}
+		set {
+			updateInfo.insertedIndexPaths = newValue
+		}
+	}
+	
+	public var removedIndexPaths: Set<NSIndexPath> {
+		get {
+			return updateInfo.removedIndexPaths
+		}
+		set {
+			updateInfo.removedIndexPaths = newValue
+		}
+	}
+	
+	public var reloadedIndexPaths: Set<NSIndexPath> {
+		get {
+			return updateInfo.reloadedIndexPaths
+		}
+		set {
+			updateInfo.reloadedIndexPaths = newValue
+		}
+	}
+	
+	public var insertedSections: Set<Int> {
+		get {
+			return updateInfo.insertedSections
+		}
+		set {
+			updateInfo.insertedSections = newValue
+		}
+	}
+	
+	public var removedSections: Set<Int> {
+		get {
+			return updateInfo.removedSections
+		}
+		set {
+			updateInfo.removedSections = newValue
+		}
+	}
+	
+	public var reloadedSections: Set<Int> {
+		get {
+			return updateInfo.reloadedSections
+		}
+		set {
+			updateInfo.reloadedSections = newValue
+		}
+	}
+	
+	public var additionalDeletedIndexPathsByKind: [String: [NSIndexPath]] {
+		get {
+			return updateInfo.additionalDeletedIndexPathsByKind
+		}
+		set {
+			updateInfo.additionalDeletedIndexPathsByKind = newValue
+		}
+	}
+	
+	public var additionalInsertedIndexPathsByKind: [String: [NSIndexPath]] {
+		get {
+			return updateInfo.additionalInsertedIndexPathsByKind
+		}
+		set {
+			updateInfo.additionalInsertedIndexPathsByKind = newValue
+		}
+	}
+	
+	public mutating func reset() {
+		updateInfo.reset()
+	}
 	
 }
