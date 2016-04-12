@@ -33,8 +33,7 @@ func invalidateLayoutAttributes(attributes: UICollectionViewLayoutAttributes, in
 	}
 }
 
-
-public protocol LayoutInfo: LayoutSizing, LayoutAttributesResolving {
+public protocol LayoutInfo: LayoutSizing, LayoutAttributesResolving, LayoutSectionProvider {
 	
 	var collectionViewSize: CGSize { get set }
 	
@@ -51,21 +50,7 @@ public protocol LayoutInfo: LayoutSizing, LayoutAttributesResolving {
 	
 	var isEditing: Bool { get }
 	
-	var numberOfSections: Int { get }
-	
-	var hasGlobalSection: Bool { get }
-	
 	var sections: [LayoutSection] { get }
-	
-	func enumerateSections(block: (sectionIndex: Int, sectionInfo: LayoutSection, inout stop: Bool) -> Void)
-	
-	/// Return the layout section with the given sectionIndex.
-	func sectionAtIndex(sectionIndex: Int) -> LayoutSection?
-	
-	func add(section: LayoutSection, sectionIndex: Int)
-	
-	/// Creates and adds a new section.
-//	func newSection(sectionIndex index: Int) -> LayoutSection
 	
 	/// Create a new placeholder covering the specified range of sections.
 	func newPlaceholderStartingAtSectionIndex(sectionIndex: Int) -> LayoutPlaceholder
@@ -92,6 +77,21 @@ public protocol LayoutInfo: LayoutSizing, LayoutAttributesResolving {
 	
 	/// Invalidate the current size information for the supplementary item with the given *elementKind* and *indexPath*. This also updates the layout to adjust the position of any content that might need to move to make room for or take up room from the adjusted supplementary item.
 	func invalidateMetricsForElementOfKind(kind: String, at indexPath: NSIndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext?)
+	
+}
+
+public protocol LayoutSectionProvider: class {
+	
+	var numberOfSections: Int { get }
+	
+	var hasGlobalSection: Bool { get }
+	
+	func enumerateSections(block: (sectionIndex: Int, sectionInfo: LayoutSection, inout stop: Bool) -> Void)
+	
+	/// Return the layout section with the given sectionIndex.
+	func sectionAtIndex(sectionIndex: Int) -> LayoutSection?
+	
+	func add(section: LayoutSection, sectionIndex: Int)
 	
 }
 
