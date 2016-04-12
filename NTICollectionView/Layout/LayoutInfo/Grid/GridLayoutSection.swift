@@ -753,6 +753,178 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		}
 	}
 	
+	private var pinnableItems: [LayoutSupplementaryItem] = []
+	
+	public func prepareForLayout() {
+		pinnableItems.removeAll()
+	}
+	
+	public func targetLayoutHeightForProposedLayoutHeight(proposedHeight: CGFloat, layoutInfo: LayoutInfo) -> CGFloat {
+		guard isGlobalSection else {
+			return proposedHeight
+		}
+		
+		let height = layoutInfo.height
+		
+		let globalNonPinningHeight = heightOfNonPinningHeaders
+		
+		if layoutInfo.contentOffset.y >= globalNonPinningHeight
+			&& proposedHeight - globalNonPinningHeight < height {
+			return height + globalNonPinningHeight
+		}
+		
+		return proposedHeight
+	}
+	
+	public func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
+		guard let layoutInfo = self.layoutInfo else {
+			return
+		}
+		let numSections = layoutInfo.numberOfSections
+		
+		guard numSections > 0 && numSections != NSNotFound else {
+			return
+		}
+		
+		var pinnableY = contentOffset.y + layoutInfo.contentInset.top
+		var nonPinnableY = pinnableY
+		
+		resetPinnableSupplementaryItems(pinnableItems, invalidationContext: invalidationContext)
+		pinnableItems.removeAll(keepCapacity: true)
+		
+		// Pin the headers as appropriate
+		guard self.isGlobalSection else {
+			return
+		}
+		
+		let pinnableHeaders = self.pinnableHeaders
+		
+		if !pinnableHeaders.isEmpty {
+			pinnableY = applyTopPinning(to: pinnableHeaders, minY: pinnableY, invalidationContext: invalidationContext)
+			finalizePinning(for: pinnableHeaders, zIndex: pinnedHeaderZIndex)
+		}
+		
+		let nonPinnableHeaders = self.nonPinnableHeaders
+
+		if !nonPinnableHeaders.isEmpty {
+			resetPinnableSupplementaryItems(nonPinnableHeaders, invalidationContext: invalidationContext)
+			nonPinnableY = applyBottomPinning(to: nonPinnableHeaders, maxY: nonPinnableY, invalidationContext: invalidationContext)
+			finalizePinning(for: nonPinnableHeaders, zIndex: pinnedHeaderZIndex)
+		}
+		
+		if let backgroundAttributes = self.backgroundAttribute {
+			var frame = backgroundAttributes.frame
+			frame.origin.y = min(nonPinnableY, layoutInfo.bounds.origin.y)
+			let bottomY = max(pinnableHeaders.last?.frame.maxY ?? 0, nonPinnableHeaders.last?.frame.maxY ?? 0)
+			frame.size.height = bottomY - frame.origin.y
+			backgroundAttributes.frame = frame
+		}
+		
+		if let overlappingSection = firstSectionOverlappingYOffset(pinnableY) {
+			let overlappingPinnableHeaders = overlappingSection.pinnableHeaders
+			applyTopPinning(to: overlappingPinnableHeaders, minY: pinnableY, invalidationContext: invalidationContext)
+			// FIXME: Magic number
+			finalizePinning(for: overlappingSection.pinnableHeaders, zIndex: pinnedHeaderZIndex - 100)
+		}
+	}
+	
+	private func resetPinnableSupplementaryItems(supplementaryItems: [LayoutSupplementaryItem], invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
+		for supplementaryItem in supplementaryItems {
+			guard let attributes = supplementaryItem.layoutAttributes as? CollectionViewLayoutAttributes else {
+				continue
+			}
+			var frame = attributes.frame
+			if frame.origin.y != attributes.unpinnedOrigin.y {
+				invalidationContext?.invalidateSupplementaryElement(with: attributes)
+			}
+			attributes.isPinned = false
+			frame.origin.y = attributes.unpinnedOrigin.y
+			attributes.frame = frame
+		}
+	}
+	
+	private func applyBottomPinning(to supplementaryItems: [LayoutSupplementaryItem], maxY: CGFloat, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGFloat {
+		var maxY = maxY
+		
+		for supplementaryItem in supplementaryItems.reverse() {
+			let attributes = supplementaryItem.layoutAttributes
+			var frame = attributes.frame
+			
+			guard frame.maxY < maxY else {
+				continue
+			}
+			
+			frame.origin.y = maxY - frame.height
+			maxY = frame.origin.y
+			attributes.frame = frame
+			
+			invalidationContext?.invalidateSupplementaryElement(with: attributes)
+		}
+		
+		return maxY
+	}
+	
+	/// Pins the attributes starting at `minY` -- as long as they don't cross `minY` -- and returns the new `minY`.
+	private func applyTopPinning(to supplementaryItems: [LayoutSupplementaryItem], minY: CGFloat, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGFloat {
+		var minY = minY
+		
+		for supplementaryItem in supplementaryItems {
+			// Record this supplementary item so we can reset it later
+			pinnableItems.append(supplementaryItem)
+			
+			let attributes = supplementaryItem.layoutAttributes
+			var frame = attributes.frame
+			
+			guard frame.origin.y < minY else {
+				continue
+			}
+			
+			frame.origin.y = minY
+			minY = frame.maxY // we have a new pinning offset
+			attributes.frame = frame
+			
+			invalidationContext?.invalidateSupplementaryElement(with: attributes)
+		}
+		
+		return minY
+	}
+	
+	private func finalizePinning(for supplementaryItems: [LayoutSupplementaryItem], zIndex: Int) {
+		for (itemIndex, supplementaryItem) in supplementaryItems.enumerate() {
+			let attributes = supplementaryItem.layoutAttributes
+			
+			if let pinnableAttributes = attributes as? CollectionViewLayoutAttributes {
+				let frame = pinnableAttributes.frame
+				pinnableAttributes.isPinned = frame.origin.y != pinnableAttributes.unpinnedOrigin.y
+			}
+			
+			let depth = itemIndex + 1
+			attributes.zIndex = zIndex - depth
+		}
+	}
+	
+	private func firstSectionOverlappingYOffset(yOffset: CGFloat) -> LayoutSection? {
+		guard let layoutInfo = self.layoutInfo else {
+			return nil
+		}
+		
+		var result: LayoutSection?
+		
+		layoutInfo.enumerateSections { (sectionIndex, sectionInfo, stop) in
+			guard sectionIndex != GlobalSectionIndex else {
+				return
+			}
+			
+			let frame = sectionInfo.frame
+			if frame.minY <= yOffset && yOffset <= frame.maxY {
+				result = sectionInfo
+				stop = true
+			}
+		}
+		
+		return result
+	}
+	
 	public func copy() -> LayoutMetrics {
 		let copy = BasicGridLayoutSection()
 		

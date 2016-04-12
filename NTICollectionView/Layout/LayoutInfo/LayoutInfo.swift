@@ -45,6 +45,10 @@ public protocol LayoutInfo: LayoutSizing, LayoutAttributesResolving {
 	
 	var contentOffset: CGPoint { get set }
 	
+	var contentInset: UIEdgeInsets { get set }
+	
+	var bounds: CGRect { get set }
+	
 	var isEditing: Bool { get }
 	
 	var numberOfSections: Int { get }
@@ -69,6 +73,9 @@ public protocol LayoutInfo: LayoutSizing, LayoutAttributesResolving {
 	/// Remove all sections including the global section, thus invalidating all layout information.
 	func invalidate()
 	
+	/// Make any necessary preparations before layout begins.
+	func prepareForLayout()
+	
 	/// Finalize the layout. This method adjusts the size of placeholders and calls each section's `finalizeLayoutAttributesForSectionsWithContent(_:)` method.
 	func finalizeLayout()
 	
@@ -77,6 +84,8 @@ public protocol LayoutInfo: LayoutSizing, LayoutAttributesResolving {
 	
 	/// Update the size of a supplementary item and mark it as invalidated in the given *invalidationContext*. This is needed for self-sizing view support. This method also adjusts the position of any content affected by the size change.
 	func setSize(size: CGSize, forElementOfKind kind: String, at indexPath: NSIndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext?)
+	
+	func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
 	/// Invalidate the current size information for the item at the given *indexPath*, update the layout possibly adjusting the position of content that needs to move to make room for or take up room from the item.
 	func invalidateMetricsForItemAt(indexPath: NSIndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext?)

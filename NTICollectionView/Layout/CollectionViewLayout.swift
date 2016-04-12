@@ -42,7 +42,6 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	
 	var layoutSize = CGSizeZero
 	
-	private var pinnableItems: [LayoutSupplementaryItem] = []
 	private var layoutInfo: LayoutInfo?
 	private var oldLayoutInfo: LayoutInfo?
 	
@@ -185,7 +184,9 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		}
 		
 		let contentOffset = targetContentOffsetForProposedContentOffset(collectionView.contentOffset)
-		updateSpecialItemsWithContentOffset(contentOffset)
+		layoutInfo.contentInset = collectionView.contentInset
+		layoutInfo.bounds = collectionView.bounds
+		layoutInfo.updateSpecialItemsWithContentOffset(contentOffset, invalidationContext: nil)
 		
 		var result: [UICollectionViewLayoutAttributes] = []
 		for sectionInfo in layoutInfo.sections {
@@ -211,10 +212,13 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		if let measuringAttributes = self.measuringAttributes
 			where measuringAttributes.indexPath == indexPath {
-				return measuringAttributes
+			layoutLog("\(#function) indexPath=\(indexPath.debugLogDescription) measuringAttributes=\(measuringAttributes)")
+			return measuringAttributes
 		}
 		
-		return layoutInfo.layoutAttributesForCell(at: indexPath)
+		let attributes = layoutInfo.layoutAttributesForCell(at: indexPath)
+		layoutLog("\(#function) indexPath=\(indexPath.debugLogDescription) attributes=\(attributes)")
+		return attributes
 	}
 	
 	public override func layoutAttributesForSupplementaryViewOfKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
@@ -241,6 +245,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return preferredAttributes.frame.height != originalAttributes.frame.height
 	}
 	
+	/*
 	public override func invalidationContextForPreferredLayoutAttributes(preferredAttributes: UICollectionViewLayoutAttributes, withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutInvalidationContext {
 		layoutLog("\(#function) originalAttributes=\(originalAttributes) preferredAttributes=\(preferredAttributes)")
 		
@@ -259,9 +264,10 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		}
 		
 		layoutSize.height += context.contentSizeAdjustment.height
-		layoutLog("\(#function) contentSizeAdjustment=\(context.contentSizeAdjustment)")
+//		layoutLog("\(#function) contentSizeAdjustment=\(context.contentSizeAdjustment)")
 		return context
 	}
+*/
 	
 	public override func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
 		return true
@@ -294,7 +300,11 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		contentOffset.y += newOrigin.y - origin.y
 		contentOffset.x += newOrigin.x - origin.x
 		
-		updateSpecialItemsWithContentOffset(contentOffset, invalidationContext: context)
+		if let layoutInfo = self.layoutInfo {
+			layoutInfo.contentInset = collectionView.contentInset
+			layoutInfo.bounds = collectionView.bounds
+			layoutInfo.updateSpecialItemsWithContentOffset(contentOffset, invalidationContext: context)
+		}
 		
 		return context
 	}
@@ -318,16 +328,20 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		let availableHeight = UIEdgeInsetsInsetRect(collectionView.bounds, insets).height
 		targetContentOffset.y = min(targetContentOffset.y, max(0, layoutSize.height - availableHeight))
 		
+		// TODO: Abstract into layout sections
 		if let firstInsertedIndex = insertedSections.first,
 			sectionInfo = sectionInfoForSectionAtIndex(firstInsertedIndex),
-			globalSection = sectionInfoForSectionAtIndex(GlobalSectionIndex) {
-				let globalNonPinnableHeight = globalSection.heightOfNonPinningHeaders
-				let globalPinnableHeight = globalSection.heightOfPinningHeaders
-				let minY = sectionInfo.frame.minY
-				if targetContentOffset.y + globalPinnableHeight > minY {
-					// Need to make the section visible
-					targetContentOffset.y = max(globalNonPinnableHeight, minY - globalPinnableHeight)
-				}
+			globalSection = sectionInfoForSectionAtIndex(GlobalSectionIndex)
+			where operationDirectionForSectionAtIndex(firstInsertedIndex) != nil {
+			
+			let globalNonPinnableHeight = globalSection.heightOfNonPinningHeaders
+			let globalPinnableHeight = globalSection.heightOfPinningHeaders
+			let minY = sectionInfo.frame.minY
+			
+			if targetContentOffset.y + globalPinnableHeight > minY {
+				// Need to make the section visible
+				targetContentOffset.y = max(globalNonPinnableHeight, minY - globalPinnableHeight)
+			}
 		}
 		
 		targetContentOffset.y -= insets.top
@@ -550,10 +564,13 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		if let additionalValues = additionalDeletedIndexPaths[elementKind] {
 			superValue += additionalValues
 		}
+		layoutLog("\(#function) kind=\(elementKind) value=\(superValue)")
 		return superValue
 	}
 	
 	public override func initialLayoutAttributesForAppearingDecorationElementOfKind(elementKind: String, atIndexPath decorationIndexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+		layoutLog("\(#function) kind=\(elementKind) indexPath=\(decorationIndexPath.debugLogDescription)")
+		
 		guard let result = layoutInfo?.layoutAttributesForDecorationViewOfKind(elementKind, at: decorationIndexPath)?.copy() as? UICollectionViewLayoutAttributes else {
 			return nil
 		}
@@ -579,6 +596,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	}
 	
 	public override func finalLayoutAttributesForDisappearingDecorationElementOfKind(elementKind: String, atIndexPath decorationIndexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+		layoutLog("\(#function) kind=\(elementKind) indexPath=\(decorationIndexPath.debugLogDescription)")
+		
 		guard let result = oldLayoutInfo?.layoutAttributesForDecorationViewOfKind(elementKind, at: decorationIndexPath)?.copy() as? UICollectionViewLayoutAttributes else {
 			return nil
 		}
@@ -604,6 +623,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	}
 	
 	public override func initialLayoutAttributesForAppearingSupplementaryElementOfKind(elementKind: String, atIndexPath elementIndexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+		layoutLog("\(#function) kind=\(elementKind) indexPath=\(elementIndexPath.debugLogDescription)")
+		
 		guard let result = layoutInfo?.layoutAttributesForSupplementaryElementOfKind(elementKind, at: elementIndexPath)?.copy() as? UICollectionViewLayoutAttributes else {
 			return nil
 		}
@@ -634,6 +655,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	}
 	
 	public override func finalLayoutAttributesForDisappearingSupplementaryElementOfKind(elementKind: String, atIndexPath elementIndexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+		layoutLog("\(#function) kind=\(elementKind) indexPath=\(elementIndexPath.debugLogDescription)")
+		
 		guard let result = oldLayoutInfo?.layoutAttributesForSupplementaryElementOfKind(elementKind, at: elementIndexPath)?.copy() as? UICollectionViewLayoutAttributes else {
 			return nil
 		}
@@ -659,7 +682,9 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	}
 	
 	public override func initialLayoutAttributesForAppearingItemAtIndexPath(itemIndexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
-		guard let result = layoutInfo?.layoutAttributesForCell(at: itemIndexPath)?.copy() as? UICollectionViewLayoutAttributes else {
+		layoutLog("\(#function) indexPath=\(itemIndexPath.debugLogDescription)")
+		
+		guard var result = layoutInfo?.layoutAttributesForCell(at: itemIndexPath)?.copy() as? UICollectionViewLayoutAttributes else {
 			return nil
 		}
 		
@@ -680,12 +705,14 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 				result.alpha = 0
 		}
 		
-		return initialLayoutAttributesForAttributes(result)
+		result = initialLayoutAttributesForAttributes(result)
+		layoutLog("\(#function) frame=\(result.frame)")
+		return result
 	}
 	
-	// MARK: - CollectionViewLayoutMeasuring
-	
 	public override func finalLayoutAttributesForDisappearingItemAtIndexPath(itemIndexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+		layoutLog("\(#function) indexPath=\(itemIndexPath.debugLogDescription)")
+		
 		guard let result = oldLayoutInfo?.layoutAttributesForCell(at: itemIndexPath)?.copy() as? UICollectionViewLayoutAttributes else {
 			return nil
 		}
@@ -711,6 +738,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		return finalLayoutAttributesForAttributes(result)
 	}
+	
+	// MARK: - CollectionViewLayoutMeasuring
 	
 	public func measuredSizeForSupplementaryItem(supplementaryItem: LayoutSupplementaryItem) -> CGSize {
 		guard let collectionView = collectionViewWrapper as? WrapperCollectionView,
@@ -966,191 +995,35 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		layoutInfo.height = height
 		layoutInfo.contentOffset.x = contentOffset.x + contentInset.left
 		layoutInfo.contentOffset.y = contentOffset.y + contentInset.top
+		layoutInfo.contentInset = contentInset
+		layoutInfo.bounds = bounds
+		
+		layoutInfo.prepareForLayout()
 		
 		var start = CGPointZero
-		
-		pinnableItems.removeAll(keepCapacity: true)
-		
-		var globalNonPinningHeight: CGFloat = 0
 		
 		let layoutEngine = GridLayoutEngine(layoutInfo: layoutInfo)
 		start = layoutEngine.layoutWithOrigin(start, layoutSizing: layoutInfo, invalidationContext: nil)
 		
-		if let globalSection = sectionInfoForSectionAtIndex(GlobalSectionIndex) {
-			globalNonPinningHeight = globalSection.heightOfNonPinningHeaders
-		}
-		
-		// TODO: Generalize to include width
 		var layoutHeight = start.y
 		
 		// The layoutHeight is the total height of the layout including any placeholders in their default size. Determine how much space is left to be shared out among the placeholders
 		layoutInfo.heightAvailableForPlaceholders = max(0, height - layoutHeight)
 		
-		if layoutInfo.contentOffset.y >= globalNonPinningHeight && layoutHeight - globalNonPinningHeight < height {
-			layoutHeight = height + globalNonPinningHeight
+		if let globalSection = sectionInfoForSectionAtIndex(GlobalSectionIndex) {
+			layoutHeight = globalSection.targetLayoutHeightForProposedLayoutHeight(layoutHeight, layoutInfo: layoutInfo)
 		}
 		
 		layoutSize = CGSize(width: width, height: layoutHeight)
 		
 		contentOffset = targetContentOffsetForProposedContentOffset(contentOffset)
-		updateSpecialItemsWithContentOffset(contentOffset)
+		layoutInfo.updateSpecialItemsWithContentOffset(contentOffset, invalidationContext: nil)
 		
 		layoutInfo.finalizeLayout()
 		
 		collectionViewWrapper = nil
 		
 		layoutLog("\(#function) Final layout height: \(layoutHeight)")
-	}
-	
-	private func resetPinnableSupplementaryItems(supplementaryItems: [LayoutSupplementaryItem], invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
-		for supplementaryItem in supplementaryItems {
-			guard let attributes = supplementaryItem.layoutAttributes as? CollectionViewLayoutAttributes else {
-				continue
-			}
-			var frame = attributes.frame
-			if frame.origin.y != attributes.unpinnedOrigin.y {
-				invalidationContext?.invalidateSupplementaryElement(with: attributes)
-			}
-			attributes.isPinned = false
-			frame.origin.y = attributes.unpinnedOrigin.y
-			attributes.frame = frame
-		}
-	}
-	
-	private func applyBottomPinning(to supplementaryItems: [LayoutSupplementaryItem], maxY: CGFloat, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGFloat {
-		var maxY = maxY
-		
-		for supplementaryItem in supplementaryItems.reverse() {
-			let attributes = supplementaryItem.layoutAttributes
-			var frame = attributes.frame
-			
-			guard frame.maxY < maxY else {
-				continue
-			}
-			
-			frame.origin.y = maxY - frame.height
-			maxY = frame.origin.y
-			attributes.frame = frame
-			
-			invalidationContext?.invalidateSupplementaryElement(with: attributes)
-		}
-		
-		return maxY
-	}
-	
-	/// Pins the attributes starting at `minY` -- as long as they don't cross `minY` -- and returns the new `minY`.
-	private func applyTopPinning(to supplementaryItems: [LayoutSupplementaryItem], minY: CGFloat, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGFloat {
-		var minY = minY
-		
-		for supplementaryItem in supplementaryItems {
-			// Record this supplementary item so we can reset it later
-			pinnableItems.append(supplementaryItem)
-			
-			let attributes = supplementaryItem.layoutAttributes
-			var frame = attributes.frame
-			
-			guard frame.origin.y < minY else {
-				continue
-			}
-			
-			frame.origin.y = minY
-			minY = frame.maxY // we have a new pinning offset
-			attributes.frame = frame
-			
-			invalidationContext?.invalidateSupplementaryElement(with: attributes)
-		}
-		
-		return minY
-	}
-	
-	private func finalizePinning(for supplementaryItems: [LayoutSupplementaryItem], zIndex: Int) {
-		for (itemIndex, supplementaryItem) in supplementaryItems.enumerate() {
-			let attributes = supplementaryItem.layoutAttributes
-			
-			if let pinnableAttributes = attributes as? CollectionViewLayoutAttributes {
-				let frame = pinnableAttributes.frame
-				pinnableAttributes.isPinned = frame.origin.y != pinnableAttributes.unpinnedOrigin.y
-			}
-			
-			let depth = itemIndex + 1
-			attributes.zIndex = zIndex - depth
-		}
-	}
-	
-	private func firstSectionOverlappingYOffset(yOffset: CGFloat) -> LayoutSection? {
-		guard let layoutInfo = self.layoutInfo else {
-			return nil
-		}
-		
-		var result: LayoutSection?
-		
-		layoutInfo.enumerateSections { (sectionIndex, sectionInfo, stop) in
-			guard sectionIndex != GlobalSectionIndex else {
-				return
-			}
-			
-			let frame = sectionInfo.frame
-			if frame.minY <= yOffset && yOffset <= frame.maxY {
-				result = sectionInfo
-				stop = true
-			}
-		}
-		
-		return result
-	}
-	
-	// TODO: Encapsulate elsewhere
-	func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
-		guard let collectionView = self.collectionView else {
-			return
-		}
-		let numSections = collectionView.numberOfSections()
-		
-		guard numSections > 0 && numSections != NSNotFound else {
-			return
-		}
-		
-		var pinnableY = contentOffset.y + collectionView.contentInset.top
-		var nonPinnableY = pinnableY
-		
-		resetPinnableSupplementaryItems(pinnableItems, invalidationContext: invalidationContext)
-		pinnableItems.removeAll(keepCapacity: true)
-		
-		// Pin the headers as appropriate
-		guard let section = sectionInfoForSectionAtIndex(GlobalSectionIndex) else {
-			return
-		}
-		
-		let pinnableHeaders = section.pinnableHeaders
-		
-		if !pinnableHeaders.isEmpty {
-			pinnableY = applyTopPinning(to: pinnableHeaders, minY: pinnableY, invalidationContext: invalidationContext)
-			finalizePinning(for: pinnableHeaders, zIndex: pinnedHeaderZIndex)
-		}
-		
-		let nonPinnableHeaders = section.nonPinnableHeaders
-		
-		if !nonPinnableHeaders.isEmpty {
-			resetPinnableSupplementaryItems(nonPinnableHeaders, invalidationContext: invalidationContext)
-			nonPinnableY = applyBottomPinning(to: nonPinnableHeaders, maxY: nonPinnableY, invalidationContext: invalidationContext)
-			// FIXME: Should this really be `pinnedHeaderZIndex`?
-			finalizePinning(for: nonPinnableHeaders, zIndex: pinnedHeaderZIndex)
-		}
-		
-		if let backgroundAttributes = section.backgroundAttribute {
-			var frame = backgroundAttributes.frame
-			frame.origin.y = min(nonPinnableY, collectionView.bounds.origin.y)
-			let bottomY = max(pinnableHeaders.last?.frame.maxY ?? 0, nonPinnableHeaders.last?.frame.maxY ?? 0)
-			frame.size.height = bottomY - frame.origin.y
-			backgroundAttributes.frame = frame
-		}
-		
-		if let overlappingSection = firstSectionOverlappingYOffset(pinnableY) {
-			let overlappingPinnableHeaders = overlappingSection.pinnableHeaders
-			applyTopPinning(to: overlappingPinnableHeaders, minY: pinnableY, invalidationContext: invalidationContext)
-			// FIXME: Magic number
-			finalizePinning(for: overlappingSection.pinnableHeaders, zIndex: pinnedHeaderZIndex - 100)
-		}
 	}
 	
 	private func initialLayoutAttributesForAttributes(attributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {

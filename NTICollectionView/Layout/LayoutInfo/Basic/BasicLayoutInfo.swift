@@ -25,6 +25,10 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 	
 	public var contentOffset = CGPointZero
 	
+	public var contentInset = UIEdgeInsetsZero
+	
+	public var bounds = CGRectZero
+	
 	public weak var layout: CollectionViewLayout?
 	
 	public var layoutMeasure: CollectionViewLayoutMeasuring? {
@@ -123,6 +127,12 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 	public func invalidate() {
 		globalSection = nil
 		_sections.removeAll(keepCapacity: true)
+	}
+	
+	public func prepareForLayout() {
+		for section in sections {
+			section.prepareForLayout()
+		}
 	}
 	
 	public func finalizeLayout() {
@@ -231,6 +241,12 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 			placeholderInfo.setFrame(frame, invalidationContext: invalidationContext)
 		}
 		return CGPointMake(0, deltaY)
+	}
+	
+	public func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
+		for section in sections {
+			section.updateSpecialItemsWithContentOffset(contentOffset, invalidationContext: invalidationContext)
+		}
 	}
 	
 	public func invalidateMetricsForItemAt(indexPath: NSIndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
