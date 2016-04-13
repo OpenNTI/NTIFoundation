@@ -20,7 +20,7 @@ extension AbstractCollectionDataSource {
 		if let header = supplementaryItemForKey(DataSourceTitleHeaderKey) {
 			return header
 		}
-		let header = BasicGridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
+		var header = BasicGridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
 		add(header, forKey: DataSourceTitleHeaderKey)
 		header.supplementaryViewClass = AAPLSectionHeaderView.self
 		header.configure { (view, dataSource, indexPath) in
@@ -33,7 +33,7 @@ extension AbstractCollectionDataSource {
 	}
 	
 	func sectionHeaderForSectionAtIndex(sectionIndex: Int) -> SupplementaryItem {
-		let newHeader = BasicGridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
+		var newHeader = BasicGridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
 		newHeader.supplementaryViewClass = AAPLSectionHeaderView.self
 		newHeader.backgroundColor = UIColor.blueColor()
 		add(newHeader, forSectionAtIndex: sectionIndex)
@@ -41,16 +41,15 @@ extension AbstractCollectionDataSource {
 	}
 	
 	func sectionHeaderWithTitle(title: String, forSectionAtIndex sectionIndex: Int) -> SupplementaryItem {
-		let newHeader = sectionHeaderForSectionAtIndex(sectionIndex)
+		var newHeader = sectionHeaderForSectionAtIndex(sectionIndex)
+		
 		newHeader.configure { (view, dataSource, indexPath) in
 			guard let view = view as? AAPLSectionHeaderView else {
 				return
 			}
 			view.leftText = title
 		}
-		if let gridHeader = newHeader as? GridSupplementaryItem {
-			gridHeader.backgroundColor = UIColor.redColor()
-		}
+		
 		return newHeader
 	}
 	
