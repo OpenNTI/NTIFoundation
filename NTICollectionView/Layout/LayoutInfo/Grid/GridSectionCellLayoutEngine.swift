@@ -124,8 +124,8 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	}
 	
 	private func layoutItems() {
-		for (itemIndex, item) in layoutSection.items.enumerate() {
-			layout(item, at: itemIndex)
+		layoutSection.mutateItems { (item, index) in
+			self.layout(item, at: index)
 		}
 	}
 	
