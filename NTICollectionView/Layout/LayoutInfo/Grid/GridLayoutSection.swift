@@ -303,6 +303,12 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		items.append(item)
 	}
 	
+	public func mutateItems(using mutator: (item: inout LayoutItem, index: Int) -> Void) {
+		for index in items.indices {
+			mutator(item: &items[index], index: index)
+		}
+	}
+	
 	public func add(supplementaryItem: LayoutSupplementaryItem) {
 		let kind = supplementaryItem.elementKind
 		supplementaryItem.itemIndex = supplementaryItems(of: kind).count

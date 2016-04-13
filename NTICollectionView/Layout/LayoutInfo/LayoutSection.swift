@@ -41,6 +41,8 @@ public protocol LayoutSection: class, LayoutEngine, LayoutAttributesResolving {
 	func add(supplementaryItem: LayoutSupplementaryItem)
 	func add(item: LayoutItem)
 	
+	func mutateItems(using mutator: (inout item: LayoutItem, index: Int) -> Void)
+	
 	/// Update the frame of this grouped object and any child objects. Use the invalidation context to mark layout objects as invalid.
 	func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
