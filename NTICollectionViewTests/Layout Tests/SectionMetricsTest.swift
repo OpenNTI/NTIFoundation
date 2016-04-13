@@ -12,12 +12,12 @@ import NTICollectionView
 class SectionMetricsTest: XCTestCase {
     
 	func testApplyValuesFromGridSectionMetrics() {
-		let metrics1 = BasicGridSectionMetrics()
+		var metrics1 = BasicGridSectionMetrics()
 		metrics1.rowHeight = 42
 		metrics1.estimatedRowHeight = 42
 		metrics1.numberOfColumns = 2
 		
-		let metrics2 = BasicGridSectionMetrics()
+		var metrics2 = BasicGridSectionMetrics()
 		metrics2.rowHeight = 31.4
 		metrics2.showsSectionSeparator = true
 		
