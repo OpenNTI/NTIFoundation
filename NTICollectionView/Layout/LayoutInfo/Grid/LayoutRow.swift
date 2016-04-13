@@ -21,7 +21,7 @@ public protocol LayoutRow: class {
 	
 	var rowSeparatorDecoration: HorizontalSeparatorDecoration? { get set }
 	
-	func add(item: LayoutItem)
+	func add(inout item: LayoutItem)
 	
 	func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
@@ -57,8 +57,7 @@ public class GridLayoutRow: LayoutRow {
 	
 	public var rowSeparatorDecoration: HorizontalSeparatorDecoration?
 	
-	public func add(item: LayoutItem) {
-		var item = item
+	public func add(inout item: LayoutItem) {
 		item.row = self
 		items.append(item)
 	}
