@@ -30,7 +30,8 @@ class CatDetailDataSource: ComposedCollectionDataSource {
 		let classificationSectionMetrics = GridDataSourceSectionMetrics()
 		classificationDataSource.setMetrics(classificationSectionMetrics, forSectionAtIndex: 0)
 		classificationDataSource.title = "Classification"
-		classificationDataSource.dataSourceTitleHeader
+		let classificationHeader = classificationDataSource.makeDataSourceTitleHeader()
+		add(classificationHeader, forKey: DataSourceTitleHeaderKey)
 		add(classificationDataSource)
 		
 		let descriptionMetrics = GridDataSourceSectionMetrics()
