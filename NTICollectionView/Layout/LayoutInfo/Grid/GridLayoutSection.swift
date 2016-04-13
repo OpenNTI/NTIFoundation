@@ -320,6 +320,16 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		return supplementaryItemsByKind[kind] ?? []
 	}
 	
+	public func mutateSupplementaryItems(using mutator: (supplementaryItem: inout LayoutSupplementaryItem, index: Int) -> Void) {
+		for (kind, supplementaryItems) in supplementaryItemsByKind {
+			var supplementaryItems = supplementaryItems
+			for index in supplementaryItems.indices {
+				mutator(supplementaryItem: &supplementaryItems[index], index: index)
+			}
+			supplementaryItemsByKind[kind] = supplementaryItems
+		}
+	}
+	
 	public func enumerateDecorations(using visitor: (inout LayoutDecoration) -> Void) {
 		for (kind, decorations) in decorationsByKind {
 			var decorations = decorations
