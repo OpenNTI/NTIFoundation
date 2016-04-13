@@ -305,10 +305,15 @@ extension DecorationAttributesWrapper {
 	
 }
 
-public struct BackgroundDecorationAttributes {
+public struct BackgroundDecorationAttributes: Equatable {
 	
 	public var color: UIColor?
 	
 	public var cornerRadius: CGFloat = 0
 	
+}
+
+public func ==(lhs: BackgroundDecorationAttributes, rhs: BackgroundDecorationAttributes) -> Bool {
+	return lhs.color == rhs.color
+	&& lhs.cornerRadius == rhs.cornerRadius
 }

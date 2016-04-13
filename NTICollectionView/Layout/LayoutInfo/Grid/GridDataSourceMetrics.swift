@@ -18,12 +18,20 @@ public class GridDataSourceSectionMetrics: DataSourceSectionMetrics {
 	
 	public var supplementaryItemsByKind: [String: [SupplementaryItem]] = [:]
 	
-	public func copy() -> LayoutMetrics {
+	public func copy() -> DataSourceSectionMetrics {
 		let copy = GridDataSourceSectionMetrics()
-		copy.metrics = (metrics as! BasicGridSectionMetrics).copy() as! BasicGridSectionMetrics
+		copy.metrics = metrics
 		copy.placeholder = placeholder?.copy()
 		copy.supplementaryItemsByKind = supplementaryItemsByKind
 		return copy
+	}
+	
+	public func isEqual(to other: LayoutMetrics) -> Bool {
+		guard let other = other as? GridDataSourceSectionMetrics else {
+			return false
+		}
+		
+		return metrics.isEqual(to: other.metrics)
 	}
 	
 	public func definesMetric(metric: String) -> Bool {

@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol LayoutAttributesResolving: class {
+public protocol LayoutAttributesResolving {
 	
 	func layoutAttributesForSupplementaryElementOfKind(kind: String, at indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes?
 	

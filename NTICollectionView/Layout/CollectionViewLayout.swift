@@ -782,7 +782,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		section.reset()
 		section.applyValues(from: gridMetrics)
-		section.resolveMissingValuesFromTheme()
+		section.metrics.resolveMissingValuesFromTheme()
 		
 		func setupSupplementaryMetrics(supplementaryMetrics: SupplementaryItem) {
 			// FIXME: Supplementary item kind shouldn't be decided here

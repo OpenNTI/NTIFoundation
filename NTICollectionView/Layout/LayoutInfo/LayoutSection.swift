@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol LayoutSection: LayoutMetrics, LayoutEngine, LayoutAttributesResolving {
+public protocol LayoutSection: class, LayoutEngine, LayoutAttributesResolving {
 	
 	var frame: CGRect { get set }
 	var sectionIndex: Int { get set }
@@ -69,6 +69,10 @@ public protocol LayoutSection: LayoutMetrics, LayoutEngine, LayoutAttributesReso
 	
 	func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
+	func applyValues(from metrics: LayoutMetrics)
+	
+	func copy() -> LayoutSection
+	
 }
 
 extension LayoutSection {
@@ -79,7 +83,7 @@ extension LayoutSection {
 	
 }
 
-public protocol LayoutEngine: class {
+public protocol LayoutEngine {
 	
 	/// Layout this section with the given starting origin and using the invalidation context to record cells and supplementary views that should be redrawn.
 	func layoutWithOrigin(origin: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint

@@ -19,7 +19,7 @@ public let collectionElementKindRightAuxiliaryItem = "collectionElementKindRight
 
 public protocol GridLayoutSection: LayoutSection {
 	
-	var metrics: GridSectionMetrics { get }
+	var metrics: GridSectionMetrics { get set }
 	
 	var rows: [LayoutRow] { get }
 	var leftAuxiliaryItems: [LayoutSupplementaryItem] { get }
@@ -124,7 +124,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		}
 	}
 	
-	public let metrics: GridSectionMetrics = BasicGridSectionMetrics()
+	public var metrics: GridSectionMetrics = BasicGridSectionMetrics()
 	
 	public var rows: [LayoutRow] = []
 	
@@ -945,7 +945,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		return result
 	}
 	
-	public func copy() -> LayoutMetrics {
+	public func copy() -> LayoutSection {
 		let copy = BasicGridLayoutSection()
 		
 		// Copy the rows first, then add the items from the copied rows; this should preserve the object graph of the copy
@@ -988,6 +988,14 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		copy.frame = frame
 		
 		return copy
+	}
+	
+	public func isEqual(to other: LayoutMetrics) -> Bool {
+		guard let other = other as? BasicGridLayoutSection else {
+			return false
+		}
+		
+		return sectionIndex == other.sectionIndex
 	}
 	
 }

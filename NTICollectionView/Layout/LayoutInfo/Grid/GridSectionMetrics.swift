@@ -83,7 +83,7 @@ public protocol GridSectionMetrics: SectionMetrics {
 	
 }
 
-public class BasicGridSectionMetrics: GridSectionMetrics {
+public struct BasicGridSectionMetrics: GridSectionMetrics {
 	
 	public static var defaultSupplementaryOrdering: Set<GridSectionSupplementaryItemOrder> = [.header(order: 0), .footer(order: 1), .leftAuxiliary(order: 2), .rightAuxiliary(order: 3)]
 	
@@ -248,41 +248,39 @@ public class BasicGridSectionMetrics: GridSectionMetrics {
 	/// How the cells should be laid out when there are multiple columns. The current default is `.LeadingToTrailing`.
 	public var cellLayoutOrder: ItemLayoutOrder = .LeadingToTrailing
 	
-	public func copy() -> LayoutMetrics {
-		let copy = BasicGridSectionMetrics()
+	public func isEqual(to other: LayoutMetrics) -> Bool {
+		guard let other = other as? BasicGridSectionMetrics else {
+			return false
+		}
 		
-		copy.decorationsByKind = decorationsByKind
-		copy.contentInset = contentInset
-		copy.cornerRadius = cornerRadius
-		copy.rowHeight = rowHeight
-		copy.estimatedRowHeight = estimatedRowHeight
-		copy.fixedColumnWidth = fixedColumnWidth
-		copy.rowSpacing = rowSpacing
-		copy.minimumInteritemSpacing = minimumInteritemSpacing
-		copy.leftAuxiliaryColumnWidth = leftAuxiliaryColumnWidth
-		copy.rightAuxiliaryColumnWidth = rightAuxiliaryColumnWidth
-		copy.auxiliaryColumnSpacing = auxiliaryColumnSpacing
-		copy.numberOfColumns = numberOfColumns
-		copy.padding = padding
-		copy.showsColumnSeparator = showsColumnSeparator
-		copy.separatorInsets = separatorInsets
-		copy.backgroundColor = backgroundColor
-		copy.selectedBackgroundColor = selectedBackgroundColor
-		copy.separatorColor = separatorColor
-		copy.sectionSeparatorColor = sectionSeparatorColor
-		copy.sectionSeparatorInsets = sectionSeparatorInsets
-		copy.showsSectionSeparator = showsSectionSeparator
-		copy.showsSectionSeparatorWhenLastSection = showsSectionSeparatorWhenLastSection
-		copy.cellLayoutOrder = cellLayoutOrder
-		copy.showsRowSeparator = showsRowSeparator
-		copy.contentBackgroundAttributes = contentBackgroundAttributes
-		copy.supplementaryOrdering = supplementaryOrdering
-		copy.flags = flags
-		
-		return copy
+		return other.contentInset == contentInset
+		&& other.cornerRadius == cornerRadius
+		&& other.rowHeight == rowHeight
+		&& other.estimatedRowHeight == estimatedRowHeight
+		&& other.fixedColumnWidth == fixedColumnWidth
+		&& other.rowSpacing == rowSpacing
+		&& other.minimumInteritemSpacing == minimumInteritemSpacing
+		&& other.leftAuxiliaryColumnWidth == leftAuxiliaryColumnWidth
+		&& other.rightAuxiliaryColumnWidth == rightAuxiliaryColumnWidth
+		&& other.auxiliaryColumnSpacing == auxiliaryColumnSpacing
+		&& other.numberOfColumns == numberOfColumns
+		&& other.padding == padding
+		&& other.showsColumnSeparator == showsColumnSeparator
+		&& other.separatorInsets == separatorInsets
+		&& other.backgroundColor == backgroundColor
+		&& other.selectedBackgroundColor == selectedBackgroundColor
+		&& other.separatorColor == separatorColor
+		&& other.sectionSeparatorColor == sectionSeparatorColor
+		&& other.sectionSeparatorInsets == sectionSeparatorInsets
+		&& other.showsSectionSeparator == showsSectionSeparator
+		&& other.showsSectionSeparatorWhenLastSection == showsSectionSeparatorWhenLastSection
+		&& other.cellLayoutOrder == cellLayoutOrder
+		&& other.showsRowSeparator == showsRowSeparator
+		&& other.contentBackgroundAttributes == contentBackgroundAttributes
+		&& other.supplementaryOrdering == supplementaryOrdering
 	}
 	
-	public func applyValues(from metrics: LayoutMetrics) {
+	public mutating func applyValues(from metrics: LayoutMetrics) {
 		guard let sectionMetrics = metrics as? SectionMetrics else {
 			return
 		}
@@ -368,7 +366,7 @@ public class BasicGridSectionMetrics: GridSectionMetrics {
 		return flags.contains(metric)
 	}
 	
-	public func resolveMissingValuesFromTheme() {
+	public mutating func resolveMissingValuesFromTheme() {
 		if !definesMetric("backgroundColor") {
 			backgroundColor = UIColor.whiteColor()
 		}
@@ -385,7 +383,7 @@ public class BasicGridSectionMetrics: GridSectionMetrics {
 	
 	private var flags: Set<String> = []
 	
-	private func setFlag(flag: String) {
+	private mutating func setFlag(flag: String) {
 		flags.insert(flag)
 	}
 	
@@ -393,7 +391,7 @@ public class BasicGridSectionMetrics: GridSectionMetrics {
 
 public protocol GridSectionMetricsOwning: SectionMetricsOwning, GridSectionMetrics {
 	
-	var metrics: GridSectionMetrics { get }
+	var metrics: GridSectionMetrics { get set }
 	
 }
 

@@ -223,7 +223,7 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 	}
 	
 	private func appliedMetricsForSection(at sectionIndex: Int) -> DataSourceSectionMetrics? {
-		guard let metrics = defaultMetrics?.copy() as? DataSourceSectionMetrics else {
+		guard let metrics = defaultMetrics?.copy() else {
 			return sectionMetrics[sectionIndex]
 		}
 		
@@ -238,7 +238,7 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		guard contributesGlobalMetrics else {
 			return nil
 		}
-		return sectionMetrics[GlobalSectionIndex]?.copy() as? DataSourceSectionMetrics
+		return sectionMetrics[GlobalSectionIndex]?.copy()
 	}
 	
 	public func layoutIndexPathForItemIndex(itemIndex: Int, sectionIndex: Int) -> NSIndexPath {

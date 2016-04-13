@@ -96,7 +96,7 @@ public class GridLayoutRow: LayoutRow {
 		copy.section = section
 		copy.frame = frame
 		copy.items = items.map { $0.copy() }
-		copy.metrics = metrics.copy() as! BasicGridSectionMetrics
+		copy.metrics = metrics
 		return copy
 	}
 	

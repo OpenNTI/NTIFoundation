@@ -24,15 +24,15 @@ public enum ItemLayoutOrder: String {
 	
 }
 
-public protocol LayoutMetrics: class {
+public protocol LayoutMetrics {
 	
-	func applyValues(from metrics: LayoutMetrics)
+	mutating func applyValues(from metrics: LayoutMetrics)
 	
 	func definesMetric(metric: String) -> Bool
 	
-	func resolveMissingValuesFromTheme()
+	mutating func resolveMissingValuesFromTheme()
 	
-	func copy() -> LayoutMetrics
+	func isEqual(to other: LayoutMetrics) -> Bool
 	
 }
 
@@ -53,13 +53,13 @@ public protocol SectionMetrics: LayoutMetrics {
 	/// The decorations to add to the section represented by `self`.
 	var decorationsByKind: [String: [LayoutDecoration]] { get set }
 	
-	func add(decoration: LayoutDecoration)
+	mutating func add(decoration: LayoutDecoration)
 	
 }
 
 extension SectionMetrics {
 	
-	public func add(decoration: LayoutDecoration) {
+	public mutating func add(decoration: LayoutDecoration) {
 		let kind = decoration.elementKind
 		decorationsByKind.append(decoration, to: kind)
 	}
@@ -68,7 +68,7 @@ extension SectionMetrics {
 
 public protocol SectionMetricsOwning: SectionMetrics {
 	
-	var metrics: SectionMetrics { get }
+	var metrics: SectionMetrics { get set }
 	
 	func applyValues(from metrics: SectionMetrics)
 	
@@ -89,7 +89,7 @@ extension SectionMetricsOwning {
 		}
 	}
 	
-	public func applyValues(from metrics: LayoutMetrics) {
+	public mutating func applyValues(from metrics: LayoutMetrics) {
 		self.metrics.applyValues(from: metrics)
 	}
 	
@@ -97,7 +97,7 @@ extension SectionMetricsOwning {
 		return metrics.definesMetric(metric)
 	}
 	
-	public func resolveMissingValuesFromTheme() {
+	public mutating func resolveMissingValuesFromTheme() {
 		metrics.resolveMissingValuesFromTheme()
 	}
 	
