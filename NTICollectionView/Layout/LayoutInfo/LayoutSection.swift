@@ -100,7 +100,7 @@ public func layoutSection(`self`: LayoutSection, setFrame frame: CGRect, invalid
 	}
 	let offset = CGPoint(x: frame.origin.x - self.frame.origin.x, y: frame.origin.y - self.frame.origin.y)
 	
-	for supplementaryItem in `self`.supplementaryItems {
+	`self`.mutateSupplementaryItems { (supplementaryItem, _) in
 		let supplementaryFrame = CGRectOffset(supplementaryItem.frame, offset.x, offset.y)
 		supplementaryItem.setFrame(supplementaryFrame, invalidationContext: invalidationContext)
 	}
@@ -115,19 +115,19 @@ public func layoutSection(`self`: LayoutSection, setFrame frame: CGRect, invalid
 }
 
 public func layoutSection(`self`: LayoutSection, offsetContentAfter origin: CGPoint, with offset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
-	for supplementaryItem in `self`.supplementaryItems {
+	`self`.mutateSupplementaryItems { (supplementaryItem, _) in
 		var supplementaryFrame = supplementaryItem.frame
 		if supplementaryFrame.minX < origin.x || supplementaryFrame.minY < origin.y {
-			continue
+			return
 		}
 		supplementaryFrame = CGRectOffset(supplementaryFrame, offset.x, offset.y)
 		supplementaryItem.setFrame(supplementaryFrame, invalidationContext: invalidationContext)
 	}
 	
-	for item in `self`.items {
+	`self`.mutateItems { (item, _) in
 		var itemFrame = item.frame
 		if itemFrame.minX < origin.x || itemFrame.minY < origin.y {
-			continue
+			return
 		}
 		itemFrame = CGRectOffset(itemFrame, offset.x, offset.y)
 		item.setFrame(itemFrame, invalidationContext: invalidationContext)
