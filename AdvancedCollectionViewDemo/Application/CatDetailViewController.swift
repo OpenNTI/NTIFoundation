@@ -83,11 +83,12 @@ class CatDetailViewController: CollectionViewController {
 		dataSource.noContentPlaceholder = BasicDataSourcePlaceholder(title: "No Sightings", message: "This cat has not been sighted recently.", image: nil)
 		
 		let metrics = GridDataSourceSectionMetrics()
-		if let gridMetrics = metrics.metrics as? GridSectionMetrics {
-			gridMetrics.showsRowSeparator = true
-			gridMetrics.separatorInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
-			gridMetrics.estimatedRowHeight = 60
-		}
+		var gridMetrics = BasicGridSectionMetrics()
+		gridMetrics.showsRowSeparator = true
+		gridMetrics.separatorInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
+		gridMetrics.estimatedRowHeight = 60
+		metrics.applyValues(from: gridMetrics)
+
 		dataSource.defaultMetrics = metrics
 		
 		return dataSource

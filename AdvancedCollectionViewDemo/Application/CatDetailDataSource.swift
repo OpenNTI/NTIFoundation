@@ -18,9 +18,15 @@ class CatDetailDataSource: ComposedCollectionDataSource {
 		
 		defaultMetrics = GridDataSourceSectionMetrics()
 		
+		var gridMetrics = BasicGridSectionMetrics()
+		
 		let classificationMetrics = GridDataSourceSectionMetrics()
-		(classificationMetrics.metrics as? GridSectionMetrics)?.estimatedRowHeight = 22
+		
+		gridMetrics.estimatedRowHeight = 22
+		
+		classificationMetrics.applyValues(from: gridMetrics)
 		classificationDataSource.defaultMetrics = classificationMetrics
+		
 		let classificationSectionMetrics = GridDataSourceSectionMetrics()
 		classificationDataSource.setMetrics(classificationSectionMetrics, forSectionAtIndex: 0)
 		classificationDataSource.title = "Classification"
@@ -28,7 +34,8 @@ class CatDetailDataSource: ComposedCollectionDataSource {
 		add(classificationDataSource)
 		
 		let descriptionMetrics = GridDataSourceSectionMetrics()
-		(descriptionMetrics.metrics as? GridSectionMetrics)?.estimatedRowHeight = 100
+		gridMetrics.estimatedRowHeight = 100
+		descriptionMetrics.applyValues(from: gridMetrics)
 		descriptionDataSource.defaultMetrics = descriptionMetrics
 		add(descriptionDataSource)
 	}
