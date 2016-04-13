@@ -127,12 +127,12 @@ public protocol LayoutArea {
 	/// Update the frame of `self` and any child areas. 
 	///
 	/// If the frame has changed, mark objects as invalid in the invalidation context as necessary.
-	func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
+	mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
 }
 
 
-public protocol LayoutElement: class, LayoutArea {
+public protocol LayoutElement: LayoutArea {
 	
 	var itemIndex: Int { get set }
 	
@@ -140,7 +140,7 @@ public protocol LayoutElement: class, LayoutArea {
 	
 	var layoutAttributes: UICollectionViewLayoutAttributes { get }
 	
-	func resetLayoutAttributes()
+	mutating func resetLayoutAttributes()
 	
 }
 

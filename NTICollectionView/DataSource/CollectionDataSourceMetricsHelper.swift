@@ -102,7 +102,7 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		let kind = supplementaryItem.elementKind
 		let supplementaryItems = supplementaryItemsOfKind(kind)
 		
-		if let itemIndex = supplementaryItems.indexOf({ $0 === supplementaryItem }) {
+		if let itemIndex = supplementaryItems.indexOf({ $0.isEqual(to: supplementaryItem) }) {
 			let indexPath = isRootDataSource ? NSIndexPath(index: itemIndex) : NSIndexPath(forItem: itemIndex, inSection: 0)
 			return [indexPath]
 		}
@@ -111,7 +111,7 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		
 		// If the item is in the default metrics, return an index path for each section
 		if let sectionItems = defaultMetrics?.supplementaryItemsByKind[kind],
-			itemIndex = sectionItems.indexOf({ $0 === supplementaryItem }) {
+			itemIndex = sectionItems.indexOf({ $0.isEqual(to: supplementaryItem) }) {
 				var result: [NSIndexPath] = []
 				for sectionIndex in 0..<numberOfSections {
 					var elementIndex = itemIndex
@@ -130,7 +130,7 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		// If the supplementary metrics exist, it's in one of the section metrics
 		for (sectionIndex, sectionMetrics) in self.sectionMetrics {
 			guard let sectionItems = sectionMetrics.supplementaryItemsByKind[kind],
-				itemIndex = sectionItems.indexOf({ $0 === supplementaryItem }) else {
+				itemIndex = sectionItems.indexOf({ $0.isEqual(to: supplementaryItem) }) else {
 					continue
 			}
 			var elementIndex = itemIndex + numberOfDefaultItems

@@ -78,12 +78,18 @@ public class BasicGridLayoutSection: GridLayoutSection {
 	
 	private var otherSupplementaryItems: [LayoutSupplementaryItem] = []
 	
+	// FIXME: Make sure this doesn't trigger when we're mutating the value
 	public var placeholderInfo: LayoutPlaceholder? {
 		didSet {
-			guard placeholderInfo !== oldValue else {
+			guard let placeholderInfo = self.placeholderInfo else {
 				return
 			}
-			placeholderInfo?.wasAddedToSection(self)
+			
+			if let oldValue = oldValue where placeholderInfo.isEqual(to: oldValue) {
+				return
+			}
+			
+			placeholderInfo.wasAddedToSection(self)
 		}
 	}
 	
@@ -299,6 +305,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 	}
 	
 	public func add(item: LayoutItem) {
+		var item = item
 		item.itemIndex = items.count
 		items.append(item)
 	}
@@ -311,6 +318,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 	
 	public func add(supplementaryItem: LayoutSupplementaryItem) {
 		let kind = supplementaryItem.elementKind
+		var supplementaryItem = supplementaryItem
 		supplementaryItem.itemIndex = supplementaryItems(of: kind).count
 		supplementaryItem.section = self
 		supplementaryItemsByKind.append(supplementaryItem, to: kind)
@@ -427,8 +435,9 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		}
 	}
 	
+	// TODO: Store items in rows and re-implement
 	public func setSize(size: CGSize, forItemAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
-		let itemInfo = items[index]
+		var itemInfo: LayoutItem = items[index]
 		var itemFrame = itemInfo.frame
 		guard size != itemFrame.size, let rowInfo = itemInfo.row else {
 			return CGPointZero
@@ -436,6 +445,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		
 		itemFrame.size = size
 		itemInfo.setFrame(itemFrame, invalidationContext: invalidationContext)
+		items[index] = itemInfo
 		
 		// Items in a row are always the same height
 		var rowFrame = rowInfo.frame
@@ -473,12 +483,13 @@ public class BasicGridLayoutSection: GridLayoutSection {
 	}
 	
 	public func setSize(size: CGSize, forSupplementaryElementOfKind kind: String, at index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
-		let items = supplementaryItems(of: kind)
-		let supplementaryItem = items[index]
-		return setSize(size, of: supplementaryItem, invalidationContext: invalidationContext)
+		var supplementaryItems = self.supplementaryItems(of: kind)
+		let delta = setSize(size, of: &supplementaryItems[index], invalidationContext: invalidationContext)
+		supplementaryItemsByKind[kind] = supplementaryItems
+		return delta
 	}
 	
-	func setSize(size: CGSize, of supplementaryItem: LayoutSupplementaryItem, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
+	func setSize(size: CGSize, inout of supplementaryItem: LayoutSupplementaryItem, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
 		var frame = supplementaryItem.frame
 		let after = CGPoint(x: 0, y: frame.maxY)
 		
@@ -973,8 +984,8 @@ public class BasicGridLayoutSection: GridLayoutSection {
 			items += newRow.items
 		}
 		
-		for (idx, itemInfo) in items.enumerate() {
-			itemInfo.itemIndex = idx
+		for idx in items.indices {
+			items[idx].itemIndex = idx
 		}
 		
 		copy.items = items
@@ -982,7 +993,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		for (kind, supplementaryItems) in supplementaryItemsByKind {
 			var copiedSupplementaryItems = [LayoutSupplementaryItem]()
 			for supplementaryItem in supplementaryItems {
-				copiedSupplementaryItems.append(supplementaryItem.copy() as! LayoutSupplementaryItem)
+				copiedSupplementaryItems.append(supplementaryItem)
 			}
 			copy.supplementaryItemsByKind[kind] = copiedSupplementaryItems
 		}

@@ -25,6 +25,8 @@ public protocol LayoutPlaceholder: LayoutElement {
 	
 	func wasAddedToSection(section: LayoutSection)
 	
+	func isEqual(to other: LayoutPlaceholder) -> Bool
+	
 }
 
 extension LayoutPlaceholder {
@@ -100,6 +102,18 @@ public class BasicLayoutPlaceholder: LayoutPlaceholder {
 	
 	public func resetLayoutAttributes() {
 		_layoutAttributes = nil
+	}
+	
+	public func isEqual(to other: LayoutPlaceholder) -> Bool {
+		guard let other = other as? BasicLayoutPlaceholder else {
+			return false
+		}
+		
+		return self === other
+//		return sectionIndexes == other.sectionIndexes
+//			&& height == other.height
+//			&& hasEstimatedHeight == other.hasEstimatedHeight
+//			&& backgroundColor == other.backgroundColor
 	}
 	
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class GridLayoutItem: LayoutItem {
+public struct GridLayoutItem: LayoutItem {
 	
 	public var frame = CGRectZero {
 		didSet {
@@ -34,9 +34,9 @@ public class GridLayoutItem: LayoutItem {
 	}
 	
 	public var layoutAttributes: UICollectionViewLayoutAttributes {
-		if let layoutAttributes = _layoutAttributes where layoutAttributes.indexPath == indexPath {
-			return layoutAttributes
-		}
+//		if let layoutAttributes = _layoutAttributes where layoutAttributes.indexPath == indexPath {
+//			return layoutAttributes
+//		}
 		
 		let attributes = CollectionViewLayoutAttributes(forCellWithIndexPath: indexPath)
 		attributes.frame = self.frame
@@ -62,7 +62,7 @@ public class GridLayoutItem: LayoutItem {
 		
 		attributes.hidden = isDragging
 		
-		_layoutAttributes = attributes
+//		_layoutAttributes = attributes
 		return attributes
 	}
 	
@@ -76,7 +76,7 @@ public class GridLayoutItem: LayoutItem {
 		return row?.section
 	}
 	
-	public func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		guard frame != self.frame else {
 			return
 		}
@@ -84,20 +84,8 @@ public class GridLayoutItem: LayoutItem {
 		invalidationContext?.invalidateItemsAtIndexPaths([indexPath])
 	}
 	
-	public func resetLayoutAttributes() {
+	public mutating func resetLayoutAttributes() {
 		_layoutAttributes = nil
-	}
-	
-	public func copy() -> LayoutItem {
-		let copy = GridLayoutItem()
-		copy.row = row
-		copy.itemIndex = itemIndex
-		copy.isDragging = isDragging
-		copy.columnIndex = columnIndex
-		copy.hasEstimatedHeight = hasEstimatedHeight
-		copy._layoutAttributes = (layoutAttributes.copy() as! UICollectionViewLayoutAttributes)
-		copy.frame = frame
-		return copy
 	}
 	
 }

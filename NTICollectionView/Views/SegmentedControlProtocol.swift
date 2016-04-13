@@ -53,18 +53,69 @@ public protocol SegmentedControlSupplementaryItem: SupplementaryItem {
 	
 }
 
-public class GridSegmentedControlHeader: BasicGridSupplementaryItem, SegmentedControlSupplementaryItem {
+public struct GridSegmentedControlHeader: GridSupplementaryItemWrapper, SegmentedControlSupplementaryItem {
 	
 	public init() {
-		super.init(elementKind: UICollectionElementKindSectionHeader)
+		gridSupplementaryItem = BasicGridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
 	}
 	
-	public convenience init(segmentedControl: SegmentedControlProtocol) {
+	public init(segmentedControl: SegmentedControlProtocol) {
 		self.init()
 		self.segmentedControl = segmentedControl
 	}
 	
+	public var gridSupplementaryItem: BasicGridSupplementaryItem
+	
 	public var segmentedControl: SegmentedControlProtocol!
+	
+	public var section: LayoutSection? {
+		get {
+			return gridSupplementaryItem.section
+		}
+		set {
+			gridSupplementaryItem.section = newValue
+		}
+	}
+	
+	public var frame: CGRect {
+		get {
+			return gridSupplementaryItem.frame
+		}
+		set {
+			gridSupplementaryItem.frame = newValue
+		}
+	}
+	
+	public var itemIndex: Int {
+		get {
+			return gridSupplementaryItem.itemIndex
+		}
+		set {
+			gridSupplementaryItem.itemIndex = newValue
+		}
+	}
+	
+	public var indexPath: NSIndexPath {
+		return gridSupplementaryItem.indexPath
+	}
+	
+	public var layoutAttributes: UICollectionViewLayoutAttributes {
+		return gridSupplementaryItem.layoutAttributes
+	}
+	
+	public func isEqual(to other: SupplementaryItem) -> Bool {
+		guard other.isEqual(to: gridSupplementaryItem) else {
+			return false
+		}
+		
+		guard let other = other as? GridSegmentedControlHeader else {
+			return false
+		}
+		
+		return segmentedControl === other.segmentedControl
+	}
+	
+	
 	
 }
 

@@ -60,9 +60,9 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 		prevPagePlaceholder.isHidden = true
 	}
 	
-	public let nextPagePlaceholder = BasicGridSupplementaryItem(elementKind: UICollectionElementKindSectionFooter)
+	public private(set) var nextPagePlaceholder: GridSupplementaryItem = BasicGridSupplementaryItem(elementKind: UICollectionElementKindSectionFooter)
 	
-	public let prevPagePlaceholder = BasicGridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
+	public private(set) var prevPagePlaceholder: GridSupplementaryItem = BasicGridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
 	
 	public var pageLoadDelay: NSTimeInterval = 0.5
 	
@@ -79,7 +79,7 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 	}
 	
 	private func configureNextPagePlaceholder() {
-		configurePagingPlaceholder(nextPagePlaceholder)
+		configurePagingPlaceholder(&nextPagePlaceholder)
 		nextPagePlaceholder.reuseIdentifier = nextPagePlaceholderKey
 		nextPagePlaceholder.configure { [weak self] (view, dataSource, indexPath) in
 			guard let `self` = self else {
@@ -102,7 +102,7 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 	}
 	
 	private func configurePrevPagePlaceholder() {
-		configurePagingPlaceholder(prevPagePlaceholder)
+		configurePagingPlaceholder(&prevPagePlaceholder)
 		prevPagePlaceholder.reuseIdentifier = prevPagePlaceholderKey
 		prevPagePlaceholder.configure { [weak self] (view, dataSource, indexPath) in
 			guard let `self` = self else {
@@ -124,7 +124,7 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 		dataSource.add(prevPagePlaceholder, forKey: prevPagePlaceholderKey)
 	}
 	
-	private func configurePagingPlaceholder(pagingPlaceholder: GridSupplementaryItem) {
+	private func configurePagingPlaceholder(inout pagingPlaceholder: GridSupplementaryItem) {
 		pagingPlaceholder.backgroundColor = nil
 		pagingPlaceholder.height = 0
 		pagingPlaceholder.isHidden = true

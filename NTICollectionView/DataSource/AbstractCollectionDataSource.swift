@@ -228,7 +228,7 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	private func remove(supplementaryItem: SupplementaryItem) {
 		let kind = supplementaryItem.elementKind
 		var items = supplementaryItemsOfKind(kind)
-		if let index = items.indexOf({ $0 === supplementaryItem }) {
+		if let index = items.indexOf({ $0.isEqual(to: supplementaryItem) }) {
 			items.removeAtIndex(index)
 			supplementaryItemsByKind[kind] = items
 		}
@@ -246,7 +246,7 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	private func replace(oldSupplementaryItem: SupplementaryItem, with supplementaryItem: SupplementaryItem) {
 		let kind = oldSupplementaryItem.elementKind
 		var items = supplementaryItemsOfKind(kind)
-		if let index = items.indexOf({ $0 === oldSupplementaryItem }) {
+		if let index = items.indexOf({ $0.isEqual(to: oldSupplementaryItem) }) {
 			items[index] = supplementaryItem
 		} else {
 			items.append(supplementaryItem)

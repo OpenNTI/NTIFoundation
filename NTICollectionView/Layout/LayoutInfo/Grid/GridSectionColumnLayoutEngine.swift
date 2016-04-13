@@ -108,7 +108,7 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 	}
 	
 	private func measureHeight(inout of supplementaryItem: LayoutSupplementaryItem) {
-		let measuredSize = layoutMeasure.measuredSizeForSupplementaryItem(supplementaryItem)
+		let measuredSize = layoutMeasure.measuredSizeForSupplementaryItem(&supplementaryItem)
 		supplementaryItem.height = measuredSize.height
 		updateFrame(of: &supplementaryItem)
 	}
@@ -116,7 +116,8 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 	private func updatePosition(with supplementaryItem: LayoutSupplementaryItem) {
 		position.y += supplementaryItem.fixedHeight
 		
-		if supplementaryItem !== supplementaryItems.last {
+		// FIXME: This logic is kind of jank
+		if !supplementaryItem.isEqual(to: supplementaryItems.last!) {
 			position.y += spacing
 		}
 	}

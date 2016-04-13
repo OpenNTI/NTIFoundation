@@ -602,7 +602,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	
 	// MARK: - CollectionViewLayoutMeasuring
 	
-	public func measuredSizeForSupplementaryItem(supplementaryItem: LayoutSupplementaryItem) -> CGSize {
+	public func measuredSizeForSupplementaryItem(inout supplementaryItem: LayoutSupplementaryItem) -> CGSize {
 		guard let collectionView = collectionViewWrapper as? WrapperCollectionView,
 			dataSource = collectionView.dataSource else {
 				return CGSizeZero
@@ -622,7 +622,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return attributes.frame.size
 	}
 	
-	public func measuredSizeForItem(item: LayoutItem) -> CGSize {
+	public func measuredSizeForItem(inout item: LayoutItem) -> CGSize {
 		guard let collectionView = collectionViewWrapper as? WrapperCollectionView,
 			dataSource = collectionView.dataSource else {
 				return CGSizeZero
@@ -642,7 +642,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return attributes.frame.size
 	}
 	
-	public func measuredSizeForPlaceholder(placeholderInfo: LayoutPlaceholder) -> CGSize {
+	public func measuredSizeForPlaceholder(inout placeholderInfo: LayoutPlaceholder) -> CGSize {
 		guard let collectionView = collectionViewWrapper as? WrapperCollectionView,
 			dataSource = collectionView.dataSource else {
 				return CGSizeZero
@@ -786,7 +786,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		func setupSupplementaryMetrics(supplementaryMetrics: SupplementaryItem) {
 			// FIXME: Supplementary item kind shouldn't be decided here
-			let supplementaryItem = BasicGridSupplementaryItem(elementKind: supplementaryMetrics.elementKind)
+			var supplementaryItem = BasicGridSupplementaryItem(elementKind: supplementaryMetrics.elementKind)
 			supplementaryItem.applyValues(from: supplementaryMetrics)
 			section.add(supplementaryItem)
 		}
@@ -809,7 +809,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		let columnWidth = section.columnWidth
 		
 		for itemIndex in 0..<numberOfItemsInSection {
-			let itemInfo = GridLayoutItem()
+			var itemInfo = GridLayoutItem()
 			itemInfo.itemIndex = itemIndex
 			itemInfo.frame = CGRect(x: 0, y: 0, width: columnWidth, height: rowHeight)
 			if isVariableRowHeight {

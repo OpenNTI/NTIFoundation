@@ -58,8 +58,9 @@ public class GridLayoutRow: LayoutRow {
 	public var rowSeparatorDecoration: HorizontalSeparatorDecoration?
 	
 	public func add(item: LayoutItem) {
-		items.append(item)
+		var item = item
 		item.row = self
+		items.append(item)
 	}
 	
 	public func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
@@ -69,10 +70,13 @@ public class GridLayoutRow: LayoutRow {
 		// Setting the frame on a row needs to update the items within the row and the row separator
 		rowSeparatorDecoration?.setContainerFrame(frame, invalidationContext: invalidationContext)
 		
-		for itemInfo in items {
+		
+		for (index, item) in items.enumerate() {
+			var itemInfo = item
 			var itemFrame = itemInfo.frame
 			itemFrame.origin.y = frame.origin.y
 			itemInfo.setFrame(itemFrame, invalidationContext: invalidationContext)
+			items[index] = itemInfo
 		}
 		
 		self.frame = frame
@@ -95,7 +99,7 @@ public class GridLayoutRow: LayoutRow {
 		let copy = GridLayoutRow()
 		copy.section = section
 		copy.frame = frame
-		copy.items = items.map { $0.copy() }
+		copy.items = items
 		copy.metrics = metrics
 		return copy
 	}

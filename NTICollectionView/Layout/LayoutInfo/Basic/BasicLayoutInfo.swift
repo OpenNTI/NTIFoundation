@@ -214,17 +214,20 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 			sectionInfo.setFrame(sectionFrame, invalidationContext: invalidationContext)
 			
 			// Move placeholder that happens to start at this section index
-			if let placeholderInfo = sectionInfo.placeholderInfo
+			if var placeholderInfo = sectionInfo.placeholderInfo
 				where placeholderInfo.startingSectionIndex == sectionIndex {
-					let placeholderFrame = CGRectOffset(placeholderInfo.frame, offset.x, offset.y)
-					placeholderInfo.setFrame(placeholderFrame, invalidationContext: invalidationContext)
+				
+				let placeholderFrame = CGRectOffset(placeholderInfo.frame, offset.x, offset.y)
+				placeholderInfo.setFrame(placeholderFrame, invalidationContext: invalidationContext)
+				sectionInfo.placeholderInfo = placeholderInfo
 			}
 		}
 	}
 	
 	private func setSize(size: CGSize, forPlaceholderAt sectionIndex: Int, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
-		guard let placeholderInfo = sectionAtIndex(sectionIndex)?.placeholderInfo else {
-			return CGPointZero
+		guard let section = sectionAtIndex(sectionIndex),
+			var placeholderInfo = section.placeholderInfo else {
+				return CGPointZero
 		}
 		var frame = placeholderInfo.frame
 		
@@ -239,6 +242,7 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 		
 		if deltaY > 0 {
 			placeholderInfo.setFrame(frame, invalidationContext: invalidationContext)
+			section.placeholderInfo = placeholderInfo
 		}
 		return CGPointMake(0, deltaY)
 	}

@@ -22,6 +22,4 @@ public protocol LayoutItem: LayoutElement {
 	
 	var row: LayoutRow? { get set }
 	
-	func copy() -> LayoutItem
-	
 }

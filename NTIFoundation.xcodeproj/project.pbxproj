@@ -511,6 +511,7 @@
 		4ADEE74C1C98950400DE9B0D /* Dictionary-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADEE74B1C98950300DE9B0D /* Dictionary-Extensions.swift */; };
 		4ADEE7691C98DBB900DE9B0D /* Decoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADEE7681C98DBB900DE9B0D /* Decoration.swift */; };
 		4ADEE76A1C98DBB900DE9B0D /* Decoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADEE7681C98DBB900DE9B0D /* Decoration.swift */; };
+		4AE4230C1CBECBC40035CF1B /* BasicSupplementaryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE4230B1CBECBC30035CF1B /* BasicSupplementaryItem.swift */; };
 		4AF3835F1CA3186A006D13D4 /* CollectionPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9C1C88B0CE00849185 /* CollectionPlaceholderView.swift */; };
 		4AF3836F1CA35C5D006D13D4 /* UICollectionReusableView-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF3836E1CA35C5D006D13D4 /* UICollectionReusableView-Extensions.swift */; };
 		4AFECA051CA5E0E400AF2D09 /* ActionSheetControlButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFECA041CA5E0E400AF2D09 /* ActionSheetControlButton.swift */; };
@@ -1167,6 +1168,7 @@
 		4AD56EE31CAC274C00482393 /* Array-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array-Extensions.swift"; sourceTree = "<group>"; };
 		4ADEE74B1C98950300DE9B0D /* Dictionary-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary-Extensions.swift"; sourceTree = "<group>"; };
 		4ADEE7681C98DBB900DE9B0D /* Decoration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Decoration.swift; sourceTree = "<group>"; };
+		4AE4230B1CBECBC30035CF1B /* BasicSupplementaryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicSupplementaryItem.swift; sourceTree = "<group>"; };
 		4AF3836E1CA35C5D006D13D4 /* UICollectionReusableView-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionReusableView-Extensions.swift"; sourceTree = "<group>"; };
 		4AFECA041CA5E0E400AF2D09 /* ActionSheetControlButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionSheetControlButton.swift; sourceTree = "<group>"; };
 		4C2ECDD31549D0A400C69E3A /* NTIMathInputExpressionModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathInputExpressionModel.h; sourceTree = "<group>"; };
@@ -2040,6 +2042,7 @@
 			isa = PBXGroup;
 			children = (
 				4A68AC821C88B0CE00849185 /* BasicLayoutInfo.swift */,
+				4AE4230B1CBECBC30035CF1B /* BasicSupplementaryItem.swift */,
 			);
 			path = Basic;
 			sourceTree = "<group>";
@@ -3371,6 +3374,7 @@
 				4A68ACC51C88B0CE00849185 /* CollectionLayoutEngine.swift in Sources */,
 				4A68ACF71C88B0CE00849185 /* StateMachine.swift in Sources */,
 				4A68ACFB1C88B0CE00849185 /* CollectionPlaceholderView.swift in Sources */,
+				4AE4230C1CBECBC40035CF1B /* BasicSupplementaryItem.swift in Sources */,
 				4A68ACFD1C88B0CE00849185 /* PlaceholderView.swift in Sources */,
 				4AF3836F1CA35C5D006D13D4 /* UICollectionReusableView-Extensions.swift in Sources */,
 				4A68ACAD1C88B0CE00849185 /* ComposedCollectionDataSourceMetricsHelper.swift in Sources */,

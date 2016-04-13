@@ -36,13 +36,157 @@ public protocol GridSupplementaryItem: LayoutSupplementaryItem {
 	
 }
 
+public protocol GridSupplementaryItemWrapper: GridSupplementaryItem, SupplementaryItemWrapper {
+	
+	var gridSupplementaryItem: BasicGridSupplementaryItem { get set }
+	
+}
+
+extension GridSupplementaryItemWrapper {
+	
+	public var supplementaryItem: SupplementaryItem {
+		get {
+			return gridSupplementaryItem.supplementaryItem
+		}
+		set {
+			gridSupplementaryItem.supplementaryItem = newValue
+		}
+	}
+	
+	public var layoutMargins: UIEdgeInsets {
+		get {
+			return gridSupplementaryItem.layoutMargins
+		}
+		set {
+			gridSupplementaryItem.layoutMargins = newValue
+		}
+	}
+	
+	public var backgroundColor: UIColor? {
+		get {
+			return gridSupplementaryItem.backgroundColor
+		}
+		set {
+			gridSupplementaryItem.backgroundColor = newValue
+		}
+	}
+	
+	public var selectedBackgroundColor: UIColor? {
+		get {
+			return gridSupplementaryItem.selectedBackgroundColor
+		}
+		set {
+			gridSupplementaryItem.selectedBackgroundColor = newValue
+		}
+	}
+	
+	public var pinnedBackgroundColor: UIColor? {
+		get {
+			return gridSupplementaryItem.pinnedBackgroundColor
+		}
+		set {
+			gridSupplementaryItem.pinnedBackgroundColor = newValue
+		}
+	}
+	
+	public var showsSeparator: Bool {
+		get {
+			return gridSupplementaryItem.showsSeparator
+		}
+		set {
+			gridSupplementaryItem.showsSeparator = newValue
+		}
+	}
+	
+	public var separatorColor: UIColor? {
+		get {
+			return gridSupplementaryItem.separatorColor
+		}
+		set {
+			gridSupplementaryItem.separatorColor = newValue
+		}
+	}
+	
+	public var pinnedSeparatorColor: UIColor? {
+		get {
+			return gridSupplementaryItem.pinnedSeparatorColor
+		}
+		set {
+			gridSupplementaryItem.pinnedSeparatorColor = newValue
+		}
+	}
+	
+	public var simulatesSelection: Bool {
+		get {
+			return gridSupplementaryItem.simulatesSelection
+		}
+		set {
+			gridSupplementaryItem.simulatesSelection = newValue
+		}
+	}
+	
+	public var section: LayoutSection? {
+		get {
+			return gridSupplementaryItem.section
+		}
+		set {
+			gridSupplementaryItem.section = newValue
+		}
+	}
+	
+	public var frame: CGRect {
+		get {
+			return gridSupplementaryItem.frame
+		}
+		set {
+			gridSupplementaryItem.frame = newValue
+		}
+	}
+	
+	public var itemIndex: Int {
+		get {
+			return gridSupplementaryItem.itemIndex
+		}
+		set {
+			gridSupplementaryItem.itemIndex = newValue
+		}
+	}
+	
+	public var indexPath: NSIndexPath {
+		return gridSupplementaryItem.indexPath
+	}
+	
+	public var layoutAttributes: UICollectionViewLayoutAttributes {
+		return gridSupplementaryItem.layoutAttributes
+	}
+	
+	public mutating func resetLayoutAttributes() {
+		gridSupplementaryItem.resetLayoutAttributes()
+	}
+	
+	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+		gridSupplementaryItem.setFrame(frame, invalidationContext: invalidationContext)
+	}
+	
+	public mutating func applyValues(from metrics: SupplementaryItem) {
+		gridSupplementaryItem.applyValues(from: metrics)
+	}
+	
+	public func definesMetric(metric: String) -> Bool {
+		return gridSupplementaryItem.definesMetric(metric)
+	}
+	
+}
+
 private let DefaultEstimatedHeight: CGFloat = 44
 
-public class BasicGridSupplementaryItem: GridSupplementaryItem {
+public struct BasicGridSupplementaryItem: GridSupplementaryItem, SupplementaryItemWrapper {
 	
 	public init(elementKind: String) {
-		self.elementKind = elementKind
+		supplementaryItem = BasicSupplementaryItem(elementKind: elementKind)
 	}
+	
+	public var supplementaryItem: SupplementaryItem
 	
 	public var layoutMargins: UIEdgeInsets = UIEdgeInsetsZero {
 		didSet {
@@ -87,54 +231,10 @@ public class BasicGridSupplementaryItem: GridSupplementaryItem {
 	
 	public var section: LayoutSection?
 	
-	public var isVisibleWhileShowingPlaceholder: Bool = false {
-		didSet {
-			setFlag("isVisibleWhileShowingPlaceholder")
-		}
-	}
-	public var shouldPin: Bool = false {
-		didSet {
-			setFlag("shouldPin")
-		}
-	}
-	public var width: CGFloat?
-	public var height: CGFloat? {
-		didSet {
-			setFlag("height")
-		}
-	}
-	public var estimatedWidth: CGFloat = DefaultEstimatedHeight
-	public var estimatedHeight: CGFloat = DefaultEstimatedHeight {
-		didSet {
-			setFlag("estimatedHeight")
-		}
-	}
-	public var isHidden: Bool = false {
-		didSet {
-			setFlag("isHidden")
-		}
-	}
-	public var supplementaryViewClass: UICollectionReusableView.Type!
-	public var elementKind: String
-	public var reuseIdentifier: String {
-		get {
-			return _reuseIdentifier ?? NSStringFromClass(supplementaryViewClass)
-		}
-		set {
-			_reuseIdentifier = newValue
-		}
-	}
-	private var _reuseIdentifier: String?
-	public var configureView: SupplementaryItemConfiguration?
-	public var fixedHeight: CGFloat {
-		return height ?? estimatedHeight
-	}
-	public var hasEstimatedHeight: Bool {
-		return height == nil
-	}
-	
 	public var frame = CGRectZero
+	
 	public var itemIndex = NSNotFound
+	
 	public var indexPath: NSIndexPath {
 		guard let sectionInfo = section else {
 			return NSIndexPath()
@@ -145,10 +245,11 @@ public class BasicGridSupplementaryItem: GridSupplementaryItem {
 			return NSIndexPath(forItem: itemIndex, inSection: sectionInfo.sectionIndex)
 		}
 	}
+	
 	public var layoutAttributes: UICollectionViewLayoutAttributes {
-		if let layoutAttributes = _layoutAttributes where layoutAttributes.indexPath == indexPath {
-			return layoutAttributes
-		}
+//		if let layoutAttributes = _layoutAttributes where layoutAttributes.indexPath == indexPath {
+//			return layoutAttributes
+//		}
 		
 		let attributes = CollectionViewLayoutAttributes(forSupplementaryViewOfKind: elementKind, withIndexPath: indexPath)
 		let section = self.section as? GridLayoutSection
@@ -171,12 +272,12 @@ public class BasicGridSupplementaryItem: GridSupplementaryItem {
 		attributes.showsSeparator = showsSeparator
 		attributes.cornerRadius = metrics?.cornerRadius ?? 0
 		
-		_layoutAttributes = attributes
+//		_layoutAttributes = attributes
 		return attributes
 	}
 	private var _layoutAttributes: CollectionViewLayoutAttributes?
 	
-	public func configure(with configuration: SupplementaryItemConfiguration) {
+	public mutating func configure(with configuration: SupplementaryItemConfiguration) {
 		guard let configureView = self.configureView else {
 			self.configureView = configuration
 			return
@@ -188,93 +289,78 @@ public class BasicGridSupplementaryItem: GridSupplementaryItem {
 		}
 	}
 	
-	public func applyValues(from metrics: SupplementaryItem) {
-		guard let metrics = metrics as? GridSupplementaryItem else {
+	public mutating func applyValues(from metrics: SupplementaryItem) {
+		supplementaryItem.applyValues(from: metrics)
+		
+		guard let gridMetrics = metrics as? GridSupplementaryItem else {
 			return
 		}
-		if metrics.definesMetric("layoutMargins") {
-			layoutMargins = metrics.layoutMargins
-		}
-		if metrics.definesMetric("separatorColor") {
-			separatorColor = metrics.separatorColor
-		}
-		if metrics.definesMetric("pinnedSeparatorColor") {
-			pinnedSeparatorColor = metrics.pinnedSeparatorColor
-		}
-		if metrics.definesMetric("backgroundColor") {
-			backgroundColor = metrics.backgroundColor
-		}
-		if metrics.definesMetric("pinnedBackgroundColor") {
-			pinnedBackgroundColor = metrics.pinnedBackgroundColor
-		}
-		if metrics.definesMetric("selectedBackgroundColor") {
-			selectedBackgroundColor = metrics.selectedBackgroundColor
-		}
-		if metrics.definesMetric("simulatesSelection") {
-			simulatesSelection = metrics.simulatesSelection
-		}
-		if metrics.definesMetric("height") {
-			height = metrics.height
-		}
-		if metrics.definesMetric("estimatedHeight") {
-			estimatedHeight = metrics.estimatedHeight
-		}
-		if metrics.definesMetric("isHidden") {
-			isHidden = metrics.isHidden
-		}
-		if metrics.definesMetric("shouldPin") {
-			shouldPin = metrics.shouldPin
-		}
-		if metrics.definesMetric("isVisibleWhileShowingPlaceholder") {
-			isVisibleWhileShowingPlaceholder = metrics.isVisibleWhileShowingPlaceholder
-		}
-		if metrics.definesMetric("showsSeparator") {
-			showsSeparator = metrics.showsSeparator
-		}
 		
-		supplementaryViewClass = metrics.supplementaryViewClass
-		configureView = metrics.configureView
-		reuseIdentifier = metrics.reuseIdentifier
+		if gridMetrics.definesMetric("layoutMargins") {
+			layoutMargins = gridMetrics.layoutMargins
+		}
+		if gridMetrics.definesMetric("separatorColor") {
+			separatorColor = gridMetrics.separatorColor
+		}
+		if gridMetrics.definesMetric("pinnedSeparatorColor") {
+			pinnedSeparatorColor = gridMetrics.pinnedSeparatorColor
+		}
+		if gridMetrics.definesMetric("backgroundColor") {
+			backgroundColor = gridMetrics.backgroundColor
+		}
+		if gridMetrics.definesMetric("pinnedBackgroundColor") {
+			pinnedBackgroundColor = gridMetrics.pinnedBackgroundColor
+		}
+		if gridMetrics.definesMetric("selectedBackgroundColor") {
+			selectedBackgroundColor = gridMetrics.selectedBackgroundColor
+		}
+		if gridMetrics.definesMetric("simulatesSelection") {
+			simulatesSelection = gridMetrics.simulatesSelection
+		}
+		if gridMetrics.definesMetric("showsSeparator") {
+			showsSeparator = gridMetrics.showsSeparator
+		}
 	}
 	
 	public func definesMetric(metric: String) -> Bool {
+		if supplementaryItem.definesMetric(metric) {
+			return true
+		}
+		
 		return flags.contains(metric)
 	}
 	
-	public func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		
 	}
 	
-	public func resetLayoutAttributes() {
+	public mutating func resetLayoutAttributes() {
 		_layoutAttributes = nil
-	}
-	
-	public func copy() -> SupplementaryItem {
-		let copy = BasicGridSupplementaryItem(elementKind: elementKind)
-		
-		copy.reuseIdentifier = reuseIdentifier
-		copy.supplementaryViewClass = supplementaryViewClass
-		copy.configureView = configureView
-		
-		copy.height = height
-		copy.estimatedHeight = estimatedHeight
-		copy.isHidden = isHidden
-		copy.shouldPin = shouldPin
-		copy.isVisibleWhileShowingPlaceholder = isVisibleWhileShowingPlaceholder
-		copy.backgroundColor = backgroundColor
-		copy.selectedBackgroundColor = selectedBackgroundColor
-		copy.layoutMargins = layoutMargins
-		copy.separatorColor = separatorColor
-		copy.pinnedSeparatorColor = pinnedSeparatorColor
-		copy.showsSeparator = showsSeparator
-		
-		return copy
 	}
 	
 	private var flags: Set<String> = []
 	
-	private func setFlag(flag: String) {
+	private mutating func setFlag(flag: String) {
 		flags.insert(flag)
+	}
+	
+	public func isEqual(to other: SupplementaryItem) -> Bool {
+		guard supplementaryItem.isEqual(to: other) else {
+			return false
+		}
+		
+		guard let other = other as? BasicGridSupplementaryItem else {
+			return false
+		}
+		
+		return layoutMargins == other.layoutMargins
+			&& backgroundColor == other.backgroundColor
+			&& selectedBackgroundColor == other.selectedBackgroundColor
+			&& pinnedBackgroundColor == other.pinnedBackgroundColor
+			&& showsSeparator == other.showsSeparator
+			&& separatorColor == other.separatorColor
+			&& pinnedSeparatorColor == other.pinnedSeparatorColor
+			&& simulatesSelection == other.simulatesSelection
 	}
 	
 }
