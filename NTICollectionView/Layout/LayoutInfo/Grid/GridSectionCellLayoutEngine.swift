@@ -125,19 +125,19 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	
 	private func layoutItems() {
 		layoutSection.mutateItems { (item, index) in
-			self.layout(item, at: index)
+			self.layout(&item, at: index)
 		}
 	}
 	
-	private func layout(item: LayoutItem, at itemIndex: Int) {
+	private func layout(inout item: LayoutItem, at itemIndex: Int) {
 		checkForPhantomCell(at: itemIndex)
 		updateHeight(with: item)
 		if item.isDragging {
-			layoutDragging(item)
+			layoutDragging(&item)
 			return
 		}
-		layout(item, isInColumn: true)
-		checkEstimatedHeight(of: item)
+		layout(&item, isInColumn: true)
+		checkEstimatedHeight(of: &item)
 		invalidate(item)
 		nextColumn()
 	}
@@ -158,31 +158,31 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 		height = item.frame.height
 	}
 	
-	private func layoutDragging(item: LayoutItem) {
-		layout(item, isInColumn: false)
+	private func layoutDragging(inout item: LayoutItem) {
+		layout(&item, isInColumn: false)
 	}
 	
-	private func layout(item: LayoutItem, isInColumn: Bool) {
-		updateFrame(of: item)
+	private func layout(inout item: LayoutItem, isInColumn: Bool) {
+		updateFrame(of: &item)
 		item.columnIndex = isInColumn ? columnIndex : NSNotFound
 		row.add(item)
 	}
 	
-	private func updateFrame(of item: LayoutItem) {
+	private func updateFrame(inout of item: LayoutItem) {
 		let columnWidth = fixedColumnWidth ?? row.columnWidth(forNumberOfColumns: numberOfColumns)
 		item.frame = CGRect(x: position.x, y: position.y, width: columnWidth, height: height)
 	}
 	
-	private func checkEstimatedHeight(of item: LayoutItem) {
+	private func checkEstimatedHeight(inout of item: LayoutItem) {
 		if item.hasEstimatedHeight {
-			measureHeight(of: item)
+			measureHeight(of: &item)
 		}
 	}
 	
-	private func measureHeight(of item: LayoutItem) {
+	private func measureHeight(inout of item: LayoutItem) {
 		let measuredSize = layoutMeasure.measuredSizeForItem(item)
 		height = measuredSize.height
-		updateFrame(of: item)
+		updateFrame(of: &item)
 		item.hasEstimatedHeight = false
 	}
 	

@@ -120,7 +120,7 @@ public class LayoutSizingInfo: LayoutSizing {
 /// A two-dimensional region in a collection view layout.
 ///
 /// An adopting type may represent a single layout element or a composition of layout elements.
-public protocol LayoutArea: class {
+public protocol LayoutArea {
 	
 	var frame: CGRect { get set }
 	
@@ -132,7 +132,7 @@ public protocol LayoutArea: class {
 }
 
 
-public protocol LayoutElement: LayoutArea {
+public protocol LayoutElement: class, LayoutArea {
 	
 	var itemIndex: Int { get set }
 	

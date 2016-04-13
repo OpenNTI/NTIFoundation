@@ -267,26 +267,27 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 	}
 	
 	private func layoutSectionPlaceholder() {
-		guard let placeholderInfo = layoutSection.placeholderInfo
+		guard var placeholderInfo = layoutSection.placeholderInfo
 			where placeholderInfo.startsAt(layoutSection) else {
 				return
 		}
-		layout(placeholderInfo)
+		layout(&placeholderInfo)
+		layoutSection.placeholderInfo = placeholderInfo
 	}
-	private func layout(placeholderInfo: LayoutPlaceholder) {
-		updateFrame(of: placeholderInfo)
-		checkEstimatedHeight(of: placeholderInfo)
+	private func layout(inout placeholderInfo: LayoutPlaceholder) {
+		updateFrame(of: &placeholderInfo)
+		checkEstimatedHeight(of: &placeholderInfo)
 		updateOrigin(with: placeholderInfo)
 	}
-	private func updateFrame(of placeholderInfo: LayoutPlaceholder) {
+	private func updateFrame(inout of placeholderInfo: LayoutPlaceholder) {
 		placeholderInfo.frame = CGRect(x: 0, y: position.y, width: width, height: placeholderInfo.height)
 	}
-	private func checkEstimatedHeight(of placeholderInfo: LayoutPlaceholder) {
+	private func checkEstimatedHeight(inout of placeholderInfo: LayoutPlaceholder) {
 		guard placeholderInfo.hasEstimatedHeight else {
 			return
 		}
 		measureHeight(of: placeholderInfo)
-		updateFrame(of: placeholderInfo)
+		updateFrame(of: &placeholderInfo)
 	}
 	private func measureHeight(of placeholderInfo: LayoutPlaceholder) {
 		let measuredSize = layoutMeasure.measuredSizeForPlaceholder(placeholderInfo)

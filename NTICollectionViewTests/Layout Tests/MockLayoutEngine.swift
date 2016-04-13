@@ -42,14 +42,14 @@ class MockSupplementaryLayoutEngine: NSObject, SupplementaryLayoutEngine {
 	func layoutWithOrigin(origin: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
 		position = origin
 		sizing = layoutSizing
-		for item in supplementaryItems {
-			layout(item)
+		for index in supplementaryItems.indices {
+			layout(&supplementaryItems[index])
 		}
 		position.x += sizing.width
 		return position
 	}
 	
-	private func layout(supplementaryItem: LayoutSupplementaryItem) {
+	private func layout(inout supplementaryItem: LayoutSupplementaryItem) {
 		let size = self.size(of: supplementaryItem)
 		supplementaryItem.frame = CGRect(origin: position, size: size)
 		position.y += size.height

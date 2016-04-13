@@ -74,17 +74,17 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 	}
 	
 	private func layoutSupplementaryItems() {
-		for supplementaryItem in supplementaryItems {
-			layoutSupplementaryView(supplementaryItem)
+		for index in supplementaryItems.indices {
+			layoutSupplementaryView(&supplementaryItems[index])
 		}
 	}
 	
-	private func layoutSupplementaryView(supplementaryItem: LayoutSupplementaryItem) {
+	private func layoutSupplementaryView(inout supplementaryItem: LayoutSupplementaryItem) {
 		guard shouldLayout(supplementaryItem) else {
 			return
 		}
-		updateFrame(of: supplementaryItem)
-		checkEstimatedHeight(of: supplementaryItem)
+		updateFrame(of: &supplementaryItem)
+		checkEstimatedHeight(of: &supplementaryItem)
 		updatePosition(with: supplementaryItem)
 		checkPinning(of: supplementaryItem)
 		invalidate(supplementaryItem)
@@ -96,21 +96,21 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 			&& supplementaryItem.fixedHeight > 0
 	}
 	
-	private func updateFrame(of supplementaryItem: LayoutSupplementaryItem) {
+	private func updateFrame(inout of supplementaryItem: LayoutSupplementaryItem) {
 		let height = supplementaryItem.fixedHeight
 		supplementaryItem.frame = CGRect(x: position.x, y: position.y, width: width, height: height)
 	}
 	
-	private func checkEstimatedHeight(of supplementaryItem: LayoutSupplementaryItem) {
+	private func checkEstimatedHeight(inout of supplementaryItem: LayoutSupplementaryItem) {
 		if supplementaryItem.hasEstimatedHeight {
-			measureHeight(of: supplementaryItem)
+			measureHeight(of: &supplementaryItem)
 		}
 	}
 	
-	private func measureHeight(of supplementaryItem: LayoutSupplementaryItem) {
+	private func measureHeight(inout of supplementaryItem: LayoutSupplementaryItem) {
 		let measuredSize = layoutMeasure.measuredSizeForSupplementaryItem(supplementaryItem)
 		supplementaryItem.height = measuredSize.height
-		updateFrame(of: supplementaryItem)
+		updateFrame(of: &supplementaryItem)
 	}
 	
 	private func updatePosition(with supplementaryItem: LayoutSupplementaryItem) {
