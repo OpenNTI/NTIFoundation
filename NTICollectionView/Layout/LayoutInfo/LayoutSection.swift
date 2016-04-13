@@ -94,28 +94,28 @@ public protocol LayoutEngine {
 	
 }
 
-public func layoutSection(`self`: LayoutSection, setFrame frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
-	guard frame != `self`.frame else {
+public func layoutSection(self: LayoutSection, setFrame frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
+	guard frame != self.frame else {
 		return
 	}
 	let offset = CGPoint(x: frame.origin.x - self.frame.origin.x, y: frame.origin.y - self.frame.origin.y)
 	
-	`self`.mutateSupplementaryItems { (supplementaryItem, _) in
+	self.mutateSupplementaryItems { (supplementaryItem, _) in
 		let supplementaryFrame = CGRectOffset(supplementaryItem.frame, offset.x, offset.y)
 		supplementaryItem.setFrame(supplementaryFrame, invalidationContext: invalidationContext)
 	}
 	
-	if let backgroundAttribute = `self`.backgroundAttribute {
+	if let backgroundAttribute = self.backgroundAttribute {
 		let backgroundRect = CGRectOffset(backgroundAttribute.frame, offset.x, offset.y)
 		backgroundAttribute.frame = backgroundRect
 		invalidationContext?.invalidateDecorationElementsOfKind(backgroundAttribute.representedElementKind!, atIndexPaths: [backgroundAttribute.indexPath])
 	}
 	
-	`self`.frame = frame
+	self.frame = frame
 }
 
-public func layoutSection(`self`: LayoutSection, offsetContentAfter origin: CGPoint, with offset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
-	`self`.mutateSupplementaryItems { (supplementaryItem, _) in
+public func layoutSection(self: LayoutSection, offsetContentAfter origin: CGPoint, with offset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
+	self.mutateSupplementaryItems { (supplementaryItem, _) in
 		var supplementaryFrame = supplementaryItem.frame
 		if supplementaryFrame.minX < origin.x || supplementaryFrame.minY < origin.y {
 			return
@@ -124,7 +124,7 @@ public func layoutSection(`self`: LayoutSection, offsetContentAfter origin: CGPo
 		supplementaryItem.setFrame(supplementaryFrame, invalidationContext: invalidationContext)
 	}
 	
-	`self`.mutateItems { (item, _) in
+	self.mutateItems { (item, _) in
 		var itemFrame = item.frame
 		if itemFrame.minX < origin.x || itemFrame.minY < origin.y {
 			return
