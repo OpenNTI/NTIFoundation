@@ -18,6 +18,7 @@ public class ComposedGridSectionLayoutEngine: NSObject, SupplementaryLayoutEngin
 	
 	public var pinnableHeaders: [LayoutSupplementaryItem] = []
 	public var nonPinnableHeaders: [LayoutSupplementaryItem] = []
+	public var supplementaryItems: [LayoutSupplementaryItem] = []
 	
 	private var origin: CGPoint!
 	private var position: CGPoint!
@@ -46,6 +47,7 @@ public class ComposedGridSectionLayoutEngine: NSObject, SupplementaryLayoutEngin
 		position = section.layoutWithOrigin(position, layoutSizing: sizing, invalidationContext: invalidationContext)
 		pinnableHeaders += section.pinnableHeaders
 		nonPinnableHeaders += section.nonPinnableHeaders
+		supplementaryItems += section.supplementaryItems
 	}
 	
 }

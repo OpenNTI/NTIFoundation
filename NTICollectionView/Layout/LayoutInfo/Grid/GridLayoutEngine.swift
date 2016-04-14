@@ -19,6 +19,7 @@ public class GridLayoutEngine: NSObject, SupplementaryLayoutEngine {
 	
 	public var pinnableHeaders: [LayoutSupplementaryItem] = []
 	public var nonPinnableHeaders: [LayoutSupplementaryItem] = []
+	public var supplementaryItems: [LayoutSupplementaryItem] = []
 	
 	private var sizing: LayoutSizing!
 	private var invalidationContext: UICollectionViewLayoutInvalidationContext?
@@ -47,6 +48,7 @@ public class GridLayoutEngine: NSObject, SupplementaryLayoutEngine {
 		position = engine.layoutWithOrigin(position, layoutSizing: sizing, invalidationContext: invalidationContext)
 		pinnableHeaders += engine.pinnableHeaders
 		nonPinnableHeaders += engine.nonPinnableHeaders
+		supplementaryItems += engine.supplementaryItems
 	}
 	
 	private func makeLayoutEngine() -> SupplementaryLayoutEngine {

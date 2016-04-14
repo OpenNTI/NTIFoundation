@@ -11,6 +11,7 @@ import UIKit
 public protocol SupplementaryLayoutEngine: LayoutEngine {
 	var pinnableHeaders: [LayoutSupplementaryItem] { get }
 	var nonPinnableHeaders: [LayoutSupplementaryItem] { get }
+	var supplementaryItems: [LayoutSupplementaryItem] { get }
 }
 
 public typealias SupplementaryLayoutEngineFactory = (layoutSection: LayoutSection, supplementaryItems: [LayoutSupplementaryItem]) -> SupplementaryLayoutEngine
@@ -20,6 +21,7 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 	public init(layoutSection: GridLayoutSection, innerLayoutEngine: LayoutEngine) {
 		self.layoutSection = layoutSection
 		self.innerLayoutEngine = innerLayoutEngine
+		supplementaryItems = layoutSection.supplementaryItems
 		super.init()
 	}
 	
@@ -30,6 +32,7 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 	
 	public var pinnableHeaders: [LayoutSupplementaryItem] = []
 	public var nonPinnableHeaders: [LayoutSupplementaryItem] = []
+	public var supplementaryItems: [LayoutSupplementaryItem]
 	
 	private var metrics: GridSectionMetrics {
 		return layoutSection.metrics
@@ -198,7 +201,8 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 		position = headersOrigin
 		headerFooterMinX = position.x
 		let headersSizing = LayoutSizingInfo(width: headersWidth, layoutMeasure: layoutMeasure)
-		layout(layoutSection.headers, using: headersSizing)
+		var headers = layoutSection.headers
+		layout(&headers, using: headersSizing)
 		headersMaxY = position.y
 	}
 	private var headersOrigin: CGPoint {
@@ -214,7 +218,8 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 		}
 		position = leftAuxiliaryItemsOrigin
 		let sizing = LayoutSizingInfo(width: leftAuxiliaryColumnWidth, layoutMeasure: layoutMeasure)
-		layout(layoutSection.leftAuxiliaryItems, using: sizing, spacing: metrics.auxiliaryColumnSpacing)
+		var leftAuxiliaryItems = layoutSection.leftAuxiliaryItems
+		layout(&leftAuxiliaryItems, using: sizing, spacing: metrics.auxiliaryColumnSpacing)
 	}
 	private var leftAuxiliaryItemsOrigin: CGPoint {
 		let orders = supplementaryOrders
@@ -231,7 +236,8 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 		}
 		position = rightAuxiliaryItemsOrigin
 		let sizing = LayoutSizingInfo(width: rightAuxiliaryColumnWidth, layoutMeasure: layoutMeasure)
-		layout(layoutSection.rightAuxiliaryItems, using: sizing, spacing: metrics.auxiliaryColumnSpacing)
+		var rightAuxiliaryItems = layoutSection.rightAuxiliaryItems
+		layout(&rightAuxiliaryItems, using: sizing, spacing: metrics.auxiliaryColumnSpacing)
 	}
 	private var rightAuxiliaryItemsOrigin: CGPoint {
 		let x = insetOrigin.x + width - rightAuxiliaryColumnWidth
@@ -243,14 +249,15 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 	private func layoutFooters() {
 		position = footersOrigin
 		let sizing = LayoutSizingInfo(width: width, layoutMeasure: layoutMeasure)
-		layout(layoutSection.footers, using: sizing)
+		var footers = layoutSection.footers
+		layout(&footers, using: sizing)
 		footersMaxY = position.y
 	}
 	private var footersOrigin: CGPoint {
 		return CGPoint(x: footersMinX, y: footersMinY)
 	}
 	
-	private func layout(supplementaryItems: [LayoutSupplementaryItem], using sizing: LayoutSizing, spacing: CGFloat = 0) {
+	private func layout(inout supplementaryItems: [LayoutSupplementaryItem], using sizing: LayoutSizing, spacing: CGFloat = 0) {
 		let engine = makeSupplementaryLayoutEngine(for: layoutSection, with: supplementaryItems, spacing: spacing)
 		position = engine.layoutWithOrigin(position, layoutSizing: sizing, invalidationContext: invalidationContext)
 		pinnableHeaders += engine.pinnableHeaders

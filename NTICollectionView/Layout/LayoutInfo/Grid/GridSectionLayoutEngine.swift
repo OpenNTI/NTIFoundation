@@ -12,6 +12,7 @@ public class GridSectionLayoutEngine: NSObject, SupplementaryLayoutEngine {
 	
 	public init(layoutSection: GridLayoutSection) {
 		self.layoutSection = layoutSection
+		supplementaryItems = layoutSection.supplementaryItems
 		super.init()
 	}
 	
@@ -19,6 +20,7 @@ public class GridSectionLayoutEngine: NSObject, SupplementaryLayoutEngine {
 	
 	public var pinnableHeaders: [LayoutSupplementaryItem] = []
 	public var nonPinnableHeaders: [LayoutSupplementaryItem] = []
+	public var supplementaryItems: [LayoutSupplementaryItem]
 	
 	private var origin: CGPoint!
 	private var position: CGPoint!
