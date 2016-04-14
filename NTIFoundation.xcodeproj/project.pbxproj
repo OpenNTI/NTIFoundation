@@ -503,6 +503,7 @@
 		4A68AD431C88BE2000849185 /* UICollectionView+SupplementaryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AD421C88BE2000849185 /* UICollectionView+SupplementaryViews.swift */; };
 		4A68AD441C88BE2000849185 /* UICollectionView+SupplementaryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AD421C88BE2000849185 /* UICollectionView+SupplementaryViews.swift */; };
 		4A9D2C301C9CCA3D00D75BBD /* DelegatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9D2C2F1C9CCA3D00D75BBD /* DelegatingViewController.swift */; };
+		4AB48C531CC0386C00F193C3 /* BasicSupplementaryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE4230B1CBECBC30035CF1B /* BasicSupplementaryItem.swift */; };
 		4AB6BE541CA4774700A86233 /* PagingPlaceholderDataSourceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB6BE531CA4774700A86233 /* PagingPlaceholderDataSourceController.swift */; };
 		4AD56EE41CAC274C00482393 /* Array-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD56EE31CAC274C00482393 /* Array-Extensions.swift */; };
 		4AD56EE51CAC274C00482393 /* Array-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD56EE31CAC274C00482393 /* Array-Extensions.swift */; };
@@ -3451,6 +3452,7 @@
 				4A0583031C9213C700F3D0E0 /* GridSupplementaryItemLayoutEngine.swift in Sources */,
 				4A68ACE21C88B0CE00849185 /* LayoutRow.swift in Sources */,
 				4A68ACE61C88B0CE00849185 /* LayoutItem.swift in Sources */,
+				4AB48C531CC0386C00F193C3 /* BasicSupplementaryItem.swift in Sources */,
 				4A68ACD01C88B0CE00849185 /* BasicLayoutInfo.swift in Sources */,
 				4A68ACCC1C88B0CE00849185 /* CollectionViewLayoutAttributes.swift in Sources */,
 				4A68ACE01C88B0CE00849185 /* GridSectionMetrics.swift in Sources */,

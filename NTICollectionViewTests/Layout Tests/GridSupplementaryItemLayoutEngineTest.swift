@@ -87,7 +87,7 @@ class GridSupplementaryItemLayoutEngineTest: XCTestCase {
 	private func makeItems(of kind: String, count: Int) -> [GridSupplementaryItem] {
 		var items: [GridSupplementaryItem] = []
 		for _ in 0..<count {
-			let item = BasicGridSupplementaryItem(elementKind: kind)
+			var item = BasicGridSupplementaryItem(elementKind: kind)
 			item.isVisibleWhileShowingPlaceholder = true
 			items.append(item)
 		}

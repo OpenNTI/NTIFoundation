@@ -51,7 +51,7 @@ class GridLayoutSectionTest: XCTestCase {
 		layoutSection.metrics.showsRowSeparator = true
 		
 		for _ in 0..<itemCount {
-			let item = GridLayoutItem()
+			var item = GridLayoutItem()
 			item.frame = CGRect(x: 0, y: 0, width: 375, height: 44)
 			item.hasEstimatedHeight = true
 			layoutSection.add(item)
@@ -72,7 +72,7 @@ class GridLayoutSectionTest: XCTestCase {
 			let row = layoutSection.rows[i]
 			let item = layoutSection.items[i]
 			XCTAssertEqual(row.items.count, 1)
-			XCTAssert(row.items[0] === item, "Row \(i) does not contain correct item")
+			XCTAssert(row.items[0].isEqual(to: item), "Row \(i) does not contain correct item")
 			XCTAssert(item.row === row, "Item \(i) does not reference correct row")
 			
 			let y: CGFloat = y_0 * CGFloat(i)

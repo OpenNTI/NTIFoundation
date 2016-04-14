@@ -19,14 +19,13 @@ class GridSectionColumnLayoutEngineTest: XCTestCase {
 		let sizing = LayoutSizingInfo(width: 20, layoutMeasure: measure)
 		
 		let kind = UICollectionElementKindSectionHeader
-		let item1 = BasicGridSupplementaryItem(elementKind: kind)
+		var item1 = BasicGridSupplementaryItem(elementKind: kind)
+		item1.isVisibleWhileShowingPlaceholder = true
 		item1.shouldPin = true
-		let item2 = BasicGridSupplementaryItem(elementKind: kind)
-		let item3 = BasicGridSupplementaryItem(elementKind: kind)
-		
-		for item in [item1, item2, item3] {
-			item.isVisibleWhileShowingPlaceholder = true
-		}
+		var item2 = BasicGridSupplementaryItem(elementKind: kind)
+		item2.isVisibleWhileShowingPlaceholder = true
+		var item3 = BasicGridSupplementaryItem(elementKind: kind)
+		item3.isVisibleWhileShowingPlaceholder = true
 		
 		section.add(item1)
 		section.add(item2)
@@ -47,10 +46,10 @@ class GridSectionColumnLayoutEngineTest: XCTestCase {
 		expectedFrame.origin.y += 20
 		XCTAssert(item3.frame == expectedFrame, "Incorrect frame for item3: expected \(expectedFrame) but found \(item3.frame)")
 		
-		XCTAssert(engine.pinnableHeaders.contains({ $0 === item1 }), "Expect pinnableHeaders to contain item1")
+		XCTAssert(engine.pinnableHeaders.contains({ $0.isEqual(to: item1) }), "Expect pinnableHeaders to contain item1")
 		
-		XCTAssert(engine.nonPinnableHeaders.contains({ $0 === item2 }), "Expect nonPinnableHeaders to contain item2")
-		XCTAssert(engine.nonPinnableHeaders.contains({ $0 === item3 }), "Expect nonPinnableHeaders to contain item3")
+		XCTAssert(engine.nonPinnableHeaders.contains({ $0.isEqual(to: item2) }), "Expect nonPinnableHeaders to contain item2")
+		XCTAssert(engine.nonPinnableHeaders.contains({ $0.isEqual(to: item3) }), "Expect nonPinnableHeaders to contain item3")
 	}
 	
 }
