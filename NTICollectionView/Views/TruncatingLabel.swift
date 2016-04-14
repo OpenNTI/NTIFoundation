@@ -214,8 +214,7 @@ public class TruncatingLabel: UILabel {
 		
 		let lines = CTFrameGetLines(frameRef)
 		let numberOfLines = CFArrayGetCount(lines)
-		var origins: [CGPoint] = []
-		origins.reserveCapacity(numberOfLines)
+		var origins: [CGPoint] = .init(count: numberOfLines, repeatedValue: CGPointZero)
 		CTFrameGetLineOrigins(frameRef, CFRange(location: 0, length: numberOfLines), &origins)
 		
 		let shouldTruncate = ellipsisString != nil && moreString != nil
