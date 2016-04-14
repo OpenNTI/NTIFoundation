@@ -20,7 +20,7 @@ class GridSectionColumnLayoutEngineTest: XCTestCase {
 		
 		let kind = UICollectionElementKindSectionHeader
 		
-		func makeItem() -> BasicGridSupplementaryItem {
+		func makeItem() -> LayoutSupplementaryItem {
 			var item = BasicGridSupplementaryItem(elementKind: kind)
 			item.supplementaryViewClass = CollectionSupplementaryView.self
 			item.isVisibleWhileShowingPlaceholder = true
@@ -29,8 +29,8 @@ class GridSectionColumnLayoutEngineTest: XCTestCase {
 		
 		var item1 = makeItem()
 		item1.shouldPin = true
-		let item2 = makeItem()
-		let item3 = makeItem()
+		var item2 = makeItem()
+		var item3 = makeItem()
 		
 		section.add(item1)
 		section.add(item2)
@@ -43,6 +43,10 @@ class GridSectionColumnLayoutEngineTest: XCTestCase {
 		let endPoint = engine.layoutWithOrigin(origin, layoutSizing: sizing, invalidationContext: nil)
 		
 		XCTAssert(endPoint == CGPoint(x: 25, y: 65), "Incorrect endPoint: \(endPoint)")
+		
+		item1 = engine.supplementaryItems[0]
+		item2 = engine.supplementaryItems[1]
+		item3 = engine.supplementaryItems[2]
 		
 		var expectedFrame = CGRect(x: 5, y: 5, width: 20, height: 20)
 		XCTAssert(item1.frame == expectedFrame, "Incorrect frame for item1: expected \(expectedFrame) but found \(item1.frame)")
