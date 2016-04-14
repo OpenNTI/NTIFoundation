@@ -226,7 +226,7 @@ public class TruncatingLabel: UILabel {
 			let x = origins[lineIndex].x + frameRect.origin.x
 			let y = origins[lineIndex].y + frameRect.origin.y
 			CGContextSetTextPosition(context, x, y)
-			let line = CFArrayGetValueAtIndex(lines, lineIndex) as! CTLineRef
+			let line = unsafeBitCast(CFArrayGetValueAtIndex(lines, lineIndex), CTLine.self)
 			CTLineDraw(line, context)
 		}
 		
@@ -237,7 +237,7 @@ public class TruncatingLabel: UILabel {
 		// Truncate the last line before drawing it
 		if numberOfLines > 0 && shouldTruncate {
 			let lastOrigin = origins[numberOfLines - 1]
-			let lastLine = CFArrayGetValueAtIndex(lines, numberOfLines - 1) as! CTLineRef
+			let lastLine = unsafeBitCast(CFArrayGetValueAtIndex(lines, numberOfLines - 1), CTLine.self)
 			
 			// The truncation token is a CTLineRef itself; use the ellipsis for single line and the more string for multiline
 			let truncationToken = CTLineCreateWithAttributedString(numberOfLines > 1 ? moreString : ellipsisString)
