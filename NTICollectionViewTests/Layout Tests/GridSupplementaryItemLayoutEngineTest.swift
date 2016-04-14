@@ -23,15 +23,12 @@ class GridSupplementaryItemLayoutEngineTest: XCTestCase {
 		section.metrics.rightAuxiliaryColumnWidth = 20
 		section.metrics.padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
 		
-		let headers = makeItems(of: UICollectionElementKindSectionHeader, count: 1)
-		let footers = makeItems(of: UICollectionElementKindSectionFooter, count: 1)
-		let leftAuxiliaryItems = makeItems(of: collectionElementKindLeftAuxiliaryItem, count: 2)
-		let rightAuxiliaryItems = makeItems(of: collectionElementKindRightAuxiliaryItem, count: 3)
-		for items in [headers, footers, leftAuxiliaryItems, rightAuxiliaryItems] {
-			for item in items {
-				section.add(item)
-			}
-		}
+		section.headers = makeItems(of: UICollectionElementKindSectionHeader, count: 1)
+		section.footers = makeItems(of: UICollectionElementKindSectionFooter, count: 1)
+		section.leftAuxiliaryItems = makeItems(of: collectionElementKindLeftAuxiliaryItem, count: 2)
+		section.rightAuxiliaryItems = makeItems(of: collectionElementKindRightAuxiliaryItem, count: 3)
+		
+		
 		
 		let innerEngine = MockLayoutEngine(mockHeight: 50)
 		
@@ -50,6 +47,11 @@ class GridSupplementaryItemLayoutEngineTest: XCTestCase {
 		// y: 5 + 10 + 20 + 5 + 50 + 5 + 20 + 10
 		let expectedPoint = CGPoint(x: 105, y: 125)
 		XCTAssert(endPoint == expectedPoint, "Incorrect endPoint: \(endPoint)")
+		
+		let headers = section.headers
+		let footers = section.footers
+		let leftAuxiliaryItems = section.leftAuxiliaryItems
+		let rightAuxiliaryItems = section.rightAuxiliaryItems
 		
 		for item in headers {
 			let expectedWidth: CGFloat = 80
@@ -84,8 +86,8 @@ class GridSupplementaryItemLayoutEngineTest: XCTestCase {
 		}
 	}
 	
-	private func makeItems(of kind: String, count: Int) -> [GridSupplementaryItem] {
-		var items: [GridSupplementaryItem] = []
+	private func makeItems(of kind: String, count: Int) -> [LayoutSupplementaryItem] {
+		var items: [LayoutSupplementaryItem] = []
 		for _ in 0..<count {
 			var item = BasicGridSupplementaryItem(elementKind: kind)
 			item.isVisibleWhileShowingPlaceholder = true
