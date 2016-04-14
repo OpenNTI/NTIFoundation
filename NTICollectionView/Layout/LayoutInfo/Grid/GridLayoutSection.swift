@@ -328,11 +328,11 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		return supplementaryItemsByKind[kind] ?? []
 	}
 	
-	public func mutateSupplementaryItems(using mutator: (supplementaryItem: inout LayoutSupplementaryItem, index: Int) -> Void) {
+	public func mutateSupplementaryItems(using mutator: (supplementaryItem: inout LayoutSupplementaryItem, kind: String, index: Int) -> Void) {
 		for (kind, supplementaryItems) in supplementaryItemsByKind {
 			var supplementaryItems = supplementaryItems
 			for index in supplementaryItems.indices {
-				mutator(supplementaryItem: &supplementaryItems[index], index: index)
+				mutator(supplementaryItem: &supplementaryItems[index], kind: kind, index: index)
 			}
 			supplementaryItemsByKind[kind] = supplementaryItems
 		}

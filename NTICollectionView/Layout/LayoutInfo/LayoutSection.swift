@@ -43,7 +43,7 @@ public protocol LayoutSection: class, LayoutEngine, LayoutAttributesResolving {
 	
 	func mutateItems(using mutator: (inout item: LayoutItem, index: Int) -> Void)
 	
-	func mutateSupplementaryItems(using mutator: (inout supplementaryItem: LayoutSupplementaryItem, index: Int) -> Void)
+	func mutateSupplementaryItems(using mutator: (inout supplementaryItem: LayoutSupplementaryItem, kind: String, index: Int) -> Void)
 	
 	/// Update the frame of this grouped object and any child objects. Use the invalidation context to mark layout objects as invalid.
 	func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
@@ -100,7 +100,7 @@ public func layoutSection(self: LayoutSection, setFrame frame: CGRect, invalidat
 	}
 	let offset = CGPoint(x: frame.origin.x - self.frame.origin.x, y: frame.origin.y - self.frame.origin.y)
 	
-	self.mutateSupplementaryItems { (supplementaryItem, _) in
+	self.mutateSupplementaryItems { (supplementaryItem, _, _) in
 		let supplementaryFrame = CGRectOffset(supplementaryItem.frame, offset.x, offset.y)
 		supplementaryItem.setFrame(supplementaryFrame, invalidationContext: invalidationContext)
 	}
@@ -115,7 +115,7 @@ public func layoutSection(self: LayoutSection, setFrame frame: CGRect, invalidat
 }
 
 public func layoutSection(self: LayoutSection, offsetContentAfter origin: CGPoint, with offset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
-	self.mutateSupplementaryItems { (supplementaryItem, _) in
+	self.mutateSupplementaryItems { (supplementaryItem, _, _) in
 		var supplementaryFrame = supplementaryItem.frame
 		if supplementaryFrame.minX < origin.x || supplementaryFrame.minY < origin.y {
 			return
