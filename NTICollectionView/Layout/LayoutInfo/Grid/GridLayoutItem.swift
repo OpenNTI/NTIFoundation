@@ -88,4 +88,17 @@ public struct GridLayoutItem: LayoutItem {
 		_layoutAttributes = nil
 	}
 	
+	public func isEqual(to other: LayoutItem) -> Bool {
+		guard let other = other as? GridLayoutItem else {
+			return false
+		}
+		
+		return itemIndex == other.itemIndex
+			&& hasEstimatedHeight == other.hasEstimatedHeight
+			&& isDragging == other.isDragging
+			&& section === other.section
+			&& row === other.row
+			&& columnIndex == other.columnIndex
+	}
+	
 }

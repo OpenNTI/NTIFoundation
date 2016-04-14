@@ -22,4 +22,6 @@ public protocol LayoutItem: LayoutElement {
 	
 	var row: LayoutRow? { get set }
 	
+	func isEqual(to other: LayoutItem) -> Bool
+	
 }
