@@ -203,6 +203,7 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 		let headersSizing = LayoutSizingInfo(width: headersWidth, layoutMeasure: layoutMeasure)
 		var headers = layoutSection.headers
 		layout(&headers, using: headersSizing)
+		layoutSection.headers = headers
 		headersMaxY = position.y
 	}
 	private var headersOrigin: CGPoint {
@@ -220,6 +221,7 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 		let sizing = LayoutSizingInfo(width: leftAuxiliaryColumnWidth, layoutMeasure: layoutMeasure)
 		var leftAuxiliaryItems = layoutSection.leftAuxiliaryItems
 		layout(&leftAuxiliaryItems, using: sizing, spacing: metrics.auxiliaryColumnSpacing)
+		layoutSection.leftAuxiliaryItems = leftAuxiliaryItems
 	}
 	private var leftAuxiliaryItemsOrigin: CGPoint {
 		let orders = supplementaryOrders
@@ -238,6 +240,7 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 		let sizing = LayoutSizingInfo(width: rightAuxiliaryColumnWidth, layoutMeasure: layoutMeasure)
 		var rightAuxiliaryItems = layoutSection.rightAuxiliaryItems
 		layout(&rightAuxiliaryItems, using: sizing, spacing: metrics.auxiliaryColumnSpacing)
+		layoutSection.rightAuxiliaryItems = rightAuxiliaryItems
 	}
 	private var rightAuxiliaryItemsOrigin: CGPoint {
 		let x = insetOrigin.x + width - rightAuxiliaryColumnWidth
@@ -251,6 +254,7 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 		let sizing = LayoutSizingInfo(width: width, layoutMeasure: layoutMeasure)
 		var footers = layoutSection.footers
 		layout(&footers, using: sizing)
+		layoutSection.footers = footers
 		footersMaxY = position.y
 	}
 	private var footersOrigin: CGPoint {
@@ -260,6 +264,7 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 	private func layout(inout supplementaryItems: [LayoutSupplementaryItem], using sizing: LayoutSizing, spacing: CGFloat = 0) {
 		let engine = makeSupplementaryLayoutEngine(for: layoutSection, with: supplementaryItems, spacing: spacing)
 		position = engine.layoutWithOrigin(position, layoutSizing: sizing, invalidationContext: invalidationContext)
+		supplementaryItems = engine.supplementaryItems
 		pinnableHeaders += engine.pinnableHeaders
 		nonPinnableHeaders += engine.nonPinnableHeaders
 	}
