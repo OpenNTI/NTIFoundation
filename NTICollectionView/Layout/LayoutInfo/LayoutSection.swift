@@ -20,8 +20,11 @@ public protocol LayoutSection: class, LayoutEngine, LayoutAttributesResolving {
 	var items: [LayoutItem] { get }
 	var supplementaryItems: [LayoutSupplementaryItem] { get }
 	var supplementaryItemsByKind: [String: [LayoutSupplementaryItem]] { get }
-	var headers: [LayoutSupplementaryItem] { get }
-	var footers: [LayoutSupplementaryItem] { get }
+	var headers: [LayoutSupplementaryItem] { get set }
+	var footers: [LayoutSupplementaryItem] { get set }
+	
+	func supplementaryItems(of kind: String) -> [LayoutSupplementaryItem]
+	func setSupplementaryItems(supplementaryItems: [LayoutSupplementaryItem], of kind: String)
 	
 	var backgroundAttribute: UICollectionViewLayoutAttributes? { get }
 	
@@ -83,6 +86,24 @@ extension LayoutSection {
 	
 	public var numberOfItems: Int {
 		return items.count
+	}
+	
+	public var headers: [LayoutSupplementaryItem] {
+		get {
+			return supplementaryItems(of: UICollectionElementKindSectionHeader)
+		}
+		set {
+			setSupplementaryItems(newValue, of: UICollectionElementKindSectionHeader)
+		}
+	}
+	
+	public var footers: [LayoutSupplementaryItem] {
+		get {
+			return supplementaryItems(of: UICollectionElementKindSectionFooter)
+		}
+		set {
+			setSupplementaryItems(newValue, of: UICollectionElementKindSectionFooter)
+		}
 	}
 	
 }

@@ -22,8 +22,8 @@ public protocol GridLayoutSection: LayoutSection {
 	var metrics: GridSectionMetrics { get set }
 	
 	var rows: [LayoutRow] { get }
-	var leftAuxiliaryItems: [LayoutSupplementaryItem] { get }
-	var rightAuxiliaryItems: [LayoutSupplementaryItem] { get }
+	var leftAuxiliaryItems: [LayoutSupplementaryItem] { get set }
+	var rightAuxiliaryItems: [LayoutSupplementaryItem] { get set }
 	
 	/// The width used to size each column.
 	///
@@ -43,6 +43,28 @@ public protocol GridLayoutSection: LayoutSection {
 
 	func add(row: LayoutRow)
 	func removeAllRows()
+	
+}
+
+extension GridLayoutSection {
+	
+	public var leftAuxiliaryItems: [LayoutSupplementaryItem] {
+		get {
+			return supplementaryItems(of: collectionElementKindLeftAuxiliaryItem)
+		}
+		set {
+			setSupplementaryItems(newValue, of: collectionElementKindLeftAuxiliaryItem)
+		}
+	}
+	
+	public var rightAuxiliaryItems: [LayoutSupplementaryItem] {
+		get {
+			return supplementaryItems(of: collectionElementKindRightAuxiliaryItem)
+		}
+		set {
+			setSupplementaryItems(newValue, of: collectionElementKindRightAuxiliaryItem)
+		}
+	}
 	
 }
 
@@ -67,14 +89,6 @@ public class BasicGridLayoutSection: GridLayoutSection {
 	}
 	
 	public var supplementaryItemsByKind: [String: [LayoutSupplementaryItem]] = [:]
-	
-	public var headers: [LayoutSupplementaryItem] {
-		return supplementaryItems(of: UICollectionElementKindSectionHeader)
-	}
-	
-	public var footers: [LayoutSupplementaryItem] {
-		return supplementaryItems(of: UICollectionElementKindSectionFooter)
-	}
 	
 	private var otherSupplementaryItems: [LayoutSupplementaryItem] = []
 	
@@ -133,14 +147,6 @@ public class BasicGridLayoutSection: GridLayoutSection {
 	public var metrics: GridSectionMetrics = BasicGridSectionMetrics()
 	
 	public var rows: [LayoutRow] = []
-	
-	public var leftAuxiliaryItems: [LayoutSupplementaryItem] {
-		return supplementaryItems(of: collectionElementKindLeftAuxiliaryItem)
-	}
-	
-	public var rightAuxiliaryItems: [LayoutSupplementaryItem] {
-		return supplementaryItems(of: collectionElementKindRightAuxiliaryItem)
-	}
 	
 	public var columnWidth: CGFloat {
 		return metrics.fixedColumnWidth ?? maximizedColumnWidth
@@ -326,6 +332,15 @@ public class BasicGridLayoutSection: GridLayoutSection {
 	
 	public func supplementaryItems(of kind: String) -> [LayoutSupplementaryItem] {
 		return supplementaryItemsByKind[kind] ?? []
+	}
+	
+	public func setSupplementaryItems(supplementaryItems: [LayoutSupplementaryItem], of kind: String) {
+		var supplementaryItems = supplementaryItems
+		for index in supplementaryItems.indices {
+			supplementaryItems[index].itemIndex = index
+			supplementaryItems[index].section = self
+		}
+		supplementaryItemsByKind[kind] = supplementaryItems
 	}
 	
 	public func mutateSupplementaryItems(using mutator: (supplementaryItem: inout LayoutSupplementaryItem, kind: String, index: Int) -> Void) {
