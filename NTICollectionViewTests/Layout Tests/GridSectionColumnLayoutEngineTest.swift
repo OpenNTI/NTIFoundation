@@ -19,13 +19,18 @@ class GridSectionColumnLayoutEngineTest: XCTestCase {
 		let sizing = LayoutSizingInfo(width: 20, layoutMeasure: measure)
 		
 		let kind = UICollectionElementKindSectionHeader
-		var item1 = BasicGridSupplementaryItem(elementKind: kind)
-		item1.isVisibleWhileShowingPlaceholder = true
+		
+		func makeItem() -> BasicGridSupplementaryItem {
+			var item = BasicGridSupplementaryItem(elementKind: kind)
+			item.supplementaryViewClass = CollectionSupplementaryView.self
+			item.isVisibleWhileShowingPlaceholder = true
+			return item
+		}
+		
+		var item1 = makeItem()
 		item1.shouldPin = true
-		var item2 = BasicGridSupplementaryItem(elementKind: kind)
-		item2.isVisibleWhileShowingPlaceholder = true
-		var item3 = BasicGridSupplementaryItem(elementKind: kind)
-		item3.isVisibleWhileShowingPlaceholder = true
+		let item2 = makeItem()
+		let item3 = makeItem()
 		
 		section.add(item1)
 		section.add(item2)
