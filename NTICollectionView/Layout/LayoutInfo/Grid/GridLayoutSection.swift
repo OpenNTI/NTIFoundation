@@ -364,6 +364,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 	}
 	
 	public func add(row: LayoutRow) {
+		var row = row
 		row.section = self
 		
 		// Create the row separator if there isn't already one
@@ -427,8 +428,8 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		
 		let offset = CGPoint(x: frame.origin.x - self.frame.origin.x, y: frame.origin.y - self.frame.origin.y)
 		
-		for row in rows {
-			self.offset(row, by: offset, invalidationContext: invalidationContext)
+		for index in rows.indices {
+			self.offset(&rows[index], by: offset, invalidationContext: invalidationContext)
 		}
 		
 		for attributes in columnSeparatorLayoutAttributes {
@@ -454,8 +455,10 @@ public class BasicGridLayoutSection: GridLayoutSection {
 	public func setSize(size: CGSize, forItemAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
 		var itemInfo: LayoutItem = items[index]
 		var itemFrame = itemInfo.frame
-		guard size != itemFrame.size, let rowInfo = itemInfo.row else {
-			return CGPointZero
+		
+		guard size != itemFrame.size,
+			var rowInfo = itemInfo.row else {
+				return CGPointZero
 		}
 		
 		itemFrame.size = size
@@ -535,8 +538,8 @@ public class BasicGridLayoutSection: GridLayoutSection {
 			offsetDecorationElement(with: attributes, by: offset, invalidationContext: invalidationContext)
 		}
 		
-		for row in rows where shouldOffsetElement(with: row.frame) {
-			self.offset(row, by: offset, invalidationContext: invalidationContext)
+		for index in rows.indices where shouldOffsetElement(with: rows[index].frame) {
+			self.offset(&rows[index], by: offset, invalidationContext: invalidationContext)
 		}
 	}
 	
@@ -545,7 +548,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		invalidationContext?.invalidateDecorationElement(with: attributes)
 	}
 	
-	private func offset(row: LayoutRow, by offset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	private func offset(inout row: LayoutRow, by offset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		let offsetFrame = CGRectOffset(row.frame, offset.x, offset.y)
 		row.setFrame(offsetFrame, invalidationContext: invalidationContext)
 	}
@@ -589,8 +592,8 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		let shouldShowSectionSeparators = metrics.showsSectionSeparator && items.count > 0
 		
 		// Hide the row separator for the last row in the section
-		if metrics.showsRowSeparator, let row = rows.last {
-			row.rowSeparatorDecoration?.isHidden = true
+		if metrics.showsRowSeparator && !rows.isEmpty {
+			rows[rows.count - 1].rowSeparatorDecoration?.isHidden = true
 		}
 		
 		if shouldShowSectionSeparators {
@@ -994,7 +997,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		var items = [LayoutItem]()
 		
 		for oldRow in rows {
-			let newRow = oldRow.copy()
+			let newRow = oldRow
 			copy.add(newRow)
 			items += newRow.items
 		}

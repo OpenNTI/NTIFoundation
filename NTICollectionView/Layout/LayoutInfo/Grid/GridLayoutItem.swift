@@ -70,7 +70,7 @@ public struct GridLayoutItem: LayoutItem {
 	
 	public var columnIndex: Int = NSNotFound
 	
-	public weak var row: LayoutRow?
+	public var row: LayoutRow?
 	
 	public var section: LayoutSection? {
 		return row?.section
@@ -97,7 +97,6 @@ public struct GridLayoutItem: LayoutItem {
 			&& hasEstimatedHeight == other.hasEstimatedHeight
 			&& isDragging == other.isDragging
 			&& section === other.section
-			&& row === other.row
 			&& columnIndex == other.columnIndex
 	}
 	

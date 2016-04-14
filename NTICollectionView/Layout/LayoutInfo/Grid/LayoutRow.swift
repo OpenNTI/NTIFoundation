@@ -9,7 +9,7 @@
 import UIKit
 
 /// Layout information about a row.
-public protocol LayoutRow: class {
+public protocol LayoutRow: LayoutArea {
 	
 	var frame: CGRect { get set }
 	
@@ -21,13 +21,13 @@ public protocol LayoutRow: class {
 	
 	var rowSeparatorDecoration: HorizontalSeparatorDecoration? { get set }
 	
-	func add(inout item: LayoutItem)
+	mutating func add(inout item: LayoutItem)
 	
-	func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
+	mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
 	func columnWidth(forNumberOfColumns columns: Int) -> CGFloat
 	
-	func copy() -> LayoutRow
+	func isEqual(to other: LayoutRow) -> Bool
 	
 }
 
@@ -41,7 +41,7 @@ extension LayoutRow {
 	
 }
 
-public class GridLayoutRow: LayoutRow {
+public struct GridLayoutRow: LayoutRow {
 	
 	public var metrics = BasicGridSectionMetrics()
 	
@@ -57,12 +57,12 @@ public class GridLayoutRow: LayoutRow {
 	
 	public var rowSeparatorDecoration: HorizontalSeparatorDecoration?
 	
-	public func add(inout item: LayoutItem) {
+	public mutating func add(inout item: LayoutItem) {
 		item.row = self
 		items.append(item)
 	}
 	
-	public func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
+	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
 		guard frame != self.frame else {
 			return
 		}
@@ -94,13 +94,14 @@ public class GridLayoutRow: LayoutRow {
 		return columnWidth
 	}
 	
-	public func copy() -> LayoutRow {
-		let copy = GridLayoutRow()
-		copy.section = section
-		copy.frame = frame
-		copy.items = items
-		copy.metrics = metrics
-		return copy
+	public func isEqual(to other: LayoutRow) -> Bool {
+		guard let other = other as? GridLayoutRow else {
+			return false
+		}
+		
+		return frame == other.frame
+			&& items.elementsEqual(other.items) { $0.isEqual(to: $1) }
+			&& section === other.section
 	}
 	
 }
