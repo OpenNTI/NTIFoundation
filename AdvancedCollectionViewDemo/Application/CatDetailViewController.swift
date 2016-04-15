@@ -48,19 +48,20 @@ class CatDetailViewController: CollectionViewController {
 		}
 		dataSource.add(globalHeader, forKey: "globalHeader")
 		
-		var segmentedHeader = GridSegmentedControlHeader()
+		var segmentedHeader = BasicGridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
 		segmentedHeader.supplementaryViewClass = AAPLSegmentedHeaderView.self
 		segmentedHeader.showsSeparator = true
+		segmentedHeader.isVisibleWhileShowingPlaceholder = true
+		segmentedHeader.shouldPin = true
 		segmentedHeader.configure { (view, dataSource, indexPath) in
 			guard let dataSource = dataSource as? SegmentedCollectionDataSource,
 				headerView = view as? AAPLSegmentedHeaderView else {
 					return
 			}
 			let segmentedControl = headerView.segmentedControl
-			segmentedHeader.segmentedControl = segmentedControl
 			dataSource.configure(segmentedControl)
 		}
-		dataSource.segmentedControlHeader = segmentedHeader
+		dataSource.add(segmentedHeader, forKey: "segmentedHeader")
 		
 		collectionView?.dataSource = dataSource
     }
