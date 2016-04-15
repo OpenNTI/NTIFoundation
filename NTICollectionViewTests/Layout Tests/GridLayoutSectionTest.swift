@@ -70,10 +70,9 @@ class GridLayoutSectionTest: XCTestCase {
 		
 		for i in 0..<itemCount {
 			let row = layoutSection.rows[i]
-			let item = layoutSection.items[i]
+			let item = layoutSection.item(at: i)
 			XCTAssertEqual(row.items.count, 1)
 			XCTAssert(row.items[0].isEqual(to: item), "Row \(i) does not contain correct item")
-			XCTAssert(item.row!.isEqual(to: row), "Item \(i) does not reference correct row")
 			
 			let y: CGFloat = y_0 * CGFloat(i)
 			let itemFrame = item.frame

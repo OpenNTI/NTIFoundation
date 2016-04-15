@@ -41,7 +41,7 @@ public protocol GridLayoutSection: LayoutSection {
 	var phantomCellIndex: Int? { get set }
 	var phantomCellSize: CGSize { get set }
 
-	func add(row: LayoutRow)
+	func add(inout row: LayoutRow)
 	func removeAllRows()
 	
 }
@@ -83,6 +83,41 @@ public class BasicGridLayoutSection: GridLayoutSection {
 	public weak var layoutInfo: LayoutInfo?
 	
 	public var items: [LayoutItem] = []
+	
+	public func item(at index: Int) -> LayoutItem {
+		var searchIndex = 0
+		
+		for row in rows {
+			let itemCount = row.items.count
+			
+			if searchIndex + itemCount <= index {
+				searchIndex += itemCount
+				continue
+			}
+			
+			let itemIndex = index - searchIndex
+			return row.items[itemIndex]
+		}
+		
+		preconditionFailure("We should find an item at \(index).")
+	}
+	
+	public func setItem(item: LayoutItem, at index: Int) {
+		var searchIndex = 0
+		
+		for rowIndex in rows.indices {
+			var row = rows[rowIndex]
+			let itemCount = row.items.count
+			
+			if searchIndex + itemCount <= index {
+				searchIndex += itemCount
+				continue
+			}
+			
+			let itemIndex = index - searchIndex
+			row.items[itemIndex] = item
+		}
+	}
 	
 	public var supplementaryItems: [LayoutSupplementaryItem] {
 		return supplementaryItemsByKind.contents
@@ -147,6 +182,31 @@ public class BasicGridLayoutSection: GridLayoutSection {
 	public var metrics: GridSectionMetrics = BasicGridSectionMetrics()
 	
 	public var rows: [LayoutRow] = []
+	
+	public func row(forItemAt itemIndex: Int) -> LayoutRow? {
+		guard let index = rowIndex(forItemAt: itemIndex) else {
+			return nil
+		}
+		
+		return rows[index]
+	}
+	
+	public func rowIndex(forItemAt itemIndex: Int) -> Int? {
+		var searchIndex = 0
+		
+		for (index, row) in rows.enumerate() {
+			let itemCount = row.items.count
+			
+			if searchIndex + itemCount < itemIndex {
+				searchIndex += itemCount
+				continue
+			}
+			
+			return index
+		}
+		
+		return nil
+	}
 	
 	public var columnWidth: CGFloat {
 		return metrics.fixedColumnWidth ?? maximizedColumnWidth
@@ -313,12 +373,21 @@ public class BasicGridLayoutSection: GridLayoutSection {
 	public func add(item: LayoutItem) {
 		var item = item
 		item.itemIndex = items.count
+		item.section = self
 		items.append(item)
 	}
 	
 	public func mutateItems(using mutator: (item: inout LayoutItem, index: Int) -> Void) {
-		for index in items.indices {
-			mutator(item: &items[index], index: index)
+		mutateRows { (row, _) in
+			for itemIndex in row.items.indices {
+				mutator(item: &row.items[itemIndex], index: itemIndex)
+			}
+		}
+	}
+	
+	public func mutateRows(using mutator: (row: inout LayoutRow, index: Int) -> Void) {
+		for index in rows.indices {
+			mutator(row: &rows[index], index: index)
 		}
 	}
 	
@@ -363,8 +432,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		}
 	}
 	
-	public func add(row: LayoutRow) {
-		var row = row
+	public func add(inout row: LayoutRow) {
 		row.section = self
 		
 		// Create the row separator if there isn't already one
@@ -451,19 +519,23 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		}
 	}
 	
-	// TODO: Store items in rows and re-implement
 	public func setSize(size: CGSize, forItemAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
-		var itemInfo: LayoutItem = items[index]
+		var itemInfo: LayoutItem = item(at: index)
 		var itemFrame = itemInfo.frame
 		
-		guard size != itemFrame.size,
-			var rowInfo = itemInfo.row else {
+		guard size != itemFrame.size else {
 				return CGPointZero
 		}
 		
 		itemFrame.size = size
 		itemInfo.setFrame(itemFrame, invalidationContext: invalidationContext)
-		items[index] = itemInfo
+		setItem(itemInfo, at: index)
+		
+		guard let rowIndex = rowIndex(forItemAt: index) else {
+			return CGPointZero
+		}
+		
+		var rowInfo = rows[rowIndex]
 		
 		// Items in a row are always the same height
 		var rowFrame = rowInfo.frame
@@ -485,6 +557,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		
 		rowFrame.size.height += sizeDelta.y
 		rowInfo.frame = rowFrame
+		rows[rowIndex] = rowInfo
 		
 		offsetContentAfterPosition(offsetPosition, offset: sizeDelta, invalidationContext: invalidationContext)
 		updateColumnSeparators(with: invalidationContext)
@@ -674,7 +747,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		guard placeholderInfo != nil || itemIndex < items.count else {
 			return nil
 		}
-		let itemInfo = items[itemIndex]
+		let itemInfo = item(at: itemIndex)
 		return itemInfo.layoutAttributes
 	}
 	
@@ -784,9 +857,9 @@ public class BasicGridLayoutSection: GridLayoutSection {
 			return nil
 		}
 		
-		let itemInfo = items[indexPath.item]
+		let itemIndex = indexPath.item
 		
-		guard let rowInfo = itemInfo.row,
+		guard let rowInfo = row(forItemAt: itemIndex),
 			rowSeparatorAttributes = rowInfo.rowSeparatorLayoutAttributes else {
 				return nil
 		}
@@ -997,8 +1070,8 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		var items = [LayoutItem]()
 		
 		for oldRow in rows {
-			let newRow = oldRow
-			copy.add(newRow)
+			var newRow = oldRow
+			copy.add(&newRow)
 			items += newRow.items
 		}
 		

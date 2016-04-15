@@ -18,9 +18,7 @@ public protocol LayoutItem: LayoutElement {
 	
 	var isDragging: Bool { get set }
 	
-	var section: LayoutSection? { get }
-	
-	var row: LayoutRow? { get set }
+	var section: LayoutSection? { get set }
 	
 	func isEqual(to other: LayoutItem) -> Bool
 	

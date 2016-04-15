@@ -70,11 +70,7 @@ public struct GridLayoutItem: LayoutItem {
 	
 	public var columnIndex: Int = NSNotFound
 	
-	public var row: LayoutRow?
-	
-	public var section: LayoutSection? {
-		return row?.section
-	}
+	public var section: LayoutSection?
 	
 	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		guard frame != self.frame else {

@@ -769,7 +769,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		}
 	}
 
-	// TODO: Encapsulate
+	// TODO: Abstract
 	/// Subclasses should override to create new sections from the metrics.
 	public func populate(section: LayoutSection, from metrics: DataSourceSectionMetrics) {
 		guard let collectionView = self.collectionView,

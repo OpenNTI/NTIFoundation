@@ -124,8 +124,9 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	}
 	
 	private func layoutItems() {
-		layoutSection.mutateItems { (item, index) in
-			self.layout(&item, at: index)
+		for (index, item) in layoutSection.items.enumerate() {
+			var item = item
+			layout(&item, at: index)
 		}
 	}
 	
@@ -136,8 +137,8 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 			layoutDragging(&item)
 			return
 		}
-		layout(&item, isInColumn: true)
 		checkEstimatedHeight(of: &item)
+		layout(&item, isInColumn: true)
 		invalidate(item)
 		nextColumn()
 	}
@@ -287,7 +288,9 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	}
 	
 	private func commitCurrentRow() {
-		layoutSection.add(row)
+		var row: LayoutRow = self.row
+		layoutSection.add(&row)
+		self.row = row as! GridLayoutRow
 		// Update the origin based on the actual frame of the row
 		position.y = row.frame.maxY + metrics.rowSpacing
 	}

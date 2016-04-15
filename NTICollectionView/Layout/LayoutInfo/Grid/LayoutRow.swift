@@ -13,7 +13,7 @@ public protocol LayoutRow: LayoutArea {
 	
 	var frame: CGRect { get set }
 	
-	var items: [LayoutItem] { get }
+	var items: [LayoutItem] { get set }
 	
 	var section: LayoutSection? { get set }
 	
@@ -47,7 +47,7 @@ public struct GridLayoutRow: LayoutRow {
 	
 	public var frame = CGRectZero
 	
-	public private(set) var items: [LayoutItem] = []
+	public var items: [LayoutItem] = []
 	
 	public weak var section: LayoutSection?
 	
@@ -58,7 +58,6 @@ public struct GridLayoutRow: LayoutRow {
 	public var rowSeparatorDecoration: HorizontalSeparatorDecoration?
 	
 	public mutating func add(inout item: LayoutItem) {
-		item.row = self
 		items.append(item)
 	}
 	
