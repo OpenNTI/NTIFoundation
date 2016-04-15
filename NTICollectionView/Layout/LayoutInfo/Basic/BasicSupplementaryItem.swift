@@ -36,6 +36,10 @@ public struct BasicSupplementaryItem: SupplementaryItem {
 		didSet { setFlag("estimatedHeight") }
 	}
 	
+	public var zIndex: Int = headerZIndex {
+		didSet { setFlag("zIndex") }
+	}
+	
 	public var isHidden: Bool = false {
 		didSet { setFlag("isHidden") }
 	}
@@ -89,7 +93,7 @@ public struct BasicSupplementaryItem: SupplementaryItem {
 		
 		attributes.frame = frame
 		attributes.unpinnedOrigin = frame.origin
-		attributes.zIndex = headerZIndex
+		attributes.zIndex = zIndex
 		attributes.isPinned = false
 		attributes.isEditing = layoutInfo?.isEditing ?? false
 		attributes.hidden = false
@@ -121,6 +125,9 @@ public struct BasicSupplementaryItem: SupplementaryItem {
 		}
 		if metrics.definesMetric("estimatedHeight") {
 			estimatedHeight = metrics.estimatedHeight
+		}
+		if metrics.definesMetric("zIndex") {
+			zIndex = metrics.zIndex
 		}
 		if metrics.definesMetric("isHidden") {
 			isHidden = metrics.isHidden

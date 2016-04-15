@@ -38,6 +38,8 @@ public protocol SupplementaryItem {
 	/// The estimated height of the supplementary view. To prevent layout glitches, this value should be set to the best estimation of the height of the supplementary view.
 	var estimatedHeight: CGFloat { get set }
 	
+	var zIndex: Int { get set }
+	
 	/// Should the supplementary view be hidden?
 	var isHidden: Bool { get set }
 	
@@ -140,6 +142,15 @@ extension SupplementaryItemWrapper {
 		}
 		set {
 			supplementaryItem.estimatedHeight = newValue
+		}
+	}
+	
+	public var zIndex: Int {
+		get {
+			return supplementaryItem.zIndex
+		}
+		set {
+			supplementaryItem.zIndex = newValue
 		}
 	}
 	

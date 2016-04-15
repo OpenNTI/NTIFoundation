@@ -286,7 +286,7 @@ public struct BasicGridSupplementaryItem: GridSupplementaryItem, SupplementaryIt
 		
 		attributes.frame = frame
 		attributes.unpinnedOrigin = CGPoint(x: frame.origin.x, y: unpinnedY)
-		attributes.zIndex = headerZIndex
+		attributes.zIndex = zIndex
 		attributes.isPinned = false
 		attributes.backgroundColor = backgroundColor ?? metrics?.backgroundColor
 		attributes.selectedBackgroundColor = selectedBackgroundColor
