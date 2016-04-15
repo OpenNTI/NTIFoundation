@@ -135,7 +135,7 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 		checkForPhantomCell(at: itemIndex)
 		updateHeight(with: item)
 		if item.isDragging {
-			layoutDragging(&item)
+			layout(&item, isInColumn: false)
 			return
 		}
 		checkEstimatedHeight(of: &item)
@@ -158,10 +158,6 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	
 	private func updateHeight(with item: LayoutItem) {
 		height = item.frame.height
-	}
-	
-	private func layoutDragging(inout item: LayoutItem) {
-		layout(&item, isInColumn: false)
 	}
 	
 	private func layout(inout item: LayoutItem, isInColumn: Bool) {
