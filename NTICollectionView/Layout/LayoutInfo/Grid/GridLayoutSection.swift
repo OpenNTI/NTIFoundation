@@ -927,7 +927,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		var pinnableY = contentOffset.y + layoutInfo.contentInset.top
 		var nonPinnableY = pinnableY
 		
-		resetPinnableSupplementaryItems(pinnableItems, invalidationContext: invalidationContext)
+		resetHeaders(pinnable: true, invalidationContext: invalidationContext)
 		pinnableItems.removeAll(keepCapacity: true)
 		
 		// Pin the headers as appropriate
@@ -935,110 +935,109 @@ public class BasicGridLayoutSection: GridLayoutSection {
 			return
 		}
 		
-		let pinnableHeaders = self.pinnableHeaders
+		pinnableY = applyTopPinningToPinnableHeaders(minY: pinnableY, invalidationContext: invalidationContext)
 		
-		if !pinnableHeaders.isEmpty {
-			pinnableY = applyTopPinning(to: pinnableHeaders, minY: pinnableY, invalidationContext: invalidationContext)
-			finalizePinning(for: pinnableHeaders, zIndex: pinnedHeaderZIndex)
-		}
+		finalizePinningForHeaders(pinnable: true, zIndex: pinnedHeaderZIndex)
 		
 		let nonPinnableHeaders = self.nonPinnableHeaders
 
-		if !nonPinnableHeaders.isEmpty {
-			resetPinnableSupplementaryItems(nonPinnableHeaders, invalidationContext: invalidationContext)
-			nonPinnableY = applyBottomPinning(to: nonPinnableHeaders, maxY: nonPinnableY, invalidationContext: invalidationContext)
-			finalizePinning(for: nonPinnableHeaders, zIndex: pinnedHeaderZIndex)
-		}
+		resetHeaders(pinnable: false, invalidationContext: invalidationContext)
+		
+		nonPinnableY = applyBottomPinningToNonPinnableHeaders(maxY: nonPinnableY, invalidationContext: invalidationContext)
+		
+		finalizePinningForHeaders(pinnable: false, zIndex: pinnedHeaderZIndex)
 		
 		if let backgroundAttributes = self.backgroundAttribute {
 			var frame = backgroundAttributes.frame
 			frame.origin.y = min(nonPinnableY, layoutInfo.bounds.origin.y)
+			
+			// FIXME: Make sure bottomY is computed using incorrect headers
 			let bottomY = max(pinnableHeaders.last?.frame.maxY ?? 0, nonPinnableHeaders.last?.frame.maxY ?? 0)
 			frame.size.height = bottomY - frame.origin.y
+			
 			backgroundAttributes.frame = frame
 		}
 		
-		if let overlappingSection = firstSectionOverlappingYOffset(pinnableY) {
-			let overlappingPinnableHeaders = overlappingSection.pinnableHeaders
-			applyTopPinning(to: overlappingPinnableHeaders, minY: pinnableY, invalidationContext: invalidationContext)
+		if let overlappingSection = firstSectionOverlappingYOffset(pinnableY) as? BasicGridLayoutSection {
+			overlappingSection.applyTopPinningToPinnableHeaders(minY: pinnableY, invalidationContext: invalidationContext)
+			
 			// FIXME: Magic number
-			finalizePinning(for: overlappingSection.pinnableHeaders, zIndex: pinnedHeaderZIndex - 100)
+			overlappingSection.finalizePinningForHeaders(pinnable: true, zIndex: pinnedHeaderZIndex - 100)
 		}
 	}
 	
-	private func resetPinnableSupplementaryItems(supplementaryItems: [LayoutSupplementaryItem], invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
-		for supplementaryItem in supplementaryItems {
-			guard let attributes = supplementaryItem.layoutAttributes as? CollectionViewLayoutAttributes else {
-				continue
+	private func resetHeaders(pinnable pinnable: Bool, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+		func resetter(inout header: GridSupplementaryItem, index: Int) {
+			var frame = header.frame
+			
+			if frame.minY != header.unpinnedY {
+				invalidationContext?.invalidate(header)
 			}
-			var frame = attributes.frame
-			if frame.origin.y != attributes.unpinnedOrigin.y {
-				invalidationContext?.invalidateSupplementaryElement(with: attributes)
-			}
-			attributes.isPinned = false
-			frame.origin.y = attributes.unpinnedOrigin.y
-			attributes.frame = frame
+			
+			header.isPinned = false
+			
+			frame.origin.y = header.unpinnedY
+			header.frame = frame
 		}
+		
+		pinnable ?
+			mutatePinnableHeaders(using: resetter)
+			: mutateNonPinnableHeaders(using: resetter)
 	}
 	
-	private func applyBottomPinning(to supplementaryItems: [LayoutSupplementaryItem], maxY: CGFloat, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGFloat {
+	private func applyBottomPinningToNonPinnableHeaders(maxY maxY: CGFloat, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGFloat {
 		var maxY = maxY
 		
-		for supplementaryItem in supplementaryItems.reverse() {
-			let attributes = supplementaryItem.layoutAttributes
-			var frame = attributes.frame
+		mutateNonPinnableHeaders(inReverse: true) { (nonPinnableHeader, index) in
+			var frame = nonPinnableHeader.frame
 			
 			guard frame.maxY < maxY else {
-				continue
+				return
 			}
 			
-			frame.origin.y = maxY - frame.height
-			maxY = frame.origin.y
-			attributes.frame = frame
+			maxY -= frame.height
+			frame.origin.y = maxY
+			nonPinnableHeader.frame = frame
 			
-			invalidationContext?.invalidateSupplementaryElement(with: attributes)
+			invalidationContext?.invalidate(nonPinnableHeader)
 		}
 		
 		return maxY
 	}
 	
-	/// Pins the attributes starting at `minY` -- as long as they don't cross `minY` -- and returns the new `minY`.
-	private func applyTopPinning(to supplementaryItems: [LayoutSupplementaryItem], minY: CGFloat, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGFloat {
+	/// Pins the pinnable headers starting at `minY` -- as long as they don't cross `minY` -- and returns the new `minY`.
+	private func applyTopPinningToPinnableHeaders(minY minY: CGFloat, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGFloat {
 		var minY = minY
 		
-		for supplementaryItem in supplementaryItems {
-			// Record this supplementary item so we can reset it later
-			pinnableItems.append(supplementaryItem)
+		mutatePinnableHeaders { (pinnableHeader, index) in
+			var frame = pinnableHeader.frame
 			
-			let attributes = supplementaryItem.layoutAttributes
-			var frame = attributes.frame
-			
-			guard frame.origin.y < minY else {
-				continue
+			guard frame.minY < minY else {
+				return
 			}
 			
+			// We have a new pinning offset
 			frame.origin.y = minY
-			minY = frame.maxY // we have a new pinning offset
-			attributes.frame = frame
+			minY = frame.maxY
+			pinnableHeader.frame = frame
 			
-			invalidationContext?.invalidateSupplementaryElement(with: attributes)
+			invalidationContext?.invalidate(pinnableHeader)
 		}
 		
 		return minY
 	}
 	
-	private func finalizePinning(for supplementaryItems: [LayoutSupplementaryItem], zIndex: Int) {
-		for (itemIndex, supplementaryItem) in supplementaryItems.enumerate() {
-			let attributes = supplementaryItem.layoutAttributes
+	private func finalizePinningForHeaders(pinnable pinnable: Bool, zIndex: Int) {
+		func finalizer(inout header: GridSupplementaryItem, index: Int) {
+			header.isPinned = header.frame.minY != header.unpinnedY
 			
-			if let pinnableAttributes = attributes as? CollectionViewLayoutAttributes {
-				let frame = pinnableAttributes.frame
-				pinnableAttributes.isPinned = frame.origin.y != pinnableAttributes.unpinnedOrigin.y
-			}
-			
-			let depth = itemIndex + 1
-			attributes.zIndex = zIndex - depth
+			let depth = index + 1
+			header.zIndex = zIndex - depth
 		}
+		
+		pinnable ?
+			mutatePinnableHeaders(using: finalizer)
+			: mutateNonPinnableHeaders(using: finalizer)
 	}
 	
 	private func firstSectionOverlappingYOffset(yOffset: CGFloat) -> LayoutSection? {
@@ -1061,6 +1060,42 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		}
 		
 		return result
+	}
+	
+	public func mutatePinnableHeaders(using mutator: (inout pinnableHeader: GridSupplementaryItem, index: Int) -> Void) {
+		var headers = self.headers
+		
+		for index in headers.indices {
+			guard var header = headers[index] as? GridSupplementaryItem
+				where header.shouldPin else {
+					continue
+			}
+			
+			mutator(pinnableHeader: &header, index: index)
+			headers[index] = header
+		}
+		
+		self.headers = headers
+	}
+	
+	public func mutateNonPinnableHeaders(inReverse inReverse: Bool = false, using mutator: (inout nonPinnableHeader: GridSupplementaryItem, index: Int) -> Void) {
+		var headers = self.headers
+		
+		let headerIndices = inReverse ?
+			AnyForwardCollection<Int>(headers.indices.reverse())
+			: AnyForwardCollection<Int>(headers.indices)
+		
+		for index in headerIndices {
+			guard var header = headers[index] as? GridSupplementaryItem
+				where !header.shouldPin else {
+					continue
+			}
+			
+			mutator(nonPinnableHeader: &header, index: index)
+			headers[index] = header
+		}
+		
+		self.headers = headers
 	}
 	
 	public func copy() -> LayoutSection {
