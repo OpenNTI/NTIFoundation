@@ -8,6 +8,7 @@
 
 import UIKit
 
+// TODO: Write test that ensures items have width before their height is measured
 public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	
 	public init(layoutSection: GridLayoutSection) {
@@ -181,6 +182,7 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	}
 	
 	private func measureHeight(inout of item: LayoutItem) {
+		updateFrame(of: &item)
 		let measuredSize = layoutMeasure.measuredSizeForItem(&item)
 		height = measuredSize.height
 		updateFrame(of: &item)
