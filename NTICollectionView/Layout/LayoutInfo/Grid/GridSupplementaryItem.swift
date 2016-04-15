@@ -34,6 +34,9 @@ public protocol GridSupplementaryItem: LayoutSupplementaryItem {
 	/// Should this supplementary view simulate selection highlighting like cells?
 	var simulatesSelection: Bool { get set }
 	
+	/// Y-origin when not pinned.
+	var unpinnedY: CGFloat { get set }
+	
 }
 
 public protocol GridSupplementaryItemWrapper: GridSupplementaryItem, SupplementaryItemWrapper {
@@ -143,6 +146,15 @@ extension GridSupplementaryItemWrapper {
 		}
 	}
 	
+	public var unpinnedY: CGFloat {
+		get {
+			return gridSupplementaryItem.unpinnedY
+		}
+		set {
+			gridSupplementaryItem.unpinnedY = newValue
+		}
+	}
+	
 	public var itemIndex: Int {
 		get {
 			return gridSupplementaryItem.itemIndex
@@ -233,6 +245,8 @@ public struct BasicGridSupplementaryItem: GridSupplementaryItem, SupplementaryIt
 	
 	public var frame = CGRectZero
 	
+	public var unpinnedY: CGFloat = 0
+	
 	public var itemIndex = NSNotFound
 	
 	public var indexPath: NSIndexPath {
@@ -257,7 +271,7 @@ public struct BasicGridSupplementaryItem: GridSupplementaryItem, SupplementaryIt
 		let layoutInfo = section?.layoutInfo
 		
 		attributes.frame = frame
-		attributes.unpinnedOrigin = frame.origin
+		attributes.unpinnedOrigin = CGPoint(x: frame.origin.x, y: unpinnedY)
 		attributes.zIndex = headerZIndex
 		attributes.isPinned = false
 		attributes.backgroundColor = backgroundColor ?? metrics?.backgroundColor
