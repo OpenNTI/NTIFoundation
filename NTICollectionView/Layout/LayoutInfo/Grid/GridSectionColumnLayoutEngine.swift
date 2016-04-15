@@ -131,10 +131,6 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 		gridItem.unpinnedY = gridItem.frame.minY
 		supplementaryItem = gridItem
 		
-		updatePinning(of: gridItem)
-	}
-	
-	private func updatePinning(of gridItem: GridSupplementaryItem) {
 		if gridItem.shouldPin {
 			pinnableHeaders.append(gridItem)
 		} else {
