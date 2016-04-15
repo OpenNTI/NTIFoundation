@@ -86,7 +86,7 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 		updateFrame(of: &supplementaryItem)
 		checkEstimatedHeight(of: &supplementaryItem)
 		updatePosition(with: supplementaryItem)
-		checkPinning(of: supplementaryItem)
+		checkPinning(of: &supplementaryItem)
 		invalidate(supplementaryItem)
 	}
 	
@@ -122,11 +122,15 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 		}
 	}
 	
-	private func checkPinning(of supplementaryItem: LayoutSupplementaryItem) {
-		guard let gridItem = supplementaryItem as? GridSupplementaryItem
+	private func checkPinning(inout of supplementaryItem: LayoutSupplementaryItem) {
+		guard var gridItem = supplementaryItem as? GridSupplementaryItem
 			where supplementaryItem.isHeader else {
 				return
 		}
+		
+		gridItem.unpinnedY = gridItem.frame.minY
+		supplementaryItem = gridItem
+		
 		updatePinning(of: gridItem)
 	}
 	
