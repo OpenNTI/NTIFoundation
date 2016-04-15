@@ -37,6 +37,9 @@ public protocol GridSupplementaryItem: LayoutSupplementaryItem {
 	/// Y-origin when not pinned.
 	var unpinnedY: CGFloat { get set }
 	
+	// Whether `self` is pinned in place.
+	var isPinned: Bool { get set }
+	
 }
 
 public protocol GridSupplementaryItemWrapper: GridSupplementaryItem, SupplementaryItemWrapper {
@@ -155,6 +158,15 @@ extension GridSupplementaryItemWrapper {
 		}
 	}
 	
+	public var isPinned: Bool {
+		get {
+			return gridSupplementaryItem.isPinned
+		}
+		set {
+			gridSupplementaryItem.isPinned = newValue
+		}
+	}
+	
 	public var itemIndex: Int {
 		get {
 			return gridSupplementaryItem.itemIndex
@@ -246,6 +258,8 @@ public struct BasicGridSupplementaryItem: GridSupplementaryItem, SupplementaryIt
 	public var frame = CGRectZero
 	
 	public var unpinnedY: CGFloat = 0
+	
+	public var isPinned = false
 	
 	public var itemIndex = NSNotFound
 	
