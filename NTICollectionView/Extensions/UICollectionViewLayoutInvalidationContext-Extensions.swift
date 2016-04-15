@@ -10,6 +10,10 @@ import UIKit
 
 extension UICollectionViewLayoutInvalidationContext {
 	
+	public func invalidate(supplementaryItem: LayoutSupplementaryItem) {
+		invalidateSupplementaryElementsOfKind(supplementaryItem.elementKind, atIndexPaths: [supplementaryItem.indexPath])
+	}
+	
 	public func invalidateSupplementaryElement(with attributes: UICollectionViewLayoutAttributes) {
 		invalidateSupplementaryElementsOfKind(attributes.representedElementKind!, atIndexPaths: [attributes.indexPath])
 	}
