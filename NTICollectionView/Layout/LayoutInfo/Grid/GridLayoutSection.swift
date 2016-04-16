@@ -279,7 +279,10 @@ public class BasicGridLayoutSection: GridLayoutSection {
 	}
 	
 	public var shouldShowColumnSeparator: Bool {
-		return metrics.numberOfColumns > 1 && metrics.separatorColor != nil && metrics.showsColumnSeparator && items.count > 0
+		return metrics.numberOfColumns > 1
+			&& metrics.separatorColor != nil
+			&& metrics.showsColumnSeparator
+			&& items.count > 0
 	}
 	
 	private var columnSeparatorLayoutAttributes: [UICollectionViewLayoutAttributes] = []
@@ -951,7 +954,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 			var frame = backgroundAttributes.frame
 			frame.origin.y = min(nonPinnableY, layoutInfo.bounds.origin.y)
 			
-			// FIXME: Make sure bottomY is computed using incorrect headers
+			// FIXME: Make sure bottomY is computed using correct headers
 			let bottomY = max(pinnableHeaders.last?.frame.maxY ?? 0, nonPinnableHeaders.last?.frame.maxY ?? 0)
 			frame.size.height = bottomY - frame.origin.y
 			
