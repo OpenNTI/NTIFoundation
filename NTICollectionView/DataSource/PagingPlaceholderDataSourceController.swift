@@ -34,11 +34,13 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 	private func addNextPagePlaceholder() {
 		nextPagePlaceholder.height = placeholderHeight
 		nextPagePlaceholder.isHidden = false
+		dataSource.replaceSupplementaryItemForKey(nextPagePlaceholderKey, with: nextPagePlaceholder)
 	}
 	
 	private func removeNextPagePlaceholder() {
 		nextPagePlaceholder.height = 0
 		nextPagePlaceholder.isHidden = true
+		dataSource.replaceSupplementaryItemForKey(nextPagePlaceholderKey, with: nextPagePlaceholder)
 	}
 	
 	public var hasPrevPage = false {
@@ -53,11 +55,13 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 	private func addPrevPagePlaceholder() {
 		prevPagePlaceholder.height = placeholderHeight
 		prevPagePlaceholder.isHidden = false
+		dataSource.replaceSupplementaryItemForKey(prevPagePlaceholderKey, with: prevPagePlaceholder)
 	}
 	
 	private func removePrevPagePlaceholder() {
 		prevPagePlaceholder.height = 0
 		prevPagePlaceholder.isHidden = true
+		dataSource.replaceSupplementaryItemForKey(prevPagePlaceholderKey, with: prevPagePlaceholder)
 	}
 	
 	public private(set) var nextPagePlaceholder: GridSupplementaryItem = BasicGridSupplementaryItem(elementKind: UICollectionElementKindSectionFooter)
