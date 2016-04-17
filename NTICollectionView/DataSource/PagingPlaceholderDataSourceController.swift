@@ -34,12 +34,16 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 	private func showNextPagePlaceholder() {
 		nextPagePlaceholder.height = placeholderHeight
 		nextPagePlaceholder.isHidden = false
-		dataSource.replaceSupplementaryItemForKey(nextPagePlaceholderKey, with: nextPagePlaceholder)
+		replaceNextPagePlaceholder()
 	}
 	
 	private func hideNextPagePlaceholder() {
 		nextPagePlaceholder.height = 0
 		nextPagePlaceholder.isHidden = true
+		replaceNextPagePlaceholder()
+	}
+	
+	private func replaceNextPagePlaceholder() {
 		dataSource.replaceSupplementaryItemForKey(nextPagePlaceholderKey, with: nextPagePlaceholder)
 	}
 	
@@ -55,12 +59,16 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 	private func showPrevPagePlaceholder() {
 		prevPagePlaceholder.height = placeholderHeight
 		prevPagePlaceholder.isHidden = false
-		dataSource.replaceSupplementaryItemForKey(prevPagePlaceholderKey, with: prevPagePlaceholder)
+		replacePrevPagePlaceholder()
 	}
 	
 	private func hidePrevPagePlaceholder() {
 		prevPagePlaceholder.height = 0
 		prevPagePlaceholder.isHidden = true
+		replacePrevPagePlaceholder()
+	}
+	
+	private func replacePrevPagePlaceholder() {
 		dataSource.replaceSupplementaryItemForKey(prevPagePlaceholderKey, with: prevPagePlaceholder)
 	}
 	
