@@ -27,17 +27,17 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 			guard hasNextPage != oldValue else {
 				return
 			}
-			hasNextPage ? addNextPagePlaceholder() : removeNextPagePlaceholder()
+			hasNextPage ? showNextPagePlaceholder() : hideNextPagePlaceholder()
 		}
 	}
 	
-	private func addNextPagePlaceholder() {
+	private func showNextPagePlaceholder() {
 		nextPagePlaceholder.height = placeholderHeight
 		nextPagePlaceholder.isHidden = false
 		dataSource.replaceSupplementaryItemForKey(nextPagePlaceholderKey, with: nextPagePlaceholder)
 	}
 	
-	private func removeNextPagePlaceholder() {
+	private func hideNextPagePlaceholder() {
 		nextPagePlaceholder.height = 0
 		nextPagePlaceholder.isHidden = true
 		dataSource.replaceSupplementaryItemForKey(nextPagePlaceholderKey, with: nextPagePlaceholder)
@@ -48,17 +48,17 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 			guard hasPrevPage != oldValue else {
 				return
 			}
-			hasPrevPage ? addPrevPagePlaceholder() : removePrevPagePlaceholder()
+			hasPrevPage ? showPrevPagePlaceholder() : hidePrevPagePlaceholder()
 		}
 	}
 	
-	private func addPrevPagePlaceholder() {
+	private func showPrevPagePlaceholder() {
 		prevPagePlaceholder.height = placeholderHeight
 		prevPagePlaceholder.isHidden = false
 		dataSource.replaceSupplementaryItemForKey(prevPagePlaceholderKey, with: prevPagePlaceholder)
 	}
 	
-	private func removePrevPagePlaceholder() {
+	private func hidePrevPagePlaceholder() {
 		prevPagePlaceholder.height = 0
 		prevPagePlaceholder.isHidden = true
 		dataSource.replaceSupplementaryItemForKey(prevPagePlaceholderKey, with: prevPagePlaceholder)
