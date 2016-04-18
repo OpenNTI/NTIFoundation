@@ -17,7 +17,7 @@ public protocol LayoutRow: LayoutArea {
 	
 	var section: LayoutSection? { get set }
 	
-	var rowSeparatorLayoutAttributes: UICollectionViewLayoutAttributes? { get }
+	var rowSeparatorLayoutAttributes: CollectionViewLayoutAttributes? { get }
 	
 	var rowSeparatorDecoration: HorizontalSeparatorDecoration? { get set }
 	
@@ -51,7 +51,7 @@ public struct GridLayoutRow: LayoutRow {
 	
 	public weak var section: LayoutSection?
 	
-	public var rowSeparatorLayoutAttributes: UICollectionViewLayoutAttributes? {
+	public var rowSeparatorLayoutAttributes: CollectionViewLayoutAttributes? {
 		return rowSeparatorDecoration?.layoutAttributes
 	}
 	

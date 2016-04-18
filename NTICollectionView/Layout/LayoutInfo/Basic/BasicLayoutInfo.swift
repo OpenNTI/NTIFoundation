@@ -289,19 +289,19 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 		setSize(newAttributes.frame.size, forElementOfKind: kind, at: indexPath, invalidationContext: invalidationContext)
 	}
 	
-	public func layoutAttributesForCell(at indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+	public func layoutAttributesForCell(at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
 		let sectionIndex = indexPath.layoutSection
 		let sectionInfo = sectionAtIndex(sectionIndex)
 		return sectionInfo?.layoutAttributesForCell(at: indexPath)
 	}
 	
-	public func layoutAttributesForDecorationViewOfKind(kind: String, at indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+	public func layoutAttributesForDecorationViewOfKind(kind: String, at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
 		let sectionIndex = indexPath.layoutSection
 		let sectionInfo = sectionAtIndex(sectionIndex)
 		return sectionInfo?.layoutAttributesForDecorationViewOfKind(kind, at: indexPath)
 	}
 	
-	public func layoutAttributesForSupplementaryElementOfKind(kind: String, at indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+	public func layoutAttributesForSupplementaryElementOfKind(kind: String, at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
 		let sectionIndex = indexPath.layoutSection
 		let sectionInfo = sectionAtIndex(sectionIndex)
 		return sectionInfo?.layoutAttributesForSupplementaryElementOfKind(kind, at: indexPath)

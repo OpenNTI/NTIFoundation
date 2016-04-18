@@ -181,7 +181,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		layoutInfo.bounds = collectionView.bounds
 		layoutInfo.updateSpecialItemsWithContentOffset(contentOffset, invalidationContext: nil)
 		
-		var result: [UICollectionViewLayoutAttributes] = []
+		var result: [CollectionViewLayoutAttributes] = []
 		for sectionInfo in layoutInfo.sections {
 			result += sectionInfo.layoutAttributes.filter { $0.frame.intersects(rect) }
 		}

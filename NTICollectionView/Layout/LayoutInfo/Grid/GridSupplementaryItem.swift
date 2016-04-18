@@ -274,7 +274,7 @@ public struct BasicGridSupplementaryItem: GridSupplementaryItem, SupplementaryIt
 		}
 	}
 	
-	public var layoutAttributes: UICollectionViewLayoutAttributes {
+	public var layoutAttributes: CollectionViewLayoutAttributes {
 //		if let layoutAttributes = _layoutAttributes where layoutAttributes.indexPath == indexPath {
 //			return layoutAttributes
 //		}

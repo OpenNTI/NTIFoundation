@@ -33,7 +33,7 @@ public struct GridLayoutItem: LayoutItem {
 		}
 	}
 	
-	public var layoutAttributes: UICollectionViewLayoutAttributes {
+	public var layoutAttributes: CollectionViewLayoutAttributes {
 //		if let layoutAttributes = _layoutAttributes where layoutAttributes.indexPath == indexPath {
 //			return layoutAttributes
 //		}

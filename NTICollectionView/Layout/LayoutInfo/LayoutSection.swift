@@ -37,9 +37,9 @@ public protocol LayoutSection: class, LayoutEngine, LayoutAttributesResolving {
 	var heightOfPinningHeaders: CGFloat { get }
 	
 	/// All the layout attributes associated with this section.
-	var layoutAttributes: [UICollectionViewLayoutAttributes] { get }
+	var layoutAttributes: [CollectionViewLayoutAttributes] { get }
 	
-	var decorationAttributesByKind: [String: [UICollectionViewLayoutAttributes]] { get }
+	var decorationAttributesByKind: [String: [CollectionViewLayoutAttributes]] { get }
 	
 	func add(supplementaryItem: LayoutSupplementaryItem)
 	func add(item: LayoutItem)

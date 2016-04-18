@@ -10,11 +10,11 @@ import UIKit
 
 public protocol LayoutAttributesResolving {
 	
-	func layoutAttributesForSupplementaryElementOfKind(kind: String, at indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes?
+	func layoutAttributesForSupplementaryElementOfKind(kind: String, at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes?
 	
-	func layoutAttributesForDecorationViewOfKind(kind: String, at indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes?
+	func layoutAttributesForDecorationViewOfKind(kind: String, at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes?
 	
-	func layoutAttributesForCell(at indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes?
+	func layoutAttributesForCell(at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes?
 	
 }
 
@@ -138,7 +138,7 @@ public protocol LayoutElement: LayoutArea {
 	
 	var indexPath: NSIndexPath { get }
 	
-	var layoutAttributes: UICollectionViewLayoutAttributes { get }
+	var layoutAttributes: CollectionViewLayoutAttributes { get }
 	
 	mutating func resetLayoutAttributes()
 	

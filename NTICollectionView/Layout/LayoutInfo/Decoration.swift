@@ -24,7 +24,7 @@ public protocol LayoutDecoration: DecorationAttributeProvider {
 	
 	var sectionIndex: Int { get set }
 	
-	var layoutAttributes: UICollectionViewLayoutAttributes { get }
+	var layoutAttributes: CollectionViewLayoutAttributes { get }
 	
 	mutating func setContainerFrame(containerFrame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
@@ -79,7 +79,7 @@ public struct HorizontalSeparatorDecoration: LayoutDecoration, DecorationAttribu
 	
 	public var attributes = DecorationAttributes()
 	
-	public var layoutAttributes: UICollectionViewLayoutAttributes {
+	public var layoutAttributes: CollectionViewLayoutAttributes {
 		let layoutAttributes = CollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, withIndexPath: indexPath)
 		layoutAttributes.frame = frame
 		layoutAttributes.backgroundColor = color
@@ -160,7 +160,7 @@ public struct VerticalSeparatorDecoration: LayoutDecoration, DecorationAttribute
 	
 	public var attributes = DecorationAttributes()
 	
-	public var layoutAttributes: UICollectionViewLayoutAttributes {
+	public var layoutAttributes: CollectionViewLayoutAttributes {
 		let layoutAttributes = CollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, withIndexPath: indexPath)
 		layoutAttributes.frame = frame
 		layoutAttributes.backgroundColor = color
@@ -217,7 +217,7 @@ public struct BackgroundDecoration: LayoutDecoration, DecorationAttributesWrappe
 	
 	public var attributes = DecorationAttributes()
 	
-	public var layoutAttributes: UICollectionViewLayoutAttributes {
+	public var layoutAttributes: CollectionViewLayoutAttributes {
 		let layoutAttributes = CollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, withIndexPath: indexPath)
 		layoutAttributes.frame = frame
 		layoutAttributes.backgroundColor = color

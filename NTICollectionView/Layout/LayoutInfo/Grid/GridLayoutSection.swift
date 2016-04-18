@@ -228,8 +228,8 @@ public class BasicGridLayoutSection: GridLayoutSection {
 	public var phantomCellIndex: Int?
 	public var phantomCellSize = CGSizeZero
 	
-	public var layoutAttributes: [UICollectionViewLayoutAttributes] {
-		var layoutAttributes: [UICollectionViewLayoutAttributes] = []
+	public var layoutAttributes: [CollectionViewLayoutAttributes] {
+		var layoutAttributes: [CollectionViewLayoutAttributes] = []
 		
 		if let backgroundAttribute = self.backgroundAttribute {
 			layoutAttributes.append(backgroundAttribute)
@@ -285,9 +285,9 @@ public class BasicGridLayoutSection: GridLayoutSection {
 			&& items.count > 0
 	}
 	
-	private var columnSeparatorLayoutAttributes: [UICollectionViewLayoutAttributes] = []
+	private var columnSeparatorLayoutAttributes: [CollectionViewLayoutAttributes] = []
 	
-	private var sectionSeparatorLayoutAttributes: [Int: UICollectionViewLayoutAttributes] = [:]
+	private var sectionSeparatorLayoutAttributes: [Int: CollectionViewLayoutAttributes] = [:]
 	
 	public var hasTopSectionSeparator: Bool {
 		return sectionSeparatorLayoutAttributes[sectionSeparatorTop] != nil
@@ -297,7 +297,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		return sectionSeparatorLayoutAttributes[sectionSeparatorBottom] != nil
 	}
 	
-	public var backgroundAttribute: UICollectionViewLayoutAttributes? {
+	public var backgroundAttribute: CollectionViewLayoutAttributes? {
 		if let backgroundAttribute = _backgroundAttribute {
 			return backgroundAttribute
 		}
@@ -328,9 +328,9 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		_backgroundAttribute = backgroundAttribute
 		return _backgroundAttribute
 	}
-	private var _backgroundAttribute: UICollectionViewLayoutAttributes?
+	private var _backgroundAttribute: CollectionViewLayoutAttributes?
 	
-	public var contentBackgroundAttributes: UICollectionViewLayoutAttributes? {
+	public var contentBackgroundAttributes: CollectionViewLayoutAttributes? {
 		if let attributes = _contentBackgroundAttributes {
 			return attributes
 		}
@@ -351,7 +351,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		_contentBackgroundAttributes = attributes
 		return _contentBackgroundAttributes
 	}
-	private var _contentBackgroundAttributes: UICollectionViewLayoutAttributes?
+	private var _contentBackgroundAttributes: CollectionViewLayoutAttributes?
 	
 	public var contentFrame: CGRect {
 		let frame = UIEdgeInsetsInsetRect(self.frame, metrics.contentInset)
@@ -619,7 +619,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		}
 	}
 	
-	private func offsetDecorationElement(with attributes: UICollectionViewLayoutAttributes, by offset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	private func offsetDecorationElement(with attributes: CollectionViewLayoutAttributes, by offset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		attributes.frame = CGRectOffset(attributes.frame, offset.x, offset.y)
 		invalidationContext?.invalidateDecorationElement(with: attributes)
 	}
@@ -723,7 +723,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		sectionSeparatorLayoutAttributes[sectionSeparator] = separatorAttributes
 	}
 	
-	private func createSectionSeparatorAttributes(sectionSeparator: Int) -> UICollectionViewLayoutAttributes {
+	private func createSectionSeparatorAttributes(sectionSeparator: Int) -> CollectionViewLayoutAttributes {
 		let indexPath = NSIndexPath(forItem: sectionSeparatorTop, inSection: sectionIndex)
 		let separatorAttributes = CollectionViewLayoutAttributes(forDecorationViewOfKind: collectionElementKindSectionSeparator, withIndexPath: indexPath)
 		separatorAttributes.frame = frameForSectionSeparator(sectionSeparator)
@@ -745,7 +745,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		return CGRect(x: x, y: y, width: width, height: height)
 	}
 	
-	public func layoutAttributesForCell(at indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+	public func layoutAttributesForCell(at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
 		let itemIndex = indexPath.itemIndex
 		guard placeholderInfo != nil || itemIndex < items.count else {
 			return nil
@@ -754,7 +754,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		return itemInfo.layoutAttributes
 	}
 	
-	public func layoutAttributesForSupplementaryElementOfKind(kind: String, at indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+	public func layoutAttributesForSupplementaryElementOfKind(kind: String, at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
 		if kind == CollectionElementKindPlaceholder {
 			return placeholderInfo?.layoutAttributes
 		}
@@ -776,7 +776,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		return supplementaryItem.layoutAttributes
 	}
 	
-	public func layoutAttributesForDecorationViewOfKind(kind: String, at indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+	public func layoutAttributesForDecorationViewOfKind(kind: String, at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
 		let itemIndex = indexPath.itemIndex
 		switch kind {
 		case collectionElementKindColumnSeparator:
@@ -804,8 +804,8 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		}
 	}
 	
-	public var decorationAttributesByKind: [String: [UICollectionViewLayoutAttributes]] {
-		var attributes: [String: [UICollectionViewLayoutAttributes]] = [:]
+	public var decorationAttributesByKind: [String: [CollectionViewLayoutAttributes]] {
+		var attributes: [String: [CollectionViewLayoutAttributes]] = [:]
 		
 		attributes[collectionElementKindColumnSeparator] = columnSeparatorLayoutAttributes
 		attributes[collectionElementKindSectionSeparator] = Array(sectionSeparatorLayoutAttributes.values)
@@ -819,8 +819,8 @@ public class BasicGridLayoutSection: GridLayoutSection {
 	}
 	
 	// O(n^2)
-	private var attributesForDecorationsByKind: [String: [UICollectionViewLayoutAttributes]] {
-		var attributesByKind: [String: [UICollectionViewLayoutAttributes]] = [:]
+	private var attributesForDecorationsByKind: [String: [CollectionViewLayoutAttributes]] {
+		var attributesByKind: [String: [CollectionViewLayoutAttributes]] = [:]
 		let insetFrame = UIEdgeInsetsInsetRect(frame, metrics.contentInset)
 		
 		for (kind, decorations) in decorationsByKind {
@@ -841,12 +841,12 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		return metrics.definesMetric(metric)
 	}
 	
-	public func additionalLayoutAttributesToInsertForInsertionOfItem(at indexPath: NSIndexPath) -> [UICollectionViewLayoutAttributes] {
+	public func additionalLayoutAttributesToInsertForInsertionOfItem(at indexPath: NSIndexPath) -> [CollectionViewLayoutAttributes] {
 		return []
 	}
 	
-	public func additionalLayoutAttributesToDeleteForDeletionOfItem(at indexPath: NSIndexPath) -> [UICollectionViewLayoutAttributes] {
-		var attributes: [UICollectionViewLayoutAttributes] = []
+	public func additionalLayoutAttributesToDeleteForDeletionOfItem(at indexPath: NSIndexPath) -> [CollectionViewLayoutAttributes] {
+		var attributes: [CollectionViewLayoutAttributes] = []
 		
 		if let rowSeparator = rowSeparatorAttributesToDeleteForDeletionOfItem(at: indexPath) {
 			attributes.append(rowSeparator)
@@ -855,7 +855,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		return attributes
 	}
 	
-	private func rowSeparatorAttributesToDeleteForDeletionOfItem(at indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+	private func rowSeparatorAttributesToDeleteForDeletionOfItem(at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
 		guard metrics.showsRowSeparator else {
 			return nil
 		}
@@ -1128,14 +1128,14 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		}
 		
 		for layoutAttributes in columnSeparatorLayoutAttributes {
-			copy.columnSeparatorLayoutAttributes.append(layoutAttributes.copy() as! UICollectionViewLayoutAttributes)
+			copy.columnSeparatorLayoutAttributes.append(layoutAttributes.copy() as! CollectionViewLayoutAttributes)
 		}
 		
 		for (itemIndex, layoutAttributes) in sectionSeparatorLayoutAttributes {
-			copy.sectionSeparatorLayoutAttributes[itemIndex] = layoutAttributes.copy() as? UICollectionViewLayoutAttributes
+			copy.sectionSeparatorLayoutAttributes[itemIndex] = layoutAttributes.copy() as? CollectionViewLayoutAttributes
 		}
 		
-		copy._backgroundAttribute = _backgroundAttribute?.copy() as? UICollectionViewLayoutAttributes
+		copy._backgroundAttribute = _backgroundAttribute?.copy() as? CollectionViewLayoutAttributes
 		
 		copy.sectionIndex = sectionIndex
 		copy.phantomCellIndex = phantomCellIndex
