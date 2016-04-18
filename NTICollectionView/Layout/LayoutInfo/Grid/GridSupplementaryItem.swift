@@ -8,7 +8,9 @@
 
 import UIKit
 
-public protocol GridSupplementaryAttributes {
+// MARK: - GridSupplementaryAttributeProvider
+
+public protocol GridSupplementaryAttributeProvider {
 	
 	/// Use top & bottom layoutMargin to adjust spacing of header & footer elements. Not all headers & footers adhere to layoutMargins. Default is UIEdgeInsetsZero which is interpreted by supplementary items to be their default values.
 	var layoutMargins: UIEdgeInsets { get set }
@@ -36,7 +38,9 @@ public protocol GridSupplementaryAttributes {
 	
 }
 
-public protocol GridSupplementaryItem: LayoutSupplementaryItem, GridSupplementaryAttributes {
+// MARK: - GridSupplementaryItem
+
+public protocol GridSupplementaryItem: LayoutSupplementaryItem, GridSupplementaryAttributeProvider {
 	
 	/// Y-origin when not pinned.
 	var unpinnedY: CGFloat { get set }
@@ -45,6 +49,8 @@ public protocol GridSupplementaryItem: LayoutSupplementaryItem, GridSupplementar
 	var isPinned: Bool { get set }
 	
 }
+
+// MARK: - GridSupplementaryItemWrapper
 
 public protocol GridSupplementaryItemWrapper: GridSupplementaryItem, SupplementaryItemWrapper {
 	
