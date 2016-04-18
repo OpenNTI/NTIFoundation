@@ -509,6 +509,8 @@
 		4AD52D371CC5698700CDEF45 /* GridSupplementaryAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD52D351CC5698700CDEF45 /* GridSupplementaryAttributes.swift */; };
 		4AD52D531CC5799000CDEF45 /* GridLayoutSupplementaryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD52D521CC5799000CDEF45 /* GridLayoutSupplementaryItem.swift */; };
 		4AD52D541CC5799000CDEF45 /* GridLayoutSupplementaryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD52D521CC5799000CDEF45 /* GridLayoutSupplementaryItem.swift */; };
+		4AD52D561CC581DE00CDEF45 /* BasicLayoutSupplementaryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD52D551CC581DE00CDEF45 /* BasicLayoutSupplementaryItem.swift */; };
+		4AD52D571CC581DE00CDEF45 /* BasicLayoutSupplementaryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD52D551CC581DE00CDEF45 /* BasicLayoutSupplementaryItem.swift */; };
 		4AD56EE41CAC274C00482393 /* Array-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD56EE31CAC274C00482393 /* Array-Extensions.swift */; };
 		4AD56EE51CAC274C00482393 /* Array-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD56EE31CAC274C00482393 /* Array-Extensions.swift */; };
 		4AD56F431CAC8BB300482393 /* CollectionSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0582DB1C90C8F800F3D0E0 /* CollectionSupplementaryView.swift */; };
@@ -1172,6 +1174,7 @@
 		4AB6BE531CA4774700A86233 /* PagingPlaceholderDataSourceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingPlaceholderDataSourceController.swift; sourceTree = "<group>"; };
 		4AD52D351CC5698700CDEF45 /* GridSupplementaryAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridSupplementaryAttributes.swift; sourceTree = "<group>"; };
 		4AD52D521CC5799000CDEF45 /* GridLayoutSupplementaryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridLayoutSupplementaryItem.swift; sourceTree = "<group>"; };
+		4AD52D551CC581DE00CDEF45 /* BasicLayoutSupplementaryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicLayoutSupplementaryItem.swift; sourceTree = "<group>"; };
 		4AD56EE31CAC274C00482393 /* Array-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array-Extensions.swift"; sourceTree = "<group>"; };
 		4ADEE74B1C98950300DE9B0D /* Dictionary-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary-Extensions.swift"; sourceTree = "<group>"; };
 		4ADEE7681C98DBB900DE9B0D /* Decoration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Decoration.swift; sourceTree = "<group>"; };
@@ -2050,6 +2053,7 @@
 			children = (
 				4A68AC821C88B0CE00849185 /* BasicLayoutInfo.swift */,
 				4AE4230B1CBECBC30035CF1B /* BasicSupplementaryItem.swift */,
+				4AD52D551CC581DE00CDEF45 /* BasicLayoutSupplementaryItem.swift */,
 			);
 			path = Basic;
 			sourceTree = "<group>";
@@ -3374,6 +3378,7 @@
 				4A68ACF11C88B0CE00849185 /* ContentLoading.swift in Sources */,
 				4A68ACBF1C88B0CE00849185 /* NSIndexPath-Extensions.swift in Sources */,
 				4A68ACF51C88B0CE00849185 /* LoadableContentStateMachine.swift in Sources */,
+				4AD52D561CC581DE00CDEF45 /* BasicLayoutSupplementaryItem.swift in Sources */,
 				4A68ACD71C88B0CE00849185 /* GridLayoutSection.swift in Sources */,
 				4A68ACD31C88B0CE00849185 /* GridDataSourceMetrics.swift in Sources */,
 				4A68ACE11C88B0CE00849185 /* LayoutRow.swift in Sources */,
@@ -3453,6 +3458,7 @@
 				4A68ACC21C88B0CE00849185 /* UICollectionViewLayoutInvalidationContext-Extensions.swift in Sources */,
 				4A68ACC61C88B0CE00849185 /* CollectionLayoutEngine.swift in Sources */,
 				4A68ACE41C88B0CE00849185 /* LayoutInfo.swift in Sources */,
+				4AD52D571CC581DE00CDEF45 /* BasicLayoutSupplementaryItem.swift in Sources */,
 				4A68ACB81C88B0CE00849185 /* SegmentedCollectionDataSource.swift in Sources */,
 				4A68ACEA1C88B0CE00849185 /* LayoutPlaceholder.swift in Sources */,
 				4A620CD21C88DDCF0084B0A2 /* PagingCollectionDataSource.swift in Sources */,
