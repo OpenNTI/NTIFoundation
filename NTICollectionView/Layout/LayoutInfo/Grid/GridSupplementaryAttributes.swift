@@ -37,3 +37,25 @@ public protocol GridSupplementaryAttributeProvider {
 	var simulatesSelection: Bool { get set }
 	
 }
+
+// MARK: - GridSupplementaryAttributes
+
+public struct GridSupplementaryAttributes: GridSupplementaryAttributeProvider {
+	
+	public var layoutMargins = UIEdgeInsetsZero
+	
+	public var backgroundColor: UIColor?
+	
+	public var selectedBackgroundColor: UIColor?
+	
+	public var pinnedBackgroundColor: UIColor?
+	
+	public var showsSeparator = false
+	
+	public var separatorColor: UIColor?
+	
+	public var pinnedSeparatorColor: UIColor?
+	
+	public var simulatesSelection = false
+	
+}
