@@ -40,7 +40,7 @@ public protocol GridSupplementaryAttributeProvider: LayoutMetricsApplicable {
 
 // MARK: - GridSupplementaryAttributes
 
-public struct GridSupplementaryAttributes: GridSupplementaryAttributeProvider {
+public struct GridSupplementaryAttributes: GridSupplementaryAttributeProvider, Equatable {
 	
 	public var layoutMargins = UIEdgeInsetsZero
 	
@@ -63,7 +63,7 @@ public struct GridSupplementaryAttributes: GridSupplementaryAttributeProvider {
 			return
 		}
 		
-		if backgroundColor == nil && gridMetrics.definesMetric("backgroundColor") {
+		if backgroundColor == nil {
 			backgroundColor = gridMetrics.backgroundColor
 		}
 		
@@ -71,7 +71,7 @@ public struct GridSupplementaryAttributes: GridSupplementaryAttributeProvider {
 			separatorColor = gridMetrics.separatorColor
 		}
 		
-		if pinnedBackgroundColor == nil && gridMetrics.definesMetric("backgroundColor") {
+		if pinnedBackgroundColor == nil {
 			pinnedBackgroundColor = gridMetrics.backgroundColor
 		}
 		
@@ -82,11 +82,22 @@ public struct GridSupplementaryAttributes: GridSupplementaryAttributeProvider {
 	
 }
 
+public func ==(lhs: GridSupplementaryAttributes, rhs: GridSupplementaryAttributes) -> Bool {
+	return lhs.layoutMargins == rhs.layoutMargins
+		&& lhs.backgroundColor == rhs.backgroundColor
+		&& lhs.selectedBackgroundColor == rhs.selectedBackgroundColor
+		&& lhs.pinnedBackgroundColor == rhs.pinnedBackgroundColor
+		&& lhs.showsSeparator == rhs.showsSeparator
+		&& lhs.separatorColor == rhs.separatorColor
+		&& lhs.pinnedSeparatorColor == rhs.pinnedSeparatorColor
+		&& lhs.simulatesSelection == rhs.simulatesSelection
+}
+
 // MARK: - GridSupplementaryAttributesWrapper
 
 public protocol GridSupplementaryAttributesWrapper: GridSupplementaryAttributeProvider {
 	
-	var gridSupplementaryAttributes: GridSupplementaryAttributeProvider { get set }
+	var gridSupplementaryAttributes: GridSupplementaryAttributes { get set }
 	
 }
 

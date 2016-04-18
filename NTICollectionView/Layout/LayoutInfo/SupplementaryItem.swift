@@ -18,7 +18,7 @@ public let AutomaticLength: CGFloat = -1
 public typealias SupplementaryItemConfiguration = (view: UICollectionReusableView, dataSource: CollectionDataSource, indexPath: NSIndexPath) -> Void
 
 /// Definition of how supplementary views should be created and presented in a collection view.
-public protocol SupplementaryItem {
+public protocol SupplementaryItem: LayoutMetricsApplicable {
 	
 	/// Should this supplementary view be displayed while the placeholder is visible?
 	var isVisibleWhileShowingPlaceholder: Bool { get set }
@@ -39,6 +39,8 @@ public protocol SupplementaryItem {
 	var estimatedHeight: CGFloat { get set }
 	
 	var zIndex: Int { get set }
+	
+	var cornerRadius: CGFloat { get set }
 	
 	/// Should the supplementary view be hidden?
 	var isHidden: Bool { get set }
@@ -62,12 +64,7 @@ public protocol SupplementaryItem {
 	/// Adds a configuration block to the supplementary view. This does not clear existing configuration blocks.
 	mutating func configure(with configuration: SupplementaryItemConfiguration)
 	
-	/// Update these metrics with the values from another metrics.
-	mutating func applyValues(from metrics: SupplementaryItem)
-	
-	func definesMetric(metric: String) -> Bool
-	
-	func applyValues(to attributes: CollectionViewLayoutAttributes)
+	func configureValues(of attributes: CollectionViewLayoutAttributes)
 	
 	func isEqual(to other: SupplementaryItem) -> Bool
 	
@@ -153,6 +150,15 @@ extension SupplementaryItemWrapper {
 		}
 		set {
 			supplementaryItem.zIndex = newValue
+		}
+	}
+	
+	public var cornerRadius: CGFloat {
+		get {
+			return supplementaryItem.cornerRadius
+		}
+		set {
+			supplementaryItem.cornerRadius = newValue
 		}
 	}
 	

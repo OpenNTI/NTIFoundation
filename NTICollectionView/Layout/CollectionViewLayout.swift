@@ -818,8 +818,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		func setupSupplementaryMetrics(supplementaryMetrics: SupplementaryItem) {
 			// FIXME: Supplementary item kind shouldn't be decided here
-			var supplementaryItem = BasicGridSupplementaryItem(elementKind: supplementaryMetrics.elementKind)
-			supplementaryItem.applyValues(from: supplementaryMetrics)
+			var supplementaryItem = GridLayoutSupplementaryItem(supplementaryItem: supplementaryMetrics)
+			supplementaryItem.applyValues(from: section.metrics)
 			section.add(supplementaryItem)
 		}
 		

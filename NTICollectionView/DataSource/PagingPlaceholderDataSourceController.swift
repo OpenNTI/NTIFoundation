@@ -72,9 +72,9 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 		dataSource.replaceSupplementaryItemForKey(prevPagePlaceholderKey, with: prevPagePlaceholder)
 	}
 	
-	public private(set) var nextPagePlaceholder: GridSupplementaryItem = BasicGridSupplementaryItem(elementKind: UICollectionElementKindSectionFooter)
+	public private(set) var nextPagePlaceholder = GridSupplementaryItem(elementKind: UICollectionElementKindSectionFooter)
 	
-	public private(set) var prevPagePlaceholder: GridSupplementaryItem = BasicGridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
+	public private(set) var prevPagePlaceholder = GridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
 	
 	public var pageLoadDelay: NSTimeInterval = 0.5
 	

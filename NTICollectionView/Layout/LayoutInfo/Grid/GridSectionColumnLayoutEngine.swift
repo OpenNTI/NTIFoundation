@@ -123,7 +123,7 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 	}
 	
 	private func checkPinning(inout of supplementaryItem: LayoutSupplementaryItem) {
-		guard var gridItem = supplementaryItem as? GridSupplementaryItem
+		guard var gridItem = supplementaryItem as? GridLayoutSupplementaryItem
 			where supplementaryItem.isHeader else {
 				return
 		}

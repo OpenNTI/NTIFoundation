@@ -146,8 +146,75 @@ public protocol LayoutElement: LayoutArea {
 
 
 /// Layout information about a supplementary item.
-public protocol LayoutSupplementaryItem: SupplementaryItem, LayoutElement {
+public protocol LayoutSupplementaryItem: SupplementaryItemWrapper, LayoutElement {
 	
 	var section: LayoutSection? { get set }
+	
+	var supplementaryItem: SupplementaryItem { get set }
+	
+}
+
+extension LayoutSupplementaryItem {
+	
+	public var layoutAttributes: CollectionViewLayoutAttributes {
+		let attributes = CollectionViewLayoutAttributes(forSupplementaryViewOfKind: elementKind, withIndexPath: indexPath)
+		
+		configureValues(of: attributes)
+		
+		return attributes
+	}
+	
+}
+
+public protocol LayoutSupplementaryItemWrapper: LayoutSupplementaryItem {
+	
+	var layoutSupplementaryItem: LayoutSupplementaryItem { get set }
+	
+}
+
+extension LayoutSupplementaryItemWrapper {
+	
+	public var section: LayoutSection? {
+		get {
+			return layoutSupplementaryItem.section
+		}
+		set {
+			layoutSupplementaryItem.section = newValue
+		}
+	}
+	
+	public var frame: CGRect {
+		get {
+			return layoutSupplementaryItem.frame
+		}
+		set {
+			layoutSupplementaryItem.frame = newValue
+		}
+	}
+	
+	public var itemIndex: Int {
+		get {
+			return layoutSupplementaryItem.itemIndex
+		}
+		set {
+			layoutSupplementaryItem.itemIndex = newValue
+		}
+	}
+	
+	public var indexPath: NSIndexPath {
+		return layoutSupplementaryItem.indexPath
+	}
+	
+	public var layoutAttributes: UICollectionViewLayoutAttributes {
+		return layoutSupplementaryItem.layoutAttributes
+	}
+	
+	public mutating func resetLayoutAttributes() {
+		layoutSupplementaryItem.resetLayoutAttributes()
+	}
+	
+	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+		layoutSupplementaryItem.setFrame(frame, invalidationContext: invalidationContext)
+	}
 	
 }

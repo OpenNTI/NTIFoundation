@@ -970,7 +970,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 	}
 	
 	private func resetHeaders(pinnable pinnable: Bool, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
-		func resetter(inout header: GridSupplementaryItem, index: Int) {
+		func resetter(inout header: GridLayoutSupplementaryItem, index: Int) {
 			var frame = header.frame
 			
 			if frame.minY != header.unpinnedY {
@@ -1031,7 +1031,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 	}
 	
 	private func finalizePinningForHeaders(pinnable pinnable: Bool, zIndex: Int) {
-		func finalizer(inout header: GridSupplementaryItem, index: Int) {
+		func finalizer(inout header: GridLayoutSupplementaryItem, index: Int) {
 			header.isPinned = header.frame.minY != header.unpinnedY
 			
 			let depth = index + 1
@@ -1065,11 +1065,11 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		return result
 	}
 	
-	public func mutatePinnableHeaders(using mutator: (inout pinnableHeader: GridSupplementaryItem, index: Int) -> Void) {
+	public func mutatePinnableHeaders(using mutator: (inout pinnableHeader: GridLayoutSupplementaryItem, index: Int) -> Void) {
 		var headers = self.headers
 		
 		for index in headers.indices {
-			guard var header = headers[index] as? GridSupplementaryItem
+			guard var header = headers[index] as? GridLayoutSupplementaryItem
 				where header.shouldPin else {
 					continue
 			}
@@ -1081,7 +1081,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		self.headers = headers
 	}
 	
-	public func mutateNonPinnableHeaders(inReverse inReverse: Bool = false, using mutator: (inout nonPinnableHeader: GridSupplementaryItem, index: Int) -> Void) {
+	public func mutateNonPinnableHeaders(inReverse inReverse: Bool = false, using mutator: (inout nonPinnableHeader: GridLayoutSupplementaryItem, index: Int) -> Void) {
 		var headers = self.headers
 		
 		let headerIndices = inReverse ?
@@ -1089,7 +1089,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 			: AnyForwardCollection<Int>(headers.indices)
 		
 		for index in headerIndices {
-			guard var header = headers[index] as? GridSupplementaryItem
+			guard var header = headers[index] as? GridLayoutSupplementaryItem
 				where !header.shouldPin else {
 					continue
 			}

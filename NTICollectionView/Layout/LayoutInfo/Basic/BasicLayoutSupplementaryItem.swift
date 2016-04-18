@@ -33,36 +33,31 @@ public struct BasicLayoutSupplementaryItem: LayoutSupplementaryItem, Supplementa
 		}
 	}
 	
-	public var layoutAttributes: CollectionViewLayoutAttributes {
-		let attributes = CollectionViewLayoutAttributes(forSupplementaryViewOfKind: elementKind, withIndexPath: indexPath)
-		
-		applyValues(to: attributes)
-		
-		return attributes
-	}
-	
 	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		
 	}
 	
-	public mutating func applyValues(from metrics: SupplementaryItem) {
-		
-	}
-	
-	public func definesMetric(metric: String) -> Bool {
-		return false
-	}
-	
 	public func isEqual(to other: SupplementaryItem) -> Bool {
-		return supplementaryItem.isEqual(to: other)
+		guard let other = other as? BasicLayoutSupplementaryItem else {
+			return false
+		}
+		
+		return supplementaryItem.isEqual(to: other.supplementaryItem)
+			&& frame == other.frame
+			&& itemIndex == other.itemIndex
+			&& section === other.section
 	}
 	
 	public mutating func resetLayoutAttributes() {
 		
 	}
 	
-	public func applyValues(to attributes: CollectionViewLayoutAttributes) {
-		supplementaryItem.applyValues(to: attributes)
+	public mutating func applyValues(from metrics: LayoutMetrics) {
+		supplementaryItem.applyValues(from: metrics)
+	}
+	
+	public func configureValues(of attributes: CollectionViewLayoutAttributes) {
+		supplementaryItem.configureValues(of: attributes)
 		
 		attributes.frame = frame
 	}

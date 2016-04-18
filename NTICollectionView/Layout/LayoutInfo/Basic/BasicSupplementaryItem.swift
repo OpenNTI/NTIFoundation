@@ -16,33 +16,23 @@ public struct BasicSupplementaryItem: SupplementaryItem {
 		self.elementKind = elementKind
 	}
 	
-	public var isVisibleWhileShowingPlaceholder: Bool = false {
-		didSet { setFlag("isVisibleWhileShowingPlaceholder") }
-	}
+	public var isVisibleWhileShowingPlaceholder: Bool = false
 	
-	public var shouldPin: Bool = false {
-		didSet { setFlag("shouldPin") }
-	}
+	public var shouldPin: Bool = false
 	
 	public var width: CGFloat?
 	
-	public var height: CGFloat? {
-		didSet { setFlag("height") }
-	}
+	public var height: CGFloat?
 	
 	public var estimatedWidth: CGFloat = DefaultEstimatedHeight
 	
-	public var estimatedHeight: CGFloat = DefaultEstimatedHeight {
-		didSet { setFlag("estimatedHeight") }
-	}
+	public var estimatedHeight: CGFloat = DefaultEstimatedHeight
 	
-	public var zIndex: Int = headerZIndex {
-		didSet { setFlag("zIndex") }
-	}
+	public var zIndex: Int = headerZIndex
 	
-	public var isHidden: Bool = false {
-		didSet { setFlag("isHidden") }
-	}
+	public var cornerRadius: CGFloat = 0
+	
+	public var isHidden: Bool = false
 	
 	public var supplementaryViewClass: UICollectionReusableView.Type!
 	
@@ -68,43 +58,13 @@ public struct BasicSupplementaryItem: SupplementaryItem {
 		return height == nil
 	}
 	
-	public var frame = CGRectZero
-	
-	public var section: LayoutSection?
-	
-	public var itemIndex = NSNotFound
-	
-	public var indexPath: NSIndexPath {
-		guard let sectionInfo = section else {
-			return NSIndexPath()
-		}
-		if sectionInfo.isGlobalSection {
-			return NSIndexPath(index: itemIndex)
-		} else {
-			return NSIndexPath(forItem: itemIndex, inSection: sectionInfo.sectionIndex)
-		}
+	public func applyValues(from metrics: LayoutMetrics) {
+		
 	}
 	
-	public var layoutAttributes: UICollectionViewLayoutAttributes {
-		let attributes = CollectionViewLayoutAttributes(forSupplementaryViewOfKind: elementKind, withIndexPath: indexPath)
-		let section = self.section as? GridLayoutSection
-		let metrics = section?.metrics
-		let layoutInfo = section?.layoutInfo
-		
-		attributes.frame = frame
-		attributes.unpinnedOrigin = frame.origin
+	public func configureValues(of attributes: CollectionViewLayoutAttributes) {
 		attributes.zIndex = zIndex
-		attributes.isPinned = false
-		attributes.isEditing = layoutInfo?.isEditing ?? false
-		attributes.hidden = false
-		attributes.shouldCalculateFittingSize = hasEstimatedHeight
-		attributes.cornerRadius = metrics?.cornerRadius ?? 0
-		
-		return attributes
-	}
-	
-	public func applyValues(to attributes: CollectionViewLayoutAttributes) {
-		attributes.zIndex = zIndex
+		attributes.cornerRadius = cornerRadius
 		attributes.hidden = false
 		attributes.shouldCalculateFittingSize = hasEstimatedHeight
 	}
@@ -121,39 +81,6 @@ public struct BasicSupplementaryItem: SupplementaryItem {
 		}
 	}
 	
-	public mutating func applyValues(from metrics: SupplementaryItem) {
-		guard let metrics = metrics as? GridSupplementaryItem else {
-			return
-		}
-		
-		if metrics.definesMetric("height") {
-			height = metrics.height
-		}
-		if metrics.definesMetric("estimatedHeight") {
-			estimatedHeight = metrics.estimatedHeight
-		}
-		if metrics.definesMetric("zIndex") {
-			zIndex = metrics.zIndex
-		}
-		if metrics.definesMetric("isHidden") {
-			isHidden = metrics.isHidden
-		}
-		if metrics.definesMetric("shouldPin") {
-			shouldPin = metrics.shouldPin
-		}
-		if metrics.definesMetric("isVisibleWhileShowingPlaceholder") {
-			isVisibleWhileShowingPlaceholder = metrics.isVisibleWhileShowingPlaceholder
-		}
-		
-		supplementaryViewClass = metrics.supplementaryViewClass
-		configureView = metrics.configureView
-		reuseIdentifier = metrics.reuseIdentifier
-	}
-	
-	public func definesMetric(metric: String) -> Bool {
-		return flags.contains(metric)
-	}
-	
 	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		
 	}
@@ -163,7 +90,7 @@ public struct BasicSupplementaryItem: SupplementaryItem {
 	}
 	
 	public func isEqual(to other: SupplementaryItem) -> Bool {
-		guard let other = other as? BasicGridSupplementaryItem else {
+		guard let other = other as? BasicSupplementaryItem else {
 			return false
 		}
 		
@@ -178,12 +105,6 @@ public struct BasicSupplementaryItem: SupplementaryItem {
 			&& estimatedWidth == other.estimatedWidth
 			&& estimatedHeight == other.estimatedHeight
 			&& isHidden == other.isHidden
-	}
-	
-	private var flags: Set<String> = []
-	
-	private mutating func setFlag(flag: String) {
-		flags.insert(flag)
 	}
 	
 }

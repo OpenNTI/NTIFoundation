@@ -8,53 +8,31 @@
 
 import UIKit
 
-public struct GridLayoutSupplementaryItem: LayoutSupplementaryItem, SupplementaryItemWrapper {
+public struct GridLayoutSupplementaryItem: LayoutSupplementaryItemWrapper {
 	
 	public init(supplementaryItem: SupplementaryItem) {
-		self.supplementaryItem = supplementaryItem
+		layoutSupplementaryItem = BasicLayoutSupplementaryItem(supplementaryItem: supplementaryItem)
 	}
 	
-	public var supplementaryItem: SupplementaryItem
+	public var layoutSupplementaryItem: LayoutSupplementaryItem
 	
+	public var supplementaryItem: SupplementaryItem {
+		get {
+			return layoutSupplementaryItem.supplementaryItem
+		}
+		set {
+			layoutSupplementaryItem.supplementaryItem = newValue
+		}
+	}
+	
+	/// Y-origin when not pinned.
 	public var unpinnedY: CGFloat = 0
 	
+	// Whether `self` is pinned in place.
 	public var isPinned = false
-	
-	public var section: LayoutSection?
-	
-	public var frame = CGRectZero
-	
-	public var itemIndex = NSNotFound
-	
-	public var indexPath: NSIndexPath {
-		guard let sectionInfo = section else {
-			return NSIndexPath()
-		}
-		if sectionInfo.isGlobalSection {
-			return NSIndexPath(index: itemIndex)
-		} else {
-			return NSIndexPath(forItem: itemIndex, inSection: sectionInfo.sectionIndex)
-		}
-	}
-	
-	public var layoutAttributes: CollectionViewLayoutAttributes {
-		let attributes = CollectionViewLayoutAttributes(forSupplementaryViewOfKind: elementKind, withIndexPath: indexPath)
-		
-		applyValues(to: attributes)
-		
-		return attributes
-	}
 	
 	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		
-	}
-	
-	public mutating func applyValues(from metrics: SupplementaryItem) {
-		
-	}
-	
-	public func definesMetric(metric: String) -> Bool {
-		return false
 	}
 	
 	public func isEqual(to other: SupplementaryItem) -> Bool {
@@ -65,10 +43,12 @@ public struct GridLayoutSupplementaryItem: LayoutSupplementaryItem, Supplementar
 		
 	}
 	
-	public func applyValues(to attributes: CollectionViewLayoutAttributes) {
-		supplementaryItem.applyValues(to: attributes)
-		
-		attributes.frame = frame
+	public mutating func applyValues(from metrics: LayoutMetrics) {
+		layoutSupplementaryItem.applyValues(from: metrics)
+	}
+	
+	public func configureValues(of attributes: CollectionViewLayoutAttributes) {
+		layoutSupplementaryItem.configureValues(of: attributes)
 	}
 	
 }
