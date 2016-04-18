@@ -81,3 +81,87 @@ public struct GridSupplementaryAttributes: GridSupplementaryAttributeProvider {
 	}
 	
 }
+
+// MARK: - GridSupplementaryAttributesWrapper
+
+public protocol GridSupplementaryAttributesWrapper: GridSupplementaryAttributeProvider {
+	
+	var gridSupplementaryAttributes: GridSupplementaryAttributeProvider { get set }
+	
+}
+
+extension GridSupplementaryAttributesWrapper {
+	
+	public var layoutMargins: UIEdgeInsets {
+		get {
+			return gridSupplementaryAttributes.layoutMargins
+		}
+		set {
+			gridSupplementaryAttributes.layoutMargins = newValue
+		}
+	}
+	
+	public var backgroundColor: UIColor? {
+		get {
+			return gridSupplementaryAttributes.backgroundColor
+		}
+		set {
+			gridSupplementaryAttributes.backgroundColor = newValue
+		}
+	}
+	
+	public var selectedBackgroundColor: UIColor? {
+		get {
+			return gridSupplementaryAttributes.selectedBackgroundColor
+		}
+		set {
+			gridSupplementaryAttributes.selectedBackgroundColor = newValue
+		}
+	}
+	
+	public var pinnedBackgroundColor: UIColor? {
+		get {
+			return gridSupplementaryAttributes.pinnedBackgroundColor
+		}
+		set {
+			gridSupplementaryAttributes.pinnedBackgroundColor = newValue
+		}
+	}
+	
+	public var showsSeparator: Bool {
+		get {
+			return gridSupplementaryAttributes.showsSeparator
+		}
+		set {
+			gridSupplementaryAttributes.showsSeparator = newValue
+		}
+	}
+	
+	public var separatorColor: UIColor? {
+		get {
+			return gridSupplementaryAttributes.separatorColor
+		}
+		set {
+			gridSupplementaryAttributes.separatorColor = newValue
+		}
+	}
+	
+	public var pinnedSeparatorColor: UIColor? {
+		get {
+			return gridSupplementaryAttributes.pinnedSeparatorColor
+		}
+		set {
+			gridSupplementaryAttributes.pinnedSeparatorColor = newValue
+		}
+	}
+	
+	public var simulatesSelection: Bool {
+		get {
+			return gridSupplementaryAttributes.simulatesSelection
+		}
+		set {
+			gridSupplementaryAttributes.simulatesSelection = newValue
+		}
+	}
+	
+}
