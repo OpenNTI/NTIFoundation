@@ -505,6 +505,8 @@
 		4A9D2C301C9CCA3D00D75BBD /* DelegatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9D2C2F1C9CCA3D00D75BBD /* DelegatingViewController.swift */; };
 		4AB48C531CC0386C00F193C3 /* BasicSupplementaryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE4230B1CBECBC30035CF1B /* BasicSupplementaryItem.swift */; };
 		4AB6BE541CA4774700A86233 /* PagingPlaceholderDataSourceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB6BE531CA4774700A86233 /* PagingPlaceholderDataSourceController.swift */; };
+		4AD52D361CC5698700CDEF45 /* GridSupplementaryAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD52D351CC5698700CDEF45 /* GridSupplementaryAttributes.swift */; };
+		4AD52D371CC5698700CDEF45 /* GridSupplementaryAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD52D351CC5698700CDEF45 /* GridSupplementaryAttributes.swift */; };
 		4AD56EE41CAC274C00482393 /* Array-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD56EE31CAC274C00482393 /* Array-Extensions.swift */; };
 		4AD56EE51CAC274C00482393 /* Array-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD56EE31CAC274C00482393 /* Array-Extensions.swift */; };
 		4AD56F431CAC8BB300482393 /* CollectionSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0582DB1C90C8F800F3D0E0 /* CollectionSupplementaryView.swift */; };
@@ -1166,6 +1168,7 @@
 		4A72F48619268DA8004792EF /* UIColor+NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NTIExtensionsTest.m"; sourceTree = "<group>"; };
 		4A9D2C2F1C9CCA3D00D75BBD /* DelegatingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DelegatingViewController.swift; sourceTree = "<group>"; };
 		4AB6BE531CA4774700A86233 /* PagingPlaceholderDataSourceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingPlaceholderDataSourceController.swift; sourceTree = "<group>"; };
+		4AD52D351CC5698700CDEF45 /* GridSupplementaryAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridSupplementaryAttributes.swift; sourceTree = "<group>"; };
 		4AD56EE31CAC274C00482393 /* Array-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array-Extensions.swift"; sourceTree = "<group>"; };
 		4ADEE74B1C98950300DE9B0D /* Dictionary-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary-Extensions.swift"; sourceTree = "<group>"; };
 		4ADEE7681C98DBB900DE9B0D /* Decoration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Decoration.swift; sourceTree = "<group>"; };
@@ -2062,6 +2065,7 @@
 				4A68AC8A1C88B0CE00849185 /* GridSectionLayoutEngine.swift */,
 				4A68AC8B1C88B0CE00849185 /* GridSectionMetrics.swift */,
 				4A68AC831C88B0CE00849185 /* GridSupplementaryItem.swift */,
+				4AD52D351CC5698700CDEF45 /* GridSupplementaryAttributes.swift */,
 				4A68AC8C1C88B0CE00849185 /* LayoutRow.swift */,
 			);
 			path = Grid;
@@ -3399,6 +3403,7 @@
 				4A68ACF31C88B0CE00849185 /* Debug.swift in Sources */,
 				4A68ACCF1C88B0CE00849185 /* BasicLayoutInfo.swift in Sources */,
 				4A68ACE51C88B0CE00849185 /* LayoutItem.swift in Sources */,
+				4AD52D361CC5698700CDEF45 /* GridSupplementaryAttributes.swift in Sources */,
 				4A68ACB31C88B0CE00849185 /* DataSourceMetrics.swift in Sources */,
 				4A620CD11C88DDCF0084B0A2 /* PagingCollectionDataSource.swift in Sources */,
 				4AD56EE41CAC274C00482393 /* Array-Extensions.swift in Sources */,
@@ -3476,6 +3481,7 @@
 				4A68ACAA1C88B0CE00849185 /* CollectionViewWrapper.swift in Sources */,
 				4A68ACCE1C88B0CE00849185 /* CollectionViewLayoutMeasuring.swift in Sources */,
 				4A68ACB41C88B0CE00849185 /* DataSourceMetrics.swift in Sources */,
+				4AD52D371CC5698700CDEF45 /* GridSupplementaryAttributes.swift in Sources */,
 				4ADEE76A1C98DBB900DE9B0D /* Decoration.swift in Sources */,
 				4AD56EE51CAC274C00482393 /* Array-Extensions.swift in Sources */,
 				4A68ACEE1C88B0CE00849185 /* SupplementaryItem.swift in Sources */,
