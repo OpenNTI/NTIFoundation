@@ -114,4 +114,14 @@ class CatListDataSource: BasicCollectionDataSource {
 		}
 	}
 	
+	// MARK: - Drag reorder support
+	
+	override func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath) -> Bool {
+		return true
+	}
+	
+	override func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath, to destinationIndexPath: NSIndexPath) -> Bool {
+		return true
+	}
+	
 }
