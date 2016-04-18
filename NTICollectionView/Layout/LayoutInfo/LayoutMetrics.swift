@@ -24,9 +24,13 @@ public enum ItemLayoutOrder: String {
 	
 }
 
-public protocol LayoutMetrics {
+public protocol LayoutMetricsApplicable {
 	
 	mutating func applyValues(from metrics: LayoutMetrics)
+	
+}
+
+public protocol LayoutMetrics: LayoutMetricsApplicable {
 	
 	func definesMetric(metric: String) -> Bool
 	
