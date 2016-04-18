@@ -34,15 +34,15 @@ public protocol GridSupplementaryAttributes {
 	/// Should this supplementary view simulate selection highlighting like cells?
 	var simulatesSelection: Bool { get set }
 	
+}
+
+public protocol GridSupplementaryItem: LayoutSupplementaryItem, GridSupplementaryAttributes {
+	
 	/// Y-origin when not pinned.
 	var unpinnedY: CGFloat { get set }
 	
 	// Whether `self` is pinned in place.
 	var isPinned: Bool { get set }
-	
-}
-
-public protocol GridSupplementaryItem: LayoutSupplementaryItem, GridSupplementaryAttributes {
 	
 }
 
