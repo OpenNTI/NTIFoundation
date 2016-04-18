@@ -328,6 +328,10 @@ public struct BasicGridSupplementaryItem: GridSupplementaryItem, SupplementaryIt
 		}
 	}
 	
+	public func applyValues(from metrics: LayoutMetrics) {
+		
+	}
+	
 	public func definesMetric(metric: String) -> Bool {
 		if supplementaryItem.definesMetric(metric) {
 			return true

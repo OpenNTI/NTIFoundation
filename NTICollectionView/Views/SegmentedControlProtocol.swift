@@ -115,7 +115,9 @@ public struct GridSegmentedControlHeader: GridSupplementaryItemWrapper, Segmente
 		return segmentedControl === other.segmentedControl
 	}
 	
-	
+	public func applyValues(from metrics: LayoutMetrics) {
+		
+	}
 	
 }
 

@@ -10,7 +10,7 @@ import UIKit
 
 // MARK: - GridSupplementaryAttributeProvider
 
-public protocol GridSupplementaryAttributeProvider {
+public protocol GridSupplementaryAttributeProvider: LayoutMetricsApplicable {
 	
 	/// Use top & bottom layoutMargin to adjust spacing of header & footer elements. Not all headers & footers adhere to layoutMargins. Default is UIEdgeInsetsZero which is interpreted by supplementary items to be their default values.
 	var layoutMargins: UIEdgeInsets { get set }
@@ -57,5 +57,27 @@ public struct GridSupplementaryAttributes: GridSupplementaryAttributeProvider {
 	public var pinnedSeparatorColor: UIColor?
 	
 	public var simulatesSelection = false
+	
+	public mutating func applyValues(from metrics: LayoutMetrics) {
+		guard let gridMetrics = metrics as? GridSectionMetrics else {
+			return
+		}
+		
+		if backgroundColor == nil && gridMetrics.definesMetric("backgroundColor") {
+			backgroundColor = gridMetrics.backgroundColor
+		}
+		
+		if separatorColor == nil && gridMetrics.definesMetric("separatorColor") {
+			separatorColor = gridMetrics.separatorColor
+		}
+		
+		if pinnedBackgroundColor == nil && gridMetrics.definesMetric("backgroundColor") {
+			pinnedBackgroundColor = gridMetrics.backgroundColor
+		}
+		
+		if pinnedSeparatorColor == nil && gridMetrics.definesMetric("separatorColor") {
+			pinnedSeparatorColor = gridMetrics.separatorColor
+		}
+	}
 	
 }
