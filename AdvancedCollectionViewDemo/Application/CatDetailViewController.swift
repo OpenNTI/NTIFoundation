@@ -36,7 +36,7 @@ class CatDetailViewController: CollectionViewController {
 		dataSource.add(detailDataSource)
 		dataSource.add(sightingDataSource)
 		
-		var globalHeader = BasicGridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
+		var globalHeader = GridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
 		globalHeader.isVisibleWhileShowingPlaceholder = true
 		globalHeader.estimatedHeight = 110
 		globalHeader.supplementaryViewClass = AAPLCatDetailHeader.self
@@ -48,7 +48,7 @@ class CatDetailViewController: CollectionViewController {
 		}
 		dataSource.add(globalHeader, forKey: "globalHeader")
 		
-		var segmentedHeader = BasicGridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
+		var segmentedHeader = GridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
 		segmentedHeader.supplementaryViewClass = AAPLSegmentedHeaderView.self
 		segmentedHeader.showsSeparator = true
 		segmentedHeader.isVisibleWhileShowingPlaceholder = true
