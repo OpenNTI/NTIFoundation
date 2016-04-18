@@ -26,7 +26,7 @@ public protocol LayoutSection: class, LayoutEngine, LayoutAttributesResolving {
 	func supplementaryItems(of kind: String) -> [LayoutSupplementaryItem]
 	func setSupplementaryItems(supplementaryItems: [LayoutSupplementaryItem], of kind: String)
 	
-	var backgroundAttribute: UICollectionViewLayoutAttributes? { get }
+	var backgroundAttribute: CollectionViewLayoutAttributes? { get }
 	
 	var placeholderInfo: LayoutPlaceholder? { get set }
 	
@@ -64,9 +64,9 @@ public protocol LayoutSection: class, LayoutEngine, LayoutAttributesResolving {
 	
 	func setSize(size: CGSize, forFooterAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
 	
-	func additionalLayoutAttributesToInsertForInsertionOfItem(at indexPath: NSIndexPath) -> [UICollectionViewLayoutAttributes]
+	func additionalLayoutAttributesToInsertForInsertionOfItem(at indexPath: NSIndexPath) -> [CollectionViewLayoutAttributes]
 	
-	func additionalLayoutAttributesToDeleteForDeletionOfItem(at indexPath: NSIndexPath) -> [UICollectionViewLayoutAttributes]
+	func additionalLayoutAttributesToDeleteForDeletionOfItem(at indexPath: NSIndexPath) -> [CollectionViewLayoutAttributes]
 	
 	func prepareForLayout()
 	

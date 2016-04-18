@@ -53,7 +53,7 @@ public class BasicLayoutPlaceholder: LayoutPlaceholder {
 		return NSIndexPath(forItem: itemIndex, inSection: startingSectionIndex)
 	}
 	
-	public var layoutAttributes: UICollectionViewLayoutAttributes {
+	public var layoutAttributes: CollectionViewLayoutAttributes {
 		if let layoutAttributes = _layoutAttributes where layoutAttributes.indexPath == indexPath {
 			return layoutAttributes
 		}

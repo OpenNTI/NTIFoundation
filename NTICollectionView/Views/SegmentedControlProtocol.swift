@@ -99,7 +99,7 @@ public struct GridSegmentedControlHeader: GridSupplementaryItemWrapper, Segmente
 		return gridSupplementaryItem.indexPath
 	}
 	
-	public var layoutAttributes: UICollectionViewLayoutAttributes {
+	public var layoutAttributes: CollectionViewLayoutAttributes {
 		return gridSupplementaryItem.layoutAttributes
 	}
 	
