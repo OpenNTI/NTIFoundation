@@ -67,6 +67,8 @@ public protocol SupplementaryItem {
 	
 	func definesMetric(metric: String) -> Bool
 	
+	func applyValues(to attributes: CollectionViewLayoutAttributes)
+	
 	func isEqual(to other: SupplementaryItem) -> Bool
 	
 }

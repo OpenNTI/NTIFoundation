@@ -103,6 +103,12 @@ public struct BasicSupplementaryItem: SupplementaryItem {
 		return attributes
 	}
 	
+	public func applyValues(to attributes: CollectionViewLayoutAttributes) {
+		attributes.zIndex = zIndex
+		attributes.hidden = false
+		attributes.shouldCalculateFittingSize = hasEstimatedHeight
+	}
+	
 	public mutating func configure(with configuration: SupplementaryItemConfiguration) {
 		guard let configureView = self.configureView else {
 			self.configureView = configuration

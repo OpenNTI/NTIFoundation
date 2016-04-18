@@ -283,6 +283,18 @@ public struct BasicGridSupplementaryItem: GridSupplementaryItem, SupplementaryIt
 	}
 	private var _layoutAttributes: CollectionViewLayoutAttributes?
 	
+	public func applyValues(to attributes: CollectionViewLayoutAttributes) {
+		supplementaryItem.applyValues(to: attributes)
+		
+		attributes.backgroundColor = backgroundColor
+		attributes.selectedBackgroundColor = selectedBackgroundColor
+		attributes.layoutMargins = layoutMargins
+		attributes.simulatesSelection = simulatesSelection
+		attributes.pinnedSeparatorColor = pinnedSeparatorColor
+		attributes.pinnedBackgroundColor = pinnedBackgroundColor
+		attributes.showsSeparator = showsSeparator
+	}
+	
 	public mutating func configure(with configuration: SupplementaryItemConfiguration) {
 		guard let configureView = self.configureView else {
 			self.configureView = configuration

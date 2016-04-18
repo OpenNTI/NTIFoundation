@@ -119,6 +119,18 @@ public struct GridSegmentedControlHeader: GridSupplementaryItemWrapper, Segmente
 		
 	}
 	
+	public func applyValues(to attributes: CollectionViewLayoutAttributes) {
+		supplementaryItem.applyValues(to: attributes)
+		
+		attributes.backgroundColor = backgroundColor
+		attributes.selectedBackgroundColor = selectedBackgroundColor
+		attributes.layoutMargins = layoutMargins
+		attributes.simulatesSelection = simulatesSelection
+		attributes.pinnedSeparatorColor = pinnedSeparatorColor
+		attributes.pinnedBackgroundColor = pinnedBackgroundColor
+		attributes.showsSeparator = showsSeparator
+	}
+	
 }
 
 public class SegmentedControl: UISegmentedControl, SegmentedControlView {
