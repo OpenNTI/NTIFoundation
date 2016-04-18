@@ -186,10 +186,10 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			result += sectionInfo.layoutAttributes.filter { $0.frame.intersects(rect) }
 		}
 		
-		if LayoutDebugging {
-			for attr in result {
-				print("\(#function) \(attr.debugLogDescription)")
-			}
+		for attributes in result {
+			finalizeConfiguration(of: attributes)
+			
+			layoutLog("\(#function) \(attributes.debugLogDescription)")
 		}
 		
 		return result
@@ -203,34 +203,66 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 				return nil
 		}
 		
+		let attributes: CollectionViewLayoutAttributes
+		
 		if let measuringAttributes = self.measuringAttributes
 			where measuringAttributes.indexPath == indexPath {
+			attributes = measuringAttributes
+			
 			layoutLog("\(#function) indexPath=\(indexPath.debugLogDescription) measuringAttributes=\(measuringAttributes)")
-			return measuringAttributes
+		}
+		else if let infoAttributes = layoutInfo.layoutAttributesForCell(at: indexPath) {
+			attributes = infoAttributes
+			
+			layoutLog("\(#function) indexPath=\(indexPath.debugLogDescription) attributes=\(attributes)")
+		}
+		else {
+			return nil
 		}
 		
-		let attributes = layoutInfo.layoutAttributesForCell(at: indexPath)
-		layoutLog("\(#function) indexPath=\(indexPath.debugLogDescription) attributes=\(attributes)")
+		finalizeConfiguration(of: attributes)
+		
 		return attributes
 	}
 	
 	public override func layoutAttributesForSupplementaryViewOfKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+		let attributes: CollectionViewLayoutAttributes
+		
 		if let measuringAttributes = self.measuringAttributes
 			where measuringAttributes.indexPath == indexPath
 				&& measuringAttributes.representedElementKind == elementKind {
-					layoutLog("\(#function) measuringAttributes=\(measuringAttributes)")
-					return measuringAttributes
+			attributes = measuringAttributes
+			
+			layoutLog("\(#function) measuringAttributes=\(measuringAttributes)")
 		}
-		
-		guard let attributes = layoutInfo?.layoutAttributesForSupplementaryElementOfKind(elementKind, at: indexPath) else {
+		else if let infoAttributes = layoutInfo?.layoutAttributesForSupplementaryElementOfKind(elementKind, at: indexPath) {
+			attributes = infoAttributes
+			
+			layoutLog("\(#function) indexPath=\(indexPath.debugLogDescription) attributes=\(attributes)")
+		}
+		else {
 			preconditionFailure("We should ALWAYS find layout attributes.")
 		}
-		layoutLog("\(#function) indexPath=\(indexPath.debugLogDescription) attributes=\(attributes)")
+		
+		finalizeConfiguration(of: attributes)
+		
 		return attributes
 	}
 	
 	public override func layoutAttributesForDecorationViewOfKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
 		return layoutInfo?.layoutAttributesForDecorationViewOfKind(elementKind, at: indexPath)
+	}
+	
+	private func finalizeConfiguration(of attributes: CollectionViewLayoutAttributes) {
+		let indexPath = attributes.indexPath
+		
+		switch attributes.representedElementCategory {
+		case .Cell:
+			attributes.isEditing = isEditing ? canEditItem(at: indexPath) : false
+			attributes.isMovable = isEditing ? canMoveItem(at: indexPath) : false
+		default:
+			attributes.isEditing = isEditing
+		}
 	}
 	
 	public override func shouldInvalidateLayoutForPreferredLayoutAttributes(preferredAttributes: UICollectionViewLayoutAttributes, withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> Bool {

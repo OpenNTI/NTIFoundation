@@ -282,7 +282,6 @@ public struct BasicGridSupplementaryItem: GridSupplementaryItem, SupplementaryIt
 		let attributes = CollectionViewLayoutAttributes(forSupplementaryViewOfKind: elementKind, withIndexPath: indexPath)
 		let section = self.section as? GridLayoutSection
 		let metrics = section?.metrics
-		let layoutInfo = section?.layoutInfo
 		
 		attributes.frame = frame
 		attributes.unpinnedOrigin = CGPoint(x: frame.origin.x, y: unpinnedY)
@@ -291,7 +290,6 @@ public struct BasicGridSupplementaryItem: GridSupplementaryItem, SupplementaryIt
 		attributes.backgroundColor = backgroundColor ?? metrics?.backgroundColor
 		attributes.selectedBackgroundColor = selectedBackgroundColor
 		attributes.layoutMargins = layoutMargins
-		attributes.isEditing = layoutInfo?.isEditing ?? false
 		attributes.hidden = false
 		attributes.shouldCalculateFittingSize = hasEstimatedHeight
 		attributes.simulatesSelection = simulatesSelection

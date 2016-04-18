@@ -41,26 +41,18 @@ public struct GridLayoutItem: LayoutItem {
 		let attributes = CollectionViewLayoutAttributes(forCellWithIndexPath: indexPath)
 		attributes.frame = self.frame
 		attributes.zIndex = defaultZIndex
+		attributes.columnIndex = columnIndex
+		attributes.shouldCalculateFittingSize = hasEstimatedHeight
+		attributes.hidden = isDragging
 		
-		// TODO: Decouple from section and layout
+		// TODO: Decouple from section
 		if let section = self.section as? GridLayoutSection {
 			let metrics = section.metrics
 			attributes.backgroundColor = metrics.backgroundColor
 			attributes.selectedBackgroundColor = metrics.selectedBackgroundColor
-			attributes.columnIndex = columnIndex
 			attributes.cornerRadius = metrics.cornerRadius
-			
-			if let layoutInfo = section.layoutInfo as? BasicLayoutInfo,
-				layout = layoutInfo.layout {
-					attributes.isEditing = layout.isEditing ? layout.canEditItem(at: indexPath) : false
-					attributes.isMovable = layout.isEditing ? layout.canMoveItem(at: indexPath) : false
-			}
-			
-			attributes.shouldCalculateFittingSize = hasEstimatedHeight
 			attributes.layoutMargins = metrics.layoutMargins
 		}
-		
-		attributes.hidden = isDragging
 		
 //		_layoutAttributes = attributes
 		return attributes
