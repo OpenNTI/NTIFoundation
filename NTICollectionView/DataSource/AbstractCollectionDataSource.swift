@@ -397,7 +397,7 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	
 	/// Determine whether or not a cell is editable. Default implementation returns `false`.
 	public func collectionView(collectionView: UICollectionView, canEditItemAt indexPath: NSIndexPath) -> Bool {
-		return false
+		return true
 	}
 	
 	public func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath) -> Bool {
