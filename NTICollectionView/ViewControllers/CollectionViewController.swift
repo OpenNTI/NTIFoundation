@@ -8,7 +8,7 @@
 
 import UIKit
 
-private var KVODataSourceContext = "DataSourceContext"
+private var kvoDataSourceContext = "DataSourceContext"
 private var updateNumber = 0
 
 public class CollectionViewController: UICollectionViewController, CollectionDataSourceDelegate, CollectionViewSupplementaryViewTracking {
@@ -136,7 +136,7 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		guard !isObservingDataSource else {
 			return
 		}
-		collectionView!.addObserver(self, forKeyPath: "dataSource", options: [.Initial, .New], context: &KVODataSourceContext)
+		collectionView!.addObserver(self, forKeyPath: "dataSource", options: [.Initial, .New], context: &kvoDataSourceContext)
 		isObservingDataSource = true
 	}
 	
@@ -149,7 +149,7 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 	}
 	
 	public override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
-		guard context == &KVODataSourceContext else {
+		guard context == &kvoDataSourceContext else {
 			super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
 			return
 		}
