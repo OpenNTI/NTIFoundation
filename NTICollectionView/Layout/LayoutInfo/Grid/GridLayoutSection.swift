@@ -755,7 +755,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 	}
 	
 	public func layoutAttributesForSupplementaryElementOfKind(kind: String, at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
-		if kind == CollectionElementKindPlaceholder {
+		if kind == collectionElementKindPlaceholder {
 			return placeholderInfo?.layoutAttributes
 		}
 		

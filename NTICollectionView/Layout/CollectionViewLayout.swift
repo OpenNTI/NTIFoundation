@@ -526,7 +526,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		let section = elementIndexPath.layoutSection
 		
 		if let direction = operationDirectionForSectionAtIndex(section) {
-			if elementKind == CollectionElementKindPlaceholder {
+			if elementKind == collectionElementKindPlaceholder {
 				result.alpha = 0
 				return initialLayoutAttributesForAttributes(result)
 			}
@@ -557,7 +557,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		let section = elementIndexPath.layoutSection
 		
 		if let direction = operationDirectionForSectionAtIndex(section) {
-			if elementKind == CollectionElementKindPlaceholder {
+			if elementKind == collectionElementKindPlaceholder {
 				result.alpha = 0
 				return finalLayoutAttributesForAttributes(result)
 			}

@@ -58,7 +58,7 @@ public class BasicLayoutPlaceholder: LayoutPlaceholder {
 			return layoutAttributes
 		}
 		
-		let attributes = CollectionViewLayoutAttributes(forSupplementaryViewOfKind: CollectionElementKindPlaceholder, withIndexPath: indexPath)
+		let attributes = CollectionViewLayoutAttributes(forSupplementaryViewOfKind: collectionElementKindPlaceholder, withIndexPath: indexPath)
 		
 		attributes.frame = frame
 		attributes.unpinnedOrigin = frame.origin
@@ -92,7 +92,7 @@ public class BasicLayoutPlaceholder: LayoutPlaceholder {
 		layoutAttributes.frame = frame
 		
 		if self.frame.height > 0 {
-			invalidationContext?.invalidateSupplementaryElementsOfKind(CollectionElementKindPlaceholder, atIndexPaths: [indexPath])
+			invalidationContext?.invalidateSupplementaryElementsOfKind(collectionElementKindPlaceholder, atIndexPaths: [indexPath])
 		}
 	}
 	

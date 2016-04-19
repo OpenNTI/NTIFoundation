@@ -152,7 +152,7 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 				
 				if placeholderInfo.startingSectionIndex == sectionInfo.sectionIndex {
 					let indexPath = NSIndexPath(forItem: 0, inSection: sectionInfo.sectionIndex)
-					setSize(placeholderInfo.frame.size, forElementOfKind: CollectionElementKindPlaceholder, at: indexPath)
+					setSize(placeholderInfo.frame.size, forElementOfKind: collectionElementKindPlaceholder, at: indexPath)
 				}
 			}
 			
@@ -190,7 +190,7 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 		let sectionInfo = sectionAtIndex(sectionIndex)
 		
 		let offset: CGPoint
-		if kind == CollectionElementKindPlaceholder {
+		if kind == collectionElementKindPlaceholder {
 			offset = setSize(size, forPlaceholderAt: sectionIndex, invalidationContext: invalidationContext)
 		} else {
 			offset = sectionInfo?.setSize(size, forSupplementaryElementOfKind: kind, at: itemIndex, invalidationContext: invalidationContext) ?? CGPointZero

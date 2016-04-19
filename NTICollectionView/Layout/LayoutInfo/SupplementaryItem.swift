@@ -9,7 +9,7 @@
 import UIKit
 
 /// The element kind for placeholders.
-public let CollectionElementKindPlaceholder = "CollectionElementKindPlaceholder"
+public let collectionElementKindPlaceholder = "collectionElementKindPlaceholder"
 
 public let globalSectionIndex = Int.max
 

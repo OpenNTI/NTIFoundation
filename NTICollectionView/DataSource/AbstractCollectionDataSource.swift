@@ -348,7 +348,7 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	}
 	
 	public func dequePlaceholderView(for collectionView: UICollectionView, at indexPath: NSIndexPath) -> CollectionPlaceholderView {
-		let placeholderView = collectionView.dequeueReusableSupplementaryViewOfKind(CollectionElementKindPlaceholder, withReuseIdentifier: NSStringFromClass(CollectionPlaceholderView.self), forIndexPath: indexPath) as! CollectionPlaceholderView
+		let placeholderView = collectionView.dequeueReusableSupplementaryViewOfKind(collectionElementKindPlaceholder, withReuseIdentifier: NSStringFromClass(CollectionPlaceholderView.self), forIndexPath: indexPath) as! CollectionPlaceholderView
 		update(placeholderView, forSectionAtIndex: indexPath.section)
 		return placeholderView
 	}
@@ -380,7 +380,7 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 			registerReusableViewsForSectionAtIndex(sectionIndex)
 		}
 		
-		collectionView.registerClass(CollectionPlaceholderView.self, forSupplementaryViewOfKind: CollectionElementKindPlaceholder, withReuseIdentifier: NSStringFromClass(CollectionPlaceholderView.self))
+		collectionView.registerClass(CollectionPlaceholderView.self, forSupplementaryViewOfKind: collectionElementKindPlaceholder, withReuseIdentifier: NSStringFromClass(CollectionPlaceholderView.self))
 		
 		registerControllerReusableViews(with: collectionView)
 	}
@@ -713,7 +713,7 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	}
 	
 	public func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
-		if kind == CollectionElementKindPlaceholder {
+		if kind == collectionElementKindPlaceholder {
 			return dequePlaceholderView(for: collectionView, at: indexPath)
 		}
 		
