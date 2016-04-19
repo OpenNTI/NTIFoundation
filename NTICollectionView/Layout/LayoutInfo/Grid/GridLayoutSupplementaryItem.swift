@@ -55,6 +55,9 @@ public struct GridLayoutSupplementaryItem: LayoutSupplementaryItemWrapper {
 	
 	public func configureValues(of attributes: CollectionViewLayoutAttributes) {
 		layoutSupplementaryItem.configureValues(of: attributes)
+		
+		attributes.unpinnedOrigin = CGPoint(x: frame.minX, y: unpinnedY)
+		attributes.isPinned = isPinned
 	}
 	
 }
