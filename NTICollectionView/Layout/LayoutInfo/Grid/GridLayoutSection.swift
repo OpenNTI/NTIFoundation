@@ -437,8 +437,6 @@ public class BasicGridLayoutSection: GridLayoutSection {
 	}
 	
 	public func add(inout row: LayoutRow) {
-		row.section = self
-		
 		// Create the row separator if there isn't already one
 		if metrics.showsRowSeparator && row.rowSeparatorDecoration == nil {
 			var separatorDecoration = HorizontalSeparatorDecoration(elementKind: collectionElementKindRowSeparator, position: .bottom)

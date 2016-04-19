@@ -15,8 +15,6 @@ public protocol LayoutRow: LayoutArea {
 	
 	var items: [LayoutItem] { get set }
 	
-	var section: LayoutSection? { get set }
-	
 	var rowSeparatorLayoutAttributes: CollectionViewLayoutAttributes? { get }
 	
 	var rowSeparatorDecoration: HorizontalSeparatorDecoration? { get set }
@@ -48,8 +46,6 @@ public struct GridLayoutRow: LayoutRow {
 	public var frame = CGRectZero
 	
 	public var items: [LayoutItem] = []
-	
-	public weak var section: LayoutSection?
 	
 	public var rowSeparatorLayoutAttributes: CollectionViewLayoutAttributes? {
 		return rowSeparatorDecoration?.layoutAttributes
@@ -100,7 +96,6 @@ public struct GridLayoutRow: LayoutRow {
 		
 		return frame == other.frame
 			&& items.elementsEqual(other.items) { $0.isEqual(to: $1) }
-			&& section === other.section
 	}
 	
 }

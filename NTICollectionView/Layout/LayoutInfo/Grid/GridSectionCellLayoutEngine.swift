@@ -116,7 +116,6 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	
 	private func startNewRow() {
 		row = GridLayoutRow()
-		row.section = layoutSection
 		row.metrics.applyValues(from: metrics)
 	}
 	
