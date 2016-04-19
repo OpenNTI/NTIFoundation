@@ -13,7 +13,7 @@ public let CollectionElementKindPlaceholder = "CollectionElementKindPlaceholder"
 
 public let globalSectionIndex = Int.max
 
-public let AutomaticLength: CGFloat = -1
+public let automaticLength: CGFloat = -1
 
 public typealias SupplementaryItemConfiguration = (view: UICollectionReusableView, dataSource: CollectionDataSource, indexPath: NSIndexPath) -> Void
 

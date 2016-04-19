@@ -832,8 +832,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		layoutLog("\(#function) section \(sectionIndex): numberOfItems=\(numberOfItemsInSection) hasPlaceholder=\(metrics.placeholder != nil)")
 		
-		var rowHeight = gridMetrics.rowHeight ?? AutomaticLength
-		let isVariableRowHeight = rowHeight == AutomaticLength
+		var rowHeight = gridMetrics.rowHeight ?? automaticLength
+		let isVariableRowHeight = rowHeight == automaticLength
 		if isVariableRowHeight {
 			rowHeight = gridMetrics.estimatedRowHeight
 		}
