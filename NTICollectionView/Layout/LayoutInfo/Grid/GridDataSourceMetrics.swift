@@ -14,6 +14,8 @@ public struct GridDataSourceSectionMetrics: DataSourceSectionMetrics {
 	
 	public var metrics: SectionMetrics = BasicGridSectionMetrics()
 	
+	public var sectionBuilder: LayoutSectionBuilder = GridLayoutSectionBuilder()
+	
 	public var placeholder: AnyObject?
 	
 	public var supplementaryItemsByKind: [String: [SupplementaryItem]] = [:]

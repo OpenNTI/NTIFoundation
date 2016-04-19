@@ -12,6 +12,8 @@ public protocol DataSourceSectionMetrics: DataSourceSectionInfo, LayoutMetrics {
 	
 	var metrics: SectionMetrics { get set }
 	
+	var sectionBuilder: LayoutSectionBuilder { get set }
+	
 }
 
 extension DataSourceSectionMetrics {
