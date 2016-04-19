@@ -394,6 +394,8 @@
 		4A1BE8611C8F9B3200790B3A /* KeyValueItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1BE85F1C8F9B3200790B3A /* KeyValueItem.swift */; };
 		4A1BE8641C8FA26300790B3A /* NTICollectionView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A68ABF51C88ADC300849185 /* NTICollectionView.framework */; };
 		4A1BE89E1C8FE03200790B3A /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4A1BE89D1C8FE03200790B3A /* LICENSE.txt */; };
+		4A280DD01CC6E2F0001EDCAA /* LayoutDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A280DCF1CC6E2F0001EDCAA /* LayoutDescription.swift */; };
+		4A280DD11CC6E2F0001EDCAA /* LayoutDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A280DCF1CC6E2F0001EDCAA /* LayoutDescription.swift */; };
 		4A51FF8D1CA49DBE000C6FE3 /* TabularControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A51FF8C1CA49DBE000C6FE3 /* TabularControlView.swift */; };
 		4A562ACB1C9C689B0072A570 /* ViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A562ACA1C9C689B0072A570 /* ViewControllerDelegate.swift */; };
 		4A562ACC1C9C689C0072A570 /* ViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A562ACA1C9C689B0072A570 /* ViewControllerDelegate.swift */; };
@@ -1103,6 +1105,7 @@
 		4A1BE84A1C8F9AD200790B3A /* CatSightingsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CatSightingsDataSource.swift; sourceTree = "<group>"; };
 		4A1BE85F1C8F9B3200790B3A /* KeyValueItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyValueItem.swift; sourceTree = "<group>"; };
 		4A1BE89D1C8FE03200790B3A /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		4A280DCF1CC6E2F0001EDCAA /* LayoutDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutDescription.swift; sourceTree = "<group>"; };
 		4A51FF8C1CA49DBE000C6FE3 /* TabularControlView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabularControlView.swift; sourceTree = "<group>"; };
 		4A5454431B1630680033FA3A /* NSDate-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate-NTIExtensionsTest.m"; sourceTree = "<group>"; };
 		4A562ACA1C9C689B0072A570 /* ViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerDelegate.swift; sourceTree = "<group>"; };
@@ -2038,6 +2041,7 @@
 				4A68AC841C88B0CE00849185 /* Grid */,
 				4A1B77F81CBD928600C977A6 /* Table */,
 				4A68AC8D1C88B0CE00849185 /* LayoutInfo.swift */,
+				4A280DCF1CC6E2F0001EDCAA /* LayoutDescription.swift */,
 				4A68AC8E1C88B0CE00849185 /* LayoutItem.swift */,
 				4A68AC8F1C88B0CE00849185 /* LayoutMetrics.swift */,
 				4A68AC901C88B0CE00849185 /* LayoutPlaceholder.swift */,
@@ -3380,6 +3384,7 @@
 				4A68ACF51C88B0CE00849185 /* LoadableContentStateMachine.swift in Sources */,
 				4AD52D561CC581DE00CDEF45 /* BasicLayoutSupplementaryItem.swift in Sources */,
 				4A68ACD71C88B0CE00849185 /* GridLayoutSection.swift in Sources */,
+				4A280DD01CC6E2F0001EDCAA /* LayoutDescription.swift in Sources */,
 				4A68ACD31C88B0CE00849185 /* GridDataSourceMetrics.swift in Sources */,
 				4A68ACE11C88B0CE00849185 /* LayoutRow.swift in Sources */,
 				4A68ACDD1C88B0CE00849185 /* GridSectionLayoutEngine.swift in Sources */,
@@ -3460,6 +3465,7 @@
 				4A68ACE41C88B0CE00849185 /* LayoutInfo.swift in Sources */,
 				4AD52D571CC581DE00CDEF45 /* BasicLayoutSupplementaryItem.swift in Sources */,
 				4A68ACB81C88B0CE00849185 /* SegmentedCollectionDataSource.swift in Sources */,
+				4A280DD11CC6E2F0001EDCAA /* LayoutDescription.swift in Sources */,
 				4A68ACEA1C88B0CE00849185 /* LayoutPlaceholder.swift in Sources */,
 				4A620CD21C88DDCF0084B0A2 /* PagingCollectionDataSource.swift in Sources */,
 				4A68ACDE1C88B0CE00849185 /* GridSectionLayoutEngine.swift in Sources */,
