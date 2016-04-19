@@ -923,15 +923,20 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	}
 	
 	private func finalLayoutAttributesForAttributes(attributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-		let deltaX = contentOffsetDelta.x, deltaY = contentOffsetDelta.y
+		let deltaX = contentOffsetDelta.x
+		let deltaY = contentOffsetDelta.y
 		var frame = attributes.frame
+		
+		// TODO: Abstract away pinning logic
 		if let attributes = attributes as? CollectionViewLayoutAttributes
 			where attributes.isPinned {
 				let newX = max(attributes.unpinnedOrigin.x, frame.minX + deltaX)
 				frame.origin.x = newX
+			
 				let newY = max(attributes.unpinnedOrigin.y, frame.minY + deltaY)
 				frame.origin.y = newY
-		} else {
+		}
+		else {
 			frame.offsetInPlace(dx: deltaX, dy: deltaY)
 		}
 		
