@@ -88,7 +88,7 @@ public class ComposedCollectionDataSourceMetricsHelper: CollectionDataSourceMetr
 		}
 		let dataSource = mapping.dataSource
 		
-		guard let enclosingMetrics = super.snapshotMetricsForSectionAtIndex(sectionIndex) else {
+		guard var enclosingMetrics = super.snapshotMetricsForSectionAtIndex(sectionIndex) else {
 			return nil
 		}
 		if let localSection = mapping.localSectionForGlobalSection(sectionIndex),

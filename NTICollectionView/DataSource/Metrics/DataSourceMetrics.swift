@@ -12,13 +12,11 @@ public protocol DataSourceSectionMetrics: DataSourceSectionInfo, LayoutMetrics {
 	
 	var metrics: SectionMetrics { get set }
 	
-	func copy() -> DataSourceSectionMetrics
-	
 }
 
 extension DataSourceSectionMetrics {
 	
-	public func applyValues(from metrics: LayoutMetrics) {
+	public mutating func applyValues(from metrics: LayoutMetrics) {
 		guard let dataSourceMetrics = metrics as? DataSourceSectionMetrics else {
 			return self.metrics.applyValues(from: metrics)
 		}

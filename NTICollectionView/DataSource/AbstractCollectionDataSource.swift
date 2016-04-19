@@ -197,7 +197,7 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	}
 	
 	public func add(supplementaryItem: SupplementaryItem, forSectionAtIndex sectionIndex: Int) {
-		guard let metrics = sectionMetrics[sectionIndex] else {
+		guard var metrics = sectionMetrics[sectionIndex] else {
 			assertionFailure("There are no metrics for section \(sectionIndex)")
 			return
 		}

@@ -74,7 +74,7 @@ public class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMet
 	}
 	
 	public override func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetrics? {
-		guard let enclosingMetrics = super.snapshotMetricsForSectionAtIndex(sectionIndex) else {
+		guard var enclosingMetrics = super.snapshotMetricsForSectionAtIndex(sectionIndex) else {
 			return nil
 		}
 		if let metrics = snapshotChildMetrics(forSectionAt: sectionIndex) {

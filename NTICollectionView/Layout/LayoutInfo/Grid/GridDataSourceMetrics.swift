@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class GridDataSourceSectionMetrics: DataSourceSectionMetrics {
+public struct GridDataSourceSectionMetrics: DataSourceSectionMetrics {
 	
 	public init() { }
 	
@@ -17,14 +17,6 @@ public class GridDataSourceSectionMetrics: DataSourceSectionMetrics {
 	public var placeholder: AnyObject?
 	
 	public var supplementaryItemsByKind: [String: [SupplementaryItem]] = [:]
-	
-	public func copy() -> DataSourceSectionMetrics {
-		let copy = GridDataSourceSectionMetrics()
-		copy.metrics = metrics
-		copy.placeholder = placeholder?.copy()
-		copy.supplementaryItemsByKind = supplementaryItemsByKind
-		return copy
-	}
 	
 	public func isEqual(to other: LayoutMetrics) -> Bool {
 		guard let other = other as? GridDataSourceSectionMetrics else {
@@ -38,7 +30,7 @@ public class GridDataSourceSectionMetrics: DataSourceSectionMetrics {
 		return false
 	}
 	
-	public func resolveMissingValuesFromTheme() {
+	public mutating func resolveMissingValuesFromTheme() {
 		metrics.resolveMissingValuesFromTheme()
 	}
 	
