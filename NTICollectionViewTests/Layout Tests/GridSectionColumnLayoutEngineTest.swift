@@ -55,10 +55,10 @@ class GridSectionColumnLayoutEngineTest: XCTestCase {
 		expectedFrame.origin.y += 20
 		XCTAssert(item3.frame == expectedFrame, "Incorrect frame for item3: expected \(expectedFrame) but found \(item3.frame)")
 		
-		XCTAssert(engine.pinnableHeaders.contains({ $0.isEqual(to: item1) }), "Expect pinnableHeaders to contain item1")
+		XCTAssert(engine.pinnableHeaders[0].isEqual(to: item1), "Expect pinnableHeaders to contain item1 at index 0")
 		
-		XCTAssert(engine.nonPinnableHeaders.contains({ $0.isEqual(to: item2) }), "Expect nonPinnableHeaders to contain item2")
-		XCTAssert(engine.nonPinnableHeaders.contains({ $0.isEqual(to: item3) }), "Expect nonPinnableHeaders to contain item3")
+		XCTAssert(engine.nonPinnableHeaders[0].isEqual(to: item2), "Expect nonPinnableHeaders to contain item2 at index 0")
+		XCTAssert(engine.nonPinnableHeaders[1].isEqual(to: item3), "Expect nonPinnableHeaders to contain item3 at index 1")
 	}
 	
 }
