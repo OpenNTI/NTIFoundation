@@ -398,7 +398,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		let kind = supplementaryItem.elementKind
 		var supplementaryItem = supplementaryItem
 		supplementaryItem.itemIndex = supplementaryItems(of: kind).count
-		supplementaryItem.section = self
+		supplementaryItem.sectionIndex = sectionIndex
 		supplementaryItemsByKind.append(supplementaryItem, to: kind)
 	}
 	
@@ -410,7 +410,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		var supplementaryItems = supplementaryItems
 		for index in supplementaryItems.indices {
 			supplementaryItems[index].itemIndex = index
-			supplementaryItems[index].section = self
+			supplementaryItems[index].sectionIndex = sectionIndex
 		}
 		supplementaryItemsByKind[kind] = supplementaryItems
 	}

@@ -148,7 +148,7 @@ public protocol LayoutElement: LayoutArea {
 /// Layout information about a supplementary item.
 public protocol LayoutSupplementaryItem: SupplementaryItemWrapper, LayoutElement {
 	
-	var section: LayoutSection? { get set }
+	var sectionIndex: Int { get set }
 	
 	var supplementaryItem: SupplementaryItem { get set }
 	
@@ -174,15 +174,6 @@ public protocol LayoutSupplementaryItemWrapper: LayoutSupplementaryItem {
 
 extension LayoutSupplementaryItemWrapper {
 	
-	public var section: LayoutSection? {
-		get {
-			return layoutSupplementaryItem.section
-		}
-		set {
-			layoutSupplementaryItem.section = newValue
-		}
-	}
-	
 	public var frame: CGRect {
 		get {
 			return layoutSupplementaryItem.frame
@@ -198,6 +189,15 @@ extension LayoutSupplementaryItemWrapper {
 		}
 		set {
 			layoutSupplementaryItem.itemIndex = newValue
+		}
+	}
+	
+	public var sectionIndex: Int {
+		get {
+			return layoutSupplementaryItem.sectionIndex
+		}
+		set {
+			layoutSupplementaryItem.sectionIndex = newValue
 		}
 	}
 	

@@ -16,21 +16,16 @@ public struct BasicLayoutSupplementaryItem: LayoutSupplementaryItem, Supplementa
 	
 	public var supplementaryItem: SupplementaryItem
 	
-	public var section: LayoutSection?
-	
 	public var frame = CGRectZero
 	
 	public var itemIndex = NSNotFound
 	
+	public var sectionIndex = NSNotFound
+	
 	public var indexPath: NSIndexPath {
-		guard let sectionInfo = section else {
-			return NSIndexPath()
-		}
-		if sectionInfo.isGlobalSection {
-			return NSIndexPath(index: itemIndex)
-		} else {
-			return NSIndexPath(forItem: itemIndex, inSection: sectionInfo.sectionIndex)
-		}
+		return sectionIndex == globalSectionIndex ?
+			NSIndexPath(index: itemIndex)
+			: NSIndexPath(forItem: itemIndex, inSection: sectionIndex)
 	}
 	
 	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
@@ -45,7 +40,7 @@ public struct BasicLayoutSupplementaryItem: LayoutSupplementaryItem, Supplementa
 		return supplementaryItem.isEqual(to: other.supplementaryItem)
 			&& frame == other.frame
 			&& itemIndex == other.itemIndex
-			&& section === other.section
+			&& sectionIndex == other.sectionIndex
 	}
 	
 	public mutating func resetLayoutAttributes() {
