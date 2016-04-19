@@ -40,7 +40,7 @@ public struct GridLayoutSupplementaryItem: LayoutSupplementaryItemWrapper {
 			return false
 		}
 		
-		return supplementaryItem.isEqual(to: other.supplementaryItem)
+		return layoutSupplementaryItem.isEqual(to: other.layoutSupplementaryItem)
 			&& unpinnedY == other.unpinnedY
 			&& isPinned == other.isPinned
 	}

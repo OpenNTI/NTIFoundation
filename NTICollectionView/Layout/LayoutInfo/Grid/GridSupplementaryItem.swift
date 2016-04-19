@@ -53,7 +53,7 @@ public struct GridSupplementaryItem: SupplementaryItemWrapper, GridSupplementary
 			return false
 		}
 		
-		return supplementaryItem.isEqual(to: other)
+		return supplementaryItem.isEqual(to: other.supplementaryItem)
 			&& gridSupplementaryAttributes == other.gridSupplementaryAttributes
 	}
 	
