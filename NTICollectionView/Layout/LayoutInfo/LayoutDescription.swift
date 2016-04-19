@@ -28,10 +28,16 @@ public struct LayoutDescription {
 /// Data used for creating a layout section.
 public struct SectionDescription {
 	
+	public init(metrics: DataSourceSectionMetrics) {
+		self.metrics = metrics
+	}
+	
 	public var sectionIndex = NSNotFound
 	
 	public var numberOfItems = 0
 	
 	public var metrics: DataSourceSectionMetrics
+	
+	public var sizingInfo: CollectionViewLayoutMeasuring?
 	
 }

@@ -14,6 +14,8 @@ public protocol DataSourceSectionMetrics: DataSourceSectionInfo, LayoutMetrics {
 	
 	var sectionBuilder: LayoutSectionBuilder { get set }
 	
+	var sizingInfo: CollectionViewLayoutMeasuring? { get set }
+	
 }
 
 extension DataSourceSectionMetrics {
