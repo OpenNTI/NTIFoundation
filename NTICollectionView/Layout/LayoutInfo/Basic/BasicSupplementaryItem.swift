@@ -8,7 +8,7 @@
 
 import UIKit
 
-private let DefaultEstimatedHeight: CGFloat = 44
+private let defaultEstimatedHeight: CGFloat = 44
 
 public struct BasicSupplementaryItem: SupplementaryItem {
 	
@@ -24,9 +24,9 @@ public struct BasicSupplementaryItem: SupplementaryItem {
 	
 	public var height: CGFloat?
 	
-	public var estimatedWidth: CGFloat = DefaultEstimatedHeight
+	public var estimatedWidth: CGFloat = defaultEstimatedHeight
 	
-	public var estimatedHeight: CGFloat = DefaultEstimatedHeight
+	public var estimatedHeight: CGFloat = defaultEstimatedHeight
 	
 	public var zIndex: Int = headerZIndex
 	

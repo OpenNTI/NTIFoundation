@@ -10,7 +10,7 @@ import UIKit
 
 // MARK: - GridSupplementaryItem
 
-private let DefaultEstimatedHeight: CGFloat = 44
+private let defaultEstimatedHeight: CGFloat = 44
 
 public struct GridSupplementaryItem: SupplementaryItemWrapper, GridSupplementaryAttributesWrapper {
 	
