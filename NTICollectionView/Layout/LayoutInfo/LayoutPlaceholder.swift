@@ -37,7 +37,7 @@ extension LayoutPlaceholder {
 	
 }
 
-public class BasicLayoutPlaceholder: LayoutPlaceholder {
+public struct BasicLayoutPlaceholder: LayoutPlaceholder {
 	
 	public init(sectionIndexes: NSIndexSet) {
 		self.sectionIndexes = sectionIndexes.mutableCopy() as! NSMutableIndexSet
@@ -54,10 +54,6 @@ public class BasicLayoutPlaceholder: LayoutPlaceholder {
 	}
 	
 	public var layoutAttributes: CollectionViewLayoutAttributes {
-		if let layoutAttributes = _layoutAttributes where layoutAttributes.indexPath == indexPath {
-			return layoutAttributes
-		}
-		
 		let attributes = CollectionViewLayoutAttributes(forSupplementaryViewOfKind: collectionElementKindPlaceholder, withIndexPath: indexPath)
 		
 		attributes.frame = frame
@@ -68,10 +64,8 @@ public class BasicLayoutPlaceholder: LayoutPlaceholder {
 		attributes.hidden = false
 		attributes.shouldCalculateFittingSize = hasEstimatedHeight
 		
-		_layoutAttributes = attributes
 		return attributes
 	}
-	private var _layoutAttributes: CollectionViewLayoutAttributes?
 	
 	public var backgroundColor: UIColor?
 	
@@ -87,7 +81,7 @@ public class BasicLayoutPlaceholder: LayoutPlaceholder {
 		return sectionIndexes.lastIndex
 	}
 	
-	public func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
+	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
 		self.frame = frame
 		layoutAttributes.frame = frame
 		
@@ -100,8 +94,8 @@ public class BasicLayoutPlaceholder: LayoutPlaceholder {
 		sectionIndexes.addIndex(section.sectionIndex)
 	}
 	
-	public func resetLayoutAttributes() {
-		_layoutAttributes = nil
+	public mutating func resetLayoutAttributes() {
+		
 	}
 	
 	public func isEqual(to other: LayoutPlaceholder) -> Bool {
@@ -109,11 +103,13 @@ public class BasicLayoutPlaceholder: LayoutPlaceholder {
 			return false
 		}
 		
-		return self === other
-//		return sectionIndexes == other.sectionIndexes
-//			&& height == other.height
-//			&& hasEstimatedHeight == other.hasEstimatedHeight
-//			&& backgroundColor == other.backgroundColor
+		return sectionIndexes == other.sectionIndexes
+			&& height == other.height
+			&& hasEstimatedHeight == other.hasEstimatedHeight
+			&& backgroundColor == other.backgroundColor
+		
+			&& frame == other.frame
+			&& itemIndex == other.itemIndex
 	}
 	
 }
