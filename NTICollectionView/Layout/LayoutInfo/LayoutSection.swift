@@ -26,8 +26,6 @@ public protocol LayoutSection: class, LayoutEngine, LayoutAttributesResolving {
 	func supplementaryItems(of kind: String) -> [LayoutSupplementaryItem]
 	func setSupplementaryItems(supplementaryItems: [LayoutSupplementaryItem], of kind: String)
 	
-	var backgroundAttribute: CollectionViewLayoutAttributes? { get }
-	
 	var placeholderInfo: LayoutPlaceholder? { get set }
 	
 	var pinnableHeaders: [LayoutSupplementaryItem] { get set }
@@ -124,12 +122,6 @@ public func layoutSection(self: LayoutSection, setFrame frame: CGRect, invalidat
 	self.mutateSupplementaryItems { (supplementaryItem, _, _) in
 		let supplementaryFrame = CGRectOffset(supplementaryItem.frame, offset.x, offset.y)
 		supplementaryItem.setFrame(supplementaryFrame, invalidationContext: invalidationContext)
-	}
-	
-	if let backgroundAttribute = self.backgroundAttribute {
-		let backgroundRect = CGRectOffset(backgroundAttribute.frame, offset.x, offset.y)
-		backgroundAttribute.frame = backgroundRect
-		invalidationContext?.invalidateDecorationElementsOfKind(backgroundAttribute.representedElementKind!, atIndexPaths: [backgroundAttribute.indexPath])
 	}
 	
 	self.frame = frame

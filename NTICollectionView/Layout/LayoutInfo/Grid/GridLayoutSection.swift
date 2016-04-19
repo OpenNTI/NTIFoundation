@@ -38,6 +38,8 @@ public protocol GridLayoutSection: LayoutSection {
 	
 	var shouldShowColumnSeparator: Bool { get }
 	
+	var backgroundAttribute: CollectionViewLayoutAttributes? { get }
+	
 	var phantomCellIndex: Int? { get set }
 	var phantomCellSize: CGSize { get set }
 
@@ -512,6 +514,12 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		
 		enumerateDecorations { (inout decoration: LayoutDecoration) in
 			decoration.setContainerFrame(frame, invalidationContext: invalidationContext)
+		}
+		
+		if let backgroundAttribute = self.backgroundAttribute {
+			let backgroundRect = CGRectOffset(backgroundAttribute.frame, offset.x, offset.y)
+			backgroundAttribute.frame = backgroundRect
+			invalidationContext?.invalidateDecorationElementsOfKind(backgroundAttribute.representedElementKind!, atIndexPaths: [backgroundAttribute.indexPath])
 		}
 		
 		layoutSection(self, setFrame: frame, invalidationContext: invalidationContext)
