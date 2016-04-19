@@ -13,7 +13,7 @@ class GridLayoutSectionTest: XCTestCase {
 	
 	var layoutInfo: DummyLayoutInfo!
 	
-	var layoutSection: BasicGridLayoutSection!
+	var layoutSection: GridLayoutSection!
     
     override func setUp() {
         super.setUp()
@@ -64,7 +64,9 @@ class GridLayoutSectionTest: XCTestCase {
 		frame: (0, 0, 375, 757.5)
 		*/
 		
-		let end = layoutSection.layoutWithOrigin(start, layoutSizing: layoutInfo)
+		let layoutEngine = GridSectionLayoutEngine(layoutSection: layoutSection)
+		let end = layoutEngine.layoutWithOrigin(start, layoutSizing: layoutInfo)
+		layoutSection = layoutEngine.layoutSection
 		
 		XCTAssertEqual(layoutSection.rows.count, itemCount)
 		

@@ -16,7 +16,7 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 		super.init()
 	}
 	
-	public weak var layoutSection: GridLayoutSection!
+	public var layoutSection: GridLayoutSection
 	private var numberOfItems: Int {
 		return layoutSection.items.count
 	}

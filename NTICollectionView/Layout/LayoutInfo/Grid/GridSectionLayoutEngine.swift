@@ -16,7 +16,7 @@ public class GridSectionLayoutEngine: NSObject, SupplementaryLayoutEngine {
 		super.init()
 	}
 	
-	public weak var layoutSection: GridLayoutSection!
+	public var layoutSection: GridLayoutSection
 	
 	public var pinnableHeaders: [LayoutSupplementaryItem] = []
 	public var nonPinnableHeaders: [LayoutSupplementaryItem] = []

@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol LayoutSection: class, LayoutEngine, LayoutAttributesResolving {
+public protocol LayoutSection: LayoutAttributesResolving {
 	
 	var frame: CGRect { get set }
 	var sectionIndex: Int { get set }
@@ -24,7 +24,7 @@ public protocol LayoutSection: class, LayoutEngine, LayoutAttributesResolving {
 	var footers: [LayoutSupplementaryItem] { get set }
 	
 	func supplementaryItems(of kind: String) -> [LayoutSupplementaryItem]
-	func setSupplementaryItems(supplementaryItems: [LayoutSupplementaryItem], of kind: String)
+	mutating func setSupplementaryItems(supplementaryItems: [LayoutSupplementaryItem], of kind: String)
 	
 	var placeholderInfo: LayoutPlaceholder? { get set }
 	
@@ -39,44 +39,42 @@ public protocol LayoutSection: class, LayoutEngine, LayoutAttributesResolving {
 	
 	var decorationAttributesByKind: [String: [CollectionViewLayoutAttributes]] { get }
 	
-	func add(supplementaryItem: LayoutSupplementaryItem)
-	func add(item: LayoutItem)
+	mutating func add(supplementaryItem: LayoutSupplementaryItem)
+	mutating func add(item: LayoutItem)
 	
-	func mutateItems(using mutator: (inout item: LayoutItem, index: Int) -> Void)
+	mutating func mutateItems(using mutator: (inout item: LayoutItem, index: Int) -> Void)
 	
-	func mutateSupplementaryItems(using mutator: (inout supplementaryItem: LayoutSupplementaryItem, kind: String, index: Int) -> Void)
+	mutating func mutateSupplementaryItems(using mutator: (inout supplementaryItem: LayoutSupplementaryItem, kind: String, index: Int) -> Void)
 	
 	/// Update the frame of this grouped object and any child objects. Use the invalidation context to mark layout objects as invalid.
-	func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
+	mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
 	/// Reset the content of this section.
-	func reset()
+	mutating func reset()
 	
-	func finalizeLayoutAttributesForSectionsWithContent(sectionsWithContent: NSIndexSet)
+	mutating func finalizeLayoutAttributesForSectionsWithContent(sectionsWithContent: NSIndexSet)
 	
-	func setSize(size: CGSize, forItemAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
+	mutating func setSize(size: CGSize, forItemAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
 	
-	func setSize(size: CGSize, forSupplementaryElementOfKind kind: String, at index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
+	mutating func setSize(size: CGSize, forSupplementaryElementOfKind kind: String, at index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
 	
-	func setSize(size: CGSize, forHeaderAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
+	mutating func setSize(size: CGSize, forHeaderAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
 	
-	func setSize(size: CGSize, forFooterAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
+	mutating func setSize(size: CGSize, forFooterAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
 	
 	func additionalLayoutAttributesToInsertForInsertionOfItem(at indexPath: NSIndexPath) -> [CollectionViewLayoutAttributes]
 	
 	func additionalLayoutAttributesToDeleteForDeletionOfItem(at indexPath: NSIndexPath) -> [CollectionViewLayoutAttributes]
 	
-	func prepareForLayout()
+	mutating func prepareForLayout()
 	
 	func targetLayoutHeightForProposedLayoutHeight(proposedHeight: CGFloat, layoutInfo: LayoutInfo) -> CGFloat
 	
 	func targetContentOffsetForProposedContentOffset(proposedContentOffset: CGPoint, firstInsertedSectionMinY: CGFloat) -> CGPoint
 	
-	func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?)
+	mutating func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
-	func applyValues(from metrics: LayoutMetrics)
-	
-	func copy() -> LayoutSection
+	mutating func applyValues(from metrics: LayoutMetrics)
 	
 }
 
@@ -113,7 +111,7 @@ public protocol LayoutEngine {
 	
 }
 
-public func layoutSection(self: LayoutSection, setFrame frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
+public func layoutSection(inout self: LayoutSection, setFrame frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
 	guard frame != self.frame else {
 		return
 	}
@@ -127,7 +125,7 @@ public func layoutSection(self: LayoutSection, setFrame frame: CGRect, invalidat
 	self.frame = frame
 }
 
-public func layoutSection(self: LayoutSection, offsetContentAfter origin: CGPoint, with offset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
+public func layoutSection(inout self: LayoutSection, offsetContentAfter origin: CGPoint, with offset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
 	self.mutateSupplementaryItems { (supplementaryItem, _, _) in
 		var supplementaryFrame = supplementaryItem.frame
 		if supplementaryFrame.minX < origin.x || supplementaryFrame.minY < origin.y {

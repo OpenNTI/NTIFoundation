@@ -829,9 +829,9 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		if let globalMetrics = layoutMetrics[globalSectionIndex] {
 			// TODO: Section type shouldn't be decided here
-			let sectionInfo = BasicGridLayoutSection()
+			var sectionInfo: LayoutSection = BasicGridLayoutSection()
+			populate(&sectionInfo, from: globalMetrics)
 			layoutInfo.add(sectionInfo, sectionIndex: globalSectionIndex)
-			populate(sectionInfo, from: globalMetrics)
 		}
 		
 		var placeholder: AnyObject?
@@ -843,8 +843,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			}
 			
 			// FIXME: Section type shouldn't be decided here
-			let sectionInfo = BasicGridLayoutSection()
-			layoutInfo.add(sectionInfo, sectionIndex: sectionIndex)
+			var sectionInfo: LayoutSection = BasicGridLayoutSection()
 			
 			if let metricsPlaceholder = metrics.placeholder {
 				if metricsPlaceholder !== placeholder {
@@ -861,7 +860,9 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			
 			placeholder = metrics.placeholder
 			
-			populate(sectionInfo, from: metrics)
+			populate(&sectionInfo, from: metrics)
+
+			layoutInfo.add(sectionInfo, sectionIndex: sectionIndex)
 		}
 	}
 	
@@ -870,26 +871,25 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		layoutInfo = BasicLayoutInfo(layout: self)
 	}
 	
-	// TODO: Abstract
-	/// Subclasses should override to create new sections from the metrics.
-	public func populate(section: LayoutSection, from metrics: DataSourceSectionMetrics) {
+	// TODO: Abstract somewhere else
+	public func populate(inout section: LayoutSection, from metrics: DataSourceSectionMetrics) {
 		guard let collectionView = self.collectionView,
 			let gridMetrics = metrics.metrics as? GridSectionMetrics,
-			section = section as? GridLayoutSection else {
+			var gridSection = section as? GridLayoutSection else {
 				return
 		}
 		
-		let sectionIndex = section.sectionIndex
+		let sectionIndex = gridSection.sectionIndex
 		
-		section.reset()
-		section.applyValues(from: gridMetrics)
-		section.metrics.resolveMissingValuesFromTheme()
+		gridSection.reset()
+		gridSection.applyValues(from: gridMetrics)
+		gridSection.metrics.resolveMissingValuesFromTheme()
 		
 		func setupSupplementaryMetrics(supplementaryMetrics: SupplementaryItem) {
 			// FIXME: Supplementary item kind shouldn't be decided here
 			var supplementaryItem = GridLayoutSupplementaryItem(supplementaryItem: supplementaryMetrics)
-			supplementaryItem.applyValues(from: section.metrics)
-			section.add(supplementaryItem)
+			supplementaryItem.applyValues(from: gridSection.metrics)
+			gridSection.add(supplementaryItem)
 		}
 		
 		for supplementaryItem in metrics.supplementaryItemsByKind.contents {
@@ -907,7 +907,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			rowHeight = gridMetrics.estimatedRowHeight
 		}
 		
-		let columnWidth = section.columnWidth
+		let columnWidth = gridSection.columnWidth
 		
 		for itemIndex in 0..<numberOfItemsInSection {
 			var itemInfo = GridLayoutItem()
@@ -916,8 +916,10 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			if isVariableRowHeight {
 				itemInfo.hasEstimatedHeight = true
 			}
-			section.add(itemInfo)
+			gridSection.add(itemInfo)
 		}
+		
+		section = gridSection
 	}
 	
 	private func initialLayoutAttributesForAttributes(attributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {

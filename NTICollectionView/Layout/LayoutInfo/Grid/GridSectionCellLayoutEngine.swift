@@ -16,7 +16,7 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 		super.init()
 	}
 	
-	public weak var layoutSection: GridLayoutSection!
+	public var layoutSection: GridLayoutSection
 	
 	private var metrics: GridSectionMetrics {
 		return layoutSection.metrics

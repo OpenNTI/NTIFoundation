@@ -34,12 +34,16 @@ class DummyLayoutInfo: NSObject, LayoutInfo {
 	
 	var sections: [LayoutSection] = []
 	
-	func enumerateSections(block: (sectionIndex: Int, sectionInfo: LayoutSection, stop: inout Bool) -> Void) {
+	func enumerateSections(block: (sectionIndex: Int, inout sectionInfo: LayoutSection, stop: inout Bool) -> Void) {
 		
 	}
 	
 	func sectionAtIndex(sectionIndex: Int) -> LayoutSection? {
 		return sections[sectionIndex]
+	}
+	
+	func setSection(section: LayoutSection, at sectionIndex: Int) {
+		sections[sectionIndex] = section
 	}
 	
 	func add(section: LayoutSection, sectionIndex: Int) {

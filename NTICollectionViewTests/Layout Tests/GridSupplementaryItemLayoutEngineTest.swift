@@ -17,7 +17,7 @@ class GridSupplementaryItemLayoutEngineTest: XCTestCase {
 		// V:|-(iT)-[headers]-(pT)-[content]-(pB)-[footers]-(iB)-|
 		// V:[headers][leftAux]-(>=0)-[footers]
 		// V:[headers][rightAux]-(>=0)-[footers]
-		let section = BasicGridLayoutSection()
+		var section = BasicGridLayoutSection()
 		section.metrics.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 		section.metrics.leftAuxiliaryColumnWidth = 20
 		section.metrics.rightAuxiliaryColumnWidth = 20

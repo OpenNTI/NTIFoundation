@@ -86,10 +86,12 @@ public protocol LayoutSectionProvider: class {
 	
 	var hasGlobalSection: Bool { get }
 	
-	func enumerateSections(block: (sectionIndex: Int, sectionInfo: LayoutSection, inout stop: Bool) -> Void)
+	func enumerateSections(block: (sectionIndex: Int, inout sectionInfo: LayoutSection, inout stop: Bool) -> Void)
 	
 	/// Return the layout section with the given sectionIndex.
 	func sectionAtIndex(sectionIndex: Int) -> LayoutSection?
+	
+	func setSection(section: LayoutSection, at sectionIndex: Int)
 	
 	func add(section: LayoutSection, sectionIndex: Int)
 	
