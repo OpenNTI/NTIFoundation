@@ -36,7 +36,13 @@ public struct GridLayoutSupplementaryItem: LayoutSupplementaryItemWrapper {
 	}
 	
 	public func isEqual(to other: SupplementaryItem) -> Bool {
-		return supplementaryItem.isEqual(to: other)
+		guard let other = other as? GridLayoutSupplementaryItem else {
+			return false
+		}
+		
+		return supplementaryItem.isEqual(to: other.supplementaryItem)
+			&& unpinnedY == other.unpinnedY
+			&& isPinned == other.isPinned
 	}
 	
 	public mutating func resetLayoutAttributes() {
