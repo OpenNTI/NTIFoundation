@@ -15,7 +15,7 @@ extension NSIndexPath {
 	}
 	
 	var layoutSection: Int {
-		return length > 1 ? section : GlobalSectionIndex
+		return length > 1 ? section : globalSectionIndex
 	}
 	
 	var isSection: Bool {

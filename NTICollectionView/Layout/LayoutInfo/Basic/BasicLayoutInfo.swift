@@ -74,7 +74,7 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 	public func enumerateSections(block: (sectionIndex: Int, sectionInfo: LayoutSection, stop: inout Bool) -> Void) {
 		var stop = false
 		if let globalSection = self.globalSection {
-			block(sectionIndex: GlobalSectionIndex, sectionInfo: globalSection, stop: &stop)
+			block(sectionIndex: globalSectionIndex, sectionInfo: globalSection, stop: &stop)
 		}
 		
 		guard !stop else {
@@ -92,7 +92,7 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 	public func add(section: LayoutSection, sectionIndex: Int) {
 		section.layoutInfo = self
 		section.sectionIndex = sectionIndex
-		if sectionIndex == GlobalSectionIndex {
+		if sectionIndex == globalSectionIndex {
 			globalSection = section
 		} else {
 			precondition(sectionIndex == _sections.count, "Number of sections out-of-sync with the section index")
@@ -115,7 +115,7 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 	}
 	
 	public func sectionAtIndex(sectionIndex: Int) -> LayoutSection? {
-		if sectionIndex == GlobalSectionIndex {
+		if sectionIndex == globalSectionIndex {
 			return globalSection
 		}
 		guard (0..<numberOfSections).contains(sectionIndex) else {
@@ -202,7 +202,7 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 	
 	private func offsetSections(afterSectionAt sectionIndex: Int, by offset: CGPoint,  invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
 		var sectionIndex = sectionIndex
-		if sectionIndex == GlobalSectionIndex {
+		if sectionIndex == globalSectionIndex {
 			sectionIndex = 0
 		} else {
 			sectionIndex += 1

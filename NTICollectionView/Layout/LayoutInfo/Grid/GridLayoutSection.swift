@@ -77,7 +77,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 	public var sectionIndex = 0
 	
 	public var isGlobalSection: Bool {
-		return sectionIndex == GlobalSectionIndex
+		return sectionIndex == globalSectionIndex
 	}
 	
 	public weak var layoutInfo: LayoutInfo?
@@ -303,7 +303,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		}
 		
 		// Only have background attribute on global section
-		guard sectionIndex == GlobalSectionIndex else {
+		guard sectionIndex == globalSectionIndex else {
 			return nil
 		}
 		
@@ -1051,7 +1051,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		var result: LayoutSection?
 		
 		layoutInfo.enumerateSections { (sectionIndex, sectionInfo, stop) in
-			guard sectionIndex != GlobalSectionIndex else {
+			guard sectionIndex != globalSectionIndex else {
 				return
 			}
 			

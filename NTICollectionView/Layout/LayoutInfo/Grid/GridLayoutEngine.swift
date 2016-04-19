@@ -35,7 +35,7 @@ public class GridLayoutEngine: NSObject, SupplementaryLayoutEngine {
 		
 		layoutSectionInfo()
 		
-		if let globalSection = layoutInfo.sectionAtIndex(GlobalSectionIndex) {
+		if let globalSection = layoutInfo.sectionAtIndex(globalSectionIndex) {
 			let globalSize = CGSize(width: layoutInfo.width, height: position.y - origin.y)
 			globalSection.frame = CGRect(origin: origin, size: globalSize)
 		}
@@ -56,7 +56,7 @@ public class GridLayoutEngine: NSObject, SupplementaryLayoutEngine {
 	}
 	
 	private func makeGlobalSectionLayoutEngine() -> SupplementaryLayoutEngine? {
-		guard let globalSection = layoutInfo.sectionAtIndex(GlobalSectionIndex) as? GridLayoutSection else {
+		guard let globalSection = layoutInfo.sectionAtIndex(globalSectionIndex) as? GridLayoutSection else {
 			return nil
 		}
 		let sectionsLayoutEngine = makeSectionsLayoutEngine()

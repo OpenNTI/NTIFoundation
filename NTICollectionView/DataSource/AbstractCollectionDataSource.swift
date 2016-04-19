@@ -374,7 +374,7 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 			}
 		}
 		
-		registerReusableViewsForSectionAtIndex(GlobalSectionIndex)
+		registerReusableViewsForSectionAtIndex(globalSectionIndex)
 		
 		for sectionIndex in 0..<numberOfSections {
 			registerReusableViewsForSectionAtIndex(sectionIndex)

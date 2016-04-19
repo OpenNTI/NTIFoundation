@@ -11,7 +11,7 @@ import UIKit
 /// The element kind for placeholders.
 public let CollectionElementKindPlaceholder = "CollectionElementKindPlaceholder"
 
-public let GlobalSectionIndex = Int.max
+public let globalSectionIndex = Int.max
 
 public let AutomaticLength: CGFloat = -1
 

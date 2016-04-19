@@ -355,7 +355,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		if let firstInsertedIndex = insertedSections.first,
 			sectionInfo = sectionInfoForSectionAtIndex(firstInsertedIndex),
-			globalSection = sectionInfoForSectionAtIndex(GlobalSectionIndex)
+			globalSection = sectionInfoForSectionAtIndex(globalSectionIndex)
 			where operationDirectionForSectionAtIndex(firstInsertedIndex) != nil {
 			
 			let minY = sectionInfo.frame.minY
@@ -391,9 +391,9 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	/// This becomes necessary when the selected data source of a segmented data source contributes a kind of global element, and then a new data source is selected which does not contribute that kind of global element.
 	private func processGlobalSectionUpdate() {
 		guard let layoutInfo = self.layoutInfo,
-			globalSection = layoutInfo.sectionAtIndex(GlobalSectionIndex),
+			globalSection = layoutInfo.sectionAtIndex(globalSectionIndex),
 			oldLayoutInfo = self.oldLayoutInfo,
-			oldGlobalSection = oldLayoutInfo.sectionAtIndex(GlobalSectionIndex) else {
+			oldGlobalSection = oldLayoutInfo.sectionAtIndex(globalSectionIndex) else {
 				return
 		}
 		
@@ -750,11 +750,11 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		registerDecorations(from: layoutMetrics)
 		
-		if let globalMetrics = layoutMetrics[GlobalSectionIndex] {
+		if let globalMetrics = layoutMetrics[globalSectionIndex] {
 			// TODO: Section type shouldn't be decided here
-//			let sectionInfo = layoutInfo.newSection(sectionIndex: GlobalSectionIndex)
+//			let sectionInfo = layoutInfo.newSection(sectionIndex: globalSectionIndex)
 			let sectionInfo = BasicGridLayoutSection()
-			layoutInfo.add(sectionInfo, sectionIndex: GlobalSectionIndex)
+			layoutInfo.add(sectionInfo, sectionIndex: globalSectionIndex)
 			populate(sectionInfo, from: globalMetrics)
 		}
 		
@@ -827,7 +827,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			setupSupplementaryMetrics(supplementaryItem)
 		}
 		
-		let isGlobalSection = sectionIndex == GlobalSectionIndex
+		let isGlobalSection = sectionIndex == globalSectionIndex
 		let numberOfItemsInSection = isGlobalSection ? 0 : collectionView.numberOfItemsInSection(sectionIndex)
 		
 		layoutLog("\(#function) section \(sectionIndex): numberOfItems=\(numberOfItemsInSection) hasPlaceholder=\(metrics.placeholder != nil)")
@@ -901,7 +901,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		// The layoutHeight is the total height of the layout including any placeholders in their default size. Determine how much space is left to be shared out among the placeholders
 		layoutInfo.heightAvailableForPlaceholders = max(0, height - layoutHeight)
 		
-		if let globalSection = sectionInfoForSectionAtIndex(GlobalSectionIndex) {
+		if let globalSection = sectionInfoForSectionAtIndex(globalSectionIndex) {
 			layoutHeight = globalSection.targetLayoutHeightForProposedLayoutHeight(layoutHeight, layoutInfo: layoutInfo)
 		}
 		

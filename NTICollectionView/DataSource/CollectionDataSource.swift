@@ -205,10 +205,10 @@ extension CollectionDataSource {
 	
 	public var globalMetrics: DataSourceSectionMetrics? {
 		get {
-			return metricsForSectionAtIndex(GlobalSectionIndex)
+			return metricsForSectionAtIndex(globalSectionIndex)
 		}
 		set {
-			setMetrics(newValue, forSectionAtIndex: GlobalSectionIndex)
+			setMetrics(newValue, forSectionAtIndex: globalSectionIndex)
 		}
 	}
 	

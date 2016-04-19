@@ -87,7 +87,7 @@ public class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMet
 		guard let selectedDataSource = self.selectedDataSource else {
 			return nil
 		}
-		if sectionIndex == GlobalSectionIndex {
+		if sectionIndex == globalSectionIndex {
 			return selectedDataSource.snapshotContributedGlobalMetrics()
 		}
 		else {
