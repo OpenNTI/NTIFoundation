@@ -152,7 +152,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			}
 		}
 		
-		if LayoutDebugging {
+		if layoutDebugging {
 			for (kind, indexPaths) in context.invalidatedSupplementaryIndexPaths ?? [:] {
 				let result = indexPaths.map { $0.debugLogDescription }
 				let resultStr = result.joinWithSeparator(", ")

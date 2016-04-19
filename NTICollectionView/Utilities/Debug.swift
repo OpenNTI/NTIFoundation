@@ -8,10 +8,10 @@
 
 import UIKit
 
-let LayoutDebugging = true
+let layoutDebugging = true
 
 func layoutLog(str: String) {
-	if LayoutDebugging {
+	if layoutDebugging {
 		debugPrint(str)
 	}
 }
