@@ -55,6 +55,9 @@ public class GridSectionLayoutEngine: NSObject, SupplementaryLayoutEngine {
 		layoutSection.frame = CGRect(origin: origin, size: size)
 		pinnableHeaders += layoutEngine.pinnableHeaders
 		nonPinnableHeaders += layoutEngine.nonPinnableHeaders
+		
+		layoutSection.pinnableHeaders = pinnableHeaders
+		layoutSection.nonPinnableHeaders = nonPinnableHeaders
 	}
 	
 	private func makeSupplementaryLayoutEngine() -> SupplementaryLayoutEngine {

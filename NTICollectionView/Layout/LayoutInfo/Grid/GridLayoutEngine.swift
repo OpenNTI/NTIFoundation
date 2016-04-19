@@ -66,10 +66,10 @@ public class GridLayoutEngine: NSObject, SupplementaryLayoutEngine {
 	private func makeSectionsLayoutEngine() -> SupplementaryLayoutEngine {
 		return ComposedGridSectionLayoutEngine(sections: sections)
 	}
-	private var sections: [LayoutSection] {
-		var sections: [LayoutSection] = []
+	private var sections: [GridLayoutSection] {
+		var sections: [GridLayoutSection] = []
 		for i in 0..<(layoutInfo.numberOfSections) {
-			guard let section = layoutInfo.sectionAtIndex(i) else {
+			guard let section = layoutInfo.sectionAtIndex(i) as? GridLayoutSection else {
 				continue
 			}
 			sections.append(section)

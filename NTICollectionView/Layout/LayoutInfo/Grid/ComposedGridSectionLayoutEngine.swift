@@ -10,11 +10,11 @@ import UIKit
 
 public class ComposedGridSectionLayoutEngine: NSObject, SupplementaryLayoutEngine {
 
-	public init(sections: [LayoutSection]) {
+	public init(sections: [GridLayoutSection]) {
 		self.sections = sections
 	}
 	
-	public var sections: [LayoutSection]
+	public var sections: [GridLayoutSection]
 	
 	public var pinnableHeaders: [LayoutSupplementaryItem] = []
 	public var nonPinnableHeaders: [LayoutSupplementaryItem] = []
@@ -42,9 +42,12 @@ public class ComposedGridSectionLayoutEngine: NSObject, SupplementaryLayoutEngin
 		}
 	}
 	
-	private func layout(section: LayoutSection) {
+	private func layout(section: GridLayoutSection) {
 		position.x = origin.x
-		position = section.layoutWithOrigin(position, layoutSizing: sizing, invalidationContext: invalidationContext)
+		
+		let layoutEngine = GridSectionLayoutEngine(layoutSection: section)
+		position = layoutEngine.layoutWithOrigin(position, layoutSizing: sizing, invalidationContext: invalidationContext)
+		
 		pinnableHeaders += section.pinnableHeaders
 		nonPinnableHeaders += section.nonPinnableHeaders
 		supplementaryItems += section.supplementaryItems
