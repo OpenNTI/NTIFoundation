@@ -16,9 +16,9 @@ func layoutLog(str: String) {
 	}
 }
 
-let UpdateDebugging = true
+let updateDebugging = true
 func updateLog(str: String) {
-	if UpdateDebugging {
+	if updateDebugging {
 		debugPrint(str)
 	}
 }

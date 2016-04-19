@@ -417,7 +417,7 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 			return
 		}
 		
-		if UpdateDebugging {
+		if updateDebugging {
 			UpdateNumber += 1
 			updateLog("\(#function) \(UpdateNumber): PERFORMING BATCH UPDATE")
 		}
