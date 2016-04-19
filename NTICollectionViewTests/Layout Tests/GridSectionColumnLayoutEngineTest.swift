@@ -21,10 +21,10 @@ class GridSectionColumnLayoutEngineTest: XCTestCase {
 		let kind = UICollectionElementKindSectionHeader
 		
 		func makeItem() -> LayoutSupplementaryItem {
-			var item = BasicGridSupplementaryItem(elementKind: kind)
+			var item = GridSupplementaryItem(elementKind: kind)
 			item.supplementaryViewClass = CollectionSupplementaryView.self
 			item.isVisibleWhileShowingPlaceholder = true
-			return item
+			return GridLayoutSupplementaryItem(supplementaryItem: item)
 		}
 		
 		var item1 = makeItem()
