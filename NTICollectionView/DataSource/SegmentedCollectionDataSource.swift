@@ -18,7 +18,7 @@ public protocol SegmentedCollectionDataSourceProtocol: ParentCollectionDataSourc
 	
 }
 
-private let SegmentedDataSourceHeaderKey = "SegmentedDataSourceHeaderKey"
+private let segmentedDataSourceHeaderKey = "SegmentedDataSourceHeaderKey"
 
 public class SegmentedCollectionDataSource: AbstractCollectionDataSource, SegmentedCollectionDataSourceProtocol, SegmentedControlDelegate {
 	
@@ -204,18 +204,18 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 	public var segmentedControlHeader: SegmentedControlSupplementaryItem? {
 		didSet {
 			guard let segmentedControlHeader = self.segmentedControlHeader else {
-				return removeSupplementaryItemForKey(SegmentedDataSourceHeaderKey)
+				return removeSupplementaryItemForKey(segmentedDataSourceHeaderKey)
 			}
 			
 			guard let oldValue = oldValue else {
-				return add(segmentedControlHeader, forKey: SegmentedDataSourceHeaderKey)
+				return add(segmentedControlHeader, forKey: segmentedDataSourceHeaderKey)
 			}
 			
 			guard !segmentedControlHeader.isEqual(to: oldValue) else {
 				return
 			}
 			
-			replaceSupplementaryItemForKey(SegmentedDataSourceHeaderKey, with: segmentedControlHeader)
+			replaceSupplementaryItemForKey(segmentedDataSourceHeaderKey, with: segmentedControlHeader)
 			configureSegmentedControlHeader()
 		}
 	}
