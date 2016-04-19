@@ -21,7 +21,7 @@ public protocol GridLayoutSection: LayoutSection {
 	
 	var metrics: GridSectionMetrics { get set }
 	
-	var rows: [LayoutRow] { get }
+	var rows: [LayoutRow] { get set }
 	var leftAuxiliaryItems: [LayoutSupplementaryItem] { get set }
 	var rightAuxiliaryItems: [LayoutSupplementaryItem] { get set }
 	

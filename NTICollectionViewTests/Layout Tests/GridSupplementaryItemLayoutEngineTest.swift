@@ -17,7 +17,7 @@ class GridSupplementaryItemLayoutEngineTest: XCTestCase {
 		// V:|-(iT)-[headers]-(pT)-[content]-(pB)-[footers]-(iB)-|
 		// V:[headers][leftAux]-(>=0)-[footers]
 		// V:[headers][rightAux]-(>=0)-[footers]
-		var section = BasicGridLayoutSection()
+		var section: GridLayoutSection = BasicGridLayoutSection()
 		section.metrics.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 		section.metrics.leftAuxiliaryColumnWidth = 20
 		section.metrics.rightAuxiliaryColumnWidth = 20
@@ -43,6 +43,8 @@ class GridSupplementaryItemLayoutEngineTest: XCTestCase {
 		let sizing = LayoutSizingInfo(width: 100, layoutMeasure: measure)
 		
 		let endPoint = engine.layoutWithOrigin(origin, layoutSizing: sizing)
+		section = engine.layoutSection
+		
 		// x: 5 + 100
 		// y: 5 + 10 + 20 + 5 + 50 + 5 + 20 + 10
 		let expectedPoint = CGPoint(x: 105, y: 125)

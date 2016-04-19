@@ -37,12 +37,12 @@ public class ComposedGridSectionLayoutEngine: NSObject, SupplementaryLayoutEngin
 	}
 	
 	private func layoutSections() {
-		for section in sections {
-			layout(section)
+		for index in sections.indices {
+			layout(&sections[index])
 		}
 	}
 	
-	private func layout(section: GridLayoutSection) {
+	private func layout(inout section: GridLayoutSection) {
 		position.x = origin.x
 		
 		let layoutEngine = GridSectionLayoutEngine(layoutSection: section)
@@ -51,6 +51,8 @@ public class ComposedGridSectionLayoutEngine: NSObject, SupplementaryLayoutEngin
 		pinnableHeaders += section.pinnableHeaders
 		nonPinnableHeaders += section.nonPinnableHeaders
 		supplementaryItems += section.supplementaryItems
+		
+		section = layoutEngine.layoutSection
 	}
 	
 }

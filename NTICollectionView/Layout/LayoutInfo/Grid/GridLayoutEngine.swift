@@ -50,6 +50,17 @@ public class GridLayoutEngine: NSObject, SupplementaryLayoutEngine {
 		pinnableHeaders += engine.pinnableHeaders
 		nonPinnableHeaders += engine.nonPinnableHeaders
 		supplementaryItems += engine.supplementaryItems
+		
+		if let supplementaryEngine = engine as? GridSupplementaryItemLayoutEngine {
+			layoutInfo.setSection(supplementaryEngine.layoutSection, at: globalSectionIndex)
+			
+			if let composedEngine = supplementaryEngine.innerLayoutEngine as? ComposedGridSectionLayoutEngine {
+				replaceSections(from: composedEngine)
+			}
+		}
+		else if let composedEngine = engine as? ComposedGridSectionLayoutEngine {
+			replaceSections(from: composedEngine)
+		}
 	}
 	
 	private func makeLayoutEngine() -> SupplementaryLayoutEngine {
@@ -76,6 +87,12 @@ public class GridLayoutEngine: NSObject, SupplementaryLayoutEngine {
 			sections.append(section)
 		}
 		return sections
+	}
+	
+	private func replaceSections(from layoutEngine: ComposedGridSectionLayoutEngine) {
+		for (index, section) in layoutEngine.sections.enumerate() {
+			layoutInfo.setSection(section, at: index)
+		}
 	}
 	
 }
