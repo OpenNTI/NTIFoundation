@@ -376,7 +376,8 @@ public class BasicGridLayoutSection: GridLayoutSection {
 	public func add(item: LayoutItem) {
 		var item = item
 		item.itemIndex = items.count
-		item.section = self
+		item.sectionIndex = sectionIndex
+		item.applyValues(from: metrics)
 		items.append(item)
 	}
 	

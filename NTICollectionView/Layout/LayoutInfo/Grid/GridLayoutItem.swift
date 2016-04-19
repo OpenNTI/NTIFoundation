@@ -18,19 +18,24 @@ public struct GridLayoutItem: LayoutItem {
 	
 	public var itemIndex = 0
 	
+	public var sectionIndex = NSNotFound
+	
 	public var hasEstimatedHeight = false
 	
 	public var isDragging = false
 	
+	public var layoutMargins = UIEdgeInsetsZero
+	
+	public var backgroundColor: UIColor?
+	
+	public var selectedBackgroundColor: UIColor?
+	
+	public var cornerRadius: CGFloat = 0
+	
 	public var indexPath: NSIndexPath {
-		guard let sectionInfo = section else {
-			preconditionFailure("Items must be assigned to a section to provide an index path.")
-		}
-		if sectionInfo.isGlobalSection {
-			return NSIndexPath(index: itemIndex)
-		} else {
-			return NSIndexPath(forItem: itemIndex, inSection: sectionInfo.sectionIndex)
-		}
+		return sectionIndex == globalSectionIndex ?
+			NSIndexPath(index: itemIndex)
+			: NSIndexPath(forItem: itemIndex, inSection: sectionIndex)
 	}
 	
 	public var layoutAttributes: CollectionViewLayoutAttributes {
@@ -45,14 +50,10 @@ public struct GridLayoutItem: LayoutItem {
 		attributes.shouldCalculateFittingSize = hasEstimatedHeight
 		attributes.hidden = isDragging
 		
-		// TODO: Decouple from section
-		if let section = self.section as? GridLayoutSection {
-			let metrics = section.metrics
-			attributes.backgroundColor = metrics.backgroundColor
-			attributes.selectedBackgroundColor = metrics.selectedBackgroundColor
-			attributes.cornerRadius = metrics.cornerRadius
-			attributes.layoutMargins = metrics.layoutMargins
-		}
+		attributes.backgroundColor = backgroundColor
+		attributes.selectedBackgroundColor = selectedBackgroundColor
+		attributes.cornerRadius = cornerRadius
+		attributes.layoutMargins = layoutMargins
 		
 //		_layoutAttributes = attributes
 		return attributes
@@ -62,14 +63,28 @@ public struct GridLayoutItem: LayoutItem {
 	
 	public var columnIndex: Int = NSNotFound
 	
-	public var section: LayoutSection?
-	
 	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		guard frame != self.frame else {
 			return
 		}
 		self.frame = frame
 		invalidationContext?.invalidateItemsAtIndexPaths([indexPath])
+	}
+	
+	public mutating func applyValues(from metrics: LayoutMetrics) {
+		guard let sectionMetrics = metrics as? SectionMetrics else {
+			return
+		}
+		
+		cornerRadius = sectionMetrics.cornerRadius
+		
+		guard let gridMetrics = metrics as? GridSectionMetrics else {
+			return
+		}
+		
+		layoutMargins = gridMetrics.layoutMargins
+		backgroundColor = gridMetrics.backgroundColor
+		selectedBackgroundColor = gridMetrics.selectedBackgroundColor
 	}
 	
 	public mutating func resetLayoutAttributes() {
@@ -82,9 +97,10 @@ public struct GridLayoutItem: LayoutItem {
 		}
 		
 		return itemIndex == other.itemIndex
+			&& sectionIndex == other.sectionIndex
+			&& frame == other.frame
 			&& hasEstimatedHeight == other.hasEstimatedHeight
 			&& isDragging == other.isDragging
-			&& section === other.section
 			&& columnIndex == other.columnIndex
 	}
 	
