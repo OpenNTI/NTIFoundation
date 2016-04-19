@@ -830,6 +830,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		if let globalMetrics = layoutMetrics[globalSectionIndex] {
 			// TODO: Section type shouldn't be decided here
 			var sectionInfo: LayoutSection = BasicGridLayoutSection()
+			sectionInfo.sectionIndex = globalSectionIndex
 			populate(&sectionInfo, from: globalMetrics)
 			layoutInfo.add(sectionInfo, sectionIndex: globalSectionIndex)
 		}
@@ -844,6 +845,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			
 			// FIXME: Section type shouldn't be decided here
 			var sectionInfo: LayoutSection = BasicGridLayoutSection()
+			sectionInfo.sectionIndex = sectionIndex
 			
 			if let metricsPlaceholder = metrics.placeholder {
 				if metricsPlaceholder !== placeholder {

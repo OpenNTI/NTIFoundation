@@ -78,7 +78,7 @@ public struct BasicGridLayoutSection: GridLayoutSection {
 	
 	public var frame = CGRectZero
 	
-	public var sectionIndex = 0
+	public var sectionIndex = NSNotFound
 	
 	public var isGlobalSection: Bool {
 		return sectionIndex == globalSectionIndex
