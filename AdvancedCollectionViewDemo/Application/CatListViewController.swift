@@ -23,7 +23,7 @@ class CatListViewController: CollectionViewController, SegmentedCollectionDataSo
 		configureAllCatsDataSource()
 		configureFavoriteCatsDataSource()
 		
-		let metrics = GridDataSourceSectionMetrics()
+		var metrics = GridDataSourceSectionMetrics()
 		
 		var gridMetrics = BasicGridSectionMetrics()
 		gridMetrics.estimatedRowHeight = 44

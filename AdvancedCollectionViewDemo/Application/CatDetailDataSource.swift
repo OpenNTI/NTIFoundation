@@ -20,7 +20,7 @@ class CatDetailDataSource: ComposedCollectionDataSource {
 		
 		var gridMetrics = BasicGridSectionMetrics()
 		
-		let classificationMetrics = GridDataSourceSectionMetrics()
+		var classificationMetrics = GridDataSourceSectionMetrics()
 		
 		gridMetrics.estimatedRowHeight = 22
 		
@@ -34,7 +34,7 @@ class CatDetailDataSource: ComposedCollectionDataSource {
 		add(classificationHeader, forKey: DataSourceTitleHeaderKey)
 		add(classificationDataSource)
 		
-		let descriptionMetrics = GridDataSourceSectionMetrics()
+		var descriptionMetrics = GridDataSourceSectionMetrics()
 		gridMetrics.estimatedRowHeight = 100
 		descriptionMetrics.applyValues(from: gridMetrics)
 		descriptionDataSource.defaultMetrics = descriptionMetrics
