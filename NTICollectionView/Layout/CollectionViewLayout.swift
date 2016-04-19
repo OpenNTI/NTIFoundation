@@ -28,6 +28,8 @@ public class CollectionViewSeparatorView: UICollectionReusableView {
 	
 }
 
+private let estimatedPlaceholderHeight: CGFloat = 200
+
 public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutMeasuring, CollectionDataSourceDelegate, ShadowRegistrarVending {
 	
 	public var isEditing = false {
@@ -719,76 +721,6 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return (collectionView!.dataSource as! CollectionDataSourceMetrics).snapshotMetrics()
 	}
 	
-	func resetLayoutInfo() {
-		oldLayoutInfo = layoutInfo
-		layoutInfo = BasicLayoutInfo(layout: self)
-	}
-	
-	func createLayoutInfoFromDataSource() {
-		resetLayoutInfo()
-		
-		guard let collectionView = self.collectionView, layoutInfo = self.layoutInfo else {
-			return
-		}
-		
-		let contentInset = collectionView.contentInset
-		let bounds = collectionView.bounds
-		let width = bounds.width - contentInset.width
-		let height = bounds.height - contentInset.height
-		
-		let numberOfSections = collectionView.numberOfSections()
-		
-		layoutLog("\(#function) numberOfSections = \(numberOfSections)")
-		
-		layoutInfo.collectionViewSize = bounds.size
-		layoutInfo.width = width
-		layoutInfo.height = height
-		
-		guard let layoutMetrics = snapshotMetrics() else {
-			return
-		}
-		
-		registerDecorations(from: layoutMetrics)
-		
-		if let globalMetrics = layoutMetrics[globalSectionIndex] {
-			// TODO: Section type shouldn't be decided here
-//			let sectionInfo = layoutInfo.newSection(sectionIndex: globalSectionIndex)
-			let sectionInfo = BasicGridLayoutSection()
-			layoutInfo.add(sectionInfo, sectionIndex: globalSectionIndex)
-			populate(sectionInfo, from: globalMetrics)
-		}
-		
-		var placeholder: AnyObject?
-		var placeholderInfo: LayoutPlaceholder?
-		
-		for sectionIndex in 0..<numberOfSections {
-			guard let metrics = layoutMetrics[sectionIndex] else {
-				continue
-			}
-			// FIXME: Section type shouldn't be decided here
-//			let sectionInfo = layoutInfo.newSection(sectionIndex: sectionIndex)
-			let sectionInfo = BasicGridLayoutSection()
-			layoutInfo.add(sectionInfo, sectionIndex: sectionIndex)
-			
-			if let metricsPlaceholder = metrics.placeholder {
-				if metricsPlaceholder !== placeholder {
-					placeholderInfo = layoutInfo.newPlaceholderStartingAtSectionIndex(sectionIndex)
-					// FIXME: Magic number
-					placeholderInfo?.height = 200
-					placeholderInfo?.hasEstimatedHeight = true
-				}
-				sectionInfo.placeholderInfo = placeholderInfo
-			}
-			else {
-				placeholderInfo = nil
-			}
-			
-			placeholder = metrics.placeholder
-			
-			populate(sectionInfo, from: metrics)
-		}
-	}
-	
 	private func registerDecorations(from layoutMetrics: [Int: DataSourceSectionMetrics]) {
 		for sectionMetrics in layoutMetrics.values {
 			registerDecorations(from: sectionMetrics.metrics)
@@ -800,66 +732,18 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			registerClass(CollectionViewSeparatorView.self, forDecorationViewOfKind: kind)
 		}
 	}
-
-	// TODO: Abstract
-	/// Subclasses should override to create new sections from the metrics.
-	public func populate(section: LayoutSection, from metrics: DataSourceSectionMetrics) {
-		guard let collectionView = self.collectionView,
-			let gridMetrics = metrics.metrics as? GridSectionMetrics,
-			section = section as? GridLayoutSection else {
-				return
-		}
-		
-		let sectionIndex = section.sectionIndex
-		
-		section.reset()
-		section.applyValues(from: gridMetrics)
-		section.metrics.resolveMissingValuesFromTheme()
-		
-		func setupSupplementaryMetrics(supplementaryMetrics: SupplementaryItem) {
-			// FIXME: Supplementary item kind shouldn't be decided here
-			var supplementaryItem = GridLayoutSupplementaryItem(supplementaryItem: supplementaryMetrics)
-			supplementaryItem.applyValues(from: section.metrics)
-			section.add(supplementaryItem)
-		}
-		
-		for supplementaryItem in metrics.supplementaryItemsByKind.contents {
-			setupSupplementaryMetrics(supplementaryItem)
-		}
-		
-		let isGlobalSection = sectionIndex == globalSectionIndex
-		let numberOfItemsInSection = isGlobalSection ? 0 : collectionView.numberOfItemsInSection(sectionIndex)
-		
-		layoutLog("\(#function) section \(sectionIndex): numberOfItems=\(numberOfItemsInSection) hasPlaceholder=\(metrics.placeholder != nil)")
-		
-		var rowHeight = gridMetrics.rowHeight ?? automaticLength
-		let isVariableRowHeight = rowHeight == automaticLength
-		if isVariableRowHeight {
-			rowHeight = gridMetrics.estimatedRowHeight
-		}
-		
-		let columnWidth = section.columnWidth
-		
-		for itemIndex in 0..<numberOfItemsInSection {
-			var itemInfo = GridLayoutItem()
-			itemInfo.itemIndex = itemIndex
-			itemInfo.frame = CGRect(x: 0, y: 0, width: columnWidth, height: rowHeight)
-			if isVariableRowHeight {
-				itemInfo.hasEstimatedHeight = true
-			}
-			section.add(itemInfo)
-		}
-	}
 	
 	func buildLayout() {
 		guard !layoutDataIsValid && !isBuildingLayout,
 			let collectionView = self.collectionView else {
 				return
 		}
+		
 		isBuildingLayout = true
 		defer {
 			isBuildingLayout = false
 		}
+		
 		// Create the collection view wrapper that will be used for measuring
 		collectionViewWrapper = WrapperCollectionView(collectionView: collectionView, mapping: nil, isUsedForMeasuring: true)
 		
@@ -915,6 +799,125 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		collectionViewWrapper = nil
 		
 		layoutLog("\(#function) Final layout height: \(layoutHeight)")
+	}
+	
+	func createLayoutInfoFromDataSource() {
+		resetLayoutInfo()
+		
+		guard let collectionView = self.collectionView, layoutInfo = self.layoutInfo else {
+			return
+		}
+		
+		let contentInset = collectionView.contentInset
+		let bounds = collectionView.bounds
+		let width = bounds.width - contentInset.width
+		let height = bounds.height - contentInset.height
+		
+		let numberOfSections = collectionView.numberOfSections()
+		
+		layoutLog("\(#function) numberOfSections = \(numberOfSections)")
+		
+		layoutInfo.collectionViewSize = bounds.size
+		layoutInfo.width = width
+		layoutInfo.height = height
+		
+		guard let layoutMetrics = snapshotMetrics() else {
+			return
+		}
+		
+		registerDecorations(from: layoutMetrics)
+		
+		if let globalMetrics = layoutMetrics[globalSectionIndex] {
+			// TODO: Section type shouldn't be decided here
+			let sectionInfo = BasicGridLayoutSection()
+			layoutInfo.add(sectionInfo, sectionIndex: globalSectionIndex)
+			populate(sectionInfo, from: globalMetrics)
+		}
+		
+		var placeholder: AnyObject?
+		var placeholderInfo: LayoutPlaceholder?
+		
+		for sectionIndex in 0..<numberOfSections {
+			guard let metrics = layoutMetrics[sectionIndex] else {
+				continue
+			}
+			
+			// FIXME: Section type shouldn't be decided here
+			let sectionInfo = BasicGridLayoutSection()
+			layoutInfo.add(sectionInfo, sectionIndex: sectionIndex)
+			
+			if let metricsPlaceholder = metrics.placeholder {
+				if metricsPlaceholder !== placeholder {
+					placeholderInfo = layoutInfo.newPlaceholderStartingAtSectionIndex(sectionIndex)
+					placeholderInfo?.height = estimatedPlaceholderHeight
+					placeholderInfo?.hasEstimatedHeight = true
+				}
+				
+				sectionInfo.placeholderInfo = placeholderInfo
+			}
+			else {
+				placeholderInfo = nil
+			}
+			
+			placeholder = metrics.placeholder
+			
+			populate(sectionInfo, from: metrics)
+		}
+	}
+	
+	func resetLayoutInfo() {
+		oldLayoutInfo = layoutInfo
+		layoutInfo = BasicLayoutInfo(layout: self)
+	}
+	
+	// TODO: Abstract
+	/// Subclasses should override to create new sections from the metrics.
+	public func populate(section: LayoutSection, from metrics: DataSourceSectionMetrics) {
+		guard let collectionView = self.collectionView,
+			let gridMetrics = metrics.metrics as? GridSectionMetrics,
+			section = section as? GridLayoutSection else {
+				return
+		}
+		
+		let sectionIndex = section.sectionIndex
+		
+		section.reset()
+		section.applyValues(from: gridMetrics)
+		section.metrics.resolveMissingValuesFromTheme()
+		
+		func setupSupplementaryMetrics(supplementaryMetrics: SupplementaryItem) {
+			// FIXME: Supplementary item kind shouldn't be decided here
+			var supplementaryItem = GridLayoutSupplementaryItem(supplementaryItem: supplementaryMetrics)
+			supplementaryItem.applyValues(from: section.metrics)
+			section.add(supplementaryItem)
+		}
+		
+		for supplementaryItem in metrics.supplementaryItemsByKind.contents {
+			setupSupplementaryMetrics(supplementaryItem)
+		}
+		
+		let isGlobalSection = sectionIndex == globalSectionIndex
+		let numberOfItemsInSection = isGlobalSection ? 0 : collectionView.numberOfItemsInSection(sectionIndex)
+		
+		layoutLog("\(#function) section \(sectionIndex): numberOfItems=\(numberOfItemsInSection) hasPlaceholder=\(metrics.placeholder != nil)")
+		
+		var rowHeight = gridMetrics.rowHeight ?? automaticLength
+		let isVariableRowHeight = rowHeight == automaticLength
+		if isVariableRowHeight {
+			rowHeight = gridMetrics.estimatedRowHeight
+		}
+		
+		let columnWidth = section.columnWidth
+		
+		for itemIndex in 0..<numberOfItemsInSection {
+			var itemInfo = GridLayoutItem()
+			itemInfo.itemIndex = itemIndex
+			itemInfo.frame = CGRect(x: 0, y: 0, width: columnWidth, height: rowHeight)
+			if isVariableRowHeight {
+				itemInfo.hasEstimatedHeight = true
+			}
+			section.add(itemInfo)
+		}
 	}
 	
 	private func initialLayoutAttributesForAttributes(attributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
