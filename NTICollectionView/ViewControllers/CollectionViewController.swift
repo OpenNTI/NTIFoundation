@@ -9,7 +9,7 @@
 import UIKit
 
 private var KVODataSourceContext = "DataSourceContext"
-private var UpdateNumber = 0
+private var updateNumber = 0
 
 public class CollectionViewController: UICollectionViewController, CollectionDataSourceDelegate, CollectionViewSupplementaryViewTracking {
 	
@@ -418,8 +418,8 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		}
 		
 		if updateDebugging {
-			UpdateNumber += 1
-			updateLog("\(#function) \(UpdateNumber): PERFORMING BATCH UPDATE")
+			updateNumber += 1
+			updateLog("\(#function) \(updateNumber): PERFORMING BATCH UPDATE")
 		}
 		
 		clearSectionUpdateInfo()
@@ -427,7 +427,7 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		var completionHandler: dispatch_block_t?
 		
 		collectionView!.performBatchUpdates({
-			updateLog("\(#function) \(UpdateNumber): BEGIN UPDATE")
+			updateLog("\(#function) \(updateNumber): BEGIN UPDATE")
 			self.isPerformingUpdates = true
 			self.updateCompletionHandler = completion
 			
@@ -441,17 +441,17 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 			sectionsToReload.removeIndexes(self.insertedSections)
 			
 			self.collectionView!.reloadSections(sectionsToReload)
-			updateLog("\(#function) \(UpdateNumber): RELOADED SECTIONS: \(sectionsToReload.debugLogDescription)")
+			updateLog("\(#function) \(updateNumber): RELOADED SECTIONS: \(sectionsToReload.debugLogDescription)")
 			
-			updateLog("\(#function) \(UpdateNumber): END UPDATE")
+			updateLog("\(#function) \(updateNumber): END UPDATE")
 			self.isPerformingUpdates = false
 			completionHandler = self.updateCompletionHandler
 			self.updateCompletionHandler = nil
 			self.clearSectionUpdateInfo()
 			}) { (_: Bool) in
-				updateLog("\(#function) \(UpdateNumber): BEGIN COMPLETION HANDLER")
+				updateLog("\(#function) \(updateNumber): BEGIN COMPLETION HANDLER")
 				completionHandler?()
-				updateLog("\(#function) \(UpdateNumber): END COMPLETION HANDLER")
+				updateLog("\(#function) \(updateNumber): END COMPLETION HANDLER")
 		}
 	}
 	
