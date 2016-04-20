@@ -400,6 +400,8 @@
 		4A24B82A1CC721DD0053ED9B /* BasicLayoutSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A24B8281CC721DD0053ED9B /* BasicLayoutSection.swift */; };
 		4A24B82C1CC809000053ED9B /* TableLayoutSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A24B82B1CC809000053ED9B /* TableLayoutSection.swift */; };
 		4A24B82D1CC809000053ED9B /* TableLayoutSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A24B82B1CC809000053ED9B /* TableLayoutSection.swift */; };
+		4A24B82F1CC809D70053ED9B /* BasicSectionMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A24B82E1CC809D70053ED9B /* BasicSectionMetrics.swift */; };
+		4A24B8301CC809D70053ED9B /* BasicSectionMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A24B82E1CC809D70053ED9B /* BasicSectionMetrics.swift */; };
 		4A280DD01CC6E2F0001EDCAA /* LayoutDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A280DCF1CC6E2F0001EDCAA /* LayoutDescription.swift */; };
 		4A280DD11CC6E2F0001EDCAA /* LayoutDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A280DCF1CC6E2F0001EDCAA /* LayoutDescription.swift */; };
 		4A280DED1CC6E623001EDCAA /* LayoutBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A280DEC1CC6E623001EDCAA /* LayoutBuilder.swift */; };
@@ -1120,6 +1122,7 @@
 		4A24B80B1CC721000053ED9B /* TableLayoutSectionBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableLayoutSectionBuilder.swift; sourceTree = "<group>"; };
 		4A24B8281CC721DD0053ED9B /* BasicLayoutSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicLayoutSection.swift; sourceTree = "<group>"; };
 		4A24B82B1CC809000053ED9B /* TableLayoutSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableLayoutSection.swift; sourceTree = "<group>"; };
+		4A24B82E1CC809D70053ED9B /* BasicSectionMetrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicSectionMetrics.swift; sourceTree = "<group>"; };
 		4A280DCF1CC6E2F0001EDCAA /* LayoutDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutDescription.swift; sourceTree = "<group>"; };
 		4A280DEC1CC6E623001EDCAA /* LayoutBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutBuilder.swift; sourceTree = "<group>"; };
 		4A280DEF1CC6E7DB001EDCAA /* GridLayoutSectionBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridLayoutSectionBuilder.swift; sourceTree = "<group>"; };
@@ -2078,6 +2081,7 @@
 			children = (
 				4A68AC821C88B0CE00849185 /* BasicLayoutInfo.swift */,
 				4A24B8281CC721DD0053ED9B /* BasicLayoutSection.swift */,
+				4A24B82E1CC809D70053ED9B /* BasicSectionMetrics.swift */,
 				4AE4230B1CBECBC30035CF1B /* BasicSupplementaryItem.swift */,
 				4AD52D551CC581DE00CDEF45 /* BasicLayoutSupplementaryItem.swift */,
 			);
@@ -3455,6 +3459,7 @@
 				4A9D2C301C9CCA3D00D75BBD /* DelegatingViewController.swift in Sources */,
 				4A68ACA11C88B0CE00849185 /* BasicCollectionDataSource.swift in Sources */,
 				4A68ACAB1C88B0CE00849185 /* ComposedCollectionDataSource.swift in Sources */,
+				4A24B82F1CC809D70053ED9B /* BasicSectionMetrics.swift in Sources */,
 				4A68ACA91C88B0CE00849185 /* CollectionViewWrapper.swift in Sources */,
 				4A68ACED1C88B0CE00849185 /* SupplementaryItem.swift in Sources */,
 				4A68ACEF1C88B0CE00849185 /* ShadowRegistrar.swift in Sources */,
@@ -3542,6 +3547,7 @@
 				4A05830E1C923B7D00F3D0E0 /* GridSectionColumnLayoutEngineTest.swift in Sources */,
 				4A68ACDA1C88B0CE00849185 /* GridSectionCellLayoutEngine.swift in Sources */,
 				4A68ACF21C88B0CE00849185 /* ContentLoading.swift in Sources */,
+				4A24B8301CC809D70053ED9B /* BasicSectionMetrics.swift in Sources */,
 				4A68ACF01C88B0CE00849185 /* ShadowRegistrar.swift in Sources */,
 				4A68AC621C88AEE300849185 /* GridLayoutSectionTest.swift in Sources */,
 				4AD56F441CAC8BC300482393 /* UICollectionReusableView-Extensions.swift in Sources */,
