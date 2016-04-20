@@ -20,6 +20,8 @@ public struct GridDataSourceSectionMetrics: DataSourceSectionMetrics {
 	
 	public var supplementaryItemsByKind: [String: [SupplementaryItem]] = [:]
 	
+	public var sizingInfo: CollectionViewLayoutMeasuring?
+	
 	public func isEqual(to other: LayoutMetrics) -> Bool {
 		guard let other = other as? GridDataSourceSectionMetrics else {
 			return false

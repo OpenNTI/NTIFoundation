@@ -20,19 +20,13 @@ public protocol LayoutSection: LayoutAttributesResolving {
 	var items: [LayoutItem] { get }
 	var supplementaryItems: [LayoutSupplementaryItem] { get }
 	var supplementaryItemsByKind: [String: [LayoutSupplementaryItem]] { get }
-	var headers: [LayoutSupplementaryItem] { get set }
-	var footers: [LayoutSupplementaryItem] { get set }
+	
+	var decorations: [LayoutDecoration] { get }
 	
 	func supplementaryItems(of kind: String) -> [LayoutSupplementaryItem]
 	mutating func setSupplementaryItems(supplementaryItems: [LayoutSupplementaryItem], of kind: String)
 	
 	var placeholderInfo: LayoutPlaceholder? { get set }
-	
-	var pinnableHeaders: [LayoutSupplementaryItem] { get set }
-	var nonPinnableHeaders: [LayoutSupplementaryItem] { get set }
-	
-	var heightOfNonPinningHeaders: CGFloat { get }
-	var heightOfPinningHeaders: CGFloat { get }
 	
 	/// All the layout attributes associated with this section.
 	var layoutAttributes: [CollectionViewLayoutAttributes] { get }
@@ -58,10 +52,6 @@ public protocol LayoutSection: LayoutAttributesResolving {
 	
 	mutating func setSize(size: CGSize, forSupplementaryElementOfKind kind: String, at index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
 	
-	mutating func setSize(size: CGSize, forHeaderAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
-	
-	mutating func setSize(size: CGSize, forFooterAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
-	
 	func additionalLayoutAttributesToInsertForInsertionOfItem(at indexPath: NSIndexPath) -> [CollectionViewLayoutAttributes]
 	
 	func additionalLayoutAttributesToDeleteForDeletionOfItem(at indexPath: NSIndexPath) -> [CollectionViewLayoutAttributes]
@@ -84,22 +74,24 @@ extension LayoutSection {
 		return items.count
 	}
 	
-	public var headers: [LayoutSupplementaryItem] {
-		get {
-			return supplementaryItems(of: UICollectionElementKindSectionHeader)
+	public var layoutAttributes: [CollectionViewLayoutAttributes] {
+		var layoutAttributes: [CollectionViewLayoutAttributes] = []
+		
+		layoutAttributes += items.map {$0.layoutAttributes}
+		
+		layoutAttributes += supplementaryItems.map {$0.layoutAttributes}
+		
+		layoutAttributes += decorations.map {$0.layoutAttributes}
+		
+		if let placeholderInfo = self.placeholderInfo where placeholderInfo.startingSectionIndex == sectionIndex {
+			layoutAttributes.append(placeholderInfo.layoutAttributes)
 		}
-		set {
-			setSupplementaryItems(newValue, of: UICollectionElementKindSectionHeader)
-		}
+		
+		return layoutAttributes
 	}
 	
-	public var footers: [LayoutSupplementaryItem] {
-		get {
-			return supplementaryItems(of: UICollectionElementKindSectionFooter)
-		}
-		set {
-			setSupplementaryItems(newValue, of: UICollectionElementKindSectionFooter)
-		}
+	public var isGlobalSection: Bool {
+		return sectionIndex == globalSectionIndex
 	}
 	
 }

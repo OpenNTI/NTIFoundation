@@ -28,7 +28,7 @@ public struct LayoutDescription {
 /// Data used for creating a layout section.
 public struct SectionDescription {
 	
-	public init(metrics: DataSourceSectionMetrics) {
+	public init(metrics: SectionMetrics) {
 		self.metrics = metrics
 	}
 	
@@ -36,8 +36,10 @@ public struct SectionDescription {
 	
 	public var numberOfItems = 0
 	
-	public var metrics: DataSourceSectionMetrics
+	public var metrics: SectionMetrics
 	
 	public var sizingInfo: CollectionViewLayoutMeasuring?
+	
+	public var supplementaryItemsByKind: [String: [SupplementaryItem]] = [:]
 	
 }

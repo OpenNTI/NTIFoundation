@@ -21,6 +21,15 @@ public protocol GridLayoutSection: LayoutSection {
 	
 	var metrics: GridSectionMetrics { get set }
 	
+	var headers: [LayoutSupplementaryItem] { get set }
+	var footers: [LayoutSupplementaryItem] { get set }
+	
+	var pinnableHeaders: [LayoutSupplementaryItem] { get set }
+	var nonPinnableHeaders: [LayoutSupplementaryItem] { get set }
+	
+	var heightOfNonPinningHeaders: CGFloat { get }
+	var heightOfPinningHeaders: CGFloat { get }
+	
 	var rows: [LayoutRow] { get set }
 	var leftAuxiliaryItems: [LayoutSupplementaryItem] { get set }
 	var rightAuxiliaryItems: [LayoutSupplementaryItem] { get set }
@@ -48,9 +57,31 @@ public protocol GridLayoutSection: LayoutSection {
 	
 	func item(at index: Int) -> LayoutItem
 	mutating func setItem(item: LayoutItem, at index: Int)
+	
+	mutating func setSize(size: CGSize, forHeaderAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
+	
+	mutating func setSize(size: CGSize, forFooterAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
 }
 
 extension GridLayoutSection {
+	
+	public var headers: [LayoutSupplementaryItem] {
+		get {
+			return supplementaryItems(of: UICollectionElementKindSectionHeader)
+		}
+		set {
+			setSupplementaryItems(newValue, of: UICollectionElementKindSectionHeader)
+		}
+	}
+	
+	public var footers: [LayoutSupplementaryItem] {
+		get {
+			return supplementaryItems(of: UICollectionElementKindSectionFooter)
+		}
+		set {
+			setSupplementaryItems(newValue, of: UICollectionElementKindSectionFooter)
+		}
+	}
 	
 	public var leftAuxiliaryItems: [LayoutSupplementaryItem] {
 		get {
@@ -79,10 +110,6 @@ public struct BasicGridLayoutSection: GridLayoutSection {
 	public var frame = CGRectZero
 	
 	public var sectionIndex = NSNotFound
-	
-	public var isGlobalSection: Bool {
-		return sectionIndex == globalSectionIndex
-	}
 	
 	public weak var layoutInfo: LayoutInfo?
 	
@@ -174,6 +201,10 @@ public struct BasicGridLayoutSection: GridLayoutSection {
 		return maxY - minY
 	}
 	
+	public var decorations: [LayoutDecoration] {
+		return decorationsByKind.contents
+	}
+	
 	public var decorationsByKind: [String: [LayoutDecoration]] {
 		get {
 			return metrics.decorationsByKind
@@ -259,7 +290,7 @@ public struct BasicGridLayoutSection: GridLayoutSection {
 				continue
 			}
 			
-			// For non-global sections, don't enumerate if there are no items and not marked as visible when showing placeholder
+		 	// For non-global sections, don't enumerate if there are no items and not marked as visible when showing placeholder
 			guard isGlobalSection || numberOfItems > 0 || supplementaryItem.isVisibleWhileShowingPlaceholder else {
 				continue
 			}
