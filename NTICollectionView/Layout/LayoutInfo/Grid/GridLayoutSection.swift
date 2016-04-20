@@ -1019,7 +1019,7 @@ public struct BasicGridLayoutSection: GridLayoutSection {
 			backgroundAttributes.frame = frame
 		}
 		
-		mutateFirstSectionOverlappingYOffset(pinnableY) { overlappingSection in
+		mutateFirstSectionOverlappingYOffset(pinnableY, from: layoutInfo) { overlappingSection in
 			overlappingSection.applyTopPinningToPinnableHeaders(minY: pinnableY, invalidationContext: invalidationContext)
 			
 			// FIXME: Magic number
@@ -1101,11 +1101,7 @@ public struct BasicGridLayoutSection: GridLayoutSection {
 			: mutateNonPinnableHeaders(using: finalizer)
 	}
 	
-	private mutating func mutateFirstSectionOverlappingYOffset(yOffset: CGFloat, using mutator: (inout BasicGridLayoutSection) -> Void) {
-		guard let layoutInfo = self.layoutInfo else {
-			return
-		}
-		
+	private mutating func mutateFirstSectionOverlappingYOffset(yOffset: CGFloat, from layoutInfo: LayoutInfo, using mutator: (inout BasicGridLayoutSection) -> Void) {
 		layoutInfo.enumerateSections { (sectionIndex, sectionInfo, stop) in
 			guard sectionIndex != globalSectionIndex else {
 				return
