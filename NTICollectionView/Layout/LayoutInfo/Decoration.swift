@@ -14,19 +14,86 @@ public protocol DecorationProvider {
 	
 }
 
-public protocol LayoutDecoration: DecorationAttributeProvider {
+public protocol LayoutDecoration: DecorationAttributeProvider, DecorationLayoutInfoProvider {
+	
+	var layoutAttributes: CollectionViewLayoutAttributes { get }
+	
+	mutating func setContainerFrame(containerFrame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
+	
+	func isEqual(to other: LayoutDecoration) -> Bool
+	
+}
+
+public protocol DecorationLayoutInfoProvider {
 	
 	var elementKind: String { get }
-	
-	var indexPath: NSIndexPath { get }
 	
 	var itemIndex: Int { get set }
 	
 	var sectionIndex: Int { get set }
 	
-	var layoutAttributes: CollectionViewLayoutAttributes { get }
+	var indexPath: NSIndexPath { get }
 	
-	mutating func setContainerFrame(containerFrame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
+}
+
+public struct DecorationLayoutInfo: DecorationLayoutInfoProvider, Equatable {
+	
+	public init(elementKind: String) {
+		self.elementKind = elementKind
+	}
+	
+	public var elementKind: String
+	
+	public var itemIndex: Int = NSNotFound
+	
+	public var sectionIndex: Int = NSNotFound
+	
+	public var indexPath: NSIndexPath {
+		return sectionIndex == globalSectionIndex ?
+		NSIndexPath(index: itemIndex)
+		: NSIndexPath(forItem: itemIndex, inSection: sectionIndex)
+	}
+}
+
+public func ==(lhs: DecorationLayoutInfo, rhs: DecorationLayoutInfo) -> Bool {
+	return lhs.elementKind == rhs.elementKind
+		&& lhs.itemIndex == rhs.itemIndex
+		&& lhs.sectionIndex == rhs.sectionIndex
+}
+
+public protocol DecorationLayoutInfoWrapper: DecorationLayoutInfoProvider {
+	
+	var decorationLayoutInfo: DecorationLayoutInfo { get set }
+	
+}
+
+extension DecorationLayoutInfoWrapper {
+	
+	public var elementKind: String {
+		return decorationLayoutInfo.elementKind
+	}
+	
+	public var itemIndex: Int {
+		get {
+			return decorationLayoutInfo.itemIndex
+		}
+		set {
+			decorationLayoutInfo.itemIndex = newValue
+		}
+	}
+	
+	public var sectionIndex: Int {
+		get {
+			return decorationLayoutInfo.sectionIndex
+		}
+		set {
+			decorationLayoutInfo.sectionIndex = newValue
+		}
+	}
+	
+	public var indexPath: NSIndexPath {
+		return decorationLayoutInfo.indexPath
+	}
 	
 }
 
@@ -34,7 +101,7 @@ private let hairline: CGFloat = 1.0 / UIScreen.mainScreen().scale
 
 public let collectionElementKindHorizontalSeparator = "collectionElementKindHorizontalSeparator"
 
-public enum HorizontalSeparatorPosition {
+public enum HorizontalSeparatorPosition: Equatable {
 	
 	/// The separator appears at the top of its container.
 	case top
@@ -52,12 +119,27 @@ public enum HorizontalSeparatorPosition {
 	
 }
 
-public struct HorizontalSeparatorDecoration: LayoutDecoration, DecorationAttributesWrapper {
+public func ==(lhs: HorizontalSeparatorPosition, rhs: HorizontalSeparatorPosition) -> Bool {
+	switch (lhs, rhs) {
+	case (.top, .top), (.bottom, .bottom):
+		return true
+	case let (.fixed(x), .fixed(y)):
+		return x == y
+	case let (.ratio(x), .ratio(y)):
+		return x == y
+	default:
+		return false
+	}
+}
+
+public struct HorizontalSeparatorDecoration: LayoutDecoration, DecorationAttributesWrapper, DecorationLayoutInfoWrapper {
 	
 	public init(elementKind: String, position: HorizontalSeparatorPosition) {
-		self.elementKind = elementKind
+		decorationLayoutInfo = DecorationLayoutInfo(elementKind: elementKind)
 		self.position = position
 	}
+	
+	public var decorationLayoutInfo: DecorationLayoutInfo
 	
 	public var thickness: CGFloat = hairline
 	
@@ -66,16 +148,6 @@ public struct HorizontalSeparatorDecoration: LayoutDecoration, DecorationAttribu
 	public var rightMargin: CGFloat = 0
 	
 	public var position: HorizontalSeparatorPosition
-	
-	public let elementKind: String
-	
-	public var indexPath: NSIndexPath {
-		return NSIndexPath(forItem: itemIndex, inSection: sectionIndex)
-	}
-	
-	public var itemIndex: Int = 0
-	
-	public var sectionIndex: Int = 0
 	
 	public var attributes = DecorationAttributes()
 	
@@ -111,11 +183,23 @@ public struct HorizontalSeparatorDecoration: LayoutDecoration, DecorationAttribu
 		}
 	}
 	
+	public func isEqual(to other: LayoutDecoration) -> Bool {
+		guard let other = other as? HorizontalSeparatorDecoration else {
+			return false
+		}
+		
+		return attributes == other.attributes
+			&& decorationLayoutInfo == other.decorationLayoutInfo
+			&& thickness == other.thickness
+			&& leftMargin == other.leftMargin
+			&& position == other.position
+	}
+	
 }
 
 public let collectionElementKindVerticalSeparator = "collectionElementKindVerticalSeparator"
 
-public enum VerticalSeparatorPosition {
+public enum VerticalSeparatorPosition: Equatable {
 	
 	/// The separator appears at the left of its container.
 	case left
@@ -133,12 +217,27 @@ public enum VerticalSeparatorPosition {
 	
 }
 
-public struct VerticalSeparatorDecoration: LayoutDecoration, DecorationAttributesWrapper {
+public func ==(lhs: VerticalSeparatorPosition, rhs: VerticalSeparatorPosition) -> Bool {
+	switch (lhs, rhs) {
+	case (.left, .left), (.right, .right):
+		return true
+	case let (.fixed(x), .fixed(y)):
+		return x == y
+	case let (.ratio(x), .ratio(y)):
+		return x == y
+	default:
+		return false
+	}
+}
+
+public struct VerticalSeparatorDecoration: LayoutDecoration, DecorationAttributesWrapper, DecorationLayoutInfoWrapper {
 	
 	public init(elementKind: String, position: VerticalSeparatorPosition) {
-		self.elementKind = elementKind
+		decorationLayoutInfo = DecorationLayoutInfo(elementKind: elementKind)
 		self.position = position
 	}
+	
+	public var decorationLayoutInfo: DecorationLayoutInfo
 	
 	public var thickness: CGFloat = hairline
 	
@@ -147,16 +246,6 @@ public struct VerticalSeparatorDecoration: LayoutDecoration, DecorationAttribute
 	public var bottomMargin: CGFloat = 0
 	
 	public var position: VerticalSeparatorPosition
-	
-	public let elementKind: String
-	
-	public var indexPath: NSIndexPath {
-		return NSIndexPath(forItem: itemIndex, inSection: sectionIndex)
-	}
-	
-	public var itemIndex: Int = 0
-	
-	public var sectionIndex: Int = 0
 	
 	public var attributes = DecorationAttributes()
 	
@@ -193,27 +282,32 @@ public struct VerticalSeparatorDecoration: LayoutDecoration, DecorationAttribute
 		}
 	}
 	
+	public func isEqual(to other: LayoutDecoration) -> Bool {
+		guard let other = other as? VerticalSeparatorDecoration else {
+			return false
+		}
+		
+		return attributes == other.attributes
+			&& decorationLayoutInfo == other.decorationLayoutInfo
+		&& thickness == other.thickness
+		&& topMargin == other.topMargin
+		&& bottomMargin == other.bottomMargin
+		&& position == other.position
+	}
+	
 }
 
-public struct BackgroundDecoration: LayoutDecoration, DecorationAttributesWrapper {
+public struct BackgroundDecoration: LayoutDecoration, DecorationAttributesWrapper, DecorationLayoutInfoWrapper {
 	
 	public init(elementKind: String) {
-		self.elementKind = elementKind
+		decorationLayoutInfo = DecorationLayoutInfo(elementKind: elementKind)
 	}
+	
+	public var decorationLayoutInfo: DecorationLayoutInfo
 	
 	public var margins = UIEdgeInsetsZero
 	
 	public var cornerRadius: CGFloat = 0
-	
-	public let elementKind: String
-	
-	public var indexPath: NSIndexPath {
-		return NSIndexPath(forItem: itemIndex, inSection: sectionIndex)
-	}
-	
-	public var itemIndex: Int = 0
-	
-	public var sectionIndex: Int = 0
 	
 	public var attributes = DecorationAttributes()
 	
@@ -233,6 +327,17 @@ public struct BackgroundDecoration: LayoutDecoration, DecorationAttributesWrappe
 		invalidationContext?.invalidateDecorationElement(with: layoutAttributes)
 	}
 	
+	public func isEqual(to other: LayoutDecoration) -> Bool {
+		guard let other = other as? BackgroundDecoration else {
+			return false
+		}
+		
+		return attributes == other.attributes
+			&& decorationLayoutInfo == other.decorationLayoutInfo
+			&& margins == other.margins
+			&& cornerRadius == other.cornerRadius
+	}
+	
 }
 
 public protocol DecorationAttributeProvider {
@@ -247,7 +352,7 @@ public protocol DecorationAttributeProvider {
 	
 }
 
-public struct DecorationAttributes: DecorationAttributeProvider {
+public struct DecorationAttributes: DecorationAttributeProvider, Equatable {
 	
 	public var frame: CGRect = CGRectZero
 	
@@ -257,6 +362,13 @@ public struct DecorationAttributes: DecorationAttributeProvider {
 	
 	public var color: UIColor?
 	
+}
+
+public func ==(lhs: DecorationAttributes, rhs: DecorationAttributes) -> Bool {
+	return lhs.frame == rhs.frame
+		&& lhs.zIndex == rhs.zIndex
+		&& lhs.isHidden == rhs.isHidden
+		&& lhs.color == rhs.color
 }
 
 public protocol DecorationAttributesWrapper: DecorationAttributeProvider {
