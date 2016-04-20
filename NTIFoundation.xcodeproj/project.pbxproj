@@ -398,6 +398,8 @@
 		4A24B80D1CC721000053ED9B /* TableLayoutSectionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A24B80B1CC721000053ED9B /* TableLayoutSectionBuilder.swift */; };
 		4A24B8291CC721DD0053ED9B /* BasicLayoutSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A24B8281CC721DD0053ED9B /* BasicLayoutSection.swift */; };
 		4A24B82A1CC721DD0053ED9B /* BasicLayoutSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A24B8281CC721DD0053ED9B /* BasicLayoutSection.swift */; };
+		4A24B82C1CC809000053ED9B /* TableLayoutSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A24B82B1CC809000053ED9B /* TableLayoutSection.swift */; };
+		4A24B82D1CC809000053ED9B /* TableLayoutSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A24B82B1CC809000053ED9B /* TableLayoutSection.swift */; };
 		4A280DD01CC6E2F0001EDCAA /* LayoutDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A280DCF1CC6E2F0001EDCAA /* LayoutDescription.swift */; };
 		4A280DD11CC6E2F0001EDCAA /* LayoutDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A280DCF1CC6E2F0001EDCAA /* LayoutDescription.swift */; };
 		4A280DED1CC6E623001EDCAA /* LayoutBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A280DEC1CC6E623001EDCAA /* LayoutBuilder.swift */; };
@@ -1117,6 +1119,7 @@
 		4A1BE89D1C8FE03200790B3A /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		4A24B80B1CC721000053ED9B /* TableLayoutSectionBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableLayoutSectionBuilder.swift; sourceTree = "<group>"; };
 		4A24B8281CC721DD0053ED9B /* BasicLayoutSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicLayoutSection.swift; sourceTree = "<group>"; };
+		4A24B82B1CC809000053ED9B /* TableLayoutSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableLayoutSection.swift; sourceTree = "<group>"; };
 		4A280DCF1CC6E2F0001EDCAA /* LayoutDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutDescription.swift; sourceTree = "<group>"; };
 		4A280DEC1CC6E623001EDCAA /* LayoutBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutBuilder.swift; sourceTree = "<group>"; };
 		4A280DEF1CC6E7DB001EDCAA /* GridLayoutSectionBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridLayoutSectionBuilder.swift; sourceTree = "<group>"; };
@@ -1822,6 +1825,7 @@
 			isa = PBXGroup;
 			children = (
 				4A1B78131CBD955200C977A6 /* TableSectionMetrics.swift */,
+				4A24B82B1CC809000053ED9B /* TableLayoutSection.swift */,
 				4A24B80B1CC721000053ED9B /* TableLayoutSectionBuilder.swift */,
 			);
 			path = Table;
@@ -3410,6 +3414,7 @@
 				4A68ACD71C88B0CE00849185 /* GridLayoutSection.swift in Sources */,
 				4A280DD01CC6E2F0001EDCAA /* LayoutDescription.swift in Sources */,
 				4A68ACD31C88B0CE00849185 /* GridDataSourceMetrics.swift in Sources */,
+				4A24B82C1CC809000053ED9B /* TableLayoutSection.swift in Sources */,
 				4A68ACE11C88B0CE00849185 /* LayoutRow.swift in Sources */,
 				4A68ACDD1C88B0CE00849185 /* GridSectionLayoutEngine.swift in Sources */,
 				4A68ACB91C88B0CE00849185 /* SegmentedCollectionDataSourceMetricsHelper.swift in Sources */,
@@ -3496,6 +3501,7 @@
 				4A68ACB81C88B0CE00849185 /* SegmentedCollectionDataSource.swift in Sources */,
 				4A280DD11CC6E2F0001EDCAA /* LayoutDescription.swift in Sources */,
 				4A68ACEA1C88B0CE00849185 /* LayoutPlaceholder.swift in Sources */,
+				4A24B82D1CC809000053ED9B /* TableLayoutSection.swift in Sources */,
 				4A620CD21C88DDCF0084B0A2 /* PagingCollectionDataSource.swift in Sources */,
 				4A68ACDE1C88B0CE00849185 /* GridSectionLayoutEngine.swift in Sources */,
 				4A68ACC81C88B0CE00849185 /* CollectionUpdateInfo.swift in Sources */,
