@@ -8,6 +8,8 @@
 
 import UIKit
 
+// MARK: - TableSectionMetricsProtocol
+
 public protocol TableSectionMetricsProtocol: SectionMetrics {
 	
 	/// The height of each row in the section.
@@ -58,6 +60,168 @@ public protocol TableSectionMetricsProtocol: SectionMetrics {
 	
 	/// How the cells should be laid out when there are multiple columns.
 	var cellLayoutOrder: ItemLayoutOrder { get set }
+	
+}
+
+// MARK: - TableSectionMetrics
+
+public struct TableSectionMetrics: TableSectionMetricsProtocol, BasicSectionMetricsWrapper {
+	
+	public var basicSectionMetrics = BasicSectionMetrics()
+	
+	public var rowHeight: CGFloat? = nil {
+		didSet {
+			setFlag("rowHeight")
+		}
+	}
+	
+	public var estimatedRowHeight: CGFloat = 44 {
+		didSet {
+			setFlag("estimatedRowHeight")
+		}
+	}
+	
+	public var numberOfColumns = 1 {
+		didSet {
+			setFlag("numberOfColumns")
+		}
+	}
+	
+	public var padding = UIEdgeInsetsZero {
+		didSet {
+			setFlag("padding")
+		}
+	}
+	
+	public var layoutMargins = UIEdgeInsetsZero
+	
+	public var showsColumnSeparator = true {
+		didSet {
+			setFlag("showsColumnSeparator")
+		}
+	}
+	
+	public var showsRowSeparator = false {
+		didSet {
+			setFlag("showsRowSeparator")
+		}
+	}
+	
+	public var showsSectionSeparator = false {
+		didSet {
+			setFlag("showsSectionSeparator")
+		}
+	}
+	
+	public var showsSectionSeparatorWhenLastSection = false {
+		didSet {
+			setFlag("showsSectionSeparatorWhenLastSection")
+		}
+	}
+	
+	public var separatorInsets = UIEdgeInsetsZero
+	
+	public var sectionSeparatorInsets = UIEdgeInsetsZero
+	
+	public var separatorColor: UIColor? {
+		didSet {
+			setFlag("separatorColor")
+		}
+	}
+	
+	public var sectionSeparatorColor: UIColor? {
+		didSet {
+			setFlag("sectionSeparatorColor")
+		}
+	}
+	
+	public var cellLayoutOrder: ItemLayoutOrder = .LeadingToTrailing
+	
+	public func isEqual(to other: LayoutMetrics) -> Bool {
+		guard let other = other as? TableSectionMetrics else {
+			return false
+		}
+		
+		return other.basicSectionMetrics.isEqual(to: basicSectionMetrics)
+			&& other.rowHeight == rowHeight
+			&& other.estimatedRowHeight == estimatedRowHeight
+			&& other.numberOfColumns == numberOfColumns
+			&& other.padding == padding
+			&& other.showsColumnSeparator == showsColumnSeparator
+			&& other.separatorInsets == separatorInsets
+			&& other.backgroundColor == backgroundColor
+			&& other.selectedBackgroundColor == selectedBackgroundColor
+			&& other.separatorColor == separatorColor
+			&& other.sectionSeparatorColor == sectionSeparatorColor
+			&& other.sectionSeparatorInsets == sectionSeparatorInsets
+			&& other.showsSectionSeparator == showsSectionSeparator
+			&& other.showsSectionSeparatorWhenLastSection == showsSectionSeparatorWhenLastSection
+			&& other.cellLayoutOrder == cellLayoutOrder
+			&& other.showsRowSeparator == showsRowSeparator
+	}
+	
+	public mutating func applyValues(from metrics: LayoutMetrics) {
+		basicSectionMetrics.applyValues(from: metrics)
+		
+		guard let tableMetrics = metrics as? TableSectionMetricsProtocol else {
+			return
+		}
+		
+		if metrics.definesMetric("rowHeight") {
+			rowHeight = tableMetrics.rowHeight
+		}
+		
+		if metrics.definesMetric("estimatedRowHeight") {
+			estimatedRowHeight = tableMetrics.estimatedRowHeight
+		}
+		
+		if metrics.definesMetric("numberOfColumns") {
+			numberOfColumns = tableMetrics.numberOfColumns
+		}
+		
+		if metrics.definesMetric("sectionSeparatorColor") {
+			sectionSeparatorColor = tableMetrics.sectionSeparatorColor
+		}
+		
+		if metrics.definesMetric("separatorColor") {
+			separatorColor = tableMetrics.separatorColor
+		}
+		
+		if metrics.definesMetric("showsSectionSeparatorWhenLastSection") {
+			showsSectionSeparatorWhenLastSection = tableMetrics.showsSectionSeparatorWhenLastSection
+		}
+		
+		if metrics.definesMetric("padding") {
+			padding = tableMetrics.padding
+		}
+		
+		if metrics.definesMetric("showsColumnSeparator") {
+			showsColumnSeparator = tableMetrics.showsColumnSeparator
+		}
+		
+		if metrics.definesMetric("showsRowSeparator") {
+			showsRowSeparator = tableMetrics.showsRowSeparator
+		}
+		
+		if metrics.definesMetric("showsSectionSeparator") {
+			showsSectionSeparator = tableMetrics.showsSectionSeparator
+		}
+	}
+	
+	public mutating func resolveMissingValuesFromTheme() {
+		if !definesMetric("backgroundColor") {
+			backgroundColor = UIColor.whiteColor()
+		}
+		if !definesMetric("selectedBackgroundColor") {
+			selectedBackgroundColor = UIColor(white: 235.0 / 0xFF, alpha: 1)
+		}
+		if !definesMetric("separatorColor") {
+			separatorColor = UIColor(white: 204.0 / 0xFF, alpha: 1)
+		}
+		if !definesMetric("sectionSeparatorColor") {
+			sectionSeparatorColor = UIColor(white: 204.0 / 0xFF, alpha: 1)
+		}
+	}
 	
 }
 

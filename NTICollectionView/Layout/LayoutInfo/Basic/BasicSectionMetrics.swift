@@ -95,3 +95,72 @@ extension BasicSectionMetrics {
 	}
 	
 }
+
+// MARK: - BasicSectionMetricsWrapper
+
+public protocol BasicSectionMetricsWrapper: SectionMetrics {
+	
+	var basicSectionMetrics: BasicSectionMetrics { get set }
+	
+}
+
+extension BasicSectionMetricsWrapper {
+	
+	public var contentInset: UIEdgeInsets {
+		get {
+			return basicSectionMetrics.contentInset
+		}
+		set {
+			basicSectionMetrics.contentInset = newValue
+		}
+	}
+	
+	public var backgroundColor: UIColor? {
+		get {
+			return basicSectionMetrics.backgroundColor
+		}
+		set {
+			basicSectionMetrics.backgroundColor = newValue
+		}
+	}
+	
+	public var selectedBackgroundColor: UIColor? {
+		get {
+			return basicSectionMetrics.selectedBackgroundColor
+		}
+		set {
+			basicSectionMetrics.selectedBackgroundColor = newValue
+		}
+	}
+	
+	public var cornerRadius: CGFloat {
+		get {
+			return basicSectionMetrics.cornerRadius
+		}
+		set {
+			basicSectionMetrics.cornerRadius = newValue
+		}
+	}
+	
+	public mutating func setFlag(flag: String) {
+		basicSectionMetrics.setFlag(flag)
+	}
+	
+	public func definesMetric(metric: String) -> Bool {
+		return basicSectionMetrics.definesMetric(metric)
+	}
+	
+	public var decorationsByKind: [String : [LayoutDecoration]] {
+		get {
+			return basicSectionMetrics.decorationsByKind
+		}
+		set {
+			basicSectionMetrics.decorationsByKind = newValue
+		}
+	}
+	
+	public mutating func add(decoration: LayoutDecoration) {
+		basicSectionMetrics.add(decoration)
+	}
+	
+}
