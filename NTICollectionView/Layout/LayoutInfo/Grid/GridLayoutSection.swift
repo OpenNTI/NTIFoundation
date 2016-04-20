@@ -728,8 +728,8 @@ public struct BasicGridLayoutSection: GridLayoutSection {
 		}
 	}
 	
-	/// Create any additional layout attributes, this requires knowing what sections actually have any content.
-	public mutating func finalizeLayoutAttributesForSectionsWithContent(sectionsWithContent: NSIndexSet) {
+	/// Creates any additional layout attributes, given the sections that have content.
+	public mutating func finalizeLayoutAttributesForSectionsWithContent(sectionsWithContent: [LayoutSection]) {
 		let shouldShowSectionSeparators = metrics.showsSectionSeparator && items.count > 0
 		
 		// Hide the row separator for the last row in the section
@@ -744,7 +744,7 @@ public struct BasicGridLayoutSection: GridLayoutSection {
 		updateColumnSeparators()
 	}
 	
-	private mutating func updateSectionSeparatorsForSectionsWithContent(sectionsWithContent: NSIndexSet) {
+	private mutating func updateSectionSeparatorsForSectionsWithContent(sectionsWithContent: [LayoutSection]) {
 		// Show the section separators
 		sectionSeparatorLayoutAttributes = [:]
 		
@@ -757,30 +757,32 @@ public struct BasicGridLayoutSection: GridLayoutSection {
 		}
 	}
 	
-	/// Only need to show the top separator when there is a section with content before this one, but it doesn't have a bottom separator already.
-	private func shouldCreateTopSectionSeparatorForSectionsWithContent(sectionsWithContent: NSIndexSet) -> Bool {
-		let previousSectionIndexWithContent = sectionsWithContent.indexLessThanIndex(sectionIndex)
-		let hasPreviousSectionWithContent = previousSectionIndexWithContent != NSNotFound
-		if hasPreviousSectionWithContent,
-			let previousSectionWithContent = layoutInfo?.sectionAtIndex(previousSectionIndexWithContent) as? GridLayoutSection
-			where !previousSectionWithContent.hasBottomSectionSeparator {
-				return true
+	private func shouldCreateTopSectionSeparatorForSectionsWithContent(sectionsWithContent: [LayoutSection]) -> Bool {
+		guard let previousSectionWithContent = sectionsWithContent.filter({$0.sectionIndex < self.sectionIndex}).last else {
+			// This is the first section with content
+			return false
 		}
-		return false
+		
+		// Only if the previous section isn't showing a bottom separator
+		if let previousGridSectionWithContent = previousSectionWithContent as? GridLayoutSection {
+			return !previousGridSectionWithContent.hasBottomSectionSeparator
+		}
+		
+		return true
 	}
 	
-	/// Only need to show the bottom separator when there is another section with content after this one that doesn't have a top separator OR we've been explicitly told to show the section separator when this is the last section.
-	private func shouldCreateBottomSectionSeparatorForSectionsWithContent(sectionsWithContent: NSIndexSet) -> Bool {
-		let nextSectionIndexWithContent = sectionsWithContent.indexGreaterThanIndex(sectionIndex)
-		let hasNextSectionWithContent = nextSectionIndexWithContent != NSNotFound
-		if hasNextSectionWithContent,
-			let nextSectionWithContent = layoutInfo?.sectionAtIndex(nextSectionIndexWithContent) as? GridLayoutSection
-			where !nextSectionWithContent.hasTopSectionSeparator {
-				return true
-		} else if metrics.showsSectionSeparatorWhenLastSection {
-			return true
+	private func shouldCreateBottomSectionSeparatorForSectionsWithContent(sectionsWithContent: [LayoutSection]) -> Bool {
+		guard let nextSectionWithContent = sectionsWithContent.filter({$0.sectionIndex > self.sectionIndex}).first else {
+			// This is the last section with content
+			return metrics.showsSectionSeparatorWhenLastSection
 		}
-		return false
+		
+		// Only if the next section isn't showing a top separator
+		if let nextGridSectionWithContent = nextSectionWithContent as? GridLayoutSection {
+			return !nextGridSectionWithContent.hasTopSectionSeparator
+		}
+		
+		return true
 	}
 	
 	private mutating func updateSectionSeparatorAttributes(sectionSeparator: Int) {

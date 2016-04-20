@@ -136,7 +136,7 @@ public struct BasicLayoutSection: LayoutSection {
 		
 	}
 	
-	public mutating func finalizeLayoutAttributesForSectionsWithContent(sectionsWithContent: NSIndexSet) {
+	public mutating func finalizeLayoutAttributesForSectionsWithContent(sectionsWithContent: [LayoutSection]) {
 		
 	}
 	

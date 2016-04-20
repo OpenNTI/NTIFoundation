@@ -46,7 +46,7 @@ public protocol LayoutSection: LayoutAttributesResolving {
 	/// Reset the content of this section.
 	mutating func reset()
 	
-	mutating func finalizeLayoutAttributesForSectionsWithContent(sectionsWithContent: NSIndexSet)
+	mutating func finalizeLayoutAttributesForSectionsWithContent(sectionsWithContent: [LayoutSection])
 	
 	mutating func setSize(size: CGSize, forItemAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
 	

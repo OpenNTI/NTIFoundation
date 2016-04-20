@@ -146,7 +146,7 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 	}
 	
 	public func finalizeLayout() {
-		let sectionsWithContent = NSMutableIndexSet()
+		var sectionsWithContent: [LayoutSection] = []
 		
 		for sectionInfo in sections {
 			if sectionInfo.isGlobalSection {
@@ -167,7 +167,7 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 			}
 			
 			if sectionInfo.items.count > 0 {
-				sectionsWithContent.addIndex(sectionInfo.sectionIndex)
+				sectionsWithContent.append(sectionInfo)
 				continue
 			}
 			
@@ -176,7 +176,7 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 				guard supplementaryItem.isVisibleWhileShowingPlaceholder && !supplementaryItem.isHidden && supplementaryItem.height != 0 else {
 					continue
 				}
-				sectionsWithContent.addIndex(sectionInfo.sectionIndex)
+				sectionsWithContent.append(sectionInfo)
 			}
 		}
 		
