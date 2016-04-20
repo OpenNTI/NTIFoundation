@@ -15,8 +15,6 @@ public protocol LayoutSection: LayoutAttributesResolving {
 	
 	var isGlobalSection: Bool { get }
 	
-	var layoutInfo: LayoutInfo? { get set }
-	
 	var items: [LayoutItem] { get }
 	var supplementaryItems: [LayoutSupplementaryItem] { get }
 	var supplementaryItemsByKind: [String: [LayoutSupplementaryItem]] { get }

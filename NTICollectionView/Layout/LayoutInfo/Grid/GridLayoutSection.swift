@@ -111,8 +111,6 @@ public struct BasicGridLayoutSection: GridLayoutSection {
 	
 	public var sectionIndex = NSNotFound
 	
-	public weak var layoutInfo: LayoutInfo?
-	
 	public var items: [LayoutItem] = []
 	
 	public func item(at index: Int) -> LayoutItem {

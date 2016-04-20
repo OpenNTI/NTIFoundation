@@ -18,8 +18,6 @@ public struct BasicLayoutSection: LayoutSection {
 	
 	public var items: [LayoutItem] = []
 	
-	public var layoutInfo: LayoutInfo?
-	
 	public var supplementaryItems: [LayoutSupplementaryItem] {
 		return supplementaryItemsByKind.contents
 	}

@@ -93,7 +93,6 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 	
 	public func add(section: LayoutSection, sectionIndex: Int) {
 		var section = section
-		section.layoutInfo = self
 		section.sectionIndex = sectionIndex
 		
 		if sectionIndex == globalSectionIndex {
