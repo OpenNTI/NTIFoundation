@@ -10,6 +10,10 @@ import UIKit
 
 extension UIEdgeInsets {
 	
+	public static var zero: UIEdgeInsets {
+		return UIEdgeInsetsZero
+	}
+	
 	/// The combined left and right inset.
 	public var width: CGFloat {
 		return left + right
