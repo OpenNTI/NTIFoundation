@@ -148,7 +148,7 @@ public struct BasicLayoutSection: LayoutSection {
 		return proposedHeight
 	}
 	
-	public mutating func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	public mutating func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, layoutInfo: LayoutInfo, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		
 	}
 	

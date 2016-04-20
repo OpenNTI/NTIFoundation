@@ -62,7 +62,7 @@ public protocol LayoutSection: LayoutAttributesResolving {
 	
 	func targetContentOffsetForProposedContentOffset(proposedContentOffset: CGPoint, firstInsertedSectionMinY: CGFloat) -> CGPoint
 	
-	mutating func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?)
+	mutating func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, layoutInfo: LayoutInfo, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
 	mutating func applyValues(from metrics: LayoutMetrics)
 	

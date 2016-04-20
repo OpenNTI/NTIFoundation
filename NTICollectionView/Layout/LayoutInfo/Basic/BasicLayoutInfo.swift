@@ -267,7 +267,7 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 	
 	public func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
 		enumerateSections { (_, section, _) in
-			section.updateSpecialItemsWithContentOffset(contentOffset, invalidationContext: invalidationContext)
+			section.updateSpecialItemsWithContentOffset(contentOffset, layoutInfo: self,  invalidationContext: invalidationContext)
 		}
 	}
 	

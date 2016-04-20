@@ -984,16 +984,7 @@ public struct BasicGridLayoutSection: GridLayoutSection {
 		return targetContentOffset
 	}
 	
-	public mutating func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
-		guard let layoutInfo = self.layoutInfo else {
-			return
-		}
-		let numSections = layoutInfo.numberOfSections
-		
-		guard numSections > 0 && numSections != NSNotFound else {
-			return
-		}
-		
+	public mutating func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, layoutInfo: LayoutInfo, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
 		var pinnableY = contentOffset.y + layoutInfo.contentInset.top
 		var nonPinnableY = pinnableY
 		
