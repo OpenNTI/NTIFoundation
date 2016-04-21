@@ -109,6 +109,68 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return dataSource.collectionView(collectionView, canMoveItemAt: indexPath)
 	}
 	
+	// MARK: - CollectionViewLayoutMeasuring
+	
+	public func measuredSizeForSupplementaryItem(inout supplementaryItem: LayoutSupplementaryItem) -> CGSize {
+		guard let collectionView = collectionViewWrapper as? WrapperCollectionView,
+			dataSource = collectionView.dataSource else {
+				return CGSizeZero
+		}
+		
+		measuringAttributes = supplementaryItem.layoutAttributes.copy() as? CollectionViewLayoutAttributes
+		measuringAttributes!.hidden = true
+		
+		let view = dataSource.collectionView!(collectionView, viewForSupplementaryElementOfKind: supplementaryItem.elementKind, atIndexPath: supplementaryItem.indexPath)
+		let attributes = view.preferredLayoutAttributesFittingAttributes(measuringAttributes!)
+		view.removeFromSuperview()
+		
+		// Allow regeneration of the layout attributes later
+		supplementaryItem.resetLayoutAttributes()
+		measuringAttributes = nil
+		
+		return attributes.frame.size
+	}
+	
+	public func measuredSizeForItem(inout item: LayoutItem) -> CGSize {
+		guard let collectionView = collectionViewWrapper as? WrapperCollectionView,
+			dataSource = collectionView.dataSource else {
+				return CGSizeZero
+		}
+		
+		measuringAttributes = item.layoutAttributes.copy() as? CollectionViewLayoutAttributes
+		measuringAttributes!.hidden = true
+		
+		let view = dataSource.collectionView(collectionView, cellForItemAtIndexPath: item.indexPath)
+		let attributes = view.preferredLayoutAttributesFittingAttributes(measuringAttributes!)
+		view.removeFromSuperview()
+		
+		// Allow regeneration of the layout attributes later
+		item.resetLayoutAttributes()
+		measuringAttributes = nil
+		
+		return attributes.frame.size
+	}
+	
+	public func measuredSizeForPlaceholder(inout placeholderInfo: LayoutPlaceholder) -> CGSize {
+		guard let collectionView = collectionViewWrapper as? WrapperCollectionView,
+			dataSource = collectionView.dataSource else {
+				return CGSizeZero
+		}
+		
+		measuringAttributes = placeholderInfo.layoutAttributes.copy() as? CollectionViewLayoutAttributes
+		measuringAttributes!.hidden = true
+		
+		let view = dataSource.collectionView!(collectionView, viewForSupplementaryElementOfKind: measuringAttributes!.representedElementKind!, atIndexPath: placeholderInfo.indexPath)
+		let attributes = view.preferredLayoutAttributesFittingAttributes(measuringAttributes!)
+		view.removeFromSuperview()
+		
+		// Allow regeneration of the layout attributes later
+		placeholderInfo.resetLayoutAttributes()
+		measuringAttributes = nil
+		
+		return attributes.frame.size
+	}
+	
 	// MARK: - UICollectionViewLayout
 	
 	public override class func layoutAttributesClass() -> AnyClass {
@@ -632,68 +694,6 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		}
 		
 		return finalLayoutAttributesForAttributes(result)
-	}
-	
-	// MARK: - CollectionViewLayoutMeasuring
-	
-	public func measuredSizeForSupplementaryItem(inout supplementaryItem: LayoutSupplementaryItem) -> CGSize {
-		guard let collectionView = collectionViewWrapper as? WrapperCollectionView,
-			dataSource = collectionView.dataSource else {
-				return CGSizeZero
-		}
-		
-		measuringAttributes = supplementaryItem.layoutAttributes.copy() as? CollectionViewLayoutAttributes
-		measuringAttributes!.hidden = true
-		
-		let view = dataSource.collectionView!(collectionView, viewForSupplementaryElementOfKind: supplementaryItem.elementKind, atIndexPath: supplementaryItem.indexPath)
-		let attributes = view.preferredLayoutAttributesFittingAttributes(measuringAttributes!)
-		view.removeFromSuperview()
-		
-		// Allow regeneration of the layout attributes later
-		supplementaryItem.resetLayoutAttributes()
-		measuringAttributes = nil
-		
-		return attributes.frame.size
-	}
-	
-	public func measuredSizeForItem(inout item: LayoutItem) -> CGSize {
-		guard let collectionView = collectionViewWrapper as? WrapperCollectionView,
-			dataSource = collectionView.dataSource else {
-				return CGSizeZero
-		}
-		
-		measuringAttributes = item.layoutAttributes.copy() as? CollectionViewLayoutAttributes
-		measuringAttributes!.hidden = true
-		
-		let view = dataSource.collectionView(collectionView, cellForItemAtIndexPath: item.indexPath)
-		let attributes = view.preferredLayoutAttributesFittingAttributes(measuringAttributes!)
-		view.removeFromSuperview()
-		
-		// Allow regeneration of the layout attributes later
-		item.resetLayoutAttributes()
-		measuringAttributes = nil
-		
-		return attributes.frame.size
-	}
-	
-	public func measuredSizeForPlaceholder(inout placeholderInfo: LayoutPlaceholder) -> CGSize {
-		guard let collectionView = collectionViewWrapper as? WrapperCollectionView,
-			dataSource = collectionView.dataSource else {
-				return CGSizeZero
-		}
-		
-		measuringAttributes = placeholderInfo.layoutAttributes.copy() as? CollectionViewLayoutAttributes
-		measuringAttributes!.hidden = true
-		
-		let view = dataSource.collectionView!(collectionView, viewForSupplementaryElementOfKind: measuringAttributes!.representedElementKind!, atIndexPath: placeholderInfo.indexPath)
-		let attributes = view.preferredLayoutAttributesFittingAttributes(measuringAttributes!)
-		view.removeFromSuperview()
-		
-		// Allow regeneration of the layout attributes later
-		placeholderInfo.resetLayoutAttributes()
-		measuringAttributes = nil
-		
-		return attributes.frame.size
 	}
 	
 	// MARK: - Helpers
