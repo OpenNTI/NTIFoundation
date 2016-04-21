@@ -20,6 +20,15 @@ public protocol LayoutSectionBuilder {
 	
 	init()
 	
-	func makeLayoutSection(using description: SectionDescription, at origin: CGPoint) -> LayoutSection
+	func makeLayoutSection(using description: SectionDescription, in layoutBounds: SectionLayoutBounds) -> LayoutSection
+	
+}
+
+
+public struct SectionLayoutBounds {
+	
+	public var origin: CGPoint
+	
+	public var width: CGFloat
 	
 }

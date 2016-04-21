@@ -12,10 +12,15 @@ public struct TableLayoutSectionBuilder: LayoutSectionBuilder {
 	
 	public init() {}
 	
-	public func makeLayoutSection(using description: SectionDescription, at origin: CGPoint) -> LayoutSection {
+	public func makeLayoutSection(using description: SectionDescription, in layoutBounds: SectionLayoutBounds) -> LayoutSection {
 		var section = TableLayoutSection()
 		
+		section.frame.origin = layoutBounds.origin
+		section.frame.size.width = layoutBounds.width
+		
 		// TODO: Implement
+		
+		
 		return section
 	}
 	

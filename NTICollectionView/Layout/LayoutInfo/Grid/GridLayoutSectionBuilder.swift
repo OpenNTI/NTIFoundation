@@ -12,7 +12,7 @@ public struct GridLayoutSectionBuilder: LayoutSectionBuilder {
 	
 	public init() {}
 	
-	public func makeLayoutSection(using description: SectionDescription, at origin: CGPoint) -> LayoutSection {
+	public func makeLayoutSection(using description: SectionDescription, in layoutBounds: SectionLayoutBounds) -> LayoutSection {
 		var section = BasicGridLayoutSection()
 		
 		// TODO: Implement
