@@ -402,6 +402,7 @@
 		4A24B82D1CC809000053ED9B /* TableLayoutSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A24B82B1CC809000053ED9B /* TableLayoutSection.swift */; };
 		4A24B82F1CC809D70053ED9B /* BasicSectionMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A24B82E1CC809D70053ED9B /* BasicSectionMetrics.swift */; };
 		4A24B8301CC809D70053ED9B /* BasicSectionMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A24B82E1CC809D70053ED9B /* BasicSectionMetrics.swift */; };
+		4A24B8311CC84DCD0053ED9B /* TableSectionMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1B78131CBD955200C977A6 /* TableSectionMetrics.swift */; };
 		4A280DD01CC6E2F0001EDCAA /* LayoutDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A280DCF1CC6E2F0001EDCAA /* LayoutDescription.swift */; };
 		4A280DD11CC6E2F0001EDCAA /* LayoutDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A280DCF1CC6E2F0001EDCAA /* LayoutDescription.swift */; };
 		4A280DED1CC6E623001EDCAA /* LayoutBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A280DEC1CC6E623001EDCAA /* LayoutBuilder.swift */; };
@@ -3520,6 +3521,7 @@
 				4A68ACCC1C88B0CE00849185 /* CollectionViewLayoutAttributes.swift in Sources */,
 				4A68ACE01C88B0CE00849185 /* GridSectionMetrics.swift in Sources */,
 				4A68ACA61C88B0CE00849185 /* CollectionDataSourceDelegate.swift in Sources */,
+				4A24B8311CC84DCD0053ED9B /* TableSectionMetrics.swift in Sources */,
 				4A68ACFE1C88B0CE00849185 /* PlaceholderView.swift in Sources */,
 				4A68AC041C88ADC300849185 /* NTICollectionViewTests.swift in Sources */,
 				4A68ACAE1C88B0CE00849185 /* ComposedCollectionDataSourceMetricsHelper.swift in Sources */,

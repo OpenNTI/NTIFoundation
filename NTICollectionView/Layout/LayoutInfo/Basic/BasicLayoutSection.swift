@@ -10,11 +10,15 @@ import UIKit
 
 public struct BasicLayoutSection: LayoutSection {
 	
-	static let hairline: CGFloat = 1.0 / UIScreen.mainScreen().scale
+	public init(metrics: SectionMetrics) {
+		self.metrics = metrics
+	}
 	
 	public var frame = CGRectZero
 	
 	public var sectionIndex = NSNotFound
+	
+	public var metrics: SectionMetrics
 	
 	public var items: [LayoutItem] = []
 	
@@ -31,14 +35,14 @@ public struct BasicLayoutSection: LayoutSection {
 	// O(n^2)
 	private var attributesForDecorationsByKind: [String: [CollectionViewLayoutAttributes]] {
 		var attributesByKind: [String: [CollectionViewLayoutAttributes]] = [:]
-//		let insetFrame = UIEdgeInsetsInsetRect(frame, metrics.contentInset)
+		let insetFrame = UIEdgeInsetsInsetRect(frame, metrics.contentInset)
 		
 		for (kind, decorations) in decorationsByKind {
 			for (index, decoration) in decorations.enumerate() {
 				var decoration = decoration
 				decoration.itemIndex = index
 				decoration.sectionIndex = sectionIndex
-				decoration.setContainerFrame(frame, invalidationContext: nil)
+				decoration.setContainerFrame(insetFrame, invalidationContext: nil)
 				let attributes = decoration.layoutAttributes
 				attributesByKind.append(attributes, to: kind)
 			}
