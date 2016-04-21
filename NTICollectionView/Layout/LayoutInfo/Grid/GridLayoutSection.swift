@@ -1104,7 +1104,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, LayoutSectionBaseCompos
 		self.headers = headers
 	}
 	
-	public func isEqual(to other: LayoutMetrics) -> Bool {
+	public func isEqual(to other: LayoutSection) -> Bool {
 		guard let other = other as? BasicGridLayoutSection else {
 			return false
 		}

@@ -856,6 +856,14 @@ public struct TableLayoutSection: LayoutSection, LayoutSectionBaseComposite {
 		self.metrics.applyValues(from: metrics)
 	}
 	
+	public func isEqual(to other: LayoutSection) -> Bool {
+		guard let other = other as? TableLayoutSection else {
+			return false
+		}
+		
+		return sectionIndex == other.sectionIndex
+	}
+	
 }
 
 extension TableLayoutSection {

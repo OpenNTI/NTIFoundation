@@ -68,6 +68,8 @@ public protocol LayoutSection: LayoutAttributesResolving {
 	
 	mutating func applyValues(from metrics: LayoutMetrics)
 	
+	func isEqual(to other: LayoutSection) -> Bool
+	
 }
 
 extension LayoutSection {

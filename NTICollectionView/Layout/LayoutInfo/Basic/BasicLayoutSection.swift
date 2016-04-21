@@ -145,4 +145,12 @@ public struct BasicLayoutSection: LayoutSection, LayoutSectionBaseComposite {
 		return nil
 	}
 	
+	public func isEqual(to other: LayoutSection) -> Bool {
+		guard let other = other as? BasicLayoutSection else {
+			return false
+		}
+		
+		return sectionIndex == other.sectionIndex
+	}
+	
 }
