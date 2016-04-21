@@ -20,6 +20,10 @@ public struct LayoutSectionBase {
 
 extension LayoutSectionBase {
 	
+	public var supplementaryItems: [LayoutSupplementaryItem] {
+		return supplementaryItemsByKind.contents
+	}
+	
 	public func supplementaryItems(of kind: String) -> [LayoutSupplementaryItem] {
 		return supplementaryItemsByKind[kind] ?? []
 	}
@@ -31,6 +35,14 @@ extension LayoutSectionBase {
 			supplementaryItems[index].sectionIndex = sectionIndex
 		}
 		supplementaryItemsByKind[kind] = supplementaryItems
+	}
+	
+	public mutating func add(supplementaryItem: LayoutSupplementaryItem) {
+		let kind = supplementaryItem.elementKind
+		var supplementaryItem = supplementaryItem
+		supplementaryItem.itemIndex = supplementaryItems(of: kind).count
+		supplementaryItem.sectionIndex = sectionIndex
+		supplementaryItemsByKind.append(supplementaryItem, to: kind)
 	}
 	
 	public mutating func mutateSupplementaryItems(using mutator: (supplementaryItem: inout LayoutSupplementaryItem, kind: String, index: Int) -> Void) {
@@ -82,12 +94,20 @@ extension LayoutSectionBaseComposite {
 		}
 	}
 	
+	public var supplementaryItems: [LayoutSupplementaryItem] {
+		return layoutSectionBase.supplementaryItems
+	}
+	
 	public func supplementaryItems(of kind: String) -> [LayoutSupplementaryItem] {
 		return layoutSectionBase.supplementaryItems(of: kind)
 	}
 	
 	public mutating func setSupplementaryItems(supplementaryItems: [LayoutSupplementaryItem], of kind: String) {
 		layoutSectionBase.setSupplementaryItems(supplementaryItems, of: kind)
+	}
+	
+	public mutating func add(supplementaryItem: LayoutSupplementaryItem) {
+		layoutSectionBase.add(supplementaryItem)
 	}
 	
 	public mutating func mutateSupplementaryItems(using mutator: (supplementaryItem: inout LayoutSupplementaryItem, kind: String, index: Int) -> Void) {

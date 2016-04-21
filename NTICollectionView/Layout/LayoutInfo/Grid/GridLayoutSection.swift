@@ -103,13 +103,11 @@ extension GridLayoutSection {
 	
 }
 
-public struct BasicGridLayoutSection: GridLayoutSection {
+public struct BasicGridLayoutSection: GridLayoutSection, LayoutSectionBaseComposite {
 	
 	static let hairline: CGFloat = 1.0 / UIScreen.mainScreen().scale
 	
-	public var frame = CGRectZero
-	
-	public var sectionIndex = NSNotFound
+	public var layoutSectionBase = LayoutSectionBase()
 	
 	public var items: [LayoutItem] = []
 	
@@ -147,14 +145,6 @@ public struct BasicGridLayoutSection: GridLayoutSection {
 			row.items[itemIndex] = item
 		}
 	}
-	
-	public var supplementaryItems: [LayoutSupplementaryItem] {
-		return supplementaryItemsByKind.contents
-	}
-	
-	public var supplementaryItemsByKind: [String: [LayoutSupplementaryItem]] = [:]
-	
-	private var otherSupplementaryItems: [LayoutSupplementaryItem] = []
 	
 	// FIXME: Make sure this doesn't trigger when we're mutating the value
 	public var placeholderInfo: LayoutPlaceholder? {
@@ -429,37 +419,6 @@ public struct BasicGridLayoutSection: GridLayoutSection {
 	public mutating func mutateRows(using mutator: (row: inout LayoutRow, index: Int) -> Void) {
 		for index in rows.indices {
 			mutator(row: &rows[index], index: index)
-		}
-	}
-	
-	public mutating func add(supplementaryItem: LayoutSupplementaryItem) {
-		let kind = supplementaryItem.elementKind
-		var supplementaryItem = supplementaryItem
-		supplementaryItem.itemIndex = supplementaryItems(of: kind).count
-		supplementaryItem.sectionIndex = sectionIndex
-		supplementaryItemsByKind.append(supplementaryItem, to: kind)
-	}
-	
-	public func supplementaryItems(of kind: String) -> [LayoutSupplementaryItem] {
-		return supplementaryItemsByKind[kind] ?? []
-	}
-	
-	public mutating func setSupplementaryItems(supplementaryItems: [LayoutSupplementaryItem], of kind: String) {
-		var supplementaryItems = supplementaryItems
-		for index in supplementaryItems.indices {
-			supplementaryItems[index].itemIndex = index
-			supplementaryItems[index].sectionIndex = sectionIndex
-		}
-		supplementaryItemsByKind[kind] = supplementaryItems
-	}
-	
-	public mutating func mutateSupplementaryItems(using mutator: (supplementaryItem: inout LayoutSupplementaryItem, kind: String, index: Int) -> Void) {
-		for (kind, supplementaryItems) in supplementaryItemsByKind {
-			var supplementaryItems = supplementaryItems
-			for index in supplementaryItems.indices {
-				mutator(supplementaryItem: &supplementaryItems[index], kind: kind, index: index)
-			}
-			supplementaryItemsByKind[kind] = supplementaryItems
 		}
 	}
 	

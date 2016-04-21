@@ -8,25 +8,17 @@
 
 import UIKit
 
-public struct BasicLayoutSection: LayoutSection {
+public struct BasicLayoutSection: LayoutSection, LayoutSectionBaseComposite {
 	
 	public init(metrics: SectionMetrics) {
 		self.metrics = metrics
 	}
 	
-	public var frame = CGRectZero
-	
-	public var sectionIndex = NSNotFound
+	public var layoutSectionBase = LayoutSectionBase()
 	
 	public var metrics: SectionMetrics
 	
 	public var items: [LayoutItem] = []
-	
-	public var supplementaryItems: [LayoutSupplementaryItem] {
-		return supplementaryItemsByKind.contents
-	}
-	
-	public var supplementaryItemsByKind: [String: [LayoutSupplementaryItem]] = [:]
 	
 	public var decorationAttributesByKind: [String : [CollectionViewLayoutAttributes]] {
 		return attributesForDecorationsByKind
@@ -79,41 +71,10 @@ public struct BasicLayoutSection: LayoutSection {
 		
 	}
 	
-	public mutating func add(supplementaryItem: LayoutSupplementaryItem) {
-		let kind = supplementaryItem.elementKind
-		var supplementaryItem = supplementaryItem
-		supplementaryItem.itemIndex = supplementaryItems(of: kind).count
-		supplementaryItem.sectionIndex = sectionIndex
-		supplementaryItemsByKind.append(supplementaryItem, to: kind)
-	}
-	
 	public mutating func mutateItems(using mutator: (item: inout LayoutItem, index: Int) -> Void) {
 		for index in items.indices {
 			mutator(item: &items[index], index: index)
 		}
-	}
-	
-	public mutating func mutateSupplementaryItems(using mutator: (supplementaryItem: inout LayoutSupplementaryItem, kind: String, index: Int) -> Void) {
-		for (kind, supplementaryItems) in supplementaryItemsByKind {
-			var supplementaryItems = supplementaryItems
-			for index in supplementaryItems.indices {
-				mutator(supplementaryItem: &supplementaryItems[index], kind: kind, index: index)
-			}
-			supplementaryItemsByKind[kind] = supplementaryItems
-		}
-	}
-	
-	public func supplementaryItems(of kind: String) -> [LayoutSupplementaryItem] {
-		return supplementaryItemsByKind[kind] ?? []
-	}
-	
-	public mutating func setSupplementaryItems(supplementaryItems: [LayoutSupplementaryItem], of kind: String) {
-		var supplementaryItems = supplementaryItems
-		for index in supplementaryItems.indices {
-			supplementaryItems[index].itemIndex = index
-			supplementaryItems[index].sectionIndex = sectionIndex
-		}
-		supplementaryItemsByKind[kind] = supplementaryItems
 	}
 	
 	public mutating func reset() {

@@ -11,21 +11,13 @@ import UIKit
 private let sectionSeparatorTop = 0
 private let sectionSeparatorBottom = 1
 
-public struct TableLayoutSection: LayoutSection {
+public struct TableLayoutSection: LayoutSection, LayoutSectionBaseComposite {
 	
 	static let hairline: CGFloat = 1.0 / UIScreen.mainScreen().scale
 	
+	public var layoutSectionBase = LayoutSectionBase()
+	
 	public var metrics = TableSectionMetrics()
-	
-	public var frame = CGRectZero
-	
-	public var sectionIndex = NSNotFound
-	
-	public var supplementaryItemsByKind: [String: [LayoutSupplementaryItem]] = [:]
-	
-	public var supplementaryItems: [LayoutSupplementaryItem] {
-		return supplementaryItemsByKind.contents
-	}
 	
 	// FIXME: Make sure this doesn't trigger when we're mutating the value
 	public var placeholderInfo: LayoutPlaceholder? {
@@ -214,18 +206,6 @@ public struct TableLayoutSection: LayoutSection {
 	
 	private var backgroundFrame = CGRectZero
 	
-	public mutating func add(supplementaryItem: LayoutSupplementaryItem) {
-		let kind = supplementaryItem.elementKind
-		var supplementaryItem = supplementaryItem
-		supplementaryItem.itemIndex = supplementaryItems(of: kind).count
-		supplementaryItem.sectionIndex = sectionIndex
-		supplementaryItemsByKind.append(supplementaryItem, to: kind)
-	}
-	
-	public func supplementaryItems(of kind: String) -> [LayoutSupplementaryItem] {
-		return supplementaryItemsByKind[kind] ?? []
-	}
-	
 	public mutating func add(row: LayoutRow) {
 		var row = row
 		
@@ -284,16 +264,6 @@ public struct TableLayoutSection: LayoutSection {
 	public mutating func mutateRows(using mutator: (row: inout LayoutRow, index: Int) -> Void) {
 		for index in rows.indices {
 			mutator(row: &rows[index], index: index)
-		}
-	}
-	
-	public mutating func mutateSupplementaryItems(using mutator: (supplementaryItem: inout LayoutSupplementaryItem, kind: String, index: Int) -> Void) {
-		for (kind, supplementaryItems) in supplementaryItemsByKind {
-			var supplementaryItems = supplementaryItems
-			for index in supplementaryItems.indices {
-				mutator(supplementaryItem: &supplementaryItems[index], kind: kind, index: index)
-			}
-			supplementaryItemsByKind[kind] = supplementaryItems
 		}
 	}
 	
@@ -917,15 +887,6 @@ extension TableLayoutSection {
 		set {
 			setSupplementaryItems(newValue, of: UICollectionElementKindSectionFooter)
 		}
-	}
-	
-	public mutating func setSupplementaryItems(supplementaryItems: [LayoutSupplementaryItem], of kind: String) {
-		var supplementaryItems = supplementaryItems
-		for index in supplementaryItems.indices {
-			supplementaryItems[index].itemIndex = index
-			supplementaryItems[index].sectionIndex = sectionIndex
-		}
-		supplementaryItemsByKind[kind] = supplementaryItems
 	}
 	
 	public var heightOfNonPinningHeaders: CGFloat {
