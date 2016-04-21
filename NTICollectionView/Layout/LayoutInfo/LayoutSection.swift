@@ -19,6 +19,9 @@ public protocol LayoutSection: LayoutAttributesResolving {
 	var supplementaryItems: [LayoutSupplementaryItem] { get }
 	var supplementaryItemsByKind: [String: [LayoutSupplementaryItem]] { get }
 	
+	var phantomCellIndex: Int? { get set }
+	var phantomCellSize: CGSize { get set }
+	
 	var decorations: [LayoutDecoration] { get }
 	
 	func supplementaryItems(of kind: String) -> [LayoutSupplementaryItem]

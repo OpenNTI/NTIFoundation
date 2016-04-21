@@ -48,9 +48,6 @@ public protocol GridLayoutSection: LayoutSection {
 	var shouldShowColumnSeparator: Bool { get }
 	
 	var backgroundAttribute: CollectionViewLayoutAttributes? { get }
-	
-	var phantomCellIndex: Int? { get set }
-	var phantomCellSize: CGSize { get set }
 
 	mutating func add(inout row: LayoutRow)
 	mutating func removeAllRows()
@@ -247,9 +244,6 @@ public struct BasicGridLayoutSection: GridLayoutSection, LayoutSectionBaseCompos
 	public var rightAuxiliaryColumnWidth: CGFloat {
 		return metrics.rightAuxiliaryColumnWidth
 	}
-	
-	public var phantomCellIndex: Int?
-	public var phantomCellSize = CGSizeZero
 	
 	public var layoutAttributes: [CollectionViewLayoutAttributes] {
 		var layoutAttributes: [CollectionViewLayoutAttributes] = []

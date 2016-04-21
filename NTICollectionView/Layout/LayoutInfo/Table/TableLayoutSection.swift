@@ -106,9 +106,6 @@ public struct TableLayoutSection: LayoutSection, LayoutSectionBaseComposite {
 		return nil
 	}
 	
-	public var phantomCellIndex: Int?
-	public var phantomCellSize = CGSizeZero
-	
 	public var layoutAttributes: [CollectionViewLayoutAttributes] {
 		var layoutAttributes: [CollectionViewLayoutAttributes] = []
 		

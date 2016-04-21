@@ -16,6 +16,10 @@ public struct LayoutSectionBase {
 	
 	public var supplementaryItemsByKind: [String: [LayoutSupplementaryItem]] = [:]
 	
+	public var phantomCellIndex: Int?
+	
+	public var phantomCellSize = CGSizeZero
+	
 }
 
 extension LayoutSectionBase {
@@ -92,6 +96,16 @@ extension LayoutSectionBaseComposite {
 		set {
 			layoutSectionBase.supplementaryItemsByKind = newValue
 		}
+	}
+	
+	public var phantomCellIndex: Int? {
+		get { return layoutSectionBase.phantomCellIndex }
+		set { layoutSectionBase.phantomCellIndex = newValue }
+	}
+	
+	public var phantomCellSize: CGSize {
+		get { return layoutSectionBase.phantomCellSize }
+		set { layoutSectionBase.phantomCellSize = newValue }
 	}
 	
 	public var supplementaryItems: [LayoutSupplementaryItem] {
