@@ -740,23 +740,24 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		}
 		
 		isBuildingLayout = true
-		defer {
-			isBuildingLayout = false
-		}
+		defer { isBuildingLayout = false }
 		
 		// Create the collection view wrapper that will be used for measuring
 		collectionViewWrapper = WrapperCollectionView(collectionView: collectionView, mapping: nil, isUsedForMeasuring: true)
+		defer { collectionViewWrapper = nil }
 		
 		layoutLog("\(#function)")
 		
 		updateFlagsFromCollectionView()
 		
 		createLayoutInfoFromDataSource()
-		layoutDataIsValid = true
 		
 		guard let layoutInfo = self.layoutInfo else {
+			assertionFailure("We never expect `layoutInfo` to be `nil` at this point.")
 			return
 		}
+		
+		layoutDataIsValid = true
 		
 		layoutSize = CGSizeZero
 		
@@ -795,8 +796,6 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		layoutInfo.updateSpecialItemsWithContentOffset(contentOffset, invalidationContext: nil)
 		
 		layoutInfo.finalizeLayout()
-		
-		collectionViewWrapper = nil
 		
 		layoutLog("\(#function) Final layout height: \(layoutHeight)")
 	}
