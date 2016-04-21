@@ -403,6 +403,8 @@
 		4A24B82F1CC809D70053ED9B /* BasicSectionMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A24B82E1CC809D70053ED9B /* BasicSectionMetrics.swift */; };
 		4A24B8301CC809D70053ED9B /* BasicSectionMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A24B82E1CC809D70053ED9B /* BasicSectionMetrics.swift */; };
 		4A24B8311CC84DCD0053ED9B /* TableSectionMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1B78131CBD955200C977A6 /* TableSectionMetrics.swift */; };
+		4A24B8331CC85A4C0053ED9B /* LayoutSectionBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A24B8321CC85A4C0053ED9B /* LayoutSectionBase.swift */; };
+		4A24B8341CC85A4C0053ED9B /* LayoutSectionBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A24B8321CC85A4C0053ED9B /* LayoutSectionBase.swift */; };
 		4A280DD01CC6E2F0001EDCAA /* LayoutDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A280DCF1CC6E2F0001EDCAA /* LayoutDescription.swift */; };
 		4A280DD11CC6E2F0001EDCAA /* LayoutDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A280DCF1CC6E2F0001EDCAA /* LayoutDescription.swift */; };
 		4A280DED1CC6E623001EDCAA /* LayoutBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A280DEC1CC6E623001EDCAA /* LayoutBuilder.swift */; };
@@ -1124,6 +1126,7 @@
 		4A24B8281CC721DD0053ED9B /* BasicLayoutSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicLayoutSection.swift; sourceTree = "<group>"; };
 		4A24B82B1CC809000053ED9B /* TableLayoutSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableLayoutSection.swift; sourceTree = "<group>"; };
 		4A24B82E1CC809D70053ED9B /* BasicSectionMetrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicSectionMetrics.swift; sourceTree = "<group>"; };
+		4A24B8321CC85A4C0053ED9B /* LayoutSectionBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutSectionBase.swift; sourceTree = "<group>"; };
 		4A280DCF1CC6E2F0001EDCAA /* LayoutDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutDescription.swift; sourceTree = "<group>"; };
 		4A280DEC1CC6E623001EDCAA /* LayoutBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutBuilder.swift; sourceTree = "<group>"; };
 		4A280DEF1CC6E7DB001EDCAA /* GridLayoutSectionBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridLayoutSectionBuilder.swift; sourceTree = "<group>"; };
@@ -2070,6 +2073,7 @@
 				4A68AC8F1C88B0CE00849185 /* LayoutMetrics.swift */,
 				4A68AC901C88B0CE00849185 /* LayoutPlaceholder.swift */,
 				4A68AC911C88B0CE00849185 /* LayoutSection.swift */,
+				4A24B8321CC85A4C0053ED9B /* LayoutSectionBase.swift */,
 				4A68AC921C88B0CE00849185 /* SupplementaryItem.swift */,
 				4ADEE7681C98DBB900DE9B0D /* Decoration.swift */,
 				4A280DEC1CC6E623001EDCAA /* LayoutBuilder.swift */,
@@ -3461,6 +3465,7 @@
 				4A68ACA11C88B0CE00849185 /* BasicCollectionDataSource.swift in Sources */,
 				4A68ACAB1C88B0CE00849185 /* ComposedCollectionDataSource.swift in Sources */,
 				4A24B82F1CC809D70053ED9B /* BasicSectionMetrics.swift in Sources */,
+				4A24B8331CC85A4C0053ED9B /* LayoutSectionBase.swift in Sources */,
 				4A68ACA91C88B0CE00849185 /* CollectionViewWrapper.swift in Sources */,
 				4A68ACED1C88B0CE00849185 /* SupplementaryItem.swift in Sources */,
 				4A68ACEF1C88B0CE00849185 /* ShadowRegistrar.swift in Sources */,
@@ -3538,6 +3543,7 @@
 				4A68ACEC1C88B0CE00849185 /* LayoutSection.swift in Sources */,
 				4A68ACD81C88B0CE00849185 /* GridLayoutSection.swift in Sources */,
 				4A0583051C922FB800F3D0E0 /* GridSupplementaryItemLayoutEngineTest.swift in Sources */,
+				4A24B8341CC85A4C0053ED9B /* LayoutSectionBase.swift in Sources */,
 				4A68ACD41C88B0CE00849185 /* GridDataSourceMetrics.swift in Sources */,
 				4A68ACAA1C88B0CE00849185 /* CollectionViewWrapper.swift in Sources */,
 				4A68ACCE1C88B0CE00849185 /* CollectionViewLayoutMeasuring.swift in Sources */,
