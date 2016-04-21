@@ -25,3 +25,14 @@ extension UIEdgeInsets {
 	}
 	
 }
+
+extension UIEdgeInsets {
+	
+	public init(uniformInset: CGFloat) {
+		top = uniformInset
+		left = uniformInset
+		bottom = uniformInset
+		right = uniformInset
+	}
+	
+}
