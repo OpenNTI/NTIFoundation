@@ -36,6 +36,7 @@ public protocol LayoutSection: LayoutAttributesResolving {
 	
 	mutating func add(supplementaryItem: LayoutSupplementaryItem)
 	mutating func add(item: LayoutItem)
+	mutating func setItem(item: LayoutItem, at index: Int)
 	
 	mutating func mutateItems(using mutator: (inout item: LayoutItem, index: Int) -> Void)
 	
