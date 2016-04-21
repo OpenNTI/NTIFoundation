@@ -10,6 +10,8 @@ import UIKit
 
 public struct GridLayoutSectionBuilder: LayoutSectionBuilder {
 	
+	public init() {}
+	
 	public func makeLayoutSection(using description: SectionDescription, at origin: CGPoint) -> LayoutSection {
 		var section = BasicGridLayoutSection()
 		

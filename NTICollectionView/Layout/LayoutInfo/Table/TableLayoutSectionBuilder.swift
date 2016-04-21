@@ -10,9 +10,13 @@ import UIKit
 
 public struct TableLayoutSectionBuilder: LayoutSectionBuilder {
 	
+	public init() {}
+	
 	public func makeLayoutSection(using description: SectionDescription, at origin: CGPoint) -> LayoutSection {
+		var section = TableLayoutSection()
+		
 		// TODO: Implement
-		preconditionFailure()
+		return section
 	}
 	
 }

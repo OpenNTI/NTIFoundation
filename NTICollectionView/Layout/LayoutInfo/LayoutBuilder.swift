@@ -18,6 +18,8 @@ public protocol LayoutBuilder {
 /// Conforming types can build `LayoutSection` instances from `SectionDescription`s.
 public protocol LayoutSectionBuilder {
 	
+	init()
+	
 	func makeLayoutSection(using description: SectionDescription, at origin: CGPoint) -> LayoutSection
 	
 }
