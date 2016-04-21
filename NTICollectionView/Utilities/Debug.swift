@@ -16,7 +16,16 @@ func layoutLog(str: String) {
 	}
 }
 
+let dragLogging = true
+
+func dragLog(funcName: String, message: String) {
+	if dragLogging {
+		debugPrint("\(funcName): \(message)")
+	}
+}
+
 let updateDebugging = true
+
 func updateLog(str: String) {
 	if updateDebugging {
 		debugPrint(str)

@@ -30,6 +30,18 @@ public class CollectionViewSeparatorView: UICollectionReusableView {
 
 private let estimatedPlaceholderHeight: CGFloat = 200
 
+private let dragShadowHeight: CGFloat = 19
+
+private let scrollSpeedMaxMultiplier: CGFloat = 4
+
+private let framesPerSecond: CGFloat = 60
+
+private enum AutoScrollDirection: String {
+	
+	case up, down, left, right
+	
+}
+
 public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutMeasuring, CollectionDataSourceDelegate, ShadowRegistrarVending {
 	
 	public var isEditing = false {
@@ -169,6 +181,422 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		measuringAttributes = nil
 		
 		return attributes.frame.size
+	}
+	
+	// MARK: - Drag & Drop
+	
+	private let scrollDirection: UICollectionViewScrollDirection = .Vertical
+	
+	private var scrollingSpeed: CGFloat = 0
+	
+	private var scrollingTriggerEdgeInsets: UIEdgeInsets = .zero
+	
+	private var selectedItemIndexPath: NSIndexPath?
+	
+	private var sourceItemIndexPath: NSIndexPath?
+	
+	private var currentView: UIView!
+	
+	private var currentViewCenter: CGPoint = .zero
+	
+	private var panTranslationInCollectionView: CGPoint = .zero
+	
+	private var displayLink: CADisplayLink?
+	
+	private var autoscrollDirection: AutoScrollDirection?
+	
+	private var autoscrollBounds: CGRect = .zero
+	
+	private var dragBounds: CGRect = .zero
+	
+	private var dragCellSize: CGSize = .zero
+	
+	
+	public func beginDraggingItem(at indexPath: NSIndexPath) {
+		guard let
+			collectionView = self.collectionView,
+			cell = collectionView.cellForItemAtIndexPath(indexPath) else {
+				return
+		}
+		
+		let sectionIndex = indexPath.section
+		
+		guard var
+			sectionInfo = sectionInfoForSectionAtIndex(indexPath.section) else {
+			return
+		}
+		
+		var dragFrame = cell.frame
+		dragCellSize = dragFrame.size
+		
+		let snapshotView = cell.snapshotViewAfterScreenUpdates(true)
+		
+		let shadowView = UIImageView(frame: CGRectInset(dragFrame, 0, -dragShadowHeight))
+		if let image = UIImage(named: "DragShadow") {
+			shadowView.image = image.resizableImageWithCapInsets(UIEdgeInsets(top: dragShadowHeight, left: 1, bottom: dragShadowHeight, right: 1))
+		}
+		shadowView.opaque = false
+		
+		dragFrame.origin = CGPoint(x: 0, y: dragShadowHeight)
+		snapshotView.frame = dragFrame
+		shadowView.addSubview(snapshotView)
+		currentView = shadowView
+		
+		currentView.center = cell.center
+		collectionView.addSubview(currentView)
+		
+		currentViewCenter = currentView.center
+		selectedItemIndexPath = indexPath
+		sourceItemIndexPath = indexPath
+		
+		let itemIndex = indexPath.item
+		var itemInfo = sectionInfo.items[itemIndex]
+		itemInfo.isDragging = true
+		sectionInfo.setItem(itemInfo, at: itemIndex)
+		layoutInfo?.setSection(sectionInfo, at: sectionIndex)
+		
+		let context = CollectionViewLayoutInvalidationContext()
+		context.invalidateItemsAtIndexPaths([indexPath])
+		invalidateLayoutWithContext(context)
+		
+		autoscrollBounds = CGRectZero
+		autoscrollBounds.size = collectionView.bounds.size
+		autoscrollBounds = UIEdgeInsetsInsetRect(autoscrollBounds, scrollingTriggerEdgeInsets)
+		
+		let collectionViewFrame = collectionView.frame
+		let collectionViewWidth = collectionViewFrame.width
+		let collectionViewHeight = collectionViewFrame.height
+		
+		dragBounds = CGRect(x: dragCellSize.width/2, y: dragCellSize.height/2, width: collectionViewWidth - dragCellSize.width, height: collectionViewHeight - dragCellSize.height)
+	}
+	
+	public func cancelDragging() {
+		guard let
+			currentView = self.currentView,
+			sourceItemIndexPath = self.sourceItemIndexPath,
+			selectedItemIndexPath = self.selectedItemIndexPath else {
+				return
+		}
+		
+		let sourceSectionIndex = sourceItemIndexPath.section
+		let destinationSectionIndex = selectedItemIndexPath.section
+		
+		guard var
+			sourceSection = sectionInfoForSectionAtIndex(sourceSectionIndex),
+			destinationSection = sectionInfoForSectionAtIndex(destinationSectionIndex) else {
+				return
+		}
+		
+		currentView.removeFromSuperview()
+		
+		destinationSection.phantomCellIndex = nil
+		destinationSection.phantomCellSize = .zero
+		
+		let fromIndex = sourceItemIndexPath.item
+		
+		var item = sourceSection.items[fromIndex]
+		item.isDragging = false
+		sourceSection.setItem(item, at: fromIndex)
+		
+		let context = CollectionViewLayoutInvalidationContext()
+		// TODO: Layout source and destination sections
+		layoutInfo?.setSection(sourceSection, at: sourceSectionIndex)
+		layoutInfo?.setSection(destinationSection, at: destinationSectionIndex)
+		invalidateLayoutWithContext(context)
+	}
+	
+	public func endDragging() {
+		guard let
+			currentView = self.currentView,
+			fromIndexPath = self.sourceItemIndexPath,
+			var toIndexPath = self.selectedItemIndexPath else {
+				return
+		}
+		
+		currentView.removeFromSuperview()
+		
+		let sourceSectionIndex = fromIndexPath.section
+		let destinationSectionIndex = toIndexPath.section
+		
+		guard var
+			sourceSection = sectionInfoForSectionAtIndex(sourceSectionIndex),
+			destinationSection = sectionInfoForSectionAtIndex(destinationSectionIndex) else {
+				return
+		}
+		
+		destinationSection.phantomCellIndex = nil
+		destinationSection.phantomCellSize = .zero
+		
+		let fromIndex = fromIndexPath.item
+		var toIndex = toIndexPath.item
+		
+		var item = sourceSection.items[fromIndex]
+		item.isDragging = false
+		sourceSection.setItem(item, at: fromIndex)
+		
+		var needsUpdate = true
+		
+		if sourceSection.isEqual(to: destinationSection) {
+			if fromIndex == toIndex {
+				needsUpdate = false
+			}
+			else if fromIndex < toIndex {
+				toIndex -= 1
+				toIndexPath = NSIndexPath(forItem: toIndex, inSection: destinationSectionIndex)
+			}
+		}
+		
+		if needsUpdate {
+			// TODO: Modify source and destination section items
+			
+			// Tell the data source, but don't animate because we've already updated everything in place
+			UIView.performWithoutAnimation {
+				guard let
+					collectionView = self.collectionView,
+					dataSource = collectionView.dataSource as? CollectionDataSource else {
+						return
+				}
+				
+				dataSource.collectionView(collectionView, moveItemAt: fromIndexPath, to: toIndexPath)
+			}
+		}
+		
+		let context = CollectionViewLayoutInvalidationContext()
+		// Layout source and destination sections
+		layoutInfo?.setSection(sourceSection, at: sourceSectionIndex)
+		layoutInfo?.setSection(destinationSection, at: destinationSectionIndex)
+		invalidateLayoutWithContext(context)
+		
+		selectedItemIndexPath = nil
+	}
+	
+	private func invalidateScrollTimer() {
+		guard let displayLink = self.displayLink else {
+			return
+		}
+		
+		if !displayLink.paused {
+			displayLink.invalidate()
+		}
+		
+		self.displayLink = nil
+	}
+	
+	private func setupScrollTimer(in direction: AutoScrollDirection) {
+		if let displayLink = self.displayLink where !displayLink.paused {
+			if autoscrollDirection == direction {
+				return
+			}
+		}
+		
+		invalidateScrollTimer()
+		
+		displayLink = CADisplayLink(target: self, selector: #selector(CollectionViewLayout.handleScroll(_:)))
+		autoscrollDirection = direction
+		
+		displayLink?.addToRunLoop(.mainRunLoop(), forMode: NSRunLoopCommonModes)
+	}
+	
+	// Tight loop, allocate memory sparely, even if they are stack allocation
+	public func handleScroll(displayLink: CADisplayLink) {
+		guard let
+			direction = autoscrollDirection,
+			collectionView = self.collectionView else {
+			return
+		}
+		
+		let frameSize = collectionView.bounds.size
+		let contentSize = collectionView.contentSize
+		let contentOffset = collectionView.contentOffset
+		let contentInset = collectionView.contentInset
+		
+		let insetBoundsSize = CGSize(width: frameSize.width - contentInset.width, height: frameSize.height - contentInset.height)
+		
+		// Need to keep the distance as an integer, because the contentOffset property is automatically rounded
+		// This would cause the view center to begin to diverge from the scrolling and appear to slip away from under the user's finger
+		var distance = rint(scrollingSpeed / framesPerSecond)
+		var translation = CGPoint.zero
+		
+		switch direction {
+		case .up:
+			distance = -distance
+			let minY: CGFloat = 0.0
+			let posY = contentOffset.y + contentInset.top
+			
+			if (posY + distance) <= minY {
+				distance = -posY
+			}
+			
+			translation = CGPoint(x: 0, y: distance)
+			
+		case .down:
+			let maxY = contentSize.height - insetBoundsSize.height
+			let posY = contentOffset.y + contentInset.top
+			
+			if (posY + distance) >= maxY {
+				distance = maxY - posY
+			}
+			
+			translation = CGPoint(x: 0, y: distance)
+			
+		case .left:
+			distance = -distance
+			let minX: CGFloat = 0
+			let posX = contentOffset.x + contentInset.left
+			
+			if (posX + distance) <= minX {
+				distance = -posX
+			}
+			
+			translation = CGPoint(x: distance, y: 0)
+			
+		case .right:
+			let maxX = contentSize.width - insetBoundsSize.width
+			let posX = contentOffset.x + contentInset.left
+			
+			if (contentOffset.x + distance) >= maxX {
+				distance = maxX - posX
+			}
+			
+			translation = CGPoint(x: distance, y: 0)
+		}
+		
+		currentViewCenter = currentViewCenter + translation
+		currentView.center = pointConstrainedToDragBounds(currentViewCenter + panTranslationInCollectionView)
+		collectionView.contentOffset = contentOffset + translation
+	}
+	
+	private func pointConstrainedToDragBounds(viewCenter: CGPoint) -> CGPoint {
+		var viewCenter = viewCenter
+		
+		if scrollDirection == .Vertical {
+			let left = dragBounds.minX
+			let right = dragBounds.maxX
+			if viewCenter.x < left {
+				viewCenter.x = left
+			}
+			else if viewCenter.x > right {
+				viewCenter.x = right
+			}
+		}
+		
+		return viewCenter
+	}
+	
+	
+	public func handlePanGesture(gestureRecognizer: UIPanGestureRecognizer) {
+		guard let collectionView = self.collectionView else {
+			return
+		}
+		
+		let contentOffset = collectionView.contentOffset
+		
+		switch gestureRecognizer.state {
+		case .Began:
+			panTranslationInCollectionView = gestureRecognizer.translationInView(collectionView)
+			let viewCenter = currentViewCenter + panTranslationInCollectionView
+			
+			currentView.center = pointConstrainedToDragBounds(viewCenter)
+			
+			makeSpaceForDraggedCell()
+			
+			let location = gestureRecognizer.locationInView(collectionView)
+			
+			switch scrollDirection {
+			case .Vertical:
+				let y = location.y - contentOffset.y
+				let top = autoscrollBounds.minY
+				let bottom = autoscrollBounds.maxY
+				
+				if y < top {
+					scrollingSpeed = 300 * ((top - y) / scrollingTriggerEdgeInsets.top) * scrollSpeedMaxMultiplier
+					setupScrollTimer(in: .up)
+				}
+				else if y > bottom {
+					scrollingSpeed = 300 * ((y - bottom) / scrollingTriggerEdgeInsets.bottom) * scrollSpeedMaxMultiplier
+					setupScrollTimer(in: .down)
+				}
+				else {
+					invalidateScrollTimer()
+				}
+				
+			case .Horizontal:
+				let x = location.x - contentOffset.x
+				let left = autoscrollBounds.minX
+				let right = autoscrollBounds.maxX
+				
+				if viewCenter.x < left {
+					scrollingSpeed = 300 * ((left - x) / scrollingTriggerEdgeInsets.left) * scrollSpeedMaxMultiplier
+					setupScrollTimer(in: .left)
+				}
+				else if viewCenter.x > right {
+					scrollingSpeed = 300 * ((x - right) / scrollingTriggerEdgeInsets.right) * scrollSpeedMaxMultiplier
+					setupScrollTimer(in: .right)
+				}
+				else {
+					invalidateScrollTimer()
+				}
+			}
+			
+		case .Cancelled, .Ended:
+			invalidateScrollTimer()
+			
+		default:
+			break
+		}
+	}
+	
+	private func makeSpaceForDraggedCell() {
+		guard let
+			collectionView = self.collectionView,
+			dataSource = collectionView.dataSource as? CollectionDataSource,
+			sourceItemIndexPath = self.sourceItemIndexPath,
+			previousIndexPath = selectedItemIndexPath,
+			var newIndexPath = collectionView.indexPathForItemAtPoint(currentView.center) else {
+				return
+		}
+		
+		let oldSectionIndex = previousIndexPath.section
+		let newSectionIndex = newIndexPath.section
+		
+		guard var
+			oldSection = sectionInfoForSectionAtIndex(oldSectionIndex),
+			newSection = sectionInfoForSectionAtIndex(newSectionIndex) else {
+				return
+		}
+		
+		 // If we've already made space for the cell, all indexes in that section need to be incremented by 1
+		if oldSection.phantomCellIndex == previousIndexPath.item
+			&& newSectionIndex == oldSectionIndex
+			&& newIndexPath.item >= oldSection.phantomCellIndex ?? NSNotFound {
+			newIndexPath = NSIndexPath(forItem: newIndexPath.item+1, inSection: newSectionIndex)
+		}
+		
+		guard newIndexPath != previousIndexPath else {
+			return
+		}
+		
+		guard dataSource.collectionView(collectionView, canMoveItemAt: sourceItemIndexPath, to: newIndexPath) else {
+				return dragLog(#function, message: "Can't MOVE from \(sourceItemIndexPath) to \(newIndexPath)")
+		}
+		
+		if !oldSection.isEqual(to: newSection) {
+			oldSection.phantomCellIndex = nil
+			oldSection.phantomCellSize = .zero
+		}
+		newSection.phantomCellIndex = newIndexPath.item
+		newSection.phantomCellSize = dragCellSize
+		selectedItemIndexPath = newIndexPath
+		
+		dragLog(#function, message: "newIndexPath = \(newIndexPath.debugLogDescription) previousIndexPath = \(previousIndexPath.debugLogDescription) phantomCellIndex = \(newSection.phantomCellIndex ?? NSNotFound)")
+		
+		let context = CollectionViewLayoutInvalidationContext()
+		
+		// TODO: Layout sections
+		layoutInfo?.setSection(oldSection, at: oldSectionIndex)
+		layoutInfo?.setSection(newSection, at: newSectionIndex)
+		
+		invalidateLayoutWithContext(context)
 	}
 	
 	// MARK: - UICollectionViewLayout
