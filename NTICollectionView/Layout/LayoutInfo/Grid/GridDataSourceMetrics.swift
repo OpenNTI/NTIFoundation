@@ -10,11 +10,11 @@ import UIKit
 
 public struct GridDataSourceSectionMetrics: DataSourceSectionMetrics {
 	
-	public init() { }
+	public init() {}
 	
 	public var metrics: SectionMetrics = BasicGridSectionMetrics()
 	
-	public var sectionBuilder: LayoutSectionBuilder = GridLayoutSectionBuilder()
+	public var sectionBuilderType: LayoutSectionBuilder.Type = GridLayoutSectionBuilder.self
 	
 	public var placeholder: AnyObject?
 	

@@ -12,8 +12,10 @@ public protocol DataSourceSectionMetrics: DataSourceSectionInfo, LayoutMetrics {
 	
 	var metrics: SectionMetrics { get set }
 	
-	var sectionBuilder: LayoutSectionBuilder { get set }
+	/// The type of `LayoutSectionBuilder` that should be used to create the section described by `self`.
+	var sectionBuilderType: LayoutSectionBuilder.Type { get set }
 	
+	/// Optional information used for sizing the elements in the section described by `self`.
 	var sizingInfo: CollectionViewLayoutMeasuring? { get set }
 	
 }
