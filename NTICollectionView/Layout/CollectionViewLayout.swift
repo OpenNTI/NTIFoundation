@@ -221,8 +221,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		let sectionIndex = indexPath.section
 		
-		guard var
-			sectionInfo = sectionInfoForSectionAtIndex(indexPath.section) else {
+		guard let layoutInfo = self.layoutInfo else {
 			return
 		}
 		
@@ -249,11 +248,9 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		selectedItemIndexPath = indexPath
 		sourceItemIndexPath = indexPath
 		
-		let itemIndex = indexPath.item
-		var itemInfo = sectionInfo.items[itemIndex]
-		itemInfo.isDragging = true
-		sectionInfo.setItem(itemInfo, at: itemIndex)
-		layoutInfo?.setSection(sectionInfo, at: sectionIndex)
+		layoutInfo.mutateItem(at: indexPath) { (item) in
+			item.isDragging = true
+		}
 		
 		let context = CollectionViewLayoutInvalidationContext()
 		context.invalidateItemsAtIndexPaths([indexPath])
@@ -294,9 +291,9 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		let fromIndex = sourceItemIndexPath.item
 		
-		var item = sourceSection.items[fromIndex]
-		item.isDragging = false
-		sourceSection.setItem(item, at: fromIndex)
+		sourceSection.mutateItem(at: fromIndex) { (item) in
+			item.isDragging = false
+		}
 		
 		let context = CollectionViewLayoutInvalidationContext()
 		// TODO: Layout source and destination sections
@@ -330,9 +327,9 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		let fromIndex = fromIndexPath.item
 		var toIndex = toIndexPath.item
 		
-		var item = sourceSection.items[fromIndex]
-		item.isDragging = false
-		sourceSection.setItem(item, at: fromIndex)
+		sourceSection.mutateItem(at: fromIndex) { (item) in
+			item.isDragging = false
+		}
 		
 		var needsUpdate = true
 		
