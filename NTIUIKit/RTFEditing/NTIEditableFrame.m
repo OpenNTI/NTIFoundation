@@ -125,8 +125,15 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 	
 	if(self.allowsAddingCustomObjects){
 		UIMenuController* menuController = [UIMenuController sharedMenuController];
-		UIMenuItem* item = [[UIMenuItem alloc] initWithTitle: @"Add Whiteboard" action: @selector(addWhiteboard:)];
-		NSArray* menuItems = OFISNULL(menuController.menuItems) ? @[item] : [menuController.menuItems arrayByAddingObject: item];
+		
+		UIMenuItem *whiteboardItem = [[UIMenuItem alloc] initWithTitle:@"Add Whiteboard" action:@selector(addWhiteboard:)];
+		
+		UIMenuItem *fileItem = [[UIMenuItem alloc] initWithTitle:@"Add File" action:@selector(addFile:)];
+		
+		NSArray *newMenuItems = @[whiteboardItem, fileItem];
+		
+		NSArray *menuItems = OFISNULL(menuController.menuItems) ? newMenuItems : [menuController.menuItems arrayByAddingObjectsFromArray:newMenuItems];
+		
 		menuController.menuItems = menuItems;
 	}
 	
@@ -526,6 +533,11 @@ shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecog
 {
 	//Reforward as us being the sender
 	[[UIApplication sharedApplication] sendAction: _cmd to: nil from: self forEvent: nil];
+}
+
+- (void)addFile:(id)sender
+{
+	[[UIApplication sharedApplication] sendAction:_cmd to:nil from:self forEvent:nil];
 }
 
 #pragma mark gesture recognizer delegate
