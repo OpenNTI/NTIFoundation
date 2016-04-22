@@ -219,8 +219,6 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 				return
 		}
 		
-		let sectionIndex = indexPath.section
-		
 		guard let layoutInfo = self.layoutInfo else {
 			return
 		}
