@@ -52,6 +52,10 @@ public protocol LayoutInfo: LayoutSizing, LayoutAttributesResolving, LayoutSecti
 	
 	var sections: [LayoutSection] { get }
 	
+	func mutateSection(at index: Int, using mutator: (inout LayoutSection) -> Void)
+	
+	func mutateItem(at indexPath: NSIndexPath, using mutator: (inout LayoutItem) -> Void)
+	
 	/// Create a new placeholder covering the specified range of sections.
 	func newPlaceholderStartingAtSectionIndex(sectionIndex: Int) -> LayoutPlaceholder
 	

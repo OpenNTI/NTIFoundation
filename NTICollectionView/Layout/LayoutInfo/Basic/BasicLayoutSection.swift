@@ -77,6 +77,12 @@ public struct BasicLayoutSection: LayoutSection, LayoutSectionBaseComposite {
 		items[index] = item
 	}
 	
+	public mutating func mutateItem(at index: Int, using mutator: (inout LayoutItem) -> Void) {
+		var item = items[index]
+		mutator(&item)
+		items[index] = item
+	}
+	
 	public mutating func mutateItems(using mutator: (item: inout LayoutItem, index: Int) -> Void) {
 		for index in items.indices {
 			mutator(item: &items[index], index: index)

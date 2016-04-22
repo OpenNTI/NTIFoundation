@@ -62,6 +62,12 @@ extension RowAlignedLayoutSectionBase {
 		}
 	}
 	
+	public mutating func mutateItem(at index: Int, using mutator: (inout LayoutItem) -> Void) {
+		var item = self.item(at: index)
+		mutator(&item)
+		setItem(item, at: index)
+	}
+	
 	public mutating func mutateItems(using mutator: (item: inout LayoutItem, index: Int) -> Void) {
 		mutateRows { (row, _) in
 			for itemIndex in row.items.indices {
@@ -145,6 +151,10 @@ extension RowAlignedLayoutSectionBaseComposite {
 	
 	public mutating func setItem(item: LayoutItem, at index: Int) {
 		rowAlignedLayoutSectionBase.setItem(item, at: index)
+	}
+	
+	public mutating func mutateItem(at index: Int, using mutator: (inout LayoutItem) -> Void) {
+		rowAlignedLayoutSectionBase.mutateItem(at: index, using: mutator)
 	}
 	
 	public mutating func mutateItems(using mutator: (item: inout LayoutItem, index: Int) -> Void) {

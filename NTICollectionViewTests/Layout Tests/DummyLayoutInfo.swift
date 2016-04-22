@@ -34,6 +34,14 @@ class DummyLayoutInfo: NSObject, LayoutInfo {
 	
 	var sections: [LayoutSection] = []
 	
+	func mutateSection(at index: Int, using mutator: (inout LayoutSection) -> Void) {
+		
+	}
+	
+	func mutateItem(at indexPath: NSIndexPath, using mutator: (inout LayoutItem) -> Void) {
+		
+	}
+	
 	func enumerateSections(block: (sectionIndex: Int, inout sectionInfo: LayoutSection, stop: inout Bool) -> Void) {
 		
 	}

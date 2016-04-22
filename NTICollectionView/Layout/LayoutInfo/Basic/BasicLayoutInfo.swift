@@ -103,6 +103,18 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 		}
 	}
 	
+	public func mutateSection(at index: Int, using mutator: (inout LayoutSection) -> Void) {
+		var section = sections[index]
+		mutator(&section)
+		setSection(section, at: index)
+	}
+	
+	public func mutateItem(at indexPath: NSIndexPath, using mutator: (inout LayoutItem) -> Void) {
+		mutateSection(at: indexPath.section) { (section) in
+			section.mutateItem(at: indexPath.item, using: mutator)
+		}
+	}
+	
 	public func newPlaceholderStartingAtSectionIndex(sectionIndex: Int) -> LayoutPlaceholder {
 		let placeholder = BasicLayoutPlaceholder(sectionIndexes: NSIndexSet(index: sectionIndex))
 		numberOfPlaceholders += 1
