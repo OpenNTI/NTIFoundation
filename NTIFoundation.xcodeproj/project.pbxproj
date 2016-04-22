@@ -521,6 +521,8 @@
 		4A68AD001C88B0CE00849185 /* SegmentedControlProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9E1C88B0CE00849185 /* SegmentedControlProtocol.swift */; };
 		4A68AD431C88BE2000849185 /* UICollectionView+SupplementaryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AD421C88BE2000849185 /* UICollectionView+SupplementaryViews.swift */; };
 		4A68AD441C88BE2000849185 /* UICollectionView+SupplementaryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AD421C88BE2000849185 /* UICollectionView+SupplementaryViews.swift */; };
+		4A7A3F761CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7A3F751CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift */; };
+		4A7A3F771CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7A3F751CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift */; };
 		4A9D2C301C9CCA3D00D75BBD /* DelegatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9D2C2F1C9CCA3D00D75BBD /* DelegatingViewController.swift */; };
 		4AB48C531CC0386C00F193C3 /* BasicSupplementaryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE4230B1CBECBC30035CF1B /* BasicSupplementaryItem.swift */; };
 		4AB6BE541CA4774700A86233 /* PagingPlaceholderDataSourceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB6BE531CA4774700A86233 /* PagingPlaceholderDataSourceController.swift */; };
@@ -1198,6 +1200,7 @@
 		4A72F45F1925AEF1004792EF /* UIColor+NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+NTIExtensions.h"; sourceTree = "<group>"; };
 		4A72F4601925AEF1004792EF /* UIColor+NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NTIExtensions.m"; sourceTree = "<group>"; };
 		4A72F48619268DA8004792EF /* UIColor+NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NTIExtensionsTest.m"; sourceTree = "<group>"; };
+		4A7A3F751CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RowAlignedLayoutSectionBase.swift; sourceTree = "<group>"; };
 		4A9D2C2F1C9CCA3D00D75BBD /* DelegatingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DelegatingViewController.swift; sourceTree = "<group>"; };
 		4AB6BE531CA4774700A86233 /* PagingPlaceholderDataSourceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingPlaceholderDataSourceController.swift; sourceTree = "<group>"; };
 		4AD52D351CC5698700CDEF45 /* GridSupplementaryAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridSupplementaryAttributes.swift; sourceTree = "<group>"; };
@@ -2074,6 +2077,7 @@
 				4A68AC901C88B0CE00849185 /* LayoutPlaceholder.swift */,
 				4A68AC911C88B0CE00849185 /* LayoutSection.swift */,
 				4A24B8321CC85A4C0053ED9B /* LayoutSectionBase.swift */,
+				4A7A3F751CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift */,
 				4A68AC921C88B0CE00849185 /* SupplementaryItem.swift */,
 				4ADEE7681C98DBB900DE9B0D /* Decoration.swift */,
 				4A280DEC1CC6E623001EDCAA /* LayoutBuilder.swift */,
@@ -3414,6 +3418,7 @@
 				4A68ACA51C88B0CE00849185 /* CollectionDataSourceDelegate.swift in Sources */,
 				4A0582FF1C9211A200F3D0E0 /* GridLayoutEngine.swift in Sources */,
 				4A68AC9F1C88B0CE00849185 /* AbstractCollectionDataSource.swift in Sources */,
+				4A7A3F761CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift in Sources */,
 				4A68ACBB1C88B0CE00849185 /* CGGeometry-Extensions.swift in Sources */,
 				4A68ACC31C88B0CE00849185 /* CollectionLayoutAnimator.swift in Sources */,
 				4A68ACF11C88B0CE00849185 /* ContentLoading.swift in Sources */,
@@ -3552,6 +3557,7 @@
 				4ADEE76A1C98DBB900DE9B0D /* Decoration.swift in Sources */,
 				4AD56EE51CAC274C00482393 /* Array-Extensions.swift in Sources */,
 				4A68ACEE1C88B0CE00849185 /* SupplementaryItem.swift in Sources */,
+				4A7A3F771CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift in Sources */,
 				4A05830E1C923B7D00F3D0E0 /* GridSectionColumnLayoutEngineTest.swift in Sources */,
 				4A68ACDA1C88B0CE00849185 /* GridSectionCellLayoutEngine.swift in Sources */,
 				4A68ACF21C88B0CE00849185 /* ContentLoading.swift in Sources */,
