@@ -315,40 +315,34 @@ public struct BasicGridLayoutSection: GridLayoutSection, LayoutSectionBaseCompos
 	}
 	
 	public var backgroundAttribute: CollectionViewLayoutAttributes? {
-		//			if let backgroundAttribute = _backgroundAttribute {
-		//				return backgroundAttribute
-		//			}
-		
 		// Only have background attribute on global section
 		guard sectionIndex == globalSectionIndex else {
 			return nil
 		}
 		
-		guard let backgroundColor = metrics.backgroundColor else {
+		guard shouldShowBackground else {
 			return nil
 		}
 		
 		let indexPath = NSIndexPath(index: 0)
 		let backgroundAttribute = CollectionViewLayoutAttributes(forDecorationViewOfKind: collectionElementKindGlobalHeaderBackground, withIndexPath: indexPath)
 		
-		// This will be updated by -updateSpecialItemsWithContentOffset
-		//			var backgroundInset = metrics.contentInset
-		//			backgroundInset.bottom = 0
-		//			let backgroundFrame = UIEdgeInsetsInsetRect(frame, backgroundInset)
 		backgroundAttribute.frame = backgroundFrame
 		backgroundAttribute.unpinnedOrigin = backgroundFrame.origin
 		backgroundAttribute.zIndex = defaultZIndex
 		backgroundAttribute.isPinned = false
 		backgroundAttribute.hidden = false
-		backgroundAttribute.backgroundColor = backgroundColor
+		backgroundAttribute.backgroundColor = metrics.backgroundColor
 		
-		//			_backgroundAttribute = backgroundAttribute
 		return backgroundAttribute
 	}
 	
+	// This is updated by -updateSpecialItemsWithContentOffset
 	private var backgroundFrame = CGRectZero
 	
-//	private var _backgroundAttribute: CollectionViewLayoutAttributes?
+	private var shouldShowBackground: Bool {
+		return metrics.backgroundColor != nil
+	}
 	
 	public var contentBackgroundAttributes: CollectionViewLayoutAttributes? {
 //		if let attributes = _contentBackgroundAttributes {
@@ -959,15 +953,15 @@ public struct BasicGridLayoutSection: GridLayoutSection, LayoutSectionBaseCompos
 		
 		finalizePinningForHeaders(pinnable: false, zIndex: pinnedHeaderZIndex)
 		
-		if let backgroundAttributes = self.backgroundAttribute {
-			var frame = backgroundAttributes.frame
-			frame.origin.y = min(nonPinnableY, layoutInfo.bounds.origin.y)
+		if shouldShowBackground {
+			var backgroundInset = metrics.contentInset
+			backgroundInset.bottom = 0
+			backgroundFrame = UIEdgeInsetsInsetRect(frame, backgroundInset)
 			
-			// FIXME: Make sure bottomY is computed using correct headers
+			backgroundFrame.origin.y = min(nonPinnableY, layoutInfo.bounds.origin.y)
+			
 			let bottomY = max(pinnableHeaders.last?.frame.maxY ?? 0, nonPinnableHeaders.last?.frame.maxY ?? 0)
-			frame.size.height = bottomY - frame.origin.y
-			
-			backgroundAttributes.frame = frame
+			backgroundFrame.size.height = bottomY - backgroundFrame.origin.y
 		}
 		
 		mutateFirstSectionOverlappingYOffset(pinnableY, from: layoutInfo) { overlappingSection in
