@@ -19,7 +19,7 @@ public protocol LayoutRowProtocol: LayoutArea {
 	
 	var rowSeparatorDecoration: HorizontalSeparatorDecoration? { get set }
 	
-	mutating func add(inout item: LayoutItem)
+	mutating func add(item: LayoutItem)
 	
 	mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
@@ -53,7 +53,7 @@ public struct LayoutRow: LayoutRowProtocol {
 	
 	public var rowSeparatorDecoration: HorizontalSeparatorDecoration?
 	
-	public mutating func add(inout item: LayoutItem) {
+	public mutating func add(item: LayoutItem) {
 		items.append(item)
 	}
 	

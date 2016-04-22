@@ -162,7 +162,7 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	private func layout(inout item: LayoutItem, isInColumn: Bool) {
 		updateFrame(of: &item)
 		item.columnIndex = isInColumn ? columnIndex : NSNotFound
-		row.add(&item)
+		row.add(item)
 	}
 	
 	private func updateFrame(inout of item: LayoutItem) {
