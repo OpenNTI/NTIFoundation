@@ -56,7 +56,7 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	private var position: CGPoint!
 	private var columnIndex: Int = 0
 	private var rowHeight: CGFloat!
-	private var row: GridLayoutRow!
+	private var row: LayoutRow!
 	private var height: CGFloat = 0
 	
 	private var layoutSizing: LayoutSizing!
@@ -115,7 +115,7 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	}
 	
 	private func startNewRow() {
-		row = GridLayoutRow()
+		row = LayoutRow()
 		row.metrics.applyValues(from: metrics)
 	}
 	
@@ -287,7 +287,7 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	private func commitCurrentRow() {
 		var row: LayoutRow = self.row
 		layoutSection.add(&row)
-		self.row = row as! GridLayoutRow
+		self.row = row
 		// Update the origin based on the actual frame of the row
 		position.y = row.frame.maxY + metrics.rowSpacing
 	}

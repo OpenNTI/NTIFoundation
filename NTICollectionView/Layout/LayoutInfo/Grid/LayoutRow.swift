@@ -9,7 +9,7 @@
 import UIKit
 
 /// Layout information about a row.
-public protocol LayoutRow: LayoutArea {
+public protocol LayoutRowProtocol: LayoutArea {
 	
 	var frame: CGRect { get set }
 	
@@ -25,11 +25,11 @@ public protocol LayoutRow: LayoutArea {
 	
 	func columnWidth(forNumberOfColumns columns: Int) -> CGFloat
 	
-	func isEqual(to other: LayoutRow) -> Bool
+	func isEqual(to other: LayoutRowProtocol) -> Bool
 	
 }
 
-extension LayoutRow {
+extension LayoutRowProtocol {
 	
 	public func columnWidth(forNumberOfColumns columns: Int) -> CGFloat {
 		let layoutWidth = frame.width
@@ -39,7 +39,7 @@ extension LayoutRow {
 	
 }
 
-public struct GridLayoutRow: LayoutRow {
+public struct LayoutRow: LayoutRowProtocol {
 	
 	public var metrics = BasicGridSectionMetrics()
 	
@@ -89,8 +89,8 @@ public struct GridLayoutRow: LayoutRow {
 		return columnWidth
 	}
 	
-	public func isEqual(to other: LayoutRow) -> Bool {
-		guard let other = other as? GridLayoutRow else {
+	public func isEqual(to other: LayoutRowProtocol) -> Bool {
+		guard let other = other as? LayoutRow else {
 			return false
 		}
 		
