@@ -100,48 +100,13 @@ extension GridLayoutSection {
 	
 }
 
-public struct BasicGridLayoutSection: GridLayoutSection, LayoutSectionBaseComposite {
+public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSectionBaseComposite {
 	
 	static let hairline: CGFloat = 1.0 / UIScreen.mainScreen().scale
 	
-	public var layoutSectionBase = LayoutSectionBase()
+	public var rowAlignedLayoutSectionBase = RowAlignedLayoutSectionBase()
 	
 	public var items: [LayoutItem] = []
-	
-	public func item(at index: Int) -> LayoutItem {
-		var searchIndex = 0
-		
-		for row in rows {
-			let itemCount = row.items.count
-			
-			if searchIndex + itemCount <= index {
-				searchIndex += itemCount
-				continue
-			}
-			
-			let itemIndex = index - searchIndex
-			return row.items[itemIndex]
-		}
-		
-		preconditionFailure("We should find an item at \(index).")
-	}
-	
-	public func setItem(item: LayoutItem, at index: Int) {
-		var searchIndex = 0
-		
-		for rowIndex in rows.indices {
-			var row = rows[rowIndex]
-			let itemCount = row.items.count
-			
-			if searchIndex + itemCount <= index {
-				searchIndex += itemCount
-				continue
-			}
-			
-			let itemIndex = index - searchIndex
-			row.items[itemIndex] = item
-		}
-	}
 	
 	// FIXME: Make sure this doesn't trigger when we're mutating the value
 	public var placeholderInfo: LayoutPlaceholder? {
@@ -200,33 +165,6 @@ public struct BasicGridLayoutSection: GridLayoutSection, LayoutSectionBaseCompos
 	}
 	
 	public var metrics: GridSectionMetrics = BasicGridSectionMetrics()
-	
-	public var rows: [LayoutRow] = []
-	
-	public func row(forItemAt itemIndex: Int) -> LayoutRow? {
-		guard let index = rowIndex(forItemAt: itemIndex) else {
-			return nil
-		}
-		
-		return rows[index]
-	}
-	
-	public func rowIndex(forItemAt itemIndex: Int) -> Int? {
-		var searchIndex = 0
-		
-		for (index, row) in rows.enumerate() {
-			let itemCount = row.items.count
-			
-			if searchIndex + itemCount < itemIndex {
-				searchIndex += itemCount
-				continue
-			}
-			
-			return index
-		}
-		
-		return nil
-	}
 	
 	public var columnWidth: CGFloat {
 		return metrics.fixedColumnWidth ?? maximizedColumnWidth
@@ -396,20 +334,6 @@ public struct BasicGridLayoutSection: GridLayoutSection, LayoutSectionBaseCompos
 		items.append(item)
 	}
 	
-	public mutating func mutateItems(using mutator: (item: inout LayoutItem, index: Int) -> Void) {
-		mutateRows { (row, _) in
-			for itemIndex in row.items.indices {
-				mutator(item: &row.items[itemIndex], index: itemIndex)
-			}
-		}
-	}
-	
-	public mutating func mutateRows(using mutator: (row: inout LayoutRow, index: Int) -> Void) {
-		for index in rows.indices {
-			mutator(row: &rows[index], index: index)
-		}
-	}
-	
 	public mutating func enumerateDecorations(using visitor: (inout LayoutDecoration) -> Void) {
 		for (kind, decorations) in decorationsByKind {
 			var decorations = decorations
@@ -439,11 +363,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, LayoutSectionBaseCompos
 			row.frame = rowFrame
 		}
 		
-		rows.append(row)
-	}
-	
-	public mutating func removeAllRows() {
-		rows.removeAll(keepCapacity: true)
+		rowAlignedLayoutSectionBase.add(row)
 	}
 	
 	public mutating func reset() {
