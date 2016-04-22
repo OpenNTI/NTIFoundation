@@ -99,6 +99,18 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 	return rowHeightForAttributedString(str, width, YES);
 }
 
+- (instancetype)initWithFrame:(CGRect)frame textContainer:(NSTextContainer *)textContainer
+{
+	self = [super initWithFrame:frame textContainer:textContainer];
+	if (!self) {
+		return nil;
+	}
+	
+	[self _commonInit];
+	
+	return self;
+}
+
 -(id)initWithFrame:(CGRect)frame
 {
 	self = [super initWithFrame: frame];
