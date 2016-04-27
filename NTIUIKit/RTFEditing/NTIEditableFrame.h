@@ -12,6 +12,7 @@
 
 @interface NSObject(NTI_EDITABLE_FRAME_OBJECTS)
 -(void)addWhiteboard:(id)sender;
+- (void)addFile:(id)sender;
 @end
 
 @class NTIEditableFrame;

@@ -523,6 +523,9 @@ shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecog
     if (action == @selector(addWhiteboard:)) {
 		return NO;
 	}
+	if (action == @selector(addFile:)) {
+		return NO;
+	}
 	else {
         return [super canPerformAction:action
                             withSender:sender];
@@ -533,6 +536,13 @@ shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecog
 {
 	if(sender != self && action == @selector(addWhiteboard:)){
 		if(self.allowsAddingCustomObjects && OFNOTNULL([self.nextResponder targetForAction: _cmd withSender: sender])){
+			return self;
+		}
+		return nil;
+	}
+	
+	if (sender != self && action == @selector(addFile:)) {
+		if (self.allowsAddingCustomObjects && OFNOTNULL([self.nextResponder targetForAction: _cmd withSender: sender])) {
 			return self;
 		}
 		return nil;
