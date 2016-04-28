@@ -36,9 +36,7 @@ selectionModeChangedWithRects: (NSArray*)rects;
 +(CGFloat)heightForAttributedString: (NSAttributedString*)str width: (CGFloat)width;
 
 @property (nonatomic, weak) id<NTIEditableFrameTextAttachmentCellDelegate> attachmentDelegate;
-@property (nonatomic, assign) BOOL allowsAddingCustomObjects;
 @property (nonatomic, assign) BOOL shouldSelectAttachmentCells;
-@property (nonatomic, assign) CGPoint contentOffsetBeforeBecomingFirstResponder;
 
 -(void)replaceRange: (UITextRange*)range withObject: (id)object;
 -(OATextAttachmentCell*)attachmentCellForPoint: (CGPoint)point fromView: (UIView*)view;
