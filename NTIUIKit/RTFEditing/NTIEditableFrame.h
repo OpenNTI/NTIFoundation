@@ -10,17 +10,7 @@
 #import "OmniUI/OUITextView.h"
 #import <OmniAppKit/OATextAttachmentCell.h>
 
-@interface NSObject(NTI_EDITABLE_FRAME_OBJECTS)
--(void)addWhiteboard:(id)sender;
-- (void)addFile:(id)sender;
-@end
-
 @class NTIEditableFrame;
-//@interface NTIEditableFrameTextAttachmentCellDelegate
-//-(BOOL)editableFrame: (NTIEditableFrame*)editableFrame 
-//	  attachmentCell: (OATextAttachmentCell*) attachmentCell
-//   wasTouchedAtPoint: (CGPoint)point;
-//@end
 @protocol NTIEditableFrameTextAttachmentCellDelegate <NSObject>
 @optional
 -(BOOL)editableFrame: (NTIEditableFrame*)editableFrame
