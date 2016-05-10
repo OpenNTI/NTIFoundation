@@ -10,16 +10,7 @@
 #import "OmniUI/OUITextView.h"
 #import <OmniAppKit/OATextAttachmentCell.h>
 
-@interface NSObject(NTI_EDITABLE_FRAME_OBJECTS)
--(void)addWhiteboard:(id)sender;
-@end
-
 @class NTIEditableFrame;
-//@interface NTIEditableFrameTextAttachmentCellDelegate
-//-(BOOL)editableFrame: (NTIEditableFrame*)editableFrame 
-//	  attachmentCell: (OATextAttachmentCell*) attachmentCell
-//   wasTouchedAtPoint: (CGPoint)point;
-//@end
 @protocol NTIEditableFrameTextAttachmentCellDelegate <NSObject>
 @optional
 -(BOOL)editableFrame: (NTIEditableFrame*)editableFrame
@@ -45,9 +36,7 @@ selectionModeChangedWithRects: (NSArray*)rects;
 +(CGFloat)heightForAttributedString: (NSAttributedString*)str width: (CGFloat)width;
 
 @property (nonatomic, weak) id<NTIEditableFrameTextAttachmentCellDelegate> attachmentDelegate;
-@property (nonatomic, assign) BOOL allowsAddingCustomObjects;
 @property (nonatomic, assign) BOOL shouldSelectAttachmentCells;
-@property (nonatomic, assign) CGPoint contentOffsetBeforeBecomingFirstResponder;
 
 -(void)replaceRange: (UITextRange*)range withObject: (id)object;
 -(OATextAttachmentCell*)attachmentCellForPoint: (CGPoint)point fromView: (UIView*)view;

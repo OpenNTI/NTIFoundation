@@ -129,32 +129,6 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 	return self;
 }
 
--(BOOL)becomeFirstResponder
-{
-	self->_contentOffsetBeforeBecomingFirstResponder = self.contentOffset;
-	
-	BOOL r = [super becomeFirstResponder];
-	
-	if(self.allowsAddingCustomObjects){
-		UIMenuController* menuController = [UIMenuController sharedMenuController];
-		UIMenuItem* item = [[UIMenuItem alloc] initWithTitle: @"Add Whiteboard" action: @selector(addWhiteboard:)];
-		NSArray* menuItems = OFISNULL(menuController.menuItems) ? @[item] : [menuController.menuItems arrayByAddingObject: item];
-		menuController.menuItems = menuItems;
-	}
-	
-	return r;
-}
-
--(BOOL)resignFirstResponder
-{
-	BOOL r = [super resignFirstResponder];
-	if(r){
-		UIMenuController* menuController = [UIMenuController sharedMenuController];
-		menuController.menuItems = nil;
-	}
-	return r;
-}
-
 -(void)_commonInit
 {
 	
@@ -510,34 +484,13 @@ shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecog
     if (action == @selector(cut:)) {
         return self.isEditable;
     }
-    if (action == @selector(paste:)) {
+    else if (action == @selector(paste:)) {
         return self.isEditable;
     }
-    if (action == @selector(addWhiteboard:)) {
-		return NO;
-	}
 	else {
         return [super canPerformAction:action
                             withSender:sender];
     }
-}
-
--(id)targetForAction: (SEL)action withSender: (id)sender
-{
-	if(sender != self && action == @selector(addWhiteboard:)){
-		if(self.allowsAddingCustomObjects && OFNOTNULL([self.nextResponder targetForAction: _cmd withSender: sender])){
-			return self;
-		}
-		return nil;
-	}
-	
-	return [super targetForAction: action withSender: sender];
-}
-
--(void)addWhiteboard: (id)sender
-{
-	//Reforward as us being the sender
-	[[UIApplication sharedApplication] sendAction: _cmd to: nil from: self forEvent: nil];
 }
 
 #pragma mark gesture recognizer delegate
