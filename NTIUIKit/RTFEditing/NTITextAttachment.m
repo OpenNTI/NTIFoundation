@@ -46,7 +46,7 @@
 	}
 	
 	CGSize s = [self.attachmentRenderer cellSize];
-	return CGRectMake(position.x, position.y, s.width, s.height);
+	return CGRectMake(0, 0, s.width, s.height);
 }
 
 -(UIImage*)imageForBounds: (CGRect)imageBounds textContainer: (NSTextContainer *)textContainer characterIndex: (NSUInteger)charIndex
