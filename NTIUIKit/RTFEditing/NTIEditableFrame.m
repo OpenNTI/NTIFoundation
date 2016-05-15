@@ -440,6 +440,9 @@ shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecog
 	CGRect glyphRect = [self.layoutManager
 						boundingRectForGlyphRange:glyphRange
 						inTextContainer:self.textContainer];
+	if(![cell respondsToSelector: @selector(attachmentBoundsInRect:)]){
+		return glyphRect;
+	}
 	return [cell attachmentBoundsInRect:glyphRect];
 }
 
