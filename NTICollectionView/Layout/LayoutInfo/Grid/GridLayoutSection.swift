@@ -206,7 +206,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		return layoutAttributes
 	}
 	
-	private func shouldShow(supplementaryItem: SupplementaryItem) -> Bool {
+	public func shouldShow(supplementaryItem: SupplementaryItem) -> Bool {
 		return isGlobalSection || numberOfItems > 0 || supplementaryItem.isVisibleWhileShowingPlaceholder
 	}
 	
