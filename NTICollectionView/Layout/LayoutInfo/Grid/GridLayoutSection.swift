@@ -184,7 +184,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 			}
 			
 			// For non-global sections, don't enumerate if there are no items and not marked as visible when showing placeholder
-			guard isGlobalSection || numberOfItems > 0 || supplementaryItem.isVisibleWhileShowingPlaceholder else {
+			guard shouldShow(supplementaryItem) else {
 				continue
 			}
 			
@@ -204,6 +204,10 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		}
 		
 		return layoutAttributes
+	}
+	
+	private func shouldShow(supplementaryItem: SupplementaryItem) -> Bool {
+		return isGlobalSection || numberOfItems > 0 || supplementaryItem.isVisibleWhileShowingPlaceholder
 	}
 	
 	public var shouldShowColumnSeparator: Bool {
@@ -664,7 +668,7 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		let supplementaryItem = items[itemIndex]
 		
 		// There's no layout attributes if this section isn't the global section, there are no items and the supplementary item shouldn't be shown when the placeholder is visible (e.g. no items)
-		guard isGlobalSection || items.count > 0 || supplementaryItem.isVisibleWhileShowingPlaceholder else {
+		guard shouldShow(supplementaryItem) else {
 			return nil
 		}
 		
