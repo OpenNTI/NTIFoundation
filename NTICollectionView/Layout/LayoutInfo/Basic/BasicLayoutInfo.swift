@@ -163,7 +163,7 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 			
 			// There are no items, need to determine if there are any supplementary elements that will be displayed
 			for supplementaryItem in sectionInfo.supplementaryItems {
-				guard supplementaryItem.isVisibleWhileShowingPlaceholder && !supplementaryItem.isHidden && supplementaryItem.height != 0 else {
+				guard sectionInfo.shouldShow(supplementaryItem) && !supplementaryItem.isHidden && supplementaryItem.height != 0 else {
 					continue
 				}
 				sectionsWithContent.addIndex(sectionInfo.sectionIndex)

@@ -91,7 +91,7 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 	}
 	
 	private func shouldLayout(supplementaryItem: SupplementaryItem) -> Bool {
-		return (numberOfItems > 0 || supplementaryItem.isVisibleWhileShowingPlaceholder)
+		return layoutSection.shouldShow(supplementaryItem)
 			&& !supplementaryItem.isHidden
 			&& supplementaryItem.fixedHeight > 0
 	}

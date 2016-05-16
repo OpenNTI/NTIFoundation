@@ -51,6 +51,8 @@ public protocol LayoutSection: class, LayoutEngine, LayoutAttributesResolving {
 	/// Reset the content of this section.
 	func reset()
 	
+	func shouldShow(supplementaryItem: SupplementaryItem) -> Bool
+	
 	func finalizeLayoutAttributesForSectionsWithContent(sectionsWithContent: NSIndexSet)
 	
 	func setSize(size: CGSize, forItemAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
