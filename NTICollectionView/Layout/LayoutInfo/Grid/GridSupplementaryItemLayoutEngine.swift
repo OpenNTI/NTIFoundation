@@ -280,7 +280,7 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 		updateOrigin(with: placeholderInfo)
 	}
 	private func updateFrame(inout of placeholderInfo: LayoutPlaceholder) {
-		placeholderInfo.frame = CGRect(x: 0, y: position.y, width: width, height: placeholderInfo.height)
+		placeholderInfo.frame = CGRect(x: innerContentMinX, y: position.y, width: width, height: placeholderInfo.height)
 	}
 	private func checkEstimatedHeight(inout of placeholderInfo: LayoutPlaceholder) {
 		guard placeholderInfo.hasEstimatedHeight else {
