@@ -134,6 +134,8 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 		
 		layoutRightAuxiliaryItems()
 		
+		position = innerContentOrigin
+		
 		layoutSectionPlaceholder()
 		
 		layoutInnerContent()
@@ -301,7 +303,6 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 	
 	private func layoutInnerContent() {
 		let innerSizing = LayoutSizingInfo(width: innerContentWidth, layoutMeasure: layoutMeasure)
-		position = innerContentOrigin
 		position = innerLayoutEngine.layoutWithOrigin(position, layoutSizing: innerSizing, invalidationContext: invalidationContext)
 		footersMinY = position.y + metrics.padding.bottom
 	}
