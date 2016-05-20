@@ -15,7 +15,7 @@ public class CollectionPlaceholderView: CollectionSupplementaryView {
 	public var isSectionPlaceholder = true
 	
 	private var activityIndicatorView: UIActivityIndicatorView!
-	private var placeholderView: PlaceholderView!
+	private var placeholderView: PlaceholderView?
 	
 	public func showActivityIndicator(shouldShow: Bool) {
 		if activityIndicatorView == nil {
@@ -48,36 +48,37 @@ public class CollectionPlaceholderView: CollectionSupplementaryView {
 	
 	public func showPlaceholderWithTitle(title: String?, message: String?, image: UIImage?, isAnimated: Bool) {
 		let oldPlaceholder = placeholderView
-		guard oldPlaceholder == nil || oldPlaceholder.title != title || oldPlaceholder.message != message else {
+		guard oldPlaceholder == nil || oldPlaceholder?.title != title || oldPlaceholder?.message != message else {
 			return
 		}
 		
 		showActivityIndicator(false)
 		
-		placeholderView = PlaceholderView(frame: CGRectZero, title: title, message: message, image: image)
-		placeholderView.alpha = 0
-		placeholderView.translatesAutoresizingMaskIntoConstraints = false
-		addSubview(placeholderView)
+		let placeholder = PlaceholderView(frame: CGRectZero, title: title, message: message, image: image)
+		placeholderView = placeholder
+		placeholder.alpha = 0
+		placeholder.translatesAutoresizingMaskIntoConstraints = false
+		addSubview(placeholder)
 		
 		var constraints: [NSLayoutConstraint] = []
-		let views = ["placeholderView": placeholderView]
+		let views = ["placeholderView": placeholder]
 		
 		constraints += NSLayoutConstraint.constraintsWithVisualFormat("H:|[placeholderView]|", options: [], metrics: nil, views: views)
 		constraints += NSLayoutConstraint.constraintsWithVisualFormat("V:|[placeholderView]|", options: [], metrics: nil, views: views)
 		
 		NSLayoutConstraint.activateConstraints(constraints)
-		sendSubviewToBack(placeholderView)
+		sendSubviewToBack(placeholder)
 		
 		if isAnimated {
 			UIView.animateWithDuration(0.25, animations: {
-				self.placeholderView.alpha = 1
+				placeholder.alpha = 1
 				oldPlaceholder?.alpha = 0
 				}, completion: { _ in
 					oldPlaceholder?.removeFromSuperview()
 			})
 		} else {
 			UIView.performWithoutAnimation {
-				self.placeholderView.alpha = 1
+				placeholder.alpha = 1
 				oldPlaceholder?.alpha = 0
 				oldPlaceholder?.removeFromSuperview()
 			}
