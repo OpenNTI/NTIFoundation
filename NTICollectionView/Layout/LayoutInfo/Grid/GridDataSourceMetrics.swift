@@ -16,12 +16,18 @@ public class GridDataSourceSectionMetrics: DataSourceSectionMetrics {
 	
 	public var placeholder: AnyObject?
 	
+	public var placeholderHeight: CGFloat = 200
+	
+	public var placeholderHasEstimatedHeight: Bool = true
+	
 	public var supplementaryItemsByKind: [String: [SupplementaryItem]] = [:]
 	
 	public func copy() -> DataSourceSectionMetrics {
 		let copy = GridDataSourceSectionMetrics()
 		copy.metrics = metrics
 		copy.placeholder = placeholder?.copy()
+		copy.placeholderHeight = placeholderHeight
+		copy.placeholderHasEstimatedHeight = placeholderHasEstimatedHeight
 		copy.supplementaryItemsByKind = supplementaryItemsByKind
 		return copy
 	}

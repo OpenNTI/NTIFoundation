@@ -741,9 +741,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			if let metricsPlaceholder = metrics.placeholder {
 				if metricsPlaceholder !== placeholder {
 					placeholderInfo = layoutInfo.newPlaceholderStartingAtSectionIndex(sectionIndex)
-					// FIXME: Magic number
-					placeholderInfo?.height = 200
-					placeholderInfo?.hasEstimatedHeight = true
+					placeholderInfo?.height = metrics.placeholderHeight
+					placeholderInfo?.hasEstimatedHeight = metrics.placeholderHasEstimatedHeight
 				}
 				sectionInfo.placeholderInfo = placeholderInfo
 			}
