@@ -12,6 +12,10 @@ public protocol DataSourceSectionMetrics: DataSourceSectionInfo, LayoutMetrics {
 	
 	var metrics: SectionMetrics { get set }
 	
+	var placeholderHeight: CGFloat { get set }
+	
+	var placeholderHasEstimatedHeight: Bool { get set }
+	
 	func copy() -> DataSourceSectionMetrics
 	
 }
@@ -34,6 +38,9 @@ extension DataSourceSectionMetrics {
 		if placeholder == nil {
 			placeholder = dataSourceMetrics.placeholder
 		}
+		
+		placeholderHeight = dataSourceMetrics.placeholderHeight
+		placeholderHasEstimatedHeight = dataSourceMetrics.placeholderHasEstimatedHeight
 	}
 	
 }
