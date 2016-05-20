@@ -232,7 +232,7 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 		var deltaY = size.height - frame.height
 		
 		if sharedHeight > 0 {
-			deltaY = size.height + sharedHeight - frame.height
+			deltaY += sharedHeight
 		}
 		
 		frame.size.height += deltaY
