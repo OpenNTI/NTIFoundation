@@ -328,13 +328,6 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 
 -(void)tapped: (UIGestureRecognizer*)r
 {
-	//If we don't have a delegate that responds to attachmentCell:wasTouchedAtPoint
-	//there is no point in doing the work
-	if( ![self.attachmentDelegate respondsToSelector:
-		 @selector(editableFrame:attachmentCell:wasTouchedAtPoint:)] ){
-		return;
-	}
-	
 	CGPoint p = [r locationInView: self.textInputView];
 	
 	
@@ -360,19 +353,19 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 					   showingMenu: NO];
 	}
 	
-	if (   self->shouldSelectCells
-		&& [self.attachmentDelegate respondsToSelector:
-			@selector(editableFrame:attachmentCell:wasSelectedWithRect:)] ) {
+	if([self.attachmentDelegate respondsToSelector: @selector(editableFrame:attachmentCells:selectionModeChangedWithRects:)]){
+		if (   self->shouldSelectCells ) {
 			CGRect rect = [self boundsForAttachmentCell: attachmentCell
 										  withTextRange: textRange];
 			[self.attachmentDelegate editableFrame: self
 									attachmentCell: attachmentCell
 							   wasSelectedWithRect: rect];
 		}
-	else {
-		[self.attachmentDelegate editableFrame: self
-								attachmentCell: attachmentCell
-							 wasTouchedAtPoint: point];
+		else {
+			[self.attachmentDelegate editableFrame: self
+									attachmentCell: attachmentCell
+								 wasTouchedAtPoint: point];
+		}
 	}
 }
 
@@ -510,11 +503,6 @@ shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecog
 {
 	if(self.attachmentGestureRecognizer != gestureRecognizer && self.attachmentLongPressRecognizer != gestureRecognizer){
 		return YES;
-	}
-	
-	if( ![self.attachmentDelegate respondsToSelector:
-		  @selector(editableFrame:attachmentCell:wasTouchedAtPoint:)] ){
-		return NO;
 	}
 	
 	CGPoint p = [touch locationInView: gestureRecognizer.view];
