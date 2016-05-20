@@ -108,6 +108,18 @@ public class CollectionPlaceholderView: CollectionSupplementaryView {
 		}
 	}
 	
+	public func setTitleFont(font: UIFont) {
+		placeholderView?.titleFont = font
+	}
+	
+	public func setMessageFont(font: UIFont) {
+		placeholderView?.messageFont = font
+	}
+	
+	public func setTextColor(color: UIColor) {
+		placeholderView?.textColor = color
+	}
+	
 	public override func preferredLayoutAttributesFittingAttributes(layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
 		guard let attributes = layoutAttributes.copy() as? CollectionViewLayoutAttributes else {
 			return layoutAttributes
