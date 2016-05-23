@@ -24,6 +24,8 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 	
 	public private(set) var dataSources: [CollectionDataSource] = []
 	
+	public var animatesSegmentChanges = true
+	
 	public func add(dataSource: CollectionDataSource) {
 		if dataSources.isEmpty {
 			_selectedDataSource = dataSource
@@ -281,7 +283,7 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 		segmentedControl.userInteractionEnabled = false
 		let selectedSegmentIndex = segmentedControl.selectedSegmentIndex
 		let dataSource = dataSources[selectedSegmentIndex]
-		setSelectedDataSource(dataSource, isAnimated: true) {
+		setSelectedDataSource(dataSource, isAnimated: animatesSegmentChanges) {
 			segmentedControl.userInteractionEnabled = true
 		}
 	}
