@@ -223,8 +223,9 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 	}
 	
 	private func setSize(size: CGSize, forPlaceholderAt sectionIndex: Int, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
-		guard let placeholderInfo = sectionAtIndex(sectionIndex)?.placeholderInfo else {
-			return CGPointZero
+		guard let section = sectionAtIndex(sectionIndex) where section.shouldResizePlaceholder,
+			let placeholderInfo = section.placeholderInfo else {
+				return CGPointZero
 		}
 		var frame = placeholderInfo.frame
 		

@@ -26,6 +26,7 @@ public protocol LayoutSection: class, LayoutEngine, LayoutAttributesResolving {
 	var backgroundAttribute: UICollectionViewLayoutAttributes? { get }
 	
 	var placeholderInfo: LayoutPlaceholder? { get set }
+	var shouldResizePlaceholder: Bool { get }
 	
 	var pinnableHeaders: [LayoutSupplementaryItem] { get set }
 	var nonPinnableHeaders: [LayoutSupplementaryItem] { get set }

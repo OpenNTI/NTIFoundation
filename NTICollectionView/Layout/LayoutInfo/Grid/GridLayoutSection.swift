@@ -87,6 +87,10 @@ public class BasicGridLayoutSection: GridLayoutSection {
 		}
 	}
 	
+	public var shouldResizePlaceholder: Bool {
+		return metrics.shouldResizePlaceholder
+	}
+	
 	public var pinnableHeaders: [LayoutSupplementaryItem] = []
 	
 	public var nonPinnableHeaders: [LayoutSupplementaryItem] = []

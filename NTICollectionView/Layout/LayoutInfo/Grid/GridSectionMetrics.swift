@@ -81,6 +81,9 @@ public protocol GridSectionMetrics: SectionMetrics {
 	/// The order in which each grid supplementary element kind is laid out.
 	var supplementaryOrdering: Set<GridSectionSupplementaryItemOrder> { get set }
 	
+	/// Whether placeholders should be resized for fill available screen space.
+	var shouldResizePlaceholder: Bool { get set }
+	
 }
 
 public struct BasicGridSectionMetrics: GridSectionMetrics {
@@ -245,6 +248,10 @@ public struct BasicGridSectionMetrics: GridSectionMetrics {
 		}
 	}
 	
+	public var shouldResizePlaceholder: Bool = true {
+		didSet { setFlag("shouldResizePlaceholder") }
+	}
+	
 	/// How the cells should be laid out when there are multiple columns. The current default is `.LeadingToTrailing`.
 	public var cellLayoutOrder: ItemLayoutOrder = .LeadingToTrailing
 	
@@ -278,6 +285,7 @@ public struct BasicGridSectionMetrics: GridSectionMetrics {
 		&& other.showsRowSeparator == showsRowSeparator
 		&& other.contentBackgroundAttributes == contentBackgroundAttributes
 		&& other.supplementaryOrdering == supplementaryOrdering
+		&& other.shouldResizePlaceholder == shouldResizePlaceholder
 	}
 	
 	public mutating func applyValues(from metrics: LayoutMetrics) {
@@ -359,6 +367,9 @@ public struct BasicGridSectionMetrics: GridSectionMetrics {
 		}
 		if metrics.definesMetric("supplementaryOrdering") {
 			supplementaryOrdering = gridMetrics.supplementaryOrdering
+		}
+		if metrics.definesMetric("shouldResizePlaceholder") {
+			shouldResizePlaceholder = gridMetrics.shouldResizePlaceholder
 		}
 	}
 	
