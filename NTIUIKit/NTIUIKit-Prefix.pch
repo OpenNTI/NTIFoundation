@@ -1,0 +1,24 @@
+//
+//  NTIUIKit-Prefix.pch
+//  NTIFoundation
+//
+//  Created by Christopher Utz on 2/11/16.
+//  Copyright © 2016 NextThought. All rights reserved.
+//
+
+#ifndef NTIUIKit_Prefix_pch
+#define NTIUIKit_Prefix_pch
+
+#import <Availability.h>
+
+#ifdef __OBJC__
+
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
+#import <OmniBase/OmniBase.h>
+#import <OmniFoundation/OmniFoundation.h>
+
+#endif
+
+#endif /* NTIUIKit_Prefix_pch */

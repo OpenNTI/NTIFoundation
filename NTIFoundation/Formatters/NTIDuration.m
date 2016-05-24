@@ -29,13 +29,13 @@
 -(NSDateComponents*)dateComponents
 {
 	NSDateComponents* comps = [[NSDateComponents alloc] init];
-	comps.year = self.years;
-	comps.month = self.monthes;
-	comps.weekOfYear = self.weeks;
-	comps.day = self.days;
-	comps.hour = self.hours;
-	comps.minute = self.minutes;
-	comps.second = self.seconds;
+	comps.year = (NSUInteger)self.years;
+	comps.month = (NSUInteger)self.monthes;
+	comps.weekOfYear = (NSUInteger)self.weeks;
+	comps.day = (NSUInteger)self.days;
+	comps.hour = (NSUInteger)self.hours;
+	comps.minute = (NSUInteger)self.minutes;
+	comps.second = (NSUInteger)self.seconds;
 	return comps;
 }
 
