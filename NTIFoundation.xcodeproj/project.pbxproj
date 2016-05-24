@@ -293,6 +293,8 @@
 		4A05832A1C9247A700F3D0E0 /* MockLayoutEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0583291C9247A700F3D0E0 /* MockLayoutEngine.swift */; };
 		4A0583341C934BCF00F3D0E0 /* ComposedGridSectionLayoutEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0583331C934BCF00F3D0E0 /* ComposedGridSectionLayoutEngine.swift */; };
 		4A0583351C934BD000F3D0E0 /* ComposedGridSectionLayoutEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0583331C934BCF00F3D0E0 /* ComposedGridSectionLayoutEngine.swift */; };
+		4A08FC0B1CF4E0AB00038F7D /* TableLayoutSupplementaryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A08FC0A1CF4E0AB00038F7D /* TableLayoutSupplementaryItem.swift */; };
+		4A08FC0C1CF4E0AB00038F7D /* TableLayoutSupplementaryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A08FC0A1CF4E0AB00038F7D /* TableLayoutSupplementaryItem.swift */; };
 		4A11C9FC1CA5949500CCDD2B /* ActionSheetControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A11C9FB1CA5949500CCDD2B /* ActionSheetControl.swift */; };
 		4A1B77BD1CBD54E600C977A6 /* CollectionUpdateRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1B77BC1CBD54E600C977A6 /* CollectionUpdateRecorder.swift */; };
 		4A1B77D81CBD64A600C977A6 /* CollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC7D1C88B0CE00849185 /* CollectionViewLayout.swift */; };
@@ -1045,6 +1047,7 @@
 		4A05830D1C923B7D00F3D0E0 /* GridSectionColumnLayoutEngineTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridSectionColumnLayoutEngineTest.swift; sourceTree = "<group>"; };
 		4A0583291C9247A700F3D0E0 /* MockLayoutEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockLayoutEngine.swift; sourceTree = "<group>"; };
 		4A0583331C934BCF00F3D0E0 /* ComposedGridSectionLayoutEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposedGridSectionLayoutEngine.swift; sourceTree = "<group>"; };
+		4A08FC0A1CF4E0AB00038F7D /* TableLayoutSupplementaryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableLayoutSupplementaryItem.swift; sourceTree = "<group>"; };
 		4A11C9FB1CA5949500CCDD2B /* ActionSheetControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionSheetControl.swift; sourceTree = "<group>"; };
 		4A1B77BC1CBD54E600C977A6 /* CollectionUpdateRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionUpdateRecorder.swift; sourceTree = "<group>"; };
 		4A1B78131CBD955200C977A6 /* TableSectionMetrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableSectionMetrics.swift; sourceTree = "<group>"; };
@@ -1837,6 +1840,7 @@
 				4A1B78131CBD955200C977A6 /* TableSectionMetrics.swift */,
 				4A24B82B1CC809000053ED9B /* TableLayoutSection.swift */,
 				4A24B80B1CC721000053ED9B /* TableLayoutSectionBuilder.swift */,
+				4A08FC0A1CF4E0AB00038F7D /* TableLayoutSupplementaryItem.swift */,
 			);
 			path = Table;
 			sourceTree = "<group>";
@@ -3468,6 +3472,7 @@
 				4AD56EE41CAC274C00482393 /* Array-Extensions.swift in Sources */,
 				4A9D2C301C9CCA3D00D75BBD /* DelegatingViewController.swift in Sources */,
 				4A68ACA11C88B0CE00849185 /* BasicCollectionDataSource.swift in Sources */,
+				4A08FC0B1CF4E0AB00038F7D /* TableLayoutSupplementaryItem.swift in Sources */,
 				4A68ACAB1C88B0CE00849185 /* ComposedCollectionDataSource.swift in Sources */,
 				4A24B82F1CC809D70053ED9B /* BasicSectionMetrics.swift in Sources */,
 				4A24B8331CC85A4C0053ED9B /* LayoutSectionBase.swift in Sources */,
@@ -3509,6 +3514,7 @@
 				4A68AC5E1C88AEE300849185 /* DummyLayoutInfo.swift in Sources */,
 				4A0583001C9211A200F3D0E0 /* GridLayoutEngine.swift in Sources */,
 				4A68ACB01C88B0CE00849185 /* DataSourceMapping.swift in Sources */,
+				4A08FC0C1CF4E0AB00038F7D /* TableLayoutSupplementaryItem.swift in Sources */,
 				4A68ACE81C88B0CE00849185 /* LayoutMetrics.swift in Sources */,
 				4A68ACC21C88B0CE00849185 /* UICollectionViewLayoutInvalidationContext-Extensions.swift in Sources */,
 				4A68ACC61C88B0CE00849185 /* CollectionLayoutEngine.swift in Sources */,
