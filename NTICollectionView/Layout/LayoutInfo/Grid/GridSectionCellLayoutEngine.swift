@@ -178,7 +178,7 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	
 	private func measureHeight(inout of item: LayoutItem) {
 		updateFrame(of: &item)
-		let measuredSize = layoutMeasure.measuredSizeForItem(&item)
+		let measuredSize = layoutMeasure.measuredSizeForItem(item)
 		height = measuredSize.height
 		updateFrame(of: &item)
 		item.hasEstimatedHeight = false

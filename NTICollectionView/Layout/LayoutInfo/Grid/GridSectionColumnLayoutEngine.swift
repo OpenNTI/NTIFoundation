@@ -108,7 +108,7 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 	}
 	
 	private func measureHeight(inout of supplementaryItem: LayoutSupplementaryItem) {
-		let measuredSize = layoutMeasure.measuredSizeForSupplementaryItem(&supplementaryItem)
+		let measuredSize = layoutMeasure.measuredSizeForSupplementaryItem(supplementaryItem)
 		supplementaryItem.height = measuredSize.height
 		updateFrame(of: &supplementaryItem)
 	}

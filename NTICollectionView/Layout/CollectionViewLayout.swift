@@ -123,7 +123,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	
 	// MARK: - CollectionViewLayoutMeasuring
 	
-	public func measuredSizeForSupplementaryItem(inout supplementaryItem: LayoutSupplementaryItem) -> CGSize {
+	public func measuredSizeForSupplementaryItem(supplementaryItem: LayoutSupplementaryItem) -> CGSize {
 		guard let collectionView = collectionViewWrapper as? WrapperCollectionView,
 			dataSource = collectionView.dataSource else {
 				return CGSizeZero
@@ -137,13 +137,13 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		view.removeFromSuperview()
 		
 		// Allow regeneration of the layout attributes later
-		supplementaryItem.resetLayoutAttributes()
+//		supplementaryItem.resetLayoutAttributes()
 		measuringAttributes = nil
 		
 		return attributes.frame.size
 	}
 	
-	public func measuredSizeForItem(inout item: LayoutItem) -> CGSize {
+	public func measuredSizeForItem(item: LayoutItem) -> CGSize {
 		guard let collectionView = collectionViewWrapper as? WrapperCollectionView,
 			dataSource = collectionView.dataSource else {
 				return CGSizeZero
@@ -157,13 +157,13 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		view.removeFromSuperview()
 		
 		// Allow regeneration of the layout attributes later
-		item.resetLayoutAttributes()
+//		item.resetLayoutAttributes()
 		measuringAttributes = nil
 		
 		return attributes.frame.size
 	}
 	
-	public func measuredSizeForPlaceholder(inout placeholderInfo: LayoutPlaceholder) -> CGSize {
+	public func measuredSizeForPlaceholder(placeholderInfo: LayoutPlaceholder) -> CGSize {
 		guard let collectionView = collectionViewWrapper as? WrapperCollectionView,
 			dataSource = collectionView.dataSource else {
 				return CGSizeZero
@@ -177,7 +177,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		view.removeFromSuperview()
 		
 		// Allow regeneration of the layout attributes later
-		placeholderInfo.resetLayoutAttributes()
+//		placeholderInfo.resetLayoutAttributes()
 		measuringAttributes = nil
 		
 		return attributes.frame.size

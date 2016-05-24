@@ -302,7 +302,7 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 		updateFrame(of: &placeholderInfo)
 	}
 	private func measureHeight(inout of placeholderInfo: LayoutPlaceholder) {
-		let measuredSize = layoutMeasure.measuredSizeForPlaceholder(&placeholderInfo)
+		let measuredSize = layoutMeasure.measuredSizeForPlaceholder(placeholderInfo)
 		// We'll add in the shared height in `finalizeLayout`
 		placeholderInfo.height = measuredSize.height
 		placeholderInfo.hasEstimatedHeight = false
