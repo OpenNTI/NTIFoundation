@@ -47,6 +47,8 @@ public struct LayoutRow: LayoutRowProtocol {
 	
 	public var items: [LayoutItem] = []
 	
+	var sectionIndex = NSNotFound
+	
 	public var rowSeparatorLayoutAttributes: CollectionViewLayoutAttributes? {
 		return rowSeparatorDecoration?.layoutAttributes
 	}
@@ -95,6 +97,7 @@ public struct LayoutRow: LayoutRowProtocol {
 		}
 		
 		return frame == other.frame
+			&& sectionIndex == other.sectionIndex
 			&& items.elementsEqual(other.items) { $0.isEqual(to: $1) }
 	}
 	
