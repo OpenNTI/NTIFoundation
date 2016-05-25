@@ -529,6 +529,7 @@
 		4A7A3F761CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7A3F751CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift */; };
 		4A7A3F771CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7A3F751CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift */; };
 		4A9D2C301C9CCA3D00D75BBD /* DelegatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9D2C2F1C9CCA3D00D75BBD /* DelegatingViewController.swift */; };
+		4AA691061CF62A1700012293 /* TableRowStackBuilderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA691051CF62A1700012293 /* TableRowStackBuilderTest.swift */; };
 		4AB48C531CC0386C00F193C3 /* BasicSupplementaryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE4230B1CBECBC30035CF1B /* BasicSupplementaryItem.swift */; };
 		4AB6BE541CA4774700A86233 /* PagingPlaceholderDataSourceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB6BE531CA4774700A86233 /* PagingPlaceholderDataSourceController.swift */; };
 		4AD52D361CC5698700CDEF45 /* GridSupplementaryAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AD52D351CC5698700CDEF45 /* GridSupplementaryAttributes.swift */; };
@@ -1210,6 +1211,7 @@
 		4A72F48619268DA8004792EF /* UIColor+NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NTIExtensionsTest.m"; sourceTree = "<group>"; };
 		4A7A3F751CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RowAlignedLayoutSectionBase.swift; sourceTree = "<group>"; };
 		4A9D2C2F1C9CCA3D00D75BBD /* DelegatingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DelegatingViewController.swift; sourceTree = "<group>"; };
+		4AA691051CF62A1700012293 /* TableRowStackBuilderTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableRowStackBuilderTest.swift; sourceTree = "<group>"; };
 		4AB6BE531CA4774700A86233 /* PagingPlaceholderDataSourceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingPlaceholderDataSourceController.swift; sourceTree = "<group>"; };
 		4AD52D351CC5698700CDEF45 /* GridSupplementaryAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridSupplementaryAttributes.swift; sourceTree = "<group>"; };
 		4AD52D521CC5799000CDEF45 /* GridLayoutSupplementaryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridLayoutSupplementaryItem.swift; sourceTree = "<group>"; };
@@ -2006,6 +2008,7 @@
 				4A05830D1C923B7D00F3D0E0 /* GridSectionColumnLayoutEngineTest.swift */,
 				4A0583291C9247A700F3D0E0 /* MockLayoutEngine.swift */,
 				4A08FCA81CF5275900038F7D /* TableLayoutSectionBuilderTest.swift */,
+				4AA691051CF62A1700012293 /* TableRowStackBuilderTest.swift */,
 				4A68AC5A1C88AEE300849185 /* DummyLayoutInfo.swift */,
 				4A68AC5B1C88AEE300849185 /* DummyLayoutMeasure.swift */,
 			);
@@ -3578,6 +3581,7 @@
 				4A68ACDA1C88B0CE00849185 /* GridSectionCellLayoutEngine.swift in Sources */,
 				4A68ACF21C88B0CE00849185 /* ContentLoading.swift in Sources */,
 				4A24B8301CC809D70053ED9B /* BasicSectionMetrics.swift in Sources */,
+				4AA691061CF62A1700012293 /* TableRowStackBuilderTest.swift in Sources */,
 				4A68ACF01C88B0CE00849185 /* ShadowRegistrar.swift in Sources */,
 				4A68AC621C88AEE300849185 /* GridLayoutSectionTest.swift in Sources */,
 				4AD56F441CAC8BC300482393 /* UICollectionReusableView-Extensions.swift in Sources */,
