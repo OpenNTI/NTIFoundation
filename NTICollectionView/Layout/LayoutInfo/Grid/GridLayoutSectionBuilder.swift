@@ -10,9 +10,17 @@ import UIKit
 
 public struct GridLayoutSectionBuilder: LayoutSectionBuilder {
 	
-	public init() {}
+	public init?(metrics: SectionMetrics) {
+		guard let gridMetrics = metrics as? GridSectionMetrics else {
+			return nil
+		}
+		
+		self.metrics = gridMetrics
+	}
 	
-	public func makeLayoutSection(using description: SectionDescription, in layoutBounds: SectionLayoutBounds) -> LayoutSection {
+	public let metrics: GridSectionMetrics
+	
+	public func makeLayoutSection(using description: SectionDescription, in layoutBounds: LayoutAreaBounds) -> LayoutSection {
 		var section = BasicGridLayoutSection()
 		
 		// TODO: Implement
