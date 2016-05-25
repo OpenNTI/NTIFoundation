@@ -42,4 +42,12 @@ public struct SectionDescription {
 	
 	public var supplementaryItemsByKind: [String: [SupplementaryItem]] = [:]
 	
+	public var placeholder: LayoutPlaceholder?
+	
+	public var draggedItemIndex: Int?
+	
+	public var phantomCellIndex: Int?
+	
+	public var phantomCellSize = CGSizeZero
+	
 }
