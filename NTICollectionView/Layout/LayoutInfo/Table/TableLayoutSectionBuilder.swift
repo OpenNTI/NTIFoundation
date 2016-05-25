@@ -11,13 +11,13 @@ import UIKit
 public struct TableLayoutSectionBuilder: LayoutSectionBuilder {
 	
 	public init?(metrics: SectionMetrics) {
-		guard let tableMetrics = metrics as? TableSectionMetrics else {
+		guard let tableMetrics = metrics as? TableSectionMetricsProviding else {
 			return nil
 		}
 		self.metrics = tableMetrics
 	}
 	
-	private let metrics: TableSectionMetrics
+	private let metrics: TableSectionMetricsProviding
 	
 	public func makeLayoutSection(using description: SectionDescription, in layoutBounds: LayoutAreaBounds) -> LayoutSection {
 		var section = TableLayoutSection()
@@ -151,7 +151,7 @@ public struct TableRowStackBuilder {
 	public func makeLayoutRows(using description: SectionDescription, in layoutBounds: LayoutAreaBounds) -> [LayoutRow] {
 		var rows = [LayoutRow]()
 		
-		guard let metrics = description.metrics as? TableSectionMetrics else {
+		guard let metrics = description.metrics as? TableRowMetricsProviding else {
 			return rows
 		}
 		
@@ -269,7 +269,7 @@ public struct TableRowStackBuilder {
 		return item
 	}
 	
-	func decorate(inout row: LayoutRow, atIndex index: Int, using metrics: TableSectionMetrics) {
+	func decorate(inout row: LayoutRow, atIndex index: Int, using metrics: TableRowMetricsProviding) {
 		guard metrics.showsRowSeparator else {
 			return
 		}
