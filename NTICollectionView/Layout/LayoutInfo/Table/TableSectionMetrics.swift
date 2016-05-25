@@ -69,72 +69,119 @@ public struct TableSectionMetrics: TableSectionMetricsProtocol, BasicSectionMetr
 	
 	public var basicSectionMetrics = BasicSectionMetrics()
 	
+	/// The height of each row in the section.
+	///
+	/// The default value is `nil`. Setting this property to a concrete value will prevent rows from being sized automatically using autolayout.
 	public var rowHeight: CGFloat? = nil {
 		didSet {
 			setFlag("rowHeight")
 		}
 	}
 	
+	/// The estimated height of each row in the section.
+	///
+	/// The closer the estimatedRowHeight value matches the actual value of the row height, the less change will be noticed when rows are resized.
+	///
+	/// The default value is `44`.
 	public var estimatedRowHeight: CGFloat = 44 {
 		didSet {
 			setFlag("estimatedRowHeight")
 		}
 	}
 	
+	/// Number of columns in this section. 
+	///
+	/// The default value is `1`.
 	public var numberOfColumns = 1 {
 		didSet {
 			setFlag("numberOfColumns")
 		}
 	}
 	
+	/// Padding around the cells for this section.
+	///
+	/// The top/bottom padding will be applied between the headers/footers and the cells.
+	/// The left/right padding will be applied between the view edges and the cells.
+	///
+	/// The default value is `UIEdgeInsetsZero`.
 	public var padding = UIEdgeInsetsZero {
 		didSet {
 			setFlag("padding")
 		}
 	}
 	
+	/// Layout margins between cells and their surrounding content.
+	///
+	/// The default value is `UIEdgeInsetsZero`.
 	public var layoutMargins = UIEdgeInsetsZero
 	
+	/// Whether a column separator should be drawn.
+	///
+	/// The default value is `false`.
 	public var showsColumnSeparator = true {
 		didSet {
 			setFlag("showsColumnSeparator")
 		}
 	}
 	
+	/// Whether a row separator should be drawn.
+	///
+	/// The default value is `false`.
 	public var showsRowSeparator = false {
 		didSet {
 			setFlag("showsRowSeparator")
 		}
 	}
 	
+	/// Whether separators should be drawn between sections.
+	///
+	/// The default value is `false`.
 	public var showsSectionSeparator = false {
 		didSet {
 			setFlag("showsSectionSeparator")
 		}
 	}
 	
+	/// Whether the section separator should be shown at the bottom of the last section.
+	///
+	/// The default value is `false`.
 	public var showsSectionSeparatorWhenLastSection = false {
 		didSet {
 			setFlag("showsSectionSeparatorWhenLastSection")
 		}
 	}
 	
+	/// Insets for the separators drawn between rows (left & right) and columns (top & bottom).
+	///
+	/// The default value is `UIEdgeInsetsZero`.
 	public var separatorInsets = UIEdgeInsetsZero
 	
+	/// Insets for the section separator drawn below this section.
+	///
+	/// The default value is `UIEdgeInsetsZero`.
 	public var sectionSeparatorInsets = UIEdgeInsetsZero
 	
+	/// The color to use when drawing the row separators (and column separators when `numberOfColumns > 1 && showsColumnSeparator == true`).
+	///
+	/// The default value is `nil`.
 	public var separatorColor: UIColor? {
 		didSet {
 			setFlag("separatorColor")
 		}
 	}
 	
+	/// The color to use when drawing the section separator below this section.
+	///
+	/// The default value is `nil`.
 	public var sectionSeparatorColor: UIColor? {
 		didSet {
 			setFlag("sectionSeparatorColor")
 		}
 	}
 	
+	/// How the cells should be laid out when there are multiple columns.
+	///
+	/// The default value is `.leadingToTrailing`.
 	public var cellLayoutOrder: ItemLayoutOrder = .LeadingToTrailing
 	
 	public func isEqual(to other: LayoutMetrics) -> Bool {
