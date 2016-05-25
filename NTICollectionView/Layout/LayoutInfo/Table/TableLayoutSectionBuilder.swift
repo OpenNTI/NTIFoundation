@@ -26,7 +26,7 @@ public struct TableLayoutSectionBuilder: LayoutSectionBuilder {
 		let origin = layoutBounds.origin
 		let width = layoutBounds.width
 		let sectionIndex = description.sectionIndex
-		let margins = metrics.layoutMargins
+		let margins = metrics.padding
 		
 		section.frame.origin = layoutBounds.origin
 		section.frame.size.width = layoutBounds.width
@@ -73,7 +73,7 @@ public struct TableLayoutSectionBuilder: LayoutSectionBuilder {
 				section.add(row)
 			}
 			
-			positionBounds.origin.y += metrics.layoutMargins.bottom
+			positionBounds.origin.y += margins.bottom
 		}
 		
 		// Layout footers

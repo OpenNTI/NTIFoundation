@@ -15,7 +15,7 @@ class TableLayoutSectionBuilderTest: XCTestCase {
 		var metrics = TableSectionMetrics()
 		metrics.numberOfColumns = 3
 		metrics.rowHeight = 20
-		metrics.layoutMargins = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+		metrics.padding = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
 		
 		var description = SectionDescription(metrics: metrics)
 		description.numberOfItems = 9
