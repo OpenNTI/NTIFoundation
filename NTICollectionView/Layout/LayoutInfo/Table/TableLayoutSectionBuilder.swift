@@ -26,6 +26,7 @@ public struct TableLayoutSectionBuilder: LayoutSectionBuilder {
 		let origin = layoutBounds.origin
 		let width = layoutBounds.width
 		let sectionIndex = description.sectionIndex
+		let margins = metrics.layoutMargins
 		
 		section.frame.origin = layoutBounds.origin
 		section.frame.size.width = layoutBounds.width
@@ -59,9 +60,13 @@ public struct TableLayoutSectionBuilder: LayoutSectionBuilder {
 		}
 		else if numberOfItems > 0 {
 			// Layout items
-			positionBounds.origin.y += metrics.layoutMargins.top
+			positionBounds.origin.y += margins.top
 			
-			let rows = TableRowStackBuilder().makeLayoutRows(using: description, in: positionBounds)
+			var cellBounds = positionBounds
+			cellBounds.origin.x += margins.left
+			cellBounds.width -= margins.width
+			
+			let rows = TableRowStackBuilder().makeLayoutRows(using: description, in: cellBounds)
 			
 			for row in rows {
 				positionBounds.origin.y += row.frame.height
