@@ -22,7 +22,7 @@ public protocol GridSectionMetrics: SectionMetrics {
 	/// An optional fixed width that can be used to size each column.
 	var fixedColumnWidth: CGFloat? { get set }
 	
-	/// The spacing between rows
+	/// The spacing between rows.
 	var rowSpacing: CGFloat { get set }
 	
 	/// The minimum horizontal spacing between items.
@@ -127,30 +127,35 @@ public struct BasicGridSectionMetrics: GridSectionMetrics {
 		}
 	}
 	
+	/// The spacing between rows.
 	public var rowSpacing: CGFloat = 0 {
 		didSet {
 			setFlag("rowSpacing")
 		}
 	}
 	
+	/// The minimum horizontal spacing between items.
 	public var minimumInteritemSpacing: CGFloat = 0 {
 		didSet {
 			setFlag("minimumInteritemSpacing")
 		}
 	}
 	
+	/// The width of the left auxiliary column.
 	public var leftAuxiliaryColumnWidth: CGFloat = 0 {
 		didSet {
 			setFlag("leftAuxiliaryColumnWidth")
 		}
 	}
 	
+	/// The width of the right auxiliary column.
 	public var rightAuxiliaryColumnWidth: CGFloat = 0 {
 		didSet {
 			setFlag("rightAuxiliaryColumnWidth")
 		}
 	}
 	
+	/// The spacing between items in the auxiliary columns.
 	public var auxiliaryColumnSpacing: CGFloat = 0 {
 		didSet {
 			setFlag("auxiliaryColumnSpacing")
