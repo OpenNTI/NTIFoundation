@@ -53,6 +53,8 @@ extension CollectionDataSourceController {
 		return [:]
 	}
 	
+	public func registerReusableViews(with collectionView: UICollectionView) {}
+	
 }
 
 public protocol ParentCollectionDataSourceController: CollectionDataSourceController {
