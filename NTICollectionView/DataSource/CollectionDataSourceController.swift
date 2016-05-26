@@ -27,6 +27,8 @@ public protocol CollectionDataSourceController: class {
 	
 	func loadPreviousContent(with progress: LoadingProgress)
 	
+	func registerReusableViews(with collectionView: UICollectionView)
+	
 }
 
 extension CollectionDataSourceController {

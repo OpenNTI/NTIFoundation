@@ -131,4 +131,9 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 		pagingPlaceholder.supplementaryViewClass = CollectionPlaceholderView.self
 	}
 	
+	public func registerReusableViews(with collectionView: UICollectionView) {
+		collectionView.register(nextPagePlaceholder)
+		collectionView.register(prevPagePlaceholder)
+	}
+	
 }
