@@ -50,6 +50,10 @@ public final class ActionSheetControlButton: UIButton, SegmentedControlView, Seg
 	
 	public var segmentedControlDelegate: SegmentedControlDelegate?
 	
+	public var numberOfSegments: Int {
+		return actionSheetControl.numberOfSegments
+	}
+	
 	public var selectedSegmentIndex: Int {
 		get {
 			return actionSheetControl.selectedSegmentIndex
