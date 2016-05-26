@@ -15,11 +15,6 @@ private let placeholderHeight: CGFloat = 100
 
 public final class PagingPlaceholderDataSourceController: CollectionDataSourceController {
 	
-	public init(dataSource: CollectionDataSource) {
-		self.dataSource = dataSource
-		configureDataSource()
-	}
-	
 	public let dataSource: CollectionDataSource
 	
 	public var hasNextPage = false {
@@ -31,16 +26,6 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 		}
 	}
 	
-	private func addNextPagePlaceholder() {
-		nextPagePlaceholder.height = placeholderHeight
-		nextPagePlaceholder.isHidden = false
-	}
-	
-	private func removeNextPagePlaceholder() {
-		nextPagePlaceholder.height = 0
-		nextPagePlaceholder.isHidden = true
-	}
-	
 	public var hasPrevPage = false {
 		didSet {
 			guard hasPrevPage != oldValue else {
@@ -48,16 +33,6 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 			}
 			hasPrevPage ? addPrevPagePlaceholder() : removePrevPagePlaceholder()
 		}
-	}
-	
-	private func addPrevPagePlaceholder() {
-		prevPagePlaceholder.height = placeholderHeight
-		prevPagePlaceholder.isHidden = false
-	}
-	
-	private func removePrevPagePlaceholder() {
-		prevPagePlaceholder.height = 0
-		prevPagePlaceholder.isHidden = true
 	}
 	
 	public let nextPagePlaceholder = BasicGridSupplementaryItem(elementKind: UICollectionElementKindSectionFooter)
@@ -71,6 +46,11 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 			nextPagePlaceholder.registration,
 			prevPagePlaceholder.registration
 		]
+	}
+	
+	public init(dataSource: CollectionDataSource) {
+		self.dataSource = dataSource
+		configureDataSource()
 	}
 	
 	private func configureDataSource() {
@@ -129,6 +109,26 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 		pagingPlaceholder.height = 0
 		pagingPlaceholder.isHidden = true
 		pagingPlaceholder.supplementaryViewClass = CollectionPlaceholderView.self
+	}
+	
+	private func addNextPagePlaceholder() {
+		nextPagePlaceholder.height = placeholderHeight
+		nextPagePlaceholder.isHidden = false
+	}
+	
+	private func removeNextPagePlaceholder() {
+		nextPagePlaceholder.height = 0
+		nextPagePlaceholder.isHidden = true
+	}
+	
+	private func addPrevPagePlaceholder() {
+		prevPagePlaceholder.height = placeholderHeight
+		prevPagePlaceholder.isHidden = false
+	}
+	
+	private func removePrevPagePlaceholder() {
+		prevPagePlaceholder.height = 0
+		prevPagePlaceholder.isHidden = true
 	}
 	
 	public func registerReusableViews(with collectionView: UICollectionView) {
