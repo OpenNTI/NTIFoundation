@@ -56,7 +56,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	
 	var layoutSize = CGSizeZero
 	
-	private var layoutInfo: LayoutInfo?
+	/// - note: `nil` until `resetLayoutInfo()` has been called for the first time.
+	private var layoutInfo: LayoutInfo!
 	private var oldLayoutInfo: LayoutInfo?
 	
 	private var updateSectionDirections: [Int: SectionOperationDirection] = [:]
@@ -219,10 +220,6 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 				return
 		}
 		
-		guard let layoutInfo = self.layoutInfo else {
-			return
-		}
-		
 		var dragFrame = cell.frame
 		dragCellSize = dragFrame.size
 		
@@ -295,8 +292,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		let context = CollectionViewLayoutInvalidationContext()
 		// TODO: Layout source and destination sections
-		layoutInfo?.setSection(sourceSection, at: sourceSectionIndex)
-		layoutInfo?.setSection(destinationSection, at: destinationSectionIndex)
+		layoutInfo.setSection(sourceSection, at: sourceSectionIndex)
+		layoutInfo.setSection(destinationSection, at: destinationSectionIndex)
 		invalidateLayoutWithContext(context)
 	}
 	
@@ -358,8 +355,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		let context = CollectionViewLayoutInvalidationContext()
 		// Layout source and destination sections
-		layoutInfo?.setSection(sourceSection, at: sourceSectionIndex)
-		layoutInfo?.setSection(destinationSection, at: destinationSectionIndex)
+		layoutInfo.setSection(sourceSection, at: sourceSectionIndex)
+		layoutInfo.setSection(destinationSection, at: destinationSectionIndex)
 		invalidateLayoutWithContext(context)
 		
 		selectedItemIndexPath = nil
@@ -588,8 +585,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		let context = CollectionViewLayoutInvalidationContext()
 		
 		// TODO: Layout sections
-		layoutInfo?.setSection(oldSection, at: oldSectionIndex)
-		layoutInfo?.setSection(newSection, at: newSectionIndex)
+		layoutInfo.setSection(oldSection, at: oldSectionIndex)
+		layoutInfo.setSection(newSection, at: newSectionIndex)
 		
 		invalidateLayoutWithContext(context)
 	}
@@ -608,11 +605,16 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		defer {
 			super.invalidateLayoutWithContext(context)
 		}
+		
+		guard let collectionView = self.collectionView else {
+			return
+		}
+		
 		let invalidateDataSourceCounts = context.invalidateDataSourceCounts
 		var invalidateEverything = context.invalidateEverything
 		
 		// The collectionView has changed width, re-evaluate the layout
-		if layoutInfo?.collectionViewSize.width != collectionView?.bounds.size.width {
+		if layoutInfo.collectionViewSize.width != collectionView.bounds.size.width {
 			invalidateEverything = true
 		}
 		
@@ -622,8 +624,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			layoutDataIsValid = false
 		}
 		
-		guard let context = context as? CollectionViewLayoutInvalidationContext,
-			layoutInfo = self.layoutInfo else {
+		guard let context = context as? CollectionViewLayoutInvalidationContext else {
 				return
 		}
 		
@@ -658,9 +659,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	
 	public override func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
 		layoutLog("\(#function) rect=\(rect)")
-		guard let collectionView = self.collectionView,
-			layoutInfo = self.layoutInfo else {
-				return nil
+		guard let collectionView = self.collectionView else {
+			return nil
 		}
 		
 		let contentOffset = targetContentOffsetForProposedContentOffset(collectionView.contentOffset)
@@ -685,9 +685,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	public override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
 		let sectionIndex = indexPath.section
 		
-		guard let layoutInfo = self.layoutInfo
-			where sectionIndex >= 0 && sectionIndex < layoutInfo.numberOfSections else {
-				return nil
+		guard sectionIndex >= 0 && sectionIndex < layoutInfo.numberOfSections else {
+			return nil
 		}
 		
 		let attributes: CollectionViewLayoutAttributes
@@ -722,7 +721,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			
 			layoutLog("\(#function) measuringAttributes=\(measuringAttributes)")
 		}
-		else if let infoAttributes = layoutInfo?.layoutAttributesForSupplementaryElementOfKind(elementKind, at: indexPath) {
+		else if let infoAttributes = layoutInfo.layoutAttributesForSupplementaryElementOfKind(elementKind, at: indexPath) {
 			attributes = infoAttributes
 			
 			layoutLog("\(#function) indexPath=\(indexPath.debugLogDescription) attributes=\(attributes)")
@@ -737,7 +736,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	}
 	
 	public override func layoutAttributesForDecorationViewOfKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
-		return layoutInfo?.layoutAttributesForDecorationViewOfKind(elementKind, at: indexPath)
+		return layoutInfo.layoutAttributesForDecorationViewOfKind(elementKind, at: indexPath)
 	}
 	
 	private func finalizeConfiguration(of attributes: CollectionViewLayoutAttributes) {
@@ -812,11 +811,9 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		contentOffset.y += newOrigin.y - origin.y
 		contentOffset.x += newOrigin.x - origin.x
 		
-		if let layoutInfo = self.layoutInfo {
-			layoutInfo.contentInset = collectionView.contentInset
-			layoutInfo.bounds = collectionView.bounds
-			layoutInfo.updateSpecialItemsWithContentOffset(contentOffset, invalidationContext: context)
-		}
+		layoutInfo.contentInset = collectionView.contentInset
+		layoutInfo.bounds = collectionView.bounds
+		layoutInfo.updateSpecialItemsWithContentOffset(contentOffset, invalidationContext: context)
 		
 		return context
 	}
@@ -877,8 +874,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	///
 	/// This becomes necessary when the selected data source of a segmented data source contributes a kind of global element, and then a new data source is selected which does not contribute that kind of global element.
 	private func processGlobalSectionUpdate() {
-		guard let layoutInfo = self.layoutInfo,
-			globalSection = layoutInfo.sectionAtIndex(globalSectionIndex),
+		guard let globalSection = layoutInfo.sectionAtIndex(globalSectionIndex),
 			oldLayoutInfo = self.oldLayoutInfo,
 			oldGlobalSection = oldLayoutInfo.sectionAtIndex(globalSectionIndex) else {
 				return
@@ -951,7 +947,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	public override func initialLayoutAttributesForAppearingDecorationElementOfKind(elementKind: String, atIndexPath decorationIndexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
 		layoutLog("\(#function) kind=\(elementKind) indexPath=\(decorationIndexPath.debugLogDescription)")
 		
-		guard let result = layoutInfo?.layoutAttributesForDecorationViewOfKind(elementKind, at: decorationIndexPath)?.copy() as? UICollectionViewLayoutAttributes else {
+		guard let result = layoutInfo.layoutAttributesForDecorationViewOfKind(elementKind, at: decorationIndexPath)?.copy() as? UICollectionViewLayoutAttributes else {
 			return nil
 		}
 		
@@ -995,7 +991,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		let isReloaded = reloadedSections.contains(section)
 		if isReloaded
-			&& layoutInfo?.layoutAttributesForDecorationViewOfKind(elementKind, at: decorationIndexPath) == nil {
+			&& layoutInfo.layoutAttributesForDecorationViewOfKind(elementKind, at: decorationIndexPath) == nil {
 				result.alpha = 0
 		}
 		
@@ -1005,7 +1001,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	public override func initialLayoutAttributesForAppearingSupplementaryElementOfKind(elementKind: String, atIndexPath elementIndexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
 		layoutLog("\(#function) kind=\(elementKind) indexPath=\(elementIndexPath.debugLogDescription)")
 		
-		guard let result = layoutInfo?.layoutAttributesForSupplementaryElementOfKind(elementKind, at: elementIndexPath)?.copy() as? UICollectionViewLayoutAttributes else {
+		guard let result = layoutInfo.layoutAttributesForSupplementaryElementOfKind(elementKind, at: elementIndexPath)?.copy() as? UICollectionViewLayoutAttributes else {
 			return nil
 		}
 		var attributes = result
@@ -1064,7 +1060,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	public override func initialLayoutAttributesForAppearingItemAtIndexPath(itemIndexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
 		layoutLog("\(#function) indexPath=\(itemIndexPath.debugLogDescription)")
 		
-		guard var result = layoutInfo?.layoutAttributesForCell(at: itemIndexPath)?.copy() as? UICollectionViewLayoutAttributes else {
+		guard var result = layoutInfo.layoutAttributesForCell(at: itemIndexPath)?.copy() as? UICollectionViewLayoutAttributes else {
 			return nil
 		}
 		
@@ -1111,7 +1107,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		let isReloaded = reloadedSections.contains(section)
 		if isReloaded
-			&& layoutInfo?.layoutAttributesForCell(at: itemIndexPath) == nil {
+			&& layoutInfo.layoutAttributesForCell(at: itemIndexPath) == nil {
 				// There's no item at this index path, so cross fade
 				result.alpha = 0
 		}
@@ -1134,7 +1130,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	}
 	
 	func sectionInfoForSectionAtIndex(sectionIndex: Int) -> LayoutSection? {
-		return layoutInfo?.sectionAtIndex(sectionIndex)
+		return layoutInfo.sectionAtIndex(sectionIndex)
 	}
 	
 	func snapshotMetrics() -> [Int: DataSourceSectionMetrics]? {
@@ -1174,11 +1170,6 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		updateFlagsFromCollectionView()
 		
 		createLayoutInfoFromDataSource()
-		
-		guard let layoutInfo = self.layoutInfo else {
-			assertionFailure("We never expect `layoutInfo` to be `nil` at this point.")
-			return
-		}
 		
 		layoutDataIsValid = true
 		
@@ -1226,7 +1217,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	func createLayoutInfoFromDataSource() {
 		resetLayoutInfo()
 		
-		guard let collectionView = self.collectionView, layoutInfo = self.layoutInfo else {
+		guard let collectionView = self.collectionView else {
 			return
 		}
 		
@@ -1290,9 +1281,17 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		}
 	}
 	
+	/// - postcondition: `layoutInfo` is not `nil`.
 	func resetLayoutInfo() {
-		oldLayoutInfo = layoutInfo
+		if layoutInfo != nil {
+			oldLayoutInfo = layoutInfo
+		}
+		
 		layoutInfo = BasicLayoutInfo(layout: self)
+		
+		guard layoutInfo != nil else {
+			preconditionFailure("Could not create layout info.")
+		}
 	}
 	
 	// TODO: Abstract somewhere else
