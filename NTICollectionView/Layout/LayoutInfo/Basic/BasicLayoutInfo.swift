@@ -8,10 +8,9 @@
 
 import UIKit
 
-public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
+public class BasicLayoutInfo: LayoutInfo {
 	
 	public init(layout: CollectionViewLayout?) {
-		super.init()
 		self.layout = layout
 	}
 	
@@ -61,7 +60,7 @@ public class BasicLayoutInfo: NSObject, LayoutInfo, NSCopying {
 	
 	private var numberOfPlaceholders = 0
 	
-	public func copyWithZone(zone: NSZone) -> AnyObject {
+	public func copy() -> BasicLayoutInfo {
 		let copy = BasicLayoutInfo(layout: layout)
 		
 		copy.width = width
