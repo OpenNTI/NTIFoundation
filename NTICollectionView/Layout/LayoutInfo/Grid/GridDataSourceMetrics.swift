@@ -8,7 +8,7 @@
 
 import UIKit
 
-public struct GridDataSourceSectionMetrics: DataSourceSectionMetrics {
+public struct GridDataSourceSectionMetrics: DataSourceSectionMetricsProviding {
 	
 	public init() {}
 	

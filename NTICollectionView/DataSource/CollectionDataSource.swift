@@ -84,20 +84,20 @@ public protocol ParentCollectionDataSource: CollectionDataSource, CollectionData
 public protocol CollectionDataSourceMetrics: NSObjectProtocol {
 	
 	/// The default metrics for all sections in `self`.
-	var defaultMetrics: DataSourceSectionMetrics? { get set }
+	var defaultMetrics: DataSourceSectionMetricsProviding? { get set }
 	/// The metrics for the global section (supplementary items) for `self`. 
 	/// 
 	/// - note: This is only meaningful when `self` is the root or top-level data source.
-	var globalMetrics: DataSourceSectionMetrics? { get set }
-	var sectionMetrics: [Int: DataSourceSectionMetrics] { get }
+	var globalMetrics: DataSourceSectionMetricsProviding? { get set }
+	var sectionMetrics: [Int: DataSourceSectionMetricsProviding] { get }
 	/// Supplementary items organized by element kind which appear prior to the supplementary items in the first section.
 	var supplementaryItemsByKind: [String: [SupplementaryItem]] { get }
 	
 	/// Returns the supplementary item for the given *key*, or `nil` if no such item is found.
 	func supplementaryItem(for key: String) -> SupplementaryItem?
 	
-	func metricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetrics?
-	func setMetrics(metrics: DataSourceSectionMetrics?, forSectionAtIndex sectionIndex: Int)
+	func metricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetricsProviding?
+	func setMetrics(metrics: DataSourceSectionMetricsProviding?, forSectionAtIndex sectionIndex: Int)
 	
 	func numberOfSupplementaryItemsOfKind(kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChildDataSources: Bool) -> Int
 	
@@ -105,11 +105,11 @@ public protocol CollectionDataSourceMetrics: NSObjectProtocol {
 	
 	func findSupplementaryItemOfKind(kind: String, at indexPath: NSIndexPath, using block: (dataSource: CollectionDataSource, localIndexPath: NSIndexPath, supplementaryItem: SupplementaryItem) -> Void)
 	
-	func snapshotMetrics() -> [Int: DataSourceSectionMetrics]
-	func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetrics?
+	func snapshotMetrics() -> [Int: DataSourceSectionMetricsProviding]
+	func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetricsProviding?
 	
 	var contributesGlobalMetrics: Bool { get set }
-	func snapshotContributedGlobalMetrics() -> DataSourceSectionMetrics?
+	func snapshotContributedGlobalMetrics() -> DataSourceSectionMetricsProviding?
 	
 	func add(supplementaryItem: SupplementaryItem)
 	func add(supplementaryItem: SupplementaryItem, forSectionAtIndex sectionIndex: Int)
@@ -203,7 +203,7 @@ extension CollectionDataSource {
 
 extension CollectionDataSource {
 	
-	public var globalMetrics: DataSourceSectionMetrics? {
+	public var globalMetrics: DataSourceSectionMetricsProviding? {
 		get {
 			return metricsForSectionAtIndex(globalSectionIndex)
 		}

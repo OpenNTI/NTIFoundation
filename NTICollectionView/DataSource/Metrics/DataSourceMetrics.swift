@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol DataSourceSectionMetrics: DataSourceSectionInfo, LayoutMetrics {
+public protocol DataSourceSectionMetricsProviding: DataSourceSectionInfo, LayoutMetrics {
 	
 	var metrics: SectionMetrics { get set }
 	
@@ -20,10 +20,10 @@ public protocol DataSourceSectionMetrics: DataSourceSectionInfo, LayoutMetrics {
 	
 }
 
-extension DataSourceSectionMetrics {
+extension DataSourceSectionMetricsProviding {
 	
 	public mutating func applyValues(from metrics: LayoutMetrics) {
-		guard let dataSourceMetrics = metrics as? DataSourceSectionMetrics else {
+		guard let dataSourceMetrics = metrics as? DataSourceSectionMetricsProviding else {
 			return self.metrics.applyValues(from: metrics)
 		}
 		

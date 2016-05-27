@@ -1170,14 +1170,14 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return layoutInfo.sectionAtIndex(sectionIndex)
 	}
 	
-	func snapshotMetrics() -> [Int: DataSourceSectionMetrics]? {
+	func snapshotMetrics() -> [Int: DataSourceSectionMetricsProviding]? {
 		guard dataSourceHasSnapshotMetrics else {
 			return nil
 		}
 		return (collectionView!.dataSource as! CollectionDataSourceMetrics).snapshotMetrics()
 	}
 	
-	private func registerDecorations(from layoutMetrics: [Int: DataSourceSectionMetrics]) {
+	private func registerDecorations(from layoutMetrics: [Int: DataSourceSectionMetricsProviding]) {
 		for sectionMetrics in layoutMetrics.values {
 			registerDecorations(from: sectionMetrics.metrics)
 		}
@@ -1334,7 +1334,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	}
 	
 	// TODO: Abstract somewhere else
-	public func populate(inout section: LayoutSection, from metrics: DataSourceSectionMetrics) {
+	public func populate(inout section: LayoutSection, from metrics: DataSourceSectionMetricsProviding) {
 		guard let collectionView = self.collectionView,
 			let gridMetrics = metrics.metrics as? GridSectionMetrics,
 			var gridSection = section as? GridLayoutSection else {

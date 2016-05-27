@@ -139,9 +139,9 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	// MARK: - Metrics
 	
 	/// The default metrics for all sections in this data source.
-	public var defaultMetrics: DataSourceSectionMetrics?
+	public var defaultMetrics: DataSourceSectionMetricsProviding?
 	
-	public private(set) var sectionMetrics: [Int: DataSourceSectionMetrics] = [:]
+	public private(set) var sectionMetrics: [Int: DataSourceSectionMetricsProviding] = [:]
 	public private(set) var supplementaryItemsByKind: [String: [SupplementaryItem]] = [:]
 	private var supplementaryItemsByKey: [String: SupplementaryItem] = [:]
 	
@@ -150,12 +150,12 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	}
 	
 	/// Retrieve the layout metrics for a specific section within this data source.
-	public func metricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetrics? {
+	public func metricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
 		return sectionMetrics[sectionIndex]
 	}
 	
 	/// Store customized layout metrics for a section in this data source. The values specified in metrics will override values specified by the data source's `defaultMetrics`.
-	public func setMetrics(metrics: DataSourceSectionMetrics?, forSectionAtIndex sectionIndex: Int) {
+	public func setMetrics(metrics: DataSourceSectionMetricsProviding?, forSectionAtIndex sectionIndex: Int) {
 		sectionMetrics[sectionIndex] = metrics
 	}
 	
@@ -175,17 +175,17 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 		metricsHelper.findSupplementaryItemOfKind(kind, at: indexPath, using: block)
 	}
 	
-	public func snapshotMetrics() -> [Int: DataSourceSectionMetrics] {
+	public func snapshotMetrics() -> [Int: DataSourceSectionMetricsProviding] {
 		return metricsHelper.snapshotMetrics()
 	}
 	
-	public func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetrics? {
+	public func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
 		return metricsHelper.snapshotMetricsForSectionAtIndex(sectionIndex)
 	}
 	
 	public var contributesGlobalMetrics = true
 	
-	public func snapshotContributedGlobalMetrics() -> DataSourceSectionMetrics? {
+	public func snapshotContributedGlobalMetrics() -> DataSourceSectionMetricsProviding? {
 		return metricsHelper.snapshotContributedGlobalMetrics()
 	}
 	

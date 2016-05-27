@@ -32,10 +32,10 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 	public var supplementaryItemsByKind: [String: [SupplementaryItem]] {
 		return dataSource.supplementaryItemsByKind
 	}
-	public var sectionMetrics: [Int: DataSourceSectionMetrics] {
+	public var sectionMetrics: [Int: DataSourceSectionMetricsProviding] {
 		return dataSource.sectionMetrics
 	}
-	public var defaultMetrics: DataSourceSectionMetrics? {
+	public var defaultMetrics: DataSourceSectionMetricsProviding? {
 		get {
 			return dataSource.defaultMetrics
 		}
@@ -43,7 +43,7 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 			dataSource.defaultMetrics = newValue
 		}
 	}
-	public var globalMetrics: DataSourceSectionMetrics? {
+	public var globalMetrics: DataSourceSectionMetricsProviding? {
 		get {
 			return dataSource.metricsForSectionAtIndex(globalSectionIndex)
 		}
@@ -66,12 +66,12 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 	}
 	
 	/// Retrieve the layout metrics for a specific section within this data source.
-	public func metricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetrics? {
+	public func metricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
 		return dataSource.metricsForSectionAtIndex(sectionIndex)
 	}
 	
 	/// Store customized layout metrics for a section in this data source. The values specified in metrics will override values specified by the data source's `defaultMetrics`.
-	public func setMetrics(metrics: DataSourceSectionMetrics?, forSectionAtIndex sectionIndex: Int) {
+	public func setMetrics(metrics: DataSourceSectionMetricsProviding?, forSectionAtIndex sectionIndex: Int) {
 		dataSource.setMetrics(metrics, forSectionAtIndex: sectionIndex)
 	}
 	
@@ -186,8 +186,8 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		}
 	}
 	
-	public func snapshotMetrics() -> [Int: DataSourceSectionMetrics] {
-		var metrics: [Int: DataSourceSectionMetrics] = [:]
+	public func snapshotMetrics() -> [Int: DataSourceSectionMetricsProviding] {
+		var metrics: [Int: DataSourceSectionMetricsProviding] = [:]
 		
 		let globalMetrics = snapshotMetricsForSectionAtIndex(globalSectionIndex)
 		metrics[globalSectionIndex] = globalMetrics
@@ -200,7 +200,7 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		return metrics
 	}
 	
-	public func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetrics? {
+	public func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
 		guard var metrics = appliedMetricsForSection(at: sectionIndex) else {
 			return nil
 		}
@@ -222,7 +222,7 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		return metrics
 	}
 	
-	private func appliedMetricsForSection(at sectionIndex: Int) -> DataSourceSectionMetrics? {
+	private func appliedMetricsForSection(at sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
 		guard var metrics = defaultMetrics else {
 			return sectionMetrics[sectionIndex]
 		}
@@ -234,7 +234,7 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		return metrics
 	}
 	
-	public func snapshotContributedGlobalMetrics() -> DataSourceSectionMetrics? {
+	public func snapshotContributedGlobalMetrics() -> DataSourceSectionMetricsProviding? {
 		guard contributesGlobalMetrics else {
 			return nil
 		}
