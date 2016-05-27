@@ -76,12 +76,6 @@ public protocol LayoutInfo: LayoutSizing, LayoutAttributesResolving, LayoutSecti
 	
 	func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
-	/// Invalidate the current size information for the item at the given *indexPath*, update the layout possibly adjusting the position of content that needs to move to make room for or take up room from the item.
-	func invalidateMetricsForItemAt(indexPath: NSIndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext?)
-	
-	/// Invalidate the current size information for the supplementary item with the given *elementKind* and *indexPath*. This also updates the layout to adjust the position of any content that might need to move to make room for or take up room from the adjusted supplementary item.
-	func invalidateMetricsForElementOfKind(kind: String, at indexPath: NSIndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext?)
-	
 }
 
 public protocol LayoutSectionProvider: class {

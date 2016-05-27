@@ -281,42 +281,6 @@ public class BasicLayoutInfo: LayoutInfo {
 		}
 	}
 	
-	public func invalidateMetricsForItemAt(indexPath: NSIndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
-		guard let cell = layout?.collectionView?.cellForItemAtIndexPath(indexPath) else {
-			return
-		}
-		
-		let attributes = layoutAttributesForCell(at: indexPath)?.copy() as! UICollectionViewLayoutAttributes
-		if let attributes = attributes as? CollectionViewLayoutAttributes {
-			attributes.shouldCalculateFittingSize = true
-		}
-		
-		let newAttributes = cell.preferredLayoutAttributesFittingAttributes(attributes)
-		guard newAttributes.frame.size != attributes.frame.size else {
-			return
-		}
-		
-		setSize(newAttributes.frame.size, forItemAt: indexPath, invalidationContext: invalidationContext)
-	}
-	
-	public func invalidateMetricsForElementOfKind(kind: String, at indexPath: NSIndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
-		guard let view = layout?.collectionView?._supplementaryViewOfKind(kind, at: indexPath) else {
-			return
-		}
-		
-		let attributes = layoutAttributesForSupplementaryElementOfKind(kind, at: indexPath)?.copy() as! UICollectionViewLayoutAttributes
-		if let attributes = attributes as? CollectionViewLayoutAttributes {
-			attributes.shouldCalculateFittingSize = true
-		}
-		
-		let newAttributes = view.preferredLayoutAttributesFittingAttributes(attributes)
-		guard newAttributes.frame.size != attributes.frame.size else {
-			return
-		}
-		
-		setSize(newAttributes.frame.size, forElementOfKind: kind, at: indexPath, invalidationContext: invalidationContext)
-	}
-	
 	public func layoutAttributesForCell(at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
 		let sectionIndex = indexPath.layoutSection
 		let sectionInfo = sectionAtIndex(sectionIndex)

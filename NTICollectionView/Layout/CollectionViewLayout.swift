@@ -632,11 +632,11 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		if layoutDataIsValid && context.invalidateMetrics {
 			for (kind, supplementaryIndexPaths) in context.invalidatedSupplementaryIndexPaths ?? [:] {
 				for indexPath in supplementaryIndexPaths {
-					layoutInfo.invalidateMetricsForElementOfKind(kind, at: indexPath, invalidationContext: context)
+					invalidateMetricsForElement(ofKind: kind, at: indexPath, in: context)
 				}
 			}
 			for indexPath in context.invalidatedItemIndexPaths ?? [] {
-				layoutInfo.invalidateMetricsForItemAt(indexPath, invalidationContext: context)
+				invalidateMetricsForItem(at: indexPath, in: context)
 			}
 		}
 		
@@ -647,6 +647,42 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 				debugPrint("\(#function) \(kind) invalidated supplementary indexPaths: \(resultStr)")
 			}
 		}
+	}
+	
+	public func invalidateMetricsForItem(at indexPath: NSIndexPath, in context: CollectionViewLayoutInvalidationContext) {
+		guard let cell = collectionView?.cellForItemAtIndexPath(indexPath) else {
+			return
+		}
+		
+		let attributes = layoutInfo.layoutAttributesForCell(at: indexPath)?.copy() as! CollectionViewLayoutAttributes
+		attributes.shouldCalculateFittingSize = true
+		
+		let newAttributes = cell.preferredLayoutAttributesFittingAttributes(attributes)
+		let newSize = newAttributes.frame.size
+		
+		guard newSize != attributes.frame.size else {
+			return
+		}
+		
+		layoutInfo.setSize(newSize, forItemAt: indexPath, invalidationContext: context)
+	}
+	
+	private func invalidateMetricsForElement(ofKind kind: String, at indexPath: NSIndexPath, in context: CollectionViewLayoutInvalidationContext) {
+		guard let view = collectionView?._supplementaryViewOfKind(kind, at: indexPath) else {
+			return
+		}
+		
+		let attributes = layoutInfo.layoutAttributesForSupplementaryElementOfKind(kind, at: indexPath)?.copy() as! CollectionViewLayoutAttributes
+		attributes.shouldCalculateFittingSize = true
+		
+		let newAttributes = view.preferredLayoutAttributesFittingAttributes(attributes)
+		let newSize = newAttributes.frame.size
+		
+		guard newSize != attributes.frame.size else {
+			return
+		}
+		
+		layoutInfo.setSize(newSize, forElementOfKind: kind, at: indexPath, invalidationContext: context)
 	}
 	
 	public override func prepareLayout() {
