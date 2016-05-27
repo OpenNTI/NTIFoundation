@@ -625,7 +625,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		}
 		
 		guard let context = context as? CollectionViewLayoutInvalidationContext else {
-				return
+			return
 		}
 		
 		// If the layout data is valid, but we've been asked to update the metrics, do that
@@ -1206,6 +1206,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		updateFlagsFromCollectionView()
 		
 		createLayoutInfoFromDataSource()
+		
+		layoutInfo.isEditing = isEditing
 		
 		layoutDataIsValid = true
 		

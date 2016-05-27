@@ -34,9 +34,7 @@ public class BasicLayoutInfo: LayoutInfo {
 		return layout
 	}
 	
-	public var isEditing: Bool {
-		return layout?.isEditing ?? false
-	}
+	public var isEditing = false
 	
 	public var numberOfSections: Int {
 		return _sections.count

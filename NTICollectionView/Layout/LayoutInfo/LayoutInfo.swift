@@ -48,7 +48,7 @@ public protocol LayoutInfo: LayoutSizing, LayoutAttributesResolving, LayoutSecti
 	
 	var bounds: CGRect { get set }
 	
-	var isEditing: Bool { get }
+	var isEditing: Bool { get set }
 	
 	var sections: [LayoutSection] { get }
 	
