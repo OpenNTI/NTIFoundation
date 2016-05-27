@@ -19,7 +19,7 @@ public let collectionElementKindRightAuxiliaryItem = "collectionElementKindRight
 
 public protocol GridLayoutSection: LayoutSection {
 	
-	var metrics: GridSectionMetrics { get set }
+	var metrics: GridSectionMetricsProviding { get set }
 	
 	var headers: [LayoutSupplementaryItem] { get set }
 	var footers: [LayoutSupplementaryItem] { get set }
@@ -165,7 +165,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 		}
 	}
 	
-	public var metrics: GridSectionMetrics = BasicGridSectionMetrics()
+	public var metrics: GridSectionMetricsProviding = BasicGridSectionMetrics()
 	
 	public var columnWidth: CGFloat {
 		return metrics.fixedColumnWidth ?? maximizedColumnWidth

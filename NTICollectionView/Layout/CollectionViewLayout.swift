@@ -1336,7 +1336,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	// TODO: Abstract somewhere else
 	public func populate(inout section: LayoutSection, from metrics: DataSourceSectionMetricsProviding) {
 		guard let collectionView = self.collectionView,
-			let gridMetrics = metrics.metrics as? GridSectionMetrics,
+			let gridMetrics = metrics.metrics as? GridSectionMetricsProviding,
 			var gridSection = section as? GridLayoutSection else {
 				return
 		}

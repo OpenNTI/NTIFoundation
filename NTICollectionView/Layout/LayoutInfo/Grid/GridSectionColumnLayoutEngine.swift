@@ -27,7 +27,7 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 	
 	public var spacing: CGFloat = 0
 	
-	private var metrics: GridSectionMetrics {
+	private var metrics: GridSectionMetricsProviding {
 		return layoutSection.metrics
 	}
 	

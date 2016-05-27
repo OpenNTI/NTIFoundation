@@ -59,7 +59,7 @@ public struct GridSupplementaryAttributes: GridSupplementaryAttributeProvider, E
 	public var simulatesSelection = false
 	
 	public mutating func applyValues(from metrics: LayoutMetrics) {
-		guard let gridMetrics = metrics as? GridSectionMetrics else {
+		guard let gridMetrics = metrics as? GridSectionMetricsProviding else {
 			return
 		}
 		

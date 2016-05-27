@@ -34,7 +34,7 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 	public var nonPinnableHeaders: [LayoutSupplementaryItem] = []
 	public var supplementaryItems: [LayoutSupplementaryItem]
 	
-	private var metrics: GridSectionMetrics {
+	private var metrics: GridSectionMetricsProviding {
 		return layoutSection.metrics
 	}
 	private var contentInset: UIEdgeInsets {

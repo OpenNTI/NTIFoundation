@@ -18,7 +18,7 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	
 	public var layoutSection: GridLayoutSection
 	
-	private var metrics: GridSectionMetrics {
+	private var metrics: GridSectionMetricsProviding {
 		return layoutSection.metrics
 	}
 	private var margins: UIEdgeInsets {

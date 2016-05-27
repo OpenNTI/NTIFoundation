@@ -78,7 +78,7 @@ public struct GridLayoutItem: LayoutItem {
 		
 		cornerRadius = sectionMetrics.cornerRadius
 		
-		guard let gridMetrics = metrics as? GridSectionMetrics else {
+		guard let gridMetrics = metrics as? GridSectionMetricsProviding else {
 			return
 		}
 		
