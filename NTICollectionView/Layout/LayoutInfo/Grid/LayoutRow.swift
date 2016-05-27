@@ -41,7 +41,7 @@ extension LayoutRowProtocol {
 
 public struct LayoutRow: LayoutRowProtocol {
 	
-	public var metrics = BasicGridSectionMetrics()
+	public var metrics = GridSectionMetrics()
 	
 	public var frame = CGRectZero
 	

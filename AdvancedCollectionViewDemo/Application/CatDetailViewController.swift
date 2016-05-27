@@ -84,7 +84,7 @@ class CatDetailViewController: CollectionViewController {
 		dataSource.noContentPlaceholder = BasicDataSourcePlaceholder(title: "No Sightings", message: "This cat has not been sighted recently.", image: nil)
 		
 		var metrics = GridDataSourceSectionMetrics()
-		var gridMetrics = BasicGridSectionMetrics()
+		var gridMetrics = GridSectionMetrics()
 		gridMetrics.showsRowSeparator = true
 		gridMetrics.separatorInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
 		gridMetrics.estimatedRowHeight = 60

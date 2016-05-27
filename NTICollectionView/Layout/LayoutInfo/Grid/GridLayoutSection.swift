@@ -165,7 +165,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 		}
 	}
 	
-	public var metrics: GridSectionMetricsProviding = BasicGridSectionMetrics()
+	public var metrics: GridSectionMetricsProviding = GridSectionMetrics()
 	
 	public var columnWidth: CGFloat {
 		return metrics.fixedColumnWidth ?? maximizedColumnWidth

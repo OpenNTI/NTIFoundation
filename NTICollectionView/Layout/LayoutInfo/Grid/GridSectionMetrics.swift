@@ -83,7 +83,7 @@ public protocol GridSectionMetricsProviding: SectionMetrics {
 	
 }
 
-public struct BasicGridSectionMetrics: GridSectionMetricsProviding {
+public struct GridSectionMetrics: GridSectionMetricsProviding {
 	
 	public static var defaultSupplementaryOrdering: Set<GridSectionSupplementaryItemOrder> = [.header(order: 0), .footer(order: 1), .leftAuxiliary(order: 2), .rightAuxiliary(order: 3)]
 	
@@ -249,7 +249,7 @@ public struct BasicGridSectionMetrics: GridSectionMetricsProviding {
 	public var cellLayoutOrder: ItemLayoutOrder = .LeadingToTrailing
 	
 	public func isEqual(to other: LayoutMetrics) -> Bool {
-		guard let other = other as? BasicGridSectionMetrics else {
+		guard let other = other as? GridSectionMetrics else {
 			return false
 		}
 		

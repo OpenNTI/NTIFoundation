@@ -12,7 +12,7 @@ public struct GridDataSourceSectionMetrics: DataSourceSectionMetricsProviding {
 	
 	public init() {}
 	
-	public var metrics: SectionMetrics = BasicGridSectionMetrics()
+	public var metrics: SectionMetrics = GridSectionMetrics()
 	
 	public var sectionBuilderType: LayoutSectionBuilder.Type = GridLayoutSectionBuilder.self
 	

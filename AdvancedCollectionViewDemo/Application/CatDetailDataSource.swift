@@ -18,7 +18,7 @@ class CatDetailDataSource: ComposedCollectionDataSource {
 		
 		defaultMetrics = GridDataSourceSectionMetrics()
 		
-		var gridMetrics = BasicGridSectionMetrics()
+		var gridMetrics = GridSectionMetrics()
 		
 		var classificationMetrics = GridDataSourceSectionMetrics()
 		
