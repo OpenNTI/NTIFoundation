@@ -601,6 +601,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return CollectionViewLayoutInvalidationContext.self
 	}
 	
+	// This is necessarily called before `resetLayoutInfo` (from `loadView`)
 	public override func invalidateLayoutWithContext(context: UICollectionViewLayoutInvalidationContext) {
 		defer {
 			super.invalidateLayoutWithContext(context)
@@ -614,7 +615,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		var invalidateEverything = context.invalidateEverything
 		
 		// The collectionView has changed width, re-evaluate the layout
-		if layoutInfo.collectionViewSize.width != collectionView.bounds.size.width {
+		if layoutInfo?.collectionViewSize.width != collectionView.bounds.size.width {
 			invalidateEverything = true
 		}
 		
