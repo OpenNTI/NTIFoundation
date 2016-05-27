@@ -280,8 +280,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 				needsConfigureBackgroundAttributes = false
 			}
 			
-			// This can lead to a crash somehow, but otherwise we'd want to do it
-//			_backgroundAttributes = _backgroundAttributes.copy() as! CollectionViewLayoutAttributes
+			_backgroundAttributes = _backgroundAttributes.copy() as! CollectionViewLayoutAttributes
 			
 			return _backgroundAttributes
 		}
@@ -886,7 +885,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 		
 		finalizePinningForHeaders(pinnable: false, zIndex: pinnedHeaderZIndex)
 		
-		if let backgroundAttributes = backgroundAttributesForWriting {
+		if let backgroundAttributes = backgroundAttributesForReading {
 			var frame = backgroundAttributes.frame
 			frame.origin.y = min(nonPinnableY, layoutInfo.bounds.origin.y)
 			let bottomY = max(pinnableHeaders.last?.frame.maxY ?? 0, nonPinnableHeaders.last?.frame.maxY ?? 0)
