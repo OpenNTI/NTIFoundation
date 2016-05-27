@@ -47,7 +47,8 @@ public protocol GridLayoutSection: LayoutSection {
 	
 	var shouldShowColumnSeparator: Bool { get }
 	
-	var backgroundAttribute: CollectionViewLayoutAttributes? { get }
+	var backgroundAttributesForReading: CollectionViewLayoutAttributes? { get }
+	var backgroundAttributesForWriting: CollectionViewLayoutAttributes? { mutating get }
 
 	mutating func add(inout row: LayoutRow)
 	mutating func removeAllRows()
@@ -186,8 +187,8 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 	public var layoutAttributes: [CollectionViewLayoutAttributes] {
 		var layoutAttributes: [CollectionViewLayoutAttributes] = []
 		
-		if let backgroundAttribute = self.backgroundAttribute {
-			layoutAttributes.append(backgroundAttribute)
+		if let backgroundAttributes = backgroundAttributesForReading {
+			layoutAttributes.append(backgroundAttributes)
 		}
 		
 		if let contentBackgroundAttributes = self.contentBackgroundAttributes {
@@ -252,34 +253,46 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 		return sectionSeparatorLayoutAttributes[sectionSeparatorBottom] != nil
 	}
 	
-	public var backgroundAttribute: CollectionViewLayoutAttributes? {
-		// Only have background attribute on global section
-		guard sectionIndex == globalSectionIndex else {
-			return nil
-		}
-		
+	private var _backgroundAttributes = CollectionViewLayoutAttributes(forDecorationViewOfKind: collectionElementKindGlobalHeaderBackground, withIndexPath: NSIndexPath(index: 0))
+	
+	public var backgroundAttributesForReading: CollectionViewLayoutAttributes? {
 		guard shouldShowBackground else {
 			return nil
 		}
 		
-		let indexPath = NSIndexPath(index: 0)
-		let backgroundAttribute = CollectionViewLayoutAttributes(forDecorationViewOfKind: collectionElementKindGlobalHeaderBackground, withIndexPath: indexPath)
-		
-		backgroundAttribute.frame = backgroundFrame
-		backgroundAttribute.unpinnedOrigin = backgroundFrame.origin
-		backgroundAttribute.zIndex = defaultZIndex
-		backgroundAttribute.isPinned = false
-		backgroundAttribute.hidden = false
-		backgroundAttribute.backgroundColor = metrics.backgroundColor
-		
-		return backgroundAttribute
+		return _backgroundAttributes
 	}
 	
-	// This is updated by -updateSpecialItemsWithContentOffset
-	private var backgroundFrame = CGRectZero
+	// This is updated by `updateSpecialItemsWithContentOffset`
+	public var backgroundAttributesForWriting: CollectionViewLayoutAttributes? {
+		mutating get {
+			guard shouldShowBackground else {
+				return nil
+			}
+			
+			if needsConfigureBackgroundAttributes {
+				_backgroundAttributes.frame = frame
+				_backgroundAttributes.unpinnedOrigin = frame.origin
+				_backgroundAttributes.zIndex = defaultZIndex
+				_backgroundAttributes.isPinned = false
+				_backgroundAttributes.hidden = false
+				_backgroundAttributes.backgroundColor = metrics.backgroundColor
+				needsConfigureBackgroundAttributes = false
+			}
+			
+			// This can lead to a crash somehow, but otherwise we'd want to do it
+//			_backgroundAttributes = _backgroundAttributes.copy() as! CollectionViewLayoutAttributes
+			
+			return _backgroundAttributes
+		}
+	}
+	
+	private var needsConfigureBackgroundAttributes = true
+	
 	
 	private var shouldShowBackground: Bool {
-		return metrics.backgroundColor != nil
+		// Only have background attribute on global section
+		return sectionIndex == globalSectionIndex && metrics.backgroundColor != nil
 	}
 	
 	public var contentBackgroundAttributes: CollectionViewLayoutAttributes? {
@@ -367,6 +380,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 	}
 	
 	public mutating func reset() {
+		needsConfigureBackgroundAttributes = true
 		items.removeAll(keepCapacity: true)
 		supplementaryItemsByKind = [:]
 		rows.removeAll(keepCapacity: true)
@@ -418,10 +432,9 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 		}
 		
 		// FIXME: Make sure this works
-		if let backgroundAttribute = self.backgroundAttribute {
-			let backgroundRect = CGRectOffset(backgroundAttribute.frame, offset.x, offset.y)
-			backgroundAttribute.frame = backgroundRect
-			invalidationContext?.invalidateDecorationElementsOfKind(backgroundAttribute.representedElementKind!, atIndexPaths: [backgroundAttribute.indexPath])
+		if let backgroundAttributes = self.backgroundAttributesForReading {
+			backgroundAttributes.frame = CGRectOffset(backgroundAttributes.frame, offset.x, offset.y)
+			invalidationContext?.invalidateDecorationElementsOfKind(backgroundAttributes.representedElementKind!, atIndexPaths: [backgroundAttributes.indexPath])
 		}
 		
 		if let contentBackgroundAttributes = self.contentBackgroundAttributes {
@@ -725,7 +738,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 			let rowInfo = rows[itemIndex]
 			return rowInfo.rowSeparatorLayoutAttributes
 		case collectionElementKindGlobalHeaderBackground:
-			return backgroundAttribute
+			return backgroundAttributesForReading
 		case collectionElementKindContentBackground:
 			return contentBackgroundAttributes
 		default:
@@ -742,7 +755,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 		attributes[collectionElementKindColumnSeparator] = columnSeparatorLayoutAttributes
 		attributes[collectionElementKindSectionSeparator] = Array(sectionSeparatorLayoutAttributes.values)
 		attributes[collectionElementKindRowSeparator] = rows.flatMap { $0.rowSeparatorLayoutAttributes }
-		attributes[collectionElementKindGlobalHeaderBackground] = [backgroundAttribute].flatMap { $0 }
+		attributes[collectionElementKindGlobalHeaderBackground] = [backgroundAttributesForReading].flatMap { $0 }
 		attributes[collectionElementKindContentBackground] = [contentBackgroundAttributes].flatMap { $0 }
 		
 		attributes.appendContents(of: attributesForDecorationsByKind)
@@ -873,15 +886,12 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 		
 		finalizePinningForHeaders(pinnable: false, zIndex: pinnedHeaderZIndex)
 		
-		if shouldShowBackground {
-			var backgroundInset = metrics.contentInset
-			backgroundInset.bottom = 0
-			backgroundFrame = UIEdgeInsetsInsetRect(frame, backgroundInset)
-			
-			backgroundFrame.origin.y = min(nonPinnableY, layoutInfo.bounds.origin.y)
-			
+		if let backgroundAttributes = backgroundAttributesForWriting {
+			var frame = backgroundAttributes.frame
+			frame.origin.y = min(nonPinnableY, layoutInfo.bounds.origin.y)
 			let bottomY = max(pinnableHeaders.last?.frame.maxY ?? 0, nonPinnableHeaders.last?.frame.maxY ?? 0)
-			backgroundFrame.size.height = bottomY - backgroundFrame.origin.y
+			frame.size.height = bottomY - frame.origin.y
+			backgroundAttributes.frame = frame
 		}
 		
 		mutateFirstSectionOverlappingYOffset(pinnableY, from: layoutInfo) { overlappingSection in
