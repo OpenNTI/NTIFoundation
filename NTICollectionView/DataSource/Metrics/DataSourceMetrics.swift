@@ -10,8 +10,6 @@ import UIKit
 
 public protocol DataSourceSectionMetricsProviding: DataSourceSectionInfo, LayoutMetrics {
 	
-	init()
-	
 	var metrics: SectionMetrics { get set }
 	
 	/// The type of `LayoutSectionBuilder` that should be used to create the section described by `self`.

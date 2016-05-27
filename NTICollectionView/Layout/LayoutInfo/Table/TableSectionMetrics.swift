@@ -73,6 +73,8 @@ public protocol TableRowMetricsProviding : LayoutMetricsApplicable {
 
 public struct TableSectionMetrics : TableSectionMetricsProviding, BasicSectionMetricsWrapper {
 	
+	public init() {}
+	
 	public var basicSectionMetrics = BasicSectionMetrics()
 	
 	/// The height of each row in the section.

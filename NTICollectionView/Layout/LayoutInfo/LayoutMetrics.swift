@@ -42,6 +42,8 @@ public protocol LayoutMetrics: LayoutMetricsApplicable {
 
 public protocol SectionMetrics: LayoutMetrics {
 	
+	init()
+	
 	/// The distance that the section content is inset from the enclosing content.
 	var contentInset: UIEdgeInsets { get set }
 	

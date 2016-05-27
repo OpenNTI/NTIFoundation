@@ -10,6 +10,8 @@ import UIKit
 
 public struct BasicSectionMetrics: SectionMetrics {
 	
+	public init() {}
+	
 	public var contentInset: UIEdgeInsets = .zero {
 		didSet {setFlag("contentInset")}
 	}
