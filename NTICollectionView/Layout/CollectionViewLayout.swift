@@ -1325,7 +1325,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			oldLayoutInfo = layoutInfo
 		}
 		
-		layoutInfo = BasicLayoutInfo(layout: self)
+		layoutInfo = BasicLayoutInfo(layoutMeasure: self)
 		
 		guard layoutInfo != nil else {
 			preconditionFailure("Could not create layout info.")

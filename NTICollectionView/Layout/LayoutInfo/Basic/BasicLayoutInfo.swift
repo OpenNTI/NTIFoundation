@@ -10,8 +10,8 @@ import UIKit
 
 public class BasicLayoutInfo: LayoutInfo {
 	
-	public init(layout: CollectionViewLayout?) {
-		self.layout = layout
+	public init(layoutMeasure: CollectionViewLayoutMeasuring?) {
+		self.layoutMeasure = layoutMeasure
 	}
 	
 	public var collectionViewSize = CGSizeZero
@@ -30,9 +30,7 @@ public class BasicLayoutInfo: LayoutInfo {
 	
 	public weak var layout: CollectionViewLayout?
 	
-	public var layoutMeasure: CollectionViewLayoutMeasuring? {
-		return layout
-	}
+	public weak var layoutMeasure: CollectionViewLayoutMeasuring?
 	
 	public var isEditing = false
 	
@@ -59,7 +57,7 @@ public class BasicLayoutInfo: LayoutInfo {
 	private var numberOfPlaceholders = 0
 	
 	public func copy() -> BasicLayoutInfo {
-		let copy = BasicLayoutInfo(layout: layout)
+		let copy = BasicLayoutInfo(layoutMeasure: layoutMeasure)
 		
 		copy.width = width
 		copy.height = height
