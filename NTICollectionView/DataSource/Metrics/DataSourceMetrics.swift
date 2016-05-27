@@ -42,4 +42,36 @@ extension DataSourceSectionMetricsProviding {
 	
 }
 
-
+public struct DataSourceSectionMetrics<Metrics: SectionMetrics> : DataSourceSectionMetricsProviding {
+	
+	public let template = Metrics.init()
+	
+	public var metrics: SectionMetrics = Metrics.init()
+	
+	public var placeholder: AnyObject?
+	
+	public var supplementaryItemsByKind: [String: [SupplementaryItem]] = [:]
+	
+	public var sizingInfo: CollectionViewLayoutMeasuring?
+	
+	public func makeTemplate() -> Metrics {
+		return Metrics.init()
+	}
+	
+	public func isEqual(to other: LayoutMetrics) -> Bool {
+		guard let other = other as? DataSourceSectionMetrics<Metrics> else {
+			return false
+		}
+		
+		return metrics.isEqual(to: other.metrics)
+	}
+	
+	public func definesMetric(metric: String) -> Bool {
+		return false
+	}
+	
+	public mutating func resolveMissingValuesFromTheme() {
+		metrics.resolveMissingValuesFromTheme()
+	}
+	
+}
