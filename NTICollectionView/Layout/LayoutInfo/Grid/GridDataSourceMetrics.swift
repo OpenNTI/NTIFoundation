@@ -39,3 +39,13 @@ public struct GridDataSourceSectionMetrics: DataSourceSectionMetricsProviding {
 	}
 	
 }
+
+public struct GridLayout : LayoutClass {
+	
+	public typealias SectionMetricsType = GridSectionMetrics
+	
+	public typealias SupplementaryItemType = GridSupplementaryItem
+	
+	public typealias LayoutBuilderType = GridLayoutSectionBuilder
+	
+}
