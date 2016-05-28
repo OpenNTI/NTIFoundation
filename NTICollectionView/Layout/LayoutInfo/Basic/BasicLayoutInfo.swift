@@ -179,7 +179,7 @@ public class BasicLayoutInfo: LayoutInfo {
 			
 			// There are no items, need to determine if there are any supplementary elements that will be displayed
 			for supplementaryItem in sectionInfo.supplementaryItems {
-				guard supplementaryItem.isVisibleWhileShowingPlaceholder && !supplementaryItem.isHidden && supplementaryItem.height != 0 else {
+				guard sectionInfo.shouldShow(supplementaryItem) && !supplementaryItem.isHidden && supplementaryItem.height != 0 else {
 					continue
 				}
 				sectionsWithContent.append(sectionInfo)
@@ -248,7 +248,7 @@ public class BasicLayoutInfo: LayoutInfo {
 	}
 	
 	private func setSize(size: CGSize, forPlaceholderAt sectionIndex: Int, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
-		guard var section = sectionAtIndex(sectionIndex),
+		guard var section = sectionAtIndex(sectionIndex) where section.shouldResizePlaceholder,
 			var placeholderInfo = section.placeholderInfo else {
 				return CGPointZero
 		}
@@ -258,7 +258,7 @@ public class BasicLayoutInfo: LayoutInfo {
 		var deltaY = size.height - frame.height
 		
 		if sharedHeight > 0 {
-			deltaY = size.height + sharedHeight - frame.height
+			deltaY += sharedHeight
 		}
 		
 		frame.size.height += deltaY

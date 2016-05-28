@@ -38,6 +38,7 @@ public class PlaceholderView: UIView {
 			updateViewHierarchy()
 		}
 	}
+	
 	public var message: String? {
 		didSet {
 			guard message != oldValue else {
@@ -46,6 +47,7 @@ public class PlaceholderView: UIView {
 			updateViewHierarchy()
 		}
 	}
+	
 	public var image: UIImage? {
 		didSet {
 			guard image != oldValue else {
@@ -54,6 +56,7 @@ public class PlaceholderView: UIView {
 			updateViewHierarchy()
 		}
 	}
+	
 	public var buttonTitle: String? {
 		didSet {
 			guard buttonTitle != oldValue else {
@@ -62,9 +65,23 @@ public class PlaceholderView: UIView {
 			updateViewHierarchy()
 		}
 	}
+	
 	public var buttonAction: dispatch_block_t?
 	
-	private let textColor = UIColor(white: textColorWhiteValue, alpha: 1)
+	public var titleFont = UIFont.systemFontOfSize(14) {
+		didSet { titleLabel.font = titleFont }
+	}
+	
+	public var messageFont = UIFont.systemFontOfSize(14) {
+		didSet { messageLabel.font = messageFont }
+	}
+	
+	public var textColor = UIColor(white: textColorWhiteValue, alpha: 1) {
+		didSet {
+			titleLabel.textColor = textColor
+			messageLabel.textColor = textColor
+		}
+	}
 	
 	private var containerView = UIView(frame: CGRectZero)
 	private var imageView: UIImageView!

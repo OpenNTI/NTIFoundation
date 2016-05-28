@@ -15,11 +15,6 @@ private let placeholderHeight: CGFloat = 100
 
 public final class PagingPlaceholderDataSourceController: CollectionDataSourceController {
 	
-	public init(dataSource: CollectionDataSource) {
-		self.dataSource = dataSource
-		configureDataSource()
-	}
-	
 	public let dataSource: CollectionDataSource
 	
 	public var hasNextPage = false {
@@ -31,22 +26,6 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 		}
 	}
 	
-	private func showNextPagePlaceholder() {
-		nextPagePlaceholder.height = placeholderHeight
-		nextPagePlaceholder.isHidden = false
-		replaceNextPagePlaceholder()
-	}
-	
-	private func hideNextPagePlaceholder() {
-		nextPagePlaceholder.height = 0
-		nextPagePlaceholder.isHidden = true
-		replaceNextPagePlaceholder()
-	}
-	
-	private func replaceNextPagePlaceholder() {
-		dataSource.replaceSupplementaryItemForKey(nextPagePlaceholderKey, with: nextPagePlaceholder)
-	}
-	
 	public var hasPrevPage = false {
 		didSet {
 			guard hasPrevPage != oldValue else {
@@ -54,22 +33,6 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 			}
 			hasPrevPage ? showPrevPagePlaceholder() : hidePrevPagePlaceholder()
 		}
-	}
-	
-	private func showPrevPagePlaceholder() {
-		prevPagePlaceholder.height = placeholderHeight
-		prevPagePlaceholder.isHidden = false
-		replacePrevPagePlaceholder()
-	}
-	
-	private func hidePrevPagePlaceholder() {
-		prevPagePlaceholder.height = 0
-		prevPagePlaceholder.isHidden = true
-		replacePrevPagePlaceholder()
-	}
-	
-	private func replacePrevPagePlaceholder() {
-		dataSource.replaceSupplementaryItemForKey(prevPagePlaceholderKey, with: prevPagePlaceholder)
 	}
 	
 	public private(set) var nextPagePlaceholder = GridSupplementaryItem(elementKind: UICollectionElementKindSectionFooter)
@@ -83,6 +46,11 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 			nextPagePlaceholder.registration,
 			prevPagePlaceholder.registration
 		]
+	}
+	
+	public init(dataSource: CollectionDataSource) {
+		self.dataSource = dataSource
+		configureDataSource()
 	}
 	
 	private func configureDataSource() {
@@ -143,4 +111,36 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 		pagingPlaceholder.supplementaryViewClass = CollectionPlaceholderView.self
 	}
 	
+	private func showNextPagePlaceholder() {
+		nextPagePlaceholder.height = placeholderHeight
+		nextPagePlaceholder.isHidden = false
+		replaceNextPagePlaceholder()
+	}
+	
+	private func hideNextPagePlaceholder() {
+		nextPagePlaceholder.height = 0
+		nextPagePlaceholder.isHidden = true
+		replaceNextPagePlaceholder()
+	}
+
+	private func replaceNextPagePlaceholder() {
+		dataSource.replaceSupplementaryItemForKey(nextPagePlaceholderKey, with: nextPagePlaceholder)
+	}
+
+	private func showPrevPagePlaceholder() {
+		prevPagePlaceholder.height = placeholderHeight
+		prevPagePlaceholder.isHidden = false
+		replacePrevPagePlaceholder()
+	}
+	
+	private func hidePrevPagePlaceholder() {
+		prevPagePlaceholder.height = 0
+		prevPagePlaceholder.isHidden = true
+		replacePrevPagePlaceholder()
+	}
+	
+	private func replacePrevPagePlaceholder() {
+		dataSource.replaceSupplementaryItemForKey(prevPagePlaceholderKey, with: prevPagePlaceholder)
+	}
+
 }

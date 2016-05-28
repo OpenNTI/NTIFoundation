@@ -69,6 +69,9 @@ public protocol SectionMetrics: LayoutMetrics {
 	/// The decorations to add to the section represented by `self`.
 	var decorationsByKind: [String: [LayoutDecoration]] { get set }
 	
+	/// Whether placeholders should be resized for fill available screen space.
+	var shouldResizePlaceholder: Bool { get set }
+	
 	mutating func add(decoration: LayoutDecoration)
 	
 }

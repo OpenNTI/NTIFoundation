@@ -27,6 +27,8 @@ public protocol CollectionDataSourceController: class {
 	
 	func loadPreviousContent(with progress: LoadingProgress)
 	
+	func registerReusableViews(with collectionView: UICollectionView)
+	
 }
 
 extension CollectionDataSourceController {
@@ -50,6 +52,8 @@ extension CollectionDataSourceController {
 	public var contributionalGlobalSupplementaryItemsByKey: [String: SupplementaryItem] {
 		return [:]
 	}
+	
+	public func registerReusableViews(with collectionView: UICollectionView) {}
 	
 }
 

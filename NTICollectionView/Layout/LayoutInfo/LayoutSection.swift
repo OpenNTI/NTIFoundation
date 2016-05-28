@@ -24,10 +24,11 @@ public protocol LayoutSection: LayoutAttributesResolving {
 	
 	var decorations: [LayoutDecoration] { get }
 	
+	var placeholderInfo: LayoutPlaceholder? { get set }
+	var shouldResizePlaceholder: Bool { get }
+	
 	func supplementaryItems(of kind: String) -> [LayoutSupplementaryItem]
 	mutating func setSupplementaryItems(supplementaryItems: [LayoutSupplementaryItem], of kind: String)
-	
-	var placeholderInfo: LayoutPlaceholder? { get set }
 	
 	/// All the layout attributes associated with this section.
 	var layoutAttributes: [CollectionViewLayoutAttributes] { get }
@@ -48,6 +49,8 @@ public protocol LayoutSection: LayoutAttributesResolving {
 	
 	/// Reset the content of this section.
 	mutating func reset()
+	
+	func shouldShow(supplementaryItem: SupplementaryItem) -> Bool
 	
 	mutating func finalizeLayoutAttributesForSectionsWithContent(sectionsWithContent: [LayoutSection])
 	

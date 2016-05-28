@@ -131,6 +131,8 @@ public class BasicCollectionDataSource: AbstractCollectionDataSource {
 	
 	public func removeItems(at indexes: NSIndexSet) {
 		var newItems: [Item] = []
+		let newCount = _items.count - indexes.count
+		newItems.reserveCapacity(newCount)
 		
 		// Set up a delayed set of batch update calls for later execution
 		var batchUpdates = {}

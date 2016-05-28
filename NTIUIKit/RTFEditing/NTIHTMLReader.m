@@ -451,14 +451,22 @@ didStartElement: (NSString*)elementName
 	//Again with our assumptions. We never have any style applied just to a link.
 	//Links only contain an image.
 	elementName = [elementName lowercaseString];
+	
+	//We collect images to such than if an anchor contains an image,
+	//we parse that as an image as a link. However, since img can by
+	//definition have no children, anytime we hit a start tag we can stop
+	//collecting/tracking the prior image.  This helps to ensure in the case
+	//of horribly formed html we don't bleed images into later anchors.
+	if(self->currentImage){
+		CFRelease( self->currentImage );
+		self->currentImage = nil;
+	}
+	
 	if( [@"a" isEqual: elementName] ) {
 		self->currentHref = [[attributeDict objectForKey: @"href"] copy];
 		self->linkStart = self->attrBuffer.length;
 	}
 	else if( [@"img" isEqual: elementName] ) {
-		if(self->currentImage){
-			CFRelease( self->currentImage );
-		}
 		NSString* src = [attributeDict objectForKey: @"src"];
 		self->currentImage = [self newImageFromURL: src];
 	}

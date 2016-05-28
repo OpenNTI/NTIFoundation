@@ -99,6 +99,18 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 	return rowHeightForAttributedString(str, width, YES);
 }
 
+- (instancetype)initWithFrame:(CGRect)frame textContainer:(NSTextContainer *)textContainer
+{
+	self = [super initWithFrame:frame textContainer:textContainer];
+	if (!self) {
+		return nil;
+	}
+	
+	[self _commonInit];
+	
+	return self;
+}
+
 -(id)initWithFrame:(CGRect)frame
 {
 	self = [super initWithFrame: frame];
@@ -115,32 +127,6 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 		[self _commonInit];
 	}
 	return self;
-}
-
--(BOOL)becomeFirstResponder
-{
-	self->_contentOffsetBeforeBecomingFirstResponder = self.contentOffset;
-	
-	BOOL r = [super becomeFirstResponder];
-	
-	if(self.allowsAddingCustomObjects){
-		UIMenuController* menuController = [UIMenuController sharedMenuController];
-		UIMenuItem* item = [[UIMenuItem alloc] initWithTitle: @"Add Whiteboard" action: @selector(addWhiteboard:)];
-		NSArray* menuItems = OFISNULL(menuController.menuItems) ? @[item] : [menuController.menuItems arrayByAddingObject: item];
-		menuController.menuItems = menuItems;
-	}
-	
-	return r;
-}
-
--(BOOL)resignFirstResponder
-{
-	BOOL r = [super resignFirstResponder];
-	if(r){
-		UIMenuController* menuController = [UIMenuController sharedMenuController];
-		menuController.menuItems = nil;
-	}
-	return r;
 }
 
 -(void)_commonInit
@@ -342,13 +328,6 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 
 -(void)tapped: (UIGestureRecognizer*)r
 {
-	//If we don't have a delegate that responds to attachmentCell:wasTouchedAtPoint
-	//there is no point in doing the work
-	if( ![self.attachmentDelegate respondsToSelector:
-		 @selector(editableFrame:attachmentCell:wasTouchedAtPoint:)] ){
-		return;
-	}
-	
 	CGPoint p = [r locationInView: self.textInputView];
 	
 	
@@ -374,19 +353,19 @@ static CGFloat rowHeightForAttributedString(NSAttributedString *string, CGFloat 
 					   showingMenu: NO];
 	}
 	
-	if (   self->shouldSelectCells
-		&& [self.attachmentDelegate respondsToSelector:
-			@selector(editableFrame:attachmentCell:wasSelectedWithRect:)] ) {
+	if([self.attachmentDelegate respondsToSelector: @selector(editableFrame:attachmentCells:selectionModeChangedWithRects:)]){
+		if (   self->shouldSelectCells ) {
 			CGRect rect = [self boundsForAttachmentCell: attachmentCell
 										  withTextRange: textRange];
 			[self.attachmentDelegate editableFrame: self
 									attachmentCell: attachmentCell
 							   wasSelectedWithRect: rect];
 		}
-	else {
-		[self.attachmentDelegate editableFrame: self
-								attachmentCell: attachmentCell
-							 wasTouchedAtPoint: point];
+		else {
+			[self.attachmentDelegate editableFrame: self
+									attachmentCell: attachmentCell
+								 wasTouchedAtPoint: point];
+		}
 	}
 }
 
@@ -454,6 +433,9 @@ shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecog
 	CGRect glyphRect = [self.layoutManager
 						boundingRectForGlyphRange:glyphRange
 						inTextContainer:self.textContainer];
+	if(![cell respondsToSelector: @selector(attachmentBoundsInRect:)]){
+		return glyphRect;
+	}
 	return [cell attachmentBoundsInRect:glyphRect];
 }
 
@@ -498,34 +480,13 @@ shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecog
     if (action == @selector(cut:)) {
         return self.isEditable;
     }
-    if (action == @selector(paste:)) {
+    else if (action == @selector(paste:)) {
         return self.isEditable;
     }
-    if (action == @selector(addWhiteboard:)) {
-		return NO;
-	}
 	else {
         return [super canPerformAction:action
                             withSender:sender];
     }
-}
-
--(id)targetForAction: (SEL)action withSender: (id)sender
-{
-	if(sender != self && action == @selector(addWhiteboard:)){
-		if(self.allowsAddingCustomObjects && OFNOTNULL([self.nextResponder targetForAction: _cmd withSender: sender])){
-			return self;
-		}
-		return nil;
-	}
-	
-	return [super targetForAction: action withSender: sender];
-}
-
--(void)addWhiteboard: (id)sender
-{
-	//Reforward as us being the sender
-	[[UIApplication sharedApplication] sendAction: _cmd to: nil from: self forEvent: nil];
 }
 
 #pragma mark gesture recognizer delegate
@@ -542,11 +503,6 @@ shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecog
 {
 	if(self.attachmentGestureRecognizer != gestureRecognizer && self.attachmentLongPressRecognizer != gestureRecognizer){
 		return YES;
-	}
-	
-	if( ![self.attachmentDelegate respondsToSelector:
-		  @selector(editableFrame:attachmentCell:wasTouchedAtPoint:)] ){
-		return NO;
 	}
 	
 	CGPoint p = [touch locationInView: gestureRecognizer.view];

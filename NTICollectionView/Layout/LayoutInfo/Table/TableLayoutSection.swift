@@ -34,6 +34,10 @@ public struct TableLayoutSection: LayoutSection, RowAlignedLayoutSectionBaseComp
 		}
 	}
 	
+	public var shouldResizePlaceholder: Bool {
+		return metrics.shouldResizePlaceholder
+	}
+	
 	public func add(item: LayoutItem) {
 		
 	}
@@ -173,6 +177,10 @@ public struct TableLayoutSection: LayoutSection, RowAlignedLayoutSectionBaseComp
 		}
 		
 		rowAlignedLayoutSectionBase.add(row)
+	}
+	
+	public func shouldShow(supplementaryItem: SupplementaryItem) -> Bool {
+		return isGlobalSection || numberOfItems > 0 || supplementaryItem.isVisibleWhileShowingPlaceholder
 	}
 	
 	public mutating func reset() {

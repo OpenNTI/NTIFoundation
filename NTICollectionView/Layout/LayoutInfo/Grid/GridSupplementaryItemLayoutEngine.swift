@@ -137,6 +137,8 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 		
 		layoutRightAuxiliaryItems()
 		
+		position = innerContentOrigin
+		
 		layoutSectionPlaceholder()
 		
 		layoutInnerContent()
@@ -292,7 +294,7 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 		updateOrigin(with: placeholderInfo)
 	}
 	private func updateFrame(inout of placeholderInfo: LayoutPlaceholder) {
-		placeholderInfo.frame = CGRect(x: 0, y: position.y, width: width, height: placeholderInfo.height)
+		placeholderInfo.frame = CGRect(x: innerContentMinX, y: position.y, width: width, height: placeholderInfo.height)
 	}
 	private func checkEstimatedHeight(inout of placeholderInfo: LayoutPlaceholder) {
 		guard placeholderInfo.hasEstimatedHeight else {
@@ -313,7 +315,6 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 	
 	private func layoutInnerContent() {
 		let innerSizing = LayoutSizingInfo(width: innerContentWidth, layoutMeasure: layoutMeasure)
-		position = innerContentOrigin
 		position = innerLayoutEngine.layoutWithOrigin(position, layoutSizing: innerSizing, invalidationContext: invalidationContext)
 		footersMinY = position.y + metrics.padding.bottom
 	}

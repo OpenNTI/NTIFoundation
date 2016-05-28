@@ -16,6 +16,10 @@ public protocol CollectionViewSupplementaryViewTracking: NSObjectProtocol {
 
 extension UICollectionView {
 	
+	public func register(item: SupplementaryItem) {
+		registerClass(item.supplementaryViewClass, forSupplementaryViewOfKind: item.elementKind, withReuseIdentifier: item.reuseIdentifier)
+	}
+	
 	public func _supplementaryViewOfKind(kind: String, at indexPath: NSIndexPath) -> UICollectionReusableView? {
 		guard #available(iOS 9.0, *) else {
 			return _supplementaryViewForElementKind(kind, at: indexPath)

@@ -28,6 +28,10 @@ public struct BasicSectionMetrics: SectionMetrics {
 		didSet {setFlag("cornerRadius")}
 	}
 	
+	public var shouldResizePlaceholder: Bool = true {
+		didSet { setFlag("shouldResizePlaceholder") }
+	}
+	
 	public var decorationsByKind: [String : [LayoutDecoration]] = [:]
 	
 	public mutating func setFlag(flag: String) {
@@ -59,6 +63,7 @@ extension BasicSectionMetrics {
 			&& backgroundColor == other.backgroundColor
 			&& selectedBackgroundColor == other.selectedBackgroundColor
 			&& cornerRadius == other.cornerRadius
+			&& shouldResizePlaceholder == other.shouldResizePlaceholder
 			&& decorationsByKind.elementsEqual(other.decorationsByKind) {
 				(lhs: (kind: String, decorations: [LayoutDecoration]), rhs: (kind: String, decorations: [LayoutDecoration])) -> Bool in
 				lhs.kind == rhs.kind
@@ -93,6 +98,10 @@ extension BasicSectionMetrics {
 		
 		if metrics.definesMetric("cornerRadius") {
 			cornerRadius = metrics.cornerRadius
+		}
+		
+		if metrics.definesMetric("shouldResizePlaceholder") {
+			shouldResizePlaceholder = metrics.shouldResizePlaceholder
 		}
 	}
 	
@@ -141,6 +150,15 @@ extension BasicSectionMetricsWrapper {
 		}
 		set {
 			basicSectionMetrics.cornerRadius = newValue
+		}
+	}
+	
+	public var shouldResizePlaceholder: Bool {
+		get {
+			return basicSectionMetrics.shouldResizePlaceholder
+		}
+		set {
+			basicSectionMetrics.shouldResizePlaceholder = newValue
 		}
 	}
 	

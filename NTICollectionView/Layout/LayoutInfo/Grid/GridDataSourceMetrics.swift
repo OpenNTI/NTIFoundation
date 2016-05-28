@@ -18,6 +18,10 @@ public struct GridDataSourceSectionMetrics: DataSourceSectionMetricsProviding {
 	
 	public var placeholder: AnyObject?
 	
+	public var placeholderHeight: CGFloat = 200
+	
+	public var placeholderHasEstimatedHeight: Bool = true
+	
 	public var supplementaryItemsByKind: [String: [SupplementaryItem]] = [:]
 	
 	public var sizingInfo: CollectionViewLayoutMeasuring?

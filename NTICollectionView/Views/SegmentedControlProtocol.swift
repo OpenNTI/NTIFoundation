@@ -14,6 +14,8 @@ public protocol SegmentedControlProtocol: class {
 	
 	var userInteractionEnabled: Bool { get set }
 	
+	var numberOfSegments: Int { get }
+	
 	weak var segmentedControlDelegate: SegmentedControlDelegate? { get set }
 	
 	func removeAllSegments()

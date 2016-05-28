@@ -64,6 +64,10 @@ public struct BasicLayoutSection: LayoutSection, LayoutSectionBaseComposite {
 		}
 	}
 	
+	public var shouldResizePlaceholder: Bool {
+		return metrics.shouldResizePlaceholder
+	}
+	
 	public mutating func add(item: LayoutItem) {
 		var item = item
 		item.sectionIndex = sectionIndex
@@ -87,6 +91,10 @@ public struct BasicLayoutSection: LayoutSection, LayoutSectionBaseComposite {
 		for index in items.indices {
 			mutator(item: &items[index], index: index)
 		}
+	}
+	
+	public func shouldShow(supplementaryItem: SupplementaryItem) -> Bool {
+		return isGlobalSection || numberOfItems > 0 || supplementaryItem.isVisibleWhileShowingPlaceholder
 	}
 	
 	public mutating func reset() {

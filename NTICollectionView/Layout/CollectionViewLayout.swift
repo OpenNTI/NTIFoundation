@@ -1302,8 +1302,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			if let metricsPlaceholder = metrics.placeholder {
 				if metricsPlaceholder !== placeholder {
 					placeholderInfo = layoutInfo.newPlaceholderStartingAtSectionIndex(sectionIndex)
-					placeholderInfo?.height = estimatedPlaceholderHeight
-					placeholderInfo?.hasEstimatedHeight = true
+					placeholderInfo?.height = metrics.placeholderHeight
+					placeholderInfo?.hasEstimatedHeight = metrics.placeholderHasEstimatedHeight
 				}
 				
 				sectionInfo.placeholderInfo = placeholderInfo

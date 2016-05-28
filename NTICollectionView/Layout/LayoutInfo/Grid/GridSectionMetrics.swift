@@ -22,7 +22,7 @@ public protocol GridSectionMetricsProviding: SectionMetrics {
 	/// An optional fixed width that can be used to size each column.
 	var fixedColumnWidth: CGFloat? { get set }
 	
-	/// The spacing between rows
+	/// The spacing between rows.
 	var rowSpacing: CGFloat { get set }
 	
 	/// The minimum horizontal spacing between items.
@@ -81,6 +81,9 @@ public protocol GridSectionMetricsProviding: SectionMetrics {
 	/// The order in which each grid supplementary element kind is laid out.
 	var supplementaryOrdering: Set<GridSectionSupplementaryItemOrder> { get set }
 	
+	/// Whether placeholders should be resized for fill available screen space.
+	var shouldResizePlaceholder: Bool { get set }
+	
 }
 
 public struct GridSectionMetrics: GridSectionMetricsProviding {
@@ -124,30 +127,35 @@ public struct GridSectionMetrics: GridSectionMetricsProviding {
 		}
 	}
 	
+	/// The spacing between rows.
 	public var rowSpacing: CGFloat = 0 {
 		didSet {
 			setFlag("rowSpacing")
 		}
 	}
 	
+	/// The minimum horizontal spacing between items.
 	public var minimumInteritemSpacing: CGFloat = 0 {
 		didSet {
 			setFlag("minimumInteritemSpacing")
 		}
 	}
 	
+	/// The width of the left auxiliary column.
 	public var leftAuxiliaryColumnWidth: CGFloat = 0 {
 		didSet {
 			setFlag("leftAuxiliaryColumnWidth")
 		}
 	}
 	
+	/// The width of the right auxiliary column.
 	public var rightAuxiliaryColumnWidth: CGFloat = 0 {
 		didSet {
 			setFlag("rightAuxiliaryColumnWidth")
 		}
 	}
 	
+	/// The spacing between items in the auxiliary columns.
 	public var auxiliaryColumnSpacing: CGFloat = 0 {
 		didSet {
 			setFlag("auxiliaryColumnSpacing")
@@ -245,6 +253,10 @@ public struct GridSectionMetrics: GridSectionMetricsProviding {
 		}
 	}
 	
+	public var shouldResizePlaceholder: Bool = true {
+		didSet { setFlag("shouldResizePlaceholder") }
+	}
+	
 	/// How the cells should be laid out when there are multiple columns. The current default is `.LeadingToTrailing`.
 	public var cellLayoutOrder: ItemLayoutOrder = .LeadingToTrailing
 	
@@ -278,6 +290,7 @@ public struct GridSectionMetrics: GridSectionMetricsProviding {
 		&& other.showsRowSeparator == showsRowSeparator
 		&& other.contentBackgroundAttributes == contentBackgroundAttributes
 		&& other.supplementaryOrdering == supplementaryOrdering
+		&& other.shouldResizePlaceholder == shouldResizePlaceholder
 	}
 	
 	public mutating func applyValues(from metrics: LayoutMetrics) {
@@ -359,6 +372,9 @@ public struct GridSectionMetrics: GridSectionMetricsProviding {
 		}
 		if metrics.definesMetric("supplementaryOrdering") {
 			supplementaryOrdering = gridMetrics.supplementaryOrdering
+		}
+		if metrics.definesMetric("shouldResizePlaceholder") {
+			shouldResizePlaceholder = gridMetrics.shouldResizePlaceholder
 		}
 	}
 	

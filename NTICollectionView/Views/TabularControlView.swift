@@ -48,6 +48,10 @@ public final class TabularControlView: UITableView, UITableViewDataSource, UITab
 	
 	// MARK: - SegmentedControlProtocol
 	
+	public var numberOfSegments: Int {
+		return segments.count
+	}
+	
 	public var selectedSegmentIndex: Int {
 		get {
 			return indexPathForSelectedRow?.row ?? UISegmentedControlNoSegment
