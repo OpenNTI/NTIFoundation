@@ -14,6 +14,10 @@ public struct GridLayoutSupplementaryItem: LayoutSupplementaryItemWrapper {
 		layoutSupplementaryItem = BasicLayoutSupplementaryItem(supplementaryItem: supplementaryItem)
 	}
 	
+	public init(elementKind: String) {
+		layoutSupplementaryItem = BasicLayoutSupplementaryItem(supplementaryItem: GridSupplementaryItem(elementKind: elementKind))
+	}
+	
 	public var layoutSupplementaryItem: LayoutSupplementaryItem
 	
 	public var supplementaryItem: SupplementaryItem {

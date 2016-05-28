@@ -20,6 +20,8 @@ public typealias SupplementaryItemConfiguration = (view: UICollectionReusableVie
 /// Definition of how supplementary views should be created and presented in a collection view.
 public protocol SupplementaryItem: LayoutMetricsApplicable {
 	
+	init(elementKind: String)
+	
 	/// Should this supplementary view be displayed while the placeholder is visible?
 	var isVisibleWhileShowingPlaceholder: Bool { get set }
 	

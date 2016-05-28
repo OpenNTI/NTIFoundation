@@ -14,6 +14,10 @@ public struct BasicLayoutSupplementaryItem: LayoutSupplementaryItem, Supplementa
 		self.supplementaryItem = supplementaryItem
 	}
 	
+	public init(elementKind: String) {
+		supplementaryItem = BasicSupplementaryItem(elementKind: elementKind)
+	}
+	
 	public var supplementaryItem: SupplementaryItem
 	
 	public var frame = CGRectZero
