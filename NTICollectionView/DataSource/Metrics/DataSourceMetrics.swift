@@ -42,11 +42,11 @@ extension DataSourceSectionMetricsProviding {
 	
 }
 
-public struct DataSourceSectionMetrics<Metrics: SectionMetrics> : DataSourceSectionMetricsProviding {
+public struct DataSourceSectionMetrics<LayoutClassType: LayoutClass> : DataSourceSectionMetricsProviding {
 	
-	public let template = Metrics.init()
+	public let template = LayoutClassType.SectionMetricsType.init()
 	
-	public var metrics: SectionMetrics = Metrics.init()
+	public var metrics: SectionMetrics = LayoutClassType.SectionMetricsType.init()
 	
 	public var placeholder: AnyObject?
 	
@@ -54,12 +54,12 @@ public struct DataSourceSectionMetrics<Metrics: SectionMetrics> : DataSourceSect
 	
 	public var sizingInfo: CollectionViewLayoutMeasuring?
 	
-	public func makeTemplate() -> Metrics {
-		return Metrics.init()
+	public func makeSupplementaryItem(elementKind kind: String) -> LayoutClassType.SupplementaryItemType {
+		return LayoutClassType.SupplementaryItemType.init(elementKind: kind)
 	}
 	
 	public func isEqual(to other: LayoutMetrics) -> Bool {
-		guard let other = other as? DataSourceSectionMetrics<Metrics> else {
+		guard let other = other as? DataSourceSectionMetrics<LayoutClassType> else {
 			return false
 		}
 		
