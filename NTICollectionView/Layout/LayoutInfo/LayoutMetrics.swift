@@ -40,6 +40,16 @@ public protocol LayoutMetrics: LayoutMetricsApplicable {
 	
 }
 
+public protocol LayoutClass {
+	
+	associatedtype SectionMetricsType : SectionMetrics
+	
+	associatedtype SupplementaryItemType : SupplementaryItem
+	
+	associatedtype LayoutBuilderType : LayoutSectionBuilder
+	
+}
+
 public protocol SectionMetrics: LayoutMetrics {
 	
 	init()
