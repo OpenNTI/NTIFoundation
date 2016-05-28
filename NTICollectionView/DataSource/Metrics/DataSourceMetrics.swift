@@ -44,6 +44,8 @@ extension DataSourceSectionMetricsProviding {
 
 public struct DataSourceSectionMetrics<LayoutClassType: LayoutClass> : DataSourceSectionMetricsProviding {
 	
+	public init() {}
+	
 	public let template = LayoutClassType.SectionMetricsType.init()
 	
 	public var metrics: SectionMetrics = LayoutClassType.SectionMetricsType.init()
