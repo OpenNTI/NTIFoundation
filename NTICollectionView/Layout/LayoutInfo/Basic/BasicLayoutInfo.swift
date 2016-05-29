@@ -230,7 +230,7 @@ public class BasicLayoutInfo: LayoutInfo {
 		
 		// FIXME: Is this correct?
 		for _ in sectionIndex..<numberOfSections {
-			var sectionInfo = sections[sectionIndex]
+			var sectionInfo = _sections[sectionIndex]
 			let sectionFrame = CGRectOffset(sectionInfo.frame, offset.x, offset.y)
 			sectionInfo.setFrame(sectionFrame, invalidationContext: invalidationContext)
 			
