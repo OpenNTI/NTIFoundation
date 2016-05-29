@@ -438,7 +438,6 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 			decoration.setContainerFrame(frame, invalidationContext: invalidationContext)
 		}
 		
-		// FIXME: Make sure this works
 		if let backgroundAttributes = self.backgroundAttributesForReading {
 			backgroundAttributes.frame = CGRectOffset(backgroundAttributes.frame, offset.x, offset.y)
 			invalidationContext?.invalidateDecorationElementsOfKind(backgroundAttributes.representedElementKind!, atIndexPaths: [backgroundAttributes.indexPath])
@@ -461,7 +460,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 		var itemFrame = itemInfo.frame
 		
 		guard size != itemFrame.size else {
-				return CGPointZero
+			return CGPointZero
 		}
 		
 		itemFrame.size = size
