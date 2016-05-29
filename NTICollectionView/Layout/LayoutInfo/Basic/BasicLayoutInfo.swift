@@ -35,7 +35,7 @@ public class BasicLayoutInfo: LayoutInfo {
 	public var isEditing = false
 	
 	public var numberOfSections: Int {
-		return _sections.count
+		return localSections.count
 	}
 	
 	public var hasGlobalSection: Bool {
@@ -43,14 +43,14 @@ public class BasicLayoutInfo: LayoutInfo {
 	}
 	
 	public var sections: [LayoutSection] {
-		var sections = _sections
+		var sections = localSections
 		if let globalSection = self.globalSection {
 			sections.insert(globalSection, atIndex: 0)
 		}
 		return sections
 	}
 	
-	private var _sections: [LayoutSection] = []
+	private var localSections: [LayoutSection] = []
 	
 	private var globalSection: LayoutSection?
 	
@@ -77,8 +77,8 @@ public class BasicLayoutInfo: LayoutInfo {
 			return
 		}
 		
-		for sectionIndex in _sections.indices {
-			block(sectionIndex: sectionIndex, sectionInfo: &_sections[sectionIndex], stop: &stop)
+		for sectionIndex in localSections.indices {
+			block(sectionIndex: sectionIndex, sectionInfo: &localSections[sectionIndex], stop: &stop)
 			
 			if stop {
 				return
@@ -93,8 +93,8 @@ public class BasicLayoutInfo: LayoutInfo {
 		if sectionIndex == globalSectionIndex {
 			globalSection = section
 		} else {
-			precondition(sectionIndex == _sections.count, "Number of sections out-of-sync with the section index")
-			_sections.insert(section, atIndex: sectionIndex)
+			precondition(sectionIndex == localSections.count, "Number of sections out-of-sync with the section index")
+			localSections.insert(section, atIndex: sectionIndex)
 		}
 	}
 	
@@ -125,7 +125,7 @@ public class BasicLayoutInfo: LayoutInfo {
 			return nil
 		}
 		
-		return _sections[sectionIndex]
+		return localSections[sectionIndex]
 	}
 	
 	public func setSection(section: LayoutSection, at sectionIndex: Int) {
@@ -137,12 +137,12 @@ public class BasicLayoutInfo: LayoutInfo {
 			return
 		}
 		
-		_sections[sectionIndex] = section
+		localSections[sectionIndex] = section
 	}
 	
 	public func invalidate() {
 		globalSection = nil
-		_sections.removeAll(keepCapacity: true)
+		localSections.removeAll(keepCapacity: true)
 	}
 	
 	public func prepareForLayout() {
@@ -195,7 +195,7 @@ public class BasicLayoutInfo: LayoutInfo {
 	public func setSize(size: CGSize, forItemAt indexPath: NSIndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
 		let sectionIndex = indexPath.section
 		
-		let offset = _sections[sectionIndex].setSize(size, forItemAt: indexPath.item, invalidationContext: invalidationContext)
+		let offset = localSections[sectionIndex].setSize(size, forItemAt: indexPath.item, invalidationContext: invalidationContext)
 		
 		offsetSections(afterSectionAt: sectionIndex, by: offset, invalidationContext: invalidationContext)
 	}
@@ -230,7 +230,7 @@ public class BasicLayoutInfo: LayoutInfo {
 		
 		// FIXME: Is this correct?
 		for _ in sectionIndex..<numberOfSections {
-			var sectionInfo = _sections[sectionIndex]
+			var sectionInfo = localSections[sectionIndex]
 			let sectionFrame = CGRectOffset(sectionInfo.frame, offset.x, offset.y)
 			sectionInfo.setFrame(sectionFrame, invalidationContext: invalidationContext)
 			
