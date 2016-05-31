@@ -1,5 +1,5 @@
 //
-//  CollectionDataSource.swift
+//  CollectionDataSourceMetrics.swift
 //  NTICollectionView
 //
 //  Created by Bryan Hoke on 2/18/16.
