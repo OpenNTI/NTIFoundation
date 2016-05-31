@@ -49,11 +49,11 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 		return 0
 	}
 	
-	public func item(at indexPath: NSIndexPath) -> Item? {
+	public func item(at indexPath: NSIndexPath) -> AnyItem? {
 		return nil
 	}
 	
-	public func indexPath(for item: Item) -> NSIndexPath? {
+	public func indexPath(for item: AnyItem) -> NSIndexPath? {
 		return nil
 	}
 	

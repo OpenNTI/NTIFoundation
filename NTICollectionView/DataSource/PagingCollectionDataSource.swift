@@ -18,7 +18,7 @@ public protocol PagingCollectionDataSourceProtocol: CollectionDataSourceType, Pa
 	
 }
 
-public class PagingCollectionDataSource: BasicCollectionDataSource {
+public class PagingCollectionDataSource<Item : AnyObject> : BasicCollectionDataSource<Item> {
 
 	/// Optional delegate to provide custom loading logic without the need to override the `PageableContentLoading` methods in a subclass.
 	public weak var loadingDelegate: PageableContentLoading?

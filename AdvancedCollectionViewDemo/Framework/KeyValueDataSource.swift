@@ -9,9 +9,7 @@
 import UIKit
 import NTICollectionView
 
-typealias SourceType = AnyObject
-
-class KeyValueDataSource: BasicCollectionDataSource {
+class KeyValueDataSource<SourceType : AnyObject> : BasicCollectionDataSource<KeyValueItem> {
 	
 	convenience init(object: SourceType?) {
 		self.init()
@@ -30,19 +28,18 @@ class KeyValueDataSource: BasicCollectionDataSource {
 	
 	var titleColumnWidth = CGFloat.min
 	
-	private var unfilteredItems: [SourceType] = []
+	private var unfilteredItems: [KeyValueItem] = []
 	
-	override var items: [Item] {
+	override var items: [KeyValueItem] {
 		get {
 			return super.items
 		}
 		set {
 			unfilteredItems = newValue
 			
-			var newItems: [Item] = []
+			var newItems: [KeyValueItem] = []
 			for item in newValue {
-				guard let item = item as? KeyValueItem,
-					object = self.object,
+				guard let object = self.object,
 					value = item.valueForObject(object)
 					where value.characters.count > 0 else {
 						continue
@@ -67,7 +64,7 @@ class KeyValueDataSource: BasicCollectionDataSource {
 	}
 	
 	override func collectionView(collectionView: UICollectionView, configure cell: UICollectionViewCell, `for` indexPath: NSIndexPath) {
-		guard let item = self.item(at: indexPath) as? KeyValueItem,
+		guard let item = value(at: indexPath),
 			cell = cell as? AAPLKeyValueCell else {
 				return
 		}

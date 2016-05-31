@@ -131,7 +131,7 @@ public class ComposedCollectionDataSource: CollectionDataSource, CollectionDataS
 		return localIndexPaths.flatMap { mapping.globalIndexPathForLocal($0) }
 	}
 	
-	public override func item(at indexPath: NSIndexPath) -> Item? {
+	public override func item(at indexPath: NSIndexPath) -> AnyItem? {
 		guard let mapping = mappingForGlobalSection(indexPath.section),
 			mappedIndexPath = mapping.localIndexPathForGlobal(indexPath) else {
 				return nil
@@ -139,7 +139,7 @@ public class ComposedCollectionDataSource: CollectionDataSource, CollectionDataS
 		return mapping.dataSource.item(at: mappedIndexPath)
 	}
 	
-	public override func indexPath(for item: Item) -> NSIndexPath? {
+	public override func indexPath(for item: AnyItem) -> NSIndexPath? {
 		for dataSource in dataSources {
 			guard let indexPath = dataSource.indexPath(for: item),
 				mapping = self.mapping(for: dataSource) else {

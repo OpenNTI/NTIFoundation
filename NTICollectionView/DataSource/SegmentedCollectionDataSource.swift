@@ -167,11 +167,11 @@ public class SegmentedCollectionDataSource: CollectionDataSource, CollectionData
 		return selectedDataSource?.localIndexPathForGlobal(globalIndexPath)
 	}
 	
-	public override func item(at indexPath: NSIndexPath) -> Item? {
+	public override func item(at indexPath: NSIndexPath) -> AnyItem? {
 		return selectedDataSource?.item(at: indexPath)
 	}
 	
-	public override func indexPath(for item: Item) -> NSIndexPath? {
+	public override func indexPath(for item: AnyItem) -> NSIndexPath? {
 		return selectedDataSource?.indexPath(for: item)
 	}
 	

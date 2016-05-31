@@ -12,7 +12,7 @@ public func requireMainThread() {
 	precondition(NSThread.isMainThread(), "This method must be called on the main thread.")
 }
 
-public typealias Item = AnyObject
+public typealias AnyItem = AnyObject
 
 public protocol DataSource: NSObjectProtocol {
 	
@@ -22,9 +22,9 @@ public protocol DataSource: NSObjectProtocol {
 	
 	func numberOfItemsInSection(sectionIndex: Int) -> Int
 	
-	func item(at indexPath: NSIndexPath) -> Item?
+	func item(at indexPath: NSIndexPath) -> AnyItem?
 	
-	func indexPath(for item: Item) -> NSIndexPath?
+	func indexPath(for item: AnyItem) -> NSIndexPath?
 	
 	func removeItem(at indexPath: NSIndexPath)
 	
