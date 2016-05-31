@@ -17,7 +17,7 @@ public protocol ComposedCollectionDataSourceProtocol: ParentCollectionDataSource
 }
 
 /// A data source that is composed of other data sources.
-public class ComposedCollectionDataSource: AbstractCollectionDataSource, ComposedCollectionDataSourceProtocol {
+public class ComposedCollectionDataSource: CollectionDataSource, CollectionDataSourceDelegate {
 	
 	private var _numberOfSections = 0
 	
@@ -131,7 +131,7 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 		return localIndexPaths.flatMap { mapping.globalIndexPathForLocal($0) }
 	}
 	
-	public override func item(at indexPath: NSIndexPath) -> Item? {
+	public override func item(at indexPath: NSIndexPath) -> AnyItem? {
 		guard let mapping = mappingForGlobalSection(indexPath.section),
 			mappedIndexPath = mapping.localIndexPathForGlobal(indexPath) else {
 				return nil
@@ -139,7 +139,7 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 		return mapping.dataSource.item(at: mappedIndexPath)
 	}
 	
-	public override func indexPath(for item: Item) -> NSIndexPath? {
+	public override func indexPath(for item: AnyItem) -> NSIndexPath? {
 		for dataSource in dataSources {
 			guard let indexPath = dataSource.indexPath(for: item),
 				mapping = self.mapping(for: dataSource) else {
@@ -254,7 +254,7 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 		let wrapper = WrapperCollectionView(collectionView: collectionView, mapping: mapping)
 		let dataSource = mapping.dataSource
 		
-		let numberOfSections = dataSource.numberOfSectionsInCollectionView!(wrapper)
+		let numberOfSections = dataSource.numberOfSectionsInCollectionView(wrapper)
 		precondition(localSection < numberOfSections, "Local section \(localSection) is out of bounds for composed data source with \(numberOfSections) sections.")
 		
 		return dataSource.collectionView(wrapper, numberOfItemsInSection: localSection)

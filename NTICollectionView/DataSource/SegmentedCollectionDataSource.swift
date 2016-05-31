@@ -20,7 +20,7 @@ public protocol SegmentedCollectionDataSourceProtocol: ParentCollectionDataSourc
 
 private let segmentedDataSourceHeaderKey = "SegmentedDataSourceHeaderKey"
 
-public class SegmentedCollectionDataSource: AbstractCollectionDataSource, SegmentedCollectionDataSourceProtocol, SegmentedControlDelegate {
+public class SegmentedCollectionDataSource: CollectionDataSource, CollectionDataSourceDelegate, SegmentedControlDelegate {
 	
 	public private(set) var dataSources: [CollectionDataSource] = []
 	
@@ -167,11 +167,11 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 		return selectedDataSource?.localIndexPathForGlobal(globalIndexPath)
 	}
 	
-	public override func item(at indexPath: NSIndexPath) -> Item? {
+	public override func item(at indexPath: NSIndexPath) -> AnyItem? {
 		return selectedDataSource?.item(at: indexPath)
 	}
 	
-	public override func indexPath(for item: Item) -> NSIndexPath? {
+	public override func indexPath(for item: AnyItem) -> NSIndexPath? {
 		return selectedDataSource?.indexPath(for: item)
 	}
 	
@@ -429,7 +429,7 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 
 public protocol SegmentedCollectionDataSourceDelegate: class {
 	
-	func segmentedCollectionDataSourceDidChangeSelectedDataSource(segmentedCollectionDataSource: SegmentedCollectionDataSourceProtocol)
+	func segmentedCollectionDataSourceDidChangeSelectedDataSource(segmentedCollectionDataSource: SegmentedCollectionDataSource)
 	
 }
 

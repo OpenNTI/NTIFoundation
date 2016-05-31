@@ -11,12 +11,12 @@ import UIKit
 // FIXME: Code duplication with the segmented metrics helper
 public class ComposedCollectionDataSourceMetricsHelper: CollectionDataSourceMetricsHelper {
 
-	public init(composedDataSource: ComposedCollectionDataSourceProtocol) {
+	public init(composedDataSource: ComposedCollectionDataSource) {
 		super.init(dataSource: composedDataSource)
 	}
 	
-	public var composedDataSource: ComposedCollectionDataSourceProtocol {
-		return dataSource as! ComposedCollectionDataSourceProtocol
+	public var composedDataSource: ComposedCollectionDataSource {
+		return dataSource as! ComposedCollectionDataSource
 	}
 	
 	public override func numberOfSupplementaryItemsOfKind(kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChildDataSources: Bool) -> Int {

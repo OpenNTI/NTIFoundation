@@ -11,7 +11,11 @@ import UIKit
 /**
 A `CollectionDataSource` which manages a single section of items backed by an array.
 */
-public class BasicCollectionDataSource: AbstractCollectionDataSource {
+public class BasicCollectionDataSource<Item : AnyObject> : CollectionDataSource {
+
+	public override init() {
+		super.init()
+	}
 	
 	public var items: [Item] {
 		get {
@@ -85,7 +89,11 @@ public class BasicCollectionDataSource: AbstractCollectionDataSource {
 		})
 	}
 	
-	public override func item(at indexPath: NSIndexPath) -> Item? {
+	public override func item(at indexPath: NSIndexPath) -> AnyItem? {
+		return value(at: indexPath)
+	}
+	
+	public func value(at indexPath: NSIndexPath) -> Item? {
 		let itemIndex = indexPath.item
 		guard itemIndex < items.count else {
 			return nil
@@ -93,7 +101,7 @@ public class BasicCollectionDataSource: AbstractCollectionDataSource {
 		return items[itemIndex]
 	}
 	
-	public override func indexPath(for item: Item) -> NSIndexPath? {
+	public override func indexPath(for item: AnyItem) -> NSIndexPath? {
 		guard let itemIndex = items.indexOf({ $0 === item }) else {
 			return nil
 		}

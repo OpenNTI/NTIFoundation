@@ -8,7 +8,7 @@
 
 import NTICollectionView
 
-class CatSightingsDataSource: BasicCollectionDataSource {
+class CatSightingsDataSource : BasicCollectionDataSource<AAPLCatSighting> {
 	
 	init(cat: AAPLCat) {
 		self.cat = cat
@@ -50,7 +50,7 @@ class CatSightingsDataSource: BasicCollectionDataSource {
 	
 	override func collectionView(collectionView: UICollectionView, configure cell: UICollectionViewCell, `for` indexPath: NSIndexPath) {
 		guard let cell = cell as? AAPLCatSightingCell,
-			catSighting = item(at: indexPath) as? AAPLCatSighting else {
+			catSighting = value(at: indexPath) else {
 				return
 		}
 		cell.configureWithCatSighting(catSighting, dateFormatter: dateFormatter)

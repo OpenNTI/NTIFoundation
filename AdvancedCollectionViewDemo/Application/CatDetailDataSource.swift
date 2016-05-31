@@ -8,12 +8,12 @@
 
 import NTICollectionView
 
-class CatDetailDataSource: ComposedCollectionDataSource {
+class CatDetailDataSource : ComposedCollectionDataSource {
 
 	init(cat: AAPLCat) {
 		self.cat = cat
-		classificationDataSource = KeyValueDataSource(object: cat)
-		descriptionDataSource = TextValueDataSource(object: cat)
+		classificationDataSource = KeyValueDataSource<AAPLCat>(object: cat)
+		descriptionDataSource = TextValueDataSource<AAPLCat>(object: cat)
 		super.init()
 		
 		defaultMetrics = GridDataSourceSectionMetrics()
@@ -42,8 +42,8 @@ class CatDetailDataSource: ComposedCollectionDataSource {
 	}
 	
 	private var cat: AAPLCat
-	private var classificationDataSource: KeyValueDataSource
-	private var descriptionDataSource: TextValueDataSource
+	private var classificationDataSource: KeyValueDataSource<AAPLCat>
+	private var descriptionDataSource: TextValueDataSource<AAPLCat>
 	
 	private func updateChildDataSources() {
 		classificationDataSource.items = [
