@@ -10,7 +10,7 @@ import NTICollectionView
 
 let DataSourceTitleHeaderKey = "DataSourceTitleHeaderKey"
 
-extension AbstractCollectionDataSource {
+extension CollectionDataSource {
 	
 	func makeDataSourceTitleHeader() -> SupplementaryItem {
 		return makeSourceHeaderWithTitle(title ?? "NULL")

@@ -60,7 +60,7 @@ class CatListViewController: CollectionViewController, SegmentedCollectionDataSo
 		favoriteCatsDataSource.errorPlaceholder = BasicDataSourcePlaceholder(title: "Unable to Load Favorites", message: "A problem with the network prevented loading your favorite cats. Please check your network settings.", image: nil)
 	}
 	
-	func segmentedCollectionDataSourceDidChangeSelectedDataSource(segmentedCollectionDataSource: SegmentedCollectionDataSourceProtocol) {
+	func segmentedCollectionDataSourceDidChangeSelectedDataSource(segmentedCollectionDataSource: SegmentedCollectionDataSource) {
 		guard let dataSource = segmentedCollectionDataSource.selectedDataSource else {
 			return
 		}
