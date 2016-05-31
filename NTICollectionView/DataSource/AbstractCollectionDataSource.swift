@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class CollectionDataSource: NSObject, UICollectionViewDataSource, LoadableContentStateMachineDelegate {
+public class CollectionDataSource: NSObject, UICollectionViewDataSource, CollectionDataSourceMetrics, LoadableContentStateMachineDelegate {
 	
 	public override init() {
 		super.init()
