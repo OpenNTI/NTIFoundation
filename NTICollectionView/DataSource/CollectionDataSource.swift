@@ -1,5 +1,5 @@
 //
-//  AbstractCollectionDataSource.swift
+//  CollectionDataSource.swift
 //  NTICollectionView
 //
 //  Created by Bryan Hoke on 2/22/16.
