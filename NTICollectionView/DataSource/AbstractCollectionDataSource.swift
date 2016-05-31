@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachineDelegate, CollectionDataSource {
+public class CollectionDataSource: NSObject, LoadableContentStateMachineDelegate {
 	
 	public override init() {
 		super.init()
@@ -125,15 +125,6 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 			update = block
 		}
 		pendingUpdate = update
-	}
-	
-	public func notifyContentLoaded(with error: NSError? = nil) {
-		requireMainThread()
-		if let loadingCompletion = self.loadingCompletion {
-			self.loadingCompletion = nil
-			loadingCompletion()
-		}
-		delegate?.dataSourceDidLoadContent(self, error: error)
 	}
 	
 	// MARK: - Metrics
@@ -440,11 +431,11 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	
 	public func setNeedsLoadContent(delay: NSTimeInterval) {
 		cancelNeedsLoadContent()
-		performSelector(#selector(AbstractCollectionDataSource.loadContent as (AbstractCollectionDataSource) -> () -> ()), withObject: nil, afterDelay: delay)
+		performSelector(#selector(CollectionDataSource.loadContent as (CollectionDataSource) -> () -> ()), withObject: nil, afterDelay: delay)
 	}
 	
 	public func cancelNeedsLoadContent() {
-		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(AbstractCollectionDataSource.loadContent as (AbstractCollectionDataSource) -> () -> ()), object: nil)
+		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(CollectionDataSource.loadContent as (CollectionDataSource) -> () -> ()), object: nil)
 	}
 	
 	/// Reset the content and loading state.
@@ -543,11 +534,11 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	
 	public func setNeedsLoadNextContent(delay: NSTimeInterval) {
 		cancelNeedsLoadNextContent()
-		performSelector(#selector(AbstractCollectionDataSource.loadNextContent as (AbstractCollectionDataSource) -> () -> ()), withObject: nil, afterDelay: delay)
+		performSelector(#selector(CollectionDataSource.loadNextContent as (CollectionDataSource) -> () -> ()), withObject: nil, afterDelay: delay)
 	}
 	
 	public func cancelNeedsLoadNextContent() {
-		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(AbstractCollectionDataSource.loadNextContent as (AbstractCollectionDataSource) -> () -> ()), object: nil)
+		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(CollectionDataSource.loadNextContent as (CollectionDataSource) -> () -> ()), object: nil)
 	}
 	
 	public func loadNextContent() {
@@ -580,11 +571,11 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	
 	public func setNeedsLoadPreviousContent(delay: NSTimeInterval) {
 		cancelNeedsLoadPreviousContent()
-		performSelector(#selector(AbstractCollectionDataSource.loadPreviousContent as (AbstractCollectionDataSource) -> () -> ()), withObject: nil, afterDelay: delay)
+		performSelector(#selector(CollectionDataSource.loadPreviousContent as (CollectionDataSource) -> () -> ()), withObject: nil, afterDelay: delay)
 	}
 	
 	public func cancelNeedsLoadPreviousContent() {
-		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(AbstractCollectionDataSource.loadPreviousContent as (AbstractCollectionDataSource) -> () -> ()), object: nil)
+		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(CollectionDataSource.loadPreviousContent as (CollectionDataSource) -> () -> ()), object: nil)
 	}
 	
 	public func loadPreviousContent() {
@@ -742,6 +733,104 @@ public class AbstractCollectionDataSource: NSObject, LoadableContentStateMachine
 	
 	public func collectionView(collectionView: UICollectionView, canMoveItemAtIndexPath indexPath: NSIndexPath) -> Bool {
 		return false
+	}
+	
+}
+
+extension CollectionDataSource {
+	
+	public var globalMetrics: DataSourceSectionMetricsProviding? {
+		get {
+			return metricsForSectionAtIndex(globalSectionIndex)
+		}
+		set {
+			setMetrics(newValue, forSectionAtIndex: globalSectionIndex)
+		}
+	}
+	
+}
+
+extension CollectionDataSource {
+	
+	/// Notify the parent data source and the collection view that new items have been inserted at positions represented by *insertedIndexPaths*.
+	public func notifyItemsInserted(at indexPaths: [NSIndexPath]) {
+		requireMainThread()
+		delegate?.dataSource(self, didInsertItemsAt: indexPaths)
+	}
+	
+	/// Notify the parent data source and collection view that the items represented by *removedIndexPaths* have been removed from this data source.
+	public func notifyItemsRemoved(at indexPaths: [NSIndexPath]) {
+		requireMainThread()
+		delegate?.dataSource(self, didRemoveItemsAt: indexPaths)
+	}
+	
+	/// Notify the parent data sources and collection view that the items represented by *refreshedIndexPaths* have been updated and need redrawing.
+	public func notifyItemsRefreshed(at indexPaths: [NSIndexPath]) {
+		requireMainThread()
+		delegate?.dataSource(self, didRefreshItemsAt: indexPaths)
+	}
+	
+	/// Notify the parent data sources and collection view that the items represented by *refreshedIndexPaths* have been updated and need redrawing.
+	public func notifyItemMoved(from oldIndexPath: NSIndexPath, to newIndexPath: NSIndexPath) {
+		requireMainThread()
+		delegate?.dataSource(self, didMoveItemAt: oldIndexPath, to: newIndexPath)
+	}
+	
+	/// Notify parent data sources and the collection view that the sections were inserted.
+	public func notifySectionsInserted(sections: NSIndexSet, direction: SectionOperationDirection? = nil) {
+		requireMainThread()
+		delegate?.dataSource(self, didInsertSections: sections, direction: direction)
+	}
+	
+	/// Notify parent data sources and (eventually) the collection view that the sections were removed.
+	public func notifySectionsRemoved(sections: NSIndexSet, direction: SectionOperationDirection? = nil) {
+		requireMainThread()
+		delegate?.dataSource(self, didRemoveSections: sections, direction: direction)
+	}
+	
+	/// Notify parent data sources and the collection view that the section at *oldSectionIndex* was moved to *newSectionIndex*.
+	public func notifySectionsMoved(from oldSectionIndex: Int, to newSectionIndex: Int, direction: SectionOperationDirection? = nil) {
+		requireMainThread()
+		delegate?.dataSource(self, didMoveSectionFrom: oldSectionIndex, to: newSectionIndex, direction: direction)
+	}
+	
+	/// Notify parent data sources and ultimately the collection view the specified sections were refreshed.
+	public func notifySectionsRefreshed(sections: NSIndexSet) {
+		requireMainThread()
+		delegate?.dataSource(self, didRefreshSections: sections)
+	}
+	
+	/// Notify parent data sources and ultimately the collection view that the data in this data source has been reloaded.
+	public func notifyDidReloadData() {
+		requireMainThread()
+		delegate?.dataSourceDidReloadData(self)
+	}
+	
+	public func notifyWillLoadContent() {
+		requireMainThread()
+		delegate?.dataSourceWillLoadContent(self)
+	}
+	
+	public func notifyContentLoaded(with error: NSError? = nil) {
+		requireMainThread()
+		if let loadingCompletion = self.loadingCompletion {
+			self.loadingCompletion = nil
+			loadingCompletion()
+		}
+		delegate?.dataSourceDidLoadContent(self, error: error)
+	}
+	
+	public func notifyContentUpdated(for supplementaryItem: SupplementaryItem, at indexPaths: [NSIndexPath]) {
+		requireMainThread()
+		delegate?.dataSource(self, didUpdate: supplementaryItem, at: indexPaths)
+	}
+	
+	public func notifyDidAddChild(childDataSource: CollectionDataSource) {
+		delegate?.dataSource(self, didAddChild: childDataSource)
+	}
+	
+	public func notifyPerform(update: (collectionView: UICollectionView) -> Void) {
+		delegate?.dataSource(self, perform: update)
 	}
 	
 }

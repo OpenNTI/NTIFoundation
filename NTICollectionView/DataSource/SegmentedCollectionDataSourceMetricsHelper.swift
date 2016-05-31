@@ -11,12 +11,12 @@ import UIKit
 // FIXME: Code duplication with the composed metrics helper
 public class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMetricsHelper {
 
-	public init(segmentedDataSource: SegmentedCollectionDataSourceProtocol) {
+	public init(segmentedDataSource: SegmentedCollectionDataSource) {
 		super.init(dataSource: segmentedDataSource)
 	}
 	
-	public var segmentedDataSource: SegmentedCollectionDataSourceProtocol {
-		return dataSource as! SegmentedCollectionDataSourceProtocol
+	public var segmentedDataSource: SegmentedCollectionDataSource {
+		return dataSource as! SegmentedCollectionDataSource
 	}
 	
 	var selectedDataSource: CollectionDataSource? {

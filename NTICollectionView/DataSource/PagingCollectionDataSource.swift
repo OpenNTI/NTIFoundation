@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol PagingCollectionDataSourceProtocol: CollectionDataSource, PageableContentLoading {
+public protocol PagingCollectionDataSourceProtocol: CollectionDataSourceType, PageableContentLoading {
 	
 	var loadingDelegate: PageableContentLoading? { get set }
 	
@@ -18,7 +18,7 @@ public protocol PagingCollectionDataSourceProtocol: CollectionDataSource, Pageab
 	
 }
 
-public class PagingCollectionDataSource: BasicCollectionDataSource, PagingCollectionDataSourceProtocol {
+public class PagingCollectionDataSource: BasicCollectionDataSource {
 
 	/// Optional delegate to provide custom loading logic without the need to override the `PageableContentLoading` methods in a subclass.
 	public weak var loadingDelegate: PageableContentLoading?

@@ -11,7 +11,7 @@ import UIKit
 /**
 A `CollectionDataSource` which manages a single section of items backed by an array.
 */
-public class BasicCollectionDataSource: AbstractCollectionDataSource {
+public class BasicCollectionDataSource: CollectionDataSource {
 	
 	public var items: [Item] {
 		get {

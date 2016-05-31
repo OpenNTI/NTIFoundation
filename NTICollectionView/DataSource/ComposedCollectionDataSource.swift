@@ -17,7 +17,7 @@ public protocol ComposedCollectionDataSourceProtocol: ParentCollectionDataSource
 }
 
 /// A data source that is composed of other data sources.
-public class ComposedCollectionDataSource: AbstractCollectionDataSource, ComposedCollectionDataSourceProtocol {
+public class ComposedCollectionDataSource: CollectionDataSource, CollectionDataSourceDelegate {
 	
 	private var _numberOfSections = 0
 	
@@ -254,7 +254,7 @@ public class ComposedCollectionDataSource: AbstractCollectionDataSource, Compose
 		let wrapper = WrapperCollectionView(collectionView: collectionView, mapping: mapping)
 		let dataSource = mapping.dataSource
 		
-		let numberOfSections = dataSource.numberOfSectionsInCollectionView!(wrapper)
+		let numberOfSections = dataSource.numberOfSectionsInCollectionView(wrapper)
 		precondition(localSection < numberOfSections, "Local section \(localSection) is out of bounds for composed data source with \(numberOfSections) sections.")
 		
 		return dataSource.collectionView(wrapper, numberOfItemsInSection: localSection)
