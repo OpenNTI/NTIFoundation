@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol CollectionViewLayoutMeasuring: NSObjectProtocol {
+public protocol CollectionViewLayoutMeasuring : class {
 	
 	func measuredSizeForSupplementaryItem(supplementaryItem: LayoutSupplementaryItem) -> CGSize
 	

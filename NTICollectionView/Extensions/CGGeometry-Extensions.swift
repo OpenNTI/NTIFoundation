@@ -12,6 +12,30 @@ func +(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
 	return CGPoint(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
 }
 
+extension CGPoint {
+	
+	public static var zero: CGPoint {
+		return CGPointZero
+	}
+	
+}
+
+extension CGSize {
+	
+	public static var zero: CGSize {
+		return CGSizeZero
+	}
+	
+}
+
+extension CGRect {
+	
+	public static var zero: CGRect {
+		return CGRectZero
+	}
+	
+}
+
 //extension CGPoint: IntegerLiteralConvertible {
 //	
 //	public init(integerLiteral value: Self.IntegerLiteralType) {
@@ -20,14 +44,3 @@ func +(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
 //	}
 //	
 //}
-
-extension UIEdgeInsets {
-	
-	public init(uniformInset: CGFloat) {
-		top = uniformInset
-		left = uniformInset
-		bottom = uniformInset
-		right = uniformInset
-	}
-	
-}

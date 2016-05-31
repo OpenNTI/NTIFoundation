@@ -50,12 +50,12 @@ class MockSupplementaryLayoutEngine: NSObject, SupplementaryLayoutEngine {
 	}
 	
 	private func layout(inout supplementaryItem: LayoutSupplementaryItem) {
-		let size = self.size(of: supplementaryItem)
+		let size = self.size(of: &supplementaryItem)
 		supplementaryItem.frame = CGRect(origin: position, size: size)
 		position.y += size.height
 	}
 	
-	private func size(of supplementaryItem: LayoutSupplementaryItem) -> CGSize {
+	private func size(inout of supplementaryItem: LayoutSupplementaryItem) -> CGSize {
 		let w = sizing.width
 		let h = sizing.layoutMeasure?.measuredSizeForSupplementaryItem(supplementaryItem).height ?? mockHeight
 		return CGSize(width: w, height: h)

@@ -1,5 +1,5 @@
 //
-//  GridSectionMetrics.swift
+//  GridSectionMetricsProviding.swift
 //  NTICollectionView
 //
 //  Created by Bryan Hoke on 2/16/16.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol GridSectionMetrics: SectionMetrics {
+public protocol GridSectionMetricsProviding: SectionMetrics {
 	
 	/// The type-default order in which each grid supplementary element kind is laid out.
 	static var defaultSupplementaryOrdering: Set<GridSectionSupplementaryItemOrder> { get }
@@ -86,7 +86,7 @@ public protocol GridSectionMetrics: SectionMetrics {
 	
 }
 
-public struct BasicGridSectionMetrics: GridSectionMetrics {
+public struct GridSectionMetrics: GridSectionMetricsProviding {
 	
 	public static var defaultSupplementaryOrdering: Set<GridSectionSupplementaryItemOrder> = [.header(order: 0), .footer(order: 1), .leftAuxiliary(order: 2), .rightAuxiliary(order: 3)]
 	
@@ -261,7 +261,7 @@ public struct BasicGridSectionMetrics: GridSectionMetrics {
 	public var cellLayoutOrder: ItemLayoutOrder = .LeadingToTrailing
 	
 	public func isEqual(to other: LayoutMetrics) -> Bool {
-		guard let other = other as? BasicGridSectionMetrics else {
+		guard let other = other as? GridSectionMetrics else {
 			return false
 		}
 		
@@ -313,7 +313,7 @@ public struct BasicGridSectionMetrics: GridSectionMetrics {
 			cornerRadius = sectionMetrics.cornerRadius
 		}
 		
-		guard let gridMetrics = metrics as? GridSectionMetrics else {
+		guard let gridMetrics = metrics as? GridSectionMetricsProviding else {
 			return
 		}
 		separatorInsets = gridMetrics.separatorInsets
@@ -405,9 +405,9 @@ public struct BasicGridSectionMetrics: GridSectionMetrics {
 	
 }
 
-public protocol GridSectionMetricsOwning: SectionMetricsOwning, GridSectionMetrics {
+public protocol GridSectionMetricsOwning: SectionMetricsOwning, GridSectionMetricsProviding {
 	
-	var metrics: GridSectionMetrics { get set }
+	var metrics: GridSectionMetricsProviding { get set }
 	
 }
 

@@ -11,7 +11,7 @@ import XCTest
 class GridSectionColumnLayoutEngineTest: XCTestCase {
     
 	func testLayout() {
-		let section = BasicGridLayoutSection()
+		var section = BasicGridLayoutSection()
 		
 		let measure = DummyLayoutMeasure()
 		measure.supplementaryItemSize = CGSize(width: 20, height: 20)
@@ -19,14 +19,18 @@ class GridSectionColumnLayoutEngineTest: XCTestCase {
 		let sizing = LayoutSizingInfo(width: 20, layoutMeasure: measure)
 		
 		let kind = UICollectionElementKindSectionHeader
-		let item1 = BasicGridSupplementaryItem(elementKind: kind)
-		item1.shouldPin = true
-		let item2 = BasicGridSupplementaryItem(elementKind: kind)
-		let item3 = BasicGridSupplementaryItem(elementKind: kind)
 		
-		for item in [item1, item2, item3] {
+		func makeItem() -> LayoutSupplementaryItem {
+			var item = GridSupplementaryItem(elementKind: kind)
+			item.supplementaryViewClass = CollectionSupplementaryView.self
 			item.isVisibleWhileShowingPlaceholder = true
+			return GridLayoutSupplementaryItem(supplementaryItem: item)
 		}
+		
+		var item1 = makeItem()
+		item1.shouldPin = true
+		var item2 = makeItem()
+		var item3 = makeItem()
 		
 		section.add(item1)
 		section.add(item2)
@@ -40,6 +44,10 @@ class GridSectionColumnLayoutEngineTest: XCTestCase {
 		
 		XCTAssert(endPoint == CGPoint(x: 25, y: 65), "Incorrect endPoint: \(endPoint)")
 		
+		item1 = engine.supplementaryItems[0]
+		item2 = engine.supplementaryItems[1]
+		item3 = engine.supplementaryItems[2]
+		
 		var expectedFrame = CGRect(x: 5, y: 5, width: 20, height: 20)
 		XCTAssert(item1.frame == expectedFrame, "Incorrect frame for item1: expected \(expectedFrame) but found \(item1.frame)")
 		expectedFrame.origin.y += 20
@@ -47,10 +55,10 @@ class GridSectionColumnLayoutEngineTest: XCTestCase {
 		expectedFrame.origin.y += 20
 		XCTAssert(item3.frame == expectedFrame, "Incorrect frame for item3: expected \(expectedFrame) but found \(item3.frame)")
 		
-		XCTAssert(engine.pinnableHeaders.contains({ $0 === item1 }), "Expect pinnableHeaders to contain item1")
+		XCTAssert(engine.pinnableHeaders[0].isEqual(to: item1), "Expect pinnableHeaders to contain item1 at index 0")
 		
-		XCTAssert(engine.nonPinnableHeaders.contains({ $0 === item2 }), "Expect nonPinnableHeaders to contain item2")
-		XCTAssert(engine.nonPinnableHeaders.contains({ $0 === item3 }), "Expect nonPinnableHeaders to contain item3")
+		XCTAssert(engine.nonPinnableHeaders[0].isEqual(to: item2), "Expect nonPinnableHeaders to contain item2 at index 0")
+		XCTAssert(engine.nonPinnableHeaders[1].isEqual(to: item3), "Expect nonPinnableHeaders to contain item3 at index 1")
 	}
 	
 }

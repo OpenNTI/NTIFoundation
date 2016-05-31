@@ -24,9 +24,13 @@ public enum ItemLayoutOrder: String {
 	
 }
 
-public protocol LayoutMetrics {
+public protocol LayoutMetricsApplicable {
 	
 	mutating func applyValues(from metrics: LayoutMetrics)
+	
+}
+
+public protocol LayoutMetrics: LayoutMetricsApplicable {
 	
 	func definesMetric(metric: String) -> Bool
 	
@@ -36,7 +40,19 @@ public protocol LayoutMetrics {
 	
 }
 
+public protocol LayoutClass {
+	
+	associatedtype SectionMetricsType : SectionMetrics
+	
+	associatedtype SupplementaryItemType : SupplementaryItem
+	
+	associatedtype LayoutBuilderType : LayoutSectionBuilder
+	
+}
+
 public protocol SectionMetrics: LayoutMetrics {
+	
+	init()
 	
 	/// The distance that the section content is inset from the enclosing content.
 	var contentInset: UIEdgeInsets { get set }
@@ -52,6 +68,9 @@ public protocol SectionMetrics: LayoutMetrics {
 	
 	/// The decorations to add to the section represented by `self`.
 	var decorationsByKind: [String: [LayoutDecoration]] { get set }
+	
+	/// Whether placeholders should be resized for fill available screen space.
+	var shouldResizePlaceholder: Bool { get set }
 	
 	mutating func add(decoration: LayoutDecoration)
 	

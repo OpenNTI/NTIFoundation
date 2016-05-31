@@ -1,22 +1,20 @@
 //
-//  GridLayoutItem.swift
-//  NTICollectionView
+//  TableLayoutItem.swift
+//  NTIFoundation
 //
-//  Created by Bryan Hoke on 2/25/16.
+//  Created by Bryan Hoke on 5/24/16.
 //  Copyright © 2016 NextThought. All rights reserved.
 //
 
 import UIKit
 
-public struct GridLayoutItem: LayoutItem {
+public struct TableLayoutItem : LayoutItem {
 	
-	public var frame = CGRectZero {
-		didSet {
-			_layoutAttributes?.frame = frame
-		}
-	}
+	public var frame = CGRectZero
 	
 	public var itemIndex = 0
+	
+	public var columnIndex = NSNotFound
 	
 	public var sectionIndex = NSNotFound
 	
@@ -30,19 +28,23 @@ public struct GridLayoutItem: LayoutItem {
 	
 	public var selectedBackgroundColor: UIColor?
 	
-	public var cornerRadius: CGFloat = 0
-	
 	public var indexPath: NSIndexPath {
 		return sectionIndex == globalSectionIndex ?
 			NSIndexPath(index: itemIndex)
 			: NSIndexPath(forItem: itemIndex, inSection: sectionIndex)
 	}
 	
-	public var layoutAttributes: CollectionViewLayoutAttributes {
-//		if let layoutAttributes = _layoutAttributes where layoutAttributes.indexPath == indexPath {
-//			return layoutAttributes
-//		}
+	public mutating func applyValues(from metrics: LayoutMetrics) {
+		guard let tableMetrics = metrics as? TableSectionMetrics else {
+			return
+		}
 		
+		layoutMargins = tableMetrics.layoutMargins
+		backgroundColor = tableMetrics.backgroundColor
+		selectedBackgroundColor = tableMetrics.selectedBackgroundColor
+	}
+	
+	public var layoutAttributes: CollectionViewLayoutAttributes {
 		let attributes = CollectionViewLayoutAttributes(forCellWithIndexPath: indexPath)
 		attributes.frame = self.frame
 		attributes.zIndex = defaultZIndex
@@ -52,16 +54,14 @@ public struct GridLayoutItem: LayoutItem {
 		
 		attributes.backgroundColor = backgroundColor
 		attributes.selectedBackgroundColor = selectedBackgroundColor
-		attributes.cornerRadius = cornerRadius
 		attributes.layoutMargins = layoutMargins
 		
-//		_layoutAttributes = attributes
 		return attributes
 	}
 	
-	private var _layoutAttributes: UICollectionViewLayoutAttributes?
-	
-	public var columnIndex: Int = NSNotFound
+	public mutating func resetLayoutAttributes() {
+
+	}
 	
 	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		guard frame != self.frame else {
@@ -69,26 +69,6 @@ public struct GridLayoutItem: LayoutItem {
 		}
 		self.frame = frame
 		invalidationContext?.invalidateItemsAtIndexPaths([indexPath])
-	}
-	
-	public mutating func applyValues(from metrics: LayoutMetrics) {
-		guard let sectionMetrics = metrics as? SectionMetrics else {
-			return
-		}
-		
-		cornerRadius = sectionMetrics.cornerRadius
-		
-		guard let gridMetrics = metrics as? GridSectionMetricsProviding else {
-			return
-		}
-		
-		layoutMargins = gridMetrics.layoutMargins
-		backgroundColor = gridMetrics.backgroundColor
-		selectedBackgroundColor = gridMetrics.selectedBackgroundColor
-	}
-	
-	public mutating func resetLayoutAttributes() {
-		_layoutAttributes = nil
 	}
 	
 	public func isEqual(to other: LayoutItem) -> Bool {

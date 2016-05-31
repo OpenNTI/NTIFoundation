@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 /// Layout information about an item (cell).
-public protocol LayoutItem: LayoutElement {
+public protocol LayoutItem: LayoutElement, LayoutMetricsApplicable {
 	
 	var columnIndex: Int { get set }
 	
@@ -18,10 +18,8 @@ public protocol LayoutItem: LayoutElement {
 	
 	var isDragging: Bool { get set }
 	
-	var section: LayoutSection? { get }
+	var sectionIndex: Int { get set }
 	
-	var row: LayoutRow? { get set }
-	
-	func copy() -> LayoutItem
+	func isEqual(to other: LayoutItem) -> Bool
 	
 }

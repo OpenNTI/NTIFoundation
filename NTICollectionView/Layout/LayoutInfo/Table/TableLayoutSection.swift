@@ -1,8 +1,8 @@
 //
-//  GridLayoutSection.swift
-//  NTICollectionView
+//  TableLayoutSection.swift
+//  NTIFoundation
 //
-//  Created by Bryan Hoke on 2/16/16.
+//  Created by Bryan Hoke on 4/20/16.
 //  Copyright © 2016 NextThought. All rights reserved.
 //
 
@@ -11,103 +11,13 @@ import UIKit
 private let sectionSeparatorTop = 0
 private let sectionSeparatorBottom = 1
 
-let separatorZIndex = 100
-let sectionSeparatorZIndex = 2000
-
-public let collectionElementKindLeftAuxiliaryItem = "collectionElementKindLeftAuxiliaryItem"
-public let collectionElementKindRightAuxiliaryItem = "collectionElementKindRightAuxiliaryItem"
-
-public protocol GridLayoutSection: LayoutSection {
-	
-	var metrics: GridSectionMetricsProviding { get set }
-	
-	var headers: [LayoutSupplementaryItem] { get set }
-	var footers: [LayoutSupplementaryItem] { get set }
-	
-	var pinnableHeaders: [LayoutSupplementaryItem] { get set }
-	var nonPinnableHeaders: [LayoutSupplementaryItem] { get set }
-	
-	var heightOfNonPinningHeaders: CGFloat { get }
-	var heightOfPinningHeaders: CGFloat { get }
-	
-	var rows: [LayoutRow] { get set }
-	var leftAuxiliaryItems: [LayoutSupplementaryItem] { get set }
-	var rightAuxiliaryItems: [LayoutSupplementaryItem] { get set }
-	
-	/// The width used to size each column.
-	///
-	/// When `fixedColumnWidth` from `metrics` is `nil`, the value returned will maximize the width of each column.
-	/// Otherwise, `fixedColumnWidth` is returned.
-	var columnWidth: CGFloat { get }
-	var leftAuxiliaryColumnWidth: CGFloat { get }
-	var rightAuxiliaryColumnWidth: CGFloat { get }
-	
-	var hasTopSectionSeparator: Bool { get }
-	var hasBottomSectionSeparator: Bool { get }
-	
-	var shouldShowColumnSeparator: Bool { get }
-	
-	var backgroundAttributesForReading: CollectionViewLayoutAttributes? { get }
-	var backgroundAttributesForWriting: CollectionViewLayoutAttributes? { mutating get }
-
-	mutating func add(inout row: LayoutRow)
-	mutating func removeAllRows()
-	
-	func item(at index: Int) -> LayoutItem
-	mutating func setItem(item: LayoutItem, at index: Int)
-	
-	mutating func setSize(size: CGSize, forHeaderAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
-	
-	mutating func setSize(size: CGSize, forFooterAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
-}
-
-extension GridLayoutSection {
-	
-	public var headers: [LayoutSupplementaryItem] {
-		get {
-			return supplementaryItems(of: UICollectionElementKindSectionHeader)
-		}
-		set {
-			setSupplementaryItems(newValue, of: UICollectionElementKindSectionHeader)
-		}
-	}
-	
-	public var footers: [LayoutSupplementaryItem] {
-		get {
-			return supplementaryItems(of: UICollectionElementKindSectionFooter)
-		}
-		set {
-			setSupplementaryItems(newValue, of: UICollectionElementKindSectionFooter)
-		}
-	}
-	
-	public var leftAuxiliaryItems: [LayoutSupplementaryItem] {
-		get {
-			return supplementaryItems(of: collectionElementKindLeftAuxiliaryItem)
-		}
-		set {
-			setSupplementaryItems(newValue, of: collectionElementKindLeftAuxiliaryItem)
-		}
-	}
-	
-	public var rightAuxiliaryItems: [LayoutSupplementaryItem] {
-		get {
-			return supplementaryItems(of: collectionElementKindRightAuxiliaryItem)
-		}
-		set {
-			setSupplementaryItems(newValue, of: collectionElementKindRightAuxiliaryItem)
-		}
-	}
-	
-}
-
-public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSectionBaseComposite {
+public struct TableLayoutSection: LayoutSection, RowAlignedLayoutSectionBaseComposite {
 	
 	static let hairline: CGFloat = 1.0 / UIScreen.mainScreen().scale
 	
 	public var rowAlignedLayoutSectionBase = RowAlignedLayoutSectionBase()
 	
-	public var items: [LayoutItem] = []
+	public var metrics = TableSectionMetrics()
 	
 	// FIXME: Make sure this doesn't trigger when we're mutating the value
 	public var placeholderInfo: LayoutPlaceholder? {
@@ -128,75 +38,15 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 		return metrics.shouldResizePlaceholder
 	}
 	
-	public var pinnableHeaders: [LayoutSupplementaryItem] = []
-	
-	public var nonPinnableHeaders: [LayoutSupplementaryItem] = []
-	
-	public var heightOfNonPinningHeaders: CGFloat {
-		return height(of: nonPinnableHeaders)
-	}
-	
-	public var heightOfPinningHeaders: CGFloat {
-		return height(of: pinnableHeaders)
-	}
-	
-	private func height(of supplementaryItems: [LayoutSupplementaryItem]) -> CGFloat {
-		guard !supplementaryItems.isEmpty else {
-			return 0
-		}
-		var minY = CGFloat.max
-		var maxY = CGFloat.min
+	public func add(item: LayoutItem) {
 		
-		for supplementaryItem in supplementaryItems {
-			let frame = supplementaryItem.frame
-			minY = min(minY, frame.minY)
-			maxY = max(maxY, frame.maxY)
-		}
-		
-		return maxY - minY
-	}
-	
-	public var decorations: [LayoutDecoration] {
-		return decorationsByKind.contents
-	}
-	
-	public var decorationsByKind: [String: [LayoutDecoration]] {
-		get {
-			return metrics.decorationsByKind
-		}
-		set {
-			metrics.decorationsByKind = newValue
-		}
-	}
-	
-	public var metrics: GridSectionMetricsProviding = GridSectionMetrics()
-	
-	public var columnWidth: CGFloat {
-		return metrics.fixedColumnWidth ?? maximizedColumnWidth
-	}
-	private var maximizedColumnWidth: CGFloat {
-		let layoutWidth = frame.width
-		let margins = metrics.padding
-		let numberOfColumns = metrics.numberOfColumns
-		let columnWidth = (layoutWidth - margins.left - margins.right) / CGFloat(numberOfColumns)
-		return columnWidth
-	}
-	public var leftAuxiliaryColumnWidth: CGFloat {
-		return metrics.leftAuxiliaryColumnWidth
-	}
-	public var rightAuxiliaryColumnWidth: CGFloat {
-		return metrics.rightAuxiliaryColumnWidth
 	}
 	
 	public var layoutAttributes: [CollectionViewLayoutAttributes] {
 		var layoutAttributes: [CollectionViewLayoutAttributes] = []
 		
-		if let backgroundAttributes = backgroundAttributesForReading {
-			layoutAttributes.append(backgroundAttributes)
-		}
-		
-		if let contentBackgroundAttributes = self.contentBackgroundAttributes {
-			layoutAttributes.append(contentBackgroundAttributes)
+		if let backgroundAttribute = backgroundAttributesForReading {
+			layoutAttributes.append(backgroundAttribute)
 		}
 		
 		for (_, attributes) in sectionSeparatorLayoutAttributes {
@@ -205,9 +55,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 		
 		layoutAttributes += columnSeparatorLayoutAttributes
 		
-		for attributes in attributesForDecorationsByKind.values {
-			layoutAttributes += attributes
-		}
+		layoutAttributes += decorations.map {$0.layoutAttributes}
 		
 		for supplementaryItem in supplementaryItems {
 			// Don't enumerate hidden or 0 height supplementary items
@@ -216,7 +64,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 			}
 			
 			// For non-global sections, don't enumerate if there are no items and not marked as visible when showing placeholder
-			guard shouldShow(supplementaryItem) else {
+			guard isGlobalSection || numberOfItems > 0 || supplementaryItem.isVisibleWhileShowingPlaceholder else {
 				continue
 			}
 			
@@ -238,8 +86,12 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 		return layoutAttributes
 	}
 	
-	public func shouldShow(supplementaryItem: SupplementaryItem) -> Bool {
-		return isGlobalSection || numberOfItems > 0 || supplementaryItem.isVisibleWhileShowingPlaceholder
+	public var columnWidth: CGFloat {
+		let layoutWidth = frame.width
+		let margins = metrics.padding
+		let numberOfColumns = metrics.numberOfColumns
+		let columnWidth = (layoutWidth - margins.width) / CGFloat(numberOfColumns)
+		return columnWidth
 	}
 	
 	public var shouldShowColumnSeparator: Bool {
@@ -288,7 +140,8 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 				needsConfigureBackgroundAttributes = false
 			}
 			
-			_backgroundAttributes = _backgroundAttributes.copy() as! CollectionViewLayoutAttributes
+			// This can lead to a crash somehow, but otherwise we'd want to do it
+			//			_backgroundAttributes = _backgroundAttributes.copy() as! CollectionViewLayoutAttributes
 			
 			return _backgroundAttributes
 		}
@@ -302,69 +155,9 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 		return sectionIndex == globalSectionIndex && metrics.backgroundColor != nil
 	}
 	
-	public var contentBackgroundAttributes: CollectionViewLayoutAttributes? {
-//		if let attributes = _contentBackgroundAttributes {
-//			return attributes
-//		}
+	public mutating func add(row: LayoutRow) {
+		var row = row
 		
-		guard metrics.contentBackgroundAttributes.color != nil else {
-			return nil
-		}
-		
-		let indexPath = isGlobalSection ? NSIndexPath(index: 0) : NSIndexPath(forItem: 0, inSection: sectionIndex)
-		let attributes = CollectionViewLayoutAttributes(forDecorationViewOfKind: collectionElementKindContentBackground, withIndexPath: indexPath)
-		
-		attributes.frame = contentFrame
-		attributes.zIndex = defaultZIndex
-		attributes.hidden = false
-		attributes.backgroundColor = metrics.contentBackgroundAttributes.color
-		attributes.cornerRadius = metrics.contentBackgroundAttributes.cornerRadius
-		
-//		_contentBackgroundAttributes = attributes
-		return attributes
-	}
-	
-	private var _contentBackgroundAttributes: CollectionViewLayoutAttributes?
-	
-	public var contentFrame: CGRect {
-		let frame = UIEdgeInsetsInsetRect(self.frame, metrics.contentInset)
-		return UIEdgeInsetsInsetRect(frame, contentFrameInset)
-	}
-	public var contentFrameInset: UIEdgeInsets {
-		var t = height(of: headers)
-		if t > 0 {
-			t += metrics.padding.top
-		}
-		let l = leftAuxiliaryColumnWidth
-			+ (leftAuxiliaryColumnWidth > 0 ? metrics.padding.left : 0)
-		let r = rightAuxiliaryColumnWidth
-			+ (rightAuxiliaryColumnWidth > 0 ? metrics.padding.right : 0)
-		var b = height(of: footers)
-		if b > 0 {
-			b += metrics.padding.bottom
-		}
-		return UIEdgeInsets(top: t, left: l, bottom: b, right: r)
-	}
-	
-	public mutating func add(item: LayoutItem) {
-		var item = item
-		item.itemIndex = items.count
-		item.sectionIndex = sectionIndex
-		item.applyValues(from: metrics)
-		items.append(item)
-	}
-	
-	public mutating func enumerateDecorations(using visitor: (inout LayoutDecoration) -> Void) {
-		for (kind, decorations) in decorationsByKind {
-			var decorations = decorations
-			for index in decorations.indices {
-				visitor(&decorations[index])
-			}
-			decorationsByKind[kind] = decorations
-		}
-	}
-	
-	public mutating func add(inout row: LayoutRow) {
 		// Create the row separator if there isn't already one
 		if metrics.showsRowSeparator && row.rowSeparatorDecoration == nil {
 			var separatorDecoration = HorizontalSeparatorDecoration(elementKind: collectionElementKindRowSeparator, position: .bottom)
@@ -386,33 +179,37 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 		rowAlignedLayoutSectionBase.add(row)
 	}
 	
+	public func shouldShow(supplementaryItem: SupplementaryItem) -> Bool {
+		return isGlobalSection || numberOfItems > 0 || supplementaryItem.isVisibleWhileShowingPlaceholder
+	}
+	
 	public mutating func reset() {
-		needsConfigureBackgroundAttributes = true
-		items.removeAll(keepCapacity: true)
 		supplementaryItemsByKind = [:]
-		rows.removeAll(keepCapacity: true)
+		removeAllRows()
 		columnSeparatorLayoutAttributes.removeAll(keepCapacity: true)
 	}
 	
-	public mutating func applyValues(from metrics: LayoutMetrics) {
-		if let gridSection = metrics as? GridLayoutSection {
-			self.metrics.applyValues(from: gridSection.metrics)
+	public var decorations: [LayoutDecoration] {
+		return decorationsByKind.contents
+	}
+	
+	public var decorationsByKind: [String: [LayoutDecoration]] {
+		get {
+			return metrics.decorationsByKind
 		}
-		else {
-			self.metrics.applyValues(from: metrics)
+		set {
+			metrics.decorationsByKind = newValue
 		}
 	}
 	
-	public mutating func resolveMissingValuesFromTheme() {
-		metrics.resolveMissingValuesFromTheme()
-	}
-	
-	public mutating func layoutWithOrigin(start: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
-		let layoutEngine = GridSectionLayoutEngine(layoutSection: self)
-		let endPoint = layoutEngine.layoutWithOrigin(start, layoutSizing: layoutSizing, invalidationContext: invalidationContext)
-		pinnableHeaders = layoutEngine.pinnableHeaders
-		nonPinnableHeaders = layoutEngine.nonPinnableHeaders
-		return endPoint
+	public mutating func mutateDecorations(using mutator: (inout LayoutDecoration) -> Void) {
+		for (kind, decorations) in decorationsByKind {
+			var decorations = decorations
+			for index in decorations.indices {
+				mutator(&decorations[index])
+			}
+			decorationsByKind[kind] = decorations
+		}
 	}
 	
 	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
@@ -434,17 +231,13 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 			offsetDecorationElement(with: attributes, by: offset, invalidationContext: invalidationContext)
 		}
 		
-		enumerateDecorations { (inout decoration: LayoutDecoration) in
+		mutateDecorations { (inout decoration: LayoutDecoration) in
 			decoration.setContainerFrame(frame, invalidationContext: invalidationContext)
 		}
 		
-		if let backgroundAttributes = self.backgroundAttributesForReading {
-			backgroundAttributes.frame = CGRectOffset(backgroundAttributes.frame, offset.x, offset.y)
-			invalidationContext?.invalidateDecorationElementsOfKind(backgroundAttributes.representedElementKind!, atIndexPaths: [backgroundAttributes.indexPath])
-		}
-		
-		if let contentBackgroundAttributes = self.contentBackgroundAttributes {
-			offsetDecorationElement(with: contentBackgroundAttributes, by: offset, invalidationContext: invalidationContext)
+		if let backgroundAttribute = backgroundAttributesForReading {
+			backgroundAttribute.frame = CGRectOffset(backgroundAttribute.frame, offset.x, offset.y)
+			invalidationContext?.invalidateDecorationElementsOfKind(backgroundAttribute.representedElementKind!, atIndexPaths: [backgroundAttribute.indexPath])
 		}
 		
 		mutateSupplementaryItems { (supplementaryItem, _, _) in
@@ -591,7 +384,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 		let hairline = self.dynamicType.hairline
 		
 		let columnWidth = self.columnWidth
-	
+		
 		let top = firstRow.frame.minY
 		let bottom = lastRow.frame.maxY
 		let numberOfColumns = metrics.numberOfColumns
@@ -611,7 +404,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 			invalidationContext?.invalidateDecorationElementsOfKind(separatorAttributes.representedElementKind!, atIndexPaths: [separatorAttributes.indexPath])
 		}
 	}
-	
+
 	/// Creates any additional layout attributes, given the sections that have content.
 	public mutating func finalizeLayoutAttributesForSectionsWithContent(sectionsWithContent: [LayoutSection]) {
 		let shouldShowSectionSeparators = metrics.showsSectionSeparator && items.count > 0
@@ -720,7 +513,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 		let supplementaryItem = items[itemIndex]
 		
 		// There's no layout attributes if this section isn't the global section, there are no items and the supplementary item shouldn't be shown when the placeholder is visible (e.g. no items)
-		guard shouldShow(supplementaryItem) else {
+		guard isGlobalSection || items.count > 0 || supplementaryItem.isVisibleWhileShowingPlaceholder else {
 			return nil
 		}
 		
@@ -745,51 +538,12 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 			return rowInfo.rowSeparatorLayoutAttributes
 		case collectionElementKindGlobalHeaderBackground:
 			return backgroundAttributesForReading
-		case collectionElementKindContentBackground:
-			return contentBackgroundAttributes
 		default:
-			guard let attributes = attributesForDecorationsByKind[kind] else {
+			guard let decorations = decorationsByKind[kind] else {
 				return nil
 			}
-			return attributes[indexPath.item]
+			return decorations[indexPath.item].layoutAttributes
 		}
-	}
-	
-	public var decorationAttributesByKind: [String: [CollectionViewLayoutAttributes]] {
-		var attributes: [String: [CollectionViewLayoutAttributes]] = [:]
-		
-		attributes[collectionElementKindColumnSeparator] = columnSeparatorLayoutAttributes
-		attributes[collectionElementKindSectionSeparator] = Array(sectionSeparatorLayoutAttributes.values)
-		attributes[collectionElementKindRowSeparator] = rows.flatMap { $0.rowSeparatorLayoutAttributes }
-		attributes[collectionElementKindGlobalHeaderBackground] = [backgroundAttributesForReading].flatMap { $0 }
-		attributes[collectionElementKindContentBackground] = [contentBackgroundAttributes].flatMap { $0 }
-		
-		attributes.appendContents(of: attributesForDecorationsByKind)
-		
-		return attributes
-	}
-	
-	// O(n^2)
-	private var attributesForDecorationsByKind: [String: [CollectionViewLayoutAttributes]] {
-		var attributesByKind: [String: [CollectionViewLayoutAttributes]] = [:]
-		let insetFrame = UIEdgeInsetsInsetRect(frame, metrics.contentInset)
-		
-		for (kind, decorations) in decorationsByKind {
-			for (index, decoration) in decorations.enumerate() {
-				var decoration = decoration
-				decoration.itemIndex = index
-				decoration.sectionIndex = sectionIndex
-				decoration.setContainerFrame(insetFrame, invalidationContext: nil)
-				let attributes = decoration.layoutAttributes
-				attributesByKind.append(attributes, to: kind)
-			}
-		}
-		
-		return attributesByKind
-	}
-	
-	public func definesMetric(metric: String) -> Bool {
-		return metrics.definesMetric(metric)
 	}
 	
 	public func additionalLayoutAttributesToInsertForInsertionOfItem(at indexPath: NSIndexPath) -> [CollectionViewLayoutAttributes] {
@@ -825,10 +579,8 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 		}
 	}
 	
-	private var pinnableItems: [LayoutSupplementaryItem] = []
-	
-	public mutating func prepareForLayout() {
-		pinnableItems.removeAll()
+	public func prepareForLayout() {
+		
 	}
 	
 	public func targetLayoutHeightForProposedLayoutHeight(proposedHeight: CGFloat, layoutInfo: LayoutInfo) -> CGFloat {
@@ -873,7 +625,6 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 		var nonPinnableY = pinnableY
 		
 		resetHeaders(pinnable: true, invalidationContext: invalidationContext)
-		pinnableItems.removeAll(keepCapacity: true)
 		
 		// Pin the headers as appropriate
 		guard self.isGlobalSection else {
@@ -885,7 +636,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 		finalizePinningForHeaders(pinnable: true, zIndex: pinnedHeaderZIndex)
 		
 		let nonPinnableHeaders = self.nonPinnableHeaders
-
+		
 		resetHeaders(pinnable: false, invalidationContext: invalidationContext)
 		
 		nonPinnableY = applyBottomPinningToNonPinnableHeaders(maxY: nonPinnableY, invalidationContext: invalidationContext)
@@ -982,7 +733,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 			: mutateNonPinnableHeaders(using: finalizer)
 	}
 	
-	private mutating func mutateFirstSectionOverlappingYOffset(yOffset: CGFloat, from layoutInfo: LayoutInfo, using mutator: (inout BasicGridLayoutSection) -> Void) {
+	private mutating func mutateFirstSectionOverlappingYOffset(yOffset: CGFloat, from layoutInfo: LayoutInfo, using mutator: (inout TableLayoutSection) -> Void) {
 		layoutInfo.enumerateSections { (sectionIndex, sectionInfo, stop) in
 			guard sectionIndex != globalSectionIndex else {
 				return
@@ -990,9 +741,9 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 			
 			let frame = sectionInfo.frame
 			if frame.minY <= yOffset && yOffset <= frame.maxY,
-				var gridSectionInfo = sectionInfo as? BasicGridLayoutSection {
-				mutator(&gridSectionInfo)
-				sectionInfo = gridSectionInfo
+				var tableSectionInfo = sectionInfo as? TableLayoutSection {
+				mutator(&tableSectionInfo)
+				sectionInfo = tableSectionInfo
 				stop = true
 			}
 		}
@@ -1034,12 +785,102 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 		self.headers = headers
 	}
 	
+	public mutating func applyValues(from metrics: LayoutMetrics) {
+		self.metrics.applyValues(from: metrics)
+	}
+	
 	public func isEqual(to other: LayoutSection) -> Bool {
-		guard let other = other as? BasicGridLayoutSection else {
+		guard let other = other as? TableLayoutSection else {
 			return false
 		}
 		
 		return sectionIndex == other.sectionIndex
+	}
+	
+}
+
+extension TableLayoutSection {
+	
+	public var headers: [LayoutSupplementaryItem] {
+		get {
+			return supplementaryItems(of: UICollectionElementKindSectionHeader)
+		}
+		set {
+			setSupplementaryItems(newValue, of: UICollectionElementKindSectionHeader)
+		}
+	}
+	
+	public var pinnableHeaders: [LayoutSupplementaryItem] {
+		return headers.filter {($0 as? GridLayoutSupplementaryItem)?.shouldPin ?? false}
+	}
+	
+	public var nonPinnableHeaders: [LayoutSupplementaryItem] {
+		return headers.filter {!(($0 as? GridLayoutSupplementaryItem)?.shouldPin ?? false)}
+	}
+	
+	public var footers: [LayoutSupplementaryItem] {
+		get {
+			return supplementaryItems(of: UICollectionElementKindSectionFooter)
+		}
+		set {
+			setSupplementaryItems(newValue, of: UICollectionElementKindSectionFooter)
+		}
+	}
+	
+	public var heightOfNonPinningHeaders: CGFloat {
+		return height(of: nonPinnableHeaders)
+	}
+	
+	public var heightOfPinningHeaders: CGFloat {
+		return height(of: pinnableHeaders)
+	}
+	
+	private func height(of supplementaryItems: [LayoutSupplementaryItem]) -> CGFloat {
+		guard !supplementaryItems.isEmpty else {
+			return 0
+		}
+		var minY = CGFloat.max
+		var maxY = CGFloat.min
+		
+		for supplementaryItem in supplementaryItems {
+			let frame = supplementaryItem.frame
+			minY = min(minY, frame.minY)
+			maxY = max(maxY, frame.maxY)
+		}
+		
+		return maxY - minY
+	}
+	
+	public var decorationAttributesByKind: [String: [CollectionViewLayoutAttributes]] {
+		var attributes: [String: [CollectionViewLayoutAttributes]] = [:]
+		
+		attributes[collectionElementKindColumnSeparator] = columnSeparatorLayoutAttributes
+		attributes[collectionElementKindSectionSeparator] = Array(sectionSeparatorLayoutAttributes.values)
+		attributes[collectionElementKindRowSeparator] = rows.flatMap { $0.rowSeparatorLayoutAttributes }
+		attributes[collectionElementKindGlobalHeaderBackground] = [backgroundAttributesForReading].flatMap { $0 }
+		
+		attributes.appendContents(of: attributesForDecorationsByKind)
+		
+		return attributes
+	}
+	
+	// O(n^2)
+	private var attributesForDecorationsByKind: [String: [CollectionViewLayoutAttributes]] {
+		var attributesByKind: [String: [CollectionViewLayoutAttributes]] = [:]
+		let insetFrame = UIEdgeInsetsInsetRect(frame, metrics.contentInset)
+		
+		for (kind, decorations) in decorationsByKind {
+			for (index, decoration) in decorations.enumerate() {
+				var decoration = decoration
+				decoration.itemIndex = index
+				decoration.sectionIndex = sectionIndex
+				decoration.setContainerFrame(insetFrame, invalidationContext: nil)
+				let attributes = decoration.layoutAttributes
+				attributesByKind.append(attributes, to: kind)
+			}
+		}
+		
+		return attributesByKind
 	}
 	
 }

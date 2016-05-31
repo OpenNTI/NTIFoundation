@@ -8,77 +8,71 @@
 
 import UIKit
 
-public protocol LayoutSection: class, LayoutEngine, LayoutAttributesResolving {
+public protocol LayoutSection: LayoutAttributesResolving {
 	
 	var frame: CGRect { get set }
 	var sectionIndex: Int { get set }
 	
 	var isGlobalSection: Bool { get }
 	
-	var layoutInfo: LayoutInfo? { get set }
-	
 	var items: [LayoutItem] { get }
 	var supplementaryItems: [LayoutSupplementaryItem] { get }
 	var supplementaryItemsByKind: [String: [LayoutSupplementaryItem]] { get }
-	var headers: [LayoutSupplementaryItem] { get }
-	var footers: [LayoutSupplementaryItem] { get }
 	
-	var backgroundAttribute: UICollectionViewLayoutAttributes? { get }
+	var phantomCellIndex: Int? { get set }
+	var phantomCellSize: CGSize { get set }
+	
+	var decorations: [LayoutDecoration] { get }
 	
 	var placeholderInfo: LayoutPlaceholder? { get set }
 	var shouldResizePlaceholder: Bool { get }
 	
-	var pinnableHeaders: [LayoutSupplementaryItem] { get set }
-	var nonPinnableHeaders: [LayoutSupplementaryItem] { get set }
-	
-	var heightOfNonPinningHeaders: CGFloat { get }
-	var heightOfPinningHeaders: CGFloat { get }
+	func supplementaryItems(of kind: String) -> [LayoutSupplementaryItem]
+	mutating func setSupplementaryItems(supplementaryItems: [LayoutSupplementaryItem], of kind: String)
 	
 	/// All the layout attributes associated with this section.
-	var layoutAttributes: [UICollectionViewLayoutAttributes] { get }
+	var layoutAttributes: [CollectionViewLayoutAttributes] { get }
 	
-	var decorationAttributesByKind: [String: [UICollectionViewLayoutAttributes]] { get }
+	var decorationAttributesByKind: [String: [CollectionViewLayoutAttributes]] { get }
 	
-	func add(supplementaryItem: LayoutSupplementaryItem)
-	func add(item: LayoutItem)
+	mutating func add(supplementaryItem: LayoutSupplementaryItem)
+	mutating func add(item: LayoutItem)
+	mutating func setItem(item: LayoutItem, at index: Int)
 	
-	func mutateItems(using mutator: (inout item: LayoutItem, index: Int) -> Void)
+	mutating func mutateItem(at index: Int, using mutator: (inout LayoutItem) -> Void)
+	mutating func mutateItems(using mutator: (inout item: LayoutItem, index: Int) -> Void)
 	
-	func mutateSupplementaryItems(using mutator: (inout supplementaryItem: LayoutSupplementaryItem, index: Int) -> Void)
+	mutating func mutateSupplementaryItems(using mutator: (inout supplementaryItem: LayoutSupplementaryItem, kind: String, index: Int) -> Void)
 	
 	/// Update the frame of this grouped object and any child objects. Use the invalidation context to mark layout objects as invalid.
-	func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
+	mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
 	/// Reset the content of this section.
-	func reset()
+	mutating func reset()
 	
 	func shouldShow(supplementaryItem: SupplementaryItem) -> Bool
 	
-	func finalizeLayoutAttributesForSectionsWithContent(sectionsWithContent: NSIndexSet)
+	mutating func finalizeLayoutAttributesForSectionsWithContent(sectionsWithContent: [LayoutSection])
 	
-	func setSize(size: CGSize, forItemAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
+	mutating func setSize(size: CGSize, forItemAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
 	
-	func setSize(size: CGSize, forSupplementaryElementOfKind kind: String, at index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
+	mutating func setSize(size: CGSize, forSupplementaryElementOfKind kind: String, at index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
 	
-	func setSize(size: CGSize, forHeaderAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
+	func additionalLayoutAttributesToInsertForInsertionOfItem(at indexPath: NSIndexPath) -> [CollectionViewLayoutAttributes]
 	
-	func setSize(size: CGSize, forFooterAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
+	func additionalLayoutAttributesToDeleteForDeletionOfItem(at indexPath: NSIndexPath) -> [CollectionViewLayoutAttributes]
 	
-	func additionalLayoutAttributesToInsertForInsertionOfItem(at indexPath: NSIndexPath) -> [UICollectionViewLayoutAttributes]
-	
-	func additionalLayoutAttributesToDeleteForDeletionOfItem(at indexPath: NSIndexPath) -> [UICollectionViewLayoutAttributes]
-	
-	func prepareForLayout()
+	mutating func prepareForLayout()
 	
 	func targetLayoutHeightForProposedLayoutHeight(proposedHeight: CGFloat, layoutInfo: LayoutInfo) -> CGFloat
 	
 	func targetContentOffsetForProposedContentOffset(proposedContentOffset: CGPoint, firstInsertedSectionMinY: CGFloat) -> CGPoint
 	
-	func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?)
+	mutating func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, layoutInfo: LayoutInfo, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
-	func applyValues(from metrics: LayoutMetrics)
+	mutating func applyValues(from metrics: LayoutMetrics)
 	
-	func copy() -> LayoutSection
+	func isEqual(to other: LayoutSection) -> Bool
 	
 }
 
@@ -86,6 +80,26 @@ extension LayoutSection {
 	
 	public var numberOfItems: Int {
 		return items.count
+	}
+	
+	public var layoutAttributes: [CollectionViewLayoutAttributes] {
+		var layoutAttributes: [CollectionViewLayoutAttributes] = []
+		
+		layoutAttributes += items.map {$0.layoutAttributes}
+		
+		layoutAttributes += supplementaryItems.map {$0.layoutAttributes}
+		
+		layoutAttributes += decorations.map {$0.layoutAttributes}
+		
+		if let placeholderInfo = self.placeholderInfo where placeholderInfo.startingSectionIndex == sectionIndex {
+			layoutAttributes.append(placeholderInfo.layoutAttributes)
+		}
+		
+		return layoutAttributes
+	}
+	
+	public var isGlobalSection: Bool {
+		return sectionIndex == globalSectionIndex
 	}
 	
 }
@@ -97,28 +111,22 @@ public protocol LayoutEngine {
 	
 }
 
-public func layoutSection(self: LayoutSection, setFrame frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
+public func layoutSection(inout self: LayoutSection, setFrame frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
 	guard frame != self.frame else {
 		return
 	}
 	let offset = CGPoint(x: frame.origin.x - self.frame.origin.x, y: frame.origin.y - self.frame.origin.y)
 	
-	self.mutateSupplementaryItems { (supplementaryItem, _) in
+	self.mutateSupplementaryItems { (supplementaryItem, _, _) in
 		let supplementaryFrame = CGRectOffset(supplementaryItem.frame, offset.x, offset.y)
 		supplementaryItem.setFrame(supplementaryFrame, invalidationContext: invalidationContext)
-	}
-	
-	if let backgroundAttribute = self.backgroundAttribute {
-		let backgroundRect = CGRectOffset(backgroundAttribute.frame, offset.x, offset.y)
-		backgroundAttribute.frame = backgroundRect
-		invalidationContext?.invalidateDecorationElementsOfKind(backgroundAttribute.representedElementKind!, atIndexPaths: [backgroundAttribute.indexPath])
 	}
 	
 	self.frame = frame
 }
 
-public func layoutSection(self: LayoutSection, offsetContentAfter origin: CGPoint, with offset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
-	self.mutateSupplementaryItems { (supplementaryItem, _) in
+public func layoutSection(inout self: LayoutSection, offsetContentAfter origin: CGPoint, with offset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
+	self.mutateSupplementaryItems { (supplementaryItem, _, _) in
 		var supplementaryFrame = supplementaryItem.frame
 		if supplementaryFrame.minX < origin.x || supplementaryFrame.minY < origin.y {
 			return

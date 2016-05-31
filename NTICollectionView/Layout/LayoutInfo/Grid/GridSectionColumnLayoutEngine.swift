@@ -16,7 +16,7 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 		super.init()
 	}
 	
-	public weak var layoutSection: GridLayoutSection!
+	public var layoutSection: GridLayoutSection
 	private var numberOfItems: Int {
 		return layoutSection.items.count
 	}
@@ -27,7 +27,7 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 	
 	public var spacing: CGFloat = 0
 	
-	private var metrics: GridSectionMetrics {
+	private var metrics: GridSectionMetricsProviding {
 		return layoutSection.metrics
 	}
 	
@@ -86,7 +86,7 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 		updateFrame(of: &supplementaryItem)
 		checkEstimatedHeight(of: &supplementaryItem)
 		updatePosition(with: supplementaryItem)
-		checkPinning(of: supplementaryItem)
+		checkPinning(of: &supplementaryItem)
 		invalidate(supplementaryItem)
 	}
 	
@@ -116,20 +116,21 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 	private func updatePosition(with supplementaryItem: LayoutSupplementaryItem) {
 		position.y += supplementaryItem.fixedHeight
 		
-		if supplementaryItem !== supplementaryItems.last {
+		// FIXME: This logic is kind of jank
+		if !supplementaryItem.isEqual(to: supplementaryItems.last!) {
 			position.y += spacing
 		}
 	}
 	
-	private func checkPinning(of supplementaryItem: LayoutSupplementaryItem) {
-		guard let gridItem = supplementaryItem as? GridSupplementaryItem
+	private func checkPinning(inout of supplementaryItem: LayoutSupplementaryItem) {
+		guard var gridItem = supplementaryItem as? GridLayoutSupplementaryItem
 			where supplementaryItem.isHeader else {
 				return
 		}
-		updatePinning(of: gridItem)
-	}
-	
-	private func updatePinning(of gridItem: GridSupplementaryItem) {
+		
+		gridItem.unpinnedY = gridItem.frame.minY
+		supplementaryItem = gridItem
+		
 		if gridItem.shouldPin {
 			pinnableHeaders.append(gridItem)
 		} else {

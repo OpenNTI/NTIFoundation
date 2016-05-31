@@ -10,6 +10,10 @@ import UIKit
 
 extension UIEdgeInsets {
 	
+	public static var zero: UIEdgeInsets {
+		return UIEdgeInsetsZero
+	}
+	
 	/// The combined left and right inset.
 	public var width: CGFloat {
 		return left + right
@@ -18,6 +22,17 @@ extension UIEdgeInsets {
 	/// The combined top and bottom inset.
 	public var height: CGFloat {
 		return top + bottom
+	}
+	
+}
+
+extension UIEdgeInsets {
+	
+	public init(uniformInset: CGFloat) {
+		top = uniformInset
+		left = uniformInset
+		bottom = uniformInset
+		right = uniformInset
 	}
 	
 }

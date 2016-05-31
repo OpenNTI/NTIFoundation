@@ -8,17 +8,26 @@
 
 import UIKit
 
-let LayoutDebugging = true
+let layoutDebugging = true
 
 func layoutLog(str: String) {
-	if LayoutDebugging {
+	if layoutDebugging {
 		debugPrint(str)
 	}
 }
 
-let UpdateDebugging = true
+let dragLogging = true
+
+func dragLog(funcName: String, message: String) {
+	if dragLogging {
+		debugPrint("\(funcName): \(message)")
+	}
+}
+
+let updateDebugging = true
+
 func updateLog(str: String) {
-	if UpdateDebugging {
+	if updateDebugging {
 		debugPrint(str)
 	}
 }

@@ -78,11 +78,11 @@ extension DataSourceMapping {
 
 public class BasicDataSourceMapping: NSObject, DataSourceMapping {
 	
-	public init(dataSource: CollectionDataSource, GlobalSectionIndex: Int? = nil) {
+	public init(dataSource: CollectionDataSource, globalSectionIndex: Int? = nil) {
 		self.dataSource = dataSource
 		super.init()
-		if let GlobalSectionIndex = GlobalSectionIndex {
-			updateMappingStartingAtGlobalSection(GlobalSectionIndex)
+		if let globalSectionIndex = globalSectionIndex {
+			updateMappingStartingAtGlobalSection(globalSectionIndex)
 		}
 	}
 	

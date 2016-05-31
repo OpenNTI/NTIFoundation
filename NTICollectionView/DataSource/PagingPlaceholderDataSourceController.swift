@@ -22,7 +22,7 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 			guard hasNextPage != oldValue else {
 				return
 			}
-			hasNextPage ? addNextPagePlaceholder() : removeNextPagePlaceholder()
+			hasNextPage ? showNextPagePlaceholder() : hideNextPagePlaceholder()
 		}
 	}
 	
@@ -31,13 +31,13 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 			guard hasPrevPage != oldValue else {
 				return
 			}
-			hasPrevPage ? addPrevPagePlaceholder() : removePrevPagePlaceholder()
+			hasPrevPage ? showPrevPagePlaceholder() : hidePrevPagePlaceholder()
 		}
 	}
 	
-	public let nextPagePlaceholder = BasicGridSupplementaryItem(elementKind: UICollectionElementKindSectionFooter)
+	public private(set) var nextPagePlaceholder = GridSupplementaryItem(elementKind: UICollectionElementKindSectionFooter)
 	
-	public let prevPagePlaceholder = BasicGridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
+	public private(set) var prevPagePlaceholder = GridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
 	
 	public var pageLoadDelay: NSTimeInterval = 0.5
 	
@@ -59,7 +59,7 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 	}
 	
 	private func configureNextPagePlaceholder() {
-		configurePagingPlaceholder(nextPagePlaceholder)
+		configurePagingPlaceholder(&nextPagePlaceholder)
 		nextPagePlaceholder.reuseIdentifier = nextPagePlaceholderKey
 		nextPagePlaceholder.configure { [weak self] (view, dataSource, indexPath) in
 			guard let `self` = self else {
@@ -82,7 +82,7 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 	}
 	
 	private func configurePrevPagePlaceholder() {
-		configurePagingPlaceholder(prevPagePlaceholder)
+		configurePagingPlaceholder(&prevPagePlaceholder)
 		prevPagePlaceholder.reuseIdentifier = prevPagePlaceholderKey
 		prevPagePlaceholder.configure { [weak self] (view, dataSource, indexPath) in
 			guard let `self` = self else {
@@ -104,36 +104,43 @@ public final class PagingPlaceholderDataSourceController: CollectionDataSourceCo
 		dataSource.add(prevPagePlaceholder, forKey: prevPagePlaceholderKey)
 	}
 	
-	private func configurePagingPlaceholder(pagingPlaceholder: GridSupplementaryItem) {
+	private func configurePagingPlaceholder(inout pagingPlaceholder: GridSupplementaryItem) {
 		pagingPlaceholder.backgroundColor = nil
 		pagingPlaceholder.height = 0
 		pagingPlaceholder.isHidden = true
 		pagingPlaceholder.supplementaryViewClass = CollectionPlaceholderView.self
 	}
 	
-	private func addNextPagePlaceholder() {
+	private func showNextPagePlaceholder() {
 		nextPagePlaceholder.height = placeholderHeight
 		nextPagePlaceholder.isHidden = false
+		replaceNextPagePlaceholder()
 	}
 	
-	private func removeNextPagePlaceholder() {
+	private func hideNextPagePlaceholder() {
 		nextPagePlaceholder.height = 0
 		nextPagePlaceholder.isHidden = true
+		replaceNextPagePlaceholder()
 	}
-	
-	private func addPrevPagePlaceholder() {
+
+	private func replaceNextPagePlaceholder() {
+		dataSource.replaceSupplementaryItemForKey(nextPagePlaceholderKey, with: nextPagePlaceholder)
+	}
+
+	private func showPrevPagePlaceholder() {
 		prevPagePlaceholder.height = placeholderHeight
 		prevPagePlaceholder.isHidden = false
+		replacePrevPagePlaceholder()
 	}
 	
-	private func removePrevPagePlaceholder() {
+	private func hidePrevPagePlaceholder() {
 		prevPagePlaceholder.height = 0
 		prevPagePlaceholder.isHidden = true
+		replacePrevPagePlaceholder()
 	}
 	
-	public func registerReusableViews(with collectionView: UICollectionView) {
-		collectionView.register(nextPagePlaceholder)
-		collectionView.register(prevPagePlaceholder)
+	private func replacePrevPagePlaceholder() {
+		dataSource.replaceSupplementaryItemForKey(prevPagePlaceholderKey, with: prevPagePlaceholder)
 	}
-	
+
 }

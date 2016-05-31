@@ -55,21 +55,6 @@ public protocol SegmentedControlSupplementaryItem: SupplementaryItem {
 	
 }
 
-public class GridSegmentedControlHeader: BasicGridSupplementaryItem, SegmentedControlSupplementaryItem {
-	
-	public init() {
-		super.init(elementKind: UICollectionElementKindSectionHeader)
-	}
-	
-	public convenience init(segmentedControl: SegmentedControlProtocol) {
-		self.init()
-		self.segmentedControl = segmentedControl
-	}
-	
-	public var segmentedControl: SegmentedControlProtocol!
-	
-}
-
 public class SegmentedControl: UISegmentedControl, SegmentedControlView {
 	
 	deinit {

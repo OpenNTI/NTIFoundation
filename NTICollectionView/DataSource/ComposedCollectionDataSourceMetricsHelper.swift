@@ -82,13 +82,13 @@ public class ComposedCollectionDataSourceMetricsHelper: CollectionDataSourceMetr
 		dataSource.findSupplementaryItemOfKind(kind, at: localIndexPath, using: block)
 	}
 	
-	public override func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetrics? {
+	public override func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
 		guard let mapping = composedDataSource.mappingForGlobalSection(sectionIndex) else {
 			return nil
 		}
 		let dataSource = mapping.dataSource
 		
-		guard let enclosingMetrics = super.snapshotMetricsForSectionAtIndex(sectionIndex) else {
+		guard var enclosingMetrics = super.snapshotMetricsForSectionAtIndex(sectionIndex) else {
 			return nil
 		}
 		if let localSection = mapping.localSectionForGlobalSection(sectionIndex),

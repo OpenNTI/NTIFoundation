@@ -8,13 +8,13 @@
 
 import UIKit
 
-public protocol DataSourceSectionInfo: class {
+public protocol DataSourceSectionInfo {
 	
 	var placeholder: AnyObject? { get set }
 	
 	var supplementaryItemsByKind: [String: [SupplementaryItem]] { get set }
 	
-	func add(supplementaryItem: SupplementaryItem)
+	mutating func add(supplementaryItem: SupplementaryItem)
 	
 }
 
@@ -28,7 +28,7 @@ extension DataSourceSectionInfo {
 		return supplementaryItemsByKind[kind] ?? []
 	}
 	
-	public func add(supplementaryItem: SupplementaryItem) {
+	public mutating func add(supplementaryItem: SupplementaryItem) {
 		let kind = supplementaryItem.elementKind
 		var items = supplementaryItemsOfKind(kind)
 		items.append(supplementaryItem)

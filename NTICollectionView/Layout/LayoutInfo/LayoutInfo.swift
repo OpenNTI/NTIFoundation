@@ -10,11 +10,11 @@ import UIKit
 
 public protocol LayoutAttributesResolving {
 	
-	func layoutAttributesForSupplementaryElementOfKind(kind: String, at indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes?
+	func layoutAttributesForSupplementaryElementOfKind(kind: String, at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes?
 	
-	func layoutAttributesForDecorationViewOfKind(kind: String, at indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes?
+	func layoutAttributesForDecorationViewOfKind(kind: String, at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes?
 	
-	func layoutAttributesForCell(at indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes?
+	func layoutAttributesForCell(at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes?
 	
 }
 
@@ -48,9 +48,13 @@ public protocol LayoutInfo: LayoutSizing, LayoutAttributesResolving, LayoutSecti
 	
 	var bounds: CGRect { get set }
 	
-	var isEditing: Bool { get }
+	var isEditing: Bool { get set }
 	
 	var sections: [LayoutSection] { get }
+	
+	func mutateSection(at index: Int, using mutator: (inout LayoutSection) -> Void)
+	
+	func mutateItem(at indexPath: NSIndexPath, using mutator: (inout LayoutItem) -> Void)
 	
 	/// Create a new placeholder covering the specified range of sections.
 	func newPlaceholderStartingAtSectionIndex(sectionIndex: Int) -> LayoutPlaceholder
@@ -72,12 +76,6 @@ public protocol LayoutInfo: LayoutSizing, LayoutAttributesResolving, LayoutSecti
 	
 	func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
-	/// Invalidate the current size information for the item at the given *indexPath*, update the layout possibly adjusting the position of content that needs to move to make room for or take up room from the item.
-	func invalidateMetricsForItemAt(indexPath: NSIndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext?)
-	
-	/// Invalidate the current size information for the supplementary item with the given *elementKind* and *indexPath*. This also updates the layout to adjust the position of any content that might need to move to make room for or take up room from the adjusted supplementary item.
-	func invalidateMetricsForElementOfKind(kind: String, at indexPath: NSIndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext?)
-	
 }
 
 public protocol LayoutSectionProvider: class {
@@ -86,10 +84,12 @@ public protocol LayoutSectionProvider: class {
 	
 	var hasGlobalSection: Bool { get }
 	
-	func enumerateSections(block: (sectionIndex: Int, sectionInfo: LayoutSection, inout stop: Bool) -> Void)
+	func enumerateSections(block: (sectionIndex: Int, inout sectionInfo: LayoutSection, inout stop: Bool) -> Void)
 	
 	/// Return the layout section with the given sectionIndex.
 	func sectionAtIndex(sectionIndex: Int) -> LayoutSection?
+	
+	func setSection(section: LayoutSection, at sectionIndex: Int)
 	
 	func add(section: LayoutSection, sectionIndex: Int)
 	
@@ -127,27 +127,94 @@ public protocol LayoutArea {
 	/// Update the frame of `self` and any child areas. 
 	///
 	/// If the frame has changed, mark objects as invalid in the invalidation context as necessary.
-	func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
+	mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
 }
 
 
-public protocol LayoutElement: class, LayoutArea {
+public protocol LayoutElement: LayoutArea {
 	
 	var itemIndex: Int { get set }
 	
 	var indexPath: NSIndexPath { get }
 	
-	var layoutAttributes: UICollectionViewLayoutAttributes { get }
+	var layoutAttributes: CollectionViewLayoutAttributes { get }
 	
-	func resetLayoutAttributes()
+	mutating func resetLayoutAttributes()
 	
 }
 
 
 /// Layout information about a supplementary item.
-public protocol LayoutSupplementaryItem: SupplementaryItem, LayoutElement {
+public protocol LayoutSupplementaryItem: SupplementaryItemWrapper, LayoutElement {
 	
-	var section: LayoutSection? { get set }
+	var sectionIndex: Int { get set }
+	
+	var supplementaryItem: SupplementaryItem { get set }
+	
+}
+
+extension LayoutSupplementaryItem {
+	
+	public var layoutAttributes: CollectionViewLayoutAttributes {
+		let attributes = CollectionViewLayoutAttributes(forSupplementaryViewOfKind: elementKind, withIndexPath: indexPath)
+		
+		configureValues(of: attributes)
+		
+		return attributes
+	}
+	
+}
+
+public protocol LayoutSupplementaryItemWrapper: LayoutSupplementaryItem {
+	
+	var layoutSupplementaryItem: LayoutSupplementaryItem { get set }
+	
+}
+
+extension LayoutSupplementaryItemWrapper {
+	
+	public var frame: CGRect {
+		get {
+			return layoutSupplementaryItem.frame
+		}
+		set {
+			layoutSupplementaryItem.frame = newValue
+		}
+	}
+	
+	public var itemIndex: Int {
+		get {
+			return layoutSupplementaryItem.itemIndex
+		}
+		set {
+			layoutSupplementaryItem.itemIndex = newValue
+		}
+	}
+	
+	public var sectionIndex: Int {
+		get {
+			return layoutSupplementaryItem.sectionIndex
+		}
+		set {
+			layoutSupplementaryItem.sectionIndex = newValue
+		}
+	}
+	
+	public var indexPath: NSIndexPath {
+		return layoutSupplementaryItem.indexPath
+	}
+	
+	public var layoutAttributes: UICollectionViewLayoutAttributes {
+		return layoutSupplementaryItem.layoutAttributes
+	}
+	
+	public mutating func resetLayoutAttributes() {
+		layoutSupplementaryItem.resetLayoutAttributes()
+	}
+	
+	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+		layoutSupplementaryItem.setFrame(frame, invalidationContext: invalidationContext)
+	}
 	
 }

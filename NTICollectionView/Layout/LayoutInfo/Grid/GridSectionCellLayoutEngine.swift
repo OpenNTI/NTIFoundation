@@ -8,6 +8,7 @@
 
 import UIKit
 
+// TODO: Write test that ensures items have width before their height is measured
 public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	
 	public init(layoutSection: GridLayoutSection) {
@@ -15,9 +16,9 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 		super.init()
 	}
 	
-	public weak var layoutSection: GridLayoutSection!
+	public var layoutSection: GridLayoutSection
 	
-	private var metrics: GridSectionMetrics {
+	private var metrics: GridSectionMetricsProviding {
 		return layoutSection.metrics
 	}
 	private var margins: UIEdgeInsets {
@@ -55,7 +56,7 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	private var position: CGPoint!
 	private var columnIndex: Int = 0
 	private var rowHeight: CGFloat!
-	private var row: GridLayoutRow!
+	private var row: LayoutRow!
 	private var height: CGFloat = 0
 	
 	private var layoutSizing: LayoutSizing!
@@ -114,8 +115,7 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	}
 	
 	private func startNewRow() {
-		row = GridLayoutRow()
-		row.section = layoutSection
+		row = LayoutRow()
 		row.metrics.applyValues(from: metrics)
 	}
 	
@@ -124,8 +124,9 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	}
 	
 	private func layoutItems() {
-		layoutSection.mutateItems { (item, index) in
-			self.layout(&item, at: index)
+		for (index, item) in layoutSection.items.enumerate() {
+			var item = item
+			layout(&item, at: index)
 		}
 	}
 	
@@ -133,11 +134,11 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 		checkForPhantomCell(at: itemIndex)
 		updateHeight(with: item)
 		if item.isDragging {
-			layoutDragging(&item)
+			layout(&item, isInColumn: false)
 			return
 		}
-		layout(&item, isInColumn: true)
 		checkEstimatedHeight(of: &item)
+		layout(&item, isInColumn: true)
 		invalidate(item)
 		nextColumn()
 	}
@@ -158,10 +159,6 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 		height = item.frame.height
 	}
 	
-	private func layoutDragging(inout item: LayoutItem) {
-		layout(&item, isInColumn: false)
-	}
-	
 	private func layout(inout item: LayoutItem, isInColumn: Bool) {
 		updateFrame(of: &item)
 		item.columnIndex = isInColumn ? columnIndex : NSNotFound
@@ -180,6 +177,7 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	}
 	
 	private func measureHeight(inout of item: LayoutItem) {
+		updateFrame(of: &item)
 		let measuredSize = layoutMeasure.measuredSizeForItem(item)
 		height = measuredSize.height
 		updateFrame(of: &item)
@@ -287,7 +285,9 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	}
 	
 	private func commitCurrentRow() {
-		layoutSection.add(row)
+		var row: LayoutRow = self.row
+		layoutSection.add(&row)
+		self.row = row
 		// Update the origin based on the actual frame of the row
 		position.y = row.frame.maxY + metrics.rowSpacing
 	}

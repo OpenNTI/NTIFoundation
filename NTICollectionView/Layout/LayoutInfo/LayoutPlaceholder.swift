@@ -25,6 +25,8 @@ public protocol LayoutPlaceholder: LayoutElement {
 	
 	func wasAddedToSection(section: LayoutSection)
 	
+	func isEqual(to other: LayoutPlaceholder) -> Bool
+	
 }
 
 extension LayoutPlaceholder {
@@ -35,7 +37,7 @@ extension LayoutPlaceholder {
 	
 }
 
-public class BasicLayoutPlaceholder: LayoutPlaceholder {
+public struct BasicLayoutPlaceholder: LayoutPlaceholder {
 	
 	public init(sectionIndexes: NSIndexSet) {
 		self.sectionIndexes = sectionIndexes.mutableCopy() as! NSMutableIndexSet
@@ -51,12 +53,8 @@ public class BasicLayoutPlaceholder: LayoutPlaceholder {
 		return NSIndexPath(forItem: itemIndex, inSection: startingSectionIndex)
 	}
 	
-	public var layoutAttributes: UICollectionViewLayoutAttributes {
-		if let layoutAttributes = _layoutAttributes where layoutAttributes.indexPath == indexPath {
-			return layoutAttributes
-		}
-		
-		let attributes = CollectionViewLayoutAttributes(forSupplementaryViewOfKind: CollectionElementKindPlaceholder, withIndexPath: indexPath)
+	public var layoutAttributes: CollectionViewLayoutAttributes {
+		let attributes = CollectionViewLayoutAttributes(forSupplementaryViewOfKind: collectionElementKindPlaceholder, withIndexPath: indexPath)
 		
 		attributes.frame = frame
 		attributes.unpinnedOrigin = frame.origin
@@ -66,10 +64,8 @@ public class BasicLayoutPlaceholder: LayoutPlaceholder {
 		attributes.hidden = false
 		attributes.shouldCalculateFittingSize = hasEstimatedHeight
 		
-		_layoutAttributes = attributes
 		return attributes
 	}
-	private var _layoutAttributes: CollectionViewLayoutAttributes?
 	
 	public var backgroundColor: UIColor?
 	
@@ -85,12 +81,12 @@ public class BasicLayoutPlaceholder: LayoutPlaceholder {
 		return sectionIndexes.lastIndex
 	}
 	
-	public func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
+	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
 		self.frame = frame
 		layoutAttributes.frame = frame
 		
 		if self.frame.height > 0 {
-			invalidationContext?.invalidateSupplementaryElementsOfKind(CollectionElementKindPlaceholder, atIndexPaths: [indexPath])
+			invalidationContext?.invalidateSupplementaryElementsOfKind(collectionElementKindPlaceholder, atIndexPaths: [indexPath])
 		}
 	}
 	
@@ -98,8 +94,22 @@ public class BasicLayoutPlaceholder: LayoutPlaceholder {
 		sectionIndexes.addIndex(section.sectionIndex)
 	}
 	
-	public func resetLayoutAttributes() {
-		_layoutAttributes = nil
+	public mutating func resetLayoutAttributes() {
+		
+	}
+	
+	public func isEqual(to other: LayoutPlaceholder) -> Bool {
+		guard let other = other as? BasicLayoutPlaceholder else {
+			return false
+		}
+		
+		return sectionIndexes == other.sectionIndexes
+			&& height == other.height
+			&& hasEstimatedHeight == other.hasEstimatedHeight
+			&& backgroundColor == other.backgroundColor
+		
+			&& frame == other.frame
+			&& itemIndex == other.itemIndex
 	}
 	
 }
