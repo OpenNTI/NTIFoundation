@@ -909,7 +909,8 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 	}
 	
 	private mutating func resetHeaders(pinnable pinnable: Bool, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
-		func resetter(inout header: GridLayoutSupplementaryItem, index: Int) {
+		func resetter(header: GridLayoutSupplementaryItem, index: Int) -> GridLayoutSupplementaryItem {
+			var header = header
 			var frame = header.frame
 			
 			if frame.minY != header.unpinnedY {
@@ -920,6 +921,8 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 			
 			frame.origin.y = header.unpinnedY
 			header.frame = frame
+			
+			return header
 		}
 		
 		pinnable ?
@@ -934,14 +937,17 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 			var frame = nonPinnableHeader.frame
 			
 			guard frame.maxY < maxY else {
-				return
+				return nonPinnableHeader
 			}
+			
+			var nonPinnableHeader = nonPinnableHeader
 			
 			maxY -= frame.height
 			frame.origin.y = maxY
 			nonPinnableHeader.frame = frame
 			
 			invalidationContext?.invalidate(nonPinnableHeader)
+			return nonPinnableHeader
 		}
 		
 		return maxY
@@ -955,8 +961,10 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 			var frame = pinnableHeader.frame
 			
 			guard frame.minY < minY else {
-				return
+				return pinnableHeader
 			}
+			
+			var pinnableHeader = pinnableHeader
 			
 			// We have a new pinning offset
 			frame.origin.y = minY
@@ -964,17 +972,22 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 			pinnableHeader.frame = frame
 			
 			invalidationContext?.invalidate(pinnableHeader)
+			return pinnableHeader
 		}
 		
 		return minY
 	}
 	
 	private mutating func finalizePinningForHeaders(pinnable pinnable: Bool, zIndex: Int) {
-		func finalizer(inout header: GridLayoutSupplementaryItem, index: Int) {
+		func finalizer(header: GridLayoutSupplementaryItem, index: Int) -> GridLayoutSupplementaryItem {
+			var header = header
+			
 			header.isPinned = header.frame.minY != header.unpinnedY
 			
 			let depth = index + 1
 			header.zIndex = zIndex - depth
+			
+			return header
 		}
 		
 		pinnable ?
@@ -998,7 +1011,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 		}
 	}
 	
-	public mutating func mutatePinnableHeaders(using mutator: (inout pinnableHeader: GridLayoutSupplementaryItem, index: Int) -> Void) {
+	public mutating func mutatePinnableHeaders(using transformer: (pinnableHeader: GridLayoutSupplementaryItem, index: Int) -> GridLayoutSupplementaryItem) {
 		var headers = self.headers
 		
 		for index in headers.indices {
@@ -1007,14 +1020,14 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 					continue
 			}
 			
-			mutator(pinnableHeader: &header, index: index)
+			header = transformer(pinnableHeader: header, index: index)
 			headers[index] = header
 		}
 		
 		self.headers = headers
 	}
 	
-	public mutating func mutateNonPinnableHeaders(inReverse inReverse: Bool = false, using mutator: (inout nonPinnableHeader: GridLayoutSupplementaryItem, index: Int) -> Void) {
+	public mutating func mutateNonPinnableHeaders(inReverse inReverse: Bool = false, using transformer: (nonPinnableHeader: GridLayoutSupplementaryItem, index: Int) -> GridLayoutSupplementaryItem) {
 		var headers = self.headers
 		
 		let headerIndices = inReverse ?
@@ -1027,7 +1040,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 					continue
 			}
 			
-			mutator(nonPinnableHeader: &header, index: index)
+			header = transformer(nonPinnableHeader: header, index: index)
 			headers[index] = header
 		}
 		
