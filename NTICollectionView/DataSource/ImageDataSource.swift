@@ -13,6 +13,10 @@ public class ImageDataSource : BasicCollectionDataSource<UIImage> {
 	
 	public let imageCellReuse = "imageCellReuse"
 	
+	public override init() {
+		super.init()
+	}
+	
 	public override func registerReusableViews(with collectionView: UICollectionView) {
 		super.registerReusableViews(with: collectionView)
 		
