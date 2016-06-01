@@ -552,6 +552,7 @@
 		4ADEE7691C98DBB900DE9B0D /* Decoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADEE7681C98DBB900DE9B0D /* Decoration.swift */; };
 		4ADEE76A1C98DBB900DE9B0D /* Decoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADEE7681C98DBB900DE9B0D /* Decoration.swift */; };
 		4AE4230C1CBECBC40035CF1B /* BasicSupplementaryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE4230B1CBECBC30035CF1B /* BasicSupplementaryItem.swift */; };
+		4AE793301CFFA4210045D2D1 /* HeadedTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE7932F1CFFA4210045D2D1 /* HeadedTextCell.swift */; };
 		4AF3835F1CA3186A006D13D4 /* CollectionPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9C1C88B0CE00849185 /* CollectionPlaceholderView.swift */; };
 		4AF3836F1CA35C5D006D13D4 /* UICollectionReusableView-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF3836E1CA35C5D006D13D4 /* UICollectionReusableView-Extensions.swift */; };
 		4AFECA051CA5E0E400AF2D09 /* ActionSheetControlButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFECA041CA5E0E400AF2D09 /* ActionSheetControlButton.swift */; };
@@ -1231,6 +1232,7 @@
 		4ADEE74B1C98950300DE9B0D /* Dictionary-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary-Extensions.swift"; sourceTree = "<group>"; };
 		4ADEE7681C98DBB900DE9B0D /* Decoration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Decoration.swift; sourceTree = "<group>"; };
 		4AE4230B1CBECBC30035CF1B /* BasicSupplementaryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicSupplementaryItem.swift; sourceTree = "<group>"; };
+		4AE7932F1CFFA4210045D2D1 /* HeadedTextCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeadedTextCell.swift; sourceTree = "<group>"; };
 		4AF3836E1CA35C5D006D13D4 /* UICollectionReusableView-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionReusableView-Extensions.swift"; sourceTree = "<group>"; };
 		4AFECA041CA5E0E400AF2D09 /* ActionSheetControlButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionSheetControlButton.swift; sourceTree = "<group>"; };
 		4C2ECDD31549D0A400C69E3A /* NTIMathInputExpressionModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathInputExpressionModel.h; sourceTree = "<group>"; };
@@ -2182,6 +2184,7 @@
 				4AB48C261CC00EFF00F193C3 /* TextValueCell.swift */,
 				4AD2D1D81CFDF9450008C8AC /* ImageCell.swift */,
 				4AB48C421CC0108D00F193C3 /* TruncatingLabel.swift */,
+				4AE7932F1CFFA4210045D2D1 /* HeadedTextCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3427,6 +3430,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4AE793301CFFA4210045D2D1 /* HeadedTextCell.swift in Sources */,
 				4AD52D531CC5799000CDEF45 /* GridLayoutSupplementaryItem.swift in Sources */,
 				4A280DED1CC6E623001EDCAA /* LayoutBuilder.swift in Sources */,
 				4A557D411CFF52D900F8A308 /* SemiEquatable.swift in Sources */,
