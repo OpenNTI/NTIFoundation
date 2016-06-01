@@ -14,10 +14,22 @@ public protocol SemiEquatable {
 	
 }
 
-extension Equatable {
-	
+extension NSObject : SemiEquatable {
+
 	public func isEqual(to other: Any) -> Bool {
-		guard let other = other as? Self else {
+		guard let other = other as? NSObject else {
+			return false
+		}
+		
+		return self == other
+	}
+
+}
+
+extension String : SemiEquatable {
+
+	public func isEqual(to other: Any) -> Bool {
+		guard let other = other as? String else {
 			return false
 		}
 		
@@ -26,13 +38,29 @@ extension Equatable {
 	
 }
 
-extension NSObject : SemiEquatable {}
+extension Int : SemiEquatable {
 
-extension String : SemiEquatable {}
+	public func isEqual(to other: Any) -> Bool {
+		guard let other = other as? Int else {
+			return false
+		}
+		
+		return self == other
+	}
 
-extension Int : SemiEquatable {}
+}
 
-extension Bool : SemiEquatable {}
+extension Bool : SemiEquatable {
+
+	public func isEqual(to other: Any) -> Bool {
+		guard let other = other as? Bool else {
+			return false
+		}
+		
+		return self == other
+	}
+
+}
 
 extension SequenceType where Generator.Element : SemiEquatable {
 	
