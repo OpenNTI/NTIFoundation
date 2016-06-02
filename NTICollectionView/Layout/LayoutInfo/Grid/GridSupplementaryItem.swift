@@ -18,6 +18,18 @@ public struct GridSupplementaryItem: SupplementaryItemWrapper, GridSupplementary
 	
 	static let footer = GridSupplementaryItem(elementKind: UICollectionElementKindSectionFooter)
 	
+	static func makeHeader(supplementaryViewClass: UICollectionReusableView.Type) -> GridSupplementaryItem {
+		var header = self.header
+		header.supplementaryViewClass = supplementaryViewClass
+		return header
+	}
+	
+	static func makeFooter(supplementaryViewClass: UICollectionReusableView.Type) -> GridSupplementaryItem {
+		var footer = self.footer
+		footer.supplementaryViewClass = supplementaryViewClass
+		return footer
+	}
+	
 	public init(elementKind: String) {
 		supplementaryItem = BasicSupplementaryItem(elementKind: elementKind)
 	}
