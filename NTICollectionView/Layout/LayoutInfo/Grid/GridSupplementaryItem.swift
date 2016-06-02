@@ -18,15 +18,15 @@ public struct GridSupplementaryItem: SupplementaryItemWrapper, GridSupplementary
 	
 	public static let footer = GridSupplementaryItem(elementKind: UICollectionElementKindSectionFooter)
 	
-	public static func makeHeader(supplementaryViewClass: UICollectionReusableView.Type) -> GridSupplementaryItem {
+	public static func makeHeader(supplementaryViewClass viewClass: UICollectionReusableView.Type) -> GridSupplementaryItem {
 		var header = self.header
-		header.supplementaryViewClass = supplementaryViewClass
+		header.supplementaryViewClass = viewClass
 		return header
 	}
 	
-	public static func makeFooter(supplementaryViewClass: UICollectionReusableView.Type) -> GridSupplementaryItem {
+	public static func makeFooter(supplementaryViewClass viewClass: UICollectionReusableView.Type) -> GridSupplementaryItem {
 		var footer = self.footer
-		footer.supplementaryViewClass = supplementaryViewClass
+		footer.supplementaryViewClass = viewClass
 		return footer
 	}
 	
