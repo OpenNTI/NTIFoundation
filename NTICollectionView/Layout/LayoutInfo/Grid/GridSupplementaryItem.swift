@@ -14,6 +14,10 @@ private let defaultEstimatedHeight: CGFloat = 44
 
 public struct GridSupplementaryItem: SupplementaryItemWrapper, GridSupplementaryAttributesWrapper {
 	
+	static let header = GridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
+	
+	static let footer = GridSupplementaryItem(elementKind: UICollectionElementKindSectionFooter)
+	
 	public init(elementKind: String) {
 		supplementaryItem = BasicSupplementaryItem(elementKind: elementKind)
 	}
