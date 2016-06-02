@@ -14,17 +14,17 @@ private let defaultEstimatedHeight: CGFloat = 44
 
 public struct GridSupplementaryItem: SupplementaryItemWrapper, GridSupplementaryAttributesWrapper {
 	
-	static let header = GridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
+	public static let header = GridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
 	
-	static let footer = GridSupplementaryItem(elementKind: UICollectionElementKindSectionFooter)
+	public static let footer = GridSupplementaryItem(elementKind: UICollectionElementKindSectionFooter)
 	
-	static func makeHeader(supplementaryViewClass: UICollectionReusableView.Type) -> GridSupplementaryItem {
+	public static func makeHeader(supplementaryViewClass: UICollectionReusableView.Type) -> GridSupplementaryItem {
 		var header = self.header
 		header.supplementaryViewClass = supplementaryViewClass
 		return header
 	}
 	
-	static func makeFooter(supplementaryViewClass: UICollectionReusableView.Type) -> GridSupplementaryItem {
+	public static func makeFooter(supplementaryViewClass: UICollectionReusableView.Type) -> GridSupplementaryItem {
 		var footer = self.footer
 		footer.supplementaryViewClass = supplementaryViewClass
 		return footer
