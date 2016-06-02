@@ -557,6 +557,7 @@
 		4AE793D91D00C7B50045D2D1 /* BasicHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE793D81D00C7B50045D2D1 /* BasicHeaderView.swift */; };
 		4AE793DB1D00DD290045D2D1 /* HelperTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE793DA1D00DD290045D2D1 /* HelperTypes.swift */; };
 		4AE793DC1D00DD290045D2D1 /* HelperTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE793DA1D00DD290045D2D1 /* HelperTypes.swift */; };
+		4AE793DE1D00EB0B0045D2D1 /* CompoundSwitchHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE793DD1D00EB0A0045D2D1 /* CompoundSwitchHeader.swift */; };
 		4AF3835F1CA3186A006D13D4 /* CollectionPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9C1C88B0CE00849185 /* CollectionPlaceholderView.swift */; };
 		4AF3836F1CA35C5D006D13D4 /* UICollectionReusableView-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF3836E1CA35C5D006D13D4 /* UICollectionReusableView-Extensions.swift */; };
 		4AFECA051CA5E0E400AF2D09 /* ActionSheetControlButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFECA041CA5E0E400AF2D09 /* ActionSheetControlButton.swift */; };
@@ -1240,6 +1241,7 @@
 		4AE793BC1D00C0FD0045D2D1 /* PinnableHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinnableHeaderView.swift; sourceTree = "<group>"; };
 		4AE793D81D00C7B50045D2D1 /* BasicHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicHeaderView.swift; sourceTree = "<group>"; };
 		4AE793DA1D00DD290045D2D1 /* HelperTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperTypes.swift; sourceTree = "<group>"; };
+		4AE793DD1D00EB0A0045D2D1 /* CompoundSwitchHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompoundSwitchHeader.swift; sourceTree = "<group>"; };
 		4AF3836E1CA35C5D006D13D4 /* UICollectionReusableView-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionReusableView-Extensions.swift"; sourceTree = "<group>"; };
 		4AFECA041CA5E0E400AF2D09 /* ActionSheetControlButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionSheetControlButton.swift; sourceTree = "<group>"; };
 		4C2ECDD31549D0A400C69E3A /* NTIMathInputExpressionModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathInputExpressionModel.h; sourceTree = "<group>"; };
@@ -2195,6 +2197,7 @@
 				4AE7932F1CFFA4210045D2D1 /* HeadedTextCell.swift */,
 				4AE793BC1D00C0FD0045D2D1 /* PinnableHeaderView.swift */,
 				4AE793D81D00C7B50045D2D1 /* BasicHeaderView.swift */,
+				4AE793DD1D00EB0A0045D2D1 /* CompoundSwitchHeader.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3488,6 +3491,7 @@
 				4A68ACFB1C88B0CE00849185 /* CollectionPlaceholderView.swift in Sources */,
 				4A08FC8C1CF506E500038F7D /* TableLayoutItem.swift in Sources */,
 				4AE4230C1CBECBC40035CF1B /* BasicSupplementaryItem.swift in Sources */,
+				4AE793DE1D00EB0B0045D2D1 /* CompoundSwitchHeader.swift in Sources */,
 				4A68ACFD1C88B0CE00849185 /* PlaceholderView.swift in Sources */,
 				4AF3836F1CA35C5D006D13D4 /* UICollectionReusableView-Extensions.swift in Sources */,
 				4A68ACAD1C88B0CE00849185 /* ComposedCollectionDataSourceMetricsHelper.swift in Sources */,
