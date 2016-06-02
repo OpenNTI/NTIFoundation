@@ -555,6 +555,8 @@
 		4AE793301CFFA4210045D2D1 /* HeadedTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE7932F1CFFA4210045D2D1 /* HeadedTextCell.swift */; };
 		4AE793BD1D00C0FD0045D2D1 /* PinnableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE793BC1D00C0FD0045D2D1 /* PinnableHeaderView.swift */; };
 		4AE793D91D00C7B50045D2D1 /* BasicHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE793D81D00C7B50045D2D1 /* BasicHeaderView.swift */; };
+		4AE793DB1D00DD290045D2D1 /* HelperTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE793DA1D00DD290045D2D1 /* HelperTypes.swift */; };
+		4AE793DC1D00DD290045D2D1 /* HelperTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE793DA1D00DD290045D2D1 /* HelperTypes.swift */; };
 		4AF3835F1CA3186A006D13D4 /* CollectionPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9C1C88B0CE00849185 /* CollectionPlaceholderView.swift */; };
 		4AF3836F1CA35C5D006D13D4 /* UICollectionReusableView-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF3836E1CA35C5D006D13D4 /* UICollectionReusableView-Extensions.swift */; };
 		4AFECA051CA5E0E400AF2D09 /* ActionSheetControlButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFECA041CA5E0E400AF2D09 /* ActionSheetControlButton.swift */; };
@@ -1237,6 +1239,7 @@
 		4AE7932F1CFFA4210045D2D1 /* HeadedTextCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeadedTextCell.swift; sourceTree = "<group>"; };
 		4AE793BC1D00C0FD0045D2D1 /* PinnableHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinnableHeaderView.swift; sourceTree = "<group>"; };
 		4AE793D81D00C7B50045D2D1 /* BasicHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicHeaderView.swift; sourceTree = "<group>"; };
+		4AE793DA1D00DD290045D2D1 /* HelperTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperTypes.swift; sourceTree = "<group>"; };
 		4AF3836E1CA35C5D006D13D4 /* UICollectionReusableView-Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionReusableView-Extensions.swift"; sourceTree = "<group>"; };
 		4AFECA041CA5E0E400AF2D09 /* ActionSheetControlButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionSheetControlButton.swift; sourceTree = "<group>"; };
 		4C2ECDD31549D0A400C69E3A /* NTIMathInputExpressionModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NTIMathInputExpressionModel.h; sourceTree = "<group>"; };
@@ -2160,6 +2163,7 @@
 				4A68AC961C88B0CE00849185 /* Debug.swift */,
 				4A68AC971C88B0CE00849185 /* LoadableContentStateMachine.swift */,
 				4A68AC981C88B0CE00849185 /* StateMachine.swift */,
+				4AE793DA1D00DD290045D2D1 /* HelperTypes.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -3447,6 +3451,7 @@
 				4A68ACD51C88B0CE00849185 /* GridLayoutItem.swift in Sources */,
 				4A280DF31CC6E8F1001EDCAA /* GridSupplementaryItemBuilder.swift in Sources */,
 				4A557CEE1CFE2E1A00F8A308 /* ImageDataSource.swift in Sources */,
+				4AE793DB1D00DD290045D2D1 /* HelperTypes.swift in Sources */,
 				4A68ACB51C88B0CE00849185 /* DataSourceSectionInfo.swift in Sources */,
 				4A1B77BD1CBD54E600C977A6 /* CollectionUpdateRecorder.swift in Sources */,
 				4A280DF01CC6E7DB001EDCAA /* GridLayoutSectionBuilder.swift in Sources */,
@@ -3579,6 +3584,7 @@
 				4A68ACE21C88B0CE00849185 /* LayoutRow.swift in Sources */,
 				4A68ACE61C88B0CE00849185 /* LayoutItem.swift in Sources */,
 				4AB48C531CC0386C00F193C3 /* BasicSupplementaryItem.swift in Sources */,
+				4AE793DC1D00DD290045D2D1 /* HelperTypes.swift in Sources */,
 				4A68ACD01C88B0CE00849185 /* BasicLayoutInfo.swift in Sources */,
 				4A68ACCC1C88B0CE00849185 /* CollectionViewLayoutAttributes.swift in Sources */,
 				4A68ACE01C88B0CE00849185 /* GridSectionMetrics.swift in Sources */,
