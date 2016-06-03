@@ -22,6 +22,8 @@ public struct GridDataSourceSectionMetrics: DataSourceSectionMetricsProviding {
 	
 	public var placeholderHasEstimatedHeight: Bool = true
 	
+	public var placeholderShouldFillAvailableHeight = true
+	
 	public var supplementaryItemsByKind: [String: [SupplementaryItem]] = [:]
 	
 	public var sizingInfo: CollectionViewLayoutMeasuring?

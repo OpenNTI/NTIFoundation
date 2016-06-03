@@ -159,7 +159,7 @@ public class BasicLayoutInfo: LayoutInfo {
 				continue
 			}
 			
-			if let placeholderInfo = sectionInfo.placeholderInfo {
+			if let placeholderInfo = sectionInfo.placeholderInfo where placeholderInfo.shouldFillAvailableHeight {
 				// If there's a placeholder and it didn't start here or end here, there's no content to worry about, because we're not going to show the items or any supplementary elements
 				if placeholderInfo.startingSectionIndex != sectionInfo.sectionIndex
 					&& placeholderInfo.endingSectionIndex != sectionInfo.sectionIndex {

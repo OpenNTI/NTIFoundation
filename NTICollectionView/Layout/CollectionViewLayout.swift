@@ -1304,6 +1304,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 					placeholderInfo = layoutInfo.newPlaceholderStartingAtSectionIndex(sectionIndex)
 					placeholderInfo?.height = metrics.placeholderHeight
 					placeholderInfo?.hasEstimatedHeight = metrics.placeholderHasEstimatedHeight
+					placeholderInfo?.shouldFillAvailableHeight = metrics.placeholderShouldFillAvailableHeight
 				}
 				
 				sectionInfo.placeholderInfo = placeholderInfo

@@ -17,6 +17,8 @@ public protocol LayoutPlaceholder: LayoutElement {
 	
 	var hasEstimatedHeight: Bool { get set }
 	
+	var shouldFillAvailableHeight: Bool { get set }
+	
 	/// The first section index of this placeholder.
 	var startingSectionIndex: Int { get }
 	
@@ -72,6 +74,8 @@ public struct BasicLayoutPlaceholder: LayoutPlaceholder {
 	public var height: CGFloat = 0
 	
 	public var hasEstimatedHeight = false
+	
+	public var shouldFillAvailableHeight = true
 	
 	public var startingSectionIndex: Int {
 		return sectionIndexes.firstIndex
