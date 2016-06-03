@@ -19,6 +19,10 @@ public class ImageCell: CollectionViewCell {
 
 	private let imageView = UIImageView()
 	
+	public override var layoutMargins: UIEdgeInsets {
+		didSet { contentView.layoutMargins = layoutMargins }
+	}
+	
 	public override init(frame: CGRect) {
 		super.init(frame: frame)
 		commonInit()
