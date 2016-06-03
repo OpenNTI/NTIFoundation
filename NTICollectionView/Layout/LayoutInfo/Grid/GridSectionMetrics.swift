@@ -176,8 +176,12 @@ public struct GridSectionMetrics: GridSectionMetricsProviding {
 		}
 	}
 	
-	/// Layout margins for cells in this section. When not set (e.g. UIEdgeInsetsZero), the default value of the theme will be used, listLayoutMargins.
-	public var layoutMargins = UIEdgeInsetsZero
+	/// Layout margins for cells in this section.
+	public var layoutMargins = UIEdgeInsetsZero {
+		didSet {
+			setFlag("layoutMargins")
+		}
+	}
 	
 	/// Whether a column separator should be drawn. Default is `true`.
 	public var showsColumnSeparator = true {
@@ -357,6 +361,9 @@ public struct GridSectionMetrics: GridSectionMetricsProviding {
 		}
 		if metrics.definesMetric("padding") {
 			padding = gridMetrics.padding
+		}
+		if metrics.definesMetric("layoutMargins") {
+			layoutMargins = gridMetrics.layoutMargins
 		}
 		if metrics.definesMetric("showsColumnSeparator") {
 			showsColumnSeparator = gridMetrics.showsColumnSeparator
