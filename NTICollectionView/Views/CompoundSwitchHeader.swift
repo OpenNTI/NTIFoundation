@@ -32,9 +32,11 @@ public class CompoundSwitchHeader: PinnableHeaderView {
 	
 	private func commonInit() {
 		leftLabel.translatesAutoresizingMaskIntoConstraints = false
+		leftLabel.setContentHuggingPriority(UILayoutPriorityRequired, forAxis: .Vertical)
 		addSubview(leftLabel)
 		
 		rightLabel.translatesAutoresizingMaskIntoConstraints = false
+		rightLabel.setContentHuggingPriority(UILayoutPriorityRequired, forAxis: .Vertical)
 		addSubview(rightLabel)
 		
 		actionSwitch.translatesAutoresizingMaskIntoConstraints = false
@@ -46,7 +48,7 @@ public class CompoundSwitchHeader: PinnableHeaderView {
 		constraints += NSLayoutConstraint.constraintsWithVisualFormat("H:|-[left]-(>=0)-[switch]-[right]-|", options: [], metrics: nil, views: views)
 		
 		for key in ["left", "right"] {
-			constraints += NSLayoutConstraint.constraintsWithVisualFormat("V:|-[\(key)]-|", options: [], metrics: nil, views: views)
+			constraints += NSLayoutConstraint.constraintsWithVisualFormat("V:|-[\(key)]", options: [], metrics: nil, views: views)
 		}
 		
 		constraints.append(NSLayoutConstraint(item: actionSwitch, attribute: .CenterY, relatedBy: .Equal, toItem: rightLabel, attribute: .CenterY, multiplier: 1, constant: 0))
