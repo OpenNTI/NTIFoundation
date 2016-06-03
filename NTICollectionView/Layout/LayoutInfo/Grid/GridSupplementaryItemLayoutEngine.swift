@@ -316,7 +316,7 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 	private func layoutInnerContent() {
 		let innerSizing = LayoutSizingInfo(width: innerContentWidth, layoutMeasure: layoutMeasure)
 		position = innerLayoutEngine.layoutWithOrigin(position, layoutSizing: innerSizing, invalidationContext: invalidationContext)
-		footersMinY = position.y + metrics.padding.bottom
+		footersMinY = position.y
 	}
 	private var innerContentWidth: CGFloat {
 		var innerContentWidth = width - leftAuxiliaryColumnWidth - rightAuxiliaryColumnWidth// - metrics.padding.width
