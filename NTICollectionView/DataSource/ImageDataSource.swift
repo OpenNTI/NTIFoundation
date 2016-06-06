@@ -13,8 +13,20 @@ public class ImageDataSource : BasicCollectionDataSource<UIImage> {
 	
 	public let imageCellReuse = "imageCellReuse"
 	
+	/// An optional transformation applied to images before being stored in `items`.
+	public var imageTransform: ((UIImage) -> UIImage)?
+	
 	public override init() {
 		super.init()
+	}
+	
+	public override func setItems(items: [UIImage], animated: Bool) {
+		var items = items
+		if let transform = imageTransform {
+			items = items.map(transform)
+		}
+		
+		super.setItems(items, animated: animated)
 	}
 	
 	public override func registerReusableViews(with collectionView: UICollectionView) {
