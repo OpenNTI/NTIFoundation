@@ -45,6 +45,8 @@ public struct LayoutData {
 	
 	public var sections: [LayoutSection] = []
 	
+	public var globalSection: LayoutSection?
+	
 	public var numberOfPlaceholders: Int = 0
 	
 }
