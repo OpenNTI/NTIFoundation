@@ -17,12 +17,14 @@ public protocol LayoutSection: LayoutAttributesResolving {
 	
 	var items: [LayoutItem] { get }
 	var supplementaryItems: [LayoutSupplementaryItem] { get }
-	var supplementaryItemsByKind: [String: [LayoutSupplementaryItem]] { get }
+	var supplementaryItemsByKind: [String: [LayoutSupplementaryItem]] { get set }
 	
 	var phantomCellIndex: Int? { get set }
 	var phantomCellSize: CGSize { get set }
 	
 	var decorations: [LayoutDecoration] { get }
+	
+	var decorationsByKind: [String: [LayoutDecoration]] { get set }
 	
 	var placeholderInfo: LayoutPlaceholder? { get set }
 	var shouldResizePlaceholder: Bool { get }
