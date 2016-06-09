@@ -531,6 +531,9 @@
 		4A68AD441C88BE2000849185 /* UICollectionView+SupplementaryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AD421C88BE2000849185 /* UICollectionView+SupplementaryViews.swift */; };
 		4A7A3F761CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7A3F751CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift */; };
 		4A7A3F771CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7A3F751CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift */; };
+		4A88EC931D09C97600CFE099 /* LayoutSectionStackBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88EC921D09C97600CFE099 /* LayoutSectionStackBuilder.swift */; };
+		4A88EC941D09C97600CFE099 /* LayoutSectionStackBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88EC921D09C97600CFE099 /* LayoutSectionStackBuilder.swift */; };
+		4A88ECB01D09CDB000CFE099 /* LayoutSectionStackBuilderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88ECAF1D09CDB000CFE099 /* LayoutSectionStackBuilderTest.swift */; };
 		4A9D2C301C9CCA3D00D75BBD /* DelegatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9D2C2F1C9CCA3D00D75BBD /* DelegatingViewController.swift */; };
 		4AA691061CF62A1700012293 /* TableRowStackBuilderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA691051CF62A1700012293 /* TableRowStackBuilderTest.swift */; };
 		4AB48C271CC00EFF00F193C3 /* TextValueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB48C261CC00EFF00F193C3 /* TextValueCell.swift */; };
@@ -1224,6 +1227,8 @@
 		4A72F4601925AEF1004792EF /* UIColor+NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NTIExtensions.m"; sourceTree = "<group>"; };
 		4A72F48619268DA8004792EF /* UIColor+NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NTIExtensionsTest.m"; sourceTree = "<group>"; };
 		4A7A3F751CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RowAlignedLayoutSectionBase.swift; sourceTree = "<group>"; };
+		4A88EC921D09C97600CFE099 /* LayoutSectionStackBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutSectionStackBuilder.swift; sourceTree = "<group>"; };
+		4A88ECAF1D09CDB000CFE099 /* LayoutSectionStackBuilderTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutSectionStackBuilderTest.swift; sourceTree = "<group>"; };
 		4A9D2C2F1C9CCA3D00D75BBD /* DelegatingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DelegatingViewController.swift; sourceTree = "<group>"; };
 		4AA691051CF62A1700012293 /* TableRowStackBuilderTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableRowStackBuilderTest.swift; sourceTree = "<group>"; };
 		4AB48C261CC00EFF00F193C3 /* TextValueCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextValueCell.swift; sourceTree = "<group>"; };
@@ -2031,6 +2036,7 @@
 				4A0583291C9247A700F3D0E0 /* MockLayoutEngine.swift */,
 				4A08FCA81CF5275900038F7D /* TableLayoutSectionBuilderTest.swift */,
 				4AA691051CF62A1700012293 /* TableRowStackBuilderTest.swift */,
+				4A88ECAF1D09CDB000CFE099 /* LayoutSectionStackBuilderTest.swift */,
 				4A68AC5A1C88AEE300849185 /* DummyLayoutInfo.swift */,
 				4A68AC5B1C88AEE300849185 /* DummyLayoutMeasure.swift */,
 			);
@@ -2119,6 +2125,7 @@
 				4A68AC921C88B0CE00849185 /* SupplementaryItem.swift */,
 				4ADEE7681C98DBB900DE9B0D /* Decoration.swift */,
 				4A280DEC1CC6E623001EDCAA /* LayoutBuilder.swift */,
+				4A88EC921D09C97600CFE099 /* LayoutSectionStackBuilder.swift */,
 			);
 			path = LayoutInfo;
 			sourceTree = "<group>";
@@ -3453,6 +3460,7 @@
 				4AB6BE541CA4774700A86233 /* PagingPlaceholderDataSourceController.swift in Sources */,
 				4A68ACD51C88B0CE00849185 /* GridLayoutItem.swift in Sources */,
 				4A280DF31CC6E8F1001EDCAA /* GridSupplementaryItemBuilder.swift in Sources */,
+				4A88EC931D09C97600CFE099 /* LayoutSectionStackBuilder.swift in Sources */,
 				4A557CEE1CFE2E1A00F8A308 /* ImageDataSource.swift in Sources */,
 				4AE793DB1D00DD290045D2D1 /* HelperTypes.swift in Sources */,
 				4A68ACB51C88B0CE00849185 /* DataSourceSectionInfo.swift in Sources */,
@@ -3555,6 +3563,7 @@
 				4A280DF41CC6E8F1001EDCAA /* GridSupplementaryItemBuilder.swift in Sources */,
 				4A08FCA91CF5275900038F7D /* TableLayoutSectionBuilderTest.swift in Sources */,
 				4A05832A1C9247A700F3D0E0 /* MockLayoutEngine.swift in Sources */,
+				4A88EC941D09C97600CFE099 /* LayoutSectionStackBuilder.swift in Sources */,
 				4A0583351C934BD000F3D0E0 /* ComposedGridSectionLayoutEngine.swift in Sources */,
 				4A280DF11CC6E7DB001EDCAA /* GridLayoutSectionBuilder.swift in Sources */,
 				4A68ACD61C88B0CE00849185 /* GridLayoutItem.swift in Sources */,
@@ -3602,6 +3611,7 @@
 				4A68ACA41C88B0CE00849185 /* CollectionDataSourceMetrics.swift in Sources */,
 				4A68ACBC1C88B0CE00849185 /* CGGeometry-Extensions.swift in Sources */,
 				4A68ACC41C88B0CE00849185 /* CollectionLayoutAnimator.swift in Sources */,
+				4A88ECB01D09CDB000CFE099 /* LayoutSectionStackBuilderTest.swift in Sources */,
 				4A68AC601C88AEE300849185 /* DummyLayoutMeasure.swift in Sources */,
 				4A1B77D91CBD64B400C977A6 /* CollectionUpdateRecorder.swift in Sources */,
 				4A620D8D1C8E148D0084B0A2 /* CollectionDataSourceController.swift in Sources */,
