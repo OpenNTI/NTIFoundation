@@ -33,6 +33,22 @@ func invalidateLayoutAttributes(attributes: UICollectionViewLayoutAttributes, in
 	}
 }
 
+public struct LayoutData {
+	
+	public var layoutSize = CGSizeZero
+	
+	public var viewBounds = CGRectZero
+	
+	public var contentOffset = CGPointZero
+	
+	public var contentInset = UIEdgeInsetsZero
+	
+	public var sections: [LayoutSection] = []
+	
+	public var numberOfPlaceholders: Int = 0
+	
+}
+
 public protocol LayoutInfo: LayoutSizing, LayoutAttributesResolving, LayoutSectionProvider {
 	
 	var collectionViewSize: CGSize { get set }
