@@ -66,6 +66,9 @@ public protocol LayoutStrategy {
 	/// Updates and invalidates the size of a supplementary item, also adjusting the position of any content affected by the size change.
 	func setSize(size: CGSize, forElementOfKind kind: String, at indexPath: NSIndexPath, inout in data: LayoutData, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
+	/// Updates any items whose behavior is dependent on the content offset.
+	func updateSpecialItems(withContentOffset offset: CGPoint, inout in data: LayoutData, invalidationContext: UICollectionViewLayoutInvalidationContext?)
+	
 }
 
 public protocol LayoutInfo: LayoutSizing, LayoutAttributesResolving, LayoutSectionProvider {

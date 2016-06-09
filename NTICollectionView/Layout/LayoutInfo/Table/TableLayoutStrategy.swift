@@ -137,4 +137,174 @@ public struct TableLayoutStrategy : LayoutStrategy {
 		resultingOffset.y += deltaY
 	}
 	
+	public func updateSpecialItems(withContentOffset offset: CGPoint, inout in data: LayoutData, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+		var pinnableY = offset.y + data.contentInset.top
+		var nonPinnableY = pinnableY
+		
+		for index in data.sections.indices {
+			resetHeaders(pinnable: true, in: &data.sections[index], invalidationContext: invalidationContext)
+		}
+		
+		guard var globalSection = data.globalSection else {
+			return
+		}
+		
+		resetHeaders(pinnable: true, in: &globalSection, invalidationContext: invalidationContext)
+		
+		applyTopPinningToPinnableHeaders(in: &globalSection, minY: &pinnableY, invalidationContext: invalidationContext)
+		
+		finalizePinningForHeaders(pinnable: true, in: &globalSection, zIndex: pinnedHeaderZIndex)
+		
+		let nonPinnableHeaders = headers(pinnable: false, in: globalSection)
+		
+		resetHeaders(pinnable: false, in: &globalSection, invalidationContext: invalidationContext)
+		
+		applyBottomPinningToNonPinnableHeaders(in: &globalSection, maxY: &nonPinnableY, invalidationContext: invalidationContext)
+		
+		finalizePinningForHeaders(pinnable: false, in: &globalSection, zIndex: pinnedHeaderZIndex)
+		
+		if var backgroundDecoration = globalSection.decorationsByKind[collectionElementKindGlobalHeaderBackground]?.first {
+			var frame = backgroundDecoration.frame
+			frame.origin.y = min(nonPinnableY, data.viewBounds.minY)
+			
+			let pinnableHeaders = headers(pinnable: true, in: globalSection)
+			let bottomY = max(pinnableHeaders.last?.frame.maxY ?? 0, nonPinnableHeaders.last?.frame.maxY ?? 0)
+			frame.size.height = bottomY - frame.minY
+			
+			backgroundDecoration.setContainerFrame(frame, invalidationContext: nil)
+			globalSection.decorationsByKind[collectionElementKindGlobalHeaderBackground]![0] = backgroundDecoration
+		}
+		
+		// Find the first section overlapping pinnableY
+		for (index, section) in data.sections.enumerate() {
+			let frame = section.frame
+			
+			guard frame.minY <= pinnableY && pinnableY <= frame.maxY else {
+				continue
+			}
+			
+			var section = section
+			
+			applyTopPinningToPinnableHeaders(in: &section, minY: &pinnableY, invalidationContext: invalidationContext)
+			
+			// FIXME: Magic number
+			finalizePinningForHeaders(pinnable: true, in: &section, zIndex: pinnedHeaderZIndex - 100)
+			
+			data.sections[index] = section
+			
+			break
+		}
+		
+		data.globalSection = globalSection
+	}
+	
+	private func resetHeaders(pinnable pinnable: Bool, inout in section: LayoutSection, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+		guard var headers = section.supplementaryItemsByKind[UICollectionElementKindSectionHeader] else {
+			return
+		}
+		
+		for (index, header) in headers.enumerate() where header.shouldPin == pinnable {
+			guard var header = header as? TableLayoutSupplementaryItem else {
+				continue
+			}
+			
+			var frame = header.frame
+			
+			if frame.minY != header.unpinnedY {
+				invalidationContext?.invalidate(header)
+			}
+			
+			header.isPinned = false
+			
+			frame.origin.y = header.unpinnedY
+			header.frame = frame
+			
+			headers[index] = header
+		}
+		
+		section.supplementaryItemsByKind[UICollectionElementKindSectionHeader] = headers
+	}
+	
+	/// Pins the pinnable headers starting at `minY` -- as long as they don't cross `minY` -- and updates `minY` to a new value.
+	private func applyTopPinningToPinnableHeaders(inout in section: LayoutSection, inout minY: CGFloat, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+		guard var headers = section.supplementaryItemsByKind[UICollectionElementKindSectionHeader] else {
+			return
+		}
+		
+		for (index, header) in headers.enumerate() where header.shouldPin {
+			guard var header = header as? TableLayoutSupplementaryItem else {
+				continue
+			}
+			
+			var frame = header.frame
+			
+			guard frame.minY < minY else {
+				continue
+			}
+			
+			// We have a new pinning offset
+			frame.origin.y = minY
+			minY = frame.maxY
+			header.frame = frame
+			
+			invalidationContext?.invalidate(header)
+			headers[index] = header
+		}
+		
+		section.supplementaryItemsByKind[UICollectionElementKindSectionHeader] = headers
+	}
+	
+	private func finalizePinningForHeaders(pinnable pinnable: Bool, inout in section: LayoutSection, zIndex: Int) {
+		guard var headers = section.supplementaryItemsByKind[UICollectionElementKindSectionHeader] else {
+			return
+		}
+		
+		for (index, header) in headers.enumerate() where header.shouldPin == pinnable {
+			guard var header = header as? TableLayoutSupplementaryItem else {
+				continue
+			}
+			
+			header.isPinned = header.frame.minY != header.unpinnedY
+			
+			let depth = index + 1
+			header.zIndex = zIndex - depth
+			
+			headers[index] = header
+		}
+		
+		section.supplementaryItemsByKind[UICollectionElementKindSectionHeader] = headers
+	}
+	
+	private func applyBottomPinningToNonPinnableHeaders(inout in section: LayoutSection, inout maxY: CGFloat, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+		guard var headers = section.supplementaryItemsByKind[UICollectionElementKindSectionHeader] else {
+			return
+		}
+		
+		for (index, header) in headers.enumerate().reverse() where !header.shouldPin {
+			var header = header
+			var frame = header.frame
+			
+			guard frame.maxY < maxY else {
+				continue
+			}
+			
+			maxY -= frame.height
+			frame.origin.y = maxY
+			header.frame = frame
+			
+			invalidationContext?.invalidate(header)
+			headers[index] = header
+		}
+		
+		section.supplementaryItemsByKind[UICollectionElementKindSectionHeader] = headers
+	}
+	
+	private func headers(pinnable pinnable: Bool, in section: LayoutSection) -> [LayoutSupplementaryItem] {
+		guard let headers = section.supplementaryItemsByKind[UICollectionElementKindSectionHeader] else {
+			return []
+		}
+		
+		return headers.filter { $0.shouldPin == pinnable }
+	}
+	
 }
