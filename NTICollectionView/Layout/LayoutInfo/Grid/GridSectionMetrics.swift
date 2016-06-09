@@ -48,6 +48,9 @@ public protocol GridSectionMetricsProviding: SectionMetrics {
 	/// Layout margins for cells in this section.
 	var layoutMargins: UIEdgeInsets { get set }
 	
+	/// The width of separators that are drawn.
+	var separatorWidth: CGFloat { get set }
+	
 	/// Whether a column separator should be drawn. Default is `true`.
 	var showsColumnSeparator: Bool { get set }
 	
@@ -87,6 +90,8 @@ public protocol GridSectionMetricsProviding: SectionMetrics {
 }
 
 public struct GridSectionMetrics: GridSectionMetricsProviding {
+	
+	public static let hairline: CGFloat = 1.0 / UIScreen.mainScreen().scale
 	
 	public static var defaultSupplementaryOrdering: Set<GridSectionSupplementaryItemOrder> = [.header(order: 0), .footer(order: 1), .leftAuxiliary(order: 2), .rightAuxiliary(order: 3)]
 	
@@ -180,6 +185,13 @@ public struct GridSectionMetrics: GridSectionMetricsProviding {
 	public var layoutMargins = UIEdgeInsetsZero {
 		didSet {
 			setFlag("layoutMargins")
+		}
+	}
+	
+	/// The width of separators that are drawn.
+	public var separatorWidth: CGFloat = hairline {
+		didSet {
+			setFlag("separatorWidth")
 		}
 	}
 	
@@ -281,6 +293,7 @@ public struct GridSectionMetrics: GridSectionMetricsProviding {
 		&& other.auxiliaryColumnSpacing == auxiliaryColumnSpacing
 		&& other.numberOfColumns == numberOfColumns
 		&& other.padding == padding
+		&& other.separatorWidth == separatorWidth
 		&& other.showsColumnSeparator == showsColumnSeparator
 		&& other.separatorInsets == separatorInsets
 		&& other.backgroundColor == backgroundColor
@@ -364,6 +377,9 @@ public struct GridSectionMetrics: GridSectionMetricsProviding {
 		}
 		if metrics.definesMetric("layoutMargins") {
 			layoutMargins = gridMetrics.layoutMargins
+		}
+		if metrics.definesMetric("separatorWidth") {
+			separatorWidth = gridMetrics.separatorWidth
 		}
 		if metrics.definesMetric("showsColumnSeparator") {
 			showsColumnSeparator = gridMetrics.showsColumnSeparator
