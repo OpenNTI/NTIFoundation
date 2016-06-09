@@ -103,8 +103,6 @@ extension GridLayoutSection {
 
 public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSectionBaseComposite {
 	
-	static let hairline: CGFloat = 1.0 / UIScreen.mainScreen().scale
-	
 	public var rowAlignedLayoutSectionBase = RowAlignedLayoutSectionBase()
 	
 	public var items: [LayoutItem] = []
@@ -588,7 +586,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 				return
 		}
 		
-		let hairline = self.dynamicType.hairline
+		let thickness = metrics.separatorWidth
 		
 		let columnWidth = self.columnWidth
 	
@@ -601,7 +599,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 		for columnIndex in 0..<numberOfColumns {
 			let indexPath = NSIndexPath(forItem: columnIndex, inSection: sectionIndex)
 			let separatorAttributes = CollectionViewLayoutAttributes(forDecorationViewOfKind: collectionElementKindColumnSeparator, withIndexPath: indexPath)
-			let separatorFrame = CGRect(x: columnWidth * CGFloat(columnIndex), y: top, width: hairline, height: bottom - top)
+			let separatorFrame = CGRect(x: columnWidth * CGFloat(columnIndex), y: top, width: thickness, height: bottom - top)
 			separatorAttributes.frame = separatorFrame
 			separatorAttributes.backgroundColor = metrics.separatorColor
 			separatorAttributes.zIndex = separatorZIndex
@@ -686,12 +684,12 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 	private func frameForSectionSeparator(sectionSeparator: Int) -> CGRect {
 		let sectionSeparatorInsets = metrics.sectionSeparatorInsets
 		let frame = self.frame
-		let hairline = self.dynamicType.hairline
+		let thickness = metrics.separatorWidth
 		
 		let x = sectionSeparatorInsets.left
 		let y = (sectionSeparator == sectionSeparatorTop) ? frame.origin.y : frame.maxY
 		let width = frame.width - sectionSeparatorInsets.left - sectionSeparatorInsets.right
-		let height = hairline
+		let height = thickness
 		
 		return CGRect(x: x, y: y, width: width, height: height)
 	}
