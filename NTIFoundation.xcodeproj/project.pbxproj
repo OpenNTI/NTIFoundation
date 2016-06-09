@@ -534,6 +534,8 @@
 		4A88EC931D09C97600CFE099 /* LayoutSectionStackBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88EC921D09C97600CFE099 /* LayoutSectionStackBuilder.swift */; };
 		4A88EC941D09C97600CFE099 /* LayoutSectionStackBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88EC921D09C97600CFE099 /* LayoutSectionStackBuilder.swift */; };
 		4A88ECB01D09CDB000CFE099 /* LayoutSectionStackBuilderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88ECAF1D09CDB000CFE099 /* LayoutSectionStackBuilderTest.swift */; };
+		4A88ECB21D09D91B00CFE099 /* TableLayoutStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88ECB11D09D91A00CFE099 /* TableLayoutStrategy.swift */; };
+		4A88ECB31D09D91B00CFE099 /* TableLayoutStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88ECB11D09D91A00CFE099 /* TableLayoutStrategy.swift */; };
 		4A9D2C301C9CCA3D00D75BBD /* DelegatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9D2C2F1C9CCA3D00D75BBD /* DelegatingViewController.swift */; };
 		4AA691061CF62A1700012293 /* TableRowStackBuilderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA691051CF62A1700012293 /* TableRowStackBuilderTest.swift */; };
 		4AB48C271CC00EFF00F193C3 /* TextValueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB48C261CC00EFF00F193C3 /* TextValueCell.swift */; };
@@ -1229,6 +1231,7 @@
 		4A7A3F751CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RowAlignedLayoutSectionBase.swift; sourceTree = "<group>"; };
 		4A88EC921D09C97600CFE099 /* LayoutSectionStackBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutSectionStackBuilder.swift; sourceTree = "<group>"; };
 		4A88ECAF1D09CDB000CFE099 /* LayoutSectionStackBuilderTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutSectionStackBuilderTest.swift; sourceTree = "<group>"; };
+		4A88ECB11D09D91A00CFE099 /* TableLayoutStrategy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableLayoutStrategy.swift; sourceTree = "<group>"; };
 		4A9D2C2F1C9CCA3D00D75BBD /* DelegatingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DelegatingViewController.swift; sourceTree = "<group>"; };
 		4AA691051CF62A1700012293 /* TableRowStackBuilderTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableRowStackBuilderTest.swift; sourceTree = "<group>"; };
 		4AB48C261CC00EFF00F193C3 /* TextValueCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextValueCell.swift; sourceTree = "<group>"; };
@@ -1876,6 +1879,7 @@
 				4A24B80B1CC721000053ED9B /* TableLayoutSectionBuilder.swift */,
 				4A08FC0A1CF4E0AB00038F7D /* TableLayoutSupplementaryItem.swift */,
 				4A08FC8B1CF506E500038F7D /* TableLayoutItem.swift */,
+				4A88ECB11D09D91A00CFE099 /* TableLayoutStrategy.swift */,
 			);
 			path = Table;
 			sourceTree = "<group>";
@@ -3495,6 +3499,7 @@
 				4A620D8C1C8E148D0084B0A2 /* CollectionDataSourceController.swift in Sources */,
 				4A68ACF91C88B0CE00849185 /* CollectionViewController.swift in Sources */,
 				4A68ACC51C88B0CE00849185 /* CollectionLayoutEngine.swift in Sources */,
+				4A88ECB21D09D91B00CFE099 /* TableLayoutStrategy.swift in Sources */,
 				4A68ACF71C88B0CE00849185 /* StateMachine.swift in Sources */,
 				4A68ACFB1C88B0CE00849185 /* CollectionPlaceholderView.swift in Sources */,
 				4A08FC8C1CF506E500038F7D /* TableLayoutItem.swift in Sources */,
@@ -3630,6 +3635,7 @@
 				4ADEE76A1C98DBB900DE9B0D /* Decoration.swift in Sources */,
 				4AD56EE51CAC274C00482393 /* Array-Extensions.swift in Sources */,
 				4A68ACEE1C88B0CE00849185 /* SupplementaryItem.swift in Sources */,
+				4A88ECB31D09D91B00CFE099 /* TableLayoutStrategy.swift in Sources */,
 				4A7A3F771CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift in Sources */,
 				4A05830E1C923B7D00F3D0E0 /* GridSectionColumnLayoutEngineTest.swift in Sources */,
 				4A68ACDA1C88B0CE00849185 /* GridSectionCellLayoutEngine.swift in Sources */,
