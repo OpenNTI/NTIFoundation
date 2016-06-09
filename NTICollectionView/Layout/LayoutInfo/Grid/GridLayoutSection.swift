@@ -370,6 +370,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 			separatorDecoration.sectionIndex = sectionIndex
 			separatorDecoration.color = metrics.separatorColor
 			separatorDecoration.zIndex = separatorZIndex
+			separatorDecoration.thickness = metrics.separatorWidth
 			let separatorInsets = metrics.separatorInsets
 			separatorDecoration.leftMargin = separatorInsets.left
 			separatorDecoration.rightMargin = separatorInsets.right
