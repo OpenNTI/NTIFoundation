@@ -49,6 +49,23 @@ public struct LayoutData {
 	
 }
 
+/// Provides layout dynamics.
+public protocol LayoutStrategy {
+	
+	/// Creates a new placeholder covering the specified range of sections.
+	func makePlaceholder(startingAtSectionIndex index: Int, inout for data: LayoutData) -> LayoutPlaceholder
+	
+	/// Finalizes the layout.
+	func finalizeLayout(inout for data: LayoutData)
+	
+	/// Updates and invalidates the size of an item, also adjusting the position of any content affected by the size change.
+	func setSize(size: CGSize, forItemAt indexPath: NSIndexPath, inout in data: LayoutData, invalidationContext: UICollectionViewLayoutInvalidationContext?)
+	
+	/// Updates and invalidates the size of a supplementary item, also adjusting the position of any content affected by the size change.
+	func setSize(size: CGSize, forElementOfKind kind: String, at indexPath: NSIndexPath, inout in data: LayoutData, invalidationContext: UICollectionViewLayoutInvalidationContext?)
+	
+}
+
 public protocol LayoutInfo: LayoutSizing, LayoutAttributesResolving, LayoutSectionProvider {
 	
 	var collectionViewSize: CGSize { get set }
