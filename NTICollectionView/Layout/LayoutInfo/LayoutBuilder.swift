@@ -11,7 +11,7 @@ import UIKit
 /// Conforming types can build `LayoutInfo` instances from `LayoutDescription`s.
 public protocol LayoutBuilder {
 	
-	func makeLayoutInfo(using description: LayoutDescription, at origin: CGPoint) -> LayoutInfo
+	func makeLayoutData(using description: LayoutDescription, at origin: CGPoint) -> LayoutData
 	
 }
 
