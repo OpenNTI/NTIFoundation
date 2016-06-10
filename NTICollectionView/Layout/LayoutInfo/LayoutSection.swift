@@ -106,6 +106,22 @@ extension LayoutSection {
 	
 }
 
+public struct GlobalLayoutSection {
+	
+	public var supplementaryItemsByKind: [String: [LayoutSupplementaryItem]] = [:]
+	
+	public var supplementaryItems: [LayoutSupplementaryItem] {
+		return supplementaryItemsByKind.contents
+	}
+	
+	public var decorationsByKind: [String: [LayoutDecoration]] = [:]
+	
+	public var decorations: [LayoutDecoration] {
+		return decorationsByKind.contents
+	}
+	
+}
+
 public protocol LayoutEngine {
 	
 	/// Layout this section with the given starting origin and using the invalidation context to record cells and supplementary views that should be redrawn.
