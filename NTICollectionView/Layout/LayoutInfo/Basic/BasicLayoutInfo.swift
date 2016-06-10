@@ -229,21 +229,21 @@ public class BasicLayoutInfo: LayoutInfo {
 		}
 		
 		// FIXME: Is this correct?
-		for _ in sectionIndex..<numberOfSections {
-			var sectionInfo = localSections[sectionIndex]
+		for index in sectionIndex..<numberOfSections {
+			var sectionInfo = localSections[index]
 			let sectionFrame = CGRectOffset(sectionInfo.frame, offset.x, offset.y)
 			sectionInfo.setFrame(sectionFrame, invalidationContext: invalidationContext)
 			
 			// Move placeholder that happens to start at this section index
 			if var placeholderInfo = sectionInfo.placeholderInfo
-				where placeholderInfo.startingSectionIndex == sectionIndex {
+				where placeholderInfo.startingSectionIndex == index {
 				
 				let placeholderFrame = CGRectOffset(placeholderInfo.frame, offset.x, offset.y)
 				placeholderInfo.setFrame(placeholderFrame, invalidationContext: invalidationContext)
 				sectionInfo.placeholderInfo = placeholderInfo
 			}
 			
-			setSection(sectionInfo, at: sectionIndex)
+			setSection(sectionInfo, at: index)
 		}
 	}
 	
