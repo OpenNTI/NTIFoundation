@@ -21,10 +21,7 @@ class TableLayoutSectionBuilderTest: XCTestCase {
 		description.numberOfItems = 9
 		description.sectionIndex = 0
 		
-		guard let builder = TableLayoutSectionBuilder(metrics: metrics) else {
-			XCTFail("Expected a non-nil builder")
-			return
-		}
+		let builder = TableLayoutSectionBuilder()
 		
 		let origin = CGPoint(x: 10, y: 10)
 		let width: CGFloat = 100

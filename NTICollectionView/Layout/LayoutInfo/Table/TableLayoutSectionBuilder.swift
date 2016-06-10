@@ -10,17 +10,12 @@ import UIKit
 
 public struct TableLayoutSectionBuilder: LayoutSectionBuilder {
 	
-	public init?(metrics: SectionMetrics) {
-		guard let tableMetrics = metrics as? TableSectionMetricsProviding else {
-			return nil
-		}
-		self.metrics = tableMetrics
-	}
-	
-	private let metrics: TableSectionMetricsProviding
-	
 	public func makeLayoutSection(using description: SectionDescription, in layoutBounds: LayoutAreaBounds) -> LayoutSection {
 		var section = TableLayoutSection()
+		
+		guard let metrics = description.metrics as? TableSectionMetricsProviding else {
+			return section
+		}
 		
 		let numberOfItems = description.numberOfItems
 		let origin = layoutBounds.origin

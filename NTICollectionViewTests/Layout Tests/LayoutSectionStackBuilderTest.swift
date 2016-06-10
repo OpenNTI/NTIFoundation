@@ -23,7 +23,7 @@ class LayoutSectionStackBuilderTest: XCTestCase {
 			return desc
 		}
 		
-		let sectionBuilder = MockLayoutSectionBuilder(metrics: metrics)!
+		let sectionBuilder = MockLayoutSectionBuilder()
 		
 		let origin = CGPoint(x: 5, y: 5)
 		let width: CGFloat = 100
@@ -50,16 +50,10 @@ class LayoutSectionStackBuilderTest: XCTestCase {
 
 struct MockLayoutSectionBuilder : LayoutSectionBuilder {
 	
-	let metrics: SectionMetrics
-	
 	var sectionHeight: CGFloat = 100
 	
-	init?(metrics: SectionMetrics) {
-		self.metrics = metrics
-	}
-	
 	func makeLayoutSection(using description: SectionDescription, in layoutBounds: LayoutAreaBounds) -> LayoutSection {
-		var section = BasicLayoutSection(metrics: metrics)
+		var section = BasicLayoutSection(metrics: description.metrics)
 		let size = CGSize(width: layoutBounds.width, height: sectionHeight)
 		section.frame = CGRect(origin: layoutBounds.origin, size: size)
 		return section

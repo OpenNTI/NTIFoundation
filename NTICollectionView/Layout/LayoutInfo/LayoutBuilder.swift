@@ -18,8 +18,6 @@ public protocol LayoutBuilder {
 /// Conforming types can build `LayoutSection` instances from `SectionDescription`s.
 public protocol LayoutSectionBuilder {
 	
-	init?(metrics: SectionMetrics)
-	
 	func makeLayoutSection(using description: SectionDescription, in layoutBounds: LayoutAreaBounds) -> LayoutSection
 	
 }
