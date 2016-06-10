@@ -536,6 +536,8 @@
 		4A88ECB01D09CDB000CFE099 /* LayoutSectionStackBuilderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88ECAF1D09CDB000CFE099 /* LayoutSectionStackBuilderTest.swift */; };
 		4A88ECB21D09D91B00CFE099 /* TableLayoutStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88ECB11D09D91A00CFE099 /* TableLayoutStrategy.swift */; };
 		4A88ECB31D09D91B00CFE099 /* TableLayoutStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88ECB11D09D91A00CFE099 /* TableLayoutStrategy.swift */; };
+		4A88ECB51D0A0FB600CFE099 /* TableLayoutBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88ECB41D0A0FB600CFE099 /* TableLayoutBuilder.swift */; };
+		4A88ECB61D0A0FB600CFE099 /* TableLayoutBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88ECB41D0A0FB600CFE099 /* TableLayoutBuilder.swift */; };
 		4A9D2C301C9CCA3D00D75BBD /* DelegatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9D2C2F1C9CCA3D00D75BBD /* DelegatingViewController.swift */; };
 		4AA691061CF62A1700012293 /* TableRowStackBuilderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA691051CF62A1700012293 /* TableRowStackBuilderTest.swift */; };
 		4AB48C271CC00EFF00F193C3 /* TextValueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB48C261CC00EFF00F193C3 /* TextValueCell.swift */; };
@@ -1232,6 +1234,7 @@
 		4A88EC921D09C97600CFE099 /* LayoutSectionStackBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutSectionStackBuilder.swift; sourceTree = "<group>"; };
 		4A88ECAF1D09CDB000CFE099 /* LayoutSectionStackBuilderTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutSectionStackBuilderTest.swift; sourceTree = "<group>"; };
 		4A88ECB11D09D91A00CFE099 /* TableLayoutStrategy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableLayoutStrategy.swift; sourceTree = "<group>"; };
+		4A88ECB41D0A0FB600CFE099 /* TableLayoutBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableLayoutBuilder.swift; sourceTree = "<group>"; };
 		4A9D2C2F1C9CCA3D00D75BBD /* DelegatingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DelegatingViewController.swift; sourceTree = "<group>"; };
 		4AA691051CF62A1700012293 /* TableRowStackBuilderTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableRowStackBuilderTest.swift; sourceTree = "<group>"; };
 		4AB48C261CC00EFF00F193C3 /* TextValueCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextValueCell.swift; sourceTree = "<group>"; };
@@ -1876,6 +1879,7 @@
 			children = (
 				4A1B78131CBD955200C977A6 /* TableSectionMetrics.swift */,
 				4A24B82B1CC809000053ED9B /* TableLayoutSection.swift */,
+				4A88ECB41D0A0FB600CFE099 /* TableLayoutBuilder.swift */,
 				4A24B80B1CC721000053ED9B /* TableLayoutSectionBuilder.swift */,
 				4A08FC0A1CF4E0AB00038F7D /* TableLayoutSupplementaryItem.swift */,
 				4A08FC8B1CF506E500038F7D /* TableLayoutItem.swift */,
@@ -3506,6 +3510,7 @@
 				4AE4230C1CBECBC40035CF1B /* BasicSupplementaryItem.swift in Sources */,
 				4AE793DE1D00EB0B0045D2D1 /* CompoundSwitchHeader.swift in Sources */,
 				4A68ACFD1C88B0CE00849185 /* PlaceholderView.swift in Sources */,
+				4A88ECB51D0A0FB600CFE099 /* TableLayoutBuilder.swift in Sources */,
 				4AF3836F1CA35C5D006D13D4 /* UICollectionReusableView-Extensions.swift in Sources */,
 				4A68ACAD1C88B0CE00849185 /* ComposedCollectionDataSourceMetricsHelper.swift in Sources */,
 				4A68ACE71C88B0CE00849185 /* LayoutMetrics.swift in Sources */,
@@ -3630,6 +3635,7 @@
 				4A68ACAA1C88B0CE00849185 /* CollectionViewWrapper.swift in Sources */,
 				4A08FC8D1CF506E500038F7D /* TableLayoutItem.swift in Sources */,
 				4A68ACCE1C88B0CE00849185 /* CollectionViewLayoutMeasuring.swift in Sources */,
+				4A88ECB61D0A0FB600CFE099 /* TableLayoutBuilder.swift in Sources */,
 				4A68ACB41C88B0CE00849185 /* DataSourceMetrics.swift in Sources */,
 				4AD52D371CC5698700CDEF45 /* GridSupplementaryAttributes.swift in Sources */,
 				4ADEE76A1C98DBB900DE9B0D /* Decoration.swift in Sources */,
