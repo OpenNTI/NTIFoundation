@@ -272,9 +272,9 @@ public class BasicLayoutInfo: LayoutInfo {
 	}
 	
 	public func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
-		enumerateSections { (_, section, _) in
-			section.updateSpecialItemsWithContentOffset(contentOffset, layoutInfo: self,  invalidationContext: invalidationContext)
-		}
+//		enumerateSections { (_, section, _) in
+//			section.updateSpecialItemsWithContentOffset(contentOffset, layoutInfo: self,  invalidationContext: invalidationContext)
+//		}
 	}
 	
 	public func layoutAttributesForCell(at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {

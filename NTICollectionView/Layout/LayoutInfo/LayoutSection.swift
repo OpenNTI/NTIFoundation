@@ -66,11 +66,7 @@ public protocol LayoutSection: LayoutAttributesResolving {
 	
 	mutating func prepareForLayout()
 	
-	func targetLayoutHeightForProposedLayoutHeight(proposedHeight: CGFloat, layoutInfo: LayoutData) -> CGFloat
-	
 	func targetContentOffsetForProposedContentOffset(proposedContentOffset: CGPoint, firstInsertedSectionMinY: CGFloat) -> CGPoint
-	
-	mutating func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, layoutInfo: LayoutInfo, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
 	mutating func applyValues(from metrics: LayoutMetrics)
 	
