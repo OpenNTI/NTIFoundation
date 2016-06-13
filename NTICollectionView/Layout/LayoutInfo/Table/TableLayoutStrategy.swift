@@ -137,6 +137,38 @@ public struct TableLayoutStrategy : LayoutStrategy {
 		resultingOffset.y += deltaY
 	}
 	
+	public func targetLayoutHeight(forProposedLayoutHeight proposed: CGFloat, using data: LayoutData) -> CGFloat {
+		guard let globalSection = data.globalSection else {
+			return proposed
+		}
+		
+		let height = data.viewBounds.height - data.contentInset.height
+		
+		let globalNonPinningHeight = self.height(of: headers(pinnable: false, in: globalSection))
+		
+		if data.contentOffset.y >= globalNonPinningHeight && proposed - globalNonPinningHeight < height {
+			return height + globalNonPinningHeight
+		}
+		
+		return proposed
+	}
+	
+	private func height(of supplementaryItems: [LayoutSupplementaryItem]) -> CGFloat {
+		guard !supplementaryItems.isEmpty else {
+			return 0
+		}
+		var minY = CGFloat.max
+		var maxY = CGFloat.min
+		
+		for supplementaryItem in supplementaryItems {
+			let frame = supplementaryItem.frame
+			minY = min(minY, frame.minY)
+			maxY = max(maxY, frame.maxY)
+		}
+		
+		return maxY - minY
+	}
+	
 	public func updateSpecialItems(withContentOffset offset: CGPoint, inout in data: LayoutData, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		var pinnableY = offset.y + data.contentInset.top
 		var nonPinnableY = pinnableY
