@@ -69,6 +69,14 @@ public func ==(lhs: LayoutData, rhs: LayoutData) -> Bool {
 			|| (lhs.globalSection != nil && rhs.globalSection != nil && lhs.globalSection!.isEqual(to: rhs.globalSection!)))
 }
 
+extension LayoutData {
+	
+	public var allSections: [LayoutSection] {
+		return [globalSection].flatMap{$0} + sections
+	}
+	
+}
+
 /// Provides layout dynamics.
 public protocol LayoutStrategy {
 	
