@@ -11,14 +11,6 @@ import UIKit
 /// Data used for creating layout info.
 public struct LayoutDescription {
 	
-	public var size = CGSizeZero
-	
-	public var contentOffset = CGPointZero
-	
-	public var contentInset = UIEdgeInsetsZero
-	
-	public var bounds = CGRectZero
-	
 	public var sections: [SectionDescription] = []
 	
 	public var globalSection: SectionDescription?
