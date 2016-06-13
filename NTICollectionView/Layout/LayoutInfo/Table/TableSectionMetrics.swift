@@ -47,7 +47,7 @@ public protocol TableSectionMetricsProviding : TableRowMetricsProviding {
 
 // MARK: - TableRowMetrics
 
-public protocol TableRowMetricsProviding : LayoutMetricsApplicable {
+public protocol TableRowMetricsProviding : SectionMetrics {
 	
 	/// The height of each row in the section.
 	///
