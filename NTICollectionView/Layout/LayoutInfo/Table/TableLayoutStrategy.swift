@@ -10,6 +10,8 @@ import UIKit
 
 public struct TableLayoutStrategy : LayoutStrategy {
 	
+	public init() {}
+	
 	public func makePlaceholder(startingAtSectionIndex index: Int, inout for data: LayoutData) -> LayoutPlaceholder {
 		let placeholder = BasicLayoutPlaceholder(sectionIndexes: NSIndexSet(index: index))
 		data.numberOfPlaceholders += 1
