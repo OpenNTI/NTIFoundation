@@ -90,6 +90,15 @@ public struct TableLayoutSectionBuilder: LayoutSectionBuilder {
 		let sectionHeight = positionBounds.origin.y - origin.y
 		section.frame.size.height = sectionHeight
 		
+		if sectionIndex == globalSectionIndex && metrics.backgroundColor != nil {
+			var backgroundDecoration = BackgroundDecoration(elementKind: collectionElementKindGlobalHeaderBackground)
+			backgroundDecoration.setContainerFrame(section.frame, invalidationContext: nil)
+			backgroundDecoration.zIndex = defaultZIndex
+			backgroundDecoration.isHidden = false
+			backgroundDecoration.color = metrics.backgroundColor
+			section.metrics.add(backgroundDecoration)
+		}
+		
 		return section
 	}
 	
