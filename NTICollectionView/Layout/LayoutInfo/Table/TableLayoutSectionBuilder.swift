@@ -13,7 +13,10 @@ public struct TableLayoutSectionBuilder: LayoutSectionBuilder {
 	public func makeLayoutSection(using description: SectionDescription, in layoutBounds: LayoutAreaBounds) -> LayoutSection {
 		var section = TableLayoutSection()
 		
-		guard let metrics = description.metrics as? TableSectionMetricsProviding else {
+		var description = description
+		description.metrics.resolveMissingValuesFromTheme()
+		
+		guard var metrics = description.metrics as? TableSectionMetricsProviding else {
 			return section
 		}
 		
