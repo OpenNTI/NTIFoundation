@@ -8,25 +8,10 @@
 
 import UIKit
 
-public protocol GridSectionMetricsProviding: SectionMetrics {
+public protocol GridSectionMetricsProviding : GridRowMetricsProviding {
 	
 	/// The type-default order in which each grid supplementary element kind is laid out.
 	static var defaultSupplementaryOrdering: Set<GridSectionSupplementaryItemOrder> { get }
-	
-	/// The height of each row in the section. The default value is `nil`. Setting this property to a concrete value will prevent rows from being sized automatically using autolayout.
-	var rowHeight: CGFloat? { get set }
-	
-	/// The estimated height of each row in the section. The default value is 44pts. The closer the estimatedRowHeight value matches the actual value of the row height, the less change will be noticed when rows are resized.
-	var estimatedRowHeight: CGFloat { get set }
-	
-	/// An optional fixed width that can be used to size each column.
-	var fixedColumnWidth: CGFloat? { get set }
-	
-	/// The spacing between rows.
-	var rowSpacing: CGFloat { get set }
-	
-	/// The minimum horizontal spacing between items.
-	var minimumInteritemSpacing: CGFloat { get set }
 	
 	/// The width of the left auxiliary column.
 	var leftAuxiliaryColumnWidth: CGFloat { get set }
@@ -37,25 +22,11 @@ public protocol GridSectionMetricsProviding: SectionMetrics {
 	/// The spacing between items in the auxiliary columns.
 	var auxiliaryColumnSpacing: CGFloat { get set }
 	
-	/// Number of columns in this section. Sections will inherit a default of 1 from the data source.
-	var numberOfColumns: Int { get set }
-	
-	/// Padding around the cells for this section. 
-	///
-	/// The top/bottom padding will be applied between the headers/footers and the cells. The left/right padding will be applied between the left/right auxiliary columns and the cells.
-	var padding: UIEdgeInsets { get set }
-	
 	/// Layout margins for cells in this section.
 	var layoutMargins: UIEdgeInsets { get set }
 	
-	/// The width of separators that are drawn.
-	var separatorWidth: CGFloat { get set }
-	
 	/// Whether a column separator should be drawn. Default is `true`.
 	var showsColumnSeparator: Bool { get set }
-	
-	/// Whether a row separator should be drawn. Default is `false`.
-	var showsRowSeparator: Bool { get set }
 	
 	/// Whether separators should be drawn between sections. Default is `false`.
 	var showsSectionSeparator: Bool { get set }
@@ -63,14 +34,8 @@ public protocol GridSectionMetricsProviding: SectionMetrics {
 	/// Whether the section separator should be shown at the bottom of the last section. Default is `false`.
 	var showsSectionSeparatorWhenLastSection: Bool { get set }
 	
-	/// Insets for the separators drawn between rows (left & right) and columns (top & bottom).
-	var separatorInsets: UIEdgeInsets { get set }
-	
 	/// Insets for the section separator drawn below this section.
 	var sectionSeparatorInsets: UIEdgeInsets { get set }
-	
-	/// The color to use when drawing the row separators (and column separators when `numberOfColumns > 1 && showsColumnSeparator == true`).
-	var separatorColor: UIColor? { get set }
 	
 	/// The color to use when drawing the section separator below this section.
 	var sectionSeparatorColor: UIColor? { get set }
@@ -86,6 +51,45 @@ public protocol GridSectionMetricsProviding: SectionMetrics {
 	
 	/// Whether placeholders should be resized for fill available screen space.
 	var shouldResizePlaceholder: Bool { get set }
+	
+}
+
+public protocol GridRowMetricsProviding : SectionMetrics {
+	
+	/// The height of each row in the section. The default value is `nil`. Setting this property to a concrete value will prevent rows from being sized automatically using autolayout.
+	var rowHeight: CGFloat? { get set }
+	
+	/// The estimated height of each row in the section. The default value is 44pts. The closer the estimatedRowHeight value matches the actual value of the row height, the less change will be noticed when rows are resized.
+	var estimatedRowHeight: CGFloat { get set }
+	
+	/// Number of columns in this section. Sections will inherit a default of 1 from the data source.
+	var numberOfColumns: Int { get set }
+	
+	/// An optional fixed width that can be used to size each column.
+	var fixedColumnWidth: CGFloat? { get set }
+	
+	/// The spacing between rows.
+	var rowSpacing: CGFloat { get set }
+	
+	/// The minimum horizontal spacing between items.
+	var minimumInteritemSpacing: CGFloat { get set }
+	
+	/// Padding around the cells for this section.
+	///
+	/// The top/bottom padding will be applied between the headers/footers and the cells. The left/right padding will be applied between the left/right auxiliary columns and the cells.
+	var padding: UIEdgeInsets { get set }
+	
+	/// Whether a row separator should be drawn. Default is `false`.
+	var showsRowSeparator: Bool { get set }
+	
+	/// The color to use when drawing the row separators (and column separators when `numberOfColumns > 1 && showsColumnSeparator == true`).
+	var separatorColor: UIColor? { get set }
+	
+	/// Insets for the separators drawn between rows (left & right) and columns (top & bottom).
+	var separatorInsets: UIEdgeInsets { get set }
+	
+	/// The width of separators that are drawn.
+	var separatorWidth: CGFloat { get set }
 	
 }
 
