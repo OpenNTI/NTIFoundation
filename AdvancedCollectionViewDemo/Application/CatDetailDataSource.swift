@@ -16,27 +16,26 @@ class CatDetailDataSource : ComposedCollectionDataSource {
 		descriptionDataSource = TextValueDataSource<AAPLCat>(object: cat)
 		super.init()
 		
-		defaultMetrics = GridDataSourceSectionMetrics()
+		defaultMetrics = DataSourceSectionMetrics<TableLayout>()
 		
-		var gridMetrics = GridSectionMetrics()
+		var classificationMetrics = DataSourceSectionMetrics<TableLayout>()
 		
-		var classificationMetrics = GridDataSourceSectionMetrics()
+		var metrics = classificationMetrics.template
+		metrics.estimatedRowHeight = 22
 		
-		gridMetrics.estimatedRowHeight = 22
-		
-		classificationMetrics.applyValues(from: gridMetrics)
+		classificationMetrics.applyValues(from: metrics)
 		classificationDataSource.defaultMetrics = classificationMetrics
 		
-		let classificationSectionMetrics = GridDataSourceSectionMetrics()
+		let classificationSectionMetrics = DataSourceSectionMetrics<TableLayout>()
 		classificationDataSource.setMetrics(classificationSectionMetrics, forSectionAtIndex: 0)
 		classificationDataSource.title = "Classification"
 		let classificationHeader = classificationDataSource.makeDataSourceTitleHeader()
 		add(classificationHeader, forKey: DataSourceTitleHeaderKey)
 		add(classificationDataSource)
 		
-		var descriptionMetrics = GridDataSourceSectionMetrics()
-		gridMetrics.estimatedRowHeight = 100
-		descriptionMetrics.applyValues(from: gridMetrics)
+		var descriptionMetrics = DataSourceSectionMetrics<TableLayout>()
+		metrics.estimatedRowHeight = 100
+		descriptionMetrics.applyValues(from: metrics)
 		descriptionDataSource.defaultMetrics = descriptionMetrics
 		add(descriptionDataSource)
 	}

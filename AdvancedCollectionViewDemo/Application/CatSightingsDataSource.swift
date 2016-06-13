@@ -15,7 +15,7 @@ class CatSightingsDataSource : BasicCollectionDataSource<AAPLCatSighting> {
 		super.init()
 		dateFormatter.dateStyle = .ShortStyle
 		dateFormatter.timeStyle = .ShortStyle
-		defaultMetrics = GridDataSourceSectionMetrics()
+		defaultMetrics = DataSourceSectionMetrics<TableLayout>()
 	}
 	
 	private var cat: AAPLCat

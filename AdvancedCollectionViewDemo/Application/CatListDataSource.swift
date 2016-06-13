@@ -12,7 +12,7 @@ class CatListDataSource : BasicCollectionDataSource<AAPLCat> {
 	
 	override init() {
 		super.init()
-		defaultMetrics = GridDataSourceSectionMetrics()
+		defaultMetrics = DataSourceSectionMetrics<TableLayout>()
 	}
 	
 	deinit {

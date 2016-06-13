@@ -23,16 +23,16 @@ class CatListViewController: CollectionViewController, SegmentedCollectionDataSo
 		configureAllCatsDataSource()
 		configureFavoriteCatsDataSource()
 		
-		var metrics = GridDataSourceSectionMetrics()
+		var defaultMetrics = DataSourceSectionMetrics<TableLayout>()
 		
-		var gridMetrics = GridSectionMetrics()
-		gridMetrics.estimatedRowHeight = 44
-		gridMetrics.showsRowSeparator = true
-		gridMetrics.separatorInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
+		var metrics = defaultMetrics.template
+		metrics.estimatedRowHeight = 44
+		metrics.showsRowSeparator = true
+		metrics.separatorInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
 		
-		metrics.applyValues(from: gridMetrics)
+		defaultMetrics.applyValues(from: metrics)
 		
-		segmentedDataSource.defaultMetrics = metrics
+		segmentedDataSource.defaultMetrics = defaultMetrics
 		
 		segmentedDataSource.segmentedCollectionDataSourceDelegate = self
 		

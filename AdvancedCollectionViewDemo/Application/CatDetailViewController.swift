@@ -12,7 +12,7 @@ class CatDetailViewController: CollectionViewController {
 	
 	init(cat: AAPLCat) {
 		self.cat = cat
-		super.init(collectionViewLayout: CollectionViewLayout())
+		super.init(collectionViewLayout: CollectionViewLayout(builder: TableLayoutBuilder(), strategy: TableLayoutStrategy()))
 	}
 
 	required init?(coder aDecoder: NSCoder) {
@@ -28,15 +28,17 @@ class CatDetailViewController: CollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+		
+		let defaultMetrics = DataSourceSectionMetrics<TableLayout>()
 
-		dataSource.defaultMetrics = GridDataSourceSectionMetrics()
+		dataSource.defaultMetrics = defaultMetrics
 		detailDataSource = newDetailDataSource()
 		sightingDataSource = newSightingsDataSource()
 		
 		dataSource.add(detailDataSource)
 		dataSource.add(sightingDataSource)
 		
-		var globalHeader = GridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
+		var globalHeader = defaultMetrics.makeSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
 		globalHeader.isVisibleWhileShowingPlaceholder = true
 		globalHeader.estimatedHeight = 110
 		globalHeader.supplementaryViewClass = AAPLCatDetailHeader.self
@@ -48,7 +50,7 @@ class CatDetailViewController: CollectionViewController {
 		}
 		dataSource.add(globalHeader, forKey: "globalHeader")
 		
-		var segmentedHeader = GridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
+		var segmentedHeader = defaultMetrics.makeSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
 		segmentedHeader.supplementaryViewClass = AAPLSegmentedHeaderView.self
 		segmentedHeader.showsSeparator = true
 		segmentedHeader.isVisibleWhileShowingPlaceholder = true
@@ -72,7 +74,7 @@ class CatDetailViewController: CollectionViewController {
 		
 		dataSource.noContentPlaceholder = BasicDataSourcePlaceholder(title: "No Cat", message: "This cat has no information.", image: nil)
 		
-		dataSource.defaultMetrics = GridDataSourceSectionMetrics()
+		dataSource.defaultMetrics = DataSourceSectionMetrics<TableLayout>()
 		
 		return dataSource
 	}
@@ -83,14 +85,14 @@ class CatDetailViewController: CollectionViewController {
 		
 		dataSource.noContentPlaceholder = BasicDataSourcePlaceholder(title: "No Sightings", message: "This cat has not been sighted recently.", image: nil)
 		
-		var metrics = GridDataSourceSectionMetrics()
-		var gridMetrics = GridSectionMetrics()
-		gridMetrics.showsRowSeparator = true
-		gridMetrics.separatorInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
-		gridMetrics.estimatedRowHeight = 60
-		metrics.applyValues(from: gridMetrics)
+		var defaultMetrics = DataSourceSectionMetrics<TableLayout>()
+		var metrics = defaultMetrics.template
+		metrics.showsRowSeparator = true
+		metrics.separatorInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
+		metrics.estimatedRowHeight = 60
+		defaultMetrics.applyValues(from: metrics)
 
-		dataSource.defaultMetrics = metrics
+		dataSource.defaultMetrics = defaultMetrics
 		
 		return dataSource
 	}

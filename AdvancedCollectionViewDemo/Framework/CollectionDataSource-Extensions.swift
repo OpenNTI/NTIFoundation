@@ -17,7 +17,7 @@ extension CollectionDataSource {
 	}
 	
 	func makeSourceHeaderWithTitle(title: String) -> SupplementaryItem {
-		var header = GridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
+		var header = TableSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
 		header.supplementaryViewClass = AAPLSectionHeaderView.self
 		header.configure { (view, dataSource, indexPath) in
 			guard let view = view as? AAPLSectionHeaderView else {
