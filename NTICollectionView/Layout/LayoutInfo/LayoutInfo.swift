@@ -35,6 +35,8 @@ func invalidateLayoutAttributes(attributes: UICollectionViewLayoutAttributes, in
 
 public struct LayoutData {
 	
+	public static let blank = LayoutData()
+	
 	public var layoutSize = CGSizeZero
 	
 	public var viewBounds = CGRectZero
