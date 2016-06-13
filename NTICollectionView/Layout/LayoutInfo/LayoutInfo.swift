@@ -77,6 +77,40 @@ extension LayoutData {
 	
 }
 
+public protocol LayoutSectionProviding {
+	
+	var numberOfSections: Int { get }
+	
+	var hasGlobalSection: Bool { get }
+	
+	func section(atIndex index: Int) -> LayoutSection?
+	
+}
+
+extension LayoutData : LayoutSectionProviding {
+	
+	public var numberOfSections: Int {
+		return sections.count
+	}
+	
+	public var hasGlobalSection: Bool {
+		return globalSection != nil
+	}
+	
+	public func section(atIndex index: Int) -> LayoutSection? {
+		if index == globalSectionIndex {
+			return globalSection
+		}
+		
+		guard (0..<sections.count).contains(index) else {
+			return nil
+		}
+		
+		return sections[index]
+	}
+	
+}
+
 /// Provides layout dynamics.
 public protocol LayoutStrategy {
 	
