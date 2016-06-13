@@ -111,6 +111,23 @@ extension LayoutData : LayoutSectionProviding {
 	
 }
 
+extension LayoutData : LayoutAttributesResolving {
+	
+	public func layoutAttributesForCell(at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
+		let section = sections[indexPath.section]
+		return section.layoutAttributesForCell(at: indexPath)
+	}
+	
+	public func layoutAttributesForDecorationViewOfKind(kind: String, at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
+		return section(atIndex: indexPath.layoutSection)?.layoutAttributesForDecorationViewOfKind(kind, at: indexPath)
+	}
+	
+	public func layoutAttributesForSupplementaryElementOfKind(kind: String, at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
+		return section(atIndex: indexPath.layoutSection)?.layoutAttributesForSupplementaryElementOfKind(kind, at: indexPath)
+	}
+	
+}
+
 /// Provides layout dynamics.
 public protocol LayoutStrategy {
 	
