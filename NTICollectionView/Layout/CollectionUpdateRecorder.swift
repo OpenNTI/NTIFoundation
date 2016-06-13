@@ -13,10 +13,10 @@ public struct CollectionUpdateRecorder: CollectionUpdateInfoWrapper {
 	
 	public var updateInfo = CollectionUpdateInfo()
 	
-	private weak var sectionProvider: LayoutSectionProvider?
-	private weak var oldSectionProvider: LayoutSectionProvider?
+	private var sectionProvider: LayoutSectionProviding?
+	private var oldSectionProvider: LayoutSectionProviding?
 	
-	public mutating func record(updates: [UICollectionViewUpdateItem], sectionProvider: LayoutSectionProvider?, oldSectionProvider: LayoutSectionProvider?) {
+	public mutating func record(updates: [UICollectionViewUpdateItem], sectionProvider: LayoutSectionProviding?, oldSectionProvider: LayoutSectionProviding?) {
 		self.sectionProvider = sectionProvider
 		self.oldSectionProvider = oldSectionProvider
 		
@@ -97,7 +97,7 @@ public struct CollectionUpdateRecorder: CollectionUpdateInfoWrapper {
 	}
 	
 	public mutating func recordAdditionalInsertedAttributesForItemInsertion(at indexPath: NSIndexPath) {
-		guard let sectionInfo = sectionProvider?.sectionAtIndex(indexPath.section) else {
+		guard let sectionInfo = sectionProvider?.section(atIndex: indexPath.section) else {
 			return
 		}
 		
@@ -121,7 +121,7 @@ public struct CollectionUpdateRecorder: CollectionUpdateInfoWrapper {
 	}
 	
 	public mutating func recordAdditionalDeletedAttributesForItemDeletion(at indexPath: NSIndexPath) {
-		guard let sectionInfo = oldSectionProvider?.sectionAtIndex(indexPath.section) else {
+		guard let sectionInfo = oldSectionProvider?.section(atIndex: indexPath.section) else {
 			return
 		}
 		
