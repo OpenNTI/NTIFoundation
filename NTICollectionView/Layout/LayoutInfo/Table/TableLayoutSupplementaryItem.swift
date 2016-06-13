@@ -8,6 +8,85 @@
 
 import UIKit
 
+public struct TableSupplementaryItem : SupplementaryItemWrapper {
+	
+	public var layoutMargins = UIEdgeInsetsZero
+	
+	public var backgroundColor: UIColor?
+	
+	public var selectedBackgroundColor: UIColor?
+	
+	public var pinnedBackgroundColor: UIColor?
+	
+	public var showsSeparator = false
+	
+	public var separatorColor: UIColor?
+	
+	public var pinnedSeparatorColor: UIColor?
+	
+	public var simulatesSelection = false
+	
+	public var supplementaryItem: SupplementaryItem
+	
+	public init(elementKind: String) {
+		supplementaryItem = BasicSupplementaryItem(elementKind: elementKind)
+	}
+	
+	public mutating func applyValues(from metrics: LayoutMetrics) {
+		supplementaryItem.applyValues(from: metrics)
+		
+		guard let metrics = metrics as? TableSectionMetrics else {
+			return
+		}
+		
+		if backgroundColor == nil {
+			backgroundColor = metrics.backgroundColor
+		}
+		
+		if separatorColor == nil && metrics.definesMetric("separatorColor") {
+			separatorColor = metrics.separatorColor
+		}
+		
+		if pinnedBackgroundColor == nil {
+			pinnedBackgroundColor = metrics.backgroundColor
+		}
+		
+		if pinnedSeparatorColor == nil && metrics.definesMetric("separatorColor") {
+			pinnedSeparatorColor = metrics.separatorColor
+		}
+	}
+	
+	public func configureValues(of attributes: CollectionViewLayoutAttributes) {
+		supplementaryItem.configureValues(of: attributes)
+		
+		attributes.layoutMargins = layoutMargins
+		attributes.backgroundColor = backgroundColor
+		attributes.selectedBackgroundColor = selectedBackgroundColor
+		attributes.pinnedBackgroundColor = pinnedBackgroundColor
+		attributes.showsSeparator = showsSeparator
+		attributes.separatorColor = separatorColor
+		attributes.pinnedSeparatorColor = pinnedSeparatorColor
+		attributes.simulatesSelection = simulatesSelection
+	}
+	
+	public func isEqual(to other: SupplementaryItem) -> Bool {
+		guard let other = other as? TableSupplementaryItem else {
+			return false
+		}
+		
+		return supplementaryItem.isEqual(to: other.supplementaryItem)
+			&& layoutMargins == other.layoutMargins
+			&& backgroundColor == other.backgroundColor
+			&& selectedBackgroundColor == other.selectedBackgroundColor
+			&& pinnedBackgroundColor == other.pinnedBackgroundColor
+			&& showsSeparator == other.showsSeparator
+			&& separatorColor == other.separatorColor
+			&& pinnedSeparatorColor == other.pinnedSeparatorColor
+			&& simulatesSelection == other.simulatesSelection
+	}
+	
+}
+
 public struct TableLayoutSupplementaryItem : LayoutSupplementaryItemWrapper {
 	
 	public init(supplementaryItem: SupplementaryItem) {
@@ -36,7 +115,7 @@ public struct TableLayoutSupplementaryItem : LayoutSupplementaryItemWrapper {
 	public var isPinned = false
 	
 	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
-		
+		layoutSupplementaryItem.setFrame(frame, invalidationContext: invalidationContext)
 	}
 	
 	public func isEqual(to other: SupplementaryItem) -> Bool {
