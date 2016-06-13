@@ -17,91 +17,7 @@ let sectionSeparatorZIndex = 2000
 public let collectionElementKindLeftAuxiliaryItem = "collectionElementKindLeftAuxiliaryItem"
 public let collectionElementKindRightAuxiliaryItem = "collectionElementKindRightAuxiliaryItem"
 
-public protocol GridLayoutSection: LayoutSection {
-	
-	var metrics: GridSectionMetricsProviding { get set }
-	
-	var headers: [LayoutSupplementaryItem] { get set }
-	var footers: [LayoutSupplementaryItem] { get set }
-	
-	var pinnableHeaders: [LayoutSupplementaryItem] { get set }
-	var nonPinnableHeaders: [LayoutSupplementaryItem] { get set }
-	
-	var heightOfNonPinningHeaders: CGFloat { get }
-	var heightOfPinningHeaders: CGFloat { get }
-	
-	var rows: [LayoutRow] { get set }
-	var leftAuxiliaryItems: [LayoutSupplementaryItem] { get set }
-	var rightAuxiliaryItems: [LayoutSupplementaryItem] { get set }
-	
-	/// The width used to size each column.
-	///
-	/// When `fixedColumnWidth` from `metrics` is `nil`, the value returned will maximize the width of each column.
-	/// Otherwise, `fixedColumnWidth` is returned.
-	var columnWidth: CGFloat { get }
-	var leftAuxiliaryColumnWidth: CGFloat { get }
-	var rightAuxiliaryColumnWidth: CGFloat { get }
-	
-	var hasTopSectionSeparator: Bool { get }
-	var hasBottomSectionSeparator: Bool { get }
-	
-	var shouldShowColumnSeparator: Bool { get }
-	
-	var backgroundAttributesForReading: CollectionViewLayoutAttributes? { get }
-	var backgroundAttributesForWriting: CollectionViewLayoutAttributes? { mutating get }
-
-	mutating func add(inout row: LayoutRow)
-	mutating func removeAllRows()
-	
-	func item(at index: Int) -> LayoutItem
-	mutating func setItem(item: LayoutItem, at index: Int)
-	
-	mutating func setSize(size: CGSize, forHeaderAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
-	
-	mutating func setSize(size: CGSize, forFooterAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint
-}
-
-extension GridLayoutSection {
-	
-	public var headers: [LayoutSupplementaryItem] {
-		get {
-			return supplementaryItems(of: UICollectionElementKindSectionHeader)
-		}
-		set {
-			setSupplementaryItems(newValue, of: UICollectionElementKindSectionHeader)
-		}
-	}
-	
-	public var footers: [LayoutSupplementaryItem] {
-		get {
-			return supplementaryItems(of: UICollectionElementKindSectionFooter)
-		}
-		set {
-			setSupplementaryItems(newValue, of: UICollectionElementKindSectionFooter)
-		}
-	}
-	
-	public var leftAuxiliaryItems: [LayoutSupplementaryItem] {
-		get {
-			return supplementaryItems(of: collectionElementKindLeftAuxiliaryItem)
-		}
-		set {
-			setSupplementaryItems(newValue, of: collectionElementKindLeftAuxiliaryItem)
-		}
-	}
-	
-	public var rightAuxiliaryItems: [LayoutSupplementaryItem] {
-		get {
-			return supplementaryItems(of: collectionElementKindRightAuxiliaryItem)
-		}
-		set {
-			setSupplementaryItems(newValue, of: collectionElementKindRightAuxiliaryItem)
-		}
-	}
-	
-}
-
-public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSectionBaseComposite {
+public struct GridLayoutSection : LayoutSection, RowAlignedLayoutSectionBaseComposite {
 	
 	public var rowAlignedLayoutSectionBase = RowAlignedLayoutSectionBase()
 	
@@ -169,6 +85,10 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 	
 	public var metrics: GridSectionMetricsProviding = GridSectionMetrics()
 	
+	/// The width used to size each column.
+	///
+	/// When `fixedColumnWidth` from `metrics` is `nil`, the value returned will maximize the width of each column.
+	/// Otherwise, `fixedColumnWidth` is returned.
 	public var columnWidth: CGFloat {
 		return metrics.fixedColumnWidth ?? maximizedColumnWidth
 	}
@@ -994,7 +914,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 			: mutateNonPinnableHeaders(using: finalizer)
 	}
 	
-	private mutating func mutateFirstSectionOverlappingYOffset(yOffset: CGFloat, from layoutInfo: LayoutInfo, using mutator: (inout BasicGridLayoutSection) -> Void) {
+	private mutating func mutateFirstSectionOverlappingYOffset(yOffset: CGFloat, from layoutInfo: LayoutInfo, using mutator: (inout GridLayoutSection) -> Void) {
 		layoutInfo.enumerateSections { (sectionIndex, sectionInfo, stop) in
 			guard sectionIndex != globalSectionIndex else {
 				return
@@ -1002,7 +922,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 			
 			let frame = sectionInfo.frame
 			if frame.minY <= yOffset && yOffset <= frame.maxY,
-				var gridSectionInfo = sectionInfo as? BasicGridLayoutSection {
+				var gridSectionInfo = sectionInfo as? GridLayoutSection {
 				mutator(&gridSectionInfo)
 				sectionInfo = gridSectionInfo
 				stop = true
@@ -1047,11 +967,51 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 	}
 	
 	public func isEqual(to other: LayoutSection) -> Bool {
-		guard let other = other as? BasicGridLayoutSection else {
+		guard let other = other as? GridLayoutSection else {
 			return false
 		}
 		
 		return sectionIndex == other.sectionIndex
+	}
+	
+}
+
+extension GridLayoutSection {
+	
+	public var headers: [LayoutSupplementaryItem] {
+		get {
+			return supplementaryItems(of: UICollectionElementKindSectionHeader)
+		}
+		set {
+			setSupplementaryItems(newValue, of: UICollectionElementKindSectionHeader)
+		}
+	}
+	
+	public var footers: [LayoutSupplementaryItem] {
+		get {
+			return supplementaryItems(of: UICollectionElementKindSectionFooter)
+		}
+		set {
+			setSupplementaryItems(newValue, of: UICollectionElementKindSectionFooter)
+		}
+	}
+	
+	public var leftAuxiliaryItems: [LayoutSupplementaryItem] {
+		get {
+			return supplementaryItems(of: collectionElementKindLeftAuxiliaryItem)
+		}
+		set {
+			setSupplementaryItems(newValue, of: collectionElementKindLeftAuxiliaryItem)
+		}
+	}
+	
+	public var rightAuxiliaryItems: [LayoutSupplementaryItem] {
+		get {
+			return supplementaryItems(of: collectionElementKindRightAuxiliaryItem)
+		}
+		set {
+			setSupplementaryItems(newValue, of: collectionElementKindRightAuxiliaryItem)
+		}
 	}
 	
 }
