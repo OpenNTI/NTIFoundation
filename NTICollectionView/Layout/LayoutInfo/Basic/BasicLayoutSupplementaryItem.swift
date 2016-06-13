@@ -33,7 +33,14 @@ public struct BasicLayoutSupplementaryItem: LayoutSupplementaryItem, Supplementa
 	}
 	
 	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+		guard frame != self.frame else {
+			return
+		}
 		
+		self.frame = frame
+		if frame.height > 0 {
+			invalidationContext?.invalidate(self)
+		}
 	}
 	
 	public func isEqual(to other: SupplementaryItem) -> Bool {
