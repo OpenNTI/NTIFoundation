@@ -66,7 +66,7 @@ public protocol LayoutSection: LayoutAttributesResolving {
 	
 	mutating func prepareForLayout()
 	
-	func targetLayoutHeightForProposedLayoutHeight(proposedHeight: CGFloat, layoutInfo: LayoutInfo) -> CGFloat
+	func targetLayoutHeightForProposedLayoutHeight(proposedHeight: CGFloat, layoutInfo: LayoutData) -> CGFloat
 	
 	func targetContentOffsetForProposedContentOffset(proposedContentOffset: CGPoint, firstInsertedSectionMinY: CGFloat) -> CGPoint
 	

@@ -127,7 +127,7 @@ public struct BasicLayoutSection: LayoutSection, LayoutSectionBaseComposite {
 		return proposedContentOffset
 	}
 	
-	public func targetLayoutHeightForProposedLayoutHeight(proposedHeight: CGFloat, layoutInfo: LayoutInfo) -> CGFloat {
+	public func targetLayoutHeightForProposedLayoutHeight(proposedHeight: CGFloat, layoutInfo: LayoutData) -> CGFloat {
 		return proposedHeight
 	}
 	

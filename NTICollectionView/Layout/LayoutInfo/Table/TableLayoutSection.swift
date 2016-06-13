@@ -563,12 +563,12 @@ public struct TableLayoutSection: LayoutSection, RowAlignedLayoutSectionBaseComp
 		
 	}
 	
-	public func targetLayoutHeightForProposedLayoutHeight(proposedHeight: CGFloat, layoutInfo: LayoutInfo) -> CGFloat {
+	public func targetLayoutHeightForProposedLayoutHeight(proposedHeight: CGFloat, layoutInfo: LayoutData) -> CGFloat {
 		guard isGlobalSection else {
 			return proposedHeight
 		}
 		
-		let height = layoutInfo.height
+		let height = layoutInfo.viewBounds.height - layoutInfo.contentInset.height
 		
 		let globalNonPinningHeight = heightOfNonPinningHeaders
 		
