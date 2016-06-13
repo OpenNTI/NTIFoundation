@@ -8,6 +8,16 @@
 
 import UIKit
 
+public struct TableLayout : LayoutClass {
+	
+	public typealias SectionMetricsType = TableSectionMetrics
+	
+	public typealias SupplementaryItemType = TableSupplementaryItem
+	
+	public typealias LayoutBuilderType = TableLayoutSectionBuilder
+	
+}
+
 // MARK: - TableSectionMetricsProviding
 
 public protocol TableSectionMetricsProviding : TableRowMetricsProviding {
