@@ -42,7 +42,7 @@ private enum AutoScrollDirection: String {
 	
 }
 
-public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutMeasuring, CollectionDataSourceDelegate, ShadowRegistrarVending {
+public class CollectionViewLayout : UICollectionViewLayout, CollectionViewLayoutMeasuring, CollectionDataSourceDelegate, ShadowRegistrarVending {
 	
 	public var isEditing = false {
 		didSet {
@@ -56,9 +56,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	
 	var layoutSize = CGSizeZero
 	
-	/// - note: `nil` until `resetLayoutInfo()` has been called for the first time.
-	private var layoutInfo: LayoutInfo!
-	private var oldLayoutInfo: LayoutInfo?
+	private var layoutInfo: LayoutData = .blank
+	private var oldLayoutInfo: LayoutData?
 	
 	private var updateSectionDirections: [Int: SectionOperationDirection] = [:]
 	
@@ -80,12 +79,22 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	/// Layout data becomes invalid if the data source changes.
 	private var layoutDataIsValid = true
 	
-	public override init() {
+	private let builder: LayoutBuilder
+	
+	private let strategy: LayoutStrategy
+	
+	public init(builder: LayoutBuilder, strategy: LayoutStrategy) {
+		self.builder = builder
+		self.strategy = strategy
+		
 		super.init()
+		
 		setUp()
 	}
 
 	public required init?(coder aDecoder: NSCoder) {
+		builder = TableLayoutBuilder()
+		strategy = TableLayoutStrategy()
 	    super.init(coder: aDecoder)
 		setUp()
 	}
@@ -243,9 +252,9 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		selectedItemIndexPath = indexPath
 		sourceItemIndexPath = indexPath
 		
-		layoutInfo.mutateItem(at: indexPath) { (item) in
-			item.isDragging = true
-		}
+//		layoutInfo.mutateItem(at: indexPath) { (item) in
+//			item.isDragging = true
+//		}
 		
 		let context = CollectionViewLayoutInvalidationContext()
 		context.invalidateItemsAtIndexPaths([indexPath])
@@ -292,8 +301,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		let context = CollectionViewLayoutInvalidationContext()
 		// TODO: Layout source and destination sections
-		layoutInfo.setSection(sourceSection, at: sourceSectionIndex)
-		layoutInfo.setSection(destinationSection, at: destinationSectionIndex)
+//		layoutInfo.setSection(sourceSection, at: sourceSectionIndex)
+//		layoutInfo.setSection(destinationSection, at: destinationSectionIndex)
 		invalidateLayoutWithContext(context)
 	}
 	
@@ -355,8 +364,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		let context = CollectionViewLayoutInvalidationContext()
 		// Layout source and destination sections
-		layoutInfo.setSection(sourceSection, at: sourceSectionIndex)
-		layoutInfo.setSection(destinationSection, at: destinationSectionIndex)
+//		layoutInfo.setSection(sourceSection, at: sourceSectionIndex)
+//		layoutInfo.setSection(destinationSection, at: destinationSectionIndex)
 		invalidateLayoutWithContext(context)
 		
 		selectedItemIndexPath = nil
@@ -585,8 +594,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		let context = CollectionViewLayoutInvalidationContext()
 		
 		// TODO: Layout sections
-		layoutInfo.setSection(oldSection, at: oldSectionIndex)
-		layoutInfo.setSection(newSection, at: newSectionIndex)
+//		layoutInfo.setSection(oldSection, at: oldSectionIndex)
+//		layoutInfo.setSection(newSection, at: newSectionIndex)
 		
 		invalidateLayoutWithContext(context)
 	}
@@ -615,7 +624,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		var invalidateEverything = context.invalidateEverything
 		
 		// The collectionView has changed width, re-evaluate the layout
-		if layoutInfo?.collectionViewSize.width != collectionView.bounds.size.width {
+		if layoutInfo.viewBounds.width != collectionView.bounds.size.width {
 			invalidateEverything = true
 		}
 		
@@ -665,7 +674,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			return
 		}
 		
-		layoutInfo.setSize(newSize, forItemAt: indexPath, invalidationContext: context)
+		strategy.setSize(newSize, forItemAt: indexPath, in: &layoutInfo, invalidationContext: context)
 	}
 	
 	private func invalidateMetricsForElement(ofKind kind: String, at indexPath: NSIndexPath, in context: CollectionViewLayoutInvalidationContext) {
@@ -683,7 +692,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			return
 		}
 		
-		layoutInfo.setSize(newSize, forElementOfKind: kind, at: indexPath, invalidationContext: context)
+		strategy.setSize(newSize, forElementOfKind: kind, at: indexPath, in: &layoutInfo, invalidationContext: context)
 	}
 	
 	public override func prepareLayout() {
@@ -702,11 +711,11 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		let contentOffset = targetContentOffsetForProposedContentOffset(collectionView.contentOffset)
 		layoutInfo.contentInset = collectionView.contentInset
-		layoutInfo.bounds = collectionView.bounds
-		layoutInfo.updateSpecialItemsWithContentOffset(contentOffset, invalidationContext: nil)
+		layoutInfo.viewBounds = collectionView.bounds
+		strategy.updateSpecialItems(withContentOffset: contentOffset, in: &layoutInfo, invalidationContext: nil)
 		
 		var result: [CollectionViewLayoutAttributes] = []
-		for sectionInfo in layoutInfo.sections {
+		for sectionInfo in layoutInfo.allSections {
 			result += sectionInfo.layoutAttributes.filter { $0.frame.intersects(rect) }
 		}
 		
@@ -720,12 +729,6 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	}
 	
 	public override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
-		let sectionIndex = indexPath.section
-		
-		guard sectionIndex >= 0 && sectionIndex < layoutInfo.numberOfSections else {
-			return nil
-		}
-		
 		let attributes: CollectionViewLayoutAttributes
 		
 		if let measuringAttributes = self.measuringAttributes
@@ -849,8 +852,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		contentOffset.x += newOrigin.x - origin.x
 		
 		layoutInfo.contentInset = collectionView.contentInset
-		layoutInfo.bounds = collectionView.bounds
-		layoutInfo.updateSpecialItemsWithContentOffset(contentOffset, invalidationContext: context)
+		layoutInfo.viewBounds = collectionView.bounds
+		strategy.updateSpecialItems(withContentOffset: contentOffset, in: &layoutInfo, invalidationContext: context)
 		
 		return context
 	}
@@ -911,9 +914,9 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	///
 	/// This becomes necessary when the selected data source of a segmented data source contributes a kind of global element, and then a new data source is selected which does not contribute that kind of global element.
 	private func processGlobalSectionUpdate() {
-		guard let globalSection = layoutInfo.sectionAtIndex(globalSectionIndex),
+		guard let globalSection = layoutInfo.section(atIndex: globalSectionIndex),
 			oldLayoutInfo = self.oldLayoutInfo,
-			oldGlobalSection = oldLayoutInfo.sectionAtIndex(globalSectionIndex) else {
+			oldGlobalSection = oldLayoutInfo.section(atIndex: globalSectionIndex) else {
 				return
 		}
 		
@@ -1167,7 +1170,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	}
 	
 	func sectionInfoForSectionAtIndex(sectionIndex: Int) -> LayoutSection? {
-		return layoutInfo.sectionAtIndex(sectionIndex)
+		return layoutInfo.section(atIndex: sectionIndex)
 	}
 	
 	func snapshotMetrics() -> [Int: DataSourceSectionMetricsProviding]? {
@@ -1206,7 +1209,9 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		updateFlagsFromCollectionView()
 		
-		createLayoutInfoFromDataSource()
+		resetLayoutInfo()
+		
+		let description = createLayoutDescriptionFromDataSource()
 		
 		layoutInfo.isEditing = isEditing
 		
@@ -1218,73 +1223,54 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		var contentOffset = collectionView.contentOffset
 		let bounds = collectionView.bounds
 		let width = bounds.width - contentInset.width
-		let height = bounds.height - contentInset.height
 		
-		layoutInfo.width = width
-		layoutInfo.height = height
 		layoutInfo.contentOffset.x = contentOffset.x + contentInset.left
 		layoutInfo.contentOffset.y = contentOffset.y + contentInset.top
 		layoutInfo.contentInset = contentInset
-		layoutInfo.bounds = bounds
+		layoutInfo.viewBounds = bounds
 		
-		layoutInfo.prepareForLayout()
+		builder.buildLayout(from: description, at: CGPointZero, using: &layoutInfo)
 		
-		var start = CGPointZero
-		
-		let layoutEngine = GridLayoutEngine(layoutInfo: layoutInfo)
-		start = layoutEngine.layoutWithOrigin(start, layoutSizing: layoutInfo, invalidationContext: nil)
-		
-		var layoutHeight = start.y
+		var layoutHeight = layoutInfo.layoutSize.height
 		
 		// The layoutHeight is the total height of the layout including any placeholders in their default size. Determine how much space is left to be shared out among the placeholders
-		layoutInfo.heightAvailableForPlaceholders = max(0, height - layoutHeight)
-		
-		if let globalSection = sectionInfoForSectionAtIndex(globalSectionIndex) {
-			layoutHeight = globalSection.targetLayoutHeightForProposedLayoutHeight(layoutHeight, layoutInfo: layoutInfo)
-		}
+		layoutHeight = strategy.targetLayoutHeight(forProposedLayoutHeight: layoutHeight, using: layoutInfo)
 		
 		layoutSize = CGSize(width: width, height: layoutHeight)
 		
 		contentOffset = targetContentOffsetForProposedContentOffset(contentOffset)
-		layoutInfo.updateSpecialItemsWithContentOffset(contentOffset, invalidationContext: nil)
+		strategy.updateSpecialItems(withContentOffset: contentOffset, in: &layoutInfo, invalidationContext: nil)
 		
-		layoutInfo.finalizeLayout()
+		strategy.finalizeLayout(for: &layoutInfo)
 		
 		layoutLog("\(#function) Final layout height: \(layoutHeight)")
 	}
 	
-	func createLayoutInfoFromDataSource() {
-		resetLayoutInfo()
+	func createLayoutDescriptionFromDataSource() -> LayoutDescription {
+		var description = LayoutDescription()
 		
 		guard let collectionView = self.collectionView else {
-			return
+			return description
 		}
 		
 		let contentInset = collectionView.contentInset
 		let bounds = collectionView.bounds
-		let width = bounds.width - contentInset.width
-		let height = bounds.height - contentInset.height
 		
 		let numberOfSections = collectionView.numberOfSections()
 		
 		layoutLog("\(#function) numberOfSections = \(numberOfSections)")
 		
-		layoutInfo.collectionViewSize = bounds.size
-		layoutInfo.width = width
-		layoutInfo.height = height
+		layoutInfo.viewBounds = bounds
+		layoutInfo.contentInset = contentInset
 		
 		guard let layoutMetrics = snapshotMetrics() else {
-			return
+			return description
 		}
 		
 		registerDecorations(from: layoutMetrics)
 		
 		if let globalMetrics = layoutMetrics[globalSectionIndex] {
-			// TODO: Section type shouldn't be decided here
-			var sectionInfo: LayoutSection = BasicGridLayoutSection()
-			sectionInfo.sectionIndex = globalSectionIndex
-			populate(&sectionInfo, from: globalMetrics)
-			layoutInfo.add(sectionInfo, sectionIndex: globalSectionIndex)
+			description.globalSection = buildDescription(ofSection: globalSectionIndex, from: globalMetrics)
 		}
 		
 		var placeholder: AnyObject?
@@ -1295,19 +1281,13 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 				continue
 			}
 			
-			// FIXME: Section type shouldn't be decided here
-			var sectionInfo: LayoutSection = BasicGridLayoutSection()
-			sectionInfo.sectionIndex = sectionIndex
-			
 			if let metricsPlaceholder = metrics.placeholder {
 				if metricsPlaceholder !== placeholder {
-					placeholderInfo = layoutInfo.newPlaceholderStartingAtSectionIndex(sectionIndex)
+					placeholderInfo = strategy.makePlaceholder(startingAtSectionIndex: sectionIndex, for: &layoutInfo)
 					placeholderInfo?.height = metrics.placeholderHeight
 					placeholderInfo?.hasEstimatedHeight = metrics.placeholderHasEstimatedHeight
 					placeholderInfo?.shouldFillAvailableHeight = metrics.placeholderShouldFillAvailableHeight
 				}
-				
-				sectionInfo.placeholderInfo = placeholderInfo
 			}
 			else {
 				placeholderInfo = nil
@@ -1315,74 +1295,39 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			
 			placeholder = metrics.placeholder
 			
-			populate(&sectionInfo, from: metrics)
+			var sectionDesc = buildDescription(ofSection: sectionIndex, from: metrics)
+			sectionDesc.placeholder = placeholderInfo
 
-			layoutInfo.add(sectionInfo, sectionIndex: sectionIndex)
+			description.sections.append(sectionDesc)
 		}
+		
+		return description
 	}
 	
 	/// - postcondition: `layoutInfo` is not `nil`.
 	func resetLayoutInfo() {
-		if layoutInfo != nil {
+		if layoutInfo != .blank {
 			oldLayoutInfo = layoutInfo
 		}
 		
-		layoutInfo = BasicLayoutInfo(layoutMeasure: self)
-		
-		guard layoutInfo != nil else {
-			preconditionFailure("Could not create layout info.")
-		}
+		layoutInfo = LayoutData()
 	}
 	
-	// TODO: Abstract somewhere else
-	public func populate(inout section: LayoutSection, from metrics: DataSourceSectionMetricsProviding) {
-		guard let collectionView = self.collectionView,
-			let gridMetrics = metrics.metrics as? GridSectionMetricsProviding,
-			var gridSection = section as? GridLayoutSection else {
-				return
-		}
+	public func buildDescription(ofSection section: Int, from metrics: DataSourceSectionMetricsProviding) -> SectionDescription {
+		var description = SectionDescription(metrics: metrics.metrics)
 		
-		let sectionIndex = gridSection.sectionIndex
+		description.sectionIndex = section
 		
-		gridSection.reset()
-		gridSection.applyValues(from: gridMetrics)
-		gridSection.metrics.resolveMissingValuesFromTheme()
+		let numberOfItems = (section == globalSectionIndex) ? 0 : collectionView!.numberOfItemsInSection(section)
+		description.numberOfItems = numberOfItems
 		
-		func setupSupplementaryMetrics(supplementaryMetrics: SupplementaryItem) {
-			// FIXME: Supplementary item kind shouldn't be decided here
-			var supplementaryItem = GridLayoutSupplementaryItem(supplementaryItem: supplementaryMetrics)
-			supplementaryItem.applyValues(from: gridSection.metrics)
-			gridSection.add(supplementaryItem)
-		}
+		description.sizingInfo = metrics.sizingInfo ?? self
 		
-		for supplementaryItem in metrics.supplementaryItemsByKind.contents {
-			setupSupplementaryMetrics(supplementaryItem)
-		}
+		description.supplementaryItemsByKind = metrics.supplementaryItemsByKind
 		
-		let isGlobalSection = sectionIndex == globalSectionIndex
-		let numberOfItemsInSection = isGlobalSection ? 0 : collectionView.numberOfItemsInSection(sectionIndex)
+		layoutLog("\(#function) section \(section): numberOfItems=\(numberOfItems) hasPlaceholder=\(metrics.placeholder != nil)")
 		
-		layoutLog("\(#function) section \(sectionIndex): numberOfItems=\(numberOfItemsInSection) hasPlaceholder=\(metrics.placeholder != nil)")
-		
-		var rowHeight = gridMetrics.rowHeight ?? automaticLength
-		let isVariableRowHeight = rowHeight == automaticLength
-		if isVariableRowHeight {
-			rowHeight = gridMetrics.estimatedRowHeight
-		}
-		
-		let columnWidth = gridSection.columnWidth
-		
-		for itemIndex in 0..<numberOfItemsInSection {
-			var itemInfo = GridLayoutItem()
-			itemInfo.itemIndex = itemIndex
-			itemInfo.frame = CGRect(x: 0, y: 0, width: columnWidth, height: rowHeight)
-			if isVariableRowHeight {
-				itemInfo.hasEstimatedHeight = true
-			}
-			gridSection.add(itemInfo)
-		}
-		
-		section = gridSection
+		return description
 	}
 	
 	private func initialLayoutAttributesForAttributes(attributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
