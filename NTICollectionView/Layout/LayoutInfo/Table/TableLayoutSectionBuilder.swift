@@ -26,8 +26,11 @@ public struct TableLayoutSectionBuilder: LayoutSectionBuilder {
 		let sectionIndex = description.sectionIndex
 		let margins = metrics.padding
 		
-		section.frame.origin = layoutBounds.origin
+		section.sectionIndex = sectionIndex
+		section.frame.origin = origin
 		section.frame.size.width = layoutBounds.width
+		
+		section.applyValues(from: description.metrics)
 		
 		var positionBounds = layoutBounds
 		
@@ -85,7 +88,7 @@ public struct TableLayoutSectionBuilder: LayoutSectionBuilder {
 		}
 		
 		let sectionHeight = positionBounds.origin.y - origin.y
-		section.frame = CGRect(x: origin.x, y: origin.x, width: width, height: sectionHeight)
+		section.frame.size.height = sectionHeight
 		
 		return section
 	}
