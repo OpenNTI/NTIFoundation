@@ -10,7 +10,7 @@ import UIKit
 
 private let defaultEstimatedHeight: CGFloat = 44
 
-public struct BasicSupplementaryItem: SupplementaryItem {
+public struct BasicSupplementaryItem : SupplementaryItem {
 	
 	public init(elementKind: String) {
 		self.elementKind = elementKind
@@ -79,14 +79,6 @@ public struct BasicSupplementaryItem: SupplementaryItem {
 			configureView(view: view, dataSource: dataSource, indexPath: indexPath)
 			configuration(view: view, dataSource: dataSource, indexPath: indexPath)
 		}
-	}
-	
-	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
-		
-	}
-	
-	public mutating func resetLayoutAttributes() {
-		
 	}
 	
 	public func isEqual(to other: SupplementaryItem) -> Bool {
