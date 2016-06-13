@@ -102,8 +102,8 @@ public struct SupplementaryItemStackBuilder {
 		
 		var positionBounds = layoutBounds
 		
-		for supplementaryItem in supplementaryItems {
-			guard let layoutItem = makeLayoutItem(for: supplementaryItem, using: description, in: positionBounds) else {
+		for (index, supplementaryItem) in supplementaryItems.enumerate() {
+			guard let layoutItem = makeLayoutItem(for: supplementaryItem, atIndex: index, using: description, in: positionBounds) else {
 				continue
 			}
 			
@@ -114,7 +114,7 @@ public struct SupplementaryItemStackBuilder {
 		return layoutItems
 	}
 	
-	func makeLayoutItem(for supplementaryItem: SupplementaryItem, using description: SectionDescription, in layoutBounds: LayoutAreaBounds) -> LayoutSupplementaryItem? {
+	func makeLayoutItem(for supplementaryItem: SupplementaryItem, atIndex index: Int, using description: SectionDescription, in layoutBounds: LayoutAreaBounds) -> LayoutSupplementaryItem? {
 		guard description.numberOfItems > 0 || supplementaryItem.isVisibleWhileShowingPlaceholder else {
 			return nil
 		}
@@ -127,6 +127,11 @@ public struct SupplementaryItemStackBuilder {
 		
 		var layoutItem = TableLayoutSupplementaryItem(supplementaryItem: supplementaryItem)
 		
+		layoutItem.itemIndex = index
+		layoutItem.sectionIndex = description.sectionIndex
+		
+		layoutItem.applyValues(from: description.metrics)
+		
 		let origin = layoutBounds.origin
 
 		layoutItem.frame = CGRect(x: origin.x, y: origin.y, width: layoutBounds.width, height: height)
@@ -137,6 +142,8 @@ public struct SupplementaryItemStackBuilder {
 			layoutItem.height = height
 			layoutItem.frame.size.height = height
 		}
+		
+		layoutItem.unpinnedY = layoutItem.frame.minY
 		
 		return layoutItem
 	}
