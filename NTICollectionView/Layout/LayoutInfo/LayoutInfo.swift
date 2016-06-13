@@ -33,7 +33,7 @@ func invalidateLayoutAttributes(attributes: UICollectionViewLayoutAttributes, in
 	}
 }
 
-public struct LayoutData {
+public struct LayoutData : Equatable {
 	
 	public static let blank = LayoutData()
 	
@@ -53,6 +53,20 @@ public struct LayoutData {
 	
 	public var isEditing = false
 	
+}
+
+public func ==(lhs: LayoutData, rhs: LayoutData) -> Bool {
+	return lhs.layoutSize == rhs.layoutSize
+		&& lhs.viewBounds == rhs.viewBounds
+		&& lhs.contentOffset == rhs.contentOffset
+		&& lhs.contentInset == rhs.contentInset
+		&& lhs.numberOfPlaceholders == rhs.numberOfPlaceholders
+		&& lhs.isEditing == rhs.isEditing
+		&& lhs.sections.elementsEqual(rhs.sections, isEquivalent: { (lSection, rSection) -> Bool in
+			lSection.isEqual(to: rSection)
+		})
+		&& ((lhs.globalSection == nil && rhs.globalSection == nil)
+			|| (lhs.globalSection != nil && rhs.globalSection != nil && lhs.globalSection!.isEqual(to: rhs.globalSection!)))
 }
 
 /// Provides layout dynamics.
