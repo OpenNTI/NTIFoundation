@@ -51,6 +51,8 @@ public struct LayoutData {
 	
 	public var numberOfPlaceholders: Int = 0
 	
+	public var isEditing = false
+	
 }
 
 /// Provides layout dynamics.
