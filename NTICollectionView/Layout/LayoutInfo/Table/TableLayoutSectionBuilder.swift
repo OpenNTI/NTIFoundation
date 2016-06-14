@@ -36,7 +36,7 @@ public struct TableLayoutSectionBuilder: LayoutSectionBuilder {
 		
 		// Layout headers
 		if let headers = description.supplementaryItemsByKind[UICollectionElementKindSectionHeader] {
-			let layoutItems = SupplementaryItemStackBuilder().makeLayoutItems(for: headers, using: description, in: positionBounds)
+			let layoutItems = makeLayoutItems(for: headers, using: description, in: positionBounds)
 			
 			for layoutItem in layoutItems {
 				positionBounds.origin.y += layoutItem.fixedHeight
@@ -79,7 +79,7 @@ public struct TableLayoutSectionBuilder: LayoutSectionBuilder {
 		
 		// Layout footers
 		if let footers = description.supplementaryItemsByKind[UICollectionElementKindSectionFooter] {
-			let layoutItems = SupplementaryItemStackBuilder().makeLayoutItems(for: footers, using: description, in: positionBounds)
+			let layoutItems = makeLayoutItems(for: footers, using: description, in: positionBounds)
 			
 			for layoutItem in layoutItems {
 				positionBounds.origin.y += layoutItem.fixedHeight
@@ -102,59 +102,12 @@ public struct TableLayoutSectionBuilder: LayoutSectionBuilder {
 		return section
 	}
 	
-}
-
-public struct SupplementaryItemStackBuilder {
-	
-	func makeLayoutItems(for supplementaryItems: [SupplementaryItem], using description: SectionDescription, in layoutBounds: LayoutAreaBounds) -> [LayoutSupplementaryItem] {
-		var layoutItems = [LayoutSupplementaryItem]()
-		
-		var positionBounds = layoutBounds
-		
-		for (index, supplementaryItem) in supplementaryItems.enumerate() {
-			guard let layoutItem = makeLayoutItem(for: supplementaryItem, atIndex: index, using: description, in: positionBounds) else {
-				continue
-			}
-			
-			positionBounds.origin.y += layoutItem.fixedHeight
-			layoutItems.append(layoutItem)
+	private func makeLayoutItems(for supplementaryItems: [SupplementaryItem], using description: SectionDescription, in layoutBounds: LayoutAreaBounds) -> [TableLayoutSupplementaryItem] {
+		return SupplementaryItemStackBuilder<TableLayoutSupplementaryItem>().makeLayoutItems(for: supplementaryItems, using: description, in: layoutBounds).map {
+			var layoutItem = $0
+			layoutItem.unpinnedY = layoutItem.frame.minY
+			return layoutItem
 		}
-		
-		return layoutItems
-	}
-	
-	func makeLayoutItem(for supplementaryItem: SupplementaryItem, atIndex index: Int, using description: SectionDescription, in layoutBounds: LayoutAreaBounds) -> LayoutSupplementaryItem? {
-		guard description.numberOfItems > 0 || supplementaryItem.isVisibleWhileShowingPlaceholder else {
-			return nil
-		}
-		
-		var height = supplementaryItem.fixedHeight
-		
-		guard height > 0 && !supplementaryItem.isHidden else {
-			return nil
-		}
-		
-		var layoutItem = TableLayoutSupplementaryItem(supplementaryItem: supplementaryItem)
-		
-		layoutItem.itemIndex = index
-		layoutItem.sectionIndex = description.sectionIndex
-		
-		layoutItem.applyValues(from: description.metrics)
-		
-		let origin = layoutBounds.origin
-
-		layoutItem.frame = CGRect(x: origin.x, y: origin.y, width: layoutBounds.width, height: height)
-		
-		if supplementaryItem.hasEstimatedHeight, let sizing = description.sizingInfo {
-			let measuredSize = sizing.measuredSizeForSupplementaryItem(layoutItem)
-			height = measuredSize.height
-			layoutItem.height = height
-			layoutItem.frame.size.height = height
-		}
-		
-		layoutItem.unpinnedY = layoutItem.frame.minY
-		
-		return layoutItem
 	}
 	
 }
