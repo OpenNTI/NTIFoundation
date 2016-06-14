@@ -10,15 +10,7 @@ import UIKit
 
 public struct GridLayoutSectionBuilder: LayoutSectionBuilder {
 	
-	public init?(metrics: SectionMetrics) {
-		guard let gridMetrics = metrics as? GridSectionMetricsProviding else {
-			return nil
-		}
-		
-		self.metrics = gridMetrics
-	}
-	
-	public let metrics: GridSectionMetricsProviding
+	public init() {}
 	
 	public func makeLayoutSection(using description: SectionDescription, in layoutBounds: LayoutAreaBounds) -> LayoutSection {
 		var section = GridLayoutSection()
@@ -42,33 +34,21 @@ public struct GridLayoutSectionBuilder: LayoutSectionBuilder {
 		
 		section.applyValues(from: description.metrics)
 		
-		var positionBounds = layoutBounds
+		let plan = GridLayoutPlanBuilder().makeLayoutItems(using: description, in: layoutBounds)
 		
-		// Layout headers
-		if let headers = description.supplementaryItemsByKind[UICollectionElementKindSectionHeader] {
-			let layoutItems = makeLayoutItems(for: headers, using: description, in: positionBounds)
-			
-			for layoutItem in layoutItems {
-				positionBounds.origin.y += layoutItem.frame.maxY
-				section.add(layoutItem)
-			}
+		for header in plan.headers {
+			section.add(header)
 		}
 		
-		positionBounds.origin.y += margins.top
-		
-		let contentStartBounds = positionBounds
-		
-		// Layout left auxiliary items
-		if let leftItems = description.supplementaryItemsByKind[collectionElementKindLeftAuxiliaryItem] {
-			var leftItemBounds = contentStartBounds
-			leftItemBounds.width = metrics.leftAuxiliaryColumnWidth
-			
-			let layoutItems = makeLayoutItems(for: leftItems, using: description, in: leftItemBounds)
-			
-			for layoutItem in layoutItems {
-				section.add(layoutItem)
-			}
+		for leftItem in plan.leftItems {
+			section.add(leftItem)
 		}
+		
+		for rightItem in plan.rightItems {
+			section.add(rightItem)
+		}
+		
+		var positionBounds = plan.contentBounds
 		
 		// Layout content area
 		if var placeholder = description.placeholder where placeholder.startingSectionIndex == sectionIndex {
@@ -101,22 +81,9 @@ public struct GridLayoutSectionBuilder: LayoutSectionBuilder {
 			positionBounds.origin.y += margins.bottom
 		}
 		
-		// Layout right auxiliary items
-		if let rightItems = description.supplementaryItemsByKind[collectionElementKindRightAuxiliaryItem] {
-			var rightItemBounds = contentStartBounds
-			rightItemBounds.width = metrics.rightAuxiliaryColumnWidth
-			rightItemBounds.origin.x = layoutBounds.width - rightItemBounds.width
-			
-			let layoutItems = makeLayoutItems(for: rightItems, using: description, in: rightItemBounds)
-			
-			for layoutItem in layoutItems {
-				section.add(layoutItem)
-			}
-		}
-		
 		// Layout footers
 		if let footers = description.supplementaryItemsByKind[UICollectionElementKindSectionFooter] {
-			let layoutItems = makeLayoutItems(for: footers, using: description, in: positionBounds)
+			let layoutItems = GridLayoutPlanBuilder().makeLayoutItems(for: footers, using: description, in: positionBounds)
 			
 			for layoutItem in layoutItems {
 				positionBounds.origin.y += layoutItem.fixedHeight
@@ -130,61 +97,82 @@ public struct GridLayoutSectionBuilder: LayoutSectionBuilder {
 		return section
 	}
 	
-	func makeLayoutItems(for supplementaryItems: [SupplementaryItem], using description: SectionDescription, in layoutBounds: LayoutAreaBounds) -> [LayoutSupplementaryItem] {
-		var layoutItems = [LayoutSupplementaryItem]()
-		
-		var positionBounds = layoutBounds
-		
-		for (index, supplementaryItem) in supplementaryItems.enumerate() {
-			guard let layoutItem = makeLayoutItem(for: supplementaryItem, atIndex: index, using: description, in: positionBounds) else {
-				continue
-			}
-			
-			positionBounds.origin.y += layoutItem.fixedHeight
-			
-			if index < supplementaryItems.count - 1,
-				let metrics = description.metrics as? GridSectionMetricsProviding {
-				positionBounds.origin.y += metrics.auxiliaryColumnSpacing
-			}
-			
-			layoutItems.append(layoutItem)
+}
+
+public typealias GridLayoutPlan = (headers: [GridLayoutSupplementaryItem], leftItems: [GridLayoutSupplementaryItem], rightItems: [GridLayoutSupplementaryItem], contentBounds: LayoutAreaBounds)
+
+public struct GridLayoutPlanBuilder {
+	
+	public func makeLayoutItems(using description: SectionDescription, in layoutBounds: LayoutAreaBounds) -> GridLayoutPlan {
+		guard let metrics = description.metrics as? GridSectionMetricsProviding else {
+			return (headers: [], leftItems: [], rightItems: [], contentBounds: layoutBounds)
 		}
 		
-		return layoutItems
+		var contentBounds = layoutBounds
+		
+		// Layout headers
+		var layoutHeaders = [GridLayoutSupplementaryItem]()
+		if let headers = description.supplementaryItemsByKind[UICollectionElementKindSectionHeader] {
+			let layoutItems = makeLayoutItems(for: headers, using: description, in: layoutBounds)
+			
+			for layoutItem in layoutItems {
+				contentBounds.origin.y += layoutItem.frame.maxY
+				layoutHeaders.append(layoutItem)
+			}
+		}
+		
+		contentBounds.origin.y += metrics.padding.top
+		
+		// Layout left auxiliary items
+		var layoutLeftItems = [GridLayoutSupplementaryItem]()
+		if metrics.leftAuxiliaryColumnWidth > 0, let leftItems = description.supplementaryItemsByKind[collectionElementKindLeftAuxiliaryItem] {
+			var leftItemBounds = contentBounds
+			leftItemBounds.width = metrics.leftAuxiliaryColumnWidth
+			
+			let layoutItems = makeLayoutItems(for: leftItems, using: description, in: leftItemBounds)
+			
+			for layoutItem in layoutItems {
+				layoutLeftItems.append(layoutItem)
+			}
+			
+			contentBounds.origin.x += leftItemBounds.width
+			contentBounds.width -= leftItemBounds.width
+		}
+		
+		// Layout right auxiliary items
+		var layoutRightItems = [GridLayoutSupplementaryItem]()
+		if metrics.rightAuxiliaryColumnWidth > 0, let rightItems = description.supplementaryItemsByKind[collectionElementKindRightAuxiliaryItem] {
+			var rightItemBounds = contentBounds
+			rightItemBounds.width = metrics.rightAuxiliaryColumnWidth
+			rightItemBounds.origin.x = layoutBounds.width - rightItemBounds.width
+			
+			let layoutItems = makeLayoutItems(for: rightItems, using: description, in: rightItemBounds)
+			
+			for layoutItem in layoutItems {
+				layoutRightItems.append(layoutItem)
+			}
+			
+			contentBounds.width -= rightItemBounds.width
+		}
+		
+		return (headers: layoutHeaders, leftItems: layoutLeftItems, rightItems: layoutRightItems, contentBounds: contentBounds)
 	}
 	
-	func makeLayoutItem(for supplementaryItem: SupplementaryItem, atIndex index: Int, using description: SectionDescription, in layoutBounds: LayoutAreaBounds) -> LayoutSupplementaryItem? {
-		guard description.numberOfItems > 0 || supplementaryItem.isVisibleWhileShowingPlaceholder else {
-			return nil
+	public func makeLayoutItems(for supplementaryItems: [SupplementaryItem], using description: SectionDescription, in layoutBounds: LayoutAreaBounds) -> [GridLayoutSupplementaryItem] {
+		let metrics: LayoutItemStackMetrics = (description.metrics as? GridSectionMetricsProviding)?.makeLayoutItemStackMetrics() ?? .zero
+		return SupplementaryItemStackBuilder<GridLayoutSupplementaryItem>().makeLayoutItems(for: supplementaryItems, using: description, in: layoutBounds, metrics: metrics).map {
+			var layoutItem = $0
+			layoutItem.unpinnedY = layoutItem.frame.minY
+			return layoutItem
 		}
-		
-		var height = supplementaryItem.fixedHeight
-		
-		guard height > 0 && !supplementaryItem.isHidden else {
-			return nil
-		}
-		
-		var layoutItem = GridLayoutSupplementaryItem(supplementaryItem: supplementaryItem)
-		
-		layoutItem.itemIndex = index
-		layoutItem.sectionIndex = description.sectionIndex
-		
-		layoutItem.applyValues(from: description.metrics)
-		
-		let origin = layoutBounds.origin
-		
-		layoutItem.frame = CGRect(x: origin.x, y: origin.y, width: layoutBounds.width, height: height)
-		
-		if supplementaryItem.hasEstimatedHeight, let sizing = description.sizingInfo {
-			let measuredSize = sizing.measuredSizeForSupplementaryItem(layoutItem)
-			height = measuredSize.height
-			layoutItem.height = height
-			layoutItem.frame.size.height = height
-		}
-		
-		layoutItem.unpinnedY = layoutItem.frame.minY
-		
-		return layoutItem
+	}
+	
+}
+
+extension GridSectionMetricsProviding {
+	
+	public func makeLayoutItemStackMetrics() -> LayoutItemStackMetrics {
+		return LayoutItemStackMetrics(spacing: auxiliaryColumnSpacing)
 	}
 	
 }
