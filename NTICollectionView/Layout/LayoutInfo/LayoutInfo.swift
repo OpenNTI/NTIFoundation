@@ -265,6 +265,8 @@ public protocol LayoutElement: LayoutArea {
 /// Layout information about a supplementary item.
 public protocol LayoutSupplementaryItem: SupplementaryItemWrapper, LayoutElement {
 	
+	init(supplementaryItem: SupplementaryItem)
+	
 	var sectionIndex: Int { get set }
 	
 	var supplementaryItem: SupplementaryItem { get set }
