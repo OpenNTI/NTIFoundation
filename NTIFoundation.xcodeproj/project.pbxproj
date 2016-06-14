@@ -529,6 +529,8 @@
 		4A68AD001C88B0CE00849185 /* SegmentedControlProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AC9E1C88B0CE00849185 /* SegmentedControlProtocol.swift */; };
 		4A68AD431C88BE2000849185 /* UICollectionView+SupplementaryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AD421C88BE2000849185 /* UICollectionView+SupplementaryViews.swift */; };
 		4A68AD441C88BE2000849185 /* UICollectionView+SupplementaryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68AD421C88BE2000849185 /* UICollectionView+SupplementaryViews.swift */; };
+		4A7880771D10791900F7B773 /* SupplementaryItemStackBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7880761D10791900F7B773 /* SupplementaryItemStackBuilder.swift */; };
+		4A7880781D10791900F7B773 /* SupplementaryItemStackBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7880761D10791900F7B773 /* SupplementaryItemStackBuilder.swift */; };
 		4A7A3F761CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7A3F751CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift */; };
 		4A7A3F771CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7A3F751CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift */; };
 		4A88EC931D09C97600CFE099 /* LayoutSectionStackBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88EC921D09C97600CFE099 /* LayoutSectionStackBuilder.swift */; };
@@ -1230,6 +1232,7 @@
 		4A72F45F1925AEF1004792EF /* UIColor+NTIExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+NTIExtensions.h"; sourceTree = "<group>"; };
 		4A72F4601925AEF1004792EF /* UIColor+NTIExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NTIExtensions.m"; sourceTree = "<group>"; };
 		4A72F48619268DA8004792EF /* UIColor+NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+NTIExtensionsTest.m"; sourceTree = "<group>"; };
+		4A7880761D10791900F7B773 /* SupplementaryItemStackBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupplementaryItemStackBuilder.swift; sourceTree = "<group>"; };
 		4A7A3F751CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RowAlignedLayoutSectionBase.swift; sourceTree = "<group>"; };
 		4A88EC921D09C97600CFE099 /* LayoutSectionStackBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutSectionStackBuilder.swift; sourceTree = "<group>"; };
 		4A88ECAF1D09CDB000CFE099 /* LayoutSectionStackBuilderTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutSectionStackBuilderTest.swift; sourceTree = "<group>"; };
@@ -2134,6 +2137,7 @@
 				4ADEE7681C98DBB900DE9B0D /* Decoration.swift */,
 				4A280DEC1CC6E623001EDCAA /* LayoutBuilder.swift */,
 				4A88EC921D09C97600CFE099 /* LayoutSectionStackBuilder.swift */,
+				4A7880761D10791900F7B773 /* SupplementaryItemStackBuilder.swift */,
 			);
 			path = LayoutInfo;
 			sourceTree = "<group>";
@@ -3487,6 +3491,7 @@
 				4A0582FF1C9211A200F3D0E0 /* GridLayoutEngine.swift in Sources */,
 				4A68AC9F1C88B0CE00849185 /* CollectionDataSource.swift in Sources */,
 				4A7A3F761CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift in Sources */,
+				4A7880771D10791900F7B773 /* SupplementaryItemStackBuilder.swift in Sources */,
 				4A68ACBB1C88B0CE00849185 /* CGGeometry-Extensions.swift in Sources */,
 				4A68ACC31C88B0CE00849185 /* CollectionLayoutAnimator.swift in Sources */,
 				4A68ACF11C88B0CE00849185 /* ContentLoading.swift in Sources */,
@@ -3580,6 +3585,7 @@
 				4A68ACB61C88B0CE00849185 /* DataSourceSectionInfo.swift in Sources */,
 				4A5ABD411C9B0D30008D292E /* DictionaryExtensionTest.swift in Sources */,
 				4A24B82A1CC721DD0053ED9B /* BasicLayoutSection.swift in Sources */,
+				4A7880781D10791900F7B773 /* SupplementaryItemStackBuilder.swift in Sources */,
 				4A68ACB21C88B0CE00849185 /* DataSourcePlaceholder.swift in Sources */,
 				4A68AD001C88B0CE00849185 /* SegmentedControlProtocol.swift in Sources */,
 				4AF3835F1CA3186A006D13D4 /* CollectionPlaceholderView.swift in Sources */,
