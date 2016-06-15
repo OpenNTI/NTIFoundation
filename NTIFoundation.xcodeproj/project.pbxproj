@@ -395,8 +395,6 @@
 		4A1BE85C1C8F9AD200790B3A /* CatListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1BE8491C8F9AD200790B3A /* CatListViewController.swift */; };
 		4A1BE85D1C8F9AD200790B3A /* CatSightingsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1BE84A1C8F9AD200790B3A /* CatSightingsDataSource.swift */; };
 		4A1BE85E1C8F9AD200790B3A /* CatSightingsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1BE84A1C8F9AD200790B3A /* CatSightingsDataSource.swift */; };
-		4A1BE8601C8F9B3200790B3A /* KeyValueItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1BE85F1C8F9B3200790B3A /* KeyValueItem.swift */; };
-		4A1BE8611C8F9B3200790B3A /* KeyValueItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1BE85F1C8F9B3200790B3A /* KeyValueItem.swift */; };
 		4A1BE8641C8FA26300790B3A /* NTICollectionView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A68ABF51C88ADC300849185 /* NTICollectionView.framework */; };
 		4A1BE89E1C8FE03200790B3A /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4A1BE89D1C8FE03200790B3A /* LICENSE.txt */; };
 		4A24B80C1CC721000053ED9B /* TableLayoutSectionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A24B80B1CC721000053ED9B /* TableLayoutSectionBuilder.swift */; };
@@ -535,6 +533,8 @@
 		4A88EC941D09C97600CFE099 /* LayoutSectionStackBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88EC921D09C97600CFE099 /* LayoutSectionStackBuilder.swift */; };
 		4A88ECB01D09CDB000CFE099 /* LayoutSectionStackBuilderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88ECAF1D09CDB000CFE099 /* LayoutSectionStackBuilderTest.swift */; };
 		4A9D2C301C9CCA3D00D75BBD /* DelegatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9D2C2F1C9CCA3D00D75BBD /* DelegatingViewController.swift */; };
+		4AA0E3E31D11DD0C00D0A5E0 /* KeyValueItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1BE85F1C8F9B3200790B3A /* KeyValueItem.swift */; };
+		4AA0E3E41D11DD0E00D0A5E0 /* KeyValueItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1BE85F1C8F9B3200790B3A /* KeyValueItem.swift */; };
 		4AA691061CF62A1700012293 /* TableRowStackBuilderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA691051CF62A1700012293 /* TableRowStackBuilderTest.swift */; };
 		4AB48C271CC00EFF00F193C3 /* TextValueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB48C261CC00EFF00F193C3 /* TextValueCell.swift */; };
 		4AB48C431CC0108D00F193C3 /* TruncatingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB48C421CC0108D00F193C3 /* TruncatingLabel.swift */; };
@@ -1960,7 +1960,6 @@
 				4A1BE80F1C8F9A4000790B3A /* CollectionDataSource-Extensions.swift */,
 				4A1BE8101C8F9A4000790B3A /* CollectionViewLayoutAttributes-Extensions.swift */,
 				4A1BE8111C8F9A4000790B3A /* KeyValueDataSource.swift */,
-				4A1BE85F1C8F9B3200790B3A /* KeyValueItem.swift */,
 				4A1BE8121C8F9A4000790B3A /* TextValueDataSource.swift */,
 				4A1BE8131C8F9A4000790B3A /* UICollectionView+SupplementaryViews.h */,
 				4A1BE8141C8F9A4000790B3A /* UICollectionView+SupplementaryViews.m */,
@@ -2173,6 +2172,7 @@
 				4A68AC971C88B0CE00849185 /* LoadableContentStateMachine.swift */,
 				4A68AC981C88B0CE00849185 /* StateMachine.swift */,
 				4AE793DA1D00DD290045D2D1 /* HelperTypes.swift */,
+				4A1BE85F1C8F9B3200790B3A /* KeyValueItem.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -3406,7 +3406,6 @@
 				4A1BE85B1C8F9AD200790B3A /* CatListViewController.swift in Sources */,
 				4A1BE8551C8F9AD200790B3A /* CatDetailDataSource.swift in Sources */,
 				4A1BE8271C8F9A4100790B3A /* AAPLSectionHeaderView.m in Sources */,
-				4A1BE8601C8F9B3200790B3A /* KeyValueItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3432,7 +3431,6 @@
 				4A1BE8281C8F9A4100790B3A /* AAPLSectionHeaderView.m in Sources */,
 				4A1BE8241C8F9A4100790B3A /* AAPLLabel.m in Sources */,
 				4A1BE8181C8F9A4100790B3A /* AAPLAction.m in Sources */,
-				4A1BE8611C8F9B3200790B3A /* KeyValueItem.swift in Sources */,
 				4A1BE85C1C8F9AD200790B3A /* CatListViewController.swift in Sources */,
 				4A1BE8541C8F9AD200790B3A /* AAPLDataAccessManager.m in Sources */,
 				4A1BE8501C8F9AD200790B3A /* AAPLCatSighting.m in Sources */,
@@ -3480,6 +3478,7 @@
 				4A68AC9F1C88B0CE00849185 /* CollectionDataSource.swift in Sources */,
 				4A7A3F761CCA8A2B001FD5AB /* RowAlignedLayoutSectionBase.swift in Sources */,
 				4A68ACBB1C88B0CE00849185 /* CGGeometry-Extensions.swift in Sources */,
+				4AA0E3E31D11DD0C00D0A5E0 /* KeyValueItem.swift in Sources */,
 				4A68ACC31C88B0CE00849185 /* CollectionLayoutAnimator.swift in Sources */,
 				4A68ACF11C88B0CE00849185 /* ContentLoading.swift in Sources */,
 				4A68ACBF1C88B0CE00849185 /* NSIndexPath-Extensions.swift in Sources */,
@@ -3583,6 +3582,7 @@
 				4A68ACC61C88B0CE00849185 /* CollectionLayoutEngine.swift in Sources */,
 				4A68ACE41C88B0CE00849185 /* LayoutInfo.swift in Sources */,
 				4AD52D571CC581DE00CDEF45 /* BasicLayoutSupplementaryItem.swift in Sources */,
+				4AA0E3E41D11DD0E00D0A5E0 /* KeyValueItem.swift in Sources */,
 				4A68ACB81C88B0CE00849185 /* SegmentedCollectionDataSource.swift in Sources */,
 				4A280DD11CC6E2F0001EDCAA /* LayoutDescription.swift in Sources */,
 				4A68ACEA1C88B0CE00849185 /* LayoutPlaceholder.swift in Sources */,
