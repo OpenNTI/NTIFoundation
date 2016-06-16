@@ -49,16 +49,22 @@ public class HeadedTextCell: CollectionViewCell {
 		let metrics = ["s": spacing]
 		
 		var constraints = [NSLayoutConstraint]()
+		
 		constraints += NSLayoutConstraint.constraintsWithVisualFormat("V:|[header]", options: [], metrics: metrics, views: views)
 		constraints += NSLayoutConstraint.constraintsWithVisualFormat("V:[text]|", options: [], metrics: metrics, views: views)
+		
 		spacingConstraint = NSLayoutConstraint(item: textLabel, attribute: .Top, relatedBy: .Equal, toItem: headerLabel, attribute: .Bottom, multiplier: 1, constant: spacing)
 		constraints.append(spacingConstraint)
+		
 		constraints += NSLayoutConstraint.constraintsWithVisualFormat("H:|[header]|", options: [], metrics: metrics, views: views)
 		constraints += NSLayoutConstraint.constraintsWithVisualFormat("H:|[text]|", options: [], metrics: metrics, views: views)
+		
 		constraints += NSLayoutConstraint.constraintsWithVisualFormat("H:|-(>=0)-[wrapper]-(>=0)-|", options: [], metrics: metrics, views: views)
 		constraints += NSLayoutConstraint.constraintsWithVisualFormat("V:|-(>=0)-[wrapper]-(>=0)-|", options: [], metrics: metrics, views: views)
+		
 		constraints.append(NSLayoutConstraint(item: wrapper, attribute: .CenterX, relatedBy: .Equal, toItem: contentView, attribute: .CenterX, multiplier: 1, constant: 0))
 		constraints.append(NSLayoutConstraint(item: wrapper, attribute: .CenterY, relatedBy: .Equal, toItem: contentView, attribute: .CenterY, multiplier: 1, constant: 0))
+		
 		NSLayoutConstraint.activateConstraints(constraints)
 	}
 
