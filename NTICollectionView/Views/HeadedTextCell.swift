@@ -117,6 +117,15 @@ public class DupleHeadedTextCell : CollectionViewCell {
 	
 	private var horizontalSpacingConstraint: NSLayoutConstraint!
 	
+	public override init(frame: CGRect) {
+		super.init(frame: frame)
+		commonInit()
+	}
+	
+	public required init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
 	private func commonInit() {
 		for view in [headedTextView1, headedTextView2] {
 			view.layoutMargins = .zero
