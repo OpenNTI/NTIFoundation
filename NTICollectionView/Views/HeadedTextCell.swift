@@ -17,6 +17,13 @@ public class HeadedTextCell: CollectionViewCell {
 	/// Displays the primary text.
 	public let textLabel = UILabel()
 	
+	/// The vertical spacing between the header and the text.
+	public var spacing: CGFloat = 7 {
+		didSet { spacingConstraint.constant = spacing }
+	}
+	
+	private var spacingConstraint: NSLayoutConstraint!
+	
 	private let wrapper = UIView()
 	
 	public override init(frame: CGRect) {
@@ -39,10 +46,13 @@ public class HeadedTextCell: CollectionViewCell {
 		wrapper.addSubview(textLabel)
 		
 		let views = ["wrapper": wrapper, "header": headerLabel, "text": textLabel]
-		let metrics = ["s": 7]
+		let metrics = ["s": spacing]
 		
 		var constraints = [NSLayoutConstraint]()
-		constraints += NSLayoutConstraint.constraintsWithVisualFormat("V:|[header]-s-[text]|", options: [], metrics: metrics, views: views)
+		constraints += NSLayoutConstraint.constraintsWithVisualFormat("V:|[header]", options: [], metrics: metrics, views: views)
+		constraints += NSLayoutConstraint.constraintsWithVisualFormat("V:[text]|", options: [], metrics: metrics, views: views)
+		spacingConstraint = NSLayoutConstraint(item: textLabel, attribute: .Top, relatedBy: .Equal, toItem: headerLabel, attribute: .Bottom, multiplier: 1, constant: spacing)
+		constraints.append(spacingConstraint)
 		constraints += NSLayoutConstraint.constraintsWithVisualFormat("H:|[header]|", options: [], metrics: metrics, views: views)
 		constraints += NSLayoutConstraint.constraintsWithVisualFormat("H:|[text]|", options: [], metrics: metrics, views: views)
 		constraints += NSLayoutConstraint.constraintsWithVisualFormat("H:|-(>=0)-[wrapper]-(>=0)-|", options: [], metrics: metrics, views: views)
