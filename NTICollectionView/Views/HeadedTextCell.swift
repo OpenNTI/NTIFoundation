@@ -89,11 +89,57 @@ public class HeadedTextView : UIView {
 		NSLayoutConstraint.activateConstraints(constraints)
 	}
 	
+}
+
+// MARK: - DupleHeadedTextCell
+
+/// A `CollectionViewCell` which displays two `HeadedTextView`s side-by-side.
+public class DupleHeadedTextCell : CollectionViewCell {
+	
+	/// The first `HeadedTextView` displayed by `self`.
+	public let headedTextView1 = HeadedTextView()
+	
+	/// The second `HeadedTextView` displayed by `self`.
+	public let headedTextView2 = HeadedTextView()
+	
+	/// The horizontal spacing between the `HeadedTextView`s displayed by `self`.
+	public var horizontalSpacing: CGFloat = 22 {
+		didSet { horizontalSpacingConstraint.constant = horizontalSpacing }
+	}
+	
+	/// The vertical spacing used by the `HeadedTextView`s displayed by `self`.
+	public var verticalSpacing: CGFloat = 7 {
+		didSet {
+			headedTextView1.spacing = verticalSpacing
+			headedTextView2.spacing = verticalSpacing
+		}
+	}
+	
+	private var horizontalSpacingConstraint: NSLayoutConstraint!
+	
+	private func commonInit() {
+		for view in [headedTextView1, headedTextView2] {
+			view.layoutMargins = .zero
+			view.translatesAutoresizingMaskIntoConstraints = false
+			contentView.addSubview(view)
+		}
 		
-		constraints.append(NSLayoutConstraint(item: wrapper, attribute: .CenterX, relatedBy: .Equal, toItem: contentView, attribute: .CenterX, multiplier: 1, constant: 0))
-		constraints.append(NSLayoutConstraint(item: wrapper, attribute: .CenterY, relatedBy: .Equal, toItem: contentView, attribute: .CenterY, multiplier: 1, constant: 0))
+		let views = ["headedText1": headedTextView1, "headedText2": headedTextView2]
+		let metrics: [String: NSNumber] = [:]
+		
+		var constraints = [NSLayoutConstraint]()
+		
+		constraints += NSLayoutConstraint.constraintsWithVisualFormat("H:|-[headedText1]", options: [], metrics: metrics, views: views)
+		constraints += NSLayoutConstraint.constraintsWithVisualFormat("H:[headedText2]-|", options: [], metrics: metrics, views: views)
+		
+		horizontalSpacingConstraint = NSLayoutConstraint(item: headedTextView2, attribute: .Leading, relatedBy: .Equal, toItem: headedTextView1, attribute: .Trailing, multiplier: 1, constant: horizontalSpacing)
+		constraints.append(horizontalSpacingConstraint)
+		
+		for idx in ["1", "2"] {
+			constraints += NSLayoutConstraint.constraintsWithVisualFormat("V:|-[headedText\(idx)]-|", options: [], metrics: metrics, views: views)
+		}
 		
 		NSLayoutConstraint.activateConstraints(constraints)
 	}
-
+	
 }
