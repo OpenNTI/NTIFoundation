@@ -543,6 +543,8 @@
 		4A88ECB51D0A0FB600CFE099 /* TableLayoutBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88ECB41D0A0FB600CFE099 /* TableLayoutBuilder.swift */; };
 		4A88ECB61D0A0FB600CFE099 /* TableLayoutBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A88ECB41D0A0FB600CFE099 /* TableLayoutBuilder.swift */; };
 		4A9D2C301C9CCA3D00D75BBD /* DelegatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9D2C2F1C9CCA3D00D75BBD /* DelegatingViewController.swift */; };
+		4AA0E3F41D1344D400D0A5E0 /* GridLayoutBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7AEF0F1D0F6C3B00FAE7FB /* GridLayoutBuilder.swift */; };
+		4AA0E4101D13453900D0A5E0 /* GridLayoutSectionBuilderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0E40F1D13453900D0A5E0 /* GridLayoutSectionBuilderTest.swift */; };
 		4AA691061CF62A1700012293 /* TableRowStackBuilderTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA691051CF62A1700012293 /* TableRowStackBuilderTest.swift */; };
 		4AB48C271CC00EFF00F193C3 /* TextValueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB48C261CC00EFF00F193C3 /* TextValueCell.swift */; };
 		4AB48C431CC0108D00F193C3 /* TruncatingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB48C421CC0108D00F193C3 /* TruncatingLabel.swift */; };
@@ -1243,6 +1245,7 @@
 		4A88ECB11D09D91A00CFE099 /* TableLayoutStrategy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableLayoutStrategy.swift; sourceTree = "<group>"; };
 		4A88ECB41D0A0FB600CFE099 /* TableLayoutBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableLayoutBuilder.swift; sourceTree = "<group>"; };
 		4A9D2C2F1C9CCA3D00D75BBD /* DelegatingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DelegatingViewController.swift; sourceTree = "<group>"; };
+		4AA0E40F1D13453900D0A5E0 /* GridLayoutSectionBuilderTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridLayoutSectionBuilderTest.swift; sourceTree = "<group>"; };
 		4AA691051CF62A1700012293 /* TableRowStackBuilderTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableRowStackBuilderTest.swift; sourceTree = "<group>"; };
 		4AB48C261CC00EFF00F193C3 /* TextValueCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextValueCell.swift; sourceTree = "<group>"; };
 		4AB48C421CC0108D00F193C3 /* TruncatingLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TruncatingLabel.swift; sourceTree = "<group>"; };
@@ -2051,6 +2054,7 @@
 				4A0583291C9247A700F3D0E0 /* MockLayoutEngine.swift */,
 				4A08FCA81CF5275900038F7D /* TableLayoutSectionBuilderTest.swift */,
 				4AA691051CF62A1700012293 /* TableRowStackBuilderTest.swift */,
+				4AA0E40F1D13453900D0A5E0 /* GridLayoutSectionBuilderTest.swift */,
 				4A88ECAF1D09CDB000CFE099 /* LayoutSectionStackBuilderTest.swift */,
 				4A68AC5A1C88AEE300849185 /* DummyLayoutInfo.swift */,
 				4A68AC5B1C88AEE300849185 /* DummyLayoutMeasure.swift */,
@@ -3605,6 +3609,7 @@
 				4A68ACE81C88B0CE00849185 /* LayoutMetrics.swift in Sources */,
 				4A68ACC21C88B0CE00849185 /* UICollectionViewLayoutInvalidationContext-Extensions.swift in Sources */,
 				4A68ACC61C88B0CE00849185 /* CollectionLayoutEngine.swift in Sources */,
+				4AA0E3F41D1344D400D0A5E0 /* GridLayoutBuilder.swift in Sources */,
 				4A68ACE41C88B0CE00849185 /* LayoutInfo.swift in Sources */,
 				4AD52D571CC581DE00CDEF45 /* BasicLayoutSupplementaryItem.swift in Sources */,
 				4A68ACB81C88B0CE00849185 /* SegmentedCollectionDataSource.swift in Sources */,
@@ -3668,6 +3673,7 @@
 				4AD56F431CAC8BB300482393 /* CollectionSupplementaryView.swift in Sources */,
 				4A68ACF81C88B0CE00849185 /* StateMachine.swift in Sources */,
 				4A0582FB1C91E80200F3D0E0 /* UIEdgeInsets-Extensions.swift in Sources */,
+				4AA0E4101D13453900D0A5E0 /* GridLayoutSectionBuilderTest.swift in Sources */,
 				4A68ACBA1C88B0CE00849185 /* SegmentedCollectionDataSourceMetricsHelper.swift in Sources */,
 				4A0582FD1C9205CB00F3D0E0 /* SectionMetricsTest.swift in Sources */,
 				4A562ACC1C9C689C0072A570 /* ViewControllerDelegate.swift in Sources */,
