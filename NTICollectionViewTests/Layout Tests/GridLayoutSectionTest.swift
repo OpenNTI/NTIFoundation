@@ -19,7 +19,7 @@ class GridLayoutSectionTest: XCTestCase {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
 		layoutInfo = DummyLayoutInfo()
-		layoutSection = BasicGridLayoutSection()
+		layoutSection = GridLayoutSection()
     }
     
     override func tearDown() {

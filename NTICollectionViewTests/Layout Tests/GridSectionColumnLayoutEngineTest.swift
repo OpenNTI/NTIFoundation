@@ -11,7 +11,7 @@ import XCTest
 class GridSectionColumnLayoutEngineTest: XCTestCase {
     
 	func testLayout() {
-		var section = BasicGridLayoutSection()
+		var section = GridLayoutSection()
 		
 		let measure = DummyLayoutMeasure()
 		measure.supplementaryItemSize = CGSize(width: 20, height: 20)
