@@ -417,6 +417,7 @@
 		4A280DF31CC6E8F1001EDCAA /* GridSupplementaryItemBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A280DF21CC6E8F1001EDCAA /* GridSupplementaryItemBuilder.swift */; };
 		4A280DF41CC6E8F1001EDCAA /* GridSupplementaryItemBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A280DF21CC6E8F1001EDCAA /* GridSupplementaryItemBuilder.swift */; };
 		4A46D0311D145F5600C613C9 /* ContainerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A46D0301D145F5600C613C9 /* ContainerCollectionViewCell.swift */; };
+		4A46D04D1D1463C200C613C9 /* ContainerSupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A46D04C1D1463C200C613C9 /* ContainerSupplementaryView.swift */; };
 		4A51FF8D1CA49DBE000C6FE3 /* TabularControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A51FF8C1CA49DBE000C6FE3 /* TabularControlView.swift */; };
 		4A557CEE1CFE2E1A00F8A308 /* ImageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A557CED1CFE2E1A00F8A308 /* ImageDataSource.swift */; };
 		4A557D411CFF52D900F8A308 /* SemiEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A557D401CFF52D900F8A308 /* SemiEquatable.swift */; };
@@ -1159,6 +1160,7 @@
 		4A280DEF1CC6E7DB001EDCAA /* GridLayoutSectionBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridLayoutSectionBuilder.swift; sourceTree = "<group>"; };
 		4A280DF21CC6E8F1001EDCAA /* GridSupplementaryItemBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridSupplementaryItemBuilder.swift; sourceTree = "<group>"; };
 		4A46D0301D145F5600C613C9 /* ContainerCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerCollectionViewCell.swift; sourceTree = "<group>"; };
+		4A46D04C1D1463C200C613C9 /* ContainerSupplementaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerSupplementaryView.swift; sourceTree = "<group>"; };
 		4A51FF8C1CA49DBE000C6FE3 /* TabularControlView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabularControlView.swift; sourceTree = "<group>"; };
 		4A5454431B1630680033FA3A /* NSDate-NTIExtensionsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate-NTIExtensionsTest.m"; sourceTree = "<group>"; };
 		4A557CED1CFE2E1A00F8A308 /* ImageDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDataSource.swift; sourceTree = "<group>"; };
@@ -2199,6 +2201,7 @@
 				4A11C9FB1CA5949500CCDD2B /* ActionSheetControl.swift */,
 				4AFECA041CA5E0E400AF2D09 /* ActionSheetControlButton.swift */,
 				4A0582DB1C90C8F800F3D0E0 /* CollectionSupplementaryView.swift */,
+				4A46D04C1D1463C200C613C9 /* ContainerSupplementaryView.swift */,
 				4A0582F71C90CF3200F3D0E0 /* CollectionViewCell.swift */,
 				4A46D0301D145F5600C613C9 /* ContainerCollectionViewCell.swift */,
 				4AB48C261CC00EFF00F193C3 /* TextValueCell.swift */,
@@ -3493,6 +3496,7 @@
 				4A24B82C1CC809000053ED9B /* TableLayoutSection.swift in Sources */,
 				4A46D0311D145F5600C613C9 /* ContainerCollectionViewCell.swift in Sources */,
 				4A68ACE11C88B0CE00849185 /* LayoutRow.swift in Sources */,
+				4A46D04D1D1463C200C613C9 /* ContainerSupplementaryView.swift in Sources */,
 				4A68ACDD1C88B0CE00849185 /* GridSectionLayoutEngine.swift in Sources */,
 				4A68ACB91C88B0CE00849185 /* SegmentedCollectionDataSourceMetricsHelper.swift in Sources */,
 				4A620D8C1C8E148D0084B0A2 /* CollectionDataSourceController.swift in Sources */,
