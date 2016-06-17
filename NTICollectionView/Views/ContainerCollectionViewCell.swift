@@ -9,7 +9,7 @@
 import UIKit
 
 /// A `CollectionViewCell` whose `contentView` contains a single `View` subview pinned to its  `layoutMargins`.
-public class ContainerCollectionViewCell<View : UIView, FrameInitializable> : CollectionViewCell {
+public class ContainerCollectionViewCell<View : UIView where View : FrameInitializable> : CollectionViewCell {
 
 	/// The single subview of `contentView`.
 	///

@@ -9,7 +9,7 @@
 import UIKit
 
 /// A `CollectionSupplementaryView` which contains a `View` instance as its single subview.
-public class ContainerSupplementaryView<View : UIView, FrameInitializable> : CollectionSupplementaryView {
+public class ContainerSupplementaryView<View : UIView where View : FrameInitializable> : CollectionSupplementaryView {
 
 	/// The single subview of `contentView`.
 	///
