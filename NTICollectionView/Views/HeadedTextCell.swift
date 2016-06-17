@@ -16,6 +16,12 @@ public class HeadedTextCell: CollectionViewCell {
 	/// The `HeadedTextView` displayed by `self`.
 	public let headedTextView = HeadedTextView()
 	
+	public override var layoutMargins: UIEdgeInsets {
+		didSet {
+			contentView.layoutMargins = layoutMargins
+		}
+	}
+	
 	public override init(frame: CGRect) {
 		super.init(frame: frame)
 		commonInit()
@@ -26,6 +32,7 @@ public class HeadedTextCell: CollectionViewCell {
 	}
 	
 	private func commonInit() {
+		headedTextView.layoutMargins = .zero
 		headedTextView.translatesAutoresizingMaskIntoConstraints = false
 		contentView.addSubview(headedTextView)
 		
@@ -112,6 +119,12 @@ public class DupleHeadedTextCell : CollectionViewCell {
 		didSet {
 			headedTextView1.spacing = verticalSpacing
 			headedTextView2.spacing = verticalSpacing
+		}
+	}
+	
+	public override var layoutMargins: UIEdgeInsets {
+		didSet {
+			contentView.layoutMargins = layoutMargins
 		}
 	}
 	
