@@ -83,14 +83,14 @@ public class ComposedCollectionDataSourceMetricsHelper: CollectionDataSourceMetr
 	}
 	
 	public override func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
-		guard let mapping = composedDataSource.mappingForGlobalSection(sectionIndex) else {
-			return nil
-		}
-		let dataSource = mapping.dataSource
-		
 		guard var enclosingMetrics = super.snapshotMetricsForSectionAtIndex(sectionIndex) else {
 			return nil
 		}
+		
+		guard let mapping = composedDataSource.mappingForGlobalSection(sectionIndex) else {
+			return enclosingMetrics
+		}
+		let dataSource = mapping.dataSource
 		if let localSection = mapping.localSectionForGlobalSection(sectionIndex),
 			metrics = dataSource.snapshotMetricsForSectionAtIndex(localSection)  {
 				enclosingMetrics.applyValues(from: metrics)
