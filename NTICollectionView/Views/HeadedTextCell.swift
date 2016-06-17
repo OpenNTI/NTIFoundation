@@ -152,7 +152,7 @@ public class DupleHeadedTextCell : CollectionViewCell {
 		var constraints = [NSLayoutConstraint]()
 		
 		constraints += NSLayoutConstraint.constraintsWithVisualFormat("H:|-[headedText1]", options: [], metrics: metrics, views: views)
-		constraints += NSLayoutConstraint.constraintsWithVisualFormat("H:[headedText2]-|", options: [], metrics: metrics, views: views)
+		constraints += NSLayoutConstraint.constraintsWithVisualFormat("H:[headedText2]-(>=0)-|", options: [], metrics: metrics, views: views)
 		
 		horizontalSpacingConstraint = NSLayoutConstraint(item: headedTextView2, attribute: .Leading, relatedBy: .Equal, toItem: headedTextView1, attribute: .Trailing, multiplier: 1, constant: horizontalSpacing)
 		constraints.append(horizontalSpacingConstraint)
