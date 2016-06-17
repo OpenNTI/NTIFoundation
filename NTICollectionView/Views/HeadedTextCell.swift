@@ -79,7 +79,7 @@ public class HeadedTextSupplementaryView : CollectionSupplementaryView {
 // MARK: - HeadedTextView
 
 /// A `UIView` which displays header text above primary text.
-public class HeadedTextView : UIView {
+public class HeadedTextView : UIView, FrameInitializable {
 	
 	/// Displays the header text.
 	public let headerLabel = UILabel()
@@ -94,7 +94,7 @@ public class HeadedTextView : UIView {
 	
 	private var spacingConstraint: NSLayoutConstraint!
 	
-	public override init(frame: CGRect) {
+	public override required init(frame: CGRect) {
 		super.init(frame: frame)
 		commonInit()
 	}
