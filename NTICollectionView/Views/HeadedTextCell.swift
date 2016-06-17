@@ -46,6 +46,36 @@ public class HeadedTextCell: CollectionViewCell {
 
 }
 
+/// A `CollectionSupplementaryView` which displays a `HeadedTextView`.
+public class HeadedTextSupplementaryView : CollectionSupplementaryView {
+	
+	/// The `HeadedTextView` displayed by `self`.
+	public let headedTextView = HeadedTextView()
+	
+	public override init(frame: CGRect) {
+		super.init(frame: frame)
+		commonInit()
+	}
+	
+	public required init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
+	private func commonInit() {
+		headedTextView.layoutMargins = .zero
+		headedTextView.translatesAutoresizingMaskIntoConstraints = false
+		addSubview(headedTextView)
+		
+		let views = ["headedText": headedTextView]
+		let metrics: [String: NSNumber] = [:]
+		
+		for dimension in ["H", "V"] {
+			NSLayoutConstraint.activateConstraints(NSLayoutConstraint.constraintsWithVisualFormat("\(dimension):|-[headedText]-|", options: [], metrics: metrics, views: views))
+		}
+	}
+	
+}
+
 // MARK: - HeadedTextView
 
 /// A `UIView` which displays header text above primary text.
