@@ -234,6 +234,7 @@ public struct GridRowStackBuilder {
 				decorate(&row, atIndex: rows.count, using: metrics)
 				position.y = row.frame.maxY
 				rows.append(row)
+				position.y += metrics.rowSpacing
 				
 				row = makeRow()
 			}
@@ -271,6 +272,9 @@ public struct GridRowStackBuilder {
 		
 		if !row.items.isEmpty {
 			rows.append(row)
+		} else {
+			// Revert the last rowSpacing that was added
+			position.y -= metrics.rowSpacing
 		}
 		
 		return rows
