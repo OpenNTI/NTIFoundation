@@ -43,7 +43,7 @@ public struct SupplementaryItemStackBuilder<LayoutItemType : LayoutSupplementary
 			return nil
 		}
 		
-		var layoutItem = LayoutItemType.init(supplementaryItem: supplementaryItem)
+		var layoutItem = LayoutItemType(supplementaryItem: supplementaryItem)
 		
 		layoutItem.itemIndex = index
 		layoutItem.sectionIndex = description.sectionIndex
