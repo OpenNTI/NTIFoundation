@@ -277,25 +277,6 @@ public struct GridLayoutSection : LayoutSection, RowAlignedLayoutSectionBaseComp
 	}
 	
 	public mutating func add(inout row: LayoutRow) {
-		// Create the row separator if there isn't already one
-		if metrics.showsRowSeparator && row.rowSeparatorDecoration == nil {
-			var separatorDecoration = HorizontalSeparatorDecoration(elementKind: collectionElementKindRowSeparator, position: .bottom)
-			separatorDecoration.itemIndex = rows.count
-			separatorDecoration.sectionIndex = sectionIndex
-			separatorDecoration.color = metrics.separatorColor
-			separatorDecoration.zIndex = separatorZIndex
-			separatorDecoration.thickness = metrics.separatorWidth
-			let separatorInsets = metrics.separatorInsets
-			separatorDecoration.leftMargin = separatorInsets.left
-			separatorDecoration.rightMargin = separatorInsets.right
-			var rowFrame = row.frame
-			separatorDecoration.setContainerFrame(rowFrame, invalidationContext: nil)
-			
-			row.rowSeparatorDecoration = separatorDecoration
-			rowFrame.size.height += separatorDecoration.thickness
-			row.frame = rowFrame
-		}
-		
 		rowAlignedLayoutSectionBase.add(row)
 	}
 	
