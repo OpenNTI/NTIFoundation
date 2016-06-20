@@ -16,7 +16,11 @@ public struct SupplementaryItemStackBuilder<LayoutItemType : LayoutSupplementary
 		var positionBounds = layoutBounds
 		
 		for (index, supplementaryItem) in supplementaryItems.enumerate() {
-			guard let layoutItem = makeLayoutItem(for: supplementaryItem, atIndex: index, using: description, in: positionBounds) else {
+			let layoutItem = makeLayoutItem(for: supplementaryItem, atIndex: index, using: description, in: positionBounds)
+			
+			layoutItems.append(layoutItem)
+			
+			guard shouldDisplay(layoutItem) else {
 				continue
 			}
 			
@@ -25,25 +29,19 @@ public struct SupplementaryItemStackBuilder<LayoutItemType : LayoutSupplementary
 			if index < supplementaryItems.count - 1 {
 				positionBounds.origin.y += metrics.spacing
 			}
-			
-			layoutItems.append(layoutItem)
 		}
 		
 		return layoutItems
 	}
 	
-	func makeLayoutItem(for supplementaryItem: SupplementaryItem, atIndex index: Int, using description: SectionDescription, in layoutBounds: LayoutAreaBounds) -> LayoutItemType? {
-		guard description.numberOfItems > 0 || supplementaryItem.isVisibleWhileShowingPlaceholder else {
-			return nil
-		}
-		
-		var height = supplementaryItem.fixedHeight
-		
-		guard height > 0 && !supplementaryItem.isHidden else {
-			return nil
-		}
+	func makeLayoutItem(for supplementaryItem: SupplementaryItem, atIndex index: Int, using description: SectionDescription, in layoutBounds: LayoutAreaBounds) -> LayoutItemType {
 		
 		var layoutItem = LayoutItemType(supplementaryItem: supplementaryItem)
+		
+		guard shouldDisplay(supplementaryItem, using: description) else {
+			layoutItem.isHidden = true
+			return layoutItem
+		}
 		
 		layoutItem.itemIndex = index
 		layoutItem.sectionIndex = description.sectionIndex
@@ -51,6 +49,7 @@ public struct SupplementaryItemStackBuilder<LayoutItemType : LayoutSupplementary
 		layoutItem.applyValues(from: description.metrics)
 		
 		let origin = layoutBounds.origin
+		var height = supplementaryItem.fixedHeight
 		
 		layoutItem.frame = CGRect(x: origin.x, y: origin.y, width: layoutBounds.width, height: height)
 		
@@ -62,6 +61,18 @@ public struct SupplementaryItemStackBuilder<LayoutItemType : LayoutSupplementary
 		}
 		
 		return layoutItem
+	}
+	
+	func shouldDisplay(supplementaryItem: SupplementaryItem, using description: SectionDescription) -> Bool {
+		return (description.numberOfItems > 0
+			|| supplementaryItem.isVisibleWhileShowingPlaceholder)
+			&& supplementaryItem.fixedHeight > 0
+			&& !supplementaryItem.isHidden
+	}
+	
+	func shouldDisplay(layoutItem: LayoutSupplementaryItem) -> Bool {
+		return !layoutItem.isHidden
+			&& layoutItem.fixedHeight > 0
 	}
 	
 }
