@@ -116,7 +116,7 @@ public struct GridLayoutPlanBuilder {
 			let layoutItems = makeLayoutItems(for: headers, using: description, in: layoutBounds)
 			
 			for layoutItem in layoutItems {
-				contentBounds.origin.y += layoutItem.frame.maxY
+				contentBounds.origin.y += layoutItem.frame.height
 				layoutHeaders.append(layoutItem)
 			}
 		}
