@@ -20,6 +20,11 @@ class GridLayoutSectionBuilderTest: XCTestCase {
 		description.numberOfItems = 9
 		description.sectionIndex = 0
 		
+		var header = GridSupplementaryItem.makeHeader(supplementaryViewClass: CollectionSupplementaryView.self)
+		let headerHeight: CGFloat = 50
+		header.height = headerHeight
+		description.supplementaryItemsByKind = [UICollectionElementKindSectionHeader: [header]]
+		
 		let builder = GridLayoutSectionBuilder()
 		
 		let origin = CGPoint(x: 10, y: 10)
@@ -31,7 +36,11 @@ class GridLayoutSectionBuilderTest: XCTestCase {
 			return
 		}
 		
-		let expectedSectionSize = CGSize(width: width, height: 70)
+		let layoutHeader = section.supplementaryItems(of: UICollectionElementKindSectionHeader)[0]
+		XCTAssertEqual(layoutHeader.height!, headerHeight)
+		
+		let expectedSectionHeight = CGFloat(description.numberOfItems / metrics.numberOfColumns) * metrics.rowHeight! + metrics.padding.height + headerHeight
+		let expectedSectionSize = CGSize(width: width, height: expectedSectionHeight)
 		let expectedSectionFrame = CGRect(origin: origin, size: expectedSectionSize)
 		XCTAssert(section.frame == expectedSectionFrame, "Incorect section frame: expected \(expectedSectionFrame) but found \(section.frame)")
 		
