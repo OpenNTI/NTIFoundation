@@ -21,8 +21,6 @@ public struct GridLayoutSection : LayoutSection, RowAlignedLayoutSectionBaseComp
 	
 	public var rowAlignedLayoutSectionBase = RowAlignedLayoutSectionBase()
 	
-	public var items: [LayoutItem] = []
-	
 	// FIXME: Make sure this doesn't trigger when we're mutating the value
 	public var placeholderInfo: LayoutPlaceholder? {
 		didSet {
@@ -265,11 +263,7 @@ public struct GridLayoutSection : LayoutSection, RowAlignedLayoutSectionBaseComp
 	}
 	
 	public mutating func add(item: LayoutItem) {
-		var item = item
-		item.itemIndex = items.count
-		item.sectionIndex = sectionIndex
-		item.applyValues(from: metrics)
-		items.append(item)
+		
 	}
 	
 	public mutating func enumerateDecorations(using visitor: (inout LayoutDecoration) -> Void) {
@@ -307,7 +301,6 @@ public struct GridLayoutSection : LayoutSection, RowAlignedLayoutSectionBaseComp
 	
 	public mutating func reset() {
 		needsConfigureBackgroundAttributes = true
-		items.removeAll(keepCapacity: true)
 		supplementaryItemsByKind = [:]
 		rows.removeAll(keepCapacity: true)
 		columnSeparatorLayoutAttributes.removeAll(keepCapacity: true)
