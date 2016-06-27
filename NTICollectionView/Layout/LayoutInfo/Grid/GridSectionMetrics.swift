@@ -89,6 +89,32 @@ public protocol GridSectionMetricsProviding: SectionMetrics {
 	
 }
 
+extension GridSectionMetricsProviding {
+	
+	var supplementaryOrders: (headers: Int, footers: Int, leftAux: Int, rightAux: Int) {
+		var orders = (headers: Int.max, footers: Int.max, leftAux: Int.max, rightAux: Int.max)
+		for order in supplementaryOrdering {
+			switch order {
+			case .header(order: let order):
+				orders.headers = order
+			case .footer(order: let order):
+				orders.footers = order
+			case .leftAuxiliary(order: let order):
+				orders.leftAux = order
+			case .rightAuxiliary(order: let order):
+				orders.rightAux = order
+			}
+		}
+		return orders
+	}
+	
+	var orderedSupplementaryElementKinds: [String] {
+		let array = Array<GridSectionSupplementaryItemOrder>(supplementaryOrdering)
+		return array.sort().map { $0.elementKind }
+	}
+	
+}
+
 public struct GridSectionMetrics: GridSectionMetricsProviding {
 	
 	public static let hairline: CGFloat = 1.0 / UIScreen.mainScreen().scale
@@ -647,6 +673,19 @@ public enum GridSectionSupplementaryItemOrder: Hashable, Comparable {
 			return order
 		case .rightAuxiliary(order: let order):
 			return order
+		}
+	}
+	
+	public var elementKind: String {
+		switch self {
+		case .header(order: _):
+			return UICollectionElementKindSectionHeader
+		case .footer(order: _):
+			return UICollectionElementKindSectionFooter
+		case .leftAuxiliary(order: _):
+			return collectionElementKindLeftAuxiliaryItem
+		case .rightAuxiliary(order: _):
+			return collectionElementKindRightAuxiliaryItem
 		}
 	}
 	

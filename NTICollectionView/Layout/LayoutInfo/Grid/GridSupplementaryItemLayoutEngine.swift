@@ -171,24 +171,11 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 	}
 	
 	private var supplementaryOrders: (headers: Int, footers: Int, leftAux: Int, rightAux: Int) {
-		var orders = (headers: Int.max, footers: Int.max, leftAux: Int.max, rightAux: Int.max)
-		for order in supplementaryOrdering {
-			switch order {
-			case .header(order: let order):
-				orders.headers = order
-			case .footer(order: let order):
-				orders.footers = order
-			case .leftAuxiliary(order: let order):
-				orders.leftAux = order
-			case .rightAuxiliary(order: let order):
-				orders.rightAux = order
-			}
-		}
-		return orders
+		return metrics.supplementaryOrders
 	}
 	
 	private func planLayout() {
-		let orders = supplementaryOrders
+		let orders = metrics.supplementaryOrders
 		
 		let insetX = insetOrigin.x
 		headersMinX = orders.leftAux < orders.headers ? insetX + leftAuxiliaryColumnWidth : insetX
