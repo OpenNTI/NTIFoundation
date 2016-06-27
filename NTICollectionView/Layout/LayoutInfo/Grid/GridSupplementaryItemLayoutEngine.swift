@@ -253,7 +253,7 @@ public class GridSupplementaryItemLayoutEngine: NSObject, SupplementaryLayoutEng
 	
 	private func layoutFooters() {
 		position = footersOrigin
-		let sizing = LayoutSizingInfo(width: width, layoutMeasure: layoutMeasure)
+		let sizing = LayoutSizingInfo(width: footersWidth, layoutMeasure: layoutMeasure)
 		var footers = layoutSection.footers
 		layout(&footers, using: sizing)
 		layoutSection.footers = footers
