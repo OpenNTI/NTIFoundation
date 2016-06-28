@@ -665,14 +665,13 @@ public struct GridLayoutSection : LayoutSection, RowAlignedLayoutSectionBaseComp
 	// O(n^2)
 	private var attributesForDecorationsByKind: [String: [CollectionViewLayoutAttributes]] {
 		var attributesByKind: [String: [CollectionViewLayoutAttributes]] = [:]
-		let insetFrame = UIEdgeInsetsInsetRect(frame, metrics.contentInset)
 		
 		for (kind, decorations) in decorationsByKind {
 			for (index, decoration) in decorations.enumerate() {
 				var decoration = decoration
 				decoration.itemIndex = index
 				decoration.sectionIndex = sectionIndex
-				decoration.setContainerFrame(insetFrame, invalidationContext: nil)
+				decoration.setContainerFrame(frame, invalidationContext: nil)
 				let attributes = decoration.layoutAttributes
 				attributesByKind.append(attributes, to: kind)
 			}
