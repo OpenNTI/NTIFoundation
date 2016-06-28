@@ -143,6 +143,8 @@ public protocol LayoutStrategy {
 	/// Updates and invalidates the size of a supplementary item, also adjusting the position of any content affected by the size change.
 	func setSize(size: CGSize, forElementOfKind kind: String, at indexPath: NSIndexPath, inout in data: LayoutData, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
+	func targetContentOffset(forProposedContentOffset proposed: CGPoint, updates: CollectionUpdateProvider, data: LayoutData) -> CGPoint
+	
 	func targetLayoutHeight(forProposedLayoutHeight proposed: CGFloat, using data: LayoutData) -> CGFloat
 	
 	/// Updates any items whose behavior is dependent on the content offset.

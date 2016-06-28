@@ -139,6 +139,29 @@ public struct TableLayoutStrategy : LayoutStrategy {
 		resultingOffset.y += deltaY
 	}
 	
+	public func targetContentOffset(forProposedContentOffset proposed: CGPoint, updates: CollectionUpdateProvider, data: LayoutData) -> CGPoint {
+		guard let globalSection = data.globalSection,
+			let insertedIndex = updates.insertedSections.first,
+			let insertedSection = data.section(atIndex: insertedIndex) else {
+				return proposed
+		}
+		
+		var target = proposed
+		
+		let pinnableHeight = height(of: headers(pinnable: true, in: globalSection))
+		let nonPinnableHeight = height(of: headers(pinnable: false, in: globalSection))
+		let insertedSectionY = insertedSection.frame.minY
+		
+		let isInsertedSectionHidden = proposed.y + pinnableHeight > insertedSectionY
+		
+		if isInsertedSectionHidden {
+			// Need to scroll the section into view
+			target.y = max(nonPinnableHeight, insertedSectionY - pinnableHeight)
+		}
+		
+		return target
+	}
+	
 	public func targetLayoutHeight(forProposedLayoutHeight proposed: CGFloat, using data: LayoutData) -> CGFloat {
 		guard let globalSection = data.globalSection else {
 			return proposed
