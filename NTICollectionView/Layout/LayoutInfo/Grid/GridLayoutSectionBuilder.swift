@@ -74,8 +74,11 @@ public struct GridLayoutSectionBuilder: LayoutSectionBuilder {
 			let rows = GridRowStackBuilder().makeLayoutRows(using: description, in: cellBounds)
 			
 			for row in rows {
-				positionBounds.origin.y += row.frame.height
 				section.add(row)
+			}
+			
+			if let lastRow = rows.last {
+				positionBounds.origin.y = lastRow.frame.maxY
 			}
 			
 			positionBounds.origin.y += margins.bottom
