@@ -155,6 +155,9 @@ public struct GridLayoutPlanBuilder {
 			contentBounds.width -= rightItemBounds.width
 		}
 		
+		contentBounds.origin.x += metrics.padding.left
+		contentBounds.width -= metrics.padding.width
+		
 		return (headers: layoutHeaders, leftItems: layoutLeftItems, rightItems: layoutRightItems, contentBounds: contentBounds)
 	}
 	
