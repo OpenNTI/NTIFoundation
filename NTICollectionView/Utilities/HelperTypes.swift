@@ -22,3 +22,6 @@ public protocol FrameInitializable {
 	init(frame: CGRect)
 	
 }
+
+extension UIImageView : FrameInitializable {
+}
