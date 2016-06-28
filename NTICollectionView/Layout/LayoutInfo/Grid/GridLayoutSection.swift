@@ -107,10 +107,6 @@ public struct GridLayoutSection : LayoutSection, RowAlignedLayoutSectionBaseComp
 	public var layoutAttributes: [CollectionViewLayoutAttributes] {
 		var layoutAttributes: [CollectionViewLayoutAttributes] = []
 		
-		if let backgroundAttributes = backgroundAttributesForReading {
-			layoutAttributes.append(backgroundAttributes)
-		}
-		
 		if let contentBackgroundAttributes = self.contentBackgroundAttributes {
 			layoutAttributes.append(contentBackgroundAttributes)
 		}
@@ -177,47 +173,6 @@ public struct GridLayoutSection : LayoutSection, RowAlignedLayoutSectionBaseComp
 		return sectionSeparatorLayoutAttributes[sectionSeparatorBottom] != nil
 	}
 	
-	private var _backgroundAttributes = CollectionViewLayoutAttributes(forDecorationViewOfKind: collectionElementKindGlobalHeaderBackground, withIndexPath: NSIndexPath(index: 0))
-	
-	public var backgroundAttributesForReading: CollectionViewLayoutAttributes? {
-		guard shouldShowBackground else {
-			return nil
-		}
-		
-		return _backgroundAttributes
-	}
-	
-	// This is updated by `updateSpecialItemsWithContentOffset`
-	public var backgroundAttributesForWriting: CollectionViewLayoutAttributes? {
-		mutating get {
-			guard shouldShowBackground else {
-				return nil
-			}
-			
-			if needsConfigureBackgroundAttributes {
-				_backgroundAttributes.frame = frame
-				_backgroundAttributes.unpinnedOrigin = frame.origin
-				_backgroundAttributes.zIndex = defaultZIndex
-				_backgroundAttributes.isPinned = false
-				_backgroundAttributes.hidden = false
-				_backgroundAttributes.backgroundColor = metrics.backgroundColor
-				needsConfigureBackgroundAttributes = false
-			}
-			
-			_backgroundAttributes = _backgroundAttributes.copy() as! CollectionViewLayoutAttributes
-			
-			return _backgroundAttributes
-		}
-	}
-	
-	private var needsConfigureBackgroundAttributes = true
-	
-	
-	private var shouldShowBackground: Bool {
-		// Only have background attribute on global section
-		return sectionIndex == globalSectionIndex && metrics.backgroundColor != nil
-	}
-	
 	public var contentBackgroundAttributes: CollectionViewLayoutAttributes? {
 //		if let attributes = _contentBackgroundAttributes {
 //			return attributes
@@ -281,7 +236,6 @@ public struct GridLayoutSection : LayoutSection, RowAlignedLayoutSectionBaseComp
 	}
 	
 	public mutating func reset() {
-		needsConfigureBackgroundAttributes = true
 		supplementaryItemsByKind = [:]
 		rows.removeAll(keepCapacity: true)
 		columnSeparatorLayoutAttributes.removeAll(keepCapacity: true)
@@ -329,11 +283,6 @@ public struct GridLayoutSection : LayoutSection, RowAlignedLayoutSectionBaseComp
 		
 		enumerateDecorations { (inout decoration: LayoutDecoration) in
 			decoration.setContainerFrame(frame, invalidationContext: invalidationContext)
-		}
-		
-		if let backgroundAttributes = self.backgroundAttributesForReading {
-			backgroundAttributes.frame = CGRectOffset(backgroundAttributes.frame, offset.x, offset.y)
-			invalidationContext?.invalidateDecorationElementsOfKind(backgroundAttributes.representedElementKind!, atIndexPaths: [backgroundAttributes.indexPath])
 		}
 		
 		if let contentBackgroundAttributes = self.contentBackgroundAttributes {
@@ -636,8 +585,6 @@ public struct GridLayoutSection : LayoutSection, RowAlignedLayoutSectionBaseComp
 			}
 			let rowInfo = rows[itemIndex]
 			return rowInfo.rowSeparatorLayoutAttributes
-		case collectionElementKindGlobalHeaderBackground:
-			return backgroundAttributesForReading
 		case collectionElementKindContentBackground:
 			return contentBackgroundAttributes
 		default:
@@ -654,7 +601,6 @@ public struct GridLayoutSection : LayoutSection, RowAlignedLayoutSectionBaseComp
 		attributes[collectionElementKindColumnSeparator] = columnSeparatorLayoutAttributes
 		attributes[collectionElementKindSectionSeparator] = Array(sectionSeparatorLayoutAttributes.values)
 		attributes[collectionElementKindRowSeparator] = rows.flatMap { $0.rowSeparatorLayoutAttributes }
-		attributes[collectionElementKindGlobalHeaderBackground] = [backgroundAttributesForReading].flatMap { $0 }
 		attributes[collectionElementKindContentBackground] = [contentBackgroundAttributes].flatMap { $0 }
 		
 		attributes.appendContents(of: attributesForDecorationsByKind)
