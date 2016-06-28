@@ -488,7 +488,8 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 			}
 			
 			context.invalidateSupplementaryElementsOfKind(kind, atIndexPaths: indexPaths)
-			// FIXME: Do we need to invalidate the layout here?
+			
+			collectionView.collectionViewLayout.invalidateLayoutWithContext(context)
 		})
 	}
 	
