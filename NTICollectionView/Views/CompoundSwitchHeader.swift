@@ -31,6 +31,8 @@ public class CompoundSwitchHeader: PinnableHeaderView {
 	}
 	
 	private func commonInit() {
+		clipsToBounds = false
+		
 		leftLabel.translatesAutoresizingMaskIntoConstraints = false
 		leftLabel.setContentHuggingPriority(UILayoutPriorityRequired, forAxis: .Vertical)
 		addSubview(leftLabel)
@@ -45,7 +47,7 @@ public class CompoundSwitchHeader: PinnableHeaderView {
 		let views = ["left": leftLabel, "right": rightLabel, "switch": actionSwitch]
 		var constraints = [NSLayoutConstraint]()
 		
-		constraints += NSLayoutConstraint.constraintsWithVisualFormat("H:|-[left]-(>=0)-[switch]-[right]-|", options: [], metrics: nil, views: views)
+		constraints += NSLayoutConstraint.constraintsWithVisualFormat("H:|-[left]-(>=0)-[right]-[switch]-|", options: [], metrics: nil, views: views)
 		
 		for key in ["left", "right"] {
 			constraints += NSLayoutConstraint.constraintsWithVisualFormat("V:|-[\(key)]", options: [], metrics: nil, views: views)
@@ -55,14 +57,4 @@ public class CompoundSwitchHeader: PinnableHeaderView {
 		
 		NSLayoutConstraint.activateConstraints(constraints)
 	}
-	
-	public override func layoutSubviews() {
-		super.layoutSubviews()
-		
-		// FIXME: This is a hack and a better solution should be implemented
-		// Allows us to draw the full switch without having to be at least as tall as it.
-		// However, user interaction is still clipped to bounds
-		clipsToBounds = false
-	}
-	
 }
