@@ -696,7 +696,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	
 	public override func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
 		layoutLog("\(#function) rect=\(rect)")
-		guard let collectionView = self.collectionView else {
+		guard layoutInfo != nil, let collectionView = self.collectionView else {
 			return nil
 		}
 		
@@ -824,7 +824,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	public override func invalidationContextForBoundsChange(newBounds: CGRect) -> UICollectionViewLayoutInvalidationContext {
 		let context = super.invalidationContextForBoundsChange(newBounds)
 		
-		guard let collectionView = self.collectionView else {
+		guard layoutInfo != nil, let collectionView = self.collectionView else {
 			return context
 		}
 		
