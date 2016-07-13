@@ -115,7 +115,7 @@ public class ShadowRegistrar: NSObject {
 		}
 		
 		guard let reusableView = view else {
-			preconditionFailure("We must have a view by this point.")
+			preconditionFailure("We must have a view by this point; identifier = \(identifier)")
 		}
 		
 		shadowRegistration.reusableView = reusableView
