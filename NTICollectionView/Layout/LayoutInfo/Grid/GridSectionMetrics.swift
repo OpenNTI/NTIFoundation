@@ -1,5 +1,5 @@
 //
-//  GridSectionMetrics.swift
+//  GridSectionMetricsProviding.swift
 //  NTICollectionView
 //
 //  Created by Bryan Hoke on 2/16/16.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol GridSectionMetrics: SectionMetrics {
+public protocol GridSectionMetricsProviding: SectionMetrics {
 	
 	/// The type-default order in which each grid supplementary element kind is laid out.
 	static var defaultSupplementaryOrdering: Set<GridSectionSupplementaryItemOrder> { get }
@@ -22,7 +22,7 @@ public protocol GridSectionMetrics: SectionMetrics {
 	/// An optional fixed width that can be used to size each column.
 	var fixedColumnWidth: CGFloat? { get set }
 	
-	/// The spacing between rows
+	/// The spacing between rows.
 	var rowSpacing: CGFloat { get set }
 	
 	/// The minimum horizontal spacing between items.
@@ -47,6 +47,9 @@ public protocol GridSectionMetrics: SectionMetrics {
 	
 	/// Layout margins for cells in this section.
 	var layoutMargins: UIEdgeInsets { get set }
+	
+	/// The width of separators that are drawn.
+	var separatorWidth: CGFloat { get set }
 	
 	/// Whether a column separator should be drawn. Default is `true`.
 	var showsColumnSeparator: Bool { get set }
@@ -86,7 +89,35 @@ public protocol GridSectionMetrics: SectionMetrics {
 	
 }
 
-public struct BasicGridSectionMetrics: GridSectionMetrics {
+extension GridSectionMetricsProviding {
+	
+	var supplementaryOrders: (headers: Int, footers: Int, leftAux: Int, rightAux: Int) {
+		var orders = (headers: Int.max, footers: Int.max, leftAux: Int.max, rightAux: Int.max)
+		for order in supplementaryOrdering {
+			switch order {
+			case .header(order: let order):
+				orders.headers = order
+			case .footer(order: let order):
+				orders.footers = order
+			case .leftAuxiliary(order: let order):
+				orders.leftAux = order
+			case .rightAuxiliary(order: let order):
+				orders.rightAux = order
+			}
+		}
+		return orders
+	}
+	
+	var orderedSupplementaryElementKinds: [String] {
+		let array = Array<GridSectionSupplementaryItemOrder>(supplementaryOrdering)
+		return array.sort().map { $0.elementKind }
+	}
+	
+}
+
+public struct GridSectionMetrics: GridSectionMetricsProviding {
+	
+	public static let hairline: CGFloat = 1.0 / UIScreen.mainScreen().scale
 	
 	public static var defaultSupplementaryOrdering: Set<GridSectionSupplementaryItemOrder> = [.header(order: 0), .footer(order: 1), .leftAuxiliary(order: 2), .rightAuxiliary(order: 3)]
 	
@@ -127,30 +158,35 @@ public struct BasicGridSectionMetrics: GridSectionMetrics {
 		}
 	}
 	
+	/// The spacing between rows.
 	public var rowSpacing: CGFloat = 0 {
 		didSet {
 			setFlag("rowSpacing")
 		}
 	}
 	
+	/// The minimum horizontal spacing between items.
 	public var minimumInteritemSpacing: CGFloat = 0 {
 		didSet {
 			setFlag("minimumInteritemSpacing")
 		}
 	}
 	
+	/// The width of the left auxiliary column.
 	public var leftAuxiliaryColumnWidth: CGFloat = 0 {
 		didSet {
 			setFlag("leftAuxiliaryColumnWidth")
 		}
 	}
 	
+	/// The width of the right auxiliary column.
 	public var rightAuxiliaryColumnWidth: CGFloat = 0 {
 		didSet {
 			setFlag("rightAuxiliaryColumnWidth")
 		}
 	}
 	
+	/// The spacing between items in the auxiliary columns.
 	public var auxiliaryColumnSpacing: CGFloat = 0 {
 		didSet {
 			setFlag("auxiliaryColumnSpacing")
@@ -171,8 +207,19 @@ public struct BasicGridSectionMetrics: GridSectionMetrics {
 		}
 	}
 	
-	/// Layout margins for cells in this section. When not set (e.g. UIEdgeInsetsZero), the default value of the theme will be used, listLayoutMargins.
-	public var layoutMargins = UIEdgeInsetsZero
+	/// Layout margins for cells in this section.
+	public var layoutMargins = UIEdgeInsetsZero {
+		didSet {
+			setFlag("layoutMargins")
+		}
+	}
+	
+	/// The width of separators that are drawn.
+	public var separatorWidth: CGFloat = hairline {
+		didSet {
+			setFlag("separatorWidth")
+		}
+	}
 	
 	/// Whether a column separator should be drawn. Default is `true`.
 	public var showsColumnSeparator = true {
@@ -256,7 +303,7 @@ public struct BasicGridSectionMetrics: GridSectionMetrics {
 	public var cellLayoutOrder: ItemLayoutOrder = .LeadingToTrailing
 	
 	public func isEqual(to other: LayoutMetrics) -> Bool {
-		guard let other = other as? BasicGridSectionMetrics else {
+		guard let other = other as? GridSectionMetrics else {
 			return false
 		}
 		
@@ -272,6 +319,7 @@ public struct BasicGridSectionMetrics: GridSectionMetrics {
 		&& other.auxiliaryColumnSpacing == auxiliaryColumnSpacing
 		&& other.numberOfColumns == numberOfColumns
 		&& other.padding == padding
+		&& other.separatorWidth == separatorWidth
 		&& other.showsColumnSeparator == showsColumnSeparator
 		&& other.separatorInsets == separatorInsets
 		&& other.backgroundColor == backgroundColor
@@ -308,7 +356,7 @@ public struct BasicGridSectionMetrics: GridSectionMetrics {
 			cornerRadius = sectionMetrics.cornerRadius
 		}
 		
-		guard let gridMetrics = metrics as? GridSectionMetrics else {
+		guard let gridMetrics = metrics as? GridSectionMetricsProviding else {
 			return
 		}
 		separatorInsets = gridMetrics.separatorInsets
@@ -352,6 +400,12 @@ public struct BasicGridSectionMetrics: GridSectionMetrics {
 		}
 		if metrics.definesMetric("padding") {
 			padding = gridMetrics.padding
+		}
+		if metrics.definesMetric("layoutMargins") {
+			layoutMargins = gridMetrics.layoutMargins
+		}
+		if metrics.definesMetric("separatorWidth") {
+			separatorWidth = gridMetrics.separatorWidth
 		}
 		if metrics.definesMetric("showsColumnSeparator") {
 			showsColumnSeparator = gridMetrics.showsColumnSeparator
@@ -400,9 +454,9 @@ public struct BasicGridSectionMetrics: GridSectionMetrics {
 	
 }
 
-public protocol GridSectionMetricsOwning: SectionMetricsOwning, GridSectionMetrics {
+public protocol GridSectionMetricsOwning: SectionMetricsOwning, GridSectionMetricsProviding {
 	
-	var metrics: GridSectionMetrics { get set }
+	var metrics: GridSectionMetricsProviding { get set }
 	
 }
 
@@ -619,6 +673,19 @@ public enum GridSectionSupplementaryItemOrder: Hashable, Comparable {
 			return order
 		case .rightAuxiliary(order: let order):
 			return order
+		}
+	}
+	
+	public var elementKind: String {
+		switch self {
+		case .header(order: _):
+			return UICollectionElementKindSectionHeader
+		case .footer(order: _):
+			return UICollectionElementKindSectionFooter
+		case .leftAuxiliary(order: _):
+			return collectionElementKindLeftAuxiliaryItem
+		case .rightAuxiliary(order: _):
+			return collectionElementKindRightAuxiliaryItem
 		}
 	}
 	

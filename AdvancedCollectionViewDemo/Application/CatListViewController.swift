@@ -23,9 +23,9 @@ class CatListViewController: CollectionViewController, SegmentedCollectionDataSo
 		configureAllCatsDataSource()
 		configureFavoriteCatsDataSource()
 		
-		let metrics = GridDataSourceSectionMetrics()
+		var metrics = GridDataSourceSectionMetrics()
 		
-		var gridMetrics = BasicGridSectionMetrics()
+		var gridMetrics = GridSectionMetrics()
 		gridMetrics.estimatedRowHeight = 44
 		gridMetrics.showsRowSeparator = true
 		gridMetrics.separatorInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
@@ -60,7 +60,7 @@ class CatListViewController: CollectionViewController, SegmentedCollectionDataSo
 		favoriteCatsDataSource.errorPlaceholder = BasicDataSourcePlaceholder(title: "Unable to Load Favorites", message: "A problem with the network prevented loading your favorite cats. Please check your network settings.", image: nil)
 	}
 	
-	func segmentedCollectionDataSourceDidChangeSelectedDataSource(segmentedCollectionDataSource: SegmentedCollectionDataSourceProtocol) {
+	func segmentedCollectionDataSourceDidChangeSelectedDataSource(segmentedCollectionDataSource: SegmentedCollectionDataSource) {
 		guard let dataSource = segmentedCollectionDataSource.selectedDataSource else {
 			return
 		}

@@ -19,6 +19,7 @@ public class GridLayoutEngine: NSObject, SupplementaryLayoutEngine {
 	
 	public var pinnableHeaders: [LayoutSupplementaryItem] = []
 	public var nonPinnableHeaders: [LayoutSupplementaryItem] = []
+	public var supplementaryItems: [LayoutSupplementaryItem] = []
 	
 	private var sizing: LayoutSizing!
 	private var invalidationContext: UICollectionViewLayoutInvalidationContext?
@@ -34,9 +35,10 @@ public class GridLayoutEngine: NSObject, SupplementaryLayoutEngine {
 		
 		layoutSectionInfo()
 		
-		if let globalSection = layoutInfo.sectionAtIndex(GlobalSectionIndex) {
-			let globalSize = CGSize(width: layoutInfo.width, height: position.y - origin.y)
+		if var globalSection = layoutInfo.sectionAtIndex(globalSectionIndex) {
+			let globalSize = CGSize(width: self.layoutInfo.width, height: self.position.y - origin.y)
 			globalSection.frame = CGRect(origin: origin, size: globalSize)
+			layoutInfo.setSection(globalSection, at: globalSectionIndex)
 		}
 		
 		return position
@@ -47,6 +49,18 @@ public class GridLayoutEngine: NSObject, SupplementaryLayoutEngine {
 		position = engine.layoutWithOrigin(position, layoutSizing: sizing, invalidationContext: invalidationContext)
 		pinnableHeaders += engine.pinnableHeaders
 		nonPinnableHeaders += engine.nonPinnableHeaders
+		supplementaryItems += engine.supplementaryItems
+		
+		if let supplementaryEngine = engine as? GridSupplementaryItemLayoutEngine {
+			layoutInfo.setSection(supplementaryEngine.layoutSection, at: globalSectionIndex)
+			
+			if let composedEngine = supplementaryEngine.innerLayoutEngine as? ComposedGridSectionLayoutEngine {
+				replaceSections(from: composedEngine)
+			}
+		}
+		else if let composedEngine = engine as? ComposedGridSectionLayoutEngine {
+			replaceSections(from: composedEngine)
+		}
 	}
 	
 	private func makeLayoutEngine() -> SupplementaryLayoutEngine {
@@ -54,7 +68,7 @@ public class GridLayoutEngine: NSObject, SupplementaryLayoutEngine {
 	}
 	
 	private func makeGlobalSectionLayoutEngine() -> SupplementaryLayoutEngine? {
-		guard let globalSection = layoutInfo.sectionAtIndex(GlobalSectionIndex) as? GridLayoutSection else {
+		guard let globalSection = layoutInfo.sectionAtIndex(globalSectionIndex) as? GridLayoutSection else {
 			return nil
 		}
 		let sectionsLayoutEngine = makeSectionsLayoutEngine()
@@ -64,15 +78,21 @@ public class GridLayoutEngine: NSObject, SupplementaryLayoutEngine {
 	private func makeSectionsLayoutEngine() -> SupplementaryLayoutEngine {
 		return ComposedGridSectionLayoutEngine(sections: sections)
 	}
-	private var sections: [LayoutSection] {
-		var sections: [LayoutSection] = []
+	private var sections: [GridLayoutSection] {
+		var sections: [GridLayoutSection] = []
 		for i in 0..<(layoutInfo.numberOfSections) {
-			guard let section = layoutInfo.sectionAtIndex(i) else {
+			guard let section = layoutInfo.sectionAtIndex(i) as? GridLayoutSection else {
 				continue
 			}
 			sections.append(section)
 		}
 		return sections
+	}
+	
+	private func replaceSections(from layoutEngine: ComposedGridSectionLayoutEngine) {
+		for (index, section) in layoutEngine.sections.enumerate() {
+			layoutInfo.setSection(section, at: index)
+		}
 	}
 	
 }

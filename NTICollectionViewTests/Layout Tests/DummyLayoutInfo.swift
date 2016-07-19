@@ -34,12 +34,24 @@ class DummyLayoutInfo: NSObject, LayoutInfo {
 	
 	var sections: [LayoutSection] = []
 	
-	func enumerateSections(block: (sectionIndex: Int, sectionInfo: LayoutSection, stop: inout Bool) -> Void) {
+	func mutateSection(at index: Int, using mutator: (inout LayoutSection) -> Void) {
+		
+	}
+	
+	func mutateItem(at indexPath: NSIndexPath, using mutator: (inout LayoutItem) -> Void) {
+		
+	}
+	
+	func enumerateSections(block: (sectionIndex: Int, inout sectionInfo: LayoutSection, stop: inout Bool) -> Void) {
 		
 	}
 	
 	func sectionAtIndex(sectionIndex: Int) -> LayoutSection? {
 		return sections[sectionIndex]
+	}
+	
+	func setSection(section: LayoutSection, at sectionIndex: Int) {
+		sections[sectionIndex] = section
 	}
 	
 	func add(section: LayoutSection, sectionIndex: Int) {
@@ -74,15 +86,15 @@ class DummyLayoutInfo: NSObject, LayoutInfo {
 		
 	}
 	
-	func layoutAttributesForCell(at indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+	func layoutAttributesForCell(at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
 		return nil
 	}
 	
-	func layoutAttributesForDecorationViewOfKind(kind: String, at indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+	func layoutAttributesForDecorationViewOfKind(kind: String, at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
 		return nil
 	}
 	
-	func layoutAttributesForSupplementaryElementOfKind(kind: String, at indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+	func layoutAttributesForSupplementaryElementOfKind(kind: String, at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
 		return nil
 	}
 	

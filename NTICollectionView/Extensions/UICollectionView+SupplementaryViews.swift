@@ -8,9 +8,6 @@
 
 import UIKit
 
-private var ShouldUseNative = false
-private var OnceToken = 0
-
 public protocol CollectionViewSupplementaryViewTracking: NSObjectProtocol {
 	
 	func collectionView(collectionView: UICollectionView, visibleViewForSupplementaryElementOfKind kind: String, at indexPath: NSIndexPath) -> UICollectionReusableView?
@@ -18,6 +15,10 @@ public protocol CollectionViewSupplementaryViewTracking: NSObjectProtocol {
 }
 
 extension UICollectionView {
+	
+	public func register(item: SupplementaryItem) {
+		registerClass(item.supplementaryViewClass, forSupplementaryViewOfKind: item.elementKind, withReuseIdentifier: item.reuseIdentifier)
+	}
 	
 	public func _supplementaryViewOfKind(kind: String, at indexPath: NSIndexPath) -> UICollectionReusableView? {
 		guard #available(iOS 9.0, *) else {

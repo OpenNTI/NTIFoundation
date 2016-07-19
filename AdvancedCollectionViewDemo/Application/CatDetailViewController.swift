@@ -36,8 +36,7 @@ class CatDetailViewController: CollectionViewController {
 		dataSource.add(detailDataSource)
 		dataSource.add(sightingDataSource)
 		
-		let globalHeader = BasicGridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
-		dataSource.add(globalHeader, forKey: "globalHeader")
+		var globalHeader = GridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
 		globalHeader.isVisibleWhileShowingPlaceholder = true
 		globalHeader.estimatedHeight = 110
 		globalHeader.supplementaryViewClass = AAPLCatDetailHeader.self
@@ -47,20 +46,22 @@ class CatDetailViewController: CollectionViewController {
 			}
 			headerView.configureWithCat(self.cat)
 		}
+		dataSource.add(globalHeader, forKey: "globalHeader")
 		
-		let segmentedHeader = GridSegmentedControlHeader()
+		var segmentedHeader = GridSupplementaryItem(elementKind: UICollectionElementKindSectionHeader)
 		segmentedHeader.supplementaryViewClass = AAPLSegmentedHeaderView.self
 		segmentedHeader.showsSeparator = true
+		segmentedHeader.isVisibleWhileShowingPlaceholder = true
+		segmentedHeader.shouldPin = true
 		segmentedHeader.configure { (view, dataSource, indexPath) in
 			guard let dataSource = dataSource as? SegmentedCollectionDataSource,
 				headerView = view as? AAPLSegmentedHeaderView else {
 					return
 			}
 			let segmentedControl = headerView.segmentedControl
-			segmentedHeader.segmentedControl = segmentedControl
 			dataSource.configure(segmentedControl)
 		}
-		dataSource.segmentedControlHeader = segmentedHeader
+		dataSource.add(segmentedHeader, forKey: "segmentedHeader")
 		
 		collectionView?.dataSource = dataSource
     }
@@ -82,8 +83,8 @@ class CatDetailViewController: CollectionViewController {
 		
 		dataSource.noContentPlaceholder = BasicDataSourcePlaceholder(title: "No Sightings", message: "This cat has not been sighted recently.", image: nil)
 		
-		let metrics = GridDataSourceSectionMetrics()
-		var gridMetrics = BasicGridSectionMetrics()
+		var metrics = GridDataSourceSectionMetrics()
+		var gridMetrics = GridSectionMetrics()
 		gridMetrics.showsRowSeparator = true
 		gridMetrics.separatorInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
 		gridMetrics.estimatedRowHeight = 60

@@ -8,7 +8,7 @@
 
 import NTICollectionView
 
-class CatListDataSource: BasicCollectionDataSource {
+class CatListDataSource : BasicCollectionDataSource<AAPLCat> {
 	
 	override init() {
 		super.init()
@@ -69,7 +69,7 @@ class CatListDataSource: BasicCollectionDataSource {
 	
 	override func collectionView(collectionView: UICollectionView, configure cell: UICollectionViewCell, `for` indexPath: NSIndexPath) {
 		guard let cell = cell as? AAPLBasicCell,
-			cat = item(at: indexPath) as? AAPLCat else {
+			cat = value(at: indexPath) else {
 				return
 		}
 		cell.style = .Subtitle
@@ -112,6 +112,16 @@ class CatListDataSource: BasicCollectionDataSource {
 		} else {
 			AAPLDataAccessManager.sharedManager().fetchCatListWithCompletionHandler(handler)
 		}
+	}
+	
+	// MARK: - Drag reorder support
+	
+	override func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath) -> Bool {
+		return true
+	}
+	
+	override func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath, to destinationIndexPath: NSIndexPath) -> Bool {
+		return true
 	}
 	
 }

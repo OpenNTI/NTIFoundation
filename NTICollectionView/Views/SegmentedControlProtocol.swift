@@ -14,6 +14,8 @@ public protocol SegmentedControlProtocol: class {
 	
 	var userInteractionEnabled: Bool { get set }
 	
+	var numberOfSegments: Int { get }
+	
 	weak var segmentedControlDelegate: SegmentedControlDelegate? { get set }
 	
 	func removeAllSegments()
@@ -53,21 +55,6 @@ public protocol SegmentedControlSupplementaryItem: SupplementaryItem {
 	
 }
 
-public class GridSegmentedControlHeader: BasicGridSupplementaryItem, SegmentedControlSupplementaryItem {
-	
-	public init() {
-		super.init(elementKind: UICollectionElementKindSectionHeader)
-	}
-	
-	public convenience init(segmentedControl: SegmentedControlProtocol) {
-		self.init()
-		self.segmentedControl = segmentedControl
-	}
-	
-	public var segmentedControl: SegmentedControlProtocol!
-	
-}
-
 public class SegmentedControl: UISegmentedControl, SegmentedControlView {
 	
 	deinit {
@@ -92,6 +79,13 @@ public class SegmentedControl: UISegmentedControl, SegmentedControlView {
 		addTarget(self, action: #selector(SegmentedControl.segmentedControlDidChangeValue), forControlEvents: .ValueChanged)
 	}
 	
+	public var resizesSegmentWidthsByContent = false {
+		didSet {
+			guard resizesSegmentWidthsByContent && !oldValue else { return }
+			resizeSegmentWidthsByContent()
+		}
+	}
+	
 	public weak var segmentedControlDelegate: SegmentedControlDelegate?
 	
 	@objc public func segmentedControlDidChangeValue() {
@@ -106,4 +100,42 @@ public class SegmentedControl: UISegmentedControl, SegmentedControlView {
 		segmentedControlDelegate = nil
 	}
 	
+	public override func setTitle(title: String?, forSegmentAtIndex segment: Int) {
+		super.setTitle(title, forSegmentAtIndex: segment)
+		
+		if resizesSegmentWidthsByContent {
+			resizeWidthOfSegmentByContent(atIndex: segment)
+		}
+	}
+	
+	public override func insertSegmentWithTitle(title: String?, atIndex segment: Int, animated: Bool) {
+		super.insertSegmentWithTitle(title, atIndex: segment, animated: animated)
+		
+		if resizesSegmentWidthsByContent {
+			resizeWidthOfSegmentByContent(atIndex: segment)
+		}
+	}
+}
+
+extension UISegmentedControl {
+	
+	public func resizeSegmentWidthsByContent() {
+		for idx in 0..<numberOfSegments {
+			resizeWidthOfSegmentByContent(atIndex: idx)
+		}
+	}
+	
+	public func resizeWidthOfSegmentByContent(atIndex index: Int) {
+		guard let title = titleForSegmentAtIndex(index) else { return }
+		
+		let horizontalPadding: CGFloat = 40
+		
+		let attributes: [String: AnyObject] = (titleTextAttributesForState(state) as? [String: AnyObject]) ?? [:]
+		let attrTitle = NSAttributedString(string: title, attributes: attributes)
+		let rect = attrTitle.boundingRectWithSize(bounds.size, options: [], context: nil)
+		let width = ceil(rect.width) + horizontalPadding
+		setWidth(width, forSegmentAtIndex: index)
+		
+		setNeedsLayout()
+	}
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TextValueDataSource: KeyValueDataSource {
+class TextValueDataSource<SourceType : AnyObject> : KeyValueDataSource<SourceType> {
 
 	override func registerReusableViews(with collectionView: UICollectionView) {
 		super.registerReusableViews(with: collectionView)
@@ -20,9 +20,9 @@ class TextValueDataSource: KeyValueDataSource {
 	}
 	
 	override func collectionView(collectionView: UICollectionView, configure cell: UICollectionViewCell, `for` indexPath: NSIndexPath) {
-		guard let item = self.item(at: indexPath) as? KeyValueItem,
+		guard let item = value(at: indexPath),
 			cell = cell as? AAPLTextValueCell else {
-			return
+				return
 		}
 		
 		guard let object = self.object,

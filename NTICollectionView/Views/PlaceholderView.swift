@@ -8,15 +8,15 @@
 
 import UIKit
 
-let CornerRadius: CGFloat = 3
-let VerticalElementSpacing: CGFloat = 35
-let ContinuousCurvesSizeFactor: CGFloat = 1.528665
-let ButtonWidth: CGFloat = 124
-let ButtonHeight: CGFloat = 19
-let TextColorWhiteValue: CGFloat = 172.0 / 0xFF
+let defaultCornerRadius: CGFloat = 3
+let verticalElementSpacing: CGFloat = 35
+let continuousCurvesSizeFactor: CGFloat = 1.528665
+let buttonWidth: CGFloat = 124
+let buttonHeight: CGFloat = 19
+let textColorWhiteValue: CGFloat = 172.0 / 0xFF
 
-private var BackgroundImage: UIImage!
-private var OnceToken: dispatch_once_t = 0
+private var cachedBackgroundImage: UIImage!
+private var onceToken: dispatch_once_t = 0
 
 public class PlaceholderView: UIView {
 	
@@ -76,7 +76,7 @@ public class PlaceholderView: UIView {
 		didSet { messageLabel.font = messageFont }
 	}
 	
-	public var textColor = UIColor(white: TextColorWhiteValue, alpha: 1) {
+	public var textColor = UIColor(white: textColorWhiteValue, alpha: 1) {
 		didSet {
 			titleLabel.textColor = textColor
 			messageLabel.textColor = textColor
@@ -147,10 +147,10 @@ public class PlaceholderView: UIView {
 	}
 	
 	private func backgroundImage(with color: UIColor) -> UIImage {
-		dispatch_once(&OnceToken) {
-			var cornerRadius = CornerRadius
+		dispatch_once(&onceToken) {
+			var cornerRadius = defaultCornerRadius
 			
-			let capSize = ceil(cornerRadius * ContinuousCurvesSizeFactor)
+			let capSize = ceil(cornerRadius * continuousCurvesSizeFactor)
 			let rectSize = 2 * capSize + 1
 			let rect = CGRect(x: 0, y: 0, width: rectSize, height: rectSize)
 			UIGraphicsBeginImageContextWithOptions(rect.size, false, 0)
@@ -163,13 +163,13 @@ public class PlaceholderView: UIView {
 			color.set()
 			path.stroke()
 			
-			BackgroundImage = UIGraphicsGetImageFromCurrentImageContext()
+			cachedBackgroundImage = UIGraphicsGetImageFromCurrentImageContext()
 			UIGraphicsEndImageContext()
 			
-			BackgroundImage = BackgroundImage.resizableImageWithCapInsets(UIEdgeInsets(uniformInset: capSize))
+			cachedBackgroundImage = cachedBackgroundImage.resizableImageWithCapInsets(UIEdgeInsets(uniformInset: capSize))
 		}
 		
-		return BackgroundImage
+		return cachedBackgroundImage
 	}
 	
 	private func updateViewHierarchy() {
@@ -289,8 +289,8 @@ public class PlaceholderView: UIView {
 		if actionButton.superview != nil {
 			constraints.append(constraintPinningViewToLast(actionButton))
 			constraints.append(NSLayoutConstraint(item: actionButton, attribute: .CenterX, relatedBy: .Equal, toItem: containerView, attribute: .CenterX, multiplier: 1, constant: 0))
-			constraints.append(NSLayoutConstraint(item: actionButton, attribute: .Width, relatedBy: .GreaterThanOrEqual, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: ButtonWidth))
-			constraints.append(NSLayoutConstraint(item: actionButton, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: ButtonHeight))
+			constraints.append(NSLayoutConstraint(item: actionButton, attribute: .Width, relatedBy: .GreaterThanOrEqual, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: buttonWidth))
+			constraints.append(NSLayoutConstraint(item: actionButton, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: buttonHeight))
 			last = actionButton
 		}
 		

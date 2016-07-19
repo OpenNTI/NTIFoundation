@@ -12,13 +12,15 @@ public class GridSectionLayoutEngine: NSObject, SupplementaryLayoutEngine {
 	
 	public init(layoutSection: GridLayoutSection) {
 		self.layoutSection = layoutSection
+		supplementaryItems = layoutSection.supplementaryItems
 		super.init()
 	}
 	
-	public weak var layoutSection: GridLayoutSection!
+	public var layoutSection: GridLayoutSection
 	
 	public var pinnableHeaders: [LayoutSupplementaryItem] = []
 	public var nonPinnableHeaders: [LayoutSupplementaryItem] = []
+	public var supplementaryItems: [LayoutSupplementaryItem]
 	
 	private var origin: CGPoint!
 	private var position: CGPoint!
@@ -47,21 +49,21 @@ public class GridSectionLayoutEngine: NSObject, SupplementaryLayoutEngine {
 	}
 	
 	private func performLayout() {
-		let layoutEngine = makeSupplementaryLayoutEngine()
+		let cellLayoutEngine = GridSectionCellLayoutEngine(layoutSection: layoutSection)
+		let layoutEngine = GridSupplementaryItemLayoutEngine(layoutSection: layoutSection, innerLayoutEngine: cellLayoutEngine)
+		
 		position = layoutEngine.layoutWithOrigin(origin, layoutSizing: layoutSizing, invalidationContext: invalidationContext)
+		
+		layoutSection = layoutEngine.layoutSection
+		layoutSection.rows = cellLayoutEngine.layoutSection.rows
+		
 		let size = CGSize(width: layoutSizing.width, height: position.y - origin.y)
 		layoutSection.frame = CGRect(origin: origin, size: size)
 		pinnableHeaders += layoutEngine.pinnableHeaders
 		nonPinnableHeaders += layoutEngine.nonPinnableHeaders
-	}
-	
-	private func makeSupplementaryLayoutEngine() -> SupplementaryLayoutEngine {
-		let cellLayoutEngine = makeCellLayoutEngine()
-		return GridSupplementaryItemLayoutEngine(layoutSection: layoutSection, innerLayoutEngine: cellLayoutEngine)
-	}
-	
-	private func makeCellLayoutEngine() -> LayoutEngine {
-		return GridSectionCellLayoutEngine(layoutSection: layoutSection)
+		
+		layoutSection.pinnableHeaders = pinnableHeaders
+		layoutSection.nonPinnableHeaders = nonPinnableHeaders
 	}
 	
 }

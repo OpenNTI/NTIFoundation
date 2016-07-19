@@ -9,29 +9,27 @@
 import UIKit
 
 /// Layout information about a row.
-public protocol LayoutRow: class {
+public protocol LayoutRowProtocol: LayoutArea {
 	
 	var frame: CGRect { get set }
 	
-	var items: [LayoutItem] { get }
+	var items: [LayoutItem] { get set }
 	
-	var section: LayoutSection? { get set }
-	
-	var rowSeparatorLayoutAttributes: UICollectionViewLayoutAttributes? { get }
+	var rowSeparatorLayoutAttributes: CollectionViewLayoutAttributes? { get }
 	
 	var rowSeparatorDecoration: HorizontalSeparatorDecoration? { get set }
 	
-	func add(item: LayoutItem)
+	mutating func add(item: LayoutItem)
 	
-	func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
+	mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
 	func columnWidth(forNumberOfColumns columns: Int) -> CGFloat
 	
-	func copy() -> LayoutRow
+	func isEqual(to other: LayoutRowProtocol) -> Bool
 	
 }
 
-extension LayoutRow {
+extension LayoutRowProtocol {
 	
 	public func columnWidth(forNumberOfColumns columns: Int) -> CGFloat {
 		let layoutWidth = frame.width
@@ -41,38 +39,40 @@ extension LayoutRow {
 	
 }
 
-public class GridLayoutRow: LayoutRow {
+public struct LayoutRow: LayoutRowProtocol {
 	
-	public var metrics = BasicGridSectionMetrics()
+	public var metrics = GridSectionMetrics()
 	
 	public var frame = CGRectZero
 	
-	public private(set) var items: [LayoutItem] = []
+	public var items: [LayoutItem] = []
 	
-	public weak var section: LayoutSection?
+	var sectionIndex = NSNotFound
 	
-	public var rowSeparatorLayoutAttributes: UICollectionViewLayoutAttributes? {
+	public var rowSeparatorLayoutAttributes: CollectionViewLayoutAttributes? {
 		return rowSeparatorDecoration?.layoutAttributes
 	}
 	
 	public var rowSeparatorDecoration: HorizontalSeparatorDecoration?
 	
-	public func add(item: LayoutItem) {
+	public mutating func add(item: LayoutItem) {
 		items.append(item)
-		item.row = self
 	}
 	
-	public func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
+	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
 		guard frame != self.frame else {
 			return
 		}
 		// Setting the frame on a row needs to update the items within the row and the row separator
 		rowSeparatorDecoration?.setContainerFrame(frame, invalidationContext: invalidationContext)
 		
-		for itemInfo in items {
+		
+		for (index, item) in items.enumerate() {
+			var itemInfo = item
 			var itemFrame = itemInfo.frame
 			itemFrame.origin.y = frame.origin.y
 			itemInfo.setFrame(itemFrame, invalidationContext: invalidationContext)
+			items[index] = itemInfo
 		}
 		
 		self.frame = frame
@@ -91,13 +91,14 @@ public class GridLayoutRow: LayoutRow {
 		return columnWidth
 	}
 	
-	public func copy() -> LayoutRow {
-		let copy = GridLayoutRow()
-		copy.section = section
-		copy.frame = frame
-		copy.items = items.map { $0.copy() }
-		copy.metrics = metrics
-		return copy
+	public func isEqual(to other: LayoutRowProtocol) -> Bool {
+		guard let other = other as? LayoutRow else {
+			return false
+		}
+		
+		return frame == other.frame
+			&& sectionIndex == other.sectionIndex
+			&& items.elementsEqual(other.items) { $0.isEqual(to: $1) }
 	}
 	
 }

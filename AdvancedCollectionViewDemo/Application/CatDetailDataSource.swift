@@ -8,19 +8,19 @@
 
 import NTICollectionView
 
-class CatDetailDataSource: ComposedCollectionDataSource {
+class CatDetailDataSource : ComposedCollectionDataSource {
 
 	init(cat: AAPLCat) {
 		self.cat = cat
-		classificationDataSource = KeyValueDataSource(object: cat)
-		descriptionDataSource = TextValueDataSource(object: cat)
+		classificationDataSource = KeyValueDataSource<AAPLCat>(object: cat)
+		descriptionDataSource = TextValueDataSource<AAPLCat>(object: cat)
 		super.init()
 		
 		defaultMetrics = GridDataSourceSectionMetrics()
 		
-		var gridMetrics = BasicGridSectionMetrics()
+		var gridMetrics = GridSectionMetrics()
 		
-		let classificationMetrics = GridDataSourceSectionMetrics()
+		var classificationMetrics = GridDataSourceSectionMetrics()
 		
 		gridMetrics.estimatedRowHeight = 22
 		
@@ -30,10 +30,11 @@ class CatDetailDataSource: ComposedCollectionDataSource {
 		let classificationSectionMetrics = GridDataSourceSectionMetrics()
 		classificationDataSource.setMetrics(classificationSectionMetrics, forSectionAtIndex: 0)
 		classificationDataSource.title = "Classification"
-		classificationDataSource.dataSourceTitleHeader
+		let classificationHeader = classificationDataSource.makeDataSourceTitleHeader()
+		add(classificationHeader, forKey: DataSourceTitleHeaderKey)
 		add(classificationDataSource)
 		
-		let descriptionMetrics = GridDataSourceSectionMetrics()
+		var descriptionMetrics = GridDataSourceSectionMetrics()
 		gridMetrics.estimatedRowHeight = 100
 		descriptionMetrics.applyValues(from: gridMetrics)
 		descriptionDataSource.defaultMetrics = descriptionMetrics
@@ -41,8 +42,8 @@ class CatDetailDataSource: ComposedCollectionDataSource {
 	}
 	
 	private var cat: AAPLCat
-	private var classificationDataSource: KeyValueDataSource
-	private var descriptionDataSource: TextValueDataSource
+	private var classificationDataSource: KeyValueDataSource<AAPLCat>
+	private var descriptionDataSource: TextValueDataSource<AAPLCat>
 	
 	private func updateChildDataSources() {
 		classificationDataSource.items = [

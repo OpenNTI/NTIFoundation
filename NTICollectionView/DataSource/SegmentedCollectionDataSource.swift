@@ -18,9 +18,9 @@ public protocol SegmentedCollectionDataSourceProtocol: ParentCollectionDataSourc
 	
 }
 
-private let SegmentedDataSourceHeaderKey = "SegmentedDataSourceHeaderKey"
+private let segmentedDataSourceHeaderKey = "SegmentedDataSourceHeaderKey"
 
-public class SegmentedCollectionDataSource: AbstractCollectionDataSource, SegmentedCollectionDataSourceProtocol, SegmentedControlDelegate {
+public class SegmentedCollectionDataSource: CollectionDataSource, CollectionDataSourceDelegate, SegmentedControlDelegate {
 	
 	public private(set) var dataSources: [CollectionDataSource] = []
 	
@@ -167,11 +167,11 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 		return selectedDataSource?.localIndexPathForGlobal(globalIndexPath)
 	}
 	
-	public override func item(at indexPath: NSIndexPath) -> Item? {
+	public override func item(at indexPath: NSIndexPath) -> AnyItem? {
 		return selectedDataSource?.item(at: indexPath)
 	}
 	
-	public override func indexPath(for item: Item) -> NSIndexPath? {
+	public override func indexPath(for item: AnyItem) -> NSIndexPath? {
 		return selectedDataSource?.indexPath(for: item)
 	}
 	
@@ -205,30 +205,43 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 	// TODO: Make computed property for item-by-key?
 	public var segmentedControlHeader: SegmentedControlSupplementaryItem? {
 		didSet {
-			guard segmentedControlHeader !== oldValue else {
-				return
-			}
 			guard let segmentedControlHeader = self.segmentedControlHeader else {
-				removeSupplementaryItemForKey(SegmentedDataSourceHeaderKey)
+				return removeSupplementaryItemForKey(segmentedDataSourceHeaderKey)
+			}
+			
+			guard let oldValue = oldValue else {
+				return add(segmentedControlHeader, forKey: segmentedDataSourceHeaderKey)
+			}
+			
+			guard !segmentedControlHeader.isEqual(to: oldValue) else {
 				return
 			}
 			
-			replaceSupplementaryItemForKey(SegmentedDataSourceHeaderKey, with: segmentedControlHeader)
+			replaceSupplementaryItemForKey(segmentedDataSourceHeaderKey, with: segmentedControlHeader)
 			configureSegmentedControlHeader()
 		}
 	}
 	
 	private func configureSegmentedControlHeader() {
-		guard let segmentedControlHeader = self.segmentedControlHeader else {
+		guard segmentedControlHeader != nil else {
 			return
 		}
-		segmentedControlHeader.isVisibleWhileShowingPlaceholder = true
-		segmentedControlHeader.shouldPin = true
-		segmentedControlHeader.configure { (view, dataSource, indexPath) -> Void in
+		
+		segmentedControlHeader?.isVisibleWhileShowingPlaceholder = true
+		segmentedControlHeader?.shouldPin = true
+		
+		segmentedControlHeader?.configure { [weak self] (view, dataSource, indexPath) -> Void in
+			guard let `self` = self else {
+				return
+			}
 			guard let segmentedDataSource = dataSource as? SegmentedCollectionDataSource else {
 				return
 			}
-			segmentedDataSource.configure(segmentedControlHeader.segmentedControl)
+			guard let segmentedControl = self.segmentedControlHeader?.segmentedControl else {
+				return
+			}
+			
+			segmentedDataSource.configure(segmentedControl)
 		}
 	}
 	
@@ -416,7 +429,7 @@ public class SegmentedCollectionDataSource: AbstractCollectionDataSource, Segmen
 
 public protocol SegmentedCollectionDataSourceDelegate: class {
 	
-	func segmentedCollectionDataSourceDidChangeSelectedDataSource(segmentedCollectionDataSource: SegmentedCollectionDataSourceProtocol)
+	func segmentedCollectionDataSourceDidChangeSelectedDataSource(segmentedCollectionDataSource: SegmentedCollectionDataSource)
 	
 }
 

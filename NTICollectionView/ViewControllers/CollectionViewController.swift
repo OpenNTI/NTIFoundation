@@ -8,8 +8,8 @@
 
 import UIKit
 
-private var KVODataSourceContext = "DataSourceContext"
-private var UpdateNumber = 0
+private var kvoDataSourceContext = "DataSourceContext"
+private var updateNumber = 0
 
 public class CollectionViewController: UICollectionViewController, CollectionDataSourceDelegate, CollectionViewSupplementaryViewTracking {
 	
@@ -136,7 +136,7 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		guard !isObservingDataSource else {
 			return
 		}
-		collectionView!.addObserver(self, forKeyPath: "dataSource", options: [.Initial, .New], context: &KVODataSourceContext)
+		collectionView!.addObserver(self, forKeyPath: "dataSource", options: [.Initial, .New], context: &kvoDataSourceContext)
 		isObservingDataSource = true
 	}
 	
@@ -149,7 +149,7 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 	}
 	
 	public override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
-		guard context == &KVODataSourceContext else {
+		guard context == &kvoDataSourceContext else {
 			super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
 			return
 		}
@@ -417,9 +417,9 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 			return
 		}
 		
-		if UpdateDebugging {
-			UpdateNumber += 1
-			updateLog("\(#function) \(UpdateNumber): PERFORMING BATCH UPDATE")
+		if updateDebugging {
+			updateNumber += 1
+			updateLog("\(#function) \(updateNumber): PERFORMING BATCH UPDATE")
 		}
 		
 		clearSectionUpdateInfo()
@@ -427,7 +427,7 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		var completionHandler: dispatch_block_t?
 		
 		collectionView!.performBatchUpdates({
-			updateLog("\(#function) \(UpdateNumber): BEGIN UPDATE")
+			updateLog("\(#function) \(updateNumber): BEGIN UPDATE")
 			self.isPerformingUpdates = true
 			self.updateCompletionHandler = completion
 			
@@ -441,17 +441,17 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 			sectionsToReload.removeIndexes(self.insertedSections)
 			
 			self.collectionView!.reloadSections(sectionsToReload)
-			updateLog("\(#function) \(UpdateNumber): RELOADED SECTIONS: \(sectionsToReload.debugLogDescription)")
+			updateLog("\(#function) \(updateNumber): RELOADED SECTIONS: \(sectionsToReload.debugLogDescription)")
 			
-			updateLog("\(#function) \(UpdateNumber): END UPDATE")
+			updateLog("\(#function) \(updateNumber): END UPDATE")
 			self.isPerformingUpdates = false
 			completionHandler = self.updateCompletionHandler
 			self.updateCompletionHandler = nil
 			self.clearSectionUpdateInfo()
 			}) { (_: Bool) in
-				updateLog("\(#function) \(UpdateNumber): BEGIN COMPLETION HANDLER")
+				updateLog("\(#function) \(updateNumber): BEGIN COMPLETION HANDLER")
 				completionHandler?()
-				updateLog("\(#function) \(UpdateNumber): END COMPLETION HANDLER")
+				updateLog("\(#function) \(updateNumber): END COMPLETION HANDLER")
 		}
 	}
 	
@@ -488,7 +488,8 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 			}
 			
 			context.invalidateSupplementaryElementsOfKind(kind, atIndexPaths: indexPaths)
-			// FIXME: Do we need to invalidate the layout here?
+			
+			collectionView.collectionViewLayout.invalidateLayoutWithContext(context)
 		})
 	}
 	

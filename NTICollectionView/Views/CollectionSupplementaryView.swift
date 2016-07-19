@@ -54,10 +54,10 @@ public class CollectionSupplementaryView: UICollectionReusableView, Selectable {
 		updateBackgroundColor()
 	}
 	
-	private var normalBackgroundColor: UIColor?
-	private var selectedBackgroundColor: UIColor?
+	var normalBackgroundColor: UIColor?
+	var selectedBackgroundColor: UIColor?
 	
-	private var simulatesSelection = false
+	var simulatesSelection = false
 	
 	public override func applyLayoutAttributes(layoutAttributes: UICollectionViewLayoutAttributes) {
 		guard let layoutAttributes = layoutAttributes as? CollectionViewLayoutAttributes else {
@@ -78,7 +78,7 @@ public class CollectionSupplementaryView: UICollectionReusableView, Selectable {
 		layer.cornerRadius = layoutAttributes.cornerRadius
 	}
 	
-	private func updateBackgroundColor() {
+	public func updateBackgroundColor() {
 		if (simulatesSelection && _isHighlighted) || isSelected {
 			backgroundColor = selectedBackgroundColor
 		} else {

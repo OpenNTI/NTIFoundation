@@ -11,12 +11,12 @@ import UIKit
 // FIXME: Code duplication with the segmented metrics helper
 public class ComposedCollectionDataSourceMetricsHelper: CollectionDataSourceMetricsHelper {
 
-	public init(composedDataSource: ComposedCollectionDataSourceProtocol) {
+	public init(composedDataSource: ComposedCollectionDataSource) {
 		super.init(dataSource: composedDataSource)
 	}
 	
-	public var composedDataSource: ComposedCollectionDataSourceProtocol {
-		return dataSource as! ComposedCollectionDataSourceProtocol
+	public var composedDataSource: ComposedCollectionDataSource {
+		return dataSource as! ComposedCollectionDataSource
 	}
 	
 	public override func numberOfSupplementaryItemsOfKind(kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChildDataSources: Bool) -> Int {
@@ -82,15 +82,15 @@ public class ComposedCollectionDataSourceMetricsHelper: CollectionDataSourceMetr
 		dataSource.findSupplementaryItemOfKind(kind, at: localIndexPath, using: block)
 	}
 	
-	public override func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetrics? {
-		guard let mapping = composedDataSource.mappingForGlobalSection(sectionIndex) else {
+	public override func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
+		guard var enclosingMetrics = super.snapshotMetricsForSectionAtIndex(sectionIndex) else {
 			return nil
+		}
+		
+		guard let mapping = composedDataSource.mappingForGlobalSection(sectionIndex) else {
+			return enclosingMetrics
 		}
 		let dataSource = mapping.dataSource
-		
-		guard let enclosingMetrics = super.snapshotMetricsForSectionAtIndex(sectionIndex) else {
-			return nil
-		}
 		if let localSection = mapping.localSectionForGlobalSection(sectionIndex),
 			metrics = dataSource.snapshotMetricsForSectionAtIndex(localSection)  {
 				enclosingMetrics.applyValues(from: metrics)

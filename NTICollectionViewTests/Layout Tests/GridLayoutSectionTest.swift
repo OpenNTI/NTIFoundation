@@ -13,14 +13,13 @@ class GridLayoutSectionTest: XCTestCase {
 	
 	var layoutInfo: DummyLayoutInfo!
 	
-	var layoutSection: BasicGridLayoutSection!
+	var layoutSection: GridLayoutSection!
     
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
 		layoutInfo = DummyLayoutInfo()
 		layoutSection = BasicGridLayoutSection()
-		layoutSection.layoutInfo = layoutInfo
     }
     
     override func tearDown() {
@@ -51,7 +50,7 @@ class GridLayoutSectionTest: XCTestCase {
 		layoutSection.metrics.showsRowSeparator = true
 		
 		for _ in 0..<itemCount {
-			let item = GridLayoutItem()
+			var item = GridLayoutItem()
 			item.frame = CGRect(x: 0, y: 0, width: 375, height: 44)
 			item.hasEstimatedHeight = true
 			layoutSection.add(item)
@@ -64,16 +63,17 @@ class GridLayoutSectionTest: XCTestCase {
 		frame: (0, 0, 375, 757.5)
 		*/
 		
-		let end = layoutSection.layoutWithOrigin(start, layoutSizing: layoutInfo)
+		let layoutEngine = GridSectionLayoutEngine(layoutSection: layoutSection)
+		let end = layoutEngine.layoutWithOrigin(start, layoutSizing: layoutInfo)
+		layoutSection = layoutEngine.layoutSection
 		
 		XCTAssertEqual(layoutSection.rows.count, itemCount)
 		
 		for i in 0..<itemCount {
 			let row = layoutSection.rows[i]
-			let item = layoutSection.items[i]
+			let item = layoutSection.item(at: i)
 			XCTAssertEqual(row.items.count, 1)
-			XCTAssert(row.items[0] === item, "Row \(i) does not contain correct item")
-			XCTAssert(item.row === row, "Item \(i) does not reference correct row")
+			XCTAssert(row.items[0].isEqual(to: item), "Row \(i) does not contain correct item")
 			
 			let y: CGFloat = y_0 * CGFloat(i)
 			let itemFrame = item.frame

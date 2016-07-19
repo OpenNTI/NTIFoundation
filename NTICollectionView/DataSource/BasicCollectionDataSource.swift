@@ -11,7 +11,19 @@ import UIKit
 /**
 A `CollectionDataSource` which manages a single section of items backed by an array.
 */
-public class BasicCollectionDataSource: AbstractCollectionDataSource {
+public class BasicCollectionDataSource<Item : AnyObject> : CollectionDataSource {
+
+	/// Allows clients to update loading progress with a specified result if using `waitsForProgressUpdate == true`.
+	///
+	/// Is `nil` until `loadContent(with:)` has been called while `waitsForProgressUpdate == true`, and resets to `nil` once called.
+	private var updateLoadingProgress: ((Result<[Item]>) -> Void)?
+	
+	/// Whether `self` relies on `updateLoadingProgress` to update loading progress.
+	public var waitsForProgressUpdate = false
+	
+	public override init() {
+		super.init()
+	}
 	
 	public var items: [Item] {
 		get {
@@ -21,6 +33,7 @@ public class BasicCollectionDataSource: AbstractCollectionDataSource {
 			setItems(newValue, animated: false)
 		}
 	}
+	
 	private var _items: [Item] = []
 	
 	public func setItems(items: [Item], animated: Bool) {
@@ -78,6 +91,13 @@ public class BasicCollectionDataSource: AbstractCollectionDataSource {
 		}
 	}
 	
+	/// Optionally allows clients to update loading progress using a specified result.
+	///
+	/// This method has no effect unless `waitsForProgressUpdate == true` and `loadingState == .loadingContent`. After its initial invocation, this method does nothing.
+	public func updateLoadingProgress(with result: Result<[Item]>) {
+		self.updateLoadingProgress?(result)
+	}
+	
 	public override func resetContent() {
 		super.resetContent()
 		performUpdate({
@@ -85,7 +105,11 @@ public class BasicCollectionDataSource: AbstractCollectionDataSource {
 		})
 	}
 	
-	public override func item(at indexPath: NSIndexPath) -> Item? {
+	public override func item(at indexPath: NSIndexPath) -> AnyItem? {
+		return value(at: indexPath)
+	}
+	
+	public func value(at indexPath: NSIndexPath) -> Item? {
 		let itemIndex = indexPath.item
 		guard itemIndex < items.count else {
 			return nil
@@ -93,7 +117,7 @@ public class BasicCollectionDataSource: AbstractCollectionDataSource {
 		return items[itemIndex]
 	}
 	
-	public override func indexPath(for item: Item) -> NSIndexPath? {
+	public override func indexPath(for item: AnyItem) -> NSIndexPath? {
 		guard let itemIndex = items.indexOf({ $0 === item }) else {
 			return nil
 		}
@@ -175,6 +199,35 @@ public class BasicCollectionDataSource: AbstractCollectionDataSource {
 	
 	public override func numberOfItemsInSection(sectionIndex: Int) -> Int {
 		return items.count
+	}
+	
+	public override func loadContent(with progress: LoadingProgress) {
+		guard waitsForProgressUpdate else {
+			return super.loadContent(with: progress)
+		}
+		
+		updateLoadingProgress = { [unowned self] (result) in
+			switch result {
+			case let .success(loadedItems):
+				let update = { (me: AnyObject) in
+					guard let me = me as? BasicCollectionDataSource<Item> else {
+						return
+					}
+					me.items = loadedItems
+				}
+				
+				if loadedItems.isEmpty {
+					progress.updateWithNoContent(update)
+				}
+				else {
+					progress.updateWithContent(update)
+				}
+			case let .failure(error):
+				progress.done(with: error)
+			}
+			
+			self.updateLoadingProgress = nil
+		}
 	}
 	
 	// MARK: - UICollectionViewDataSource

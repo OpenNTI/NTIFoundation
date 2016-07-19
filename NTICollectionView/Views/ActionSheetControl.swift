@@ -93,6 +93,10 @@ public final class ActionSheetControl: SegmentedControlView {
 	
 	// MARK: - SegmentedControl
 	
+	public var numberOfSegments: Int {
+		return segments.count
+	}
+	
 	public var selectedSegmentIndex: Int = UISegmentedControlNoSegment
 	
 	public var userInteractionEnabled: Bool {

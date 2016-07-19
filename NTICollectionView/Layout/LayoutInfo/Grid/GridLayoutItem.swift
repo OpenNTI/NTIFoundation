@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class GridLayoutItem: LayoutItem {
+public struct GridLayoutItem: LayoutItem {
 	
 	public var frame = CGRectZero {
 		didSet {
@@ -18,51 +18,44 @@ public class GridLayoutItem: LayoutItem {
 	
 	public var itemIndex = 0
 	
+	public var sectionIndex = NSNotFound
+	
 	public var hasEstimatedHeight = false
 	
 	public var isDragging = false
 	
+	public var layoutMargins = UIEdgeInsetsZero
+	
+	public var backgroundColor: UIColor?
+	
+	public var selectedBackgroundColor: UIColor?
+	
+	public var cornerRadius: CGFloat = 0
+	
 	public var indexPath: NSIndexPath {
-		guard let sectionInfo = section else {
-			preconditionFailure("Items must be assigned to a section to provide an index path.")
-		}
-		if sectionInfo.isGlobalSection {
-			return NSIndexPath(index: itemIndex)
-		} else {
-			return NSIndexPath(forItem: itemIndex, inSection: sectionInfo.sectionIndex)
-		}
+		return sectionIndex == globalSectionIndex ?
+			NSIndexPath(index: itemIndex)
+			: NSIndexPath(forItem: itemIndex, inSection: sectionIndex)
 	}
 	
-	public var layoutAttributes: UICollectionViewLayoutAttributes {
-		if let layoutAttributes = _layoutAttributes where layoutAttributes.indexPath == indexPath {
-			return layoutAttributes
-		}
+	public var layoutAttributes: CollectionViewLayoutAttributes {
+//		if let layoutAttributes = _layoutAttributes where layoutAttributes.indexPath == indexPath {
+//			return layoutAttributes
+//		}
 		
 		let attributes = CollectionViewLayoutAttributes(forCellWithIndexPath: indexPath)
 		attributes.frame = self.frame
 		attributes.zIndex = defaultZIndex
-		
-		// TODO: Decouple from section and layout
-		if let section = self.section as? GridLayoutSection {
-			let metrics = section.metrics
-			attributes.backgroundColor = metrics.backgroundColor
-			attributes.selectedBackgroundColor = metrics.selectedBackgroundColor
-			attributes.columnIndex = columnIndex
-			attributes.cornerRadius = metrics.cornerRadius
-			
-			if let layoutInfo = section.layoutInfo as? BasicLayoutInfo,
-				layout = layoutInfo.layout {
-					attributes.isEditing = layout.isEditing ? layout.canEditItem(at: indexPath) : false
-					attributes.isMovable = layout.isEditing ? layout.canMoveItem(at: indexPath) : false
-			}
-			
-			attributes.shouldCalculateFittingSize = hasEstimatedHeight
-			attributes.layoutMargins = metrics.layoutMargins
-		}
-		
+		attributes.columnIndex = columnIndex
+		attributes.shouldCalculateFittingSize = hasEstimatedHeight
 		attributes.hidden = isDragging
 		
-		_layoutAttributes = attributes
+		attributes.backgroundColor = backgroundColor
+		attributes.selectedBackgroundColor = selectedBackgroundColor
+		attributes.cornerRadius = cornerRadius
+		attributes.layoutMargins = layoutMargins
+		
+//		_layoutAttributes = attributes
 		return attributes
 	}
 	
@@ -70,13 +63,7 @@ public class GridLayoutItem: LayoutItem {
 	
 	public var columnIndex: Int = NSNotFound
 	
-	public weak var row: LayoutRow?
-	
-	public var section: LayoutSection? {
-		return row?.section
-	}
-	
-	public func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		guard frame != self.frame else {
 			return
 		}
@@ -84,20 +71,37 @@ public class GridLayoutItem: LayoutItem {
 		invalidationContext?.invalidateItemsAtIndexPaths([indexPath])
 	}
 	
-	public func resetLayoutAttributes() {
+	public mutating func applyValues(from metrics: LayoutMetrics) {
+		guard let sectionMetrics = metrics as? SectionMetrics else {
+			return
+		}
+		
+		cornerRadius = sectionMetrics.cornerRadius
+		
+		guard let gridMetrics = metrics as? GridSectionMetricsProviding else {
+			return
+		}
+		
+		layoutMargins = gridMetrics.layoutMargins
+		backgroundColor = gridMetrics.backgroundColor
+		selectedBackgroundColor = gridMetrics.selectedBackgroundColor
+	}
+	
+	public mutating func resetLayoutAttributes() {
 		_layoutAttributes = nil
 	}
 	
-	public func copy() -> LayoutItem {
-		let copy = GridLayoutItem()
-		copy.row = row
-		copy.itemIndex = itemIndex
-		copy.isDragging = isDragging
-		copy.columnIndex = columnIndex
-		copy.hasEstimatedHeight = hasEstimatedHeight
-		copy._layoutAttributes = (layoutAttributes.copy() as! UICollectionViewLayoutAttributes)
-		copy.frame = frame
-		return copy
+	public func isEqual(to other: LayoutItem) -> Bool {
+		guard let other = other as? GridLayoutItem else {
+			return false
+		}
+		
+		return itemIndex == other.itemIndex
+			&& sectionIndex == other.sectionIndex
+			&& frame == other.frame
+			&& hasEstimatedHeight == other.hasEstimatedHeight
+			&& isDragging == other.isDragging
+			&& columnIndex == other.columnIndex
 	}
 	
 }

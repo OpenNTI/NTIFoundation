@@ -32,10 +32,10 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 	public var supplementaryItemsByKind: [String: [SupplementaryItem]] {
 		return dataSource.supplementaryItemsByKind
 	}
-	public var sectionMetrics: [Int: DataSourceSectionMetrics] {
+	public var sectionMetrics: [Int: DataSourceSectionMetricsProviding] {
 		return dataSource.sectionMetrics
 	}
-	public var defaultMetrics: DataSourceSectionMetrics? {
+	public var defaultMetrics: DataSourceSectionMetricsProviding? {
 		get {
 			return dataSource.defaultMetrics
 		}
@@ -43,12 +43,12 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 			dataSource.defaultMetrics = newValue
 		}
 	}
-	public var globalMetrics: DataSourceSectionMetrics? {
+	public var globalMetrics: DataSourceSectionMetricsProviding? {
 		get {
-			return dataSource.metricsForSectionAtIndex(GlobalSectionIndex)
+			return dataSource.metricsForSectionAtIndex(globalSectionIndex)
 		}
 		set {
-			dataSource.setMetrics(newValue, forSectionAtIndex: GlobalSectionIndex)
+			dataSource.setMetrics(newValue, forSectionAtIndex: globalSectionIndex)
 		}
 	}
 	
@@ -66,19 +66,19 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 	}
 	
 	/// Retrieve the layout metrics for a specific section within this data source.
-	public func metricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetrics? {
+	public func metricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
 		return dataSource.metricsForSectionAtIndex(sectionIndex)
 	}
 	
 	/// Store customized layout metrics for a section in this data source. The values specified in metrics will override values specified by the data source's `defaultMetrics`.
-	public func setMetrics(metrics: DataSourceSectionMetrics?, forSectionAtIndex sectionIndex: Int) {
+	public func setMetrics(metrics: DataSourceSectionMetricsProviding?, forSectionAtIndex sectionIndex: Int) {
 		dataSource.setMetrics(metrics, forSectionAtIndex: sectionIndex)
 	}
 	
 	public func numberOfSupplementaryItemsOfKind(kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChildDataSources: Bool) -> Int {
 		let items = supplementaryItemsOfKind(kind)
 		
-		if isRootDataSource && sectionIndex == GlobalSectionIndex {
+		if isRootDataSource && sectionIndex == globalSectionIndex {
 			return items.count
 		}
 		
@@ -102,7 +102,7 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		let kind = supplementaryItem.elementKind
 		let supplementaryItems = supplementaryItemsOfKind(kind)
 		
-		if let itemIndex = supplementaryItems.indexOf({ $0 === supplementaryItem }) {
+		if let itemIndex = supplementaryItems.indexOf({ $0.isEqual(to: supplementaryItem) }) {
 			let indexPath = isRootDataSource ? NSIndexPath(index: itemIndex) : NSIndexPath(forItem: itemIndex, inSection: 0)
 			return [indexPath]
 		}
@@ -111,7 +111,7 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		
 		// If the item is in the default metrics, return an index path for each section
 		if let sectionItems = defaultMetrics?.supplementaryItemsByKind[kind],
-			itemIndex = sectionItems.indexOf({ $0 === supplementaryItem }) {
+			itemIndex = sectionItems.indexOf({ $0.isEqual(to: supplementaryItem) }) {
 				var result: [NSIndexPath] = []
 				for sectionIndex in 0..<numberOfSections {
 					var elementIndex = itemIndex
@@ -130,7 +130,7 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		// If the supplementary metrics exist, it's in one of the section metrics
 		for (sectionIndex, sectionMetrics) in self.sectionMetrics {
 			guard let sectionItems = sectionMetrics.supplementaryItemsByKind[kind],
-				itemIndex = sectionItems.indexOf({ $0 === supplementaryItem }) else {
+				itemIndex = sectionItems.indexOf({ $0.isEqual(to: supplementaryItem) }) else {
 					continue
 			}
 			var elementIndex = itemIndex + numberOfDefaultItems
@@ -149,11 +149,11 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		var itemIndex = indexPath.itemIndex
 		
 		// Disable this assertion to allow contributed global supplementary views, unless it breaks
-//		assert(sectionIndex != GlobalSectionIndex || isRootDataSource, "Should only have the global section when we're the root data source")
+//		assert(sectionIndex != globalSectionIndex || isRootDataSource, "Should only have the global section when we're the root data source")
 		
 		let items = supplementaryItemsOfKind(kind)
 		
-		if isRootDataSource && sectionIndex == GlobalSectionIndex {
+		if isRootDataSource && sectionIndex == globalSectionIndex {
 			if itemIndex < items.count {
 				block(dataSource: dataSource, localIndexPath: indexPath, supplementaryItem: items[itemIndex])
 			}
@@ -186,11 +186,11 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		}
 	}
 	
-	public func snapshotMetrics() -> [Int: DataSourceSectionMetrics] {
-		var metrics: [Int: DataSourceSectionMetrics] = [:]
+	public func snapshotMetrics() -> [Int: DataSourceSectionMetricsProviding] {
+		var metrics: [Int: DataSourceSectionMetricsProviding] = [:]
 		
-		let globalMetrics = snapshotMetricsForSectionAtIndex(GlobalSectionIndex)
-		metrics[GlobalSectionIndex] = globalMetrics
+		let globalMetrics = snapshotMetricsForSectionAtIndex(globalSectionIndex)
+		metrics[globalSectionIndex] = globalMetrics
 		
 		for sectionIndex in 0..<numberOfSections {
 			let sectionMetrics = snapshotMetricsForSectionAtIndex(sectionIndex)
@@ -200,13 +200,13 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		return metrics
 	}
 	
-	public func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetrics? {
-		guard let metrics = appliedMetricsForSection(at: sectionIndex) else {
+	public func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
+		guard var metrics = appliedMetricsForSection(at: sectionIndex) else {
 			return nil
 		}
 		
 		 // The root data source puts its items into the special global section; other data sources put theirs into their 0 section
-		if isRootDataSource && sectionIndex == GlobalSectionIndex {
+		if isRootDataSource && sectionIndex == globalSectionIndex {
 			metrics.supplementaryItemsByKind = supplementaryItemsByKind
 		}
 		else if !isRootDataSource && sectionIndex == 0 {
@@ -222,8 +222,8 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		return metrics
 	}
 	
-	private func appliedMetricsForSection(at sectionIndex: Int) -> DataSourceSectionMetrics? {
-		guard let metrics = defaultMetrics?.copy() else {
+	private func appliedMetricsForSection(at sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
+		guard var metrics = defaultMetrics else {
 			return sectionMetrics[sectionIndex]
 		}
 		
@@ -234,15 +234,15 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		return metrics
 	}
 	
-	public func snapshotContributedGlobalMetrics() -> DataSourceSectionMetrics? {
+	public func snapshotContributedGlobalMetrics() -> DataSourceSectionMetricsProviding? {
 		guard contributesGlobalMetrics else {
 			return nil
 		}
-		return sectionMetrics[GlobalSectionIndex]?.copy()
+		return sectionMetrics[globalSectionIndex]
 	}
 	
 	public func layoutIndexPathForItemIndex(itemIndex: Int, sectionIndex: Int) -> NSIndexPath {
-		let isGlobalSection = sectionIndex == GlobalSectionIndex
+		let isGlobalSection = sectionIndex == globalSectionIndex
 		if isGlobalSection {
 			return NSIndexPath(index: itemIndex)
 		} else {

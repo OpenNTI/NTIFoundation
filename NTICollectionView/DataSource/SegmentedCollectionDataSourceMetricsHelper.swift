@@ -11,12 +11,12 @@ import UIKit
 // FIXME: Code duplication with the composed metrics helper
 public class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMetricsHelper {
 
-	public init(segmentedDataSource: SegmentedCollectionDataSourceProtocol) {
+	public init(segmentedDataSource: SegmentedCollectionDataSource) {
 		super.init(dataSource: segmentedDataSource)
 	}
 	
-	public var segmentedDataSource: SegmentedCollectionDataSourceProtocol {
-		return dataSource as! SegmentedCollectionDataSourceProtocol
+	public var segmentedDataSource: SegmentedCollectionDataSource {
+		return dataSource as! SegmentedCollectionDataSource
 	}
 	
 	var selectedDataSource: CollectionDataSource? {
@@ -73,8 +73,8 @@ public class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMet
 		selectedDataSource?.findSupplementaryItemOfKind(kind, at: childIndexPath, using: block)
 	}
 	
-	public override func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetrics? {
-		guard let enclosingMetrics = super.snapshotMetricsForSectionAtIndex(sectionIndex) else {
+	public override func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
+		guard var enclosingMetrics = super.snapshotMetricsForSectionAtIndex(sectionIndex) else {
 			return nil
 		}
 		if let metrics = snapshotChildMetrics(forSectionAt: sectionIndex) {
@@ -83,11 +83,11 @@ public class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMet
 		return enclosingMetrics
 	}
 	
-	private func snapshotChildMetrics(forSectionAt sectionIndex: Int) -> DataSourceSectionMetrics? {
+	private func snapshotChildMetrics(forSectionAt sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
 		guard let selectedDataSource = self.selectedDataSource else {
 			return nil
 		}
-		if sectionIndex == GlobalSectionIndex {
+		if sectionIndex == globalSectionIndex {
 			return selectedDataSource.snapshotContributedGlobalMetrics()
 		}
 		else {
