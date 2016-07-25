@@ -44,6 +44,15 @@ enum {
 typedef uint8_t NTITextAlignment;
 
 @interface NTIHTMLWriter ()
+{
+@private
+	NSAttributedString *attributedString;
+	NSMutableDictionary *registeredColors;
+	NSMutableDictionary *registeredFonts;
+	OFDataBuffer *dataBuffer;
+	
+	state_t *state;
+}
 
 @property (readwrite, strong) NSAttributedString* attributedString;
 

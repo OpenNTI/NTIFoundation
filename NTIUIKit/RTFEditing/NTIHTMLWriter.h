@@ -9,8 +9,6 @@
 @class NSAttributedString;
 @class OAFontDescriptor;
 
-#import <OmniFoundation/OFDataBuffer.h>
-
 
 @class NTIHTMLWriter;
 
@@ -41,15 +39,6 @@ typedef struct {
 
 
 
-{
-@private
-	NSAttributedString* attributedString;
-	NSMutableDictionary* registeredColors;
-	NSMutableDictionary* registeredFonts;
-	OFDataBuffer* dataBuffer;
-	
-	state_t* state;
-}
 @interface NTIHTMLWriter : NSObject
 
 +(void)registerWriterClass: (Class)clazz;
