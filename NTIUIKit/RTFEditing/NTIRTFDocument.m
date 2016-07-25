@@ -11,6 +11,8 @@
 #import "NSAttributedString-HTMLReadingExtensions.h"
 #import "NSAttributedString-HTMLWritingExtensions.h"
 
+#import <OmniFoundation/OmniFoundation.h>
+
 @implementation NTIRTFDocument
 
 @synthesize text;

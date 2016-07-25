@@ -6,8 +6,6 @@
 //  Copyright 2011 NextThought. All rights reserved.
 //
 
-#import <OmniFoundation/OFObject.h>
-
 @class NSAttributedString;
 @class OAFontDescriptor;
 
@@ -43,7 +41,6 @@ typedef struct {
 
 
 
-@interface NTIHTMLWriter : OFObject
 {
 @private
 	NSAttributedString* attributedString;
@@ -53,6 +50,7 @@ typedef struct {
 	
 	state_t* state;
 }
+@interface NTIHTMLWriter : NSObject
 
 +(void)registerWriterClass: (Class)clazz;
 +(Class)writerClass;

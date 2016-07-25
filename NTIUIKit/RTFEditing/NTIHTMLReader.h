@@ -7,7 +7,7 @@
 //
 #import <QuartzCore/QuartzCore.h>
 
-@interface NTIHTMLReader : OFObject<NSXMLParserDelegate> {
+@interface NTIHTMLReader : NSObject<NSXMLParserDelegate> {
 @private
 	NSMutableAttributedString* attrBuffer;
 	NSMutableArray* nsattrStack;

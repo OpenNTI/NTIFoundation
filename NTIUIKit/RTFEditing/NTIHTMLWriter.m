@@ -6,6 +6,7 @@
 //  Copyright 2011 NextThought. All rights reserved.
 //
 #import "NTIHTMLWriter.h"
+#import <OmniFoundation/OFObject.h>
 #import <OmniFoundation/OFDataBuffer.h>
 #import <OmniFoundation/OFStringScanner.h>
 #import <OmniFoundation/NSDictionary-OFExtensions.h>

@@ -1,8 +1,8 @@
 //Initially based on code copyright 2010 by the omni group. 
 
-#import <OmniFoundation/OmniFoundation.h>
+#import <Foundation/Foundation.h>
 
-@interface NTIRTFDocument : OFObject
+@interface NTIRTFDocument : NSObject
 {
 @private
     
