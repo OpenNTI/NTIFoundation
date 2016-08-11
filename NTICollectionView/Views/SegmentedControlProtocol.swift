@@ -86,9 +86,45 @@ public class SegmentedControl: UISegmentedControl, SegmentedControlView {
 		}
 	}
 	
+	/// The divider image used for the right edge of the rightmost segment.
+	public var rightDividerImage: UIImage? {
+		didSet {
+			guard let rightDividerImage = rightDividerImage else {
+				rightDividerLayer = nil
+				return
+			}
+			
+			guard rightDividerImage !== oldValue else { return }
+			
+			if rightDividerLayer == nil {
+				rightDividerLayer = CALayer()
+			}
+			
+			rightDividerLayer?.contents = rightDividerImage.CGImage
+		}
+	}
+	
+	/// The layer used to draw the right divider, if any.
+	private var rightDividerLayer: CALayer? {
+		didSet {
+			guard rightDividerLayer !== oldValue else { return }
+			
+			if let oldLayer = oldValue {
+				oldLayer.removeFromSuperlayer()
+			}
+			
+			if let newLayer = rightDividerLayer {
+				layer.addSublayer(newLayer)
+			}
+			
+			setNeedsLayout()
+		}
+	}
+	
 	public weak var segmentedControlDelegate: SegmentedControlDelegate?
 	
 	@objc public func segmentedControlDidChangeValue() {
+		setNeedsLayout()
 		segmentedControlDelegate?.segmentedControlDidChangeValue(self)
 	}
 	
@@ -115,6 +151,25 @@ public class SegmentedControl: UISegmentedControl, SegmentedControlView {
 			resizeWidthOfSegmentByContent(atIndex: segment)
 		}
 	}
+	
+	public override func layoutSubviews() {
+		super.layoutSubviews()
+		
+		layoutRightDivider()
+	}
+	
+	private func layoutRightDivider() {
+		guard let rightDividerLayer = rightDividerLayer else { return }
+		
+		// +3 makes the divider line up with the selected segment
+		let dividerX: CGFloat = (0..<numberOfSegments).reduce(bounds.minX + 3) {
+			$0 + self.widthForSegmentAtIndex($1)
+		}
+		
+		rightDividerLayer.frame = numberOfSegments > 0 ? CGRect(x: dividerX, y: bounds.minY, width: SegmentedControl.hairline, height: bounds.height) : .zero
+	}
+	
+	private static let hairline: CGFloat = 1.0 / UIScreen.mainScreen().scale
 }
 
 extension UISegmentedControl {
