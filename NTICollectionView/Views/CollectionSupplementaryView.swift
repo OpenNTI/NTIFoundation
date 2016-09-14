@@ -94,7 +94,7 @@ public class CollectionSupplementaryView: UICollectionReusableView, Selectable {
 		isHighlighted = false
 	}
 	
-	public override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
+	public override func touchesCancelled(touches: Set<UITouch>, withEvent event: UIEvent?) {
 		isHighlighted = false
 	}
 	

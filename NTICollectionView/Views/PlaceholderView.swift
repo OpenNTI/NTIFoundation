@@ -273,7 +273,7 @@ public class PlaceholderView: UIView {
 			constraints.append(constraintPinningViewToLast(titleLabel))
 			
 			last = titleLabel
-			lastAttr = .Baseline
+			lastAttr = .LastBaseline
 			constant = 20
 		}
 		
@@ -282,7 +282,7 @@ public class PlaceholderView: UIView {
 			constraints.append(constraintPinningViewToLast(messageLabel))
 			
 			last = messageLabel
-			lastAttr = .Baseline
+			lastAttr = .LastBaseline
 			constant = 20
 		}
 		

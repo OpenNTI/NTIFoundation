@@ -268,7 +268,7 @@ public class WrapperCollectionView: UICollectionView, CollectionViewWrapper {
 	}
 	
 	@available(iOS 9.0, *)
-	public override func supplementaryViewForElementKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+	public override func supplementaryViewForElementKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView? {
 		let globalIndexPath = globalIndexPathForLocal(indexPath)
 		return collectionView.supplementaryViewForElementKind(elementKind, atIndexPath: globalIndexPath)
 	}

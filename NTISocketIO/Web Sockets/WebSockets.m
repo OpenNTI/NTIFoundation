@@ -178,7 +178,7 @@ static NSError* errorWithCodeAndMessage(NSInteger code, NSString* message)
 	
 	//Generate the sec-websocket-key value for checking later.
 	NSMutableData* secKeyData = [NSMutableData dataWithLength: 16];
-	SecRandomCopyBytes(kSecRandomDefault, secKeyData.length, secKeyData.mutableBytes);
+	(void)SecRandomCopyBytes(kSecRandomDefault, secKeyData.length, secKeyData.mutableBytes);
 	self->key = [secKeyData base64String];
 	
 	NSURL* url = self.request.URL;
