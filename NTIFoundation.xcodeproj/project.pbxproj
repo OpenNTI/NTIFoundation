@@ -2808,7 +2808,7 @@
 					4053FF9F1BDED6840083A477 = {
 						CreatedOnToolsVersion = 7.0.1;
 						DevelopmentTeam = XGPWRAB2BX;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					40C997A81C6CE84D00D450CD = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -2818,7 +2818,7 @@
 					40C997B11C6CE84D00D450CD = {
 						CreatedOnToolsVersion = 7.2.1;
 						DevelopmentTeam = XGPWRAB2BX;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					40C9981D1C6CEF6000D450CD = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -2828,7 +2828,7 @@
 					40C998261C6CEF6000D450CD = {
 						CreatedOnToolsVersion = 7.2.1;
 						DevelopmentTeam = XGPWRAB2BX;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					4A1BE7661C8F85B800790B3A = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -2846,7 +2846,7 @@
 					4A68ABFD1C88ADC300849185 = {
 						CreatedOnToolsVersion = 7.2.1;
 						DevelopmentTeam = XGPWRAB2BX;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -3903,7 +3903,7 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = XGPWRAB2BX;
@@ -4052,7 +4052,7 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = XGPWRAB2BX;
@@ -4202,7 +4202,7 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = XGPWRAB2BX;
@@ -4679,7 +4679,7 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = XGPWRAB2BX;
