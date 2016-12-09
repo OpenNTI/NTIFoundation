@@ -391,10 +391,6 @@ open class CollectionDataSource: NSObject, UICollectionViewDataSource, Collectio
 		return true
 	}
 	
-	open func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
-		return false
-	}
-	
 	/// Determine whether an item may be moved from its original location to a proposed location. Default implementation returns `false`.
 	open func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath, to destinationIndexPath: IndexPath) -> Bool {
 		return false
