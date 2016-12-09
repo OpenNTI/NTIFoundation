@@ -8,64 +8,64 @@
 
 import UIKit
 
-public class CollectionDataSource: NSObject, UICollectionViewDataSource, CollectionDataSourceMetrics, LoadableContentStateMachineDelegate {
+open class CollectionDataSource: NSObject, UICollectionViewDataSource, CollectionDataSourceMetrics, LoadableContentStateMachineDelegate {
 	
 	public override init() {
 		super.init()
 		stateMachine.delegate = self
 	}
 
-	public var title: String?
+	open var title: String?
 	
-	public weak var delegate: CollectionDataSourceDelegate?
+	open weak var delegate: CollectionDataSourceDelegate?
 	
-	public weak var controller: CollectionDataSourceController?
+	open weak var controller: CollectionDataSourceController?
 	
-	public var delegatesLoadingToController = false
+	open var delegatesLoadingToController = false
 	
-	public var allowsSelection: Bool {
+	open var allowsSelection: Bool {
 		return true
 	}
 	
-	public var isRootDataSource: Bool {
+	open var isRootDataSource: Bool {
 		return !(delegate is CollectionDataSource)
 	}
 	
-	public func dataSourceForSectionAtIndex(sectionIndex: Int) -> CollectionDataSource {
+	open func dataSourceForSectionAtIndex(_ sectionIndex: Int) -> CollectionDataSource {
 		return self
 	}
 	
-	public func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath? {
+	open func localIndexPathForGlobal(_ globalIndexPath: IndexPath) -> IndexPath? {
 		return globalIndexPath
 	}
 	
 	/// The number of sections in this data source.
-	public var numberOfSections: Int {
+	open var numberOfSections: Int {
 		return 1
 	}
 	
 	/// Return the number of items in a specific section. Implement this instead of the UICollectionViewDataSource method.
-	public func numberOfItemsInSection(sectionIndex: Int) -> Int {
+	open func numberOfItemsInSection(_ sectionIndex: Int) -> Int {
 		return 0
 	}
 	
-	public func item(at indexPath: NSIndexPath) -> AnyItem? {
+	open func item(at indexPath: IndexPath) -> AnyItem? {
 		return nil
 	}
 	
-	public func indexPath(for item: AnyItem) -> NSIndexPath? {
+	open func indexPath(for item: AnyItem) -> IndexPath? {
 		return nil
 	}
 	
 	/// Removes an object from the data source. This method should only be called as the result of a user action, such as tapping the "Delete" button in a swipe-to-delete gesture. Automatic removal of items due to outside changes should instead be handled by the data source itself — not the controller. Data sources must implement this to support swipe-to-delete.
-	public func removeItem(at indexPath: NSIndexPath) {
+	open func removeItem(at indexPath: IndexPath) {
 		// Subclasses should override
 	}
 	
 	// MARK: - Notifications
 	
 	/// Called when a data source becomes active in a collection view. If the data source is in the `Initial` state, it will be sent a `-loadContent` message.
-	public func didBecomeActive() {
+	open func didBecomeActive() {
 		if loadingState == .Initial {
 			setNeedsLoadContent()
 			return
@@ -81,7 +81,7 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 	}
 	
 	/// Called when a data source becomes inactive in a collection view.
-	public func willResignActive() {
+	open func willResignActive() {
 		// We need to hang onto the placeholder, because dismiss clears it
 		if let placeholder = self.placeholder {
 			dismissPlaceholder()
@@ -90,7 +90,7 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 	}
 	
 	/// Update the state of the data source in a safe manner. This ensures the collection view will be updated appropriately.
-	public func performUpdate(update: () -> Void, complete: (Void -> ())? = nil) {
+	open func performUpdate(_ update: @escaping () -> Void, complete: ((Void) -> ())? = nil) {
 		requireMainThread()
 		
 		 // If this data source is loading, wait until we're done before we execute the update
@@ -100,21 +100,21 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 			}
 			return
 		}
-		internalPerformUpdate(update, complete: complete)
+		internalPerformUpdate(update, complete: complete!)
 	}
 	
-	private func internalPerformUpdate(block: dispatch_block_t, complete: dispatch_block_t? = nil) {
+	fileprivate func internalPerformUpdate(_ block: @escaping ()->(), complete: ()->()? = nil) {
 		let update = block
 		if let delegate = self.delegate {
 			delegate.dataSource(self, performBatchUpdate: update, complete: complete)
 		} else {
 			update()
-			complete?()
+			complete()
 		}
 	}
 	
-	private func enqueueUpdate(block: dispatch_block_t) {
-		let update: dispatch_block_t
+	fileprivate func enqueueUpdate(_ block: @escaping ()->()) {
+		let update: ()->()
 		if let pendingUpdate = self.pendingUpdate {
 			let oldPendingUpdate = pendingUpdate
 			update = {
@@ -130,64 +130,64 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 	// MARK: - Metrics
 	
 	/// The default metrics for all sections in this data source.
-	public var defaultMetrics: DataSourceSectionMetricsProviding?
+	open var defaultMetrics: DataSourceSectionMetricsProviding?
 	
-	public private(set) var sectionMetrics: [Int: DataSourceSectionMetricsProviding] = [:]
-	public private(set) var supplementaryItemsByKind: [String: [SupplementaryItem]] = [:]
-	private var supplementaryItemsByKey: [String: SupplementaryItem] = [:]
+	open fileprivate(set) var sectionMetrics: [Int: DataSourceSectionMetricsProviding] = [:]
+	open fileprivate(set) var supplementaryItemsByKind: [String: [SupplementaryItem]] = [:]
+	fileprivate var supplementaryItemsByKey: [String: SupplementaryItem] = [:]
 	
-	public func supplementaryItem(for key: String) -> SupplementaryItem? {
+	open func supplementaryItem(for key: String) -> SupplementaryItem? {
 		return supplementaryItemsByKey[key]
 	}
 	
 	/// Retrieve the layout metrics for a specific section within this data source.
-	public func metricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
+	open func metricsForSectionAtIndex(_ sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
 		return sectionMetrics[sectionIndex]
 	}
 	
 	/// Store customized layout metrics for a section in this data source. The values specified in metrics will override values specified by the data source's `defaultMetrics`.
-	public func setMetrics(metrics: DataSourceSectionMetricsProviding?, forSectionAtIndex sectionIndex: Int) {
+	open func setMetrics(_ metrics: DataSourceSectionMetricsProviding?, forSectionAtIndex sectionIndex: Int) {
 		sectionMetrics[sectionIndex] = metrics
 	}
 	
-	public var metricsHelper: CollectionDataSourceMetrics {
+	open var metricsHelper: CollectionDataSourceMetrics {
 		return CollectionDataSourceMetricsHelper(dataSource: self)
 	}
 	
-	public func numberOfSupplementaryItemsOfKind(kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChildDataSources: Bool) -> Int {
+	open func numberOfSupplementaryItemsOfKind(_ kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChildDataSources: Bool) -> Int {
 		return metricsHelper.numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChildDataSources: shouldIncludeChildDataSources)
 	}
 	
-	public func indexPaths(for supplementaryItem: SupplementaryItem) -> [NSIndexPath] {
-		return metricsHelper.indexPaths(for: supplementaryItem)
+	open func indexPaths(for supplementaryItem: SupplementaryItem) -> [IndexPath] {
+		return metricsHelper.indexPaths(for: supplementaryItem) as [IndexPath]
 	}
 	
-	public func findSupplementaryItemOfKind(kind: String, at indexPath: NSIndexPath, using block: (dataSource: CollectionDataSource, localIndexPath: NSIndexPath, supplementaryItem: SupplementaryItem) -> Void) {
+	open func findSupplementaryItemOfKind(_ kind: String, at indexPath: IndexPath, using block: (_ dataSource: CollectionDataSource, _ localIndexPath: IndexPath, _ supplementaryItem: SupplementaryItem) -> Void) {
 		metricsHelper.findSupplementaryItemOfKind(kind, at: indexPath, using: block)
 	}
 	
-	public func snapshotMetrics() -> [Int: DataSourceSectionMetricsProviding] {
+	open func snapshotMetrics() -> [Int: DataSourceSectionMetricsProviding] {
 		return metricsHelper.snapshotMetrics()
 	}
 	
-	public func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
+	open func snapshotMetricsForSectionAtIndex(_ sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
 		return metricsHelper.snapshotMetricsForSectionAtIndex(sectionIndex)
 	}
 	
-	public var contributesGlobalMetrics = true
+	open var contributesGlobalMetrics = true
 	
-	public func snapshotContributedGlobalMetrics() -> DataSourceSectionMetricsProviding? {
+	open func snapshotContributedGlobalMetrics() -> DataSourceSectionMetricsProviding? {
 		return metricsHelper.snapshotContributedGlobalMetrics()
 	}
 	
-	public func add(supplementaryItem: SupplementaryItem) {
+	open func add(_ supplementaryItem: SupplementaryItem) {
 		let kind = supplementaryItem.elementKind
 		var items = supplementaryItemsOfKind(kind)
 		items.append(supplementaryItem)
 		supplementaryItemsByKind[kind] = items
 	}
 	
-	public func add(supplementaryItem: SupplementaryItem, forSectionAtIndex sectionIndex: Int) {
+	open func add(_ supplementaryItem: SupplementaryItem, forSectionAtIndex sectionIndex: Int) {
 		guard var metrics = sectionMetrics[sectionIndex] else {
 			assertionFailure("There are no metrics for section \(sectionIndex)")
 			return
@@ -195,37 +195,37 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 		metrics.add(supplementaryItem)
 	}
 	
-	public func add(supplementaryItem: SupplementaryItem, forKey key: String) {
+	open func add(_ supplementaryItem: SupplementaryItem, forKey key: String) {
 		add(supplementaryItem)
 		supplementaryItemsByKey[key] = supplementaryItem
 	}
 	
-	public func supplementaryItemsOfKind(kind: String) -> [SupplementaryItem] {
+	open func supplementaryItemsOfKind(_ kind: String) -> [SupplementaryItem] {
 		return supplementaryItemsByKind[kind] ?? []
 	}
 	
-	public func supplementaryItemForKey(key: String) -> SupplementaryItem? {
+	open func supplementaryItemForKey(_ key: String) -> SupplementaryItem? {
 		return supplementaryItemsByKey[key]
 	}
 	
-	public func removeSupplementaryItemForKey(key: String) {
+	open func removeSupplementaryItemForKey(_ key: String) {
 		guard let oldSupplementaryItem = supplementaryItemForKey(key) else {
 			return
 		}
-		supplementaryItemsByKey.removeValueForKey(key)
+		supplementaryItemsByKey.removeValue(forKey: key)
 		remove(oldSupplementaryItem)
 	}
 	
-	private func remove(supplementaryItem: SupplementaryItem) {
+	fileprivate func remove(_ supplementaryItem: SupplementaryItem) {
 		let kind = supplementaryItem.elementKind
 		var items = supplementaryItemsOfKind(kind)
-		if let index = items.indexOf({ $0.isEqual(to: supplementaryItem) }) {
-			items.removeAtIndex(index)
+		if let index = items.index(where: { $0.isEqual(to: supplementaryItem) }) {
+			items.remove(at: index)
 			supplementaryItemsByKind[kind] = items
 		}
 	}
 	
-	public func replaceSupplementaryItemForKey(key: String, with supplementaryItem: SupplementaryItem) {
+	open func replaceSupplementaryItemForKey(_ key: String, with supplementaryItem: SupplementaryItem) {
 		guard let oldSupplementaryItem = supplementaryItemForKey(key) else {
 			add(supplementaryItem, forKey: key)
 			return
@@ -234,10 +234,10 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 		replace(oldSupplementaryItem, with: supplementaryItem)
 	}
 	
-	private func replace(oldSupplementaryItem: SupplementaryItem, with supplementaryItem: SupplementaryItem) {
+	fileprivate func replace(_ oldSupplementaryItem: SupplementaryItem, with supplementaryItem: SupplementaryItem) {
 		let kind = oldSupplementaryItem.elementKind
 		var items = supplementaryItemsOfKind(kind)
-		if let index = items.indexOf({ $0.isEqual(to: oldSupplementaryItem) }) {
+		if let index = items.index(where: { $0.isEqual(to: oldSupplementaryItem) }) {
 			items[index] = supplementaryItem
 		} else {
 			items.append(supplementaryItem)
@@ -248,44 +248,44 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 	// MARK: - Placeholders
 	
 	/// The placeholder to show when the data source is in the "No Content" state.
-	public var noContentPlaceholder: DataSourcePlaceholder?
+	open var noContentPlaceholder: DataSourcePlaceholder?
 	
 	/// The placeholder to show when the data source is in the "Error" state.
-	public var errorPlaceholder: DataSourcePlaceholder?
+	open var errorPlaceholder: DataSourcePlaceholder?
 	
-	public var placeholder: DataSourcePlaceholder?
+	open var placeholder: DataSourcePlaceholder?
 	
-	public var showsActivityIndicatorWhileRefreshingContent = false
+	open var showsActivityIndicatorWhileRefreshingContent = false
 	
-	public var shouldShowActivityIndicator: Bool {
+	open var shouldShowActivityIndicator: Bool {
 		return (showsActivityIndicatorWhileRefreshingContent && loadingState == .RefreshingContent)
 			|| loadingState == .LoadingContent
 	}
 	
-	public var shouldShowPlaceholder: Bool {
+	open var shouldShowPlaceholder: Bool {
 		return placeholder != nil
 	}
 	
-	public func presentActivityIndicator(forSections sections: NSIndexSet? = nil) {
+	open func presentActivityIndicator(forSections sections: IndexSet? = nil) {
 		guard let delegate = self.delegate else {
 			return
 		}
 		let sections = sections ?? indexesOfAllSections
 		internalPerformUpdate({
-			if sections.containsIndexesInRange(self.rangeOfAllSections) {
+			if sections.contains(integersIn: self.rangeOfAllSections.toRange() ?? 0..<0) {
 				self.placeholder = BasicDataSourcePlaceholder.placeholderWithActivityIndicator()
 			}
 			delegate.dataSource(self, didPresentActivityIndicatorForSections: sections)
 		})
 	}
 	
-	public func present(placeholder: DataSourcePlaceholder?, forSections sections: NSIndexSet? = nil) {
+	open func present(_ placeholder: DataSourcePlaceholder?, forSections sections: IndexSet? = nil) {
 		guard let delegate = self.delegate else {
 			return
 		}
 		let sections = sections ?? indexesOfAllSections
 		internalPerformUpdate({
-			if sections.containsIndexesInRange(self.rangeOfAllSections),
+			if sections.contains(integersIn: self.rangeOfAllSections.toRange() ?? 0..<0),
 				let placeholder = placeholder {
 					self.placeholder = placeholder
 			}
@@ -293,28 +293,28 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 		})
 	}
 	
-	public func dismissPlaceholder(forSections sections: NSIndexSet? = nil) {
+	open func dismissPlaceholder(forSections sections: IndexSet? = nil) {
 		guard let delegate = self.delegate else {
 			return
 		}
 		let sections = sections ?? indexesOfAllSections
 		internalPerformUpdate({
-			if sections.containsIndexesInRange(self.rangeOfAllSections) {
+			if sections.contains(integersIn: self.rangeOfAllSections.toRange() ?? 0..<0) {
 				self.placeholder = nil
 			}
 			delegate.dataSource(self, didDismissPlaceholderForSections: sections)
 		})
 	}
 	
-	var indexesOfAllSections: NSIndexSet {
-		return NSIndexSet(indexesInRange: rangeOfAllSections)
+	var indexesOfAllSections: IndexSet {
+		return IndexSet(integersIn: rangeOfAllSections.toRange() ?? 0..<0)
 	}
 	
 	var rangeOfAllSections: NSRange {
 		return NSMakeRange(0, numberOfSections)
 	}
 	
-	public func update(placeholderView: CollectionPlaceholderView?, forSectionAtIndex sectionIndex: Int) {
+	open func update(_ placeholderView: CollectionPlaceholderView?, forSectionAtIndex sectionIndex: Int) {
 		guard let placeholderView = placeholderView else {
 			return
 		}
@@ -338,30 +338,30 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 		}
 	}
 	
-	public func dequePlaceholderView(for collectionView: UICollectionView, at indexPath: NSIndexPath) -> CollectionPlaceholderView {
-		let placeholderView = collectionView.dequeueReusableSupplementaryViewOfKind(collectionElementKindPlaceholder, withReuseIdentifier: NSStringFromClass(CollectionPlaceholderView.self), forIndexPath: indexPath) as! CollectionPlaceholderView
+	open func dequePlaceholderView(for collectionView: UICollectionView, at indexPath: IndexPath) -> CollectionPlaceholderView {
+		let placeholderView = collectionView.dequeueReusableSupplementaryView(ofKind: collectionElementKindPlaceholder, withReuseIdentifier: NSStringFromClass(CollectionPlaceholderView.self), for: indexPath) as! CollectionPlaceholderView
 		update(placeholderView, forSectionAtIndex: indexPath.section)
 		return placeholderView
 	}
 	
 	// MARK: - Subclass hooks
 	
-	public func collectionView(collectionView: UICollectionView, configure cell: UICollectionViewCell, for indexPath: NSIndexPath) {
+	open func collectionView(_ collectionView: UICollectionView, configure cell: UICollectionViewCell, for indexPath: IndexPath) {
 		// Subclasses should override
 	}
 	
-	public func collectionView(collectionView: UICollectionView, identifierForCellAt indexPath: NSIndexPath) -> String {
+	open func collectionView(_ collectionView: UICollectionView, identifierForCellAt indexPath: IndexPath) -> String {
 		preconditionFailure("Subclasses must override this method.")
 	}
 	
 	/// Register reusable views needed by this data source.
-	public func registerReusableViews(with collectionView: UICollectionView) {
-		func registerReusableViewsForSectionAtIndex(sectionIndex: Int) {
+	open func registerReusableViews(with collectionView: UICollectionView) {
+		func registerReusableViewsForSectionAtIndex(_ sectionIndex: Int) {
 			guard let sectionMetrics = snapshotMetricsForSectionAtIndex(sectionIndex) else {
 				return
 			}
 			for itemMetrics in sectionMetrics.supplementaryItems {
-				collectionView.registerClass(itemMetrics.supplementaryViewClass, forSupplementaryViewOfKind: itemMetrics.elementKind, withReuseIdentifier: itemMetrics.reuseIdentifier)
+				collectionView.register(itemMetrics.supplementaryViewClass, forSupplementaryViewOfKind: itemMetrics.elementKind, withReuseIdentifier: itemMetrics.reuseIdentifier)
 			}
 		}
 		
@@ -371,42 +371,42 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 			registerReusableViewsForSectionAtIndex(sectionIndex)
 		}
 		
-		collectionView.registerClass(CollectionPlaceholderView.self, forSupplementaryViewOfKind: collectionElementKindPlaceholder, withReuseIdentifier: NSStringFromClass(CollectionPlaceholderView.self))
+		collectionView.register(CollectionPlaceholderView.self, forSupplementaryViewOfKind: collectionElementKindPlaceholder, withReuseIdentifier: NSStringFromClass(CollectionPlaceholderView.self))
 		
 		registerControllerReusableViews(with: collectionView)
 	}
 	
-	private func registerControllerReusableViews(with collectionView: UICollectionView) {
+	fileprivate func registerControllerReusableViews(with collectionView: UICollectionView) {
 		guard let controller = self.controller else {
 			return
 		}
 		
 		for registration in controller.supplementaryViewRegistrations {
-			collectionView.registerClass(registration.viewClass, forSupplementaryViewOfKind: registration.elementKind, withReuseIdentifier: registration.identifier)
+			collectionView.register(registration.viewClass, forSupplementaryViewOfKind: registration.elementKind, withReuseIdentifier: registration.identifier)
 		}
 	}
 	
 	/// Determine whether or not a cell is editable. Default implementation returns `false`.
-	public func collectionView(collectionView: UICollectionView, canEditItemAt indexPath: NSIndexPath) -> Bool {
+	open func collectionView(_ collectionView: UICollectionView, canEditItemAt indexPath: IndexPath) -> Bool {
 		return true
 	}
 	
-	public func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath) -> Bool {
+	open func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
 		return false
 	}
 	
 	/// Determine whether an item may be moved from its original location to a proposed location. Default implementation returns `false`.
-	public func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath, to destinationIndexPath: NSIndexPath) -> Bool {
+	open func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath, to destinationIndexPath: IndexPath) -> Bool {
 		return false
 	}
 	
-	public func collectionView(collectionView: UICollectionView, moveItemAt sourceIndexPath: NSIndexPath, to destinationIndexPath: NSIndexPath) {
+	open func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
 		
 	}
 	
 	// MARK: - ContentLoading
 	
-	public var loadingState: LoadState {
+	open var loadingState: LoadState {
 		get {
 			return stateMachine.currentState
 		}
@@ -415,31 +415,31 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 		}
 	}
 	
-	public var loadingError: NSError?
+	open var loadingError: NSError?
 	
-	private let stateMachine = LoadableContentStateMachine()
+	fileprivate let stateMachine = LoadableContentStateMachine()
 	
-	private var pendingUpdate: (() -> Void)?
-	private var loadingCompletion: (() -> Void)?
-	private weak var loadingProgress: LoadingProgress?
-	private var isResettingContent = false
+	fileprivate var pendingUpdate: (() -> Void)?
+	fileprivate var loadingCompletion: (() -> Void)?
+	fileprivate weak var loadingProgress: LoadingProgress?
+	fileprivate var isResettingContent = false
 	
 	/// Signal that the datasource should reload its content.
-	public func setNeedsLoadContent() {
+	open func setNeedsLoadContent() {
 		setNeedsLoadContent(0)
 	}
 	
-	public func setNeedsLoadContent(delay: NSTimeInterval) {
+	open func setNeedsLoadContent(_ delay: TimeInterval) {
 		cancelNeedsLoadContent()
-		performSelector(#selector(CollectionDataSource.loadContent as (CollectionDataSource) -> () -> ()), withObject: nil, afterDelay: delay)
+		perform(#selector(CollectionDataSource.loadContent as (CollectionDataSource) -> () -> ()), with: nil, afterDelay: delay)
 	}
 	
-	public func cancelNeedsLoadContent() {
-		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(CollectionDataSource.loadContent as (CollectionDataSource) -> () -> ()), object: nil)
+	open func cancelNeedsLoadContent() {
+		NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(CollectionDataSource.loadContent as (CollectionDataSource) -> () -> ()), object: nil)
 	}
 	
 	/// Reset the content and loading state.
-	public func resetContent() {
+	open func resetContent() {
 		isResettingContent = true
 		// This ONLY works because the resettingContent flag is set to YES; this will be checked in -missingTransitionFromState:toState: to decide whether to allow the transition
 		loadingState = .Initial
@@ -449,7 +449,7 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 		loadingProgress?.ignore()
 	}
 	
-	public func loadContent() {
+	open func loadContent() {
 		let loadingState = self.loadingState
 		switch loadingState {
 		case .Initial, .LoadingContent:
@@ -465,7 +465,7 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 		beginLoadingContent(with: loadingProgress)
 	}
 	
-	public func startNewLoadingProgress() -> LoadingProgress {
+	open func startNewLoadingProgress() -> LoadingProgress {
 		let loadingProgress = BasicLoadingProgress { (newState, error, update) in
 			guard let newState = newState else {
 				return
@@ -482,7 +482,7 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 		return loadingProgress
 	}
 	
-	public func beginLoadingContent(with progress: LoadingProgress) {
+	open func beginLoadingContent(with progress: LoadingProgress) {
 		if delegatesLoadingToController,
 			let controller = self.controller {
 			return controller.loadContent(with: progress)
@@ -490,13 +490,13 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 		loadContent(with: progress)
 	}
 	
-	public func loadContent(with progress: LoadingProgress) {
+	open func loadContent(with progress: LoadingProgress) {
 		// This default implementation just signals that the load completed
 		progress.done()
 	}
 	
 	/// Use this method to wait for content to load. The block will be called once the loadingState has transitioned to the ContentLoaded, NoContent, or Error states. If the data source is already in that state, the block will be called immediately.
-	public func whenLoaded(onLoad: () -> Void) {
+	open func whenLoaded(_ onLoad: @escaping () -> Void) {
 		var complete: Int32 = 0
 		
 		let oldLoadingCompletion = loadingCompletion
@@ -513,7 +513,7 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 		}
 	}
 	
-	public func endLoadingContent(with state: LoadState, error: NSError?, update: (() -> Void)?) {
+	open func endLoadingContent(with state: LoadState, error: NSError?, update: (() -> Void)?) {
 		loadingError = error
 		loadingState = state
 		
@@ -528,20 +528,20 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 		notifyContentLoaded(with: error)
 	}
 	
-	public func setNeedsLoadNextContent() {
+	open func setNeedsLoadNextContent() {
 		setNeedsLoadNextContent(0)
 	}
 	
-	public func setNeedsLoadNextContent(delay: NSTimeInterval) {
+	open func setNeedsLoadNextContent(_ delay: TimeInterval) {
 		cancelNeedsLoadNextContent()
-		performSelector(#selector(CollectionDataSource.loadNextContent as (CollectionDataSource) -> () -> ()), withObject: nil, afterDelay: delay)
+		perform(#selector(CollectionDataSource.loadNextContent as (CollectionDataSource) -> () -> ()), with: nil, afterDelay: delay)
 	}
 	
-	public func cancelNeedsLoadNextContent() {
-		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(CollectionDataSource.loadNextContent as (CollectionDataSource) -> () -> ()), object: nil)
+	open func cancelNeedsLoadNextContent() {
+		NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(CollectionDataSource.loadNextContent as (CollectionDataSource) -> () -> ()), object: nil)
 	}
 	
-	public func loadNextContent() {
+	open func loadNextContent() {
 		guard canEnter(.LoadingNextContent) else {
 			return
 		}
@@ -553,7 +553,7 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 		beginLoadingNextContent(with: loadingProgress)
 	}
 	
-	public func beginLoadingNextContent(with progress: LoadingProgress) {
+	open func beginLoadingNextContent(with progress: LoadingProgress) {
 		if delegatesLoadingToController,
 			let controller = self.controller {
 			return controller.loadNextContent(with: progress)
@@ -561,24 +561,24 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 		loadNextContent(with: progress)
 	}
 	
-	public func loadNextContent(with progress: LoadingProgress) {
+	open func loadNextContent(with progress: LoadingProgress) {
 		progress.done()
 	}
 	
-	public func setNeedsLoadPreviousContent() {
+	open func setNeedsLoadPreviousContent() {
 		setNeedsLoadPreviousContent(0)
 	}
 	
-	public func setNeedsLoadPreviousContent(delay: NSTimeInterval) {
+	open func setNeedsLoadPreviousContent(_ delay: TimeInterval) {
 		cancelNeedsLoadPreviousContent()
-		performSelector(#selector(CollectionDataSource.loadPreviousContent as (CollectionDataSource) -> () -> ()), withObject: nil, afterDelay: delay)
+		perform(#selector(CollectionDataSource.loadPreviousContent as (CollectionDataSource) -> () -> ()), with: nil, afterDelay: delay)
 	}
 	
-	public func cancelNeedsLoadPreviousContent() {
-		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(CollectionDataSource.loadPreviousContent as (CollectionDataSource) -> () -> ()), object: nil)
+	open func cancelNeedsLoadPreviousContent() {
+		NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(CollectionDataSource.loadPreviousContent as (CollectionDataSource) -> () -> ()), object: nil)
 	}
 	
-	public func loadPreviousContent() {
+	open func loadPreviousContent() {
 		guard canEnter(.LoadingPreviousContent) else {
 			return
 		}
@@ -590,7 +590,7 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 		beginLoadingPreviousContent(with: loadingProgress)
 	}
 	
-	public func beginLoadingPreviousContent(with progress: LoadingProgress) {
+	open func beginLoadingPreviousContent(with progress: LoadingProgress) {
 		if delegatesLoadingToController,
 			let controller = self.controller {
 			return controller.loadPreviousContent(with: progress)
@@ -598,25 +598,25 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 		loadPreviousContent(with: progress)
 	}
 	
-	public func loadPreviousContent(with progress: LoadingProgress) {
+	open func loadPreviousContent(with progress: LoadingProgress) {
 		progress.done()
 	}
 	
-	public func canEnter(state: LoadState) -> Bool {
+	open func canEnter(_ state: LoadState) -> Bool {
 		return stateMachine.canTransition(to: state)
 	}
 	
-	public func stateWillChange(to newState: LoadState) {
-		willChangeValueForKey("loadingState")
+	open func stateWillChange(to newState: LoadState) {
+		willChangeValue(forKey: "loadingState")
 	}
 	
-	public func stateDidChange(to newState: LoadState, from oldState: LoadState) {
-		didChangeValueForKey("loadingState")
+	open func stateDidChange(to newState: LoadState, from oldState: LoadState) {
+		didChangeValue(forKey: "loadingState")
 		didExit(oldState)
 		didEnter(newState)
 	}
 	
-	private func didExit(state: LoadState) {
+	fileprivate func didExit(_ state: LoadState) {
 		switch state {
 		case .LoadingContent:
 			didExitLoadingState()
@@ -629,7 +629,7 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 		}
 	}
 	
-	private func didEnter(state: LoadState) {
+	fileprivate func didEnter(_ state: LoadState) {
 		switch state {
 		case .LoadingContent:
 			didEnterLoadingState()
@@ -642,43 +642,43 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 		}
 	}
 	
-	public func didEnterLoadingState() {
+	open func didEnterLoadingState() {
 		presentActivityIndicator()
 	}
 	
-	public func didExitLoadingState() {
+	open func didExitLoadingState() {
 		dismissPlaceholder()
 	}
 	
-	public func didEnterNoContentState() {
+	open func didEnterNoContentState() {
 		guard let noContentPlaceholder = self.noContentPlaceholder else {
 			return
 		}
 		present(noContentPlaceholder)
 	}
 	
-	public func didExitNoContentState() {
+	open func didExitNoContentState() {
 		guard noContentPlaceholder != nil else {
 			return
 		}
 		dismissPlaceholder()
 	}
 	
-	public func didEnterErrorState() {
+	open func didEnterErrorState() {
 		guard let errorPlaceholder = self.errorPlaceholder else {
 			return
 		}
 		present(errorPlaceholder)
 	}
 	
-	public func didExitErrorState() {
+	open func didExitErrorState() {
 		guard errorPlaceholder != nil else {
 			return
 		}
 		dismissPlaceholder()
 	}
 	
-	public func missingTransition(from fromState: LoadState, to toState: LoadState) throws -> LoadState? {
+	open func missingTransition(from fromState: LoadState, to toState: LoadState) throws -> LoadState? {
 		guard isResettingContent && toState == .Initial else {
 			return nil
 		}
@@ -687,29 +687,29 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 	
 	// MARK: - UICollectionViewDataSource
 	
-	public func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+	open func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		// When we're showing a placeholder, we have to lie to the collection view about the number of items we have; otherwise, it will ask for layout attributes that we don't have
 		return placeholder == nil ? numberOfItemsInSection(section) : 0
 	}
 	
-	public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+	open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		let identifier = self.collectionView(collectionView, identifierForCellAt: indexPath)
-		let cell = collectionView.dequeueReusableCellWithReuseIdentifier(identifier, forIndexPath: indexPath)
+		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath)
 		self.collectionView(collectionView, configure: cell, for: indexPath)
 		return cell
 	}
 	
-	public func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+	open func numberOfSections(in collectionView: UICollectionView) -> Int {
 		return numberOfSections
 	}
 	
-	public func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+	open func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
 		if kind == collectionElementKindPlaceholder {
 			return dequePlaceholderView(for: collectionView, at: indexPath)
 		}
 		
 		var metrics: SupplementaryItem?
-		var localIndexPath: NSIndexPath?
+		var localIndexPath: IndexPath?
 		var dataSource: CollectionDataSource = self
 		
 		findSupplementaryItemOfKind(kind, at: indexPath) { (foundDataSource, foundIndexPath, foundMetrics) in
@@ -724,14 +724,14 @@ public class CollectionDataSource: NSObject, UICollectionViewDataSource, Collect
 		
 		layoutLog("\(#function) \(kind) \(indexPath) \(viewMetrics.reuseIdentifier) \(viewMetrics.supplementaryViewClass)")
 		
-		let view = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: viewMetrics.reuseIdentifier, forIndexPath: indexPath)
+		let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: viewMetrics.reuseIdentifier, for: indexPath)
 		
-		viewMetrics.configureView?(view: view, dataSource: dataSource, indexPath: localIndexPath!)
+		viewMetrics.configureView?(view, dataSource, localIndexPath!)
 		
 		return view
 	}
 	
-	public func collectionView(collectionView: UICollectionView, canMoveItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+	open func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
 		return false
 	}
 	
@@ -753,37 +753,37 @@ extension CollectionDataSource {
 extension CollectionDataSource {
 	
 	/// Notify the parent data source and the collection view that new items have been inserted at positions represented by *insertedIndexPaths*.
-	public func notifyItemsInserted(at indexPaths: [NSIndexPath]) {
+	public func notifyItemsInserted(at indexPaths: [IndexPath]) {
 		requireMainThread()
 		delegate?.dataSource(self, didInsertItemsAt: indexPaths)
 	}
 	
 	/// Notify the parent data source and collection view that the items represented by *removedIndexPaths* have been removed from this data source.
-	public func notifyItemsRemoved(at indexPaths: [NSIndexPath]) {
+	public func notifyItemsRemoved(at indexPaths: [IndexPath]) {
 		requireMainThread()
 		delegate?.dataSource(self, didRemoveItemsAt: indexPaths)
 	}
 	
 	/// Notify the parent data sources and collection view that the items represented by *refreshedIndexPaths* have been updated and need redrawing.
-	public func notifyItemsRefreshed(at indexPaths: [NSIndexPath]) {
+	public func notifyItemsRefreshed(at indexPaths: [IndexPath]) {
 		requireMainThread()
 		delegate?.dataSource(self, didRefreshItemsAt: indexPaths)
 	}
 	
 	/// Notify the parent data sources and collection view that the items represented by *refreshedIndexPaths* have been updated and need redrawing.
-	public func notifyItemMoved(from oldIndexPath: NSIndexPath, to newIndexPath: NSIndexPath) {
+	public func notifyItemMoved(from oldIndexPath: IndexPath, to newIndexPath: IndexPath) {
 		requireMainThread()
 		delegate?.dataSource(self, didMoveItemAt: oldIndexPath, to: newIndexPath)
 	}
 	
 	/// Notify parent data sources and the collection view that the sections were inserted.
-	public func notifySectionsInserted(sections: NSIndexSet, direction: SectionOperationDirection? = nil) {
+	public func notifySectionsInserted(_ sections: IndexSet, direction: SectionOperationDirection? = nil) {
 		requireMainThread()
 		delegate?.dataSource(self, didInsertSections: sections, direction: direction)
 	}
 	
 	/// Notify parent data sources and (eventually) the collection view that the sections were removed.
-	public func notifySectionsRemoved(sections: NSIndexSet, direction: SectionOperationDirection? = nil) {
+	public func notifySectionsRemoved(_ sections: IndexSet, direction: SectionOperationDirection? = nil) {
 		requireMainThread()
 		delegate?.dataSource(self, didRemoveSections: sections, direction: direction)
 	}
@@ -795,7 +795,7 @@ extension CollectionDataSource {
 	}
 	
 	/// Notify parent data sources and ultimately the collection view the specified sections were refreshed.
-	public func notifySectionsRefreshed(sections: NSIndexSet) {
+	public func notifySectionsRefreshed(_ sections: IndexSet) {
 		requireMainThread()
 		delegate?.dataSource(self, didRefreshSections: sections)
 	}
@@ -820,16 +820,16 @@ extension CollectionDataSource {
 		delegate?.dataSourceDidLoadContent(self, error: error)
 	}
 	
-	public func notifyContentUpdated(for supplementaryItem: SupplementaryItem, at indexPaths: [NSIndexPath]) {
+	public func notifyContentUpdated(for supplementaryItem: SupplementaryItem, at indexPaths: [IndexPath]) {
 		requireMainThread()
 		delegate?.dataSource(self, didUpdate: supplementaryItem, at: indexPaths)
 	}
 	
-	public func notifyDidAddChild(childDataSource: CollectionDataSource) {
+	public func notifyDidAddChild(_ childDataSource: CollectionDataSource) {
 		delegate?.dataSource(self, didAddChild: childDataSource)
 	}
 	
-	public func notifyPerform(update: (collectionView: UICollectionView) -> Void) {
+	public func notifyPerform(_ update: (_ collectionView: UICollectionView) -> Void) {
 		delegate?.dataSource(self, perform: update)
 	}
 	

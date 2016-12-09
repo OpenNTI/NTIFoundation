@@ -18,65 +18,65 @@ public protocol DataSourceMapping: NSObjectProtocol {
 	var numberOfSections: Int { get }
 	
 	/// Return the local section for a global section.
-	func localSectionForGlobalSection(globalSection: Int) -> Int?
-	func localSectionsForGlobalSections(globalSections: NSIndexSet) -> NSIndexSet
+	func localSectionForGlobalSection(_ globalSection: Int) -> Int?
+	func localSectionsForGlobalSections(_ globalSections: IndexSet) -> IndexSet
 	
 	/// Return the global section for a local section.
-	func globalSectionForLocalSection(localSection: Int) -> Int
-	func globalSectionsForLocalSections(localSections: NSIndexSet) -> NSIndexSet
+	func globalSectionForLocalSection(_ localSection: Int) -> Int
+	func globalSectionsForLocalSections(_ localSections: IndexSet) -> IndexSet
 	
 	/// Return a local index path for a global index path. Returns nil when the global indexPath does not map locally.
-	func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath?
+	func localIndexPathForGlobal(_ globalIndexPath: IndexPath) -> IndexPath?
 	
 	/// Return a global index path for a local index path.
-	func globalIndexPathForLocal(localIndexPath: NSIndexPath) -> NSIndexPath
+	func globalIndexPathForLocal(_ localIndexPath: IndexPath) -> IndexPath
 	
 	/// Return an array of local index paths from an array of global index paths.
-	func localIndexPathsForGlobal(globalIndexPaths: [NSIndexPath]) -> [NSIndexPath]
+	func localIndexPathsForGlobal(_ globalIndexPaths: [IndexPath]) -> [IndexPath]
 	
 	/// Return an array of global index paths from an array of local index paths.
-	func globalIndexPathsForLocal(localIndexPaths: [NSIndexPath]) -> [NSIndexPath]
+	func globalIndexPathsForLocal(_ localIndexPaths: [IndexPath]) -> [IndexPath]
 	
 	/// The func argument is called once for each mapped section and passed the global section index.
-	func updateMappingStartingAtGlobalSection(globalSection: Int, withUpdater updater: ((globalSection: Int) -> Void)?)
+	func updateMappingStartingAtGlobalSection(_ globalSection: Int, withUpdater updater: ((_ globalSection: Int) -> Void)?)
 	
 }
 
 extension DataSourceMapping {
 	
-	public func localSectionsForGlobalSections(globalSections: NSIndexSet) -> NSIndexSet {
+	public func localSectionsForGlobalSections(_ globalSections: IndexSet) -> IndexSet {
 		let localSections = NSMutableIndexSet()
 		for globalSection in globalSections {
 			guard let localSection = localSectionForGlobalSection(globalSection) else {
 				continue
 			}
-			localSections.addIndex(localSection)
+			localSections.add(localSection)
 		}
-		return localSections
+		return localSections as IndexSet
 	}
 	
-	public func globalSectionsForLocalSections(localSections: NSIndexSet) -> NSIndexSet {
+	public func globalSectionsForLocalSections(_ localSections: IndexSet) -> IndexSet {
 		let globalSections = NSMutableIndexSet()
 		for localSection in localSections {
 			let globalSection = globalSectionForLocalSection(localSection)
-			globalSections.addIndex(globalSection)
+			globalSections.add(globalSection)
 		}
-		return globalSections
+		return globalSections as IndexSet
 	}
 	
-	public func localIndexPathsForGlobal(globalIndexPaths: [NSIndexPath]) -> [NSIndexPath] {
+	public func localIndexPathsForGlobal(_ globalIndexPaths: [IndexPath]) -> [IndexPath] {
 		return globalIndexPaths.flatMap {
 			localIndexPathForGlobal($0)
 		}
 	}
 	
-	public func globalIndexPathsForLocal(localIndexPaths: [NSIndexPath]) -> [NSIndexPath] {
+	public func globalIndexPathsForLocal(_ localIndexPaths: [IndexPath]) -> [IndexPath] {
 		return localIndexPaths.map { globalIndexPathForLocal($0) }
 	}
 	
 }
 
-public class BasicDataSourceMapping: NSObject, DataSourceMapping {
+open class BasicDataSourceMapping: NSObject, DataSourceMapping {
 	
 	public init(dataSource: CollectionDataSource, globalSectionIndex: Int? = nil) {
 		self.dataSource = dataSource
@@ -86,55 +86,55 @@ public class BasicDataSourceMapping: NSObject, DataSourceMapping {
 		}
 	}
 	
-	public var dataSource: CollectionDataSource
+	open var dataSource: CollectionDataSource
 	
-	public private(set) var numberOfSections: Int = 0
+	open fileprivate(set) var numberOfSections: Int = 0
 	
-	private var globalToLocalSections: [Int: Int] = [:]
-	private var localToGlobalSections: [Int: Int] = [:]
+	fileprivate var globalToLocalSections: [Int: Int] = [:]
+	fileprivate var localToGlobalSections: [Int: Int] = [:]
 	
-	public func localSectionForGlobalSection(globalSection: Int) -> Int? {
+	open func localSectionForGlobalSection(_ globalSection: Int) -> Int? {
 		return globalToLocalSections[globalSection]
 	}
 	
-	public func globalSectionForLocalSection(localSection: Int) -> Int {
+	open func globalSectionForLocalSection(_ localSection: Int) -> Int {
 		guard let globalSection = localToGlobalSections[localSection] else {
 			preconditionFailure("localSection \(localSection) not found in localToGlobalSections: \(localToGlobalSections)")
 		}
 		return globalSection
 	}
 	
-	public func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath? {
+	open func localIndexPathForGlobal(_ globalIndexPath: IndexPath) -> IndexPath? {
 		guard let section = localSectionForGlobalSection(globalIndexPath.section) else {
 			return nil
 		}
-		return NSIndexPath(forItem: globalIndexPath.item, inSection: section)
+		return IndexPath(item: globalIndexPath.item, section: section)
 	}
 	
-	public func globalIndexPathForLocal(localIndexPath: NSIndexPath) -> NSIndexPath {
+	open func globalIndexPathForLocal(_ localIndexPath: IndexPath) -> IndexPath {
 		let section = globalSectionForLocalSection(localIndexPath.section)
-		return NSIndexPath(forItem: localIndexPath.item, inSection: section)
+		return IndexPath(item: localIndexPath.item, section: section)
 	}
 	
-	private func addMappingFromGlobalSection(globalSection: Int, toLocalSection localSection: Int) {
+	fileprivate func addMappingFromGlobalSection(_ globalSection: Int, toLocalSection localSection: Int) {
 		assert(!localSectionExistsForGlobalSection(globalSection), "Collision while trying to add a mapping from globalSection \(globalSection) to localSection \(localSection)")
 		globalToLocalSections[globalSection] = localSection
 		localToGlobalSections[localSection] = globalSection
 	}
 	
-	private func localSectionExistsForGlobalSection(globalSection: Int) -> Bool {
+	fileprivate func localSectionExistsForGlobalSection(_ globalSection: Int) -> Bool {
 		return globalToLocalSections[globalSection] != nil
 	}
 	
-	public func updateMappingStartingAtGlobalSection(globalSection: Int, withUpdater updater: ((globalSection: Int) -> Void)? = nil) {
+	open func updateMappingStartingAtGlobalSection(_ globalSection: Int, withUpdater updater: ((_ globalSection: Int) -> Void)? = nil) {
 		numberOfSections = dataSource.numberOfSections
-		globalToLocalSections.removeAll(keepCapacity: true)
-		localToGlobalSections.removeAll(keepCapacity: true)
+		globalToLocalSections.removeAll(keepingCapacity: true)
+		localToGlobalSections.removeAll(keepingCapacity: true)
 		
 		var globalSection = globalSection
 		for localSection in 0..<numberOfSections {
 			addMappingFromGlobalSection(globalSection, toLocalSection: localSection)
-			updater?(globalSection: globalSection)
+			updater?(globalSection)
 			globalSection += 1
 		}
 	}

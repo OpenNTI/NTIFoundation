@@ -10,7 +10,7 @@ import UIKit
 import CoreText
 
 /// A `UILabel` that draws an additional string when the text is truncated.
-public class TruncatingLabel: UILabel {
+open class TruncatingLabel: UILabel {
 
 	/// The text to display when truncated.
 	///
@@ -18,7 +18,7 @@ public class TruncatingLabel: UILabel {
 	/// Default is "more".
 	/// The truncationText is displayed in the tintColor of this view.
 	/// This property can be reset to the default by setting it to `nil`.
-	public var truncationText: String! {
+	open var truncationText: String! {
 		get {
 			return _truncationText
 		}
@@ -37,9 +37,9 @@ public class TruncatingLabel: UILabel {
 		}
 	}
 	
-	private var _truncationText: String?
+	fileprivate var _truncationText: String?
 	
-	private func resetTruncationText() {
+	fileprivate func resetTruncationText() {
 		_truncationText = NSLocalizedString("more", comment: "Default text to display after truncated text.")
 	}
 	
@@ -49,7 +49,7 @@ public class TruncatingLabel: UILabel {
 	}
 	
 	public convenience init() {
-		self.init(frame: CGRectZero)
+		self.init(frame: CGRect.zero)
 	}
 	
 	public required init?(coder aDecoder: NSCoder) {
@@ -57,11 +57,11 @@ public class TruncatingLabel: UILabel {
 		commonInit()
 	}
 	
-	private func commonInit() {
+	fileprivate func commonInit() {
 		resetTruncationText()
 	}
 	
-	private var framesetter: CTFramesetterRef? {
+	fileprivate var framesetter: CTFramesetter? {
 		if let framesetter = _framesetter {
 			return framesetter
 		}
@@ -74,67 +74,67 @@ public class TruncatingLabel: UILabel {
 		return _framesetter
 	}
 	
-	private func setNeedsFramesetter() {
+	fileprivate func setNeedsFramesetter() {
 		_framesetter = nil
 	}
 	
-	private var _framesetter: CTFramesetterRef?
+	fileprivate var _framesetter: CTFramesetter?
 	
-	public override var text: String? {
+	open override var text: String? {
 		willSet {
 			setNeedsFramesetter()
 		}
 	}
 	
-	public override var attributedText: NSAttributedString? {
+	open override var attributedText: NSAttributedString? {
 		willSet {
 			setNeedsFramesetter()
 		}
 	}
 	
-	public override var font: UIFont! {
+	open override var font: UIFont! {
 		willSet {
 			setNeedsFramesetter()
 		}
 	}
 	
-	public override var textColor: UIColor! {
+	open override var textColor: UIColor! {
 		willSet {
 			setNeedsFramesetter()
 		}
 	}
 	
-	public override var textAlignment: NSTextAlignment {
+	open override var textAlignment: NSTextAlignment {
 		willSet {
 			setNeedsFramesetter()
 		}
 	}
 	
-	public override var lineBreakMode: NSLineBreakMode {
+	open override var lineBreakMode: NSLineBreakMode {
 		willSet {
 			setNeedsFramesetter()
 		}
 	}
 	
-	public override func textRectForBounds(bounds: CGRect, limitedToNumberOfLines numberOfLines: Int) -> CGRect {
+	open override func textRect(forBounds bounds: CGRect, limitedToNumberOfLines numberOfLines: Int) -> CGRect {
 		var bounds = bounds
 		bounds.size = makeSizeFitting(bounds.size, attributedString: attributedText, numberOfLines: numberOfLines)
 		return bounds
 	}
 	
-	private func makeSizeFitting(size: CGSize, attributedString: NSAttributedString?, numberOfLines: Int) -> CGSize {
+	fileprivate func makeSizeFitting(_ size: CGSize, attributedString: NSAttributedString?, numberOfLines: Int) -> CGSize {
 		guard let attributedString = attributedString,
-			framesetter = self.framesetter else {
-				return CGSizeZero
+			let framesetter = self.framesetter else {
+				return CGSize.zero
 		}
 		
 		var rangeToSize = CFRange(location: 0, length: attributedString.length)
-		let constraints = CGSize(width: size.width, height: .max)
+		let constraints = CGSize(width: size.width, height: .greatestFiniteMagnitude)
 		
 		if numberOfLines > 0 {
 			// If the line count of the label is more than 1, limit `rangeToSize` to the number of lines that have been set
-			let path = CGPathCreateMutable()
-			CGPathAddRect(path, nil, CGRect(origin: CGPointZero, size: constraints))
+			let path = CGMutablePath()
+			CGPathAddRect(path, nil, CGRect(origin: CGPoint.zero, size: constraints))
 			let frame = CTFramesetterCreateFrame(framesetter, CFRange(location: 0, length: 0), path, nil)
 			
 			let lines = CTFrameGetLines(frame)
@@ -142,7 +142,7 @@ public class TruncatingLabel: UILabel {
 			
 			if lineCount > 0 {
 				let lastVisibleLineIndex = min(numberOfLines, lineCount - 1)
-				let lastVisibleLine = CFArrayGetValueAtIndex(lines, lastVisibleLineIndex) as! CTLineRef
+				let lastVisibleLine = CFArrayGetValueAtIndex(lines, lastVisibleLineIndex) as! CTLine
 				
 				let rangeToLayout = CTLineGetStringRange(lastVisibleLine)
 				rangeToSize = CFRange(location: 0, length: rangeToLayout.location + rangeToLayout.length)
@@ -154,7 +154,7 @@ public class TruncatingLabel: UILabel {
 		return CGSize(width: ceil(suggestedSize.width), height: ceil(suggestedSize.height))
 	}
 	
-	public override func drawTextInRect(rect: CGRect) {
+	open override func drawText(in rect: CGRect) {
 		guard !rect.isEmpty, let textAttributedString = self.attributedText else {
 			return
 		}
@@ -180,41 +180,41 @@ public class TruncatingLabel: UILabel {
 			ellipsisString = NSAttributedString(string: ellipsis, attributes: textAttributes)
 			
 			let truncationString = NSMutableAttributedString(attributedString: ellipsisString!)
-			truncationString.appendAttributedString(NSAttributedString(string: " ", attributes: textAttributes))
-			truncationString.appendAttributedString(NSAttributedString(string: truncationText, attributes: truncationAttributes))
+			truncationString.append(NSAttributedString(string: " ", attributes: textAttributes))
+			truncationString.append(NSAttributedString(string: truncationText, attributes: truncationAttributes))
 			moreString = truncationString
 		}
 		
 		draw(textAttributedString, ellipsisString: ellipsisString, moreString: moreString, rect: rect, context: context)
 	}
 	
-	private func draw(attributedString: NSAttributedString, ellipsisString: NSAttributedString?, moreString: NSAttributedString?, rect frameRect: CGRect, context: CGContextRef) {
+	fileprivate func draw(_ attributedString: NSAttributedString, ellipsisString: NSAttributedString?, moreString: NSAttributedString?, rect frameRect: CGRect, context: CGContext) {
 		guard let framesetter = self.framesetter else {
 			return
 		}
 		
-		CGContextSaveGState(context)
-		defer { CGContextRestoreGState(context) }
+		context.saveGState()
+		defer { context.restoreGState() }
 		
 		// Flip the coordinate system
-		CGContextSetTextMatrix(context, CGAffineTransformIdentity)
-		CGContextTranslateCTM(context, 0, bounds.size.height)
-		CGContextScaleCTM(context, 1, -1)
+		context.textMatrix = CGAffineTransform.identity
+		context.translateBy(x: 0, y: bounds.size.height)
+		context.scaleBy(x: 1, y: -1)
 		
-		let fontRef = CGFontCreateWithFontName(font.fontName)
-		CGContextSetFont(context, fontRef!)
-		CGContextSetFontSize(context, font.pointSize)
+		let fontRef = CGFont(font.fontName)
+		context.setFont(fontRef!)
+		context.setFontSize(font.pointSize)
 		
 		// Create a path in which to render text
 		// Don't set any line break modes, etc, just let the frame draw as many full lines as will fit
-		let framePath = CGPathCreateMutable()
+		let framePath = CGMutablePath()
 		CGPathAddRect(framePath, nil, frameRect)
 		let fullStringRange = CFRange(location: 0, length: CFAttributedStringGetLength(attributedString))
 		let frameRef = CTFramesetterCreateFrame(framesetter, fullStringRange, framePath, nil)
 		
 		let lines = CTFrameGetLines(frameRef)
 		let numberOfLines = CFArrayGetCount(lines)
-		var origins: [CGPoint] = .init(count: numberOfLines, repeatedValue: CGPointZero)
+		var origins: [CGPoint] = .init(repeating: CGPoint.zero, count: numberOfLines)
 		CTFrameGetLineOrigins(frameRef, CFRange(location: 0, length: numberOfLines), &origins)
 		
 		let shouldTruncate = ellipsisString != nil && moreString != nil
@@ -226,22 +226,22 @@ public class TruncatingLabel: UILabel {
 			let x = origins[lineIndex].x + frameRect.origin.x
 			let y = origins[lineIndex].y + frameRect.origin.y
 			CGContextSetTextPosition(context, x, y)
-			let line = unsafeBitCast(CFArrayGetValueAtIndex(lines, lineIndex), CTLine.self)
+			let line = unsafeBitCast(CFArrayGetValueAtIndex(lines, lineIndex), to: CTLine.self)
 			CTLineDraw(line, context)
 		}
 		
-		guard let ellipsisString = ellipsisString, moreString = moreString else {
+		guard let ellipsisString = ellipsisString, let moreString = moreString else {
 			return
 		}
 		
 		// Truncate the last line before drawing it
 		if numberOfLines > 0 && shouldTruncate {
 			let lastOrigin = origins[numberOfLines - 1]
-			let lastLine = unsafeBitCast(CFArrayGetValueAtIndex(lines, numberOfLines - 1), CTLine.self)
+			let lastLine = unsafeBitCast(CFArrayGetValueAtIndex(lines, numberOfLines - 1), to: CTLine.self)
 			
 			// The truncation token is a CTLineRef itself; use the ellipsis for single line and the more string for multiline
 			let truncationToken = CTLineCreateWithAttributedString(numberOfLines > 1 ? moreString : ellipsisString)
-			var truncated: CTLineRef!
+			var truncated: CTLine!
 			
 			// Now create the truncated line -- need to grab extra characters from the source string,  or else the system will see the line as already fitting within the given width and will not truncate it
 			let lastLineRange = CTLineGetStringRange(lastLine)
@@ -254,14 +254,14 @@ public class TruncatingLabel: UILabel {
 				range.length = attributedString.length - range.location
 				
 				// Substring with that range
-				let longString = NSMutableAttributedString(attributedString: attributedString.attributedSubstringFromRange(range))
+				let longString = NSMutableAttributedString(attributedString: attributedString.attributedSubstring(from: range))
 				// FIXME: Need to reset the text color for the final line, it seems to get lost for some reason
 				longString.addAttribute(NSForegroundColorAttributeName, value: textColor, range: NSRange(location: 0, length: longString.length))
 				
 				// Line for that string
 				let longLine = CTLineCreateWithAttributedString(longString)
 				
-				truncated = CTLineCreateTruncatedLine(longLine, Double(frameRect.size.width), .End, truncationToken)
+				truncated = CTLineCreateTruncatedLine(longLine, Double(frameRect.size.width), .end, truncationToken)
 				
 				// If the truncation call fails, we'll use the last line
 				if truncated == nil {

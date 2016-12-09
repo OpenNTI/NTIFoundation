@@ -11,15 +11,15 @@ import Foundation
 /**
 A wrapper for `StateMachine` which exposes its API in terms of `LoadState` states instead of `String` states.
 */
-public class LoadableContentStateMachine: NSObject, StateMachineDelegate {
+open class LoadableContentStateMachine: NSObject, StateMachineDelegate {
 	
-	public static let initialState: LoadState = .Initial
+	open static let initialState: LoadState = .Initial
 	
-	private class var stringInitialState: String {
+	fileprivate class var stringInitialState: String {
 		return initialState.rawValue
 	}
 	
-	public static let validTransitions: [LoadState: Set<LoadState>] = [
+	open static let validTransitions: [LoadState: Set<LoadState>] = [
 		.Initial: [.LoadingContent],
 		.LoadingContent: [.ContentLoaded, .NoContent, .Error],
 		.RefreshingContent: [.ContentLoaded, .NoContent, .Error],
@@ -30,7 +30,7 @@ public class LoadableContentStateMachine: NSObject, StateMachineDelegate {
 		.Error: [.LoadingContent, .RefreshingContent, .NoContent, .ContentLoaded]
 	]
 	
-	private class var stringValidTransitions: [String: Set<String>] {
+	fileprivate class var stringValidTransitions: [String: Set<String>] {
 		var transitions: [String: Set<String>] = [:]
 		for (fromState, toStates) in validTransitions {
 			let fromString = fromState.rawValue
@@ -47,44 +47,44 @@ public class LoadableContentStateMachine: NSObject, StateMachineDelegate {
 		super.init()
 	}
 	
-	private var stateMachine: StateMachine
+	fileprivate var stateMachine: StateMachine
 	
-	public weak var delegate: LoadableContentStateMachineDelegate? {
+	open weak var delegate: LoadableContentStateMachineDelegate? {
 		didSet {
 			stateMachine.delegate = (delegate != nil) ? self : nil
 		}
 	}
 	
-	public var currentState: LoadState {
+	open var currentState: LoadState {
 		return LoadState(rawValue: stateMachine.currentState)!
 	}
 	
-	public func apply(state: LoadState) throws {
+	open func apply(_ state: LoadState) throws {
 		try stateMachine.apply(state.rawValue)
 	}
 	
-	public func canTransition(to newState: LoadState) -> Bool {
+	open func canTransition(to newState: LoadState) -> Bool {
 		return stateMachine.canTransition(to: newState.rawValue)
 	}
 	
-	public func missingTransition(from fromState: String, to toState: String) throws -> String? {
+	open func missingTransition(from fromState: String, to toState: String) throws -> String? {
 		let fromState = LoadState(rawValue: fromState)!
 		let toState = LoadState(rawValue: toState)!
 		return delegate?.missingTransition(from: fromState, to: toState)?.rawValue
 	}
 	
-	public func stateWillChange(to newState: String) {
+	open func stateWillChange(to newState: String) {
 		let newState = LoadState(rawValue: newState)!
 		delegate?.stateWillChange(to: newState)
 	}
 	
-	public func stateDidChange(to newState: String, from oldState: String) {
+	open func stateDidChange(to newState: String, from oldState: String) {
 		let newState = LoadState(rawValue: newState)!
 		let oldState = LoadState(rawValue: oldState)!
 		delegate?.stateDidChange(to: newState, from: oldState)
 	}
 	
-	public func shouldEnter(state: String) -> Bool {
+	open func shouldEnter(_ state: String) -> Bool {
 		let state = LoadState(rawValue: state)!
 		return delegate?.shouldEnter(state) ?? true
 	}
@@ -99,7 +99,7 @@ public protocol LoadableContentStateMachineDelegate: NSObjectProtocol {
 	
 	func stateDidChange(to newState: LoadState, from oldState: LoadState)
 	
-	func shouldEnter(state: LoadState) -> Bool
+	func shouldEnter(_ state: LoadState) -> Bool
 	
 }
 
@@ -109,7 +109,7 @@ extension LoadableContentStateMachineDelegate {
 		return nil
 	}
 	
-	public func shouldEnter(state: LoadState) -> Bool {
+	public func shouldEnter(_ state: LoadState) -> Bool {
 		return true
 	}
 	

@@ -112,7 +112,7 @@ public struct TableSectionMetrics : TableSectionMetricsProviding, BasicSectionMe
 	/// The left/right padding will be applied between the view edges and the cells.
 	///
 	/// The default value is `UIEdgeInsetsZero`.
-	public var padding = UIEdgeInsetsZero {
+	public var padding = UIEdgeInsets.zero {
 		didSet {
 			setFlag("padding")
 		}
@@ -121,7 +121,7 @@ public struct TableSectionMetrics : TableSectionMetricsProviding, BasicSectionMe
 	/// Layout margins for cells in this section.
 	///
 	/// The default value is `UIEdgeInsetsZero`.
-	public var layoutMargins = UIEdgeInsetsZero
+	public var layoutMargins = UIEdgeInsets.zero
 	
 	/// Whether a column separator should be drawn.
 	///
@@ -162,12 +162,12 @@ public struct TableSectionMetrics : TableSectionMetricsProviding, BasicSectionMe
 	/// Insets for the separators drawn between rows (left & right) and columns (top & bottom).
 	///
 	/// The default value is `UIEdgeInsetsZero`.
-	public var separatorInsets = UIEdgeInsetsZero
+	public var separatorInsets = UIEdgeInsets.zero
 	
 	/// Insets for the section separator drawn below this section.
 	///
 	/// The default value is `UIEdgeInsetsZero`.
-	public var sectionSeparatorInsets = UIEdgeInsetsZero
+	public var sectionSeparatorInsets = UIEdgeInsets.zero
 	
 	/// The color to use when drawing the row and column separators.
 	///
@@ -265,7 +265,7 @@ public struct TableSectionMetrics : TableSectionMetricsProviding, BasicSectionMe
 	
 	public mutating func resolveMissingValuesFromTheme() {
 		if !definesMetric("backgroundColor") {
-			backgroundColor = UIColor.whiteColor()
+			backgroundColor = UIColor.white
 		}
 		if !definesMetric("selectedBackgroundColor") {
 			selectedBackgroundColor = UIColor(white: 235.0 / 0xFF, alpha: 1)

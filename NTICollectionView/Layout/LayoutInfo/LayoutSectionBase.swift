@@ -10,7 +10,7 @@ import UIKit
 
 public struct LayoutSectionBase {
 	
-	public var frame = CGRectZero
+	public var frame = CGRect.zero
 	
 	public var sectionIndex = NSNotFound
 	
@@ -18,7 +18,7 @@ public struct LayoutSectionBase {
 	
 	public var phantomCellIndex: Int?
 	
-	public var phantomCellSize = CGSizeZero
+	public var phantomCellSize = CGSize.zero
 	
 }
 
@@ -32,7 +32,7 @@ extension LayoutSectionBase {
 		return supplementaryItemsByKind[kind] ?? []
 	}
 	
-	public mutating func setSupplementaryItems(supplementaryItems: [LayoutSupplementaryItem], of kind: String) {
+	public mutating func setSupplementaryItems(_ supplementaryItems: [LayoutSupplementaryItem], of kind: String) {
 		var supplementaryItems = supplementaryItems
 		for index in supplementaryItems.indices {
 			supplementaryItems[index].itemIndex = index
@@ -41,7 +41,7 @@ extension LayoutSectionBase {
 		supplementaryItemsByKind[kind] = supplementaryItems
 	}
 	
-	public mutating func add(supplementaryItem: LayoutSupplementaryItem) {
+	public mutating func add(_ supplementaryItem: LayoutSupplementaryItem) {
 		let kind = supplementaryItem.elementKind
 		var supplementaryItem = supplementaryItem
 		supplementaryItem.itemIndex = supplementaryItems(of: kind).count
@@ -49,11 +49,11 @@ extension LayoutSectionBase {
 		supplementaryItemsByKind.append(supplementaryItem, to: kind)
 	}
 	
-	public mutating func mutateSupplementaryItems(using mutator: (supplementaryItem: inout LayoutSupplementaryItem, kind: String, index: Int) -> Void) {
+	public mutating func mutateSupplementaryItems(using mutator: (_ supplementaryItem: inout LayoutSupplementaryItem, _ kind: String, _ index: Int) -> Void) {
 		for (kind, supplementaryItems) in supplementaryItemsByKind {
 			var supplementaryItems = supplementaryItems
 			for index in supplementaryItems.indices {
-				mutator(supplementaryItem: &supplementaryItems[index], kind: kind, index: index)
+				mutator(&supplementaryItems[index], kind, index)
 			}
 			supplementaryItemsByKind[kind] = supplementaryItems
 		}
@@ -116,15 +116,15 @@ extension LayoutSectionBaseComposite {
 		return layoutSectionBase.supplementaryItems(of: kind)
 	}
 	
-	public mutating func setSupplementaryItems(supplementaryItems: [LayoutSupplementaryItem], of kind: String) {
+	public mutating func setSupplementaryItems(_ supplementaryItems: [LayoutSupplementaryItem], of kind: String) {
 		layoutSectionBase.setSupplementaryItems(supplementaryItems, of: kind)
 	}
 	
-	public mutating func add(supplementaryItem: LayoutSupplementaryItem) {
+	public mutating func add(_ supplementaryItem: LayoutSupplementaryItem) {
 		layoutSectionBase.add(supplementaryItem)
 	}
 	
-	public mutating func mutateSupplementaryItems(using mutator: (supplementaryItem: inout LayoutSupplementaryItem, kind: String, index: Int) -> Void) {
+	public mutating func mutateSupplementaryItems(using mutator: (_ supplementaryItem: inout LayoutSupplementaryItem, _ kind: String, _ index: Int) -> Void) {
 		layoutSectionBase.mutateSupplementaryItems(using: mutator)
 	}
 	

@@ -8,18 +8,18 @@
 
 import Foundation
 
-extension NSIndexPath {
+extension IndexPath {
 	
 	var itemIndex: Int {
-		return length > 1 ? item : indexAtPosition(0)
+		return count > 1 ? item : index(atPosition: 0)
 	}
 	
 	var layoutSection: Int {
-		return length > 1 ? section : globalSectionIndex
+		return count > 1 ? section : globalSectionIndex
 	}
 	
 	var isSection: Bool {
-		return length > 1 && item == NSNotFound
+		return count > 1 && item == NSNotFound
 	}
 	
 }

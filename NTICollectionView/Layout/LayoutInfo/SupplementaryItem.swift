@@ -15,7 +15,7 @@ public let globalSectionIndex = Int.max
 
 public let automaticLength: CGFloat = -1
 
-public typealias SupplementaryItemConfiguration = (view: UICollectionReusableView, dataSource: CollectionDataSource, indexPath: NSIndexPath) -> Void
+public typealias SupplementaryItemConfiguration = (_ view: UICollectionReusableView, _ dataSource: CollectionDataSource, _ indexPath: IndexPath) -> Void
 
 /// Definition of how supplementary views should be created and presented in a collection view.
 public protocol SupplementaryItem: LayoutMetricsApplicable {

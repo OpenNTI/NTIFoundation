@@ -41,7 +41,7 @@ public protocol PageableContentLoading: ContentLoading {
 }
 
 /// A block that performs updates on the object that is loading. The object parameter is the receiver of the `-loadContentWithProgress:` message.
-public typealias LoadingUpdateBlock = AnyObject -> Void
+public typealias LoadingUpdateBlock = (AnyObject) -> Void
 
 /// A protocol that defines content loading behavior.
 public protocol LoadingProgress: NSObjectProtocol {
@@ -58,57 +58,57 @@ public protocol LoadingProgress: NSObjectProtocol {
 	func done(with error: NSError)
 	
 	/// Signals that loading is complete.
-	func updateWithContent(update: LoadingUpdateBlock)
+	func updateWithContent(_ update: LoadingUpdateBlock)
 	
 	/// Signals that loading completed with no content.
-	func updateWithNoContent(update: LoadingUpdateBlock)
+	func updateWithNoContent(_ update: LoadingUpdateBlock)
 	
 }
 
-public typealias LoadingProgressCompletionHandler = (state: LoadState?, error: NSError?, update: LoadingUpdateBlock?) -> Void
+public typealias LoadingProgressCompletionHandler = (_ state: LoadState?, _ error: NSError?, _ update: LoadingUpdateBlock?) -> Void
 
-public class BasicLoadingProgress: NSObject, LoadingProgress {
+open class BasicLoadingProgress: NSObject, LoadingProgress {
 	
-	public init(completionHandler: LoadingProgressCompletionHandler) {
+	public init(completionHandler: @escaping LoadingProgressCompletionHandler) {
 		self.completionHandler = completionHandler
 		super.init()
 	}
 	
-	public private(set) var isCancelled = false
+	open fileprivate(set) var isCancelled = false
 	
-	private var completionHandler: LoadingProgressCompletionHandler!
+	fileprivate var completionHandler: LoadingProgressCompletionHandler!
 	
 	/// Sends a nil value for the state to the completion handler.
-	public func ignore() {
+	open func ignore() {
 		done(state: nil, error: nil, update: nil)
 	}
 	
 	/// This triggers a transition to the Loaded state.
-	public func done() {
+	open func done() {
 		done(state: .ContentLoaded, error: nil, update: nil)
 	}
 	
 	/// This triggers a transition to the Error state.
-	public func done(with error: NSError) {
+	open func done(with error: NSError) {
 		done(state: .Error, error: error, update: nil)
 	}
 	
 	/// Transitions into the Loaded state and then runs the update block.
-	public func updateWithContent(update: LoadingUpdateBlock) {
+	open func updateWithContent(_ update: @escaping LoadingUpdateBlock) {
 		done(state: .ContentLoaded, error: nil, update: update)
 	}
 	
 	/// Transitions to the No Content state and then runs the update block.
-	public func updateWithNoContent(update: LoadingUpdateBlock) {
+	open func updateWithNoContent(_ update: @escaping LoadingUpdateBlock) {
 		done(state: .NoContent, error: nil, update: update)
 	}
 	
-	private func done(state newState: LoadState?, error: NSError?, update: LoadingUpdateBlock?) {
+	fileprivate func done(state newState: LoadState?, error: NSError?, update: LoadingUpdateBlock?) {
 		guard let handler = completionHandler else {
 			return
 		}
-		dispatch_async(dispatch_get_main_queue()) {
-			handler(state: newState, error: error, update: update)
+		DispatchQueue.main.async {
+			handler(newState, error, update)
 		}
 		completionHandler = nil
 	}

@@ -42,7 +42,7 @@ public protocol GridSupplementaryAttributeProvider: LayoutMetricsApplicable {
 
 public struct GridSupplementaryAttributes: GridSupplementaryAttributeProvider, Equatable {
 	
-	public var layoutMargins = UIEdgeInsetsZero
+	public var layoutMargins = UIEdgeInsets.zero
 	
 	public var backgroundColor: UIColor?
 	

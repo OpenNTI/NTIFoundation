@@ -8,55 +8,55 @@
 
 import UIKit
 
-public class BasicLayoutInfo: LayoutInfo {
+open class BasicLayoutInfo: LayoutInfo {
 	
 	public init(layoutMeasure: CollectionViewLayoutMeasuring?) {
 		self.layoutMeasure = layoutMeasure
 	}
 	
-	public var collectionViewSize = CGSizeZero
+	open var collectionViewSize = CGSize.zero
 	
-	public var width: CGFloat = 0
+	open var width: CGFloat = 0
 	
-	public var height: CGFloat = 0
+	open var height: CGFloat = 0
 	
-	public var heightAvailableForPlaceholders: CGFloat = 0
+	open var heightAvailableForPlaceholders: CGFloat = 0
 	
-	public var contentOffset = CGPointZero
+	open var contentOffset = CGPoint.zero
 	
-	public var contentInset = UIEdgeInsetsZero
+	open var contentInset = UIEdgeInsets.zero
 	
-	public var bounds = CGRectZero
+	open var bounds = CGRect.zero
 	
-	public weak var layout: CollectionViewLayout?
+	open weak var layout: CollectionViewLayout?
 	
-	public weak var layoutMeasure: CollectionViewLayoutMeasuring?
+	open weak var layoutMeasure: CollectionViewLayoutMeasuring?
 	
-	public var isEditing = false
+	open var isEditing = false
 	
-	public var numberOfSections: Int {
+	open var numberOfSections: Int {
 		return localSections.count
 	}
 	
-	public var hasGlobalSection: Bool {
+	open var hasGlobalSection: Bool {
 		return globalSection != nil
 	}
 	
-	public var sections: [LayoutSection] {
+	open var sections: [LayoutSection] {
 		var sections = localSections
 		if let globalSection = self.globalSection {
-			sections.insert(globalSection, atIndex: 0)
+			sections.insert(globalSection, at: 0)
 		}
 		return sections
 	}
 	
-	private var localSections: [LayoutSection] = []
+	fileprivate var localSections: [LayoutSection] = []
 	
-	private var globalSection: LayoutSection?
+	fileprivate var globalSection: LayoutSection?
 	
-	private var numberOfPlaceholders = 0
+	fileprivate var numberOfPlaceholders = 0
 	
-	public func copy() -> BasicLayoutInfo {
+	open func copy() -> BasicLayoutInfo {
 		let copy = BasicLayoutInfo(layoutMeasure: layoutMeasure)
 		
 		copy.width = width
@@ -66,10 +66,10 @@ public class BasicLayoutInfo: LayoutInfo {
 		return copy
 	}
 	
-	public func enumerateSections(block: (sectionIndex: Int, inout sectionInfo: LayoutSection, stop: inout Bool) -> Void) {
+	open func enumerateSections(_ block: (_ sectionIndex: Int, _ sectionInfo: inout LayoutSection, _ stop: inout Bool) -> Void) {
 		var stop = false
 		if var globalSection = self.globalSection {
-			block(sectionIndex: globalSectionIndex, sectionInfo: &globalSection, stop: &stop)
+			block(globalSectionIndex, &globalSection, &stop)
 			self.globalSection = globalSection
 		}
 		
@@ -78,7 +78,7 @@ public class BasicLayoutInfo: LayoutInfo {
 		}
 		
 		for sectionIndex in localSections.indices {
-			block(sectionIndex: sectionIndex, sectionInfo: &localSections[sectionIndex], stop: &stop)
+			block(sectionIndex, &localSections[sectionIndex], &stop)
 			
 			if stop {
 				return
@@ -86,7 +86,7 @@ public class BasicLayoutInfo: LayoutInfo {
 		}
 	}
 	
-	public func add(section: LayoutSection, sectionIndex: Int) {
+	open func add(_ section: LayoutSection, sectionIndex: Int) {
 		var section = section
 		section.sectionIndex = sectionIndex
 		
@@ -94,29 +94,29 @@ public class BasicLayoutInfo: LayoutInfo {
 			globalSection = section
 		} else {
 			precondition(sectionIndex == localSections.count, "Number of sections out-of-sync with the section index")
-			localSections.insert(section, atIndex: sectionIndex)
+			localSections.insert(section, at: sectionIndex)
 		}
 	}
 	
-	public func mutateSection(at index: Int, using mutator: (inout LayoutSection) -> Void) {
+	open func mutateSection(at index: Int, using mutator: (inout LayoutSection) -> Void) {
 		var section = sections[index]
 		mutator(&section)
 		setSection(section, at: index)
 	}
 	
-	public func mutateItem(at indexPath: NSIndexPath, using mutator: (inout LayoutItem) -> Void) {
+	open func mutateItem(at indexPath: IndexPath, using mutator: (inout LayoutItem) -> Void) {
 		mutateSection(at: indexPath.section) { (section) in
 			section.mutateItem(at: indexPath.item, using: mutator)
 		}
 	}
 	
-	public func newPlaceholderStartingAtSectionIndex(sectionIndex: Int) -> LayoutPlaceholder {
-		let placeholder = BasicLayoutPlaceholder(sectionIndexes: NSIndexSet(index: sectionIndex))
+	open func newPlaceholderStartingAtSectionIndex(_ sectionIndex: Int) -> LayoutPlaceholder {
+		let placeholder = BasicLayoutPlaceholder(sectionIndexes: IndexSet(integer: sectionIndex))
 		numberOfPlaceholders += 1
 		return placeholder
 	}
 	
-	public func sectionAtIndex(sectionIndex: Int) -> LayoutSection? {
+	open func sectionAtIndex(_ sectionIndex: Int) -> LayoutSection? {
 		if sectionIndex == globalSectionIndex {
 			return globalSection
 		}
@@ -128,7 +128,7 @@ public class BasicLayoutInfo: LayoutInfo {
 		return localSections[sectionIndex]
 	}
 	
-	public func setSection(section: LayoutSection, at sectionIndex: Int) {
+	open func setSection(_ section: LayoutSection, at sectionIndex: Int) {
 		if sectionIndex == globalSectionIndex {
 			globalSection = section
 		}
@@ -140,18 +140,18 @@ public class BasicLayoutInfo: LayoutInfo {
 		localSections[sectionIndex] = section
 	}
 	
-	public func invalidate() {
+	open func invalidate() {
 		globalSection = nil
-		localSections.removeAll(keepCapacity: true)
+		localSections.removeAll(keepingCapacity: true)
 	}
 	
-	public func prepareForLayout() {
+	open func prepareForLayout() {
 		enumerateSections { (_, sectionInfo, _) in
 			sectionInfo.prepareForLayout()
 		}
 	}
 	
-	public func finalizeLayout() {
+	open func finalizeLayout() {
 		var sectionsWithContent: [LayoutSection] = []
 		
 		for sectionInfo in sections {
@@ -159,7 +159,7 @@ public class BasicLayoutInfo: LayoutInfo {
 				continue
 			}
 			
-			if let placeholderInfo = sectionInfo.placeholderInfo where placeholderInfo.shouldFillAvailableHeight {
+			if let placeholderInfo = sectionInfo.placeholderInfo, placeholderInfo.shouldFillAvailableHeight {
 				// If there's a placeholder and it didn't start here or end here, there's no content to worry about, because we're not going to show the items or any supplementary elements
 				if placeholderInfo.startingSectionIndex != sectionInfo.sectionIndex
 					&& placeholderInfo.endingSectionIndex != sectionInfo.sectionIndex {
@@ -167,7 +167,7 @@ public class BasicLayoutInfo: LayoutInfo {
 				}
 				
 				if placeholderInfo.startingSectionIndex == sectionInfo.sectionIndex {
-					let indexPath = NSIndexPath(forItem: 0, inSection: sectionInfo.sectionIndex)
+					let indexPath = IndexPath(item: 0, section: sectionInfo.sectionIndex)
 					setSize(placeholderInfo.frame.size, forElementOfKind: collectionElementKindPlaceholder, at: indexPath)
 				}
 			}
@@ -192,7 +192,7 @@ public class BasicLayoutInfo: LayoutInfo {
 		}
 	}
 	
-	public func setSize(size: CGSize, forItemAt indexPath: NSIndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
+	open func setSize(_ size: CGSize, forItemAt indexPath: IndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
 		let sectionIndex = indexPath.section
 		
 		let offset = localSections[sectionIndex].setSize(size, forItemAt: indexPath.item, invalidationContext: invalidationContext)
@@ -200,7 +200,7 @@ public class BasicLayoutInfo: LayoutInfo {
 		offsetSections(afterSectionAt: sectionIndex, by: offset, invalidationContext: invalidationContext)
 	}
 	
-	public func setSize(size: CGSize, forElementOfKind kind: String, at indexPath: NSIndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
+	open func setSize(_ size: CGSize, forElementOfKind kind: String, at indexPath: IndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
 		let sectionIndex = indexPath.layoutSection
 		let itemIndex = indexPath.itemIndex
 		
@@ -213,14 +213,14 @@ public class BasicLayoutInfo: LayoutInfo {
 			setSection(sectionInfo, at: sectionIndex)
 		}
 		else {
-			offset = CGPointZero
+			offset = CGPoint.zero
 		}
 		
 		offsetSections(afterSectionAt: sectionIndex, by: offset, invalidationContext: invalidationContext)
 		invalidationContext?.contentSizeAdjustment = CGSize(width: offset.x, height: offset.y)
 	}
 	
-	private func offsetSections(afterSectionAt sectionIndex: Int, by offset: CGPoint,  invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
+	fileprivate func offsetSections(afterSectionAt sectionIndex: Int, by offset: CGPoint,  invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
 		var sectionIndex = sectionIndex
 		if sectionIndex == globalSectionIndex {
 			sectionIndex = 0
@@ -231,14 +231,13 @@ public class BasicLayoutInfo: LayoutInfo {
 		// FIXME: Is this correct?
 		for index in sectionIndex..<numberOfSections {
 			var sectionInfo = localSections[index]
-			let sectionFrame = CGRectOffset(sectionInfo.frame, offset.x, offset.y)
+			let sectionFrame = sectionInfo.frame.offsetBy(dx: offset.x, dy: offset.y)
 			sectionInfo.setFrame(sectionFrame, invalidationContext: invalidationContext)
 			
 			// Move placeholder that happens to start at this section index
-			if var placeholderInfo = sectionInfo.placeholderInfo
-				where placeholderInfo.startingSectionIndex == index {
+			if var placeholderInfo = sectionInfo.placeholderInfo, placeholderInfo.startingSectionIndex == index {
 				
-				let placeholderFrame = CGRectOffset(placeholderInfo.frame, offset.x, offset.y)
+				let placeholderFrame = placeholderInfo.frame.offsetBy(dx: offset.x, dy: offset.y)
 				placeholderInfo.setFrame(placeholderFrame, invalidationContext: invalidationContext)
 				sectionInfo.placeholderInfo = placeholderInfo
 			}
@@ -247,10 +246,10 @@ public class BasicLayoutInfo: LayoutInfo {
 		}
 	}
 	
-	private func setSize(size: CGSize, forPlaceholderAt sectionIndex: Int, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
-		guard var section = sectionAtIndex(sectionIndex) where section.shouldResizePlaceholder,
+	fileprivate func setSize(_ size: CGSize, forPlaceholderAt sectionIndex: Int, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
+		guard var section = sectionAtIndex(sectionIndex), section.shouldResizePlaceholder,
 			var placeholderInfo = section.placeholderInfo else {
-				return CGPointZero
+				return CGPoint.zero
 		}
 		var frame = placeholderInfo.frame
 		
@@ -268,28 +267,28 @@ public class BasicLayoutInfo: LayoutInfo {
 			section.placeholderInfo = placeholderInfo
 			setSection(section, at: sectionIndex)
 		}
-		return CGPointMake(0, deltaY)
+		return CGPoint(x: 0, y: deltaY)
 	}
 	
-	public func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
+	open func updateSpecialItemsWithContentOffset(_ contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
 		enumerateSections { (_, section, _) in
 			section.updateSpecialItemsWithContentOffset(contentOffset, layoutInfo: self,  invalidationContext: invalidationContext)
 		}
 	}
 	
-	public func layoutAttributesForCell(at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
+	open func layoutAttributesForCell(at indexPath: IndexPath) -> CollectionViewLayoutAttributes? {
 		let sectionIndex = indexPath.layoutSection
 		let sectionInfo = sectionAtIndex(sectionIndex)
 		return sectionInfo?.layoutAttributesForCell(at: indexPath)
 	}
 	
-	public func layoutAttributesForDecorationViewOfKind(kind: String, at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
+	open func layoutAttributesForDecorationViewOfKind(_ kind: String, at indexPath: IndexPath) -> CollectionViewLayoutAttributes? {
 		let sectionIndex = indexPath.layoutSection
 		let sectionInfo = sectionAtIndex(sectionIndex)
 		return sectionInfo?.layoutAttributesForDecorationViewOfKind(kind, at: indexPath)
 	}
 	
-	public func layoutAttributesForSupplementaryElementOfKind(kind: String, at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
+	open func layoutAttributesForSupplementaryElementOfKind(_ kind: String, at indexPath: IndexPath) -> CollectionViewLayoutAttributes? {
 		let sectionIndex = indexPath.layoutSection
 		let sectionInfo = sectionAtIndex(sectionIndex)
 		return sectionInfo?.layoutAttributesForSupplementaryElementOfKind(kind, at: indexPath)

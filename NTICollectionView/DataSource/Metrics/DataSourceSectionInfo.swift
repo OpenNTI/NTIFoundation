@@ -14,21 +14,21 @@ public protocol DataSourceSectionInfo {
 	
 	var supplementaryItemsByKind: [String: [SupplementaryItem]] { get set }
 	
-	mutating func add(supplementaryItem: SupplementaryItem)
+	mutating func add(_ supplementaryItem: SupplementaryItem)
 	
 }
 
 extension DataSourceSectionInfo {
 	
 	public var supplementaryItems: [SupplementaryItem] {
-		return supplementaryItemsByKind.values.reduce([], combine: +)
+		return supplementaryItemsByKind.values.reduce([], +)
 	}
 	
-	public func supplementaryItemsOfKind(kind: String) -> [SupplementaryItem] {
+	public func supplementaryItemsOfKind(_ kind: String) -> [SupplementaryItem] {
 		return supplementaryItemsByKind[kind] ?? []
 	}
 	
-	public mutating func add(supplementaryItem: SupplementaryItem) {
+	public mutating func add(_ supplementaryItem: SupplementaryItem) {
 		let kind = supplementaryItem.elementKind
 		var items = supplementaryItemsOfKind(kind)
 		items.append(supplementaryItem)

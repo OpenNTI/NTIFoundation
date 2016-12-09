@@ -9,12 +9,12 @@
 import UIKit
 
 /// A `CollectionSupplementaryView` which contains a `View` instance as its single subview.
-public class ContainerSupplementaryView<View : UIView where View : FrameInitializable> : CollectionSupplementaryView {
+open class ContainerSupplementaryView<View : UIView> : CollectionSupplementaryView where View : FrameInitializable {
 
 	/// The single subview of `contentView`.
 	///
 	/// The `top`, `leading`, `bottom`, and `trailing` attributes of `containedView` are constrained equal to the respective `layoutMargins` of `self`.
-	public let containedView: View
+	open let containedView: View
 	
 	public override init(frame: CGRect) {
 		containedView = View.init(frame: frame)
@@ -23,8 +23,12 @@ public class ContainerSupplementaryView<View : UIView where View : FrameInitiali
 		
 		commonInit()
 	}
+
+	required public init?(coder aDecoder: NSCoder) {
+	    fatalError("init(coder:) has not been implemented")
+	}
 	
-	private func commonInit() {
+	fileprivate func commonInit() {
 		containedView.layoutMargins = .zero
 		containedView.translatesAutoresizingMaskIntoConstraints = false
 		addSubview(containedView)
@@ -32,7 +36,7 @@ public class ContainerSupplementaryView<View : UIView where View : FrameInitiali
 		let views = ["contained": containedView]
 		
 		for dimension in ["H", "V"] {
-			NSLayoutConstraint.activateConstraints(NSLayoutConstraint.constraintsWithVisualFormat("\(dimension):|-[contained]-|", options: [], metrics: nil, views: views))
+			NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "\(dimension):|-[contained]-|", options: [], metrics: nil, views: views))
 		}
 	}
 

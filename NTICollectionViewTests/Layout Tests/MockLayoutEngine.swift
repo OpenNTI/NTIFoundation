@@ -17,7 +17,7 @@ class MockLayoutEngine: NSObject, LayoutEngine {
 	
 	var layoutHeight: CGFloat
 	
-	func layoutWithOrigin(origin: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
+	func layoutWithOrigin(_ origin: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
 		return CGPoint(x: origin.x + layoutSizing.width, y: origin.y + layoutHeight)
 	}
 	
@@ -39,7 +39,7 @@ class MockSupplementaryLayoutEngine: NSObject, SupplementaryLayoutEngine {
 	var position: CGPoint!
 	var sizing: LayoutSizing!
 
-	func layoutWithOrigin(origin: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
+	func layoutWithOrigin(_ origin: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
 		position = origin
 		sizing = layoutSizing
 		for index in supplementaryItems.indices {
@@ -49,13 +49,13 @@ class MockSupplementaryLayoutEngine: NSObject, SupplementaryLayoutEngine {
 		return position
 	}
 	
-	private func layout(inout supplementaryItem: LayoutSupplementaryItem) {
+	fileprivate func layout(_ supplementaryItem: inout LayoutSupplementaryItem) {
 		let size = self.size(of: &supplementaryItem)
 		supplementaryItem.frame = CGRect(origin: position, size: size)
 		position.y += size.height
 	}
 	
-	private func size(inout of supplementaryItem: LayoutSupplementaryItem) -> CGSize {
+	fileprivate func size(of supplementaryItem: inout LayoutSupplementaryItem) -> CGSize {
 		let w = sizing.width
 		let h = sizing.layoutMeasure?.measuredSizeForSupplementaryItem(supplementaryItem).height ?? mockHeight
 		return CGSize(width: w, height: h)

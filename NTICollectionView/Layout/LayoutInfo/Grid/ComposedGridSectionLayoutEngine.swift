@@ -8,24 +8,24 @@
 
 import UIKit
 
-public class ComposedGridSectionLayoutEngine: NSObject, SupplementaryLayoutEngine {
+open class ComposedGridSectionLayoutEngine: NSObject, SupplementaryLayoutEngine {
 
 	public init(sections: [GridLayoutSection]) {
 		self.sections = sections
 	}
 	
-	public var sections: [GridLayoutSection]
+	open var sections: [GridLayoutSection]
 	
-	public var pinnableHeaders: [LayoutSupplementaryItem] = []
-	public var nonPinnableHeaders: [LayoutSupplementaryItem] = []
-	public var supplementaryItems: [LayoutSupplementaryItem] = []
+	open var pinnableHeaders: [LayoutSupplementaryItem] = []
+	open var nonPinnableHeaders: [LayoutSupplementaryItem] = []
+	open var supplementaryItems: [LayoutSupplementaryItem] = []
 	
-	private var origin: CGPoint!
-	private var position: CGPoint!
-	private var sizing: LayoutSizing!
-	private var invalidationContext: UICollectionViewLayoutInvalidationContext?
+	fileprivate var origin: CGPoint!
+	fileprivate var position: CGPoint!
+	fileprivate var sizing: LayoutSizing!
+	fileprivate var invalidationContext: UICollectionViewLayoutInvalidationContext?
 	
-	public func layoutWithOrigin(origin: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
+	open func layoutWithOrigin(_ origin: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
 		self.origin = origin
 		position = origin
 		sizing = layoutSizing
@@ -36,13 +36,13 @@ public class ComposedGridSectionLayoutEngine: NSObject, SupplementaryLayoutEngin
 		return position
 	}
 	
-	private func layoutSections() {
+	fileprivate func layoutSections() {
 		for index in sections.indices {
 			layout(&sections[index])
 		}
 	}
 	
-	private func layout(inout section: GridLayoutSection) {
+	fileprivate func layout(_ section: inout GridLayoutSection) {
 		position.x = origin.x
 		
 		let layoutEngine = GridSectionLayoutEngine(layoutSection: section)

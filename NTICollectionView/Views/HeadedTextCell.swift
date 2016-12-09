@@ -11,12 +11,12 @@ import UIKit
 // MARK: - HeadedTextCell
 
 /// A `CollectionViewCell` which displays a `HeadedTextView`.
-public class HeadedTextCell: CollectionViewCell {
+open class HeadedTextCell: CollectionViewCell {
 	
 	/// The `HeadedTextView` displayed by `self`.
-	public let headedTextView = HeadedTextView()
+	open let headedTextView = HeadedTextView()
 	
-	public override var layoutMargins: UIEdgeInsets {
+	open override var layoutMargins: UIEdgeInsets {
 		didSet {
 			contentView.layoutMargins = layoutMargins
 		}
@@ -31,7 +31,7 @@ public class HeadedTextCell: CollectionViewCell {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	private func commonInit() {
+	fileprivate func commonInit() {
 		headedTextView.layoutMargins = .zero
 		headedTextView.translatesAutoresizingMaskIntoConstraints = false
 		contentView.addSubview(headedTextView)
@@ -40,17 +40,17 @@ public class HeadedTextCell: CollectionViewCell {
 		let metrics: [String: NSNumber] = [:]
 		
 		for dimension in ["H", "V"] {
-			NSLayoutConstraint.activateConstraints(NSLayoutConstraint.constraintsWithVisualFormat("\(dimension):|-[headedText]-|", options: [], metrics: metrics, views: views))
+			NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "\(dimension):|-[headedText]-|", options: [], metrics: metrics, views: views))
 		}
 	}
 
 }
 
 /// A `CollectionSupplementaryView` which displays a `HeadedTextView`.
-public class HeadedTextSupplementaryView : CollectionSupplementaryView {
+open class HeadedTextSupplementaryView : CollectionSupplementaryView {
 	
 	/// The `HeadedTextView` displayed by `self`.
-	public let headedTextView = HeadedTextView()
+	open let headedTextView = HeadedTextView()
 	
 	public override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -61,7 +61,7 @@ public class HeadedTextSupplementaryView : CollectionSupplementaryView {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	private func commonInit() {
+	fileprivate func commonInit() {
 		headedTextView.layoutMargins = .zero
 		headedTextView.translatesAutoresizingMaskIntoConstraints = false
 		addSubview(headedTextView)
@@ -70,7 +70,7 @@ public class HeadedTextSupplementaryView : CollectionSupplementaryView {
 		let metrics: [String: NSNumber] = [:]
 		
 		for dimension in ["H", "V"] {
-			NSLayoutConstraint.activateConstraints(NSLayoutConstraint.constraintsWithVisualFormat("\(dimension):|-[headedText]-|", options: [], metrics: metrics, views: views))
+			NSLayoutConstraint.activate(NSLayoutConstraint.constraints(withVisualFormat: "\(dimension):|-[headedText]-|", options: [], metrics: metrics, views: views))
 		}
 	}
 	
@@ -79,20 +79,20 @@ public class HeadedTextSupplementaryView : CollectionSupplementaryView {
 // MARK: - HeadedTextView
 
 /// A `UIView` which displays header text above primary text.
-public class HeadedTextView : UIView, FrameInitializable {
+open class HeadedTextView : UIView, FrameInitializable {
 	
 	/// Displays the header text.
-	public let headerLabel = UILabel()
+	open let headerLabel = UILabel()
 	
 	/// Displays the primary text.
-	public let textLabel = UILabel()
+	open let textLabel = UILabel()
 	
 	/// The vertical spacing between the header and the primary text.
-	public var spacing: CGFloat = 7 {
+	open var spacing: CGFloat = 7 {
 		didSet { spacingConstraint.constant = spacing }
 	}
 	
-	private var spacingConstraint: NSLayoutConstraint!
+	fileprivate var spacingConstraint: NSLayoutConstraint!
 	
 	public override required init(frame: CGRect) {
 		super.init(frame: frame)
@@ -103,7 +103,7 @@ public class HeadedTextView : UIView, FrameInitializable {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	private func commonInit() {
+	fileprivate func commonInit() {
 		for view in [headerLabel, textLabel] {
 			view.translatesAutoresizingMaskIntoConstraints = false
 			addSubview(view)
@@ -114,16 +114,16 @@ public class HeadedTextView : UIView, FrameInitializable {
 		
 		var constraints = [NSLayoutConstraint]()
 		
-		constraints += NSLayoutConstraint.constraintsWithVisualFormat("V:|-[header]", options: [], metrics: metrics, views: views)
-		constraints += NSLayoutConstraint.constraintsWithVisualFormat("V:[text]-|", options: [], metrics: metrics, views: views)
+		constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-[header]", options: [], metrics: metrics, views: views)
+		constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:[text]-|", options: [], metrics: metrics, views: views)
 		
-		spacingConstraint = NSLayoutConstraint(item: textLabel, attribute: .Top, relatedBy: .Equal, toItem: headerLabel, attribute: .Bottom, multiplier: 1, constant: spacing)
+		spacingConstraint = NSLayoutConstraint(item: textLabel, attribute: .top, relatedBy: .equal, toItem: headerLabel, attribute: .bottom, multiplier: 1, constant: spacing)
 		constraints.append(spacingConstraint)
 		
-		constraints += NSLayoutConstraint.constraintsWithVisualFormat("H:|-[header]-|", options: [], metrics: metrics, views: views)
-		constraints += NSLayoutConstraint.constraintsWithVisualFormat("H:|-[text]-|", options: [], metrics: metrics, views: views)
+		constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-[header]-|", options: [], metrics: metrics, views: views)
+		constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-[text]-|", options: [], metrics: metrics, views: views)
 		
-		NSLayoutConstraint.activateConstraints(constraints)
+		NSLayoutConstraint.activate(constraints)
 	}
 	
 }
@@ -131,34 +131,34 @@ public class HeadedTextView : UIView, FrameInitializable {
 // MARK: - DupleHeadedTextCell
 
 /// A `CollectionViewCell` which displays two `HeadedTextView`s side-by-side.
-public class DupleHeadedTextCell : CollectionViewCell {
+open class DupleHeadedTextCell : CollectionViewCell {
 	
 	/// The first `HeadedTextView` displayed by `self`.
-	public let headedTextView1 = HeadedTextView()
+	open let headedTextView1 = HeadedTextView()
 	
 	/// The second `HeadedTextView` displayed by `self`.
-	public let headedTextView2 = HeadedTextView()
+	open let headedTextView2 = HeadedTextView()
 	
 	/// The horizontal spacing between the `HeadedTextView`s displayed by `self`.
-	public var horizontalSpacing: CGFloat = 22 {
+	open var horizontalSpacing: CGFloat = 22 {
 		didSet { horizontalSpacingConstraint.constant = horizontalSpacing }
 	}
 	
 	/// The vertical spacing used by the `HeadedTextView`s displayed by `self`.
-	public var verticalSpacing: CGFloat = 7 {
+	open var verticalSpacing: CGFloat = 7 {
 		didSet {
 			headedTextView1.spacing = verticalSpacing
 			headedTextView2.spacing = verticalSpacing
 		}
 	}
 	
-	public override var layoutMargins: UIEdgeInsets {
+	open override var layoutMargins: UIEdgeInsets {
 		didSet {
 			contentView.layoutMargins = layoutMargins
 		}
 	}
 	
-	private var horizontalSpacingConstraint: NSLayoutConstraint!
+	fileprivate var horizontalSpacingConstraint: NSLayoutConstraint!
 	
 	public override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -169,7 +169,7 @@ public class DupleHeadedTextCell : CollectionViewCell {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	private func commonInit() {
+	fileprivate func commonInit() {
 		for view in [headedTextView1, headedTextView2] {
 			view.layoutMargins = .zero
 			view.translatesAutoresizingMaskIntoConstraints = false
@@ -181,17 +181,17 @@ public class DupleHeadedTextCell : CollectionViewCell {
 		
 		var constraints = [NSLayoutConstraint]()
 		
-		constraints += NSLayoutConstraint.constraintsWithVisualFormat("H:|-[headedText1]", options: [], metrics: metrics, views: views)
-		constraints += NSLayoutConstraint.constraintsWithVisualFormat("H:[headedText2]-(>=0)-|", options: [], metrics: metrics, views: views)
+		constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-[headedText1]", options: [], metrics: metrics, views: views)
+		constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:[headedText2]-(>=0)-|", options: [], metrics: metrics, views: views)
 		
-		horizontalSpacingConstraint = NSLayoutConstraint(item: headedTextView2, attribute: .Leading, relatedBy: .Equal, toItem: headedTextView1, attribute: .Trailing, multiplier: 1, constant: horizontalSpacing)
+		horizontalSpacingConstraint = NSLayoutConstraint(item: headedTextView2, attribute: .leading, relatedBy: .equal, toItem: headedTextView1, attribute: .trailing, multiplier: 1, constant: horizontalSpacing)
 		constraints.append(horizontalSpacingConstraint)
 		
 		for idx in ["1", "2"] {
-			constraints += NSLayoutConstraint.constraintsWithVisualFormat("V:|-[headedText\(idx)]-|", options: [], metrics: metrics, views: views)
+			constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-[headedText\(idx)]-|", options: [], metrics: metrics, views: views)
 		}
 		
-		NSLayoutConstraint.activateConstraints(constraints)
+		NSLayoutConstraint.activate(constraints)
 	}
 	
 }

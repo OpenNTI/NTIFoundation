@@ -11,17 +11,17 @@ import UIKit
 /// The purpose of this class will be to encapsulate some of the behavior of `CollectionViewLayout`.
 public protocol CollectionLayoutAnimator {
 	
-	func initialLayoutAttributesForAppearingItemAtIndexPath(itemIndexPath: NSIndexPath) -> UICollectionViewLayoutAttributes?
+	func initialLayoutAttributesForAppearingItemAtIndexPath(_ itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
 	
-	func finalLayoutAttributesForDisappearingItemAtIndexPath(itemIndexPath: NSIndexPath) -> UICollectionViewLayoutAttributes?
+	func finalLayoutAttributesForDisappearingItemAtIndexPath(_ itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
 	
-	func initialLayoutAttributesForAppearingSupplementaryElementOfKind(elementKind: String, atIndexPath elementIndexPath: NSIndexPath) -> UICollectionViewLayoutAttributes?
+	func initialLayoutAttributesForAppearingSupplementaryElementOfKind(_ elementKind: String, atIndexPath elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
 	
-	func finalLayoutAttributesForDisappearingSupplementaryElementOfKind(elementKind: String, atIndexPath elementIndexPath: NSIndexPath) -> UICollectionViewLayoutAttributes?
+	func finalLayoutAttributesForDisappearingSupplementaryElementOfKind(_ elementKind: String, atIndexPath elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
 	
-	func initialLayoutAttributesForAppearingDecorationElementOfKind(elementKind: String, atIndexPath decorationIndexPath: NSIndexPath) -> UICollectionViewLayoutAttributes?
+	func initialLayoutAttributesForAppearingDecorationElementOfKind(_ elementKind: String, atIndexPath decorationIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
 	
-	func finalLayoutAttributesForDisappearingDecorationElementOfKind(elementKind: String, atIndexPath decorationIndexPath: NSIndexPath) -> UICollectionViewLayoutAttributes?
+	func finalLayoutAttributesForDisappearingDecorationElementOfKind(_ elementKind: String, atIndexPath decorationIndexPath: IndexPath) -> UICollectionViewLayoutAttributes?
 	
 }
 

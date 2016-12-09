@@ -20,7 +20,7 @@ public protocol SegmentedControlProtocol: class {
 	
 	func removeAllSegments()
 	
-	func insertSegmentWithTitle(title: String?, atIndex segment: Int, animated: Bool)
+	func insertSegmentWithTitle(_ title: String?, atIndex segment: Int, animated: Bool)
 	
 	func setSegments(with titles: [String], animated: Bool)
 	
@@ -30,7 +30,7 @@ extension SegmentedControlProtocol {
 	
 	public func setSegments(with titles: [String], animated: Bool) {
 		removeAllSegments()
-		for (index, title) in titles.enumerate() {
+		for (index, title) in titles.enumerated() {
 			insertSegmentWithTitle(title, atIndex: index, animated: animated)
 		}
 	}
@@ -39,7 +39,7 @@ extension SegmentedControlProtocol {
 
 public protocol SegmentedControlDelegate: class {
 	
-	func segmentedControlDidChangeValue(segmentedControl: SegmentedControlProtocol)
+	func segmentedControlDidChangeValue(_ segmentedControl: SegmentedControlProtocol)
 	
 }
 
@@ -55,10 +55,10 @@ public protocol SegmentedControlSupplementaryItem: SupplementaryItem {
 	
 }
 
-public class SegmentedControl: UISegmentedControl, SegmentedControlView {
+open class SegmentedControl: UISegmentedControl, SegmentedControlView {
 	
 	deinit {
-		removeTarget(self, action: #selector(SegmentedControl.segmentedControlDidChangeValue), forControlEvents: .ValueChanged)
+		removeTarget(self, action: #selector(SegmentedControl.segmentedControlDidChangeValue), for: .valueChanged)
 	}
 	
 	public override init(frame: CGRect) {
@@ -66,7 +66,7 @@ public class SegmentedControl: UISegmentedControl, SegmentedControlView {
 		registerSelfAsTarget()
 	}
 	
-	public override init(items: [AnyObject]?) {
+	public override init(items: [Any]?) {
 		super.init(items: items)
 	}
 
@@ -75,11 +75,11 @@ public class SegmentedControl: UISegmentedControl, SegmentedControlView {
 		registerSelfAsTarget()
 	}
 	
-	private func registerSelfAsTarget() {
-		addTarget(self, action: #selector(SegmentedControl.segmentedControlDidChangeValue), forControlEvents: .ValueChanged)
+	fileprivate func registerSelfAsTarget() {
+		addTarget(self, action: #selector(SegmentedControl.segmentedControlDidChangeValue), for: .valueChanged)
 	}
 	
-	public var resizesSegmentWidthsByContent = false {
+	open var resizesSegmentWidthsByContent = false {
 		didSet {
 			guard resizesSegmentWidthsByContent && !oldValue else { return }
 			resizeSegmentWidthsByContent()
@@ -87,7 +87,7 @@ public class SegmentedControl: UISegmentedControl, SegmentedControlView {
 	}
 	
 	/// The divider image used for the right edge of the rightmost segment.
-	public var rightDividerImage: UIImage? {
+	open var rightDividerImage: UIImage? {
 		didSet {
 			guard let rightDividerImage = rightDividerImage else {
 				rightDividerLayer = nil
@@ -100,12 +100,12 @@ public class SegmentedControl: UISegmentedControl, SegmentedControlView {
 				rightDividerLayer = CALayer()
 			}
 			
-			rightDividerLayer?.contents = rightDividerImage.CGImage
+			rightDividerLayer?.contents = rightDividerImage.cgImage
 		}
 	}
 	
 	/// The layer used to draw the right divider, if any.
-	private var rightDividerLayer: CALayer? {
+	fileprivate var rightDividerLayer: CALayer? {
 		didSet {
 			guard rightDividerLayer !== oldValue else { return }
 			
@@ -121,55 +121,55 @@ public class SegmentedControl: UISegmentedControl, SegmentedControlView {
 		}
 	}
 	
-	public weak var segmentedControlDelegate: SegmentedControlDelegate?
+	open weak var segmentedControlDelegate: SegmentedControlDelegate?
 	
-	@objc public func segmentedControlDidChangeValue() {
+	@objc open func segmentedControlDidChangeValue() {
 		setNeedsLayout()
 		segmentedControlDelegate?.segmentedControlDidChangeValue(self)
 	}
 	
-	public var controlView: UIControl {
+	open var controlView: UIControl {
 		return self
 	}
 	
-	public func prepareForReuse() {
+	open func prepareForReuse() {
 		segmentedControlDelegate = nil
 	}
 	
-	public override func setTitle(title: String?, forSegmentAtIndex segment: Int) {
-		super.setTitle(title, forSegmentAtIndex: segment)
+	open override func setTitle(_ title: String?, forSegmentAt segment: Int) {
+		super.setTitle(title, forSegmentAt: segment)
 		
 		if resizesSegmentWidthsByContent {
 			resizeWidthOfSegmentByContent(atIndex: segment)
 		}
 	}
 	
-	public override func insertSegmentWithTitle(title: String?, atIndex segment: Int, animated: Bool) {
-		super.insertSegmentWithTitle(title, atIndex: segment, animated: animated)
+	open override func insertSegment(withTitle title: String?, at segment: Int, animated: Bool) {
+		super.insertSegment(withTitle: title, at: segment, animated: animated)
 		
 		if resizesSegmentWidthsByContent {
 			resizeWidthOfSegmentByContent(atIndex: segment)
 		}
 	}
 	
-	public override func layoutSubviews() {
+	open override func layoutSubviews() {
 		super.layoutSubviews()
 		
 		layoutRightDivider()
 	}
 	
-	private func layoutRightDivider() {
+	fileprivate func layoutRightDivider() {
 		guard let rightDividerLayer = rightDividerLayer else { return }
 		
 		// +3 makes the divider line up with the selected segment
 		let dividerX: CGFloat = (0..<numberOfSegments).reduce(bounds.minX + 3) {
-			$0 + self.widthForSegmentAtIndex($1)
+			$0 + self.widthForSegment(at: $1)
 		}
 		
 		rightDividerLayer.frame = numberOfSegments > 0 ? CGRect(x: dividerX, y: bounds.minY, width: SegmentedControl.hairline, height: bounds.height) : .zero
 	}
 	
-	private static let hairline: CGFloat = 1.0 / UIScreen.mainScreen().scale
+	fileprivate static let hairline: CGFloat = 1.0 / UIScreen.main.scale
 }
 
 extension UISegmentedControl {
@@ -181,15 +181,15 @@ extension UISegmentedControl {
 	}
 	
 	public func resizeWidthOfSegmentByContent(atIndex index: Int) {
-		guard let title = titleForSegmentAtIndex(index) else { return }
+		guard let title = titleForSegment(at: index) else { return }
 		
 		let horizontalPadding: CGFloat = 40
 		
-		let attributes: [String: AnyObject] = (titleTextAttributesForState(state) as? [String: AnyObject]) ?? [:]
+		let attributes: [String: AnyObject] = (titleTextAttributes(for: state) as? [String: AnyObject]) ?? [:]
 		let attrTitle = NSAttributedString(string: title, attributes: attributes)
-		let rect = attrTitle.boundingRectWithSize(bounds.size, options: [], context: nil)
+		let rect = attrTitle.boundingRect(with: bounds.size, options: [], context: nil)
 		let width = ceil(rect.width) + horizontalPadding
-		setWidth(width, forSegmentAtIndex: index)
+		setWidth(width, forSegmentAt: index)
 		
 		setNeedsLayout()
 	}

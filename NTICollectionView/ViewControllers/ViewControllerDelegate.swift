@@ -10,28 +10,28 @@ import UIKit
 
 public protocol ViewControllerDelegate: class {
 	
-	func viewControllerViewDidLoad(viewController: UIViewController)
+	func viewControllerViewDidLoad(_ viewController: UIViewController)
 	
-	func viewControllerViewWillAppear(viewController: UIViewController)
+	func viewControllerViewWillAppear(_ viewController: UIViewController)
 	
-	func viewControllerViewDidDisappear(viewController: UIViewController)
+	func viewControllerViewDidDisappear(_ viewController: UIViewController)
 	
-	func viewController(viewController: UIViewController, willTransitionTo newCollection: UITraitCollection, with transitionCoordinator: UIViewControllerTransitionCoordinator)
+	func viewController(_ viewController: UIViewController, willTransitionTo newCollection: UITraitCollection, with transitionCoordinator: UIViewControllerTransitionCoordinator)
 	
-	func viewController(viewController: UIViewController, viewWillTransitionTo size: CGSize, with transitionCoordinator: UIViewControllerTransitionCoordinator)
+	func viewController(_ viewController: UIViewController, viewWillTransitionTo size: CGSize, with transitionCoordinator: UIViewControllerTransitionCoordinator)
 	
 }
 
 extension ViewControllerDelegate {
 	
-	public func viewControllerViewDidLoad(viewController: UIViewController) { }
+	public func viewControllerViewDidLoad(_ viewController: UIViewController) { }
 	
-	public func viewControllerViewWillAppear(viewController: UIViewController) { }
+	public func viewControllerViewWillAppear(_ viewController: UIViewController) { }
 	
-	public func viewControllerViewDidDisappear(viewController: UIViewController) { }
+	public func viewControllerViewDidDisappear(_ viewController: UIViewController) { }
 	
-	public func viewController(viewController: UIViewController, willTransitionTo newCollection: UITraitCollection, with transitionCoordinator: UIViewControllerTransitionCoordinator) { }
+	public func viewController(_ viewController: UIViewController, willTransitionTo newCollection: UITraitCollection, with transitionCoordinator: UIViewControllerTransitionCoordinator) { }
 	
-	public func viewController(viewController: UIViewController, viewWillTransitionTo size: CGSize, with transitionCoordinator: UIViewControllerTransitionCoordinator) { }
+	public func viewController(_ viewController: UIViewController, viewWillTransitionTo size: CGSize, with transitionCoordinator: UIViewControllerTransitionCoordinator) { }
 	
 }

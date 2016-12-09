@@ -8,17 +8,17 @@
 
 import Foundation
 
-extension Dictionary where Value: protocol<RangeReplaceableCollectionType, ArrayLiteralConvertible> {
+extension Dictionary where Value: RangeReplaceableCollection & ExpressibleByArrayLiteral {
 	
-	public var contents: [Value.Generator.Element] {
-		var allContents: [Value.Generator.Element] = []
+	public var contents: [Value.Iterator.Element] {
+		var allContents: [Value.Iterator.Element] = []
 		for contents in values {
 			allContents += contents
 		}
 		return allContents
 	}
 	
-	public mutating func append(x: Value.Generator.Element, to key: Key) {
+	public mutating func append(_ x: Value.Iterator.Element, to key: Key) {
 		var items = self[key] ?? []
 		items.append(x)
 		self[key] = items
@@ -32,7 +32,7 @@ extension Dictionary where Value: protocol<RangeReplaceableCollectionType, Array
 	
 	public mutating func appendContents(of newElements: Value, to key: Key) {
 		var items = self[key] ?? []
-		items.appendContentsOf(newElements)
+		items.append(contentsOf: newElements)
 		self[key] = items
 	}
 	

@@ -34,11 +34,11 @@ public struct BasicSectionMetrics: SectionMetrics {
 	
 	public var decorationsByKind: [String : [LayoutDecoration]] = [:]
 	
-	public mutating func setFlag(flag: String) {
+	public mutating func setFlag(_ flag: String) {
 		flags.insert(flag)
 	}
 	
-	private var flags: Set<String> = []
+	fileprivate var flags: Set<String> = []
 	
 }
 
@@ -46,7 +46,7 @@ public struct BasicSectionMetrics: SectionMetrics {
 
 extension BasicSectionMetrics {
 	
-	public func definesMetric(metric: String) -> Bool {
+	public func definesMetric(_ metric: String) -> Bool {
 		return flags.contains(metric)
 	}
 	
@@ -162,11 +162,11 @@ extension BasicSectionMetricsWrapper {
 		}
 	}
 	
-	public mutating func setFlag(flag: String) {
+	public mutating func setFlag(_ flag: String) {
 		basicSectionMetrics.setFlag(flag)
 	}
 	
-	public func definesMetric(metric: String) -> Bool {
+	public func definesMetric(_ metric: String) -> Bool {
 		return basicSectionMetrics.definesMetric(metric)
 	}
 	
@@ -179,7 +179,7 @@ extension BasicSectionMetricsWrapper {
 		}
 	}
 	
-	public mutating func add(decoration: LayoutDecoration) {
+	public mutating func add(_ decoration: LayoutDecoration) {
 		basicSectionMetrics.add(decoration)
 	}
 	

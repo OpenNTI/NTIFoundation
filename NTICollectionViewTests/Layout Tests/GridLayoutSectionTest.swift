@@ -39,7 +39,7 @@ class GridLayoutSectionTest: XCTestCase {
 		let y_0: CGFloat = 50.5
 		let h: CGFloat = 50
 		let endY: CGFloat = 757.5
-		let start = CGPointZero
+		let start = CGPoint.zero
 		let itemCount = 15
 		
 		let measure = DummyLayoutMeasure()

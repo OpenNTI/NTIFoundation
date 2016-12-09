@@ -9,13 +9,13 @@
 import UIKit
 
 // FIXME: Code duplication with the composed metrics helper
-public class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMetricsHelper {
+open class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMetricsHelper {
 
 	public init(segmentedDataSource: SegmentedCollectionDataSource) {
 		super.init(dataSource: segmentedDataSource)
 	}
 	
-	public var segmentedDataSource: SegmentedCollectionDataSource {
+	open var segmentedDataSource: SegmentedCollectionDataSource {
 		return dataSource as! SegmentedCollectionDataSource
 	}
 	
@@ -23,7 +23,7 @@ public class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMet
 		return segmentedDataSource.selectedDataSource
 	}
 	
-	public override func numberOfSupplementaryItemsOfKind(kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChildDataSources: Bool) -> Int {
+	open override func numberOfSupplementaryItemsOfKind(_ kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChildDataSources: Bool) -> Int {
 		var numberOfItems = super.numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChildDataSources: false)
 		if shouldIncludeChildDataSources {
 			numberOfItems += selectedDataSource?.numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChildDataSources: true) ?? 0
@@ -31,10 +31,10 @@ public class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMet
 		return numberOfItems
 	}
 	
-	public override func indexPaths(for supplementaryItem: SupplementaryItem) -> [NSIndexPath] {
+	open override func indexPaths(for supplementaryItem: SupplementaryItem) -> [IndexPath] {
 		var result = super.indexPaths(for: supplementaryItem)
 		if !result.isEmpty {
-			return result
+			return result as [IndexPath]
 		}
 		
 		// If the metrics aren't defined on this data source, check the selected data source
@@ -44,7 +44,7 @@ public class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMet
 		result = selectedDataSource.indexPaths(for: supplementaryItem)
 		
 		// Need to update the index paths of the selected data source to reflect any items defined in this data source
-		var adjusted: [NSIndexPath] = []
+		var adjusted: [IndexPath] = []
 		let kind = supplementaryItem.elementKind
 		
 		for indexPath in result {
@@ -59,7 +59,7 @@ public class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMet
 		return adjusted
 	}
 	
-	public override func findSupplementaryItemOfKind(kind: String, at indexPath: NSIndexPath, using block: (dataSource: CollectionDataSource, localIndexPath: NSIndexPath, supplementaryItem: SupplementaryItem) -> Void) {
+	open override func findSupplementaryItemOfKind(_ kind: String, at indexPath: IndexPath, using block: (_ dataSource: CollectionDataSource, _ localIndexPath: IndexPath, _ supplementaryItem: SupplementaryItem) -> Void) {
 		let sectionIndex = indexPath.layoutSection
 		var itemIndex = indexPath.itemIndex
 		
@@ -73,7 +73,7 @@ public class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMet
 		selectedDataSource?.findSupplementaryItemOfKind(kind, at: childIndexPath, using: block)
 	}
 	
-	public override func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
+	open override func snapshotMetricsForSectionAtIndex(_ sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
 		guard var enclosingMetrics = super.snapshotMetricsForSectionAtIndex(sectionIndex) else {
 			return nil
 		}
@@ -83,7 +83,7 @@ public class SegmentedCollectionDataSourceMetricsHelper: CollectionDataSourceMet
 		return enclosingMetrics
 	}
 	
-	private func snapshotChildMetrics(forSectionAt sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
+	fileprivate func snapshotChildMetrics(forSectionAt sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
 		guard let selectedDataSource = self.selectedDataSource else {
 			return nil
 		}

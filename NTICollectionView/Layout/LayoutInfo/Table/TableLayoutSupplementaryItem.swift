@@ -35,7 +35,7 @@ public struct TableLayoutSupplementaryItem : LayoutSupplementaryItemWrapper {
 	// Whether `self` is pinned in place.
 	public var isPinned = false
 	
-	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	public mutating func setFrame(_ frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		
 	}
 	

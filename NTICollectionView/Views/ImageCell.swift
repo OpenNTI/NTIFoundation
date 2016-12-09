@@ -9,17 +9,17 @@
 import UIKit
 
 /// A `CollectionViewCell` that displays a single image aligned to the `layoutMargins` of its `contentView`.
-public class ImageCell: CollectionViewCell {
+open class ImageCell: CollectionViewCell {
 	
 	/// The image displayed by `self`.
-	public var image: UIImage? {
+	open var image: UIImage? {
 		get { return imageView.image }
 		set { imageView.image = newValue }
 	}
 
-	private let imageView = UIImageView()
+	fileprivate let imageView = UIImageView()
 	
-	public override var layoutMargins: UIEdgeInsets {
+	open override var layoutMargins: UIEdgeInsets {
 		didSet { contentView.layoutMargins = layoutMargins }
 	}
 	
@@ -32,15 +32,15 @@ public class ImageCell: CollectionViewCell {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	private func commonInit() {
+	fileprivate func commonInit() {
 		imageView.translatesAutoresizingMaskIntoConstraints = false
 		contentView.addSubview(imageView)
 		
 		let views = ["image": imageView]
 		for axis in ["H", "V"] {
-			let constraints = NSLayoutConstraint.constraintsWithVisualFormat(
-				"\(axis):|-[image]-|", options: [], metrics: nil, views: views)
-			NSLayoutConstraint.activateConstraints(constraints)
+			let constraints = NSLayoutConstraint.constraints(
+				withVisualFormat: "\(axis):|-[image]-|", options: [], metrics: nil, views: views)
+			NSLayoutConstraint.activate(constraints)
 		}
 	}
 

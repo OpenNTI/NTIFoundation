@@ -10,17 +10,17 @@ import UIKit
 
 public protocol CollectionLayout: NSObjectProtocol {
 	
-	func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]?
+	func layoutAttributesForElementsInRect(_ rect: CGRect) -> [UICollectionViewLayoutAttributes]?
 	
-	func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes?
+	func layoutAttributesForItemAtIndexPath(_ indexPath: IndexPath) -> UICollectionViewLayoutAttributes?
 	
-	func layoutAttributesForSupplementaryViewOfKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes?
+	func layoutAttributesForSupplementaryViewOfKind(_ elementKind: String, atIndexPath indexPath: IndexPath) -> UICollectionViewLayoutAttributes?
 	
-	func layoutAttributesForDecorationViewOfKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes?
+	func layoutAttributesForDecorationViewOfKind(_ elementKind: String, atIndexPath indexPath: IndexPath) -> UICollectionViewLayoutAttributes?
 	
 }
 
 /// The purpose of this class will be to encapsulate some of the behavior of `CollectionViewLayout`.
-public class CollectionLayoutEngine: NSObject {
+open class CollectionLayoutEngine: NSObject {
 	
 }

@@ -17,33 +17,33 @@ public protocol ShadowRegistrarVending: NSObjectProtocol {
 	
 }
 
-public class ShadowRegistrar: NSObject {
+open class ShadowRegistrar: NSObject {
 
-	private var cellRegistry: [ReuseIdentifier: ShadowRegistration] = [:]
-	private var supplementaryViewRegistry: [ElementKind: [ReuseIdentifier: ShadowRegistration]] = [:]
+	fileprivate var cellRegistry: [ReuseIdentifier: ShadowRegistration] = [:]
+	fileprivate var supplementaryViewRegistry: [ElementKind: [ReuseIdentifier: ShadowRegistration]] = [:]
 	
-	public func registerClass(cellClass: UICollectionReusableView.Type, forCellWith identifier: ReuseIdentifier) {
+	open func registerClass(_ cellClass: UICollectionReusableView.Type, forCellWith identifier: ReuseIdentifier) {
 		let shadowRegistration = shadowRegistrationForCell(with: identifier)
 		shadowRegistration.viewClass = cellClass
 		shadowRegistration.nib = nil
 		shadowRegistration.reusableView = nil
 	}
 	
-	public func registerNib(nib: UINib, forCellWith identifier: ReuseIdentifier) {
+	open func registerNib(_ nib: UINib, forCellWith identifier: ReuseIdentifier) {
 		let shadowRegistration = shadowRegistrationForCell(with: identifier)
 		shadowRegistration.viewClass = nil
 		shadowRegistration.nib = nib
 		shadowRegistration.reusableView = nil
 	}
 	
-	public func registerClass(viewClass: UICollectionReusableView.Type, forSupplementaryViewOf elementKind: ElementKind, with identifier: ReuseIdentifier) {
+	open func registerClass(_ viewClass: UICollectionReusableView.Type, forSupplementaryViewOf elementKind: ElementKind, with identifier: ReuseIdentifier) {
 		let shadowRegistration = shadowRegistrationForSupplementaryView(of: elementKind, with: identifier)
 		shadowRegistration.viewClass = viewClass
 		shadowRegistration.nib = nil
 		shadowRegistration.reusableView = nil
 	}
 	
-	private func shadowRegistrationForCell(with identifier: ReuseIdentifier) -> ShadowRegistration {
+	fileprivate func shadowRegistrationForCell(with identifier: ReuseIdentifier) -> ShadowRegistration {
 		var shadowRegistration = cellRegistry[identifier]
 		if shadowRegistration == nil {
 			shadowRegistration = ShadowRegistration()
@@ -52,14 +52,14 @@ public class ShadowRegistrar: NSObject {
 		return shadowRegistration!
 	}
 	
-	public func registerNib(nib: UINib, forSupplementaryViewOf elementKind: ElementKind, with identifier: ReuseIdentifier) {
+	open func registerNib(_ nib: UINib, forSupplementaryViewOf elementKind: ElementKind, with identifier: ReuseIdentifier) {
 		let shadowRegistration = shadowRegistrationForSupplementaryView(of: elementKind, with: identifier)
 		shadowRegistration.viewClass = nil
 		shadowRegistration.nib = nib
 		shadowRegistration.reusableView = nil
 	}
 	
-	private func shadowRegistrationForSupplementaryView(of elementKind: ElementKind, with identifier: ReuseIdentifier) -> ShadowRegistration {
+	fileprivate func shadowRegistrationForSupplementaryView(of elementKind: ElementKind, with identifier: ReuseIdentifier) -> ShadowRegistration {
 		var elementKindRegistry = elementKindRegistryForSupplementaryViews(of: elementKind)
 		var shadowRegistration = elementKindRegistry[identifier]
 		if shadowRegistration == nil {
@@ -70,7 +70,7 @@ public class ShadowRegistrar: NSObject {
 		return shadowRegistration!
 	}
 	
-	private func elementKindRegistryForSupplementaryViews(of elementKind: ElementKind) -> [ReuseIdentifier: ShadowRegistration] {
+	fileprivate func elementKindRegistryForSupplementaryViews(of elementKind: ElementKind) -> [ReuseIdentifier: ShadowRegistration] {
 		var elementKindRegistry = supplementaryViewRegistry[elementKind]
 		if elementKindRegistry == nil {
 			elementKindRegistry = [:]
@@ -79,21 +79,21 @@ public class ShadowRegistrar: NSObject {
 		return elementKindRegistry!
 	}
 	
-	public func dequeReusableCell(with identifier: ReuseIdentifier, for indexPath: NSIndexPath, collectionView: UICollectionView) -> UICollectionReusableView {
+	open func dequeReusableCell(with identifier: ReuseIdentifier, for indexPath: IndexPath, collectionView: UICollectionView) -> UICollectionReusableView {
 		let layout = collectionView.collectionViewLayout
-		let layoutAttributes = layout.layoutAttributesForItemAtIndexPath(indexPath)!
+		let layoutAttributes = layout.layoutAttributesForItem(at: indexPath)!
 		let shadowRegistration = shadowRegistrationForCell(with: identifier)
 		return dequeReusableView(for: shadowRegistration, identifier: identifier, layoutAttributes: layoutAttributes, collectionView: collectionView)
 	}
 	
-	public func dequeReusableSupplementaryView(of elementKind: ElementKind, with identifier: ReuseIdentifier, for indexPath: NSIndexPath, collectionView: UICollectionView) -> UICollectionReusableView {
+	open func dequeReusableSupplementaryView(of elementKind: ElementKind, with identifier: ReuseIdentifier, for indexPath: IndexPath, collectionView: UICollectionView) -> UICollectionReusableView {
 		let layout = collectionView.collectionViewLayout
-		let layoutAttributes = layout.layoutAttributesForSupplementaryViewOfKind(elementKind, atIndexPath: indexPath)!
+		let layoutAttributes = layout.layoutAttributesForSupplementaryView(ofKind: elementKind, at: indexPath)!
 		let shadowRegistration = shadowRegistrationForSupplementaryView(of: elementKind, with: identifier)
 		return dequeReusableView(for: shadowRegistration, identifier: identifier, layoutAttributes: layoutAttributes, collectionView: collectionView)
 	}
 	
-	private func dequeReusableView(for shadowRegistration: ShadowRegistration, identifier: ReuseIdentifier, layoutAttributes: UICollectionViewLayoutAttributes, collectionView: UICollectionView) -> UICollectionReusableView {
+	fileprivate func dequeReusableView(for shadowRegistration: ShadowRegistration, identifier: ReuseIdentifier, layoutAttributes: UICollectionViewLayoutAttributes, collectionView: UICollectionView) -> UICollectionReusableView {
 		var view = shadowRegistration.reusableView
 		
 		if view != nil {
@@ -103,7 +103,7 @@ public class ShadowRegistrar: NSObject {
 			frame.size = layoutAttributes.size
 			view = viewClass.init(frame: frame)
 		} else if let nib = shadowRegistration.nib {
-			let topLevelObjects = nib.instantiateWithOwner(nil, options: nil)
+			let topLevelObjects = nib.instantiate(withOwner: nil, options: nil)
 			guard let nibView = topLevelObjects.first as? UICollectionReusableView else {
 				preconditionFailure("Invalid nib registered for identifier (\(identifier)) - nib must contain exactly one top level object which must be a UICollectionReusableView instance")
 			}
@@ -119,7 +119,7 @@ public class ShadowRegistrar: NSObject {
 		}
 		
 		shadowRegistration.reusableView = reusableView
-		reusableView.autoresizingMask = .None
+		reusableView.autoresizingMask = UIViewAutoresizing()
 		reusableView.translatesAutoresizingMaskIntoConstraints = true
 		
 		UIView.performWithoutAnimation {
@@ -130,12 +130,12 @@ public class ShadowRegistrar: NSObject {
 		return reusableView
 	}
 	
-	private func apply(layoutAttributes: UICollectionViewLayoutAttributes, to view: UICollectionReusableView) {
+	fileprivate func apply(_ layoutAttributes: UICollectionViewLayoutAttributes, to view: UICollectionReusableView) {
 		view.center = layoutAttributes.center
 		view.bounds.size = layoutAttributes.size
 		view.alpha = layoutAttributes.alpha
 		view.layer.transform = layoutAttributes.transform3D
-		view.applyLayoutAttributes(layoutAttributes)
+		view.apply(layoutAttributes)
 	}
 	
 }

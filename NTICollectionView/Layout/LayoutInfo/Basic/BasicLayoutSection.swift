@@ -25,12 +25,12 @@ public struct BasicLayoutSection: LayoutSection, LayoutSectionBaseComposite {
 	}
 	
 	// O(n^2)
-	private var attributesForDecorationsByKind: [String: [CollectionViewLayoutAttributes]] {
+	fileprivate var attributesForDecorationsByKind: [String: [CollectionViewLayoutAttributes]] {
 		var attributesByKind: [String: [CollectionViewLayoutAttributes]] = [:]
 		let insetFrame = UIEdgeInsetsInsetRect(frame, metrics.contentInset)
 		
 		for (kind, decorations) in decorationsByKind {
-			for (index, decoration) in decorations.enumerate() {
+			for (index, decoration) in decorations.enumerated() {
 				var decoration = decoration
 				decoration.itemIndex = index
 				decoration.sectionIndex = sectionIndex
@@ -56,7 +56,7 @@ public struct BasicLayoutSection: LayoutSection, LayoutSectionBaseComposite {
 				return
 			}
 			
-			if let oldValue = oldValue where placeholderInfo.isEqual(to: oldValue) {
+			if let oldValue = oldValue, placeholderInfo.isEqual(to: oldValue) {
 				return
 			}
 			
@@ -68,14 +68,14 @@ public struct BasicLayoutSection: LayoutSection, LayoutSectionBaseComposite {
 		return metrics.shouldResizePlaceholder
 	}
 	
-	public mutating func add(item: LayoutItem) {
+	public mutating func add(_ item: LayoutItem) {
 		var item = item
 		item.sectionIndex = sectionIndex
 		items.append(item)
 		
 	}
 	
-	public mutating func setItem(item: LayoutItem, at index: Int) {
+	public mutating func setItem(_ item: LayoutItem, at index: Int) {
 		var item = item
 		item.sectionIndex = sectionIndex
 		items[index] = item
@@ -87,13 +87,13 @@ public struct BasicLayoutSection: LayoutSection, LayoutSectionBaseComposite {
 		items[index] = item
 	}
 	
-	public mutating func mutateItems(using mutator: (item: inout LayoutItem, index: Int) -> Void) {
+	public mutating func mutateItems(using mutator: (_ item: inout LayoutItem, _ index: Int) -> Void) {
 		for index in items.indices {
-			mutator(item: &items[index], index: index)
+			mutator(&items[index], index)
 		}
 	}
 	
-	public func shouldShow(supplementaryItem: SupplementaryItem) -> Bool {
+	public func shouldShow(_ supplementaryItem: SupplementaryItem) -> Bool {
 		return isGlobalSection || numberOfItems > 0 || supplementaryItem.isVisibleWhileShowingPlaceholder
 	}
 	
@@ -103,35 +103,35 @@ public struct BasicLayoutSection: LayoutSection, LayoutSectionBaseComposite {
 		
 	}
 	
-	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	public mutating func setFrame(_ frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		
 	}
 	
-	public mutating func setSize(size: CGSize, forItemAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
-		return CGPointZero
+	public mutating func setSize(_ size: CGSize, forItemAt index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
+		return CGPoint.zero
 	}
 	
-	public mutating func setSize(size: CGSize, forSupplementaryElementOfKind kind: String, at index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
-		return CGPointZero
+	public mutating func setSize(_ size: CGSize, forSupplementaryElementOfKind kind: String, at index: Int, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
+		return CGPoint.zero
 	}
 	
 	public mutating func prepareForLayout() {
 		
 	}
 	
-	public mutating func finalizeLayoutAttributesForSectionsWithContent(sectionsWithContent: [LayoutSection]) {
+	public mutating func finalizeLayoutAttributesForSectionsWithContent(_ sectionsWithContent: [LayoutSection]) {
 		
 	}
 	
-	public func targetContentOffsetForProposedContentOffset(proposedContentOffset: CGPoint, firstInsertedSectionMinY: CGFloat) -> CGPoint {
+	public func targetContentOffsetForProposedContentOffset(_ proposedContentOffset: CGPoint, firstInsertedSectionMinY: CGFloat) -> CGPoint {
 		return proposedContentOffset
 	}
 	
-	public func targetLayoutHeightForProposedLayoutHeight(proposedHeight: CGFloat, layoutInfo: LayoutInfo) -> CGFloat {
+	public func targetLayoutHeightForProposedLayoutHeight(_ proposedHeight: CGFloat, layoutInfo: LayoutInfo) -> CGFloat {
 		return proposedHeight
 	}
 	
-	public mutating func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, layoutInfo: LayoutInfo, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	public mutating func updateSpecialItemsWithContentOffset(_ contentOffset: CGPoint, layoutInfo: LayoutInfo, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		
 	}
 	
@@ -139,23 +139,23 @@ public struct BasicLayoutSection: LayoutSection, LayoutSectionBaseComposite {
 		
 	}
 	
-	public func additionalLayoutAttributesToInsertForInsertionOfItem(at indexPath: NSIndexPath) -> [CollectionViewLayoutAttributes] {
+	public func additionalLayoutAttributesToInsertForInsertionOfItem(at indexPath: IndexPath) -> [CollectionViewLayoutAttributes] {
 		return []
 	}
 	
-	public func additionalLayoutAttributesToDeleteForDeletionOfItem(at indexPath: NSIndexPath) -> [CollectionViewLayoutAttributes] {
+	public func additionalLayoutAttributesToDeleteForDeletionOfItem(at indexPath: IndexPath) -> [CollectionViewLayoutAttributes] {
 		return []
 	}
 	
-	public func layoutAttributesForCell(at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
+	public func layoutAttributesForCell(at indexPath: IndexPath) -> CollectionViewLayoutAttributes? {
 		return nil
 	}
 	
-	public func layoutAttributesForSupplementaryElementOfKind(kind: String, at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
+	public func layoutAttributesForSupplementaryElementOfKind(_ kind: String, at indexPath: IndexPath) -> CollectionViewLayoutAttributes? {
 		return nil
 	}
 	
-	public func layoutAttributesForDecorationViewOfKind(kind: String, at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
+	public func layoutAttributesForDecorationViewOfKind(_ kind: String, at indexPath: IndexPath) -> CollectionViewLayoutAttributes? {
 		return nil
 	}
 	

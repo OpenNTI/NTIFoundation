@@ -18,7 +18,7 @@ public protocol LayoutDecoration: DecorationAttributeProvider, DecorationLayoutI
 	
 	var layoutAttributes: CollectionViewLayoutAttributes { get }
 	
-	mutating func setContainerFrame(containerFrame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
+	mutating func setContainerFrame(_ containerFrame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
 	func isEqual(to other: LayoutDecoration) -> Bool
 	
@@ -32,7 +32,7 @@ public protocol DecorationLayoutInfoProvider {
 	
 	var sectionIndex: Int { get set }
 	
-	var indexPath: NSIndexPath { get }
+	var indexPath: IndexPath { get }
 	
 }
 
@@ -48,10 +48,10 @@ public struct DecorationLayoutInfo: DecorationLayoutInfoProvider, Equatable {
 	
 	public var sectionIndex: Int = NSNotFound
 	
-	public var indexPath: NSIndexPath {
+	public var indexPath: IndexPath {
 		return sectionIndex == globalSectionIndex ?
-		NSIndexPath(index: itemIndex)
-		: NSIndexPath(forItem: itemIndex, inSection: sectionIndex)
+		IndexPath(index: itemIndex)
+		: IndexPath(item: itemIndex, section: sectionIndex)
 	}
 }
 
@@ -91,13 +91,13 @@ extension DecorationLayoutInfoWrapper {
 		}
 	}
 	
-	public var indexPath: NSIndexPath {
+	public var indexPath: IndexPath {
 		return decorationLayoutInfo.indexPath
 	}
 	
 }
 
-private let hairline: CGFloat = 1.0 / UIScreen.mainScreen().scale
+private let hairline: CGFloat = 1.0 / UIScreen.main.scale
 
 public let collectionElementKindHorizontalSeparator = "collectionElementKindHorizontalSeparator"
 
@@ -152,15 +152,15 @@ public struct HorizontalSeparatorDecoration: LayoutDecoration, DecorationAttribu
 	public var attributes = DecorationAttributes()
 	
 	public var layoutAttributes: CollectionViewLayoutAttributes {
-		let layoutAttributes = CollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, withIndexPath: indexPath)
+		let layoutAttributes = CollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, with: indexPath)
 		layoutAttributes.frame = frame
 		layoutAttributes.backgroundColor = color
 		layoutAttributes.zIndex = zIndex
-		layoutAttributes.hidden = isHidden
+		layoutAttributes.isHidden = isHidden
 		return layoutAttributes
 	}
 	
-	public mutating func setContainerFrame(containerFrame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	public mutating func setContainerFrame(_ containerFrame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		frame.origin.x = containerFrame.minX + leftMargin
 		frame.origin.y = computeYCoordinate(for: containerFrame)
 		frame.size.width = containerFrame.width - leftMargin - rightMargin
@@ -169,7 +169,7 @@ public struct HorizontalSeparatorDecoration: LayoutDecoration, DecorationAttribu
 		invalidationContext?.invalidateDecorationElement(with: layoutAttributes)
 	}
 	
-	private func computeYCoordinate(for containerFrame: CGRect) -> CGFloat {
+	fileprivate func computeYCoordinate(for containerFrame: CGRect) -> CGFloat {
 		switch position {
 		case .top:
 			return containerFrame.minY
@@ -250,15 +250,15 @@ public struct VerticalSeparatorDecoration: LayoutDecoration, DecorationAttribute
 	public var attributes = DecorationAttributes()
 	
 	public var layoutAttributes: CollectionViewLayoutAttributes {
-		let layoutAttributes = CollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, withIndexPath: indexPath)
+		let layoutAttributes = CollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, with: indexPath)
 		layoutAttributes.frame = frame
 		layoutAttributes.backgroundColor = color
 		layoutAttributes.zIndex = zIndex
-		layoutAttributes.hidden = isHidden
+		layoutAttributes.isHidden = isHidden
 		return layoutAttributes
 	}
 	
-	public mutating func setContainerFrame(containerFrame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	public mutating func setContainerFrame(_ containerFrame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		
 		frame.origin.x = computeXCoordinate(for: containerFrame)
 		frame.origin.y = containerFrame.minY + topMargin
@@ -268,7 +268,7 @@ public struct VerticalSeparatorDecoration: LayoutDecoration, DecorationAttribute
 		invalidationContext?.invalidateDecorationElement(with: layoutAttributes)
 	}
 	
-	private func computeXCoordinate(for containerFrame: CGRect) -> CGFloat {
+	fileprivate func computeXCoordinate(for containerFrame: CGRect) -> CGFloat {
 		switch position {
 		case .left:
 			return containerFrame.minX
@@ -305,23 +305,23 @@ public struct BackgroundDecoration: LayoutDecoration, DecorationAttributesWrappe
 	
 	public var decorationLayoutInfo: DecorationLayoutInfo
 	
-	public var margins = UIEdgeInsetsZero
+	public var margins = UIEdgeInsets.zero
 	
 	public var cornerRadius: CGFloat = 0
 	
 	public var attributes = DecorationAttributes()
 	
 	public var layoutAttributes: CollectionViewLayoutAttributes {
-		let layoutAttributes = CollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, withIndexPath: indexPath)
+		let layoutAttributes = CollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, with: indexPath)
 		layoutAttributes.frame = frame
 		layoutAttributes.backgroundColor = color
 		layoutAttributes.zIndex = zIndex
-		layoutAttributes.hidden = isHidden
+		layoutAttributes.isHidden = isHidden
 		layoutAttributes.cornerRadius = cornerRadius
 		return layoutAttributes
 	}
 	
-	public mutating func setContainerFrame(containerFrame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	public mutating func setContainerFrame(_ containerFrame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		frame = UIEdgeInsetsInsetRect(containerFrame, margins)
 		
 		invalidationContext?.invalidateDecorationElement(with: layoutAttributes)
@@ -354,7 +354,7 @@ public protocol DecorationAttributeProvider {
 
 public struct DecorationAttributes: DecorationAttributeProvider, Equatable {
 	
-	public var frame: CGRect = CGRectZero
+	public var frame: CGRect = CGRect.zero
 	
 	public var zIndex: Int = 0
 	

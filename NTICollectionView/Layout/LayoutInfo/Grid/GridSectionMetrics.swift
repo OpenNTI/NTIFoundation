@@ -110,14 +110,14 @@ extension GridSectionMetricsProviding {
 	
 	var orderedSupplementaryElementKinds: [String] {
 		let array = Array<GridSectionSupplementaryItemOrder>(supplementaryOrdering)
-		return array.sort().map { $0.elementKind }
+		return array.sorted().map { $0.elementKind }
 	}
 	
 }
 
 public struct GridSectionMetrics: GridSectionMetricsProviding {
 	
-	public static let hairline: CGFloat = 1.0 / UIScreen.mainScreen().scale
+	public static let hairline: CGFloat = 1.0 / UIScreen.main.scale
 	
 	public static var defaultSupplementaryOrdering: Set<GridSectionSupplementaryItemOrder> = [.header(order: 0), .footer(order: 1), .leftAuxiliary(order: 2), .rightAuxiliary(order: 3)]
 	
@@ -125,7 +125,7 @@ public struct GridSectionMetrics: GridSectionMetricsProviding {
 	
 	public var decorationsByKind: [String: [LayoutDecoration]] = [:]
 	
-	public var contentInset = UIEdgeInsetsZero {
+	public var contentInset = UIEdgeInsets.zero {
 		didSet {
 			setFlag("contentInset")
 		}
@@ -201,14 +201,14 @@ public struct GridSectionMetrics: GridSectionMetricsProviding {
 	}
 	
 	/// Padding around the cells for this section. The top & bottom padding will be applied between the headers & footers and the cells. The left & right padding will be applied between the view edges and the cells.
-	public var padding = UIEdgeInsetsZero {
+	public var padding = UIEdgeInsets.zero {
 		didSet {
 			setFlag("padding")
 		}
 	}
 	
 	/// Layout margins for cells in this section.
-	public var layoutMargins = UIEdgeInsetsZero {
+	public var layoutMargins = UIEdgeInsets.zero {
 		didSet {
 			setFlag("layoutMargins")
 		}
@@ -250,10 +250,10 @@ public struct GridSectionMetrics: GridSectionMetricsProviding {
 	}
 	
 	/// Insets for the separators drawn between rows (left & right) and columns (top & bottom).
-	public var separatorInsets = UIEdgeInsetsZero
+	public var separatorInsets = UIEdgeInsets.zero
 	
 	/// Insets for the section separator drawn below this section.
-	public var sectionSeparatorInsets = UIEdgeInsetsZero
+	public var sectionSeparatorInsets = UIEdgeInsets.zero
 	
 	/// The color to use for the background of a cell in this section.
 	public var backgroundColor: UIColor? {
@@ -427,13 +427,13 @@ public struct GridSectionMetrics: GridSectionMetricsProviding {
 		}
 	}
 	
-	public func definesMetric(metric: String) -> Bool {
+	public func definesMetric(_ metric: String) -> Bool {
 		return flags.contains(metric)
 	}
 	
 	public mutating func resolveMissingValuesFromTheme() {
 		if !definesMetric("backgroundColor") {
-			backgroundColor = UIColor.whiteColor()
+			backgroundColor = UIColor.white
 		}
 		if !definesMetric("selectedBackgroundColor") {
 			selectedBackgroundColor = UIColor(white: 235.0 / 0xFF, alpha: 1)
@@ -446,9 +446,9 @@ public struct GridSectionMetrics: GridSectionMetricsProviding {
 		}
 	}
 	
-	private var flags: Set<String> = []
+	fileprivate var flags: Set<String> = []
 	
-	private mutating func setFlag(flag: String) {
+	fileprivate mutating func setFlag(_ flag: String) {
 		flags.insert(flag)
 	}
 	

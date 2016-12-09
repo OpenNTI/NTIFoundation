@@ -61,9 +61,9 @@ public protocol ParentCollectionDataSourceController: CollectionDataSourceContro
 	
 	var childControllers: [CollectionDataSourceController] { get }
 	
-	func addChild(controller: CollectionDataSourceController)
+	func addChild(_ controller: CollectionDataSourceController)
 	
-	func insert(controller: CollectionDataSourceController, at index: Int)
+	func insert(_ controller: CollectionDataSourceController, at index: Int)
 	
 	func removeAllChildren()
 	

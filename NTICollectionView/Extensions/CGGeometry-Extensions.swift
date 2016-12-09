@@ -15,7 +15,7 @@ func +(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
 extension CGPoint {
 	
 	public static var zero: CGPoint {
-		return CGPointZero
+		return CGPoint.zero
 	}
 	
 }
@@ -23,7 +23,7 @@ extension CGPoint {
 extension CGSize {
 	
 	public static var zero: CGSize {
-		return CGSizeZero
+		return CGSize.zero
 	}
 	
 }
@@ -31,7 +31,7 @@ extension CGSize {
 extension CGRect {
 	
 	public static var zero: CGRect {
-		return CGRectZero
+		return CGRect.zero
 	}
 	
 }

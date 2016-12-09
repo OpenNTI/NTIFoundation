@@ -8,26 +8,26 @@
 
 import UIKit
 
-public class GridLayoutEngine: NSObject, SupplementaryLayoutEngine {
+open class GridLayoutEngine: NSObject, SupplementaryLayoutEngine {
 	
 	public init(layoutInfo: LayoutInfo) {
 		self.layoutInfo = layoutInfo
 		super.init()
 	}
 	
-	public var layoutInfo: LayoutInfo
+	open var layoutInfo: LayoutInfo
 	
-	public var pinnableHeaders: [LayoutSupplementaryItem] = []
-	public var nonPinnableHeaders: [LayoutSupplementaryItem] = []
-	public var supplementaryItems: [LayoutSupplementaryItem] = []
+	open var pinnableHeaders: [LayoutSupplementaryItem] = []
+	open var nonPinnableHeaders: [LayoutSupplementaryItem] = []
+	open var supplementaryItems: [LayoutSupplementaryItem] = []
 	
-	private var sizing: LayoutSizing!
-	private var invalidationContext: UICollectionViewLayoutInvalidationContext?
+	fileprivate var sizing: LayoutSizing!
+	fileprivate var invalidationContext: UICollectionViewLayoutInvalidationContext?
 	
-	private var origin: CGPoint!
-	private var position: CGPoint!
+	fileprivate var origin: CGPoint!
+	fileprivate var position: CGPoint!
 	
-	public func layoutWithOrigin(origin: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
+	open func layoutWithOrigin(_ origin: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
 		self.origin = origin
 		self.position = origin
 		sizing = layoutSizing
@@ -44,7 +44,7 @@ public class GridLayoutEngine: NSObject, SupplementaryLayoutEngine {
 		return position
 	}
 	
-	private func layoutSectionInfo() {
+	fileprivate func layoutSectionInfo() {
 		let engine = makeLayoutEngine()
 		position = engine.layoutWithOrigin(position, layoutSizing: sizing, invalidationContext: invalidationContext)
 		pinnableHeaders += engine.pinnableHeaders
@@ -63,11 +63,11 @@ public class GridLayoutEngine: NSObject, SupplementaryLayoutEngine {
 		}
 	}
 	
-	private func makeLayoutEngine() -> SupplementaryLayoutEngine {
+	fileprivate func makeLayoutEngine() -> SupplementaryLayoutEngine {
 		return makeGlobalSectionLayoutEngine() ?? makeSectionsLayoutEngine()
 	}
 	
-	private func makeGlobalSectionLayoutEngine() -> SupplementaryLayoutEngine? {
+	fileprivate func makeGlobalSectionLayoutEngine() -> SupplementaryLayoutEngine? {
 		guard let globalSection = layoutInfo.sectionAtIndex(globalSectionIndex) as? GridLayoutSection else {
 			return nil
 		}
@@ -75,10 +75,10 @@ public class GridLayoutEngine: NSObject, SupplementaryLayoutEngine {
 		return GridSupplementaryItemLayoutEngine(layoutSection: globalSection, innerLayoutEngine: sectionsLayoutEngine)
 	}
 	
-	private func makeSectionsLayoutEngine() -> SupplementaryLayoutEngine {
+	fileprivate func makeSectionsLayoutEngine() -> SupplementaryLayoutEngine {
 		return ComposedGridSectionLayoutEngine(sections: sections)
 	}
-	private var sections: [GridLayoutSection] {
+	fileprivate var sections: [GridLayoutSection] {
 		var sections: [GridLayoutSection] = []
 		for i in 0..<(layoutInfo.numberOfSections) {
 			guard let section = layoutInfo.sectionAtIndex(i) as? GridLayoutSection else {
@@ -89,8 +89,8 @@ public class GridLayoutEngine: NSObject, SupplementaryLayoutEngine {
 		return sections
 	}
 	
-	private func replaceSections(from layoutEngine: ComposedGridSectionLayoutEngine) {
-		for (index, section) in layoutEngine.sections.enumerate() {
+	fileprivate func replaceSections(from layoutEngine: ComposedGridSectionLayoutEngine) {
+		for (index, section) in layoutEngine.sections.enumerated() {
 			layoutInfo.setSection(section, at: index)
 		}
 	}

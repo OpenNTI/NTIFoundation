@@ -11,7 +11,7 @@ import UIKit
 extension UIEdgeInsets {
 	
 	public static var zero: UIEdgeInsets {
-		return UIEdgeInsetsZero
+		return UIEdgeInsets.zero
 	}
 	
 	/// The combined left and right inset.
