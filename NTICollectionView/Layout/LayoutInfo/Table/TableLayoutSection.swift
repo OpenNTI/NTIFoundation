@@ -789,7 +789,7 @@ public struct TableLayoutSection: LayoutSection, RowAlignedLayoutSectionBaseComp
 					continue
 			}
 			
-			header = transformer(nonPinnableHeader: header, index: index)
+			header = transformer(header, index)
 			headers[index] = header
 		}
 		

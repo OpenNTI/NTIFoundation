@@ -76,8 +76,8 @@ public struct BasicSupplementaryItem: SupplementaryItem {
 		}
 		
 		self.configureView = { (view: UICollectionReusableView, dataSource: CollectionDataSource, indexPath: IndexPath) in
-			configureView(view: view, dataSource: dataSource, indexPath: indexPath)
-			configuration(view: view, dataSource: dataSource, indexPath: indexPath)
+			configureView(view, dataSource, indexPath)
+			configuration(view, dataSource, indexPath)
 		}
 	}
 	

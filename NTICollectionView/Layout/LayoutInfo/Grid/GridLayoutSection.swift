@@ -1075,7 +1075,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 					continue
 			}
 			
-			item = transformer(nonPinnableItem: item, index: index)
+			item = transformer(item, index)
 			items[index] = item
 		}
 		

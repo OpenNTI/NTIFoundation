@@ -484,7 +484,7 @@ open class CollectionViewController: UICollectionViewController, CollectionDataS
 					let localIndexPath = dataSource.localIndexPathForGlobal(indexPath) else {
 						continue
 				}
-				supplementaryItem.configureView?(view: view, dataSource: localDataSource, indexPath: localIndexPath)
+				supplementaryItem.configureView?(view, localDataSource, localIndexPath)
 			}
 			
 			context.invalidateSupplementaryElements(ofKind: kind, at: indexPaths)
