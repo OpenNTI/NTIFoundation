@@ -77,6 +77,7 @@ open class PlaceholderView: UIView {
 		didSet {
 			titleLabel.textColor = textColor
 			messageLabel.textColor = textColor
+			updateActionButton()
 		}
 	}
 	
@@ -193,6 +194,7 @@ open class PlaceholderView: UIView {
 		if let buttonTitle = self.buttonTitle, !buttonTitle.characters.isEmpty {
 			containerView.addSubview(actionButton)
 			actionButton.setTitle(buttonTitle, for: UIControlState())
+			updateActionButton()
 		} else {
 			actionButton.removeFromSuperview()
 		}
@@ -203,6 +205,16 @@ open class PlaceholderView: UIView {
 		
 		_constraints.removeAll(keepingCapacity: true)
 		setNeedsUpdateConstraints()
+	}
+	
+	/// Updates `actionButton` using `textColor`, unless it is not being shown.
+	private func updateActionButton() {
+		guard actionButton.superview != nil else {
+			return
+		}
+		
+		actionButton.setBackgroundImage(backgroundImage(with: textColor), for: UIControlState())
+		actionButton.setTitleColor(textColor, for: UIControlState())
 	}
 	
 	fileprivate func activateContainerConstraints() {
