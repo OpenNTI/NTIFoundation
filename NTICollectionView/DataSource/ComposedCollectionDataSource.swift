@@ -46,11 +46,11 @@ open class ComposedCollectionDataSource: CollectionDataSource, CollectionDataSou
 		notifyDidAddChild(dataSource)
 		
 		updateMappings()
-		let addedSections = NSMutableIndexSet()
+		var addedSections = IndexSet()
 		let numberOfSections = dataSource.numberOfSections
 		for sectionIdx in 0..<numberOfSections {
 			let section = mappingForDataSource.globalSectionForLocalSection(sectionIdx)
-			addedSections.add(section)
+			addedSections.insert(section)
 		}
 		notifySectionsInserted(addedSections)
 	}
@@ -61,12 +61,12 @@ open class ComposedCollectionDataSource: CollectionDataSource, CollectionDataSou
 			preconditionFailure("Data source not found in mapping")
 		}
 		
-		let removedSections = NSMutableIndexSet()
+		var removedSections = IndexSet()
 		let numberOfSections = dataSource.numberOfSections
 		
 		for sectionIdx in 0..<numberOfSections {
 			let section = mappingForDataSoure.globalSectionForLocalSection(sectionIdx)
-			removedSections.add(section)
+			removedSections.insert(section)
 		}
 		
 		dataSourceToMappings.removeObject(forKey: dataSource)

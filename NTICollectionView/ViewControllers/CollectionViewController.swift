@@ -13,10 +13,10 @@ private var updateNumber = 0
 
 open class CollectionViewController: UICollectionViewController, CollectionDataSourceDelegate, CollectionViewSupplementaryViewTracking {
 	
-	fileprivate var updateCompletionHandler: ()->()?
-	fileprivate let reloadedSections = NSMutableIndexSet()
-	fileprivate let deletedSections = NSMutableIndexSet()
-	fileprivate let insertedSections = NSMutableIndexSet()
+	fileprivate var updateCompletionHandler: (()->())?
+	fileprivate var reloadedSections = IndexSet()
+	fileprivate var deletedSections = IndexSet()
+	fileprivate var insertedSections = IndexSet()
 	fileprivate var isPerformingUpdates = false
 	fileprivate var isObservingDataSource = false
 	fileprivate var visibleSupplementaryViews: [String: [IndexPath: UICollectionReusableView]] = [:]
@@ -326,9 +326,9 @@ open class CollectionViewController: UICollectionViewController, CollectionDataS
 	// MARK: - CollectionDataSourceDelegate
 	
 	fileprivate func clearSectionUpdateInfo() {
-		reloadedSections.removeAllIndexes()
-		deletedSections.removeAllIndexes()
-		insertedSections.removeAllIndexes()
+		reloadedSections.removeAll()
+		deletedSections.removeAll()
+		insertedSections.removeAll()
 	}
 	
 	open func dataSource(_ dataSource: CollectionDataSource, didInsertItemsAt indexPaths: [IndexPath]) {
@@ -358,7 +358,7 @@ open class CollectionViewController: UICollectionViewController, CollectionDataS
 			collectionLayout.dataSource(dataSource, didInsertSections: sections, direction: direction)
 		}
 		collectionView!.insertSections(sections)
-		insertedSections.add(sections)
+		insertedSections.formUnion(sections)
 	}
 	
 	open func dataSource(_ dataSource: CollectionDataSource, didRemoveSections sections: IndexSet, direction: SectionOperationDirection?) {
@@ -368,14 +368,14 @@ open class CollectionViewController: UICollectionViewController, CollectionDataS
 			collectionLayout.dataSource(dataSource, didRemoveSections: sections, direction: direction)
 		}
 		collectionView!.deleteSections(sections)
-		deletedSections.add(sections)
+		deletedSections.formUnion(sections)
 	}
 	
 	open func dataSource(_ dataSource: CollectionDataSource, didRefreshSections sections: IndexSet) {
 		updateLog("\(#function) REFRESH SECTIONS: \(sections.debugLogDescription)")
 		// It's not "legal" to reload a section if you also delete the section later in the same batch update. So we'll just remember that we want to reload these sections when we're performing a batch update and reload them only if they weren't also deleted.
 		if isPerformingUpdates {
-			reloadedSections.add(sections)
+			reloadedSections.formUnion(sections)
 		} else {
 			collectionView!.reloadSections(sections)
 		}
@@ -434,11 +434,11 @@ open class CollectionViewController: UICollectionViewController, CollectionDataS
 			updates()
 			
 			// Perform delayed reloadSections calls
-			let sectionsToReload = NSMutableIndexSet(self.reloadedSections)
+			var sectionsToReload = IndexSet(self.reloadedSections)
 			
 			// UICollectionView doesn't like it if you reload a section that was either inserted or deleted
-			sectionsToReload.remove(self.deletedSections)
-			sectionsToReload.remove(self.insertedSections)
+			sectionsToReload.subtract(self.deletedSections)
+			sectionsToReload.subtract(self.insertedSections)
 			
 			self.collectionView!.reloadSections(sectionsToReload)
 			updateLog("\(#function) \(updateNumber): RELOADED SECTIONS: \(sectionsToReload.debugLogDescription)")
@@ -457,17 +457,17 @@ open class CollectionViewController: UICollectionViewController, CollectionDataS
 	
 	open func dataSource(_ dataSource: CollectionDataSource, didPresentActivityIndicatorForSections sections: IndexSet) {
 		updateLog("\(#function) Present activity indicator: sections=\(sections.debugLogDescription)")
-		reloadedSections.add(sections)
+		reloadedSections.formUnion(sections)
 	}
 	
 	open func dataSource(_ dataSource: CollectionDataSource, didPresentPlaceholderForSections sections: IndexSet) {
 		updateLog("\(#function) Present placeholder: sections=\(sections.debugLogDescription)")
-		reloadedSections.add(sections)
+		reloadedSections.formUnion(sections)
 	}
 	
 	open func dataSource(_ dataSource: CollectionDataSource, didDismissPlaceholderForSections sections: IndexSet) {
 		updateLog("\(#function) Dismiss placeholder: sections=\(sections.debugLogDescription)")
-		reloadedSections.add(sections)
+		reloadedSections.formUnion(sections)
 	}
 	
 	open func dataSource(_ dataSource: CollectionDataSource, didUpdate supplementaryItem: SupplementaryItem, at indexPaths: [IndexPath]) {
