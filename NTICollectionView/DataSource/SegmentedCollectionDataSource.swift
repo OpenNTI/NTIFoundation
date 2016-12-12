@@ -81,9 +81,9 @@ open class SegmentedCollectionDataSource: CollectionDataSource, CollectionDataSo
 		setSelectedDataSource(selectedDataSource, isAnimated: isAnimated, completionHandler: nil)
 	}
 	
-	open func setSelectedDataSource(_ selectedDataSource: CollectionDataSource?, isAnimated: Bool, completionHandler: ()->()?) {
+	open func setSelectedDataSource(_ selectedDataSource: CollectionDataSource?, isAnimated: Bool, completionHandler: (()->())?) {
 		guard selectedDataSource !== self.selectedDataSource else {
-			completionHandler()
+			completionHandler?()
 			return
 		}
 		if selectedDataSource != nil {

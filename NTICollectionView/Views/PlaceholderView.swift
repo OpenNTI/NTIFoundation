@@ -88,7 +88,7 @@ open class PlaceholderView: UIView {
 		}
 	}
 	
-	open var buttonAction: ()->()?
+	open var buttonAction: (()->())?
 	
 	open var titleFont = UIFont.systemFont(ofSize: 14) {
 		didSet { titleLabel.font = titleFont }
@@ -233,7 +233,7 @@ open class PlaceholderView: UIView {
 	}
 	
 	open func actionButtonPressed(_ sender: AnyObject) {
-		buttonAction()
+		buttonAction?()
 	}
 	
 	open override func layoutSubviews() {

@@ -399,7 +399,7 @@ open class CollectionViewController: UICollectionViewController, CollectionDataS
 		performBatchUpdates(update, completion: complete!)
 	}
 	
-	fileprivate func performBatchUpdates(_ updates: @escaping ()->(), completion: @escaping ()->()? = nil) {
+	fileprivate func performBatchUpdates(_ updates: @escaping ()->(), completion: (()->())? = nil) {
 		requireMainThread()
 		// We're currently updating the collection view, so we can't call -performBatchUpdates:completion: on it
 		guard !isPerformingUpdates else {
@@ -408,8 +408,8 @@ open class CollectionViewController: UICollectionViewController, CollectionDataS
 			if completion != nil {
 				let oldCompletion = updateCompletionHandler
 				updateCompletionHandler = {
-					oldCompletion()
-					completion()
+					oldCompletion?()
+					completion?()
 				}
 			}
 			// Now immediately execute the new updates
@@ -424,7 +424,7 @@ open class CollectionViewController: UICollectionViewController, CollectionDataS
 		
 		clearSectionUpdateInfo()
 		
-		var completionHandler: ()->()?
+		var completionHandler: (()->())?
 		
 		collectionView!.performBatchUpdates({
 			updateLog("\(#function) \(updateNumber): BEGIN UPDATE")
@@ -450,7 +450,7 @@ open class CollectionViewController: UICollectionViewController, CollectionDataS
 			self.clearSectionUpdateInfo()
 			}) { (_: Bool) in
 				updateLog("\(#function) \(updateNumber): BEGIN COMPLETION HANDLER")
-				completionHandler()
+				completionHandler?()
 				updateLog("\(#function) \(updateNumber): END COMPLETION HANDLER")
 		}
 	}

@@ -103,13 +103,13 @@ open class CollectionDataSource: NSObject, UICollectionViewDataSource, Collectio
 		internalPerformUpdate(update, complete: complete!)
 	}
 	
-	fileprivate func internalPerformUpdate(_ block: @escaping ()->(), complete: ()->()? = nil) {
+	fileprivate func internalPerformUpdate(_ block: @escaping ()->(), complete: (()->())? = nil) {
 		let update = block
 		if let delegate = self.delegate {
 			delegate.dataSource(self, performBatchUpdate: update, complete: complete)
 		} else {
 			update()
-			complete()
+			complete?()
 		}
 	}
 	
