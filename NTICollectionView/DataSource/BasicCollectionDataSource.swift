@@ -232,7 +232,7 @@ open class BasicCollectionDataSource<Item : AnyObject> : CollectionDataSource {
 	
 	// MARK: - UICollectionViewDataSource
 	
-	open func collectionView(_ collectionView: UICollectionView, moveItemAtIndexPath indexPath: IndexPath, toIndexPath destinationIndexPath: IndexPath) {
+	open override func collectionView(_ collectionView: UICollectionView, moveItemAt indexPath: IndexPath, to destinationIndexPath: IndexPath) {
 		let fromIndex = indexPath.item
 		var toIndex = destinationIndexPath.item
 		
