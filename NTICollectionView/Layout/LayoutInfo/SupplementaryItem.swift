@@ -64,7 +64,7 @@ public protocol SupplementaryItem: LayoutMetricsApplicable {
 	var hasEstimatedHeight: Bool { get }
 	
 	/// Adds a configuration block to the supplementary view. This does not clear existing configuration blocks.
-	mutating func configure(with configuration: SupplementaryItemConfiguration)
+	mutating func configure(with configuration: @escaping SupplementaryItemConfiguration)
 	
 	func configureValues(of attributes: CollectionViewLayoutAttributes)
 	
@@ -212,7 +212,7 @@ extension SupplementaryItemWrapper {
 		return supplementaryItem.hasEstimatedHeight
 	}
 	
-	public mutating func configure(with configuration: SupplementaryItemConfiguration) {
+	public mutating func configure(with configuration: @escaping SupplementaryItemConfiguration) {
 		supplementaryItem.configure(with: configuration)
 	}
 	

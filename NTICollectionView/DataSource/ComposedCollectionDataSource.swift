@@ -394,7 +394,7 @@ open class ComposedCollectionDataSource: CollectionDataSource, CollectionDataSou
 		notifyDidReloadData()
 	}
 	
-	open func dataSource(_ dataSource: CollectionDataSource, performBatchUpdate update: () -> Void, complete: (() -> Void)?) {
+	open func dataSource(_ dataSource: CollectionDataSource, performBatchUpdate update: @escaping () -> Void, complete: (() -> Void)?) {
 		performUpdate(update, complete: complete)
 	}
 	

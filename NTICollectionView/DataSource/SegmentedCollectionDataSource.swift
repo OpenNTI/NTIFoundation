@@ -384,7 +384,7 @@ open class SegmentedCollectionDataSource: CollectionDataSource, CollectionDataSo
 		notifyDidReloadData()
 	}
 	
-	open func dataSource(_ dataSource: CollectionDataSource, performBatchUpdate update: () -> Void, complete: (() -> Void)?) {
+	open func dataSource(_ dataSource: CollectionDataSource, performBatchUpdate update: @escaping () -> Void, complete: (() -> Void)?) {
 		guard dataSource === selectedDataSource else {
 			update()
 			complete?()

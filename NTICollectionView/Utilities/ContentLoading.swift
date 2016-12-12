@@ -58,10 +58,10 @@ public protocol LoadingProgress: NSObjectProtocol {
 	func done(with error: NSError)
 	
 	/// Signals that loading is complete.
-	func updateWithContent(_ update: LoadingUpdateBlock)
+	func updateWithContent(_ update: @escaping LoadingUpdateBlock)
 	
 	/// Signals that loading completed with no content.
-	func updateWithNoContent(_ update: LoadingUpdateBlock)
+	func updateWithNoContent(_ update: @escaping LoadingUpdateBlock)
 	
 }
 
