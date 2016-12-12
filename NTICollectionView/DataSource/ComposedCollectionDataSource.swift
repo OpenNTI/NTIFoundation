@@ -261,7 +261,7 @@ open class ComposedCollectionDataSource: CollectionDataSource, CollectionDataSou
 	
 	open override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		let info = mappingInfoForGlobalIndexPath(indexPath, collectionView: collectionView)!
-		return info.dataSource.collectionView(collectionView: info.wrapper, cellForItemAtIndexPath: info.localIndexPath)
+		return info.dataSource.collectionView(info.wrapper, cellForItemAt: info.localIndexPath)
 	}
 	
 	open override func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
