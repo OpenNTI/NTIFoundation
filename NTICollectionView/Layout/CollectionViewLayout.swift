@@ -1383,7 +1383,7 @@ open class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutMea
 	}
 	
 	fileprivate func initialLayoutAttributesForAttributes(_ attributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-		attributes.frame.offsetInPlace(dx: -contentOffsetDelta.x, dy: -contentOffsetDelta.y)
+		attributes.frame = attributes.frame.offsetBy(dx: -contentOffsetDelta.x, dy: -contentOffsetDelta.y)
 		return attributes
 	}
 	
@@ -1401,7 +1401,7 @@ open class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutMea
 				frame.origin.y = newY
 		}
 		else {
-			frame.offsetInPlace(dx: deltaX, dy: deltaY)
+			frame = frame.offsetBy(dx: deltaX, dy: deltaY)
 		}
 		
 		attributes.frame = frame
@@ -1433,7 +1433,7 @@ open class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutMea
 			frame.origin.x -= bounds.size.width
 		}
 		
-		frame.offsetInPlace(dx: contentOffsetDelta.x, dy: contentOffsetDelta.y)
+		frame = frame.offsetBy(dx: contentOffsetDelta.x, dy: contentOffsetDelta.y)
 		attributes.frame = frame
 		
 		attributes.alpha = 0
