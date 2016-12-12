@@ -15,32 +15,7 @@ let buttonWidth: CGFloat = 124
 let buttonHeight: CGFloat = 19
 let textColorWhiteValue: CGFloat = 172.0 / 0xFF
 
-private var cachedBackgroundImage: UIImage!
-private var onceToken: Int = 0
-
 open class PlaceholderView: UIView {
-	
-	private static var __once: () = {
-			var cornerRadius = defaultCornerRadius
-			
-			let capSize = ceil(cornerRadius * continuousCurvesSizeFactor)
-			let rectSize = 2 * capSize + 1
-			let rect = CGRect(x: 0, y: 0, width: rectSize, height: rectSize)
-			UIGraphicsBeginImageContextWithOptions(rect.size, false, 0)
-			
-			// Pull in the stroke a wee bit
-			let pathRect = rect.insetBy(dx: 0.5, dy: 0.5)
-			cornerRadius -= 0.5
-			let path = UIBezierPath(roundedRect: pathRect, cornerRadius: cornerRadius)
-			
-			color.set()
-			path.stroke()
-			
-			cachedBackgroundImage = UIGraphicsGetImageFromCurrentImageContext()
-			UIGraphicsEndImageContext()
-			
-			cachedBackgroundImage = cachedBackgroundImage.resizableImage(withCapInsets: UIEdgeInsets(uniformInset: capSize))
-		}()
 	
 	public init(frame: CGRect, title: String?, message: String?, image: UIImage?, buttonTitle: String? = nil, buttonAction: (()->())? = nil) {
 		self.title = title
@@ -112,6 +87,7 @@ open class PlaceholderView: UIView {
 	fileprivate var actionButton = UIButton(type: .system)
 	fileprivate var _constraints: [NSLayoutConstraint] = []
 	fileprivate var topConstraint: NSLayoutConstraint!
+
 	
 	fileprivate func configure() {
 		autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -168,10 +144,28 @@ open class PlaceholderView: UIView {
 		containerView.addSubview(actionButton)
 	}
 	
-	fileprivate func backgroundImage(with color: UIColor) -> UIImage {
-		_ = PlaceholderView.__once
+	fileprivate func backgroundImage(with color: UIColor) -> UIImage? {
+		var cornerRadius = defaultCornerRadius
 		
-		return cachedBackgroundImage
+		let capSize = ceil(cornerRadius * continuousCurvesSizeFactor)
+		let rectSize = 2 * capSize + 1
+		let rect = CGRect(x: 0, y: 0, width: rectSize, height: rectSize)
+		UIGraphicsBeginImageContextWithOptions(rect.size, false, 0)
+		
+		// Pull in the stroke a wee bit
+		let pathRect = rect.insetBy(dx: 0.5, dy: 0.5)
+		cornerRadius -= 0.5
+		let path = UIBezierPath(roundedRect: pathRect, cornerRadius: cornerRadius)
+		
+		color.set()
+		path.stroke()
+		
+		var image = UIGraphicsGetImageFromCurrentImageContext()
+		UIGraphicsEndImageContext()
+		
+		image = image?.resizableImage(withCapInsets: UIEdgeInsets(uniformInset: capSize))
+		
+		return image
 	}
 	
 	fileprivate func updateViewHierarchy() {
