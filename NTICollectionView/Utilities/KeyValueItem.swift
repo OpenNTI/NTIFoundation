@@ -8,8 +8,8 @@
 
 import UIKit
 
-public typealias KeyValueTransformer = (AnyObject?) -> String?
-public typealias KeyValueImageTransformer = (AnyObject?) -> UIImage?
+public typealias KeyValueTransformer = (Any?) -> String?
+public typealias KeyValueImageTransformer = (Any?) -> UIImage?
 
 public enum KeyValueItemType: Int {
 	case `default`, button, url
@@ -62,23 +62,23 @@ open class KeyValueItem: NSObject {
 	/// 
 	/// This uses the transformer property if one is assigned.
 	open func valueForObject(_ object: AnyObject) -> String? {
-		var value: AnyObject?
+		var value: Any?
 		if let keyPath = self.keyPath {
-			value = object.value(forKeyPath: keyPath)
+			value = (object as? NSObject)?.value(forKeyPath: keyPath)
 		}
 		else {
 			value = object
 		}
 		
 		if let transformer = self.transformer {
-			value = transformer(value) as AnyObject?
+			value = transformer(value)
 		}
 		
 		if !(value is String) {
 			if let number = value as? NSNumber {
-				value = number.stringValue as AnyObject?
+				value = number.stringValue
 			} else {
-				value = value?.description as AnyObject?
+				value = (value as? NSObject)?.description
 			}
 		}
 		
@@ -90,9 +90,9 @@ open class KeyValueItem: NSObject {
 	/// This method requires imageTransformer be non-nil.
 	/// - note: This is a synchronous operation. The image must already be available.
 	open func imageForObject(_ object: AnyObject) -> UIImage? {
-		var value: AnyObject?
+		var value: Any?
 		if let keyPath = self.keyPath {
-			value = object.value(forKeyPath: keyPath)
+			value = (object as? NSObject)?.value(forKeyPath: keyPath)
 		}
 		
 		if imageTransformer == nil || value is String {
