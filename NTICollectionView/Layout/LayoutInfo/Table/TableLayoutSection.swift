@@ -781,8 +781,8 @@ public struct TableLayoutSection: LayoutSection, RowAlignedLayoutSectionBaseComp
 		var headers = self.headers
 		
 		let headerIndices = inReverse ?
-			AnyForwardCollection<Int>(headers.indices.reversed())
-			: AnyForwardCollection<Int>(headers.indices)
+			AnyCollection<Int>(headers.indices.reversed())
+			: AnyCollection<Int>(headers.indices)
 		
 		for index in headerIndices {
 			guard var header = headers[index] as? GridLayoutSupplementaryItem, !header.shouldPin else {

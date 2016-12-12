@@ -1067,8 +1067,8 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 		var items = supplementaryItems(of: kind)
 		
 		let itemIndices = inReverse ?
-			AnyForwardCollection<Int>(items.indices.reversed())
-			: AnyForwardCollection<Int>(items.indices)
+			AnyCollection<Int>(items.indices.reversed())
+			: AnyCollection<Int>(items.indices)
 		
 		for index in itemIndices {
 			guard var item = items[index] as? GridLayoutSupplementaryItem, !item.shouldPin else {
