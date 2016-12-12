@@ -30,7 +30,7 @@ public struct TableLayoutSection: LayoutSection, RowAlignedLayoutSectionBaseComp
 				return
 			}
 			
-			placeholderInfo.wasAddedToSection(self)
+			self.placeholderInfo?.wasAddedToSection(self)
 		}
 	}
 	

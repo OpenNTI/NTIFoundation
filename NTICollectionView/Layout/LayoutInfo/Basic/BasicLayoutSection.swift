@@ -60,7 +60,7 @@ public struct BasicLayoutSection: LayoutSection, LayoutSectionBaseComposite {
 				return
 			}
 			
-			placeholderInfo.wasAddedToSection(self)
+			self.placeholderInfo?.wasAddedToSection(self)
 		}
 	}
 	

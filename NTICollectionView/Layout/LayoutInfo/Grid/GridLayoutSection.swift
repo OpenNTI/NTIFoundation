@@ -118,7 +118,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 				return
 			}
 			
-			placeholderInfo.wasAddedToSection(self)
+			self.placeholderInfo?.wasAddedToSection(self)
 		}
 	}
 	

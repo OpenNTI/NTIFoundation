@@ -25,7 +25,7 @@ public protocol LayoutPlaceholder: LayoutElement {
 	/// The last section index of this placeholder.
 	var endingSectionIndex: Int { get }
 	
-	func wasAddedToSection(_ section: LayoutSection)
+	mutating func wasAddedToSection(_ section: LayoutSection)
 	
 	func isEqual(to other: LayoutPlaceholder) -> Bool
 	
@@ -42,10 +42,10 @@ extension LayoutPlaceholder {
 public struct BasicLayoutPlaceholder: LayoutPlaceholder {
 	
 	public init(sectionIndexes: IndexSet) {
-		self.sectionIndexes = (sectionIndexes as NSIndexSet).mutableCopy() as! NSMutableIndexSet
+		self.sectionIndexes = sectionIndexes
 	}
 	
-	fileprivate let sectionIndexes: NSMutableIndexSet
+	fileprivate var sectionIndexes: IndexSet
 	
 	public var frame = CGRect.zero
 	
@@ -78,11 +78,11 @@ public struct BasicLayoutPlaceholder: LayoutPlaceholder {
 	public var shouldFillAvailableHeight = true
 	
 	public var startingSectionIndex: Int {
-		return sectionIndexes.first
+		return sectionIndexes.first ?? NSNotFound
 	}
 	
 	public var endingSectionIndex: Int {
-		return sectionIndexes.last
+		return sectionIndexes.last ?? NSNotFound
 	}
 	
 	public mutating func setFrame(_ frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
@@ -94,8 +94,8 @@ public struct BasicLayoutPlaceholder: LayoutPlaceholder {
 		}
 	}
 	
-	public func wasAddedToSection(_ section: LayoutSection) {
-		sectionIndexes.add(section.sectionIndex)
+	public mutating func wasAddedToSection(_ section: LayoutSection) {
+		sectionIndexes.insert(section.sectionIndex)
 	}
 	
 	public mutating func resetLayoutAttributes() {
