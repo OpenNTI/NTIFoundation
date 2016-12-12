@@ -42,7 +42,7 @@ open class PlaceholderView: UIView {
 			cachedBackgroundImage = cachedBackgroundImage.resizableImage(withCapInsets: UIEdgeInsets(uniformInset: capSize))
 		}()
 	
-	public init(frame: CGRect, title: String?, message: String?, image: UIImage?, buttonTitle: String? = nil, buttonAction: @escaping ()->()? = nil) {
+	public init(frame: CGRect, title: String?, message: String?, image: UIImage?, buttonTitle: String? = nil, buttonAction: (()->())? = nil) {
 		self.title = title
 		self.message = message
 		self.image = image
