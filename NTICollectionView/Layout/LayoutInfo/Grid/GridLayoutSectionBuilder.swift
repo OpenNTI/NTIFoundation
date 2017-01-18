@@ -21,7 +21,7 @@ public struct GridLayoutSectionBuilder: LayoutSectionBuilder {
 	public let metrics: GridSectionMetricsProviding
 	
 	public func makeLayoutSection(using description: SectionDescription, in layoutBounds: LayoutAreaBounds) -> LayoutSection {
-		var section = BasicGridLayoutSection()
+		let section = BasicGridLayoutSection()
 		
 		// TODO: Implement
 		

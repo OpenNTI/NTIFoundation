@@ -202,7 +202,7 @@ public class TruncatingLabel: UILabel {
 		CGContextScaleCTM(context, 1, -1)
 		
 		let fontRef = CGFontCreateWithFontName(font.fontName)
-		CGContextSetFont(context, fontRef)
+		CGContextSetFont(context, fontRef!)
 		CGContextSetFontSize(context, font.pointSize)
 		
 		// Create a path in which to render text

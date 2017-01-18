@@ -232,8 +232,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		shadowView.opaque = false
 		
 		dragFrame.origin = CGPoint(x: 0, y: dragShadowHeight)
-		snapshotView.frame = dragFrame
-		shadowView.addSubview(snapshotView)
+		snapshotView!.frame = dragFrame
+		shadowView.addSubview(snapshotView!)
 		currentView = shadowView
 		
 		currentView.center = cell.center
