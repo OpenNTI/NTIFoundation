@@ -208,7 +208,7 @@ open class TruncatingLabel: UILabel {
 		// Create a path in which to render text
 		// Don't set any line break modes, etc, just let the frame draw as many full lines as will fit
 		let framePath = CGMutablePath()
-		CGPathAddRect(framePath, nil, frameRect)
+		framePath.addRect(frameRect)
 		let fullStringRange = CFRange(location: 0, length: CFAttributedStringGetLength(attributedString))
 		let frameRef = CTFramesetterCreateFrame(framesetter, fullStringRange, framePath, nil)
 		
