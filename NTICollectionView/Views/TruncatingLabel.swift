@@ -201,7 +201,7 @@ open class TruncatingLabel: UILabel {
 		context.translateBy(x: 0, y: bounds.size.height)
 		context.scaleBy(x: 1, y: -1)
 		
-		let fontRef = CGFont(font.fontName)
+		let fontRef = CGFont(font.fontName as CFString)
 		context.setFont(fontRef!)
 		context.setFontSize(font.pointSize)
 		
