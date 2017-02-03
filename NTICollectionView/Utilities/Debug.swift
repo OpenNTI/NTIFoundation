@@ -63,12 +63,12 @@ extension IndexSet: DebugLoggable {
 	
 	var debugLogDescription: String {
 		var result: [String] = []
-		enumerateRanges { (range, stop) in
-			switch range.length {
+		for range in rangeView {
+			switch range.count {
 			case 0:
 				result.append("empty")
 			case 1:
-				result.append("\(range.location)")
+				result.append("\(range.lowerBound)")
 			default:
 				result.append(range.debugLogDescription)
 			}
@@ -76,6 +76,13 @@ extension IndexSet: DebugLoggable {
 		return "(" + result.joined(separator: ", ") + ")"
 	}
 	
+}
+
+extension CountableRange : DebugLoggable {
+	
+	var debugLogDescription: String {
+		return "\(lowerBound)...\(upperBound)"
+	}
 }
 
 extension NSRange: DebugLoggable {
