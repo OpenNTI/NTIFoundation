@@ -134,7 +134,7 @@ open class TruncatingLabel: UILabel {
 		if numberOfLines > 0 {
 			// If the line count of the label is more than 1, limit `rangeToSize` to the number of lines that have been set
 			let path = CGMutablePath()
-			CGPathAddRect(path, nil, CGRect(origin: CGPoint.zero, size: constraints))
+			path.addRect(CGRect(origin: CGPoint.zero, size: constraints))
 			let frame = CTFramesetterCreateFrame(framesetter, CFRange(location: 0, length: 0), path, nil)
 			
 			let lines = CTFrameGetLines(frame)
