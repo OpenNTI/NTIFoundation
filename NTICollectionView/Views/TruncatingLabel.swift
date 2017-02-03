@@ -163,11 +163,11 @@ open class TruncatingLabel: UILabel {
 			return
 		}
 		
-		let textAttributes = [
+		let textAttributes: [String: Any] = [
 			NSFontAttributeName: font,
 			NSForegroundColorAttributeName: textColor
 		]
-		let truncationAttributes = [
+		let truncationAttributes: [String : Any] = [
 			NSFontAttributeName: font,
 			NSForegroundColorAttributeName: tintColor
 		]
