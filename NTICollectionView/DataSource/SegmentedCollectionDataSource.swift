@@ -295,6 +295,8 @@ public class SegmentedCollectionDataSource: CollectionDataSource, CollectionData
 	public func segmentedControlDidChangeValue(segmentedControl: SegmentedControlProtocol) {
 		segmentedControl.userInteractionEnabled = false
 		let selectedSegmentIndex = segmentedControl.selectedSegmentIndex
+		// FIXME: fatal error: Index out of range
+		// `segmentedControl` does not have a "Members" segment
 		let dataSource = dataSources[selectedSegmentIndex]
 		setSelectedDataSource(dataSource, isAnimated: animatesSegmentChanges) {
 			segmentedControl.userInteractionEnabled = true
