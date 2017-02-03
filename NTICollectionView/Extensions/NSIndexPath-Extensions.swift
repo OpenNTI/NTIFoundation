@@ -11,7 +11,7 @@ import Foundation
 extension IndexPath {
 	
 	var itemIndex: Int {
-		return count > 1 ? item : index(atPosition: 0)
+		return count > 1 ? item : self[0]
 	}
 	
 	var layoutSection: Int {

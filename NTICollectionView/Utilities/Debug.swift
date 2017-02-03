@@ -52,7 +52,7 @@ extension IndexPath: DebugLoggable {
 		var indexes: [String] = []
 		let numberOfIndexes = count
 		for index in 0..<numberOfIndexes {
-			indexes.append("\(self.index(atPosition: index))")
+			indexes.append("\(self[index])")
 		}
 		return "(" + indexes.joined(separator: ", ") + ")"
 	}
