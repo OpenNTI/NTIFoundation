@@ -225,7 +225,7 @@ open class TruncatingLabel: UILabel {
 			// Draw each line in the correct position as-is
 			let x = origins[lineIndex].x + frameRect.origin.x
 			let y = origins[lineIndex].y + frameRect.origin.y
-			CGContextSetTextPosition(context, x, y)
+			context.textPosition = CGPoint(x: x, y: y)
 			let line = unsafeBitCast(CFArrayGetValueAtIndex(lines, lineIndex), to: CTLine.self)
 			CTLineDraw(line, context)
 		}
@@ -270,7 +270,7 @@ open class TruncatingLabel: UILabel {
 			}
 			
 			// Draw it at the same offset as the non-truncated version
-			CGContextSetTextPosition(context, lastOrigin.x + frameRect.origin.x, lastOrigin.y + frameRect.origin.y)
+			context.textPosition = CGPoint(x: lastOrigin.x + frameRect.origin.x, y: lastOrigin.y + frameRect.origin.y)
 			CTLineDraw(truncated, context)
 		}
 	}
