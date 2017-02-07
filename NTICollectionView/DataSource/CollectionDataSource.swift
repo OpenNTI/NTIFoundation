@@ -411,7 +411,7 @@ open class CollectionDataSource: NSObject, UICollectionViewDataSource, Collectio
 		}
 	}
 	
-	open var loadingError: NSError?
+	open var loadingError: Error?
 	
 	fileprivate let stateMachine = LoadableContentStateMachine()
 	
@@ -509,7 +509,7 @@ open class CollectionDataSource: NSObject, UICollectionViewDataSource, Collectio
 		}
 	}
 	
-	open func endLoadingContent(with state: LoadState, error: NSError?, update: (() -> Void)?) {
+	open func endLoadingContent(with state: LoadState, error: Error?, update: (() -> Void)?) {
 		loadingError = error
 		loadingState = state
 		
@@ -807,7 +807,7 @@ extension CollectionDataSource {
 		delegate?.dataSourceWillLoadContent(self)
 	}
 	
-	public func notifyContentLoaded(with error: NSError? = nil) {
+	public func notifyContentLoaded(with error: Error? = nil) {
 		requireMainThread()
 		if let loadingCompletion = self.loadingCompletion {
 			self.loadingCompletion = nil

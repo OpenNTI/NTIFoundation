@@ -286,7 +286,7 @@ open class ComposedCollectionDataSource: CollectionDataSource, CollectionDataSou
 	
 	// MARK: - ContentLoading
 	
-	open override func endLoadingContent(with state: LoadState, error: NSError?, update: (() -> Void)?) {
+	open override func endLoadingContent(with state: LoadState, error: Error?, update: (() -> Void)?) {
 		guard state != .NoContent && state != .Error else {
 			super.endLoadingContent(with: state, error: error, update: update)
 			return

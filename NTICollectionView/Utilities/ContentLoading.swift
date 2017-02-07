@@ -20,7 +20,7 @@ public protocol ContentLoading: NSObjectProtocol {
 	var loadingState: LoadState { get }
 	
 	/// Any error that occurred during content loading.
-	var loadingError: NSError? { get }
+	var loadingError: Error? { get }
 	
 	/// Used to begin loading the content.
 	func loadContent(with progress: LoadingProgress)
@@ -55,7 +55,7 @@ public protocol LoadingProgress: NSObjectProtocol {
 	func done()
 	
 	/// Signals that loading failed with an error.
-	func done(with error: NSError)
+	func done(with error: Error)
 	
 	/// Signals that loading is complete.
 	func updateWithContent(_ update: @escaping LoadingUpdateBlock)
@@ -65,7 +65,7 @@ public protocol LoadingProgress: NSObjectProtocol {
 	
 }
 
-public typealias LoadingProgressCompletionHandler = (_ state: LoadState?, _ error: NSError?, _ update: LoadingUpdateBlock?) -> Void
+public typealias LoadingProgressCompletionHandler = (_ state: LoadState?, _ error: Error?, _ update: LoadingUpdateBlock?) -> Void
 
 open class BasicLoadingProgress: NSObject, LoadingProgress {
 	
@@ -89,7 +89,7 @@ open class BasicLoadingProgress: NSObject, LoadingProgress {
 	}
 	
 	/// This triggers a transition to the Error state.
-	open func done(with error: NSError) {
+	open func done(with error: Error) {
 		done(state: .Error, error: error, update: nil)
 	}
 	
@@ -103,7 +103,7 @@ open class BasicLoadingProgress: NSObject, LoadingProgress {
 		done(state: .NoContent, error: nil, update: update)
 	}
 	
-	fileprivate func done(state newState: LoadState?, error: NSError?, update: LoadingUpdateBlock?) {
+	fileprivate func done(state newState: LoadState?, error: Error?, update: LoadingUpdateBlock?) {
 		guard let handler = completionHandler else {
 			return
 		}

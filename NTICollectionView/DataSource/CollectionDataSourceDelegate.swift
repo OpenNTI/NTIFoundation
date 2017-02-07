@@ -28,7 +28,7 @@ public protocol CollectionDataSourceDelegate: NSObjectProtocol {
 	func dataSource(_ dataSource: CollectionDataSource, performBatchUpdate update: () -> Void, complete: (() -> Void)?)
 	
 	/// If the content was loaded successfully, the error will be nil.
-	func dataSourceDidLoadContent(_ dataSource: CollectionDataSource, error: NSError?)
+	func dataSourceDidLoadContent(_ dataSource: CollectionDataSource, error: Error?)
 	
 	/// Called just before a datasource begins loading its content.
 	func dataSourceWillLoadContent(_ dataSource: CollectionDataSource)
@@ -66,7 +66,7 @@ extension CollectionDataSourceDelegate {
 	public func dataSourceDidReloadData(_ dataSource: CollectionDataSource) {}
 	public func dataSource(_ dataSource: CollectionDataSource, performBatchUpdate update: () -> Void, complete: (() -> Void)?) {}
 	
-	public func dataSourceDidLoadContent(_ dataSource: CollectionDataSource, error: NSError? = nil) {}
+	public func dataSourceDidLoadContent(_ dataSource: CollectionDataSource, error: Error? = nil) {}
 	
 	public func dataSourceWillLoadContent(_ dataSource: CollectionDataSource) {}
 	
