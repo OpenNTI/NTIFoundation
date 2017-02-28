@@ -100,7 +100,7 @@ open class CollectionDataSource: NSObject, UICollectionViewDataSource, Collectio
 			}
 			return
 		}
-		internalPerformUpdate(update, complete: complete!)
+		internalPerformUpdate(update, complete: complete)
 	}
 	
 	fileprivate func internalPerformUpdate(_ block: @escaping ()->(), complete: (()->())? = nil) {
