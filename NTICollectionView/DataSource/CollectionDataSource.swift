@@ -95,8 +95,8 @@ open class CollectionDataSource: NSObject, UICollectionViewDataSource, Collectio
 		
 		 // If this data source is loading, wait until we're done before we execute the update
 		guard loadingState != .LoadingContent else {
-			enqueueUpdate { [unowned self] in
-				self.performUpdate(update, complete: complete)
+			enqueueUpdate { [weak self] in
+				self?.performUpdate(update, complete: complete)
 			}
 			return
 		}
