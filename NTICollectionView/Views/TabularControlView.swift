@@ -13,21 +13,21 @@ private let cellIdentifier = "cell"
 public final class TabularControlView: UITableView, UITableViewDataSource, UITableViewDelegate, SegmentedControlProtocol {
 	
 	public init(frame: CGRect) {
-		super.init(frame: frame, style: .Plain)
+		super.init(frame: frame, style: .plain)
 		dataSource = self
 		delegate = self
-		registerClass(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+		register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
 	}
 	
 	public convenience init() {
-		self.init(frame: CGRectZero)
+		self.init(frame: CGRect.zero)
 	}
 	
 	public required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	private var segments: [String] = []
+	fileprivate var segments: [String] = []
 	
 	public var font: UIFont?
 	
@@ -37,8 +37,8 @@ public final class TabularControlView: UITableView, UITableViewDataSource, UITab
 	
 	public var cellSelectedBackgroundColor: UIColor?
 	
-	public override func intrinsicContentSize() -> CGSize {
-		let superSize = super.intrinsicContentSize()
+	public override var intrinsicContentSize : CGSize {
+		let superSize = super.intrinsicContentSize
 		guard !segments.isEmpty else {
 			return superSize
 		}
@@ -60,29 +60,29 @@ public final class TabularControlView: UITableView, UITableViewDataSource, UITab
 			guard newValue != selectedSegmentIndex else {
 				return
 			}
-			let indexPath: NSIndexPath?
+			let indexPath: IndexPath?
 			if newValue == UISegmentedControlNoSegment {
 				indexPath = nil
 			} else {
-				indexPath = NSIndexPath(forRow: newValue, inSection: 0)
+				indexPath = IndexPath(row: newValue, section: 0)
 			}
-			selectRowAtIndexPath(indexPath, animated: false, scrollPosition: .None)
+			selectRow(at: indexPath, animated: false, scrollPosition: .none)
 		}
 	}
 
 	public weak var segmentedControlDelegate: SegmentedControlDelegate?
 	
 	public func removeAllSegments() {
-		segments.removeAll(keepCapacity: true)
+		segments.removeAll(keepingCapacity: true)
 		invalidateIntrinsicContentSize()
 		reloadData()
 	}
 	
-	public func insertSegmentWithTitle(title: String?, atIndex segment: Int, animated: Bool) {
+	public func insertSegmentWithTitle(_ title: String?, atIndex segment: Int, animated: Bool) {
 		beginUpdates()
-		segments.insert(title ?? "", atIndex: segment)
-		let indexPath = NSIndexPath(forRow: segment, inSection: 0)
-		insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+		segments.insert(title ?? "", at: segment)
+		let indexPath = IndexPath(row: segment, section: 0)
+		insertRows(at: [indexPath], with: .automatic)
 		invalidateIntrinsicContentSize()
 		endUpdates()
 	}
@@ -95,12 +95,12 @@ public final class TabularControlView: UITableView, UITableViewDataSource, UITab
 	
 	// MARK: - UITableViewDataSource
 	
-	public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+	public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return segments.count
 	}
 	
-	public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-		guard let cell = dequeueReusableCellWithIdentifier(cellIdentifier) else {
+	public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		guard let cell = dequeueReusableCell(withIdentifier: cellIdentifier) else {
 			preconditionFailure("We should have a cell.")
 		}
 		cell.textLabel?.text = segments[indexPath.row]
@@ -109,11 +109,11 @@ public final class TabularControlView: UITableView, UITableViewDataSource, UITab
 	
 	// MARK: - UITableViewDelegate
 	
-	public func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+	public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		segmentedControlDelegate?.segmentedControlDidChangeValue(self)
 	}
 	
-	public func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+	public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 		if let font = self.font {
 			cell.textLabel?.font = font
 		}

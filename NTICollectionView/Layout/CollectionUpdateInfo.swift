@@ -13,18 +13,18 @@ import UIKit
 /// A container for keeping track of collection view updates.
 public protocol CollectionUpdateProvider {
 	
-	var insertedIndexPaths: Set<NSIndexPath> { get set }
-	var removedIndexPaths: Set<NSIndexPath> { get set }
-	var reloadedIndexPaths: Set<NSIndexPath> { get set }
+	var insertedIndexPaths: Set<IndexPath> { get set }
+	var removedIndexPaths: Set<IndexPath> { get set }
+	var reloadedIndexPaths: Set<IndexPath> { get set }
 	
 	var insertedSections: Set<Int> { get set }
 	var removedSections: Set<Int> { get set }
 	var reloadedSections: Set<Int> { get set }
 	
 	/// Additional index paths to delete for given kinds of elements during updates.
-	var additionalDeletedIndexPathsByKind: [String: [NSIndexPath]] { get set }
+	var additionalDeletedIndexPathsByKind: [String: [IndexPath]] { get set }
 	/// Additional index paths to insert for given kinds of elements during updates.
-	var additionalInsertedIndexPathsByKind: [String: [NSIndexPath]] { get set }
+	var additionalInsertedIndexPathsByKind: [String: [IndexPath]] { get set }
 	
 	mutating func reset()
 }
@@ -49,16 +49,16 @@ extension CollectionUpdateProvider {
 /// A container for keeping track of collection view updates.
 public struct CollectionUpdateInfo: CollectionUpdateProvider {
 	
-	public var insertedIndexPaths: Set<NSIndexPath> = []
-	public var removedIndexPaths: Set<NSIndexPath> = []
-	public var reloadedIndexPaths: Set<NSIndexPath> = []
+	public var insertedIndexPaths: Set<IndexPath> = []
+	public var removedIndexPaths: Set<IndexPath> = []
+	public var reloadedIndexPaths: Set<IndexPath> = []
 	
 	public var insertedSections: Set<Int> = []
 	public var removedSections: Set<Int> = []
 	public var reloadedSections: Set<Int> = []
 	
-	public var additionalDeletedIndexPathsByKind: [String: [NSIndexPath]] = [:]
-	public var additionalInsertedIndexPathsByKind: [String: [NSIndexPath]] = [:]
+	public var additionalDeletedIndexPathsByKind: [String: [IndexPath]] = [:]
+	public var additionalInsertedIndexPathsByKind: [String: [IndexPath]] = [:]
 	
 }
 
@@ -72,7 +72,7 @@ public protocol CollectionUpdateInfoWrapper: CollectionUpdateProvider {
 
 extension CollectionUpdateInfoWrapper {
 	
-	public var insertedIndexPaths: Set<NSIndexPath> {
+	public var insertedIndexPaths: Set<IndexPath> {
 		get {
 			return updateInfo.insertedIndexPaths
 		}
@@ -81,7 +81,7 @@ extension CollectionUpdateInfoWrapper {
 		}
 	}
 	
-	public var removedIndexPaths: Set<NSIndexPath> {
+	public var removedIndexPaths: Set<IndexPath> {
 		get {
 			return updateInfo.removedIndexPaths
 		}
@@ -90,7 +90,7 @@ extension CollectionUpdateInfoWrapper {
 		}
 	}
 	
-	public var reloadedIndexPaths: Set<NSIndexPath> {
+	public var reloadedIndexPaths: Set<IndexPath> {
 		get {
 			return updateInfo.reloadedIndexPaths
 		}
@@ -126,7 +126,7 @@ extension CollectionUpdateInfoWrapper {
 		}
 	}
 	
-	public var additionalDeletedIndexPathsByKind: [String: [NSIndexPath]] {
+	public var additionalDeletedIndexPathsByKind: [String: [IndexPath]] {
 		get {
 			return updateInfo.additionalDeletedIndexPathsByKind
 		}
@@ -135,7 +135,7 @@ extension CollectionUpdateInfoWrapper {
 		}
 	}
 	
-	public var additionalInsertedIndexPathsByKind: [String: [NSIndexPath]] {
+	public var additionalInsertedIndexPathsByKind: [String: [IndexPath]] {
 		get {
 			return updateInfo.additionalInsertedIndexPathsByKind
 		}

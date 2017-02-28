@@ -17,20 +17,20 @@ public final class ActionSheetControlButton: UIButton, SegmentedControlView, Seg
 	}
 	
 	public convenience init() {
-		self.init(frame: CGRectZero)
+		self.init(frame: CGRect.zero)
 	}
 	
 	public required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	public private(set) var actionSheetControl: ActionSheetControl!
+	public fileprivate(set) var actionSheetControl: ActionSheetControl!
 	
-	private func updateTitleText() {
-		setTitle(makeTitleText(), forState: .Normal)
+	fileprivate func updateTitleText() {
+		setTitle(makeTitleText(), for: UIControlState())
 	}
 	
-	private func makeTitleText() -> String? {
+	fileprivate func makeTitleText() -> String? {
 		let title = selectedSegmentIndex != UISegmentedControlNoSegment
 			? actionSheetControl.segments[selectedSegmentIndex]
 			: ""
@@ -64,7 +64,7 @@ public final class ActionSheetControlButton: UIButton, SegmentedControlView, Seg
 		}
 	}
 	
-	public func insertSegmentWithTitle(title: String?, atIndex segment: Int, animated: Bool) {
+	public func insertSegmentWithTitle(_ title: String?, atIndex segment: Int, animated: Bool) {
 		actionSheetControl.insertSegmentWithTitle(title, atIndex: segment, animated: animated)
 	}
 	
@@ -78,7 +78,7 @@ public final class ActionSheetControlButton: UIButton, SegmentedControlView, Seg
 	
 	// MARK: - SegmentedControlDelegate
 	
-	public func segmentedControlDidChangeValue(segmentedControl: SegmentedControlProtocol) {
+	public func segmentedControlDidChangeValue(_ segmentedControl: SegmentedControlProtocol) {
 		updateTitleText()
 		segmentedControlDelegate?.segmentedControlDidChangeValue(self)
 	}

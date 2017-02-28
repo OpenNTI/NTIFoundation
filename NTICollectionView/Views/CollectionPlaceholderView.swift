@@ -9,20 +9,20 @@
 import UIKit
 
 /// A placeholder view for use in a collection view. This placeholder includes a loading indicator.
-public class CollectionPlaceholderView: CollectionSupplementaryView {
+open class CollectionPlaceholderView: CollectionSupplementaryView {
 	
 	/// Whether `self` is a section placeholder with special behavior.
-	public var isSectionPlaceholder = true
+	open var isSectionPlaceholder = true
 	
-	private var activityIndicatorView: UIActivityIndicatorView!
-	private var placeholderView: PlaceholderView?
+	fileprivate var activityIndicatorView: UIActivityIndicatorView!
+	fileprivate var placeholderView: PlaceholderView?
 	
-	public func showActivityIndicator(shouldShow: Bool) {
+	open func showActivityIndicator(_ shouldShow: Bool) {
 		if activityIndicatorView == nil {
 			createActivityIndicatorView()
 		}
 		
-		activityIndicatorView.hidden = !shouldShow
+		activityIndicatorView.isHidden = !shouldShow
 		
 		if shouldShow {
 			activityIndicatorView.startAnimating()
@@ -31,22 +31,22 @@ public class CollectionPlaceholderView: CollectionSupplementaryView {
 		}
 	}
 	
-	private func createActivityIndicatorView() {
-		activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+	fileprivate func createActivityIndicatorView() {
+		activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
 		activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
-		activityIndicatorView.color = UIColor.lightGrayColor()
-		activityIndicatorView.setContentHuggingPriority(UILayoutPriorityFittingSizeLevel, forAxis: .Horizontal)
-		activityIndicatorView.setContentHuggingPriority(UILayoutPriorityFittingSizeLevel, forAxis: .Vertical)
+		activityIndicatorView.color = UIColor.lightGray
+		activityIndicatorView.setContentHuggingPriority(UILayoutPriorityFittingSizeLevel, for: .horizontal)
+		activityIndicatorView.setContentHuggingPriority(UILayoutPriorityFittingSizeLevel, for: .vertical)
 		addSubview(activityIndicatorView)
 		
 		var constraints: [NSLayoutConstraint] = []
 		let views = ["activityIndicatorView": activityIndicatorView]
-		constraints += NSLayoutConstraint.constraintsWithVisualFormat("H:|[activityIndicatorView]|", options: [], metrics: nil, views: views)
-		constraints += NSLayoutConstraint.constraintsWithVisualFormat("V:|[activityIndicatorView]|", options: [], metrics: nil, views: views)
-		NSLayoutConstraint.activateConstraints(constraints)
+		constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[activityIndicatorView]|", options: [], metrics: nil, views: views)
+		constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[activityIndicatorView]|", options: [], metrics: nil, views: views)
+		NSLayoutConstraint.activate(constraints)
 	}
 	
-	public func showPlaceholderWithTitle(title: String?, message: String?, image: UIImage?, isAnimated: Bool) {
+	open func showPlaceholderWithTitle(_ title: String?, message: String?, image: UIImage?, isAnimated: Bool) {
 		let oldPlaceholder = placeholderView
 		guard oldPlaceholder == nil || oldPlaceholder?.title != title || oldPlaceholder?.message != message else {
 			return
@@ -54,7 +54,7 @@ public class CollectionPlaceholderView: CollectionSupplementaryView {
 		
 		showActivityIndicator(false)
 		
-		let placeholder = PlaceholderView(frame: CGRectZero, title: title, message: message, image: image)
+		let placeholder = PlaceholderView(frame: CGRect.zero, title: title, message: message, image: image)
 		placeholderView = placeholder
 		placeholder.alpha = 0
 		placeholder.translatesAutoresizingMaskIntoConstraints = false
@@ -63,14 +63,14 @@ public class CollectionPlaceholderView: CollectionSupplementaryView {
 		var constraints: [NSLayoutConstraint] = []
 		let views = ["placeholderView": placeholder]
 		
-		constraints += NSLayoutConstraint.constraintsWithVisualFormat("H:|[placeholderView]|", options: [], metrics: nil, views: views)
-		constraints += NSLayoutConstraint.constraintsWithVisualFormat("V:|[placeholderView]|", options: [], metrics: nil, views: views)
+		constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[placeholderView]|", options: [], metrics: nil, views: views)
+		constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[placeholderView]|", options: [], metrics: nil, views: views)
 		
-		NSLayoutConstraint.activateConstraints(constraints)
-		sendSubviewToBack(placeholder)
+		NSLayoutConstraint.activate(constraints)
+		sendSubview(toBack: placeholder)
 		
 		if isAnimated {
-			UIView.animateWithDuration(0.25, animations: {
+			UIView.animate(withDuration: 0.25, animations: {
 				placeholder.alpha = 1
 				oldPlaceholder?.alpha = 0
 				}, completion: { _ in
@@ -85,13 +85,13 @@ public class CollectionPlaceholderView: CollectionSupplementaryView {
 		}
 	}
 	
-	public func hidePlaceholder(isAnimated isAnimated: Bool) {
+	open func hidePlaceholder(isAnimated: Bool) {
 		guard let placeholderView = self.placeholderView else {
 			return
 		}
 		
 		if isAnimated {
-			UIView.animateWithDuration(0.25, animations: {
+			UIView.animate(withDuration: 0.25, animations: {
 				placeholderView.alpha = 0
 				}, completion: { _ in
 					placeholderView.removeFromSuperview()
@@ -109,19 +109,19 @@ public class CollectionPlaceholderView: CollectionSupplementaryView {
 		}
 	}
 	
-	public func setTitleFont(font: UIFont) {
+	open func setTitleFont(_ font: UIFont) {
 		placeholderView?.titleFont = font
 	}
 	
-	public func setMessageFont(font: UIFont) {
+	open func setMessageFont(_ font: UIFont) {
 		placeholderView?.messageFont = font
 	}
 	
-	public func setTextColor(color: UIColor) {
+	open func setTextColor(_ color: UIColor) {
 		placeholderView?.textColor = color
 	}
 	
-	public override func preferredLayoutAttributesFittingAttributes(layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+	open override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
 		guard let attributes = layoutAttributes.copy() as? CollectionViewLayoutAttributes else {
 			return layoutAttributes
 		}
@@ -134,7 +134,7 @@ public class CollectionPlaceholderView: CollectionSupplementaryView {
 		var frame = attributes.frame
 		
 		let fittingSize = CGSize(width: frame.width, height: UILayoutFittingCompressedSize.height)
-		frame.size = systemLayoutSizeFittingSize(fittingSize, withHorizontalFittingPriority: UILayoutPriorityDefaultHigh, verticalFittingPriority: UILayoutPriorityFittingSizeLevel)
+		frame.size = systemLayoutSizeFitting(fittingSize, withHorizontalFittingPriority: UILayoutPriorityDefaultHigh, verticalFittingPriority: UILayoutPriorityFittingSizeLevel)
 		
 		attributes.frame = frame
 		return attributes

@@ -8,9 +8,9 @@
 
 import UIKit
 
-public class CollectionViewLayoutAttributes: UICollectionViewLayoutAttributes {
+open class CollectionViewLayoutAttributes: UICollectionViewLayoutAttributes {
 	
-	public override var hash: Int {
+	open override var hash: Int {
 		let prime = 31
 		var result = 1
 		result = prime * result + super.hash
@@ -30,33 +30,33 @@ public class CollectionViewLayoutAttributes: UICollectionViewLayoutAttributes {
 	}
 	
 	// If this is a supplementary view, is it pinned in place?
-	public var isPinned = false
+	open var isPinned = false
 	/// The background color of the view.
-	public var backgroundColor: UIColor?
+	open var backgroundColor: UIColor?
 	/// The background color when selected.
-	public var selectedBackgroundColor: UIColor?
+	open var selectedBackgroundColor: UIColor?
 	/// Layout margins passed to cells and supplementary views.
-	public var layoutMargins = UIEdgeInsetsZero
+	open var layoutMargins = UIEdgeInsets.zero
 	
 	/// The column index of the item in a grid layout.
-	public var columnIndex: Int = NSNotFound
-	public var isEditing = false
-	public var isMovable = false
-	public var pinnedBackgroundColor: UIColor?
-	public var separatorColor: UIColor?
-	public var pinnedSeparatorColor: UIColor?
-	public var showsSeparator = false
-	public var simulatesSelection = false
+	open var columnIndex: Int = NSNotFound
+	open var isEditing = false
+	open var isMovable = false
+	open var pinnedBackgroundColor: UIColor?
+	open var separatorColor: UIColor?
+	open var pinnedSeparatorColor: UIColor?
+	open var showsSeparator = false
+	open var simulatesSelection = false
 	/// Origin when not pinned.
-	public var unpinnedOrigin = CGPointZero
+	open var unpinnedOrigin = CGPoint.zero
 	/// Whether the correct fitting size should be calculated in `-preferredLayoutAttributesFittingAttributes:` or if the value is already correct.
-	public var shouldCalculateFittingSize = true
+	open var shouldCalculateFittingSize = true
 	
 	/// The corner radius of the view's layer.
-	public var cornerRadius: CGFloat = 0
+	open var cornerRadius: CGFloat = 0
 	
-	public override func copyWithZone(zone: NSZone) -> AnyObject {
-		let copy = super.copyWithZone(zone) as! CollectionViewLayoutAttributes
+	open override func copy(with zone: NSZone?) -> Any {
+		let copy = super.copy(with: zone) as! CollectionViewLayoutAttributes
 		copy.isPinned = isPinned
 		copy.columnIndex = columnIndex
 		copy.backgroundColor = backgroundColor
@@ -75,9 +75,8 @@ public class CollectionViewLayoutAttributes: UICollectionViewLayoutAttributes {
 		return copy
 	}
 	
-	public override func isEqual(object: AnyObject?) -> Bool {
-		guard let object = object as? CollectionViewLayoutAttributes
-			where super.isEqual(object) else {
+	open override func isEqual(_ object: Any?) -> Bool {
+		guard let object = object as? CollectionViewLayoutAttributes, super.isEqual(object) else {
 				return false
 		}
 		return isEditing == object.isEditing

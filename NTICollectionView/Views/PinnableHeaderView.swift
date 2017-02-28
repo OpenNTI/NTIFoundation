@@ -9,18 +9,18 @@
 import UIKit
 
 /// A base class for headers that respond to being pinned to the top of the collection view.
-public class PinnableHeaderView: CollectionSupplementaryView {
+open class PinnableHeaderView: CollectionSupplementaryView {
 
 	/// Default	`layoutMargins` values preferred by `self`.
-	public var defaultLayoutMargins = UIEdgeInsets(top: 8, left: 15, bottom: 8, right: 15)
+	open var defaultLayoutMargins = UIEdgeInsets(top: 8, left: 15, bottom: 8, right: 15)
 	
 	/// Property updated by the collection view layout when the header is pinned to the top of the collection view.
-	public var isPinned: Bool {
+	open var isPinned: Bool {
 		get { return _isPinned }
 		set {
 			let duration = (newValue == _isPinned ? 0 : 0.25)
 			
-			UIView.animateWithDuration(duration) { 
+			UIView.animate(withDuration: duration, animations: { 
 				if newValue {
 					self.backgroundColor = self.pinnedBackgroundColor
 				}
@@ -32,19 +32,19 @@ public class PinnableHeaderView: CollectionSupplementaryView {
 				
 				let separatorColor = self.pinnedSeparatorColor ?? self.separatorColor
 				self.separatorView.backgroundColor = separatorColor
-			}
+			}) 
 		}
 	}
 	
-	private var _isPinned = false
+	fileprivate var _isPinned = false
 	
 	/// Whether `self` displays a separator beneath its text.
-	public var showsSeparator = false {
-		didSet { separatorView.hidden = !showsSeparator }
+	open var showsSeparator = false {
+		didSet { separatorView.isHidden = !showsSeparator }
 	}
 	
 	/// The color of the separator.
-	public var separatorColor: UIColor? {
+	open var separatorColor: UIColor? {
 		didSet {
 			if isPinned {
 				separatorView.backgroundColor = pinnedSeparatorColor
@@ -55,7 +55,7 @@ public class PinnableHeaderView: CollectionSupplementaryView {
 	/// The color of the separator when	`self` is pinned.
 	///
 	/// If `nil`, the separator will not change color when pinned.
-	public var pinnedSeparatorColor: UIColor? {
+	open var pinnedSeparatorColor: UIColor? {
 		didSet {
 			if isPinned {
 				separatorView.backgroundColor = pinnedSeparatorColor
@@ -66,7 +66,7 @@ public class PinnableHeaderView: CollectionSupplementaryView {
 	/// The background color to display when `self` is been pinned. 
 	///
 	/// A `nil` value indicates the header should blend with navigation bars.
-	public var pinnedBackgroundColor: UIColor?
+	open var pinnedBackgroundColor: UIColor?
 	
 	let separatorView = UIView()
 	
@@ -79,31 +79,31 @@ public class PinnableHeaderView: CollectionSupplementaryView {
 		let views = ["separator": separatorView]
 		var constraints = [NSLayoutConstraint]()
 		
-		constraints += NSLayoutConstraint.constraintsWithVisualFormat("H:|[separator]|", options: [], metrics: nil, views: views)
-		constraints.append(NSLayoutConstraint(item: separatorView, attribute: .Bottom, relatedBy: .Equal, toItem: self, attribute: .Bottom, multiplier: 1, constant: 0))
+		constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[separator]|", options: [], metrics: nil, views: views)
+		constraints.append(NSLayoutConstraint(item: separatorView, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1, constant: 0))
 		
-		NSLayoutConstraint.activateConstraints(constraints)
+		NSLayoutConstraint.activate(constraints)
 	}
 	
 	public required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	public override func updateBackgroundColor() {
+	open override func updateBackgroundColor() {
 		super.updateBackgroundColor()
 		if isPinned {
 			backgroundColor = pinnedBackgroundColor
 		}
 	}
 	
-	public override func applyLayoutAttributes(layoutAttributes: UICollectionViewLayoutAttributes) {
-		super.applyLayoutAttributes(layoutAttributes)
+	open override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+		super.apply(layoutAttributes)
 		
 		guard let attributes = layoutAttributes as? CollectionViewLayoutAttributes else {
 			return
 		}
 		
-		if attributes.layoutMargins == UIEdgeInsetsZero {
+		if attributes.layoutMargins == UIEdgeInsets.zero {
 			layoutMargins = defaultLayoutMargins
 		}
 		else {
@@ -118,14 +118,14 @@ public class PinnableHeaderView: CollectionSupplementaryView {
 		isPinned = attributes.isPinned
 	}
 	
-	public override func prepareForReuse() {
+	open override func prepareForReuse() {
 		super.prepareForReuse()
 		layoutMargins = defaultLayoutMargins
 		isPinned = false
 		pinnedBackgroundColor = nil
 	}
 	
-	public override func layoutMarginsDidChange() {
+	open override func layoutMarginsDidChange() {
 		super.layoutMarginsDidChange()
 		setNeedsUpdateConstraints()
 	}

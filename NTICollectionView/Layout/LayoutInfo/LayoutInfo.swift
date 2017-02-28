@@ -10,26 +10,26 @@ import UIKit
 
 public protocol LayoutAttributesResolving {
 	
-	func layoutAttributesForSupplementaryElementOfKind(kind: String, at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes?
+	func layoutAttributesForSupplementaryElementOfKind(_ kind: String, at indexPath: IndexPath) -> CollectionViewLayoutAttributes?
 	
-	func layoutAttributesForDecorationViewOfKind(kind: String, at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes?
+	func layoutAttributesForDecorationViewOfKind(_ kind: String, at indexPath: IndexPath) -> CollectionViewLayoutAttributes?
 	
-	func layoutAttributesForCell(at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes?
+	func layoutAttributesForCell(at indexPath: IndexPath) -> CollectionViewLayoutAttributes?
 	
 }
 
-func invalidateLayoutAttributes(attributes: UICollectionViewLayoutAttributes, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+func invalidateLayoutAttributes(_ attributes: UICollectionViewLayoutAttributes, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 	guard let invalidationContext = invalidationContext else {
 		return
 	}
 	let indexPaths = [attributes.indexPath]
 	switch attributes.representedElementCategory {
-	case .Cell:
-		invalidationContext.invalidateItemsAtIndexPaths(indexPaths)
-	case .DecorationView:
-		invalidationContext.invalidateDecorationElementsOfKind(attributes.representedElementKind!, atIndexPaths: indexPaths)
-	case .SupplementaryView:
-		invalidationContext.invalidateSupplementaryElementsOfKind(attributes.representedElementKind!, atIndexPaths: indexPaths)
+	case .cell:
+		invalidationContext.invalidateItems(at: indexPaths)
+	case .decorationView:
+		invalidationContext.invalidateDecorationElements(ofKind: attributes.representedElementKind!, at: indexPaths)
+	case .supplementaryView:
+		invalidationContext.invalidateSupplementaryElements(ofKind: attributes.representedElementKind!, at: indexPaths)
 	}
 }
 
@@ -54,10 +54,10 @@ public protocol LayoutInfo: LayoutSizing, LayoutAttributesResolving, LayoutSecti
 	
 	func mutateSection(at index: Int, using mutator: (inout LayoutSection) -> Void)
 	
-	func mutateItem(at indexPath: NSIndexPath, using mutator: (inout LayoutItem) -> Void)
+	func mutateItem(at indexPath: IndexPath, using mutator: (inout LayoutItem) -> Void)
 	
 	/// Create a new placeholder covering the specified range of sections.
-	func newPlaceholderStartingAtSectionIndex(sectionIndex: Int) -> LayoutPlaceholder
+	func newPlaceholderStartingAtSectionIndex(_ sectionIndex: Int) -> LayoutPlaceholder
 	
 	/// Remove all sections including the global section, thus invalidating all layout information.
 	func invalidate()
@@ -69,12 +69,12 @@ public protocol LayoutInfo: LayoutSizing, LayoutAttributesResolving, LayoutSecti
 	func finalizeLayout()
 	
 	/// Update the size of an item and mark it as invalidated in the given invalidationContext. This is needed for self-sizing view support. This method also adjusts the position of any content affected by the size change.
-	func setSize(size: CGSize, forItemAt indexPath: NSIndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext?)
+	func setSize(_ size: CGSize, forItemAt indexPath: IndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
 	/// Update the size of a supplementary item and mark it as invalidated in the given *invalidationContext*. This is needed for self-sizing view support. This method also adjusts the position of any content affected by the size change.
-	func setSize(size: CGSize, forElementOfKind kind: String, at indexPath: NSIndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext?)
+	func setSize(_ size: CGSize, forElementOfKind kind: String, at indexPath: IndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
-	func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?)
+	func updateSpecialItemsWithContentOffset(_ contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
 }
 
@@ -84,14 +84,14 @@ public protocol LayoutSectionProvider: class {
 	
 	var hasGlobalSection: Bool { get }
 	
-	func enumerateSections(block: (sectionIndex: Int, inout sectionInfo: LayoutSection, inout stop: Bool) -> Void)
+	func enumerateSections(_ block: (_ sectionIndex: Int, _ sectionInfo: inout LayoutSection, _ stop: inout Bool) -> Void)
 	
 	/// Return the layout section with the given sectionIndex.
-	func sectionAtIndex(sectionIndex: Int) -> LayoutSection?
+	func sectionAtIndex(_ sectionIndex: Int) -> LayoutSection?
 	
-	func setSection(section: LayoutSection, at sectionIndex: Int)
+	func setSection(_ section: LayoutSection, at sectionIndex: Int)
 	
-	func add(section: LayoutSection, sectionIndex: Int)
+	func add(_ section: LayoutSection, sectionIndex: Int)
 	
 }
 
@@ -104,16 +104,16 @@ public protocol LayoutSizing: class {
 	
 }
 
-public class LayoutSizingInfo: LayoutSizing {
+open class LayoutSizingInfo: LayoutSizing {
 	
 	public init(width: CGFloat, layoutMeasure: CollectionViewLayoutMeasuring?) {
 		self.width = width
 		self.layoutMeasure = layoutMeasure
 	}
 	
-	public var width: CGFloat
+	open var width: CGFloat
 	
-	public var layoutMeasure: CollectionViewLayoutMeasuring?
+	open var layoutMeasure: CollectionViewLayoutMeasuring?
 	
 }
 
@@ -127,7 +127,7 @@ public protocol LayoutArea {
 	/// Update the frame of `self` and any child areas. 
 	///
 	/// If the frame has changed, mark objects as invalid in the invalidation context as necessary.
-	mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
+	mutating func setFrame(_ frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
 }
 
@@ -136,7 +136,7 @@ public protocol LayoutElement: LayoutArea {
 	
 	var itemIndex: Int { get set }
 	
-	var indexPath: NSIndexPath { get }
+	var indexPath: IndexPath { get }
 	
 	var layoutAttributes: CollectionViewLayoutAttributes { get }
 	
@@ -157,7 +157,7 @@ public protocol LayoutSupplementaryItem: SupplementaryItemWrapper, LayoutElement
 extension LayoutSupplementaryItem {
 	
 	public var layoutAttributes: CollectionViewLayoutAttributes {
-		let attributes = CollectionViewLayoutAttributes(forSupplementaryViewOfKind: elementKind, withIndexPath: indexPath)
+		let attributes = CollectionViewLayoutAttributes(forSupplementaryViewOfKind: elementKind, with: indexPath)
 		
 		configureValues(of: attributes)
 		
@@ -201,7 +201,7 @@ extension LayoutSupplementaryItemWrapper {
 		}
 	}
 	
-	public var indexPath: NSIndexPath {
+	public var indexPath: IndexPath {
 		return layoutSupplementaryItem.indexPath
 	}
 	
@@ -213,7 +213,7 @@ extension LayoutSupplementaryItemWrapper {
 		layoutSupplementaryItem.resetLayoutAttributes()
 	}
 	
-	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	public mutating func setFrame(_ frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		layoutSupplementaryItem.setFrame(frame, invalidationContext: invalidationContext)
 	}
 	

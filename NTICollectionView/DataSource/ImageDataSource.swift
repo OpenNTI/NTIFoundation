@@ -9,18 +9,18 @@
 import UIKit
 
 /// A `BasicCollectionDataSource` which vends instances of `ImageCell`.
-public class ImageDataSource : BasicCollectionDataSource<UIImage> {
+open class ImageDataSource : BasicCollectionDataSource<UIImage> {
 	
-	public let imageCellReuse = "imageCellReuse"
+	open let imageCellReuse = "imageCellReuse"
 	
 	/// An optional transformation applied to images before being stored in `items`.
-	public var imageTransform: ((UIImage) -> UIImage)?
+	open var imageTransform: ((UIImage) -> UIImage)?
 	
 	public override init() {
 		super.init()
 	}
 	
-	public override func setItems(items: [UIImage], animated: Bool) {
+	open override func setItems(_ items: [UIImage], animated: Bool) {
 		var items = items
 		if let transform = imageTransform {
 			items = items.map(transform)
@@ -29,17 +29,17 @@ public class ImageDataSource : BasicCollectionDataSource<UIImage> {
 		super.setItems(items, animated: animated)
 	}
 	
-	public override func registerReusableViews(with collectionView: UICollectionView) {
+	open override func registerReusableViews(with collectionView: UICollectionView) {
 		super.registerReusableViews(with: collectionView)
 		
-		collectionView.registerClass(ImageCell.self, forCellWithReuseIdentifier: imageCellReuse)
+		collectionView.register(ImageCell.self, forCellWithReuseIdentifier: imageCellReuse)
 	}
 	
-	public override func collectionView(collectionView: UICollectionView, identifierForCellAt indexPath: NSIndexPath) -> String {
+	open override func collectionView(_ collectionView: UICollectionView, identifierForCellAt indexPath: IndexPath) -> String {
 		return imageCellReuse
 	}
 	
-	public override func collectionView(collectionView: UICollectionView, configure cell: UICollectionViewCell, for indexPath: NSIndexPath) {
+	open override func collectionView(_ collectionView: UICollectionView, configure cell: UICollectionViewCell, for indexPath: IndexPath) {
 		guard let cell = cell as? ImageCell else {
 			return
 		}

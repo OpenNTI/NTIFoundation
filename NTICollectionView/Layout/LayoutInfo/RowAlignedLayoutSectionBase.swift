@@ -42,7 +42,7 @@ extension RowAlignedLayoutSectionBase {
 		preconditionFailure("We should find an item at \(index).")
 	}
 	
-	public mutating func setItem(item: LayoutItem, at index: Int) {
+	public mutating func setItem(_ item: LayoutItem, at index: Int) {
 		var searchIndex = 0
 		
 		for rowIndex in rows.indices {
@@ -68,10 +68,10 @@ extension RowAlignedLayoutSectionBase {
 		setItem(item, at: index)
 	}
 	
-	public mutating func mutateItems(using mutator: (item: inout LayoutItem, index: Int) -> Void) {
+	public mutating func mutateItems(using mutator: (_ item: inout LayoutItem, _ index: Int) -> Void) {
 		mutateRows { (row, _) in
 			for itemIndex in row.items.indices {
-				mutator(item: &row.items[itemIndex], index: itemIndex)
+				mutator(&row.items[itemIndex], itemIndex)
 			}
 		}
 	}
@@ -91,7 +91,7 @@ extension RowAlignedLayoutSectionBase {
 	public func rowIndex(forItemAt itemIndex: Int) -> Int? {
 		var searchIndex = 0
 		
-		for (index, row) in rows.enumerate() {
+		for (index, row) in rows.enumerated() {
 			let itemCount = row.items.count
 			
 			if searchIndex + itemCount < itemIndex {
@@ -105,18 +105,18 @@ extension RowAlignedLayoutSectionBase {
 		return nil
 	}
 	
-	public mutating func add(row: LayoutRow) {
+	public mutating func add(_ row: LayoutRow) {
 		rows.append(row)
 	}
 	
-	public mutating func mutateRows(using mutator: (row: inout LayoutRow, index: Int) -> Void) {
+	public mutating func mutateRows(using mutator: (_ row: inout LayoutRow, _ index: Int) -> Void) {
 		for index in rows.indices {
-			mutator(row: &rows[index], index: index)
+			mutator(&rows[index], index)
 		}
 	}
 	
 	public mutating func removeAllRows() {
-		rows.removeAll(keepCapacity: true)
+		rows.removeAll(keepingCapacity: true)
 	}
 	
 }
@@ -149,7 +149,7 @@ extension RowAlignedLayoutSectionBaseComposite {
 		return rowAlignedLayoutSectionBase.item(at: index)
 	}
 	
-	public mutating func setItem(item: LayoutItem, at index: Int) {
+	public mutating func setItem(_ item: LayoutItem, at index: Int) {
 		rowAlignedLayoutSectionBase.setItem(item, at: index)
 	}
 	
@@ -157,7 +157,7 @@ extension RowAlignedLayoutSectionBaseComposite {
 		rowAlignedLayoutSectionBase.mutateItem(at: index, using: mutator)
 	}
 	
-	public mutating func mutateItems(using mutator: (item: inout LayoutItem, index: Int) -> Void) {
+	public mutating func mutateItems(using mutator: (_ item: inout LayoutItem, _ index: Int) -> Void) {
 		rowAlignedLayoutSectionBase.mutateItems(using: mutator)
 	}
 	
@@ -169,11 +169,11 @@ extension RowAlignedLayoutSectionBaseComposite {
 		return rowAlignedLayoutSectionBase.rowIndex(forItemAt: itemIndex)
 	}
 	
-	public mutating func add(row: LayoutRow) {
+	public mutating func add(_ row: LayoutRow) {
 		rowAlignedLayoutSectionBase.add(row)
 	}
 	
-	public mutating func mutateRows(using mutator: (row: inout LayoutRow, index: Int) -> Void) {
+	public mutating func mutateRows(using mutator: (_ row: inout LayoutRow, _ index: Int) -> Void) {
 		rowAlignedLayoutSectionBase.mutateRows(using: mutator)
 	}
 	

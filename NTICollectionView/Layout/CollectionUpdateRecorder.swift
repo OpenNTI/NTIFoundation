@@ -13,10 +13,10 @@ public struct CollectionUpdateRecorder: CollectionUpdateInfoWrapper {
 	
 	public var updateInfo = CollectionUpdateInfo()
 	
-	private weak var sectionProvider: LayoutSectionProvider?
-	private weak var oldSectionProvider: LayoutSectionProvider?
+	fileprivate weak var sectionProvider: LayoutSectionProvider?
+	fileprivate weak var oldSectionProvider: LayoutSectionProvider?
 	
-	public mutating func record(updates: [UICollectionViewUpdateItem], sectionProvider: LayoutSectionProvider?, oldSectionProvider: LayoutSectionProvider?) {
+	public mutating func record(_ updates: [UICollectionViewUpdateItem], sectionProvider: LayoutSectionProvider?, oldSectionProvider: LayoutSectionProvider?) {
 		self.sectionProvider = sectionProvider
 		self.oldSectionProvider = oldSectionProvider
 		
@@ -28,22 +28,22 @@ public struct CollectionUpdateRecorder: CollectionUpdateInfoWrapper {
 		self.oldSectionProvider = nil
 	}
 	
-	private mutating func record(update: UICollectionViewUpdateItem) {
+	fileprivate mutating func record(_ update: UICollectionViewUpdateItem) {
 		switch update.updateAction {
-		case .Insert:
+		case .insert:
 			recordInsert(update)
-		case .Delete:
+		case .delete:
 			recordDelete(update)
-		case .Reload:
+		case .reload:
 			recordReload(update)
-		case .Move:
+		case .move:
 			recordMove(update)
-		case .None:
+		case .none:
 			break
 		}
 	}
 	
-	private mutating func recordInsert(update: UICollectionViewUpdateItem) {
+	fileprivate mutating func recordInsert(_ update: UICollectionViewUpdateItem) {
 		guard let indexPath = update.indexPathAfterUpdate else {
 			return
 		}
@@ -56,7 +56,7 @@ public struct CollectionUpdateRecorder: CollectionUpdateInfoWrapper {
 		}
 	}
 	
-	private mutating func recordDelete(update: UICollectionViewUpdateItem) {
+	fileprivate mutating func recordDelete(_ update: UICollectionViewUpdateItem) {
 		guard let indexPath = update.indexPathBeforeUpdate else {
 			return
 		}
@@ -69,7 +69,7 @@ public struct CollectionUpdateRecorder: CollectionUpdateInfoWrapper {
 		}
 	}
 	
-	private mutating func recordReload(update: UICollectionViewUpdateItem) {
+	fileprivate mutating func recordReload(_ update: UICollectionViewUpdateItem) {
 		guard let indexPath = update.indexPathAfterUpdate else {
 			return
 		}
@@ -81,9 +81,9 @@ public struct CollectionUpdateRecorder: CollectionUpdateInfoWrapper {
 		}
 	}
 	
-	private mutating func recordMove(update: UICollectionViewUpdateItem) {
+	fileprivate mutating func recordMove(_ update: UICollectionViewUpdateItem) {
 		guard let oldIndexPath = update.indexPathBeforeUpdate,
-			newIndexPath = update.indexPathAfterUpdate else {
+			let newIndexPath = update.indexPathAfterUpdate else {
 				return
 		}
 		
@@ -96,7 +96,7 @@ public struct CollectionUpdateRecorder: CollectionUpdateInfoWrapper {
 		}
 	}
 	
-	public mutating func recordAdditionalInsertedAttributesForItemInsertion(at indexPath: NSIndexPath) {
+	public mutating func recordAdditionalInsertedAttributesForItemInsertion(at indexPath: IndexPath) {
 		guard let sectionInfo = sectionProvider?.sectionAtIndex(indexPath.section) else {
 			return
 		}
@@ -110,17 +110,17 @@ public struct CollectionUpdateRecorder: CollectionUpdateInfoWrapper {
 		}
 	}
 	
-	public mutating func recordAdditionalInsertedIndexPath(indexPath: NSIndexPath, forElementOf kind: String) {
+	public mutating func recordAdditionalInsertedIndexPath(_ indexPath: IndexPath, forElementOf kind: String) {
 		additionalInsertedIndexPathsByKind.append(indexPath, to: kind)
 	}
 	
-	public mutating func recordAdditionalInsertedIndexPaths(indexPaths: [NSIndexPath], forElementOf kind: String) {
+	public mutating func recordAdditionalInsertedIndexPaths(_ indexPaths: [IndexPath], forElementOf kind: String) {
 		for indexPath in indexPaths {
 			recordAdditionalInsertedIndexPath(indexPath, forElementOf: kind)
 		}
 	}
 	
-	public mutating func recordAdditionalDeletedAttributesForItemDeletion(at indexPath: NSIndexPath) {
+	public mutating func recordAdditionalDeletedAttributesForItemDeletion(at indexPath: IndexPath) {
 		guard let sectionInfo = oldSectionProvider?.sectionAtIndex(indexPath.section) else {
 			return
 		}
@@ -134,13 +134,13 @@ public struct CollectionUpdateRecorder: CollectionUpdateInfoWrapper {
 		}
 	}
 	
-	public mutating func recordAdditionalDeletedIndexPaths(indexPaths: [NSIndexPath], forElementOf kind: String) {
+	public mutating func recordAdditionalDeletedIndexPaths(_ indexPaths: [IndexPath], forElementOf kind: String) {
 		for indexPath in indexPaths {
 			recordAdditionalDeletedIndexPath(indexPath, forElementOf: kind)
 		}
 	}
 	
-	public mutating func recordAdditionalDeletedIndexPath(indexPath: NSIndexPath, forElementOf kind: String) {
+	public mutating func recordAdditionalDeletedIndexPath(_ indexPath: IndexPath, forElementOf kind: String) {
 		additionalDeletedIndexPathsByKind.append(indexPath, to: kind)
 	}
 	

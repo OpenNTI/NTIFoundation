@@ -11,13 +11,13 @@ import UIKit
 /// Data used for creating layout info.
 public struct LayoutDescription {
 	
-	public var size = CGSizeZero
+	public var size = CGSize.zero
 	
-	public var contentOffset = CGPointZero
+	public var contentOffset = CGPoint.zero
 	
-	public var contentInset = UIEdgeInsetsZero
+	public var contentInset = UIEdgeInsets.zero
 	
-	public var bounds = CGRectZero
+	public var bounds = CGRect.zero
 	
 	public var sections: [SectionDescription] = []
 	
@@ -48,6 +48,6 @@ public struct SectionDescription {
 	
 	public var phantomCellIndex: Int?
 	
-	public var phantomCellSize = CGSizeZero
+	public var phantomCellSize = CGSize.zero
 	
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class GridSectionLayoutEngine: NSObject, SupplementaryLayoutEngine {
+open class GridSectionLayoutEngine: NSObject, SupplementaryLayoutEngine {
 	
 	public init(layoutSection: GridLayoutSection) {
 		self.layoutSection = layoutSection
@@ -16,19 +16,19 @@ public class GridSectionLayoutEngine: NSObject, SupplementaryLayoutEngine {
 		super.init()
 	}
 	
-	public var layoutSection: GridLayoutSection
+	open var layoutSection: GridLayoutSection
 	
-	public var pinnableHeaders: [LayoutSupplementaryItem] = []
-	public var nonPinnableHeaders: [LayoutSupplementaryItem] = []
-	public var supplementaryItems: [LayoutSupplementaryItem]
+	open var pinnableHeaders: [LayoutSupplementaryItem] = []
+	open var nonPinnableHeaders: [LayoutSupplementaryItem] = []
+	open var supplementaryItems: [LayoutSupplementaryItem]
 	
-	private var origin: CGPoint!
-	private var position: CGPoint!
+	fileprivate var origin: CGPoint!
+	fileprivate var position: CGPoint!
 	
 	var layoutSizing: LayoutSizing!
 	var invalidationContext: UICollectionViewLayoutInvalidationContext?
 	
-	public func layoutWithOrigin(start: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
+	open func layoutWithOrigin(_ start: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
 		reset()
 		origin = start
 		position = start
@@ -41,14 +41,14 @@ public class GridSectionLayoutEngine: NSObject, SupplementaryLayoutEngine {
 		return position
 	}
 	
-	private func reset() {
+	fileprivate func reset() {
 		position = origin
 		pinnableHeaders = []
 		nonPinnableHeaders = []
 		layoutSection.removeAllRows()
 	}
 	
-	private func performLayout() {
+	fileprivate func performLayout() {
 		let cellLayoutEngine = GridSectionCellLayoutEngine(layoutSection: layoutSection)
 		let layoutEngine = GridSupplementaryItemLayoutEngine(layoutSection: layoutSection, innerLayoutEngine: cellLayoutEngine)
 		

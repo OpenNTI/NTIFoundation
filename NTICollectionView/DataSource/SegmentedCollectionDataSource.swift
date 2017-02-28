@@ -20,13 +20,13 @@ public protocol SegmentedCollectionDataSourceProtocol: ParentCollectionDataSourc
 
 private let segmentedDataSourceHeaderKey = "SegmentedDataSourceHeaderKey"
 
-public class SegmentedCollectionDataSource: CollectionDataSource, CollectionDataSourceDelegate, SegmentedControlDelegate {
+open class SegmentedCollectionDataSource: CollectionDataSource, CollectionDataSourceDelegate, SegmentedControlDelegate {
 	
-	public private(set) var dataSources: [CollectionDataSource] = []
+	open fileprivate(set) var dataSources: [CollectionDataSource] = []
 	
-	public var animatesSegmentChanges = true
+	open var animatesSegmentChanges = true
 	
-	public func add(dataSource: CollectionDataSource) {
+	open func add(_ dataSource: CollectionDataSource) {
 		if dataSources.isEmpty {
 			_selectedDataSource = dataSource
 		}
@@ -35,17 +35,17 @@ public class SegmentedCollectionDataSource: CollectionDataSource, CollectionData
 		notifyDidAddChild(dataSource)
 	}
 	
-	public func remove(dataSource: CollectionDataSource) {
+	open func remove(_ dataSource: CollectionDataSource) {
 		guard let index = dataSourcesIndexOf(dataSource) else {
 			return
 		}
-		dataSources.removeAtIndex(index)
+		dataSources.remove(at: index)
 		if dataSource.delegate === self {
 			dataSource.delegate = nil
 		}
 	}
 	
-	public func removeAllDataSources() {
+	open func removeAllDataSources() {
 		for dataSource in dataSources where dataSource.delegate === self {
 			dataSource.delegate = nil
 		}
@@ -53,15 +53,15 @@ public class SegmentedCollectionDataSource: CollectionDataSource, CollectionData
 		_selectedDataSource = nil
 	}
 	
-	private func dataSourcesIndexOf(dataSource: CollectionDataSource) -> Int? {
-		return dataSources.indexOf({ $0 === dataSource })
+	fileprivate func dataSourcesIndexOf(_ dataSource: CollectionDataSource) -> Int? {
+		return dataSources.index(where: { $0 === dataSource })
 	}
 	
-	private func dataSourcesContains(dataSource: CollectionDataSource) -> Bool {
-		return dataSources.contains({ $0 === selectedDataSource })
+	fileprivate func dataSourcesContains(_ dataSource: CollectionDataSource) -> Bool {
+		return dataSources.contains(where: { $0 === selectedDataSource })
 	}
 	
-	public var selectedDataSource: CollectionDataSource? {
+	open var selectedDataSource: CollectionDataSource? {
 		get {
 			return _selectedDataSource
 		}
@@ -69,19 +69,19 @@ public class SegmentedCollectionDataSource: CollectionDataSource, CollectionData
 			setSelectedDataSource(newValue, isAnimated: false)
 		}
 	}
-	private var _selectedDataSource: CollectionDataSource? {
+	fileprivate var _selectedDataSource: CollectionDataSource? {
 		didSet {
 			segmentedCollectionDataSourceDelegate?.segmentedCollectionDataSourceDidChangeSelectedDataSource(self)
 		}
 	}
 	
-	public weak var segmentedCollectionDataSourceDelegate: SegmentedCollectionDataSourceDelegate?
+	open weak var segmentedCollectionDataSourceDelegate: SegmentedCollectionDataSourceDelegate?
 	
-	public func setSelectedDataSource(selectedDataSource: CollectionDataSource?, isAnimated: Bool) {
+	open func setSelectedDataSource(_ selectedDataSource: CollectionDataSource?, isAnimated: Bool) {
 		setSelectedDataSource(selectedDataSource, isAnimated: isAnimated, completionHandler: nil)
 	}
 	
-	public func setSelectedDataSource(selectedDataSource: CollectionDataSource?, isAnimated: Bool, completionHandler: dispatch_block_t?) {
+	open func setSelectedDataSource(_ selectedDataSource: CollectionDataSource?, isAnimated: Bool, completionHandler: (()->())?) {
 		guard selectedDataSource !== self.selectedDataSource else {
 			completionHandler?()
 			return
@@ -95,7 +95,7 @@ public class SegmentedCollectionDataSource: CollectionDataSource, CollectionData
 		var direction: SectionOperationDirection?
 		if isAnimated,
 			let oldSelectedDataSource = oldDataSource,
-			newSelectedDataSource = selectedDataSource {
+			let newSelectedDataSource = selectedDataSource {
 			let oldIndex = dataSourcesIndexOf(oldSelectedDataSource)!
 			let newIndex = dataSourcesIndexOf(newSelectedDataSource)!
 			direction = (oldIndex < newIndex) ? .Right : .Left
@@ -103,8 +103,8 @@ public class SegmentedCollectionDataSource: CollectionDataSource, CollectionData
 		
 		let numberOfOldSections = oldDataSource?.numberOfSections ?? 0
 		let numberOfNewSections = selectedDataSource?.numberOfSections ?? 0
-		let removedSet = NSIndexSet(indexesInRange: NSMakeRange(0, numberOfOldSections))
-		let insertedSet = NSIndexSet(indexesInRange: NSMakeRange(0, numberOfNewSections))
+		let removedSet = IndexSet(integersIn: NSMakeRange(0, numberOfOldSections).toRange()!)
+		let insertedSet = IndexSet(integersIn: NSMakeRange(0, numberOfNewSections).toRange()!)
 		
 		performUpdate({
 			oldDataSource?.willResignActive()
@@ -113,13 +113,13 @@ public class SegmentedCollectionDataSource: CollectionDataSource, CollectionData
 				self.notifySectionsRemoved(removedSet, direction: direction)
 			}
 			
-			self.willChangeValueForKey("selectedDataSource")
-			self.willChangeValueForKey("selectedDataSourceIndex")
+			self.willChangeValue(forKey: "selectedDataSource")
+			self.willChangeValue(forKey: "selectedDataSourceIndex")
 			
 			self._selectedDataSource = selectedDataSource
 			
-			self.didChangeValueForKey("selectedDataSource")
-			self.didChangeValueForKey("selectedDataSourceIndex")
+			self.didChangeValue(forKey: "selectedDataSource")
+			self.didChangeValue(forKey: "selectedDataSourceIndex")
 			
 			self.segmentedCollectionDataSourceDelegate?.segmentedCollectionDataSourceDidChangeSelectedDataSource(self)
 			
@@ -131,7 +131,7 @@ public class SegmentedCollectionDataSource: CollectionDataSource, CollectionData
 			}, complete: completionHandler)
 	}
 	
-	public var selectedDataSourceIndex: Int? {
+	open var selectedDataSourceIndex: Int? {
 		get {
 			guard let selectedDataSource = self.selectedDataSource else {
 				return nil
@@ -142,7 +142,7 @@ public class SegmentedCollectionDataSource: CollectionDataSource, CollectionData
 			setSelectedDataSourceIndex(newValue, isAnimated: false)
 		}
 	}
-	public func setSelectedDataSourceIndex(selectedDataSourceIndex: Int?, isAnimated: Bool) {
+	open func setSelectedDataSourceIndex(_ selectedDataSourceIndex: Int?, isAnimated: Bool) {
 		guard let index = selectedDataSourceIndex else {
 			selectedDataSource = nil
 			return
@@ -151,35 +151,35 @@ public class SegmentedCollectionDataSource: CollectionDataSource, CollectionData
 		selectedDataSource = dataSource
 	}
 	
-	private func dataSourceAtIndex(dataSourceIndex: Int) -> CollectionDataSource {
+	fileprivate func dataSourceAtIndex(_ dataSourceIndex: Int) -> CollectionDataSource {
 		return dataSources[dataSourceIndex]
 	}
 	
-	public override var numberOfSections: Int {
+	open override var numberOfSections: Int {
 		return selectedDataSource?.numberOfSections ?? 0
 	}
 	
-	public override func dataSourceForSectionAtIndex(sectionIndex: Int) -> CollectionDataSource {
+	open override func dataSourceForSectionAtIndex(_ sectionIndex: Int) -> CollectionDataSource {
 		return selectedDataSource?.dataSourceForSectionAtIndex(sectionIndex) ?? super.dataSourceForSectionAtIndex(sectionIndex)
 	}
 	
-	public override func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath? {
+	open override func localIndexPathForGlobal(_ globalIndexPath: IndexPath) -> IndexPath? {
 		return selectedDataSource?.localIndexPathForGlobal(globalIndexPath)
 	}
 	
-	public override func item(at indexPath: NSIndexPath) -> AnyItem? {
+	open override func item(at indexPath: IndexPath) -> AnyItem? {
 		return selectedDataSource?.item(at: indexPath)
 	}
 	
-	public override func indexPath(for item: AnyItem) -> NSIndexPath? {
-		return selectedDataSource?.indexPath(for: item)
+	open override func indexPath(for item: AnyItem) -> IndexPath? {
+		return selectedDataSource?.indexPath(for: item) as IndexPath?
 	}
 	
-	public override func removeItem(at indexPath: NSIndexPath) {
+	open override func removeItem(at indexPath: IndexPath) {
 		selectedDataSource?.removeItem(at: indexPath)
 	}
 	
-	public override func registerReusableViews(with collectionView: UICollectionView) {
+	open override func registerReusableViews(with collectionView: UICollectionView) {
 		super.registerReusableViews(with: collectionView)
 		for dataSource in dataSources {
 			dataSource.registerReusableViews(with: collectionView)
@@ -188,22 +188,22 @@ public class SegmentedCollectionDataSource: CollectionDataSource, CollectionData
 	
 	// TODO: Action stuff?
 	
-	public override func didBecomeActive() {
+	open override func didBecomeActive() {
 		super.didBecomeActive()
 		selectedDataSource?.didBecomeActive()
 	}
 	
-	public override func willResignActive() {
+	open override func willResignActive() {
 		super.willResignActive()
 		selectedDataSource?.willResignActive()
 	}
 	
-	public override var allowsSelection: Bool {
+	open override var allowsSelection: Bool {
 		return selectedDataSource?.allowsSelection ?? super.allowsSelection
 	}
 	
 	// TODO: Make computed property for item-by-key?
-	public var segmentedControlHeader: SegmentedControlSupplementaryItem? {
+	open var segmentedControlHeader: SegmentedControlSupplementaryItem? {
 		didSet {
 			guard let segmentedControlHeader = self.segmentedControlHeader else {
 				return removeSupplementaryItemForKey(segmentedDataSourceHeaderKey)
@@ -222,7 +222,7 @@ public class SegmentedCollectionDataSource: CollectionDataSource, CollectionData
 		}
 	}
 	
-	private func configureSegmentedControlHeader() {
+	fileprivate func configureSegmentedControlHeader() {
 		guard segmentedControlHeader != nil else {
 			return
 		}
@@ -245,7 +245,7 @@ public class SegmentedCollectionDataSource: CollectionDataSource, CollectionData
 		}
 	}
 	
-	public func configure(segmentedControl: SegmentedControlProtocol) {
+	open func configure(_ segmentedControl: SegmentedControlProtocol) {
 		let titles = dataSources.map { $0.title ?? "" }
 		
 		segmentedControl.setSegments(with: titles, animated: false)
@@ -256,28 +256,28 @@ public class SegmentedCollectionDataSource: CollectionDataSource, CollectionData
 	
 	// MARK: - Metrics
 	
-	public override var metricsHelper: CollectionDataSourceMetrics {
+	open override var metricsHelper: CollectionDataSourceMetrics {
 		return SegmentedCollectionDataSourceMetricsHelper(segmentedDataSource: self)
 	}
 	
 	// MARK: - Subclass hooks
 	
-	public override func collectionView(collectionView: UICollectionView, canEditItemAt indexPath: NSIndexPath) -> Bool {
+	open override func collectionView(_ collectionView: UICollectionView, canEditItemAt indexPath: IndexPath) -> Bool {
 		return selectedDataSource?.collectionView(collectionView, canEditItemAt: indexPath) ?? super.collectionView(collectionView, canEditItemAt: indexPath)
 	}
 	
-	public override func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath) -> Bool {
+	open override func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
 		return selectedDataSource?.collectionView(collectionView, canMoveItemAt: indexPath) ?? super.collectionView(collectionView, canMoveItemAt: indexPath)
 	}
 	
 	// MARK: - ContentLoading
 	
-	public override func beginLoadingContent(with progress: LoadingProgress) {
+	open override func beginLoadingContent(with progress: LoadingProgress) {
 		selectedDataSource?.loadContent()
 		super.beginLoadingContent(with: progress)
 	}
 	
-	public override func resetContent() {
+	open override func resetContent() {
 		for dataSource in dataSources {
 			dataSource.resetContent()
 		}
@@ -286,13 +286,13 @@ public class SegmentedCollectionDataSource: CollectionDataSource, CollectionData
 	
 	// MARK: - Placeholders
 	
-	public override func update(placeholderView: CollectionPlaceholderView?, forSectionAtIndex sectionIndex: Int) {
+	open override func update(_ placeholderView: CollectionPlaceholderView?, forSectionAtIndex sectionIndex: Int) {
 		selectedDataSource?.update(placeholderView, forSectionAtIndex: sectionIndex)
 	}
 	
 	// MARK: - SegmentedControlDelegate
 	
-	public func segmentedControlDidChangeValue(segmentedControl: SegmentedControlProtocol) {
+	open func segmentedControlDidChangeValue(_ segmentedControl: SegmentedControlProtocol) {
 		segmentedControl.userInteractionEnabled = false
 		let selectedSegmentIndex = segmentedControl.selectedSegmentIndex
 		// FIXME: fatal error: Index out of range
@@ -305,88 +305,88 @@ public class SegmentedCollectionDataSource: CollectionDataSource, CollectionData
 	
 	// MARK: - UICollectionViewDataSource
 	
-	public override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+	open override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 		return shouldShowPlaceholder ? 0 : selectedDataSource?.collectionView(collectionView, numberOfItemsInSection: section) ?? super.collectionView(collectionView, numberOfItemsInSection: section)
 	}
 	
-	public override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-		return selectedDataSource?.collectionView(collectionView, cellForItemAtIndexPath: indexPath) ?? super.collectionView(collectionView, cellForItemAtIndexPath: indexPath)
+	open override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+		return selectedDataSource?.collectionView(collectionView, cellForItemAt: indexPath) ?? super.collectionView(collectionView, cellForItemAt: indexPath)
 	}
 	
-	public override func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath, to destinationIndexPath: NSIndexPath) -> Bool {
+	open override func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath, to destinationIndexPath: IndexPath) -> Bool {
 		return selectedDataSource?.collectionView(collectionView, canMoveItemAt: indexPath, to: destinationIndexPath) ?? super.collectionView(collectionView, canMoveItemAt: indexPath, to: destinationIndexPath)
 	}
 	
-	public override func collectionView(collectionView: UICollectionView, moveItemAt sourceIndexPath: NSIndexPath, to destinationIndexPath: NSIndexPath) {
+	open override func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
 		selectedDataSource?.collectionView(collectionView, moveItemAt: sourceIndexPath, to: destinationIndexPath)
 	}
 	
 	// MARK: - CollectionDataSourceDelegate
 	
-	public func dataSource(dataSource: CollectionDataSource, didInsertItemsAt indexPaths: [NSIndexPath]) {
+	open func dataSource(_ dataSource: CollectionDataSource, didInsertItemsAt indexPaths: [IndexPath]) {
 		guard dataSource === selectedDataSource else {
 			return
 		}
 		notifyItemsInserted(at: indexPaths)
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didRemoveItemsAt indexPaths: [NSIndexPath]) {
+	open func dataSource(_ dataSource: CollectionDataSource, didRemoveItemsAt indexPaths: [IndexPath]) {
 		guard dataSource === selectedDataSource else {
 			return
 		}
 		notifyItemsRemoved(at: indexPaths)
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didRefreshItemsAt indexPaths: [NSIndexPath]) {
+	open func dataSource(_ dataSource: CollectionDataSource, didRefreshItemsAt indexPaths: [IndexPath]) {
 		guard dataSource === selectedDataSource else {
 			return
 		}
 		notifyItemsRefreshed(at: indexPaths)
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didMoveItemAt oldIndexPath: NSIndexPath, to newIndexPath: NSIndexPath) {
+	open func dataSource(_ dataSource: CollectionDataSource, didMoveItemAt oldIndexPath: IndexPath, to newIndexPath: IndexPath) {
 		guard dataSource === selectedDataSource else {
 			return
 		}
 		notifyItemMoved(from: oldIndexPath, to: newIndexPath)
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didInsertSections sections: NSIndexSet, direction: SectionOperationDirection?) {
+	open func dataSource(_ dataSource: CollectionDataSource, didInsertSections sections: IndexSet, direction: SectionOperationDirection?) {
 		guard dataSource === selectedDataSource else {
 			return
 		}
 		notifySectionsInserted(sections, direction: direction)
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didRemoveSections sections: NSIndexSet, direction: SectionOperationDirection?) {
+	open func dataSource(_ dataSource: CollectionDataSource, didRemoveSections sections: IndexSet, direction: SectionOperationDirection?) {
 		guard dataSource === selectedDataSource else {
 			return
 		}
 		notifySectionsRemoved(sections, direction: direction)
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didRefreshSections sections: NSIndexSet) {
+	open func dataSource(_ dataSource: CollectionDataSource, didRefreshSections sections: IndexSet) {
 		guard dataSource === selectedDataSource else {
 			return
 		}
 		notifySectionsRefreshed(sections)
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didMoveSectionFrom oldSection: Int, to newSection: Int, direction: SectionOperationDirection?) {
+	open func dataSource(_ dataSource: CollectionDataSource, didMoveSectionFrom oldSection: Int, to newSection: Int, direction: SectionOperationDirection?) {
 		guard dataSource === selectedDataSource else {
 			return
 		}
 		notifySectionsMoved(from: oldSection, to: newSection, direction: direction)
 	}
 	
-	public func dataSourceDidReloadData(dataSource: CollectionDataSource) {
+	open func dataSourceDidReloadData(_ dataSource: CollectionDataSource) {
 		guard dataSource === selectedDataSource else {
 			return
 		}
 		notifyDidReloadData()
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, performBatchUpdate update: () -> Void, complete: (() -> Void)?) {
+	open func dataSource(_ dataSource: CollectionDataSource, performBatchUpdate update: @escaping () -> Void, complete: (() -> Void)?) {
 		guard dataSource === selectedDataSource else {
 			update()
 			complete?()
@@ -395,35 +395,35 @@ public class SegmentedCollectionDataSource: CollectionDataSource, CollectionData
 		performUpdate(update, complete: complete)
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didPresentActivityIndicatorForSections sections: NSIndexSet) {
+	open func dataSource(_ dataSource: CollectionDataSource, didPresentActivityIndicatorForSections sections: IndexSet) {
 		guard dataSource === selectedDataSource else {
 			return
 		}
 		presentActivityIndicator(forSections: sections)
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didPresentPlaceholderForSections sections: NSIndexSet) {
+	open func dataSource(_ dataSource: CollectionDataSource, didPresentPlaceholderForSections sections: IndexSet) {
 		guard dataSource === selectedDataSource else {
 			return
 		}
 		present(nil, forSections: sections)
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didDismissPlaceholderForSections sections: NSIndexSet) {
+	open func dataSource(_ dataSource: CollectionDataSource, didDismissPlaceholderForSections sections: IndexSet) {
 		guard dataSource === selectedDataSource else {
 			return
 		}
 		dismissPlaceholder(forSections: sections)
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didUpdate supplementaryItem: SupplementaryItem, at indexPaths: [NSIndexPath]) {
+	open func dataSource(_ dataSource: CollectionDataSource, didUpdate supplementaryItem: SupplementaryItem, at indexPaths: [IndexPath]) {
 		guard dataSource === selectedDataSource else {
 			return
 		}
 		notifyContentUpdated(for: supplementaryItem, at: indexPaths)
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, perform update: UICollectionView -> Void) {
+	open func dataSource(_ dataSource: CollectionDataSource, perform update: @escaping (UICollectionView) -> Void) {
 		delegate?.dataSource(dataSource, perform: update)
 	}
 	
@@ -431,7 +431,7 @@ public class SegmentedCollectionDataSource: CollectionDataSource, CollectionData
 
 public protocol SegmentedCollectionDataSourceDelegate: class {
 	
-	func segmentedCollectionDataSourceDidChangeSelectedDataSource(segmentedCollectionDataSource: SegmentedCollectionDataSource)
+	func segmentedCollectionDataSourceDidChangeSelectedDataSource(_ segmentedCollectionDataSource: SegmentedCollectionDataSource)
 	
 }
 

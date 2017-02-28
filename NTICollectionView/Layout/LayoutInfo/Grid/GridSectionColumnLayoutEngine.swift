@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine {
+open class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine {
 
 	public init(layoutSection: GridLayoutSection, supplementaryItems: [LayoutSupplementaryItem]) {
 		self.layoutSection = layoutSection
@@ -16,18 +16,18 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 		super.init()
 	}
 	
-	public var layoutSection: GridLayoutSection
-	private var numberOfItems: Int {
+	open var layoutSection: GridLayoutSection
+	fileprivate var numberOfItems: Int {
 		return layoutSection.items.count
 	}
-	public var supplementaryItems: [LayoutSupplementaryItem]
+	open var supplementaryItems: [LayoutSupplementaryItem]
 	
-	public var pinnableHeaders: [LayoutSupplementaryItem] = []
-	public var nonPinnableHeaders: [LayoutSupplementaryItem] = []
+	open var pinnableHeaders: [LayoutSupplementaryItem] = []
+	open var nonPinnableHeaders: [LayoutSupplementaryItem] = []
 	
-	public var spacing: CGFloat = 0
+	open var spacing: CGFloat = 0
 	
-	private var metrics: GridSectionMetricsProviding {
+	fileprivate var metrics: GridSectionMetricsProviding {
 		return layoutSection.metrics
 	}
 	
@@ -38,19 +38,19 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 	var layoutMeasure: CollectionViewLayoutMeasuring!
 	var invalidationContext: UICollectionViewLayoutInvalidationContext?
 	
-	private var width: CGFloat! {
+	fileprivate var width: CGFloat! {
 		return layoutSizing.width
 	}
-	private var leftAuxiliaryColumnWidth: CGFloat {
+	fileprivate var leftAuxiliaryColumnWidth: CGFloat {
 		return layoutSection.leftAuxiliaryColumnWidth
 	}
-	private var rightAuxiliaryColumnWidth: CGFloat {
+	fileprivate var rightAuxiliaryColumnWidth: CGFloat {
 		return layoutSection.rightAuxiliaryColumnWidth
 	}
 	
-	public func layoutWithOrigin(start: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
+	open func layoutWithOrigin(_ start: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext?) -> CGPoint {
 		guard let layoutMeasure = layoutSizing.layoutMeasure else {
-			return CGPointZero
+			return CGPoint.zero
 		}
 		self.layoutSizing = layoutSizing
 		self.layoutMeasure = layoutMeasure
@@ -67,19 +67,19 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 		return position
 	}
 	
-	private func reset() {
+	fileprivate func reset() {
 		position = CGPoint(x: 0, y: 0)
 		pinnableHeaders = []
 		nonPinnableHeaders = []
 	}
 	
-	private func layoutSupplementaryItems() {
+	fileprivate func layoutSupplementaryItems() {
 		for index in supplementaryItems.indices {
 			layoutSupplementaryView(&supplementaryItems[index])
 		}
 	}
 	
-	private func layoutSupplementaryView(inout supplementaryItem: LayoutSupplementaryItem) {
+	fileprivate func layoutSupplementaryView(_ supplementaryItem: inout LayoutSupplementaryItem) {
 		guard shouldLayout(supplementaryItem) else {
 			return
 		}
@@ -90,30 +90,30 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 		invalidate(supplementaryItem)
 	}
 	
-	private func shouldLayout(supplementaryItem: SupplementaryItem) -> Bool {
+	fileprivate func shouldLayout(_ supplementaryItem: SupplementaryItem) -> Bool {
 		return layoutSection.shouldShow(supplementaryItem)
 			&& !supplementaryItem.isHidden
 			&& supplementaryItem.fixedHeight > 0
 	}
 	
-	private func updateFrame(inout of supplementaryItem: LayoutSupplementaryItem) {
+	fileprivate func updateFrame(of supplementaryItem: inout LayoutSupplementaryItem) {
 		let height = supplementaryItem.fixedHeight
 		supplementaryItem.frame = CGRect(x: position.x, y: position.y, width: width, height: height)
 	}
 	
-	private func checkEstimatedHeight(inout of supplementaryItem: LayoutSupplementaryItem) {
+	fileprivate func checkEstimatedHeight(of supplementaryItem: inout LayoutSupplementaryItem) {
 		if supplementaryItem.hasEstimatedHeight {
 			measureHeight(of: &supplementaryItem)
 		}
 	}
 	
-	private func measureHeight(inout of supplementaryItem: LayoutSupplementaryItem) {
+	fileprivate func measureHeight(of supplementaryItem: inout LayoutSupplementaryItem) {
 		let measuredSize = layoutMeasure.measuredSizeForSupplementaryItem(supplementaryItem)
 		supplementaryItem.height = measuredSize.height
 		updateFrame(of: &supplementaryItem)
 	}
 	
-	private func updatePosition(with supplementaryItem: LayoutSupplementaryItem) {
+	fileprivate func updatePosition(with supplementaryItem: LayoutSupplementaryItem) {
 		position.y += supplementaryItem.fixedHeight
 		
 		// FIXME: This logic is kind of jank
@@ -122,9 +122,8 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 		}
 	}
 	
-	private func checkPinning(inout of supplementaryItem: LayoutSupplementaryItem) {
-		guard var gridItem = supplementaryItem as? GridLayoutSupplementaryItem
-			where supplementaryItem.isHeader else {
+	fileprivate func checkPinning(of supplementaryItem: inout LayoutSupplementaryItem) {
+		guard var gridItem = supplementaryItem as? GridLayoutSupplementaryItem, supplementaryItem.isHeader else {
 				return
 		}
 		
@@ -138,8 +137,8 @@ public class GridSectionColumnLayoutEngine: NSObject, SupplementaryLayoutEngine 
 		}
 	}
 	
-	private func invalidate(supplementaryItem: LayoutSupplementaryItem) {
-		invalidationContext?.invalidateSupplementaryElementsOfKind(supplementaryItem.elementKind, atIndexPaths: [supplementaryItem.indexPath])
+	fileprivate func invalidate(_ supplementaryItem: LayoutSupplementaryItem) {
+		invalidationContext?.invalidateSupplementaryElements(ofKind: supplementaryItem.elementKind, at: [supplementaryItem.indexPath as IndexPath])
 	}
 	
 }

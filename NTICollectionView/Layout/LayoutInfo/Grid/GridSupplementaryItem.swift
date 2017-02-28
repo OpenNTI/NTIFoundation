@@ -72,7 +72,7 @@ public struct GridSupplementaryItem: SupplementaryItemWrapper, GridSupplementary
 		gridSupplementaryAttributes.applyValues(from: metrics)
 	}
 	
-	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	public mutating func setFrame(_ frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		
 	}
 	

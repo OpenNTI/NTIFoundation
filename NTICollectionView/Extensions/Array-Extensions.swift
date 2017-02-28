@@ -11,13 +11,13 @@ import Foundation
 extension Array where Element: AnyObject {
 	
 	/// Returns `true` iff `object` is in `self`.
-	public func containsObject(object: AnyObject) -> Bool {
-		return contains({ $0 === object })
+	public func containsObject(_ object: AnyObject) -> Bool {
+		return contains(where: { $0 === object })
 	}
 	
 	/// Returns the first index where `object` appears in `self` or `nil` if `object` is not found.
-	public func indexOfObject(object: AnyObject) -> Int? {
-		return indexOf({ $0 === object})
+	public func indexOfObject(_ object: AnyObject) -> Int? {
+		return index(where: { $0 === object})
 	}
 	
 }

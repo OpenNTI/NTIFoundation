@@ -10,7 +10,7 @@ import UIKit
 
 public struct GridSupplementaryItemBuilder {
 	
-	public func buildSupplementaryItems(using description: SectionDescription, inout into section: GridLayoutSection) {
+	public func buildSupplementaryItems(using description: SectionDescription, into section: inout GridLayoutSection) {
 		
 	}
 	

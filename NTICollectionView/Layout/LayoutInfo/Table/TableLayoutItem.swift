@@ -10,7 +10,7 @@ import UIKit
 
 public struct TableLayoutItem : LayoutItem {
 	
-	public var frame = CGRectZero
+	public var frame = CGRect.zero
 	
 	public var itemIndex = 0
 	
@@ -22,16 +22,16 @@ public struct TableLayoutItem : LayoutItem {
 	
 	public var isDragging = false
 	
-	public var layoutMargins = UIEdgeInsetsZero
+	public var layoutMargins = UIEdgeInsets.zero
 	
 	public var backgroundColor: UIColor?
 	
 	public var selectedBackgroundColor: UIColor?
 	
-	public var indexPath: NSIndexPath {
+	public var indexPath: IndexPath {
 		return sectionIndex == globalSectionIndex ?
-			NSIndexPath(index: itemIndex)
-			: NSIndexPath(forItem: itemIndex, inSection: sectionIndex)
+			IndexPath(index: itemIndex)
+			: IndexPath(item: itemIndex, section: sectionIndex)
 	}
 	
 	public mutating func applyValues(from metrics: LayoutMetrics) {
@@ -45,12 +45,12 @@ public struct TableLayoutItem : LayoutItem {
 	}
 	
 	public var layoutAttributes: CollectionViewLayoutAttributes {
-		let attributes = CollectionViewLayoutAttributes(forCellWithIndexPath: indexPath)
+		let attributes = CollectionViewLayoutAttributes(forCellWith: indexPath)
 		attributes.frame = self.frame
 		attributes.zIndex = defaultZIndex
 		attributes.columnIndex = columnIndex
 		attributes.shouldCalculateFittingSize = hasEstimatedHeight
-		attributes.hidden = isDragging
+		attributes.isHidden = isDragging
 		
 		attributes.backgroundColor = backgroundColor
 		attributes.selectedBackgroundColor = selectedBackgroundColor
@@ -63,12 +63,12 @@ public struct TableLayoutItem : LayoutItem {
 
 	}
 	
-	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	public mutating func setFrame(_ frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		guard frame != self.frame else {
 			return
 		}
 		self.frame = frame
-		invalidationContext?.invalidateItemsAtIndexPaths([indexPath])
+		invalidationContext?.invalidateItems(at: [indexPath])
 	}
 	
 	public func isEqual(to other: LayoutItem) -> Bool {

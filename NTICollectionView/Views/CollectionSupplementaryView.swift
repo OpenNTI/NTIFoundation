@@ -8,22 +8,22 @@
 
 import UIKit
 
-public class CollectionSupplementaryView: UICollectionReusableView, Selectable {
+open class CollectionSupplementaryView: UICollectionReusableView, Selectable {
 	
 	/// May be called by `UICollectionViewDelegate` when this view becomes selected.
-	public var onDidSelect: (() -> Void)?
+	open var onDidSelect: (() -> Void)?
 	
 	/// May be called by `UICollectionViewDelegate` when this view becomes deselected.
-	public var onDidDeselect: (() -> Void)?
+	open var onDidDeselect: (() -> Void)?
 	
 	/// May be called by `UICollectionViewDelegate` when this view will be displayed.
-	public var onWillDisplay: (() -> Void)?
+	open var onWillDisplay: (() -> Void)?
 	
 	/// May be called by `UICollectionViewDelegate` when this view will end being displayed.
-	public var onWillEndDisplaying: (() -> Void)?
+	open var onWillEndDisplaying: (() -> Void)?
 	
 	/// Set when tracking a touch in `self`.
-	public var isHighlighted: Bool {
+	open var isHighlighted: Bool {
 		get {
 			return _isHighlighted
 		}
@@ -35,13 +35,13 @@ public class CollectionSupplementaryView: UICollectionReusableView, Selectable {
 			updateDisplayForHighlighting()
 		}
 	}
-	private var _isHighlighted = false
+	fileprivate var _isHighlighted = false
 	
-	public func updateDisplayForHighlighting() {
+	open func updateDisplayForHighlighting() {
 		updateBackgroundColor()
 	}
 	
-	public var isSelected = false {
+	open var isSelected = false {
 		didSet {
 			guard isSelected != oldValue else {
 				return
@@ -50,7 +50,7 @@ public class CollectionSupplementaryView: UICollectionReusableView, Selectable {
 		}
 	}
 	
-	public func updateDisplayForSelection() {
+	open func updateDisplayForSelection() {
 		updateBackgroundColor()
 	}
 	
@@ -59,13 +59,13 @@ public class CollectionSupplementaryView: UICollectionReusableView, Selectable {
 	
 	var simulatesSelection = false
 	
-	public override func applyLayoutAttributes(layoutAttributes: UICollectionViewLayoutAttributes) {
+	open override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
 		guard let layoutAttributes = layoutAttributes as? CollectionViewLayoutAttributes else {
 			return
 		}
 		
-		hidden = layoutAttributes.hidden
-		userInteractionEnabled = !layoutAttributes.isEditing
+		isHidden = layoutAttributes.isHidden
+		isUserInteractionEnabled = !layoutAttributes.isEditing
 		
 		layoutMargins = layoutAttributes.layoutMargins
 		
@@ -78,7 +78,7 @@ public class CollectionSupplementaryView: UICollectionReusableView, Selectable {
 		layer.cornerRadius = layoutAttributes.cornerRadius
 	}
 	
-	public func updateBackgroundColor() {
+	open func updateBackgroundColor() {
 		if (simulatesSelection && _isHighlighted) || isSelected {
 			backgroundColor = selectedBackgroundColor
 		} else {
@@ -86,21 +86,20 @@ public class CollectionSupplementaryView: UICollectionReusableView, Selectable {
 		}
 	}
 	
-	public override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+	open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 		isHighlighted = true
 	}
 	
-	public override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+	open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
 		isHighlighted = false
 	}
 	
-	public override func touchesCancelled(touches: Set<UITouch>, withEvent event: UIEvent?) {
+	open override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
 		isHighlighted = false
 	}
 	
-	public override func preferredLayoutAttributesFittingAttributes(layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-		guard let attributes = layoutAttributes as? CollectionViewLayoutAttributes
-			where attributes.shouldCalculateFittingSize else {
+	open override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+		guard let attributes = layoutAttributes as? CollectionViewLayoutAttributes, attributes.shouldCalculateFittingSize else {
 				return layoutAttributes
 		}
 		
@@ -108,7 +107,7 @@ public class CollectionSupplementaryView: UICollectionReusableView, Selectable {
 		var frame = attributes.frame
 		
 		let fittingSize = CGSize(width: frame.width, height: UILayoutFittingCompressedSize.height)
-		let layoutSize = systemLayoutSizeFittingSize(fittingSize, withHorizontalFittingPriority: UILayoutPriorityDefaultHigh, verticalFittingPriority: UILayoutPriorityFittingSizeLevel)
+		let layoutSize = systemLayoutSizeFitting(fittingSize, withHorizontalFittingPriority: UILayoutPriorityDefaultHigh, verticalFittingPriority: UILayoutPriorityFittingSizeLevel)
 		frame.size = layoutSize
 		
 		let newAttributes = attributes.copy() as! CollectionViewLayoutAttributes
@@ -118,12 +117,12 @@ public class CollectionSupplementaryView: UICollectionReusableView, Selectable {
 	
 	// MARK: - Selectable
 	
-	public func didBecomeSelected() {
+	open func didBecomeSelected() {
 		isSelected = true
 		onDidSelect?()
 	}
 	
-	public func didBecomeDeselected() {
+	open func didBecomeDeselected() {
 		isSelected = false
 		onDidDeselect?()
 	}

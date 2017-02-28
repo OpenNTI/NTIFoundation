@@ -9,7 +9,7 @@
 import UIKit
 
 public func requireMainThread() {
-	precondition(NSThread.isMainThread(), "This method must be called on the main thread.")
+	precondition(Thread.isMainThread, "This method must be called on the main thread.")
 }
 
 public typealias AnyItem = AnyObject
@@ -20,13 +20,13 @@ public protocol DataSource: NSObjectProtocol {
 	
 	var numberOfSections: Int { get }
 	
-	func numberOfItemsInSection(sectionIndex: Int) -> Int
+	func numberOfItemsInSection(_ sectionIndex: Int) -> Int
 	
-	func item(at indexPath: NSIndexPath) -> AnyItem?
+	func item(at indexPath: IndexPath) -> AnyItem?
 	
-	func indexPath(for item: AnyItem) -> NSIndexPath?
+	func indexPath(for item: AnyItem) -> IndexPath?
 	
-	func removeItem(at indexPath: NSIndexPath)
+	func removeItem(at indexPath: IndexPath)
 	
 }
 
@@ -35,49 +35,49 @@ public protocol CollectionDataSourceType: UICollectionViewDataSource, DataSource
 	var delegate: CollectionDataSourceDelegate? { get set }
 	var allowsSelection: Bool { get }
 	var isRootDataSource: Bool { get }
-	func dataSourceForSectionAtIndex(sectionIndex: Int) -> CollectionDataSourceType
-	func localIndexPathForGlobal(globalIndexPath: NSIndexPath) -> NSIndexPath?
+	func dataSourceForSectionAtIndex(_ sectionIndex: Int) -> CollectionDataSourceType
+	func localIndexPathForGlobal(_ globalIndexPath: IndexPath) -> IndexPath?
 	func registerReusableViews(with collectionView: UICollectionView)
 	
 	var noContentPlaceholder: DataSourcePlaceholder? { get set }
 	var errorPlaceholder: DataSourcePlaceholder? { get set }
 	var placeholder: DataSourcePlaceholder? { get set }
-	func update(placeholderView: CollectionPlaceholderView?, forSectionAtIndex sectionIndex: Int)
+	func update(_ placeholderView: CollectionPlaceholderView?, forSectionAtIndex sectionIndex: Int)
 	
-	func performUpdate(update: () -> Void, complete: (() -> Void)?)
+	func performUpdate(_ update: () -> Void, complete: (() -> Void)?)
 	func didBecomeActive()
 	func willResignActive()
 	
 	func setNeedsLoadContent()
-	func setNeedsLoadContent(delay: NSTimeInterval)
+	func setNeedsLoadContent(_ delay: TimeInterval)
 	func cancelNeedsLoadContent()
 	func loadContent()
-	func whenLoaded(onLoad: () -> Void)
+	func whenLoaded(_ onLoad: () -> Void)
 	
 	func setNeedsLoadNextContent()
-	func setNeedsLoadNextContent(delay: NSTimeInterval)
+	func setNeedsLoadNextContent(_ delay: TimeInterval)
 	func cancelNeedsLoadNextContent()
 	
 	func setNeedsLoadPreviousContent()
-	func setNeedsLoadPreviousContent(delay: NSTimeInterval)
+	func setNeedsLoadPreviousContent(_ delay: TimeInterval)
 	func cancelNeedsLoadPreviousContent()
 	
 	var controller: CollectionDataSourceController? { get set }
 	var delegatesLoadingToController: Bool { get set }
 	
-	func collectionView(collectionView: UICollectionView, identifierForCellAt indexPath: NSIndexPath) -> String
-	func collectionView(collectionView: UICollectionView, canEditItemAt indexPath: NSIndexPath) -> Bool
-	func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath) -> Bool
-	func collectionView(collectionView: UICollectionView, canMoveItemAt indexPath: NSIndexPath, to destinationIndexPath: NSIndexPath) -> Bool
-	func collectionView(collectionView: UICollectionView, moveItemAt sourceIndexPath: NSIndexPath, to destinationIndexPath: NSIndexPath)
+	func collectionView(_ collectionView: UICollectionView, identifierForCellAt indexPath: IndexPath) -> String
+	func collectionView(_ collectionView: UICollectionView, canEditItemAt indexPath: IndexPath) -> Bool
+	func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool
+	func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath, to destinationIndexPath: IndexPath) -> Bool
+	func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
 }
 
 public protocol ParentCollectionDataSource: CollectionDataSourceType, CollectionDataSourceDelegate {
 	
 	var dataSources: [CollectionDataSourceType] { get }
 	
-	func add(dataSource: CollectionDataSourceType)
-	func remove(dataSource: CollectionDataSourceType)
+	func add(_ dataSource: CollectionDataSourceType)
+	func remove(_ dataSource: CollectionDataSourceType)
 	
 }
 
@@ -96,26 +96,26 @@ public protocol CollectionDataSourceMetrics: NSObjectProtocol {
 	/// Returns the supplementary item for the given *key*, or `nil` if no such item is found.
 	func supplementaryItem(for key: String) -> SupplementaryItem?
 	
-	func metricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetricsProviding?
-	func setMetrics(metrics: DataSourceSectionMetricsProviding?, forSectionAtIndex sectionIndex: Int)
+	func metricsForSectionAtIndex(_ sectionIndex: Int) -> DataSourceSectionMetricsProviding?
+	func setMetrics(_ metrics: DataSourceSectionMetricsProviding?, forSectionAtIndex sectionIndex: Int)
 	
-	func numberOfSupplementaryItemsOfKind(kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChildDataSources: Bool) -> Int
+	func numberOfSupplementaryItemsOfKind(_ kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChildDataSources: Bool) -> Int
 	
-	func indexPaths(for supplementaryItem: SupplementaryItem) -> [NSIndexPath]
+	func indexPaths(for supplementaryItem: SupplementaryItem) -> [IndexPath]
 	
-	func findSupplementaryItemOfKind(kind: String, at indexPath: NSIndexPath, using block: (dataSource: CollectionDataSource, localIndexPath: NSIndexPath, supplementaryItem: SupplementaryItem) -> Void)
+	func findSupplementaryItemOfKind(_ kind: String, at indexPath: IndexPath, using block: (_ dataSource: CollectionDataSource, _ localIndexPath: IndexPath, _ supplementaryItem: SupplementaryItem) -> Void)
 	
 	func snapshotMetrics() -> [Int: DataSourceSectionMetricsProviding]
-	func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetricsProviding?
+	func snapshotMetricsForSectionAtIndex(_ sectionIndex: Int) -> DataSourceSectionMetricsProviding?
 	
 	var contributesGlobalMetrics: Bool { get set }
 	func snapshotContributedGlobalMetrics() -> DataSourceSectionMetricsProviding?
 	
-	func add(supplementaryItem: SupplementaryItem)
-	func add(supplementaryItem: SupplementaryItem, forSectionAtIndex sectionIndex: Int)
-	func add(supplementaryItem: SupplementaryItem, forKey key: String)
-	func removeSupplementaryItemForKey(key: String)
-	func replaceSupplementaryItemForKey(key: String, with supplementaryItem: SupplementaryItem)
-	func supplementaryItemsOfKind(kind: String) -> [SupplementaryItem]
-	func supplementaryItemForKey(key: String) -> SupplementaryItem?
+	func add(_ supplementaryItem: SupplementaryItem)
+	func add(_ supplementaryItem: SupplementaryItem, forSectionAtIndex sectionIndex: Int)
+	func add(_ supplementaryItem: SupplementaryItem, forKey key: String)
+	func removeSupplementaryItemForKey(_ key: String)
+	func replaceSupplementaryItemForKey(_ key: String, with supplementaryItem: SupplementaryItem)
+	func supplementaryItemsOfKind(_ kind: String) -> [SupplementaryItem]
+	func supplementaryItemForKey(_ key: String) -> SupplementaryItem?
 }

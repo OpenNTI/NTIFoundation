@@ -32,7 +32,7 @@ public protocol LayoutMetricsApplicable {
 
 public protocol LayoutMetrics: LayoutMetricsApplicable {
 	
-	func definesMetric(metric: String) -> Bool
+	func definesMetric(_ metric: String) -> Bool
 	
 	mutating func resolveMissingValuesFromTheme()
 	
@@ -72,13 +72,13 @@ public protocol SectionMetrics: LayoutMetrics {
 	/// Whether placeholders should be resized for fill available screen space.
 	var shouldResizePlaceholder: Bool { get set }
 	
-	mutating func add(decoration: LayoutDecoration)
+	mutating func add(_ decoration: LayoutDecoration)
 	
 }
 
 extension SectionMetrics {
 	
-	public mutating func add(decoration: LayoutDecoration) {
+	public mutating func add(_ decoration: LayoutDecoration) {
 		let kind = decoration.elementKind
 		decorationsByKind.append(decoration, to: kind)
 	}
@@ -91,7 +91,7 @@ public protocol SectionMetricsOwning: SectionMetrics {
 	
 	func applyValues(from metrics: SectionMetrics)
 	
-	func definesMetric(metric: String) -> Bool
+	func definesMetric(_ metric: String) -> Bool
 	
 	func resolveMissingValuesFromTheme()
 	
@@ -112,7 +112,7 @@ extension SectionMetricsOwning {
 		self.metrics.applyValues(from: metrics)
 	}
 	
-	public func definesMetric(metric: String) -> Bool {
+	public func definesMetric(_ metric: String) -> Bool {
 		return metrics.definesMetric(metric)
 	}
 	

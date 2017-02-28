@@ -20,19 +20,19 @@ public struct BasicLayoutSupplementaryItem: LayoutSupplementaryItem, Supplementa
 	
 	public var supplementaryItem: SupplementaryItem
 	
-	public var frame = CGRectZero
+	public var frame = CGRect.zero
 	
 	public var itemIndex = NSNotFound
 	
 	public var sectionIndex = NSNotFound
 	
-	public var indexPath: NSIndexPath {
+	public var indexPath: IndexPath {
 		return sectionIndex == globalSectionIndex ?
-			NSIndexPath(index: itemIndex)
-			: NSIndexPath(forItem: itemIndex, inSection: sectionIndex)
+			IndexPath(index: itemIndex)
+			: IndexPath(item: itemIndex, section: sectionIndex)
 	}
 	
-	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	public mutating func setFrame(_ frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		
 	}
 	

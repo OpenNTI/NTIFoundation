@@ -9,10 +9,10 @@
 import UIKit
 
 /// A simple header view that displays a single title label.
-public class BasicHeaderView: PinnableHeaderView {
+open class BasicHeaderView: PinnableHeaderView {
 
 	/// Displays the title text.
-    public let titleLabel = UILabel()
+    open let titleLabel = UILabel()
 	
 	public override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -24,17 +24,17 @@ public class BasicHeaderView: PinnableHeaderView {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	private func commonInit() {
+	fileprivate func commonInit() {
 		titleLabel.translatesAutoresizingMaskIntoConstraints = false
 		addSubview(titleLabel)
 		
 		let views = ["title": titleLabel]
 		var constraints = [NSLayoutConstraint]()
 		
-		constraints += NSLayoutConstraint.constraintsWithVisualFormat("H:|-[title]-|", options: [], metrics: nil, views: views)
-		constraints += NSLayoutConstraint.constraintsWithVisualFormat("V:|-[title]-|", options: [], metrics: nil, views: views)
+		constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|-[title]-|", options: [], metrics: nil, views: views)
+		constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|-[title]-|", options: [], metrics: nil, views: views)
 		
-		NSLayoutConstraint.activateConstraints(constraints)
+		NSLayoutConstraint.activate(constraints)
 	}
 
 }

@@ -62,7 +62,7 @@ extension Bool : SemiEquatable {
 
 }
 
-extension SequenceType where Generator.Element : SemiEquatable {
+extension Sequence where Iterator.Element : SemiEquatable {
 	
 	public func isEqual(to other: Self) -> Bool {
 		return elementsEqual(other) { $0.isEqual(to: $1) }

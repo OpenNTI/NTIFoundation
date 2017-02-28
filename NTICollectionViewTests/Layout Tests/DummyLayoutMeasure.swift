@@ -10,21 +10,21 @@ import UIKit
 
 class DummyLayoutMeasure: NSObject, CollectionViewLayoutMeasuring {
 	
-	var itemSize = CGSizeZero
+	var itemSize = CGSize.zero
 	
-	var supplementaryItemSize = CGSizeZero
+	var supplementaryItemSize = CGSize.zero
 	
-	var placeholderSize = CGSizeZero
+	var placeholderSize = CGSize.zero
 	
-	func measuredSizeForItem(item: LayoutItem) -> CGSize {
+	func measuredSizeForItem(_ item: LayoutItem) -> CGSize {
 		return itemSize
 	}
 	
-	func measuredSizeForPlaceholder(placeholderInfo: LayoutPlaceholder) -> CGSize {
+	func measuredSizeForPlaceholder(_ placeholderInfo: LayoutPlaceholder) -> CGSize {
 		return placeholderSize
 	}
 	
-	func measuredSizeForSupplementaryItem(supplementaryItem: LayoutSupplementaryItem) -> CGSize {
+	func measuredSizeForSupplementaryItem(_ supplementaryItem: LayoutSupplementaryItem) -> CGSize {
 		return supplementaryItemSize
 	}
 	

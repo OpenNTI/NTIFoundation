@@ -10,7 +10,7 @@ import UIKit
 
 public struct GridLayoutItem: LayoutItem {
 	
-	public var frame = CGRectZero {
+	public var frame = CGRect.zero {
 		didSet {
 			_layoutAttributes?.frame = frame
 		}
@@ -24,7 +24,7 @@ public struct GridLayoutItem: LayoutItem {
 	
 	public var isDragging = false
 	
-	public var layoutMargins = UIEdgeInsetsZero
+	public var layoutMargins = UIEdgeInsets.zero
 	
 	public var backgroundColor: UIColor?
 	
@@ -32,10 +32,10 @@ public struct GridLayoutItem: LayoutItem {
 	
 	public var cornerRadius: CGFloat = 0
 	
-	public var indexPath: NSIndexPath {
+	public var indexPath: IndexPath {
 		return sectionIndex == globalSectionIndex ?
-			NSIndexPath(index: itemIndex)
-			: NSIndexPath(forItem: itemIndex, inSection: sectionIndex)
+			IndexPath(index: itemIndex)
+			: IndexPath(item: itemIndex, section: sectionIndex)
 	}
 	
 	public var layoutAttributes: CollectionViewLayoutAttributes {
@@ -43,12 +43,12 @@ public struct GridLayoutItem: LayoutItem {
 //			return layoutAttributes
 //		}
 		
-		let attributes = CollectionViewLayoutAttributes(forCellWithIndexPath: indexPath)
+		let attributes = CollectionViewLayoutAttributes(forCellWith: indexPath)
 		attributes.frame = self.frame
 		attributes.zIndex = defaultZIndex
 		attributes.columnIndex = columnIndex
 		attributes.shouldCalculateFittingSize = hasEstimatedHeight
-		attributes.hidden = isDragging
+		attributes.isHidden = isDragging
 		
 		attributes.backgroundColor = backgroundColor
 		attributes.selectedBackgroundColor = selectedBackgroundColor
@@ -59,16 +59,16 @@ public struct GridLayoutItem: LayoutItem {
 		return attributes
 	}
 	
-	private var _layoutAttributes: UICollectionViewLayoutAttributes?
+	fileprivate var _layoutAttributes: UICollectionViewLayoutAttributes?
 	
 	public var columnIndex: Int = NSNotFound
 	
-	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	public mutating func setFrame(_ frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		guard frame != self.frame else {
 			return
 		}
 		self.frame = frame
-		invalidationContext?.invalidateItemsAtIndexPaths([indexPath])
+		invalidationContext?.invalidateItems(at: [indexPath])
 	}
 	
 	public mutating func applyValues(from metrics: LayoutMetrics) {

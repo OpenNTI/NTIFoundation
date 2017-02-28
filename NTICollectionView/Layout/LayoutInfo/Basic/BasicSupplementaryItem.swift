@@ -46,7 +46,7 @@ public struct BasicSupplementaryItem: SupplementaryItem {
 			_reuseIdentifier = newValue
 		}
 	}
-	private var _reuseIdentifier: String?
+	fileprivate var _reuseIdentifier: String?
 	
 	public var configureView: SupplementaryItemConfiguration?
 	
@@ -65,23 +65,23 @@ public struct BasicSupplementaryItem: SupplementaryItem {
 	public func configureValues(of attributes: CollectionViewLayoutAttributes) {
 		attributes.zIndex = zIndex
 		attributes.cornerRadius = cornerRadius
-		attributes.hidden = false
+		attributes.isHidden = false
 		attributes.shouldCalculateFittingSize = hasEstimatedHeight
 	}
 	
-	public mutating func configure(with configuration: SupplementaryItemConfiguration) {
+	public mutating func configure(with configuration: @escaping SupplementaryItemConfiguration) {
 		guard let configureView = self.configureView else {
 			self.configureView = configuration
 			return
 		}
 		
-		self.configureView = { (view: UICollectionReusableView, dataSource: CollectionDataSource, indexPath: NSIndexPath) in
-			configureView(view: view, dataSource: dataSource, indexPath: indexPath)
-			configuration(view: view, dataSource: dataSource, indexPath: indexPath)
+		self.configureView = { (view: UICollectionReusableView, dataSource: CollectionDataSource, indexPath: IndexPath) in
+			configureView(view, dataSource, indexPath)
+			configuration(view, dataSource, indexPath)
 		}
 	}
 	
-	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	public mutating func setFrame(_ frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		
 	}
 	
