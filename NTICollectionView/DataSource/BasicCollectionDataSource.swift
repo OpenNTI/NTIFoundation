@@ -180,7 +180,7 @@ open class BasicCollectionDataSource<Item : AnyObject> : CollectionDataSource {
 			}
 		}
 		
-		_items = newItems ?? []
+		_items = newItems
 		batchUpdates()
 		updateLoadingStateFromItems()
 	}
