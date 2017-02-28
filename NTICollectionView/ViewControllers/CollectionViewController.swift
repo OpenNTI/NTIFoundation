@@ -396,7 +396,7 @@ open class CollectionViewController: UICollectionViewController, CollectionDataS
 	}
 	
 	open func dataSource(_ dataSource: CollectionDataSource, performBatchUpdate update: @escaping () -> Void, complete: (() -> Void)?) {
-		performBatchUpdates(update, completion: complete!)
+		performBatchUpdates(update, completion: complete)
 	}
 	
 	fileprivate func performBatchUpdates(_ updates: @escaping ()->(), completion: (()->())? = nil) {
