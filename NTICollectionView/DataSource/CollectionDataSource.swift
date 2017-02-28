@@ -825,7 +825,7 @@ extension CollectionDataSource {
 		delegate?.dataSource(self, didAddChild: childDataSource)
 	}
 	
-	public func notifyPerform(_ update: (_ collectionView: UICollectionView) -> Void) {
+	public func notifyPerform(_ update: @escaping (_ collectionView: UICollectionView) -> Void) {
 		delegate?.dataSource(self, perform: update)
 	}
 	

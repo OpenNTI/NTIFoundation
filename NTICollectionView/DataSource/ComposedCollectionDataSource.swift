@@ -422,7 +422,7 @@ open class ComposedCollectionDataSource: CollectionDataSource, CollectionDataSou
 		notifyContentUpdated(for: supplementaryItem, at: globalIndexPaths)
 	}
 	
-	open func dataSource(_ dataSource: CollectionDataSource, perform update: (UICollectionView) -> Void) {
+	open func dataSource(_ dataSource: CollectionDataSource, perform update: @escaping (UICollectionView) -> Void) {
 		delegate?.dataSource(dataSource, perform: update)
 	}
 	

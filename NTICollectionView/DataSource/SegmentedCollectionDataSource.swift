@@ -421,7 +421,7 @@ open class SegmentedCollectionDataSource: CollectionDataSource, CollectionDataSo
 		notifyContentUpdated(for: supplementaryItem, at: indexPaths)
 	}
 	
-	open func dataSource(_ dataSource: CollectionDataSource, perform update: (UICollectionView) -> Void) {
+	open func dataSource(_ dataSource: CollectionDataSource, perform update: @escaping (UICollectionView) -> Void) {
 		delegate?.dataSource(dataSource, perform: update)
 	}
 	

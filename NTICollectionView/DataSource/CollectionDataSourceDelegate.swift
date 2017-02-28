@@ -25,7 +25,7 @@ public protocol CollectionDataSourceDelegate: NSObjectProtocol {
 	func dataSource(_ dataSource: CollectionDataSource, didRefreshSections sections: IndexSet)
 	
 	func dataSourceDidReloadData(_ dataSource: CollectionDataSource)
-	func dataSource(_ dataSource: CollectionDataSource, performBatchUpdate update: () -> Void, complete: (() -> Void)?)
+	func dataSource(_ dataSource: CollectionDataSource, performBatchUpdate update: @escaping () -> Void, complete: (() -> Void)?)
 	
 	/// If the content was loaded successfully, the error will be nil.
 	func dataSourceDidLoadContent(_ dataSource: CollectionDataSource, error: Error?)
@@ -47,7 +47,7 @@ public protocol CollectionDataSourceDelegate: NSObjectProtocol {
 	
 	func dataSource(_ dataSource: CollectionDataSource, didAddChild childDataSource: CollectionDataSource)
 	
-	func dataSource(_ dataSource: CollectionDataSource, perform update: (UICollectionView) -> Void)
+	func dataSource(_ dataSource: CollectionDataSource, perform update: @escaping (UICollectionView) -> Void)
 	
 }
 
@@ -64,7 +64,7 @@ extension CollectionDataSourceDelegate {
 	public func dataSource(_ dataSource: CollectionDataSource, didRefreshSections sections: IndexSet) {}
 	
 	public func dataSourceDidReloadData(_ dataSource: CollectionDataSource) {}
-	public func dataSource(_ dataSource: CollectionDataSource, performBatchUpdate update: () -> Void, complete: (() -> Void)?) {}
+	public func dataSource(_ dataSource: CollectionDataSource, performBatchUpdate update: @escaping () -> Void, complete: (() -> Void)?) {}
 	
 	public func dataSourceDidLoadContent(_ dataSource: CollectionDataSource, error: Error? = nil) {}
 	
@@ -80,6 +80,6 @@ extension CollectionDataSourceDelegate {
 	
 	public func dataSource(_ dataSource: CollectionDataSource, didAddChild childDataSource: CollectionDataSource) { }
 	
-	public func dataSource(_ dataSource: CollectionDataSource, perform update: (UICollectionView) -> Void) { }
+	public func dataSource(_ dataSource: CollectionDataSource, perform update: @escaping (UICollectionView) -> Void) { }
 	
 }
