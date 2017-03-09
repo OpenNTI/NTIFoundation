@@ -99,7 +99,9 @@ open class ComposedCollectionDataSource: CollectionDataSource, CollectionDataSou
 	}
 	
 	open override func dataSourceForSectionAtIndex(_ sectionIndex: Int) -> CollectionDataSource {
-		let mapping = globalSectionToMappings[sectionIndex]!
+		if sectionIndex == globalSectionIndex {
+			return self
+		}
 		guard let mapping = globalSectionToMappings[sectionIndex] else {
 			preconditionFailure("\(#function) Mapping not found for section \(sectionIndex)\n globalSectionToMappings=\(globalSectionToMappings)")
 		}
