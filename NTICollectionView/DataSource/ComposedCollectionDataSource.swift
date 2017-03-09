@@ -109,7 +109,9 @@ open class ComposedCollectionDataSource: CollectionDataSource, CollectionDataSou
 	}
 	
 	open override func localIndexPathForGlobal(_ globalIndexPath: IndexPath) -> IndexPath? {
-		let mapping = mappingForGlobalSection(globalIndexPath.section)!
+		guard let mapping = mappingForGlobalSection(globalIndexPath.layoutSection) else {
+			return globalIndexPath
+		}
 		return mapping.localIndexPathForGlobal(globalIndexPath)
 	}
 	
