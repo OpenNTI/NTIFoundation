@@ -481,7 +481,7 @@ open class CollectionViewController: UICollectionViewController, CollectionDataS
 			let context = contextClass.init()
 			
 			for indexPath in indexPaths {
-				let localDataSource = dataSource.dataSourceForSectionAtIndex(indexPath.section)
+				let localDataSource = dataSource.dataSourceForSectionAtIndex(indexPath.layoutSection)
 				guard let view = self.collectionView(collectionView, visibleViewForSupplementaryElementOfKind: kind, at: indexPath),
 					let localIndexPath = dataSource.localIndexPathForGlobal(indexPath) else {
 						continue
