@@ -475,6 +475,8 @@ open class CollectionViewController: UICollectionViewController, CollectionDataS
 		let kind = supplementaryItem.elementKind
 		
 		performBatchUpdates({
+			updateLog("\(#function) Batch updates: indexPaths=[\(indexPaths.map({$0.debugLogDescription}).joined(separator: ", "))]")
+			
 			let contextClass = type(of: collectionView.collectionViewLayout).invalidationContextClass as! UICollectionViewLayoutInvalidationContext.Type
 			let context = contextClass.init()
 			
