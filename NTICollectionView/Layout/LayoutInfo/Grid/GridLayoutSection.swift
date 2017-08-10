@@ -313,7 +313,7 @@ public struct BasicGridLayoutSection: GridLayoutSection, RowAlignedLayoutSection
 		let attributes = CollectionViewLayoutAttributes(forDecorationViewOfKind: collectionElementKindContentBackground, with: indexPath)
 		
 		attributes.frame = contentFrame
-		attributes.zIndex = defaultZIndex
+		attributes.zIndex = backgroundZIndex
 		attributes.isHidden = false
 		attributes.backgroundColor = metrics.contentBackgroundAttributes.color
 		attributes.cornerRadius = metrics.contentBackgroundAttributes.cornerRadius

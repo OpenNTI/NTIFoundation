@@ -11,6 +11,7 @@ import UIKit
 let defaultZIndex = 1
 let headerZIndex = 1000
 let pinnedHeaderZIndex = 10000
+let backgroundZIndex = 0
 
 public let collectionElementKindRowSeparator = "collectionElementKindRowSeparator"
 public let collectionElementKindColumnSeparator = "collectionElementKindColumnSeparator"
