@@ -36,7 +36,7 @@ public struct GridDataSourceSectionMetrics: DataSourceSectionMetricsProviding {
 		return metrics.isEqual(to: other.metrics)
 	}
 	
-	public func definesMetric(metric: String) -> Bool {
+	public func definesMetric(_ metric: String) -> Bool {
 		return false
 	}
 	

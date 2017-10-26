@@ -10,7 +10,7 @@ import UIKit
 
 class DummyLayoutInfo: NSObject, LayoutInfo {
 
-	var collectionViewSize = CGSizeZero
+	var collectionViewSize = CGSize.zero
 	
 	var width: CGFloat = 0
 	
@@ -18,11 +18,11 @@ class DummyLayoutInfo: NSObject, LayoutInfo {
 	
 	var heightAvailableForPlaceholders: CGFloat = 0
 	
-	var contentOffset = CGPointZero
+	var contentOffset = CGPoint.zero
 	
-	var contentInset = UIEdgeInsetsZero
+	var contentInset = UIEdgeInsets.zero
 	
-	var bounds = CGRectZero
+	var bounds = CGRect.zero
 	
 	var layoutMeasure: CollectionViewLayoutMeasuring?
 	
@@ -38,28 +38,28 @@ class DummyLayoutInfo: NSObject, LayoutInfo {
 		
 	}
 	
-	func mutateItem(at indexPath: NSIndexPath, using mutator: (inout LayoutItem) -> Void) {
+	func mutateItem(at indexPath: IndexPath, using mutator: (inout LayoutItem) -> Void) {
 		
 	}
 	
-	func enumerateSections(block: (sectionIndex: Int, inout sectionInfo: LayoutSection, stop: inout Bool) -> Void) {
+	func enumerateSections(_ block: (_ sectionIndex: Int, _ sectionInfo: inout LayoutSection, _ stop: inout Bool) -> Void) {
 		
 	}
 	
-	func sectionAtIndex(sectionIndex: Int) -> LayoutSection? {
+	func sectionAtIndex(_ sectionIndex: Int) -> LayoutSection? {
 		return sections[sectionIndex]
 	}
 	
-	func setSection(section: LayoutSection, at sectionIndex: Int) {
+	func setSection(_ section: LayoutSection, at sectionIndex: Int) {
 		sections[sectionIndex] = section
 	}
 	
-	func add(section: LayoutSection, sectionIndex: Int) {
-		sections.insert(section, atIndex: sectionIndex)
+	func add(_ section: LayoutSection, sectionIndex: Int) {
+		sections.insert(section, at: sectionIndex)
 	}
 	
-	func newPlaceholderStartingAtSectionIndex(sectionIndex: Int) -> LayoutPlaceholder {
-		return BasicLayoutPlaceholder(sectionIndexes: NSIndexSet())
+	func newPlaceholderStartingAtSectionIndex(_ sectionIndex: Int) -> LayoutPlaceholder {
+		return BasicLayoutPlaceholder(sectionIndexes: IndexSet())
 	}
 	
 	func invalidate() {
@@ -70,31 +70,31 @@ class DummyLayoutInfo: NSObject, LayoutInfo {
 		
 	}
 	
-	func setSize(size: CGSize, forItemAt indexPath: NSIndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	func setSize(_ size: CGSize, forItemAt indexPath: IndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		
 	}
 	
-	func setSize(size: CGSize, forElementOfKind kind: String, at indexPath: NSIndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	func setSize(_ size: CGSize, forElementOfKind kind: String, at indexPath: IndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		
 	}
 	
-	func invalidateMetricsForItemAt(indexPath: NSIndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	func invalidateMetricsForItemAt(_ indexPath: IndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		
 	}
 	
-	func invalidateMetricsForElementOfKind(kind: String, at indexPath: NSIndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	func invalidateMetricsForElementOfKind(_ kind: String, at indexPath: IndexPath, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		
 	}
 	
-	func layoutAttributesForCell(at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
+	func layoutAttributesForCell(at indexPath: IndexPath) -> CollectionViewLayoutAttributes? {
 		return nil
 	}
 	
-	func layoutAttributesForDecorationViewOfKind(kind: String, at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
+	func layoutAttributesForDecorationViewOfKind(_ kind: String, at indexPath: IndexPath) -> CollectionViewLayoutAttributes? {
 		return nil
 	}
 	
-	func layoutAttributesForSupplementaryElementOfKind(kind: String, at indexPath: NSIndexPath) -> CollectionViewLayoutAttributes? {
+	func layoutAttributesForSupplementaryElementOfKind(_ kind: String, at indexPath: IndexPath) -> CollectionViewLayoutAttributes? {
 		return nil
 	}
 	
@@ -102,7 +102,7 @@ class DummyLayoutInfo: NSObject, LayoutInfo {
 		
 	}
 	
-	func updateSpecialItemsWithContentOffset(contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
+	func updateSpecialItemsWithContentOffset(_ contentOffset: CGPoint, invalidationContext: UICollectionViewLayoutInvalidationContext?) {
 		
 	}
 	

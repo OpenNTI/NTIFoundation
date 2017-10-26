@@ -18,12 +18,12 @@ public protocol PagingCollectionDataSourceProtocol: CollectionDataSourceType, Pa
 	
 }
 
-public class PagingCollectionDataSource<Item : AnyObject> : BasicCollectionDataSource<Item> {
+open class PagingCollectionDataSource<Item : AnyObject> : BasicCollectionDataSource<Item> {
 
 	/// Optional delegate to provide custom loading logic without the need to override the `PageableContentLoading` methods in a subclass.
-	public weak var loadingDelegate: PageableContentLoading?
+	open weak var loadingDelegate: PageableContentLoading?
 	
-	public override func beginLoadingContent(with progress: LoadingProgress) {
+	open override func beginLoadingContent(with progress: LoadingProgress) {
 		if let loadingDelegate = self.loadingDelegate {
 			return loadingDelegate.loadContent(with: progress)
 		}
@@ -32,7 +32,7 @@ public class PagingCollectionDataSource<Item : AnyObject> : BasicCollectionDataS
 	
 	// MARK: - PagingCollectionDataSourceProtocol
 	
-	public override func loadNextContent() {
+	open override func loadNextContent() {
 		guard canEnter(.LoadingNextContent) else {
 			return
 		}
@@ -44,14 +44,14 @@ public class PagingCollectionDataSource<Item : AnyObject> : BasicCollectionDataS
 		beginLoadingNextContent(with: loadingProgress)
 	}
 	
-	public override func beginLoadingNextContent(with progress: LoadingProgress) {
+	open override func beginLoadingNextContent(with progress: LoadingProgress) {
 		if let loadingDelegate = self.loadingDelegate {
 			return loadingDelegate.loadNextContent(with: progress)
 		}
 		loadNextContent(with: progress)
 	}
 	
-	public override func loadPreviousContent() {
+	open override func loadPreviousContent() {
 		guard canEnter(.LoadingPreviousContent) else {
 			return
 		}
@@ -63,7 +63,7 @@ public class PagingCollectionDataSource<Item : AnyObject> : BasicCollectionDataS
 		beginLoadingPreviousContent(with: loadingProgress)
 	}
 	
-	public override func beginLoadingPreviousContent(with progress: LoadingProgress) {
+	open override func beginLoadingPreviousContent(with progress: LoadingProgress) {
 		if let loadingDelegate = self.loadingDelegate {
 			return loadingDelegate.loadPreviousContent(with: progress)
 		}
@@ -72,11 +72,11 @@ public class PagingCollectionDataSource<Item : AnyObject> : BasicCollectionDataS
 	
 	// MARK: - PageableContentLoading
 	
-	public override func loadNextContent(with progress: LoadingProgress) {
+	open override func loadNextContent(with progress: LoadingProgress) {
 		// This is never called if a `loadingDelegate` is set
 	}
 	
-	public override func loadPreviousContent(with progress: LoadingProgress) {
+	open override func loadPreviousContent(with progress: LoadingProgress) {
 		// This is never called if a `loadingDelegate` is set
 	}
 	

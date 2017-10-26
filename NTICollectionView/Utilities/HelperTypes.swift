@@ -12,7 +12,7 @@ public enum Result<T> {
 	
 	case success(T)
 	
-	case failure(NSError)
+	case failure(Error)
 	
 }
 

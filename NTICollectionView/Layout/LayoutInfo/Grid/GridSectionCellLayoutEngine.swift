@@ -9,63 +9,63 @@
 import UIKit
 
 // TODO: Write test that ensures items have width before their height is measured
-public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
+open class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 	
 	public init(layoutSection: GridLayoutSection) {
 		self.layoutSection = layoutSection
 		super.init()
 	}
 	
-	public var layoutSection: GridLayoutSection
+	open var layoutSection: GridLayoutSection
 	
-	private var metrics: GridSectionMetricsProviding {
+	fileprivate var metrics: GridSectionMetricsProviding {
 		return layoutSection.metrics
 	}
-	private var margins: UIEdgeInsets {
+	fileprivate var margins: UIEdgeInsets {
 		return metrics.padding
 	}
-	private var numberOfColumns: Int {
+	fileprivate var numberOfColumns: Int {
 		return metrics.numberOfColumns
 	}
-	private var numberOfItems: Int {
+	fileprivate var numberOfItems: Int {
 		return layoutSection.items.count
 	}
 	
-	private var width: CGFloat! {
+	fileprivate var width: CGFloat! {
 		return layoutSizing.width
 	}
 	
-	private var columnWidth: CGFloat {
+	fileprivate var columnWidth: CGFloat {
 		return layoutSection.columnWidth
 	}
-	private var fixedColumnWidth: CGFloat? {
+	fileprivate var fixedColumnWidth: CGFloat? {
 		return metrics.fixedColumnWidth
 	}
-	private var phantomCellIndex: Int? {
+	fileprivate var phantomCellIndex: Int? {
 		return layoutSection.phantomCellIndex
 	}
-	private var phantomCellSize: CGSize {
+	fileprivate var phantomCellSize: CGSize {
 		return layoutSection.phantomCellSize
 	}
 	
-	private var shouldLayoutItems: Bool {
+	fileprivate var shouldLayoutItems: Bool {
 		return layoutSection.placeholderInfo == nil && numberOfItems > 0
 	}
 	
-	private var origin: CGPoint!
-	private var position: CGPoint!
-	private var columnIndex: Int = 0
-	private var rowHeight: CGFloat!
-	private var row: LayoutRow!
-	private var height: CGFloat = 0
+	fileprivate var origin: CGPoint!
+	fileprivate var position: CGPoint!
+	fileprivate var columnIndex: Int = 0
+	fileprivate var rowHeight: CGFloat!
+	fileprivate var row: LayoutRow!
+	fileprivate var height: CGFloat = 0
 	
-	private var layoutSizing: LayoutSizing!
-	private var layoutMeasure: CollectionViewLayoutMeasuring!
-	private var invalidationContext: UICollectionViewLayoutInvalidationContext?
+	fileprivate var layoutSizing: LayoutSizing!
+	fileprivate var layoutMeasure: CollectionViewLayoutMeasuring!
+	fileprivate var invalidationContext: UICollectionViewLayoutInvalidationContext?
 	
-	public func layoutWithOrigin(start: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
+	open func layoutWithOrigin(_ start: CGPoint, layoutSizing: LayoutSizing, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) -> CGPoint {
 		guard let layoutMeasure = layoutSizing.layoutMeasure else {
-				return CGPointZero
+				return CGPoint.zero
 		}
 		self.layoutSizing = layoutSizing
 		self.layoutMeasure = layoutMeasure
@@ -80,7 +80,7 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 		return position
 	}
 	
-	private func layoutRows() {
+	fileprivate func layoutRows() {
 		guard shouldLayoutItems else {
 			return
 		}
@@ -96,16 +96,16 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 		advancePositionForBottomMargin()
 	}
 	
-	private func applyLeadingMargins() {
+	fileprivate func applyLeadingMargins() {
 		applyTopMargin()
 		applyLeadingHorizontalMargin()
 	}
 	
-	private func applyTopMargin() {
+	fileprivate func applyTopMargin() {
 		position.y += margins.top
 	}
 	
-	private func applyLeadingHorizontalMargin() {
+	fileprivate func applyLeadingHorizontalMargin() {
 		switch metrics.cellLayoutOrder {
 		case .LeadingToTrailing:
 			position.x += margins.left
@@ -114,23 +114,23 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 		}
 	}
 	
-	private func startNewRow() {
+	fileprivate func startNewRow() {
 		row = LayoutRow()
 		row.metrics.applyValues(from: metrics)
 	}
 	
-	private func updateRowFrame() {
+	fileprivate func updateRowFrame() {
 		row.frame = CGRect(x: origin.x + margins.left, y: position.y, width: width - margins.width, height: rowHeight)
 	}
 	
-	private func layoutItems() {
-		for (index, item) in layoutSection.items.enumerate() {
+	fileprivate func layoutItems() {
+		for (index, item) in layoutSection.items.enumerated() {
 			var item = item
 			layout(&item, at: index)
 		}
 	}
 	
-	private func layout(inout item: LayoutItem, at itemIndex: Int) {
+	fileprivate func layout(_ item: inout LayoutItem, at itemIndex: Int) {
 		checkForPhantomCell(at: itemIndex)
 		updateHeight(with: item)
 		if item.isDragging {
@@ -143,40 +143,40 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 		nextColumn()
 	}
 	
-	private func checkForPhantomCell(at itemIndex: Int) {
+	fileprivate func checkForPhantomCell(at itemIndex: Int) {
 		let isPhantomCell = itemIndex == phantomCellIndex
 		if isPhantomCell {
 			updateForPhantomCell()
 		}
 	}
 	
-	private func updateForPhantomCell() {
+	fileprivate func updateForPhantomCell() {
 		height = phantomCellSize.height
 		nextColumn()
 	}
 	
-	private func updateHeight(with item: LayoutItem) {
+	fileprivate func updateHeight(with item: LayoutItem) {
 		height = item.frame.height
 	}
 	
-	private func layout(inout item: LayoutItem, isInColumn: Bool) {
+	fileprivate func layout(_ item: inout LayoutItem, isInColumn: Bool) {
 		updateFrame(of: &item)
 		item.columnIndex = isInColumn ? columnIndex : NSNotFound
 		row.add(item)
 	}
 	
-	private func updateFrame(inout of item: LayoutItem) {
+	fileprivate func updateFrame(of item: inout LayoutItem) {
 		let columnWidth = fixedColumnWidth ?? row.columnWidth(forNumberOfColumns: numberOfColumns)
 		item.frame = CGRect(x: position.x, y: position.y, width: columnWidth, height: height)
 	}
 	
-	private func checkEstimatedHeight(inout of item: LayoutItem) {
+	fileprivate func checkEstimatedHeight(of item: inout LayoutItem) {
 		if item.hasEstimatedHeight {
 			measureHeight(of: &item)
 		}
 	}
 	
-	private func measureHeight(inout of item: LayoutItem) {
+	fileprivate func measureHeight(of item: inout LayoutItem) {
 		updateFrame(of: &item)
 		let measuredSize = layoutMeasure.measuredSizeForItem(item)
 		height = measuredSize.height
@@ -184,38 +184,38 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 		item.hasEstimatedHeight = false
 	}
 	
-	private func invalidate(item: LayoutItem) {
-		invalidationContext?.invalidateItemsAtIndexPaths([item.indexPath])
+	fileprivate func invalidate(_ item: LayoutItem) {
+		invalidationContext?.invalidateItems(at: [item.indexPath as IndexPath])
 	}
 	
-	private func advancePositionForBottomMargin() {
+	fileprivate func advancePositionForBottomMargin() {
 		position.y += margins.bottom
 	}
 	
 	// Advance to the next column and if necessary the next row. Takes into account the phantom cell index.
-	private func nextColumn() {
+	fileprivate func nextColumn() {
 		updateRowHeight()
 		advanceToNextColumn()
 		checkForNextRow()
 	}
 	
-	private func updateRowHeight() {
+	fileprivate func updateRowHeight() {
 		fitRowHeightToItemHeight()
 		updateRowFrameHeight()
 	}
 	
-	private func fitRowHeightToItemHeight() {
+	fileprivate func fitRowHeightToItemHeight() {
 		if rowHeight < height {
 			rowHeight = height
 		}
 	}
 	
-	private func advanceToNextColumn() {
+	fileprivate func advanceToNextColumn() {
 		advanceLayoutPositionToNextColumn()
 		advanceColumnIndex()
 	}
 	
-	private func advanceLayoutPositionToNextColumn() {
+	fileprivate func advanceLayoutPositionToNextColumn() {
 		switch metrics.cellLayoutOrder {
 		case .LeadingToTrailing:
 			position.x += columnWidth + metrics.minimumInteritemSpacing
@@ -224,41 +224,41 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 		}
 	}
 	
-	private func advanceColumnIndex() {
+	fileprivate func advanceColumnIndex() {
 		columnIndex += 1
 	}
 	
-	private func updateRowFrameHeight() {
+	fileprivate func updateRowFrameHeight() {
 		row.frame.size.height = rowHeight
 	}
 	
-	private func checkForNextRow() {
+	fileprivate func checkForNextRow() {
 		if columnIndexStartsNewRow {
 			nextRow()
 		}
 	}
 	
-	private var columnIndexStartsNewRow: Bool {
+	fileprivate var columnIndexStartsNewRow: Bool {
 		return columnIndex == numberOfColumns
 	}
 	
-	private func nextRow() {
+	fileprivate func nextRow() {
 		adjustPositionForNextRow()
 		reset()
 		processNextRow()
 		updateRowFrame()
 	}
 	
-	private func adjustPositionForNextRow() {
+	fileprivate func adjustPositionForNextRow() {
 		advanceYPositionToNextRow()
 		resetXPositionToColumnStart()
 	}
 	
-	private func advanceYPositionToNextRow() {
+	fileprivate func advanceYPositionToNextRow() {
 		position.y += metrics.rowSpacing + rowHeight
 	}
 	
-	private func resetXPositionToColumnStart() {
+	fileprivate func resetXPositionToColumnStart() {
 		switch metrics.cellLayoutOrder {
 		case .LeadingToTrailing:
 			position.x = origin.x + margins.left
@@ -267,24 +267,24 @@ public class GridSectionCellLayoutEngine: NSObject, LayoutEngine {
 		}
 	}
 	
-	private func reset() {
+	fileprivate func reset() {
 		height = 0
 		rowHeight = 0
 		columnIndex = 0
 	}
 	
-	private func processNextRow() {
+	fileprivate func processNextRow() {
 		if rowContainsItems {
 			commitCurrentRow()
 			startNewRow()
 		}
 	}
 	
-	private var rowContainsItems: Bool {
+	fileprivate var rowContainsItems: Bool {
 		return row.items.count > 0
 	}
 	
-	private func commitCurrentRow() {
+	fileprivate func commitCurrentRow() {
 		var row: LayoutRow = self.row
 		layoutSection.add(&row)
 		self.row = row

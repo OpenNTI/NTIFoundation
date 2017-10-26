@@ -9,31 +9,31 @@
 import UIKit
 
 // FIXME: Code duplication with the segmented metrics helper
-public class ComposedCollectionDataSourceMetricsHelper: CollectionDataSourceMetricsHelper {
+open class ComposedCollectionDataSourceMetricsHelper: CollectionDataSourceMetricsHelper {
 
 	public init(composedDataSource: ComposedCollectionDataSource) {
 		super.init(dataSource: composedDataSource)
 	}
 	
-	public var composedDataSource: ComposedCollectionDataSource {
+	open var composedDataSource: ComposedCollectionDataSource {
 		return dataSource as! ComposedCollectionDataSource
 	}
 	
-	public override func numberOfSupplementaryItemsOfKind(kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChildDataSources: Bool) -> Int {
+	open override func numberOfSupplementaryItemsOfKind(_ kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChildDataSources: Bool) -> Int {
 		var numberOfElements = super.numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: sectionIndex, shouldIncludeChildDataSources: false)
 		if shouldIncludeChildDataSources,
 			let mapping = composedDataSource.mappingForGlobalSection(sectionIndex),
-			localSection = mapping.localSectionForGlobalSection(sectionIndex) {
+			let localSection = mapping.localSectionForGlobalSection(sectionIndex) {
 				let dataSource = mapping.dataSource
 				numberOfElements += dataSource.numberOfSupplementaryItemsOfKind(kind, inSectionAtIndex: localSection, shouldIncludeChildDataSources: true)
 		}
 		return numberOfElements
 	}
 	
-	public override func indexPaths(for supplementaryItem: SupplementaryItem) -> [NSIndexPath] {
+	open override func indexPaths(for supplementaryItem: SupplementaryItem) -> [IndexPath] {
 		var result = super.indexPaths(for: supplementaryItem)
 		if !result.isEmpty {
-			return result
+			return result as [IndexPath]
 		}
 		
 		let kind = supplementaryItem.elementKind
@@ -42,7 +42,7 @@ public class ComposedCollectionDataSourceMetricsHelper: CollectionDataSourceMetr
 			result = dataSource.indexPaths(for: supplementaryItem)
 			result = mapping.globalIndexPathsForLocal(result)
 			
-			var adjusted: [NSIndexPath] = []
+			var adjusted: [IndexPath] = []
 			for indexPath in result {
 				let sectionIndex = indexPath.layoutSection
 				let itemIndex = indexPath.itemIndex
@@ -58,10 +58,10 @@ public class ComposedCollectionDataSourceMetricsHelper: CollectionDataSourceMetr
 			}
 		}
 		
-		return result
+		return result as [IndexPath]
 	}
 	
-	public override func findSupplementaryItemOfKind(kind: String, at indexPath: NSIndexPath, using block: (dataSource: CollectionDataSource, localIndexPath: NSIndexPath, supplementaryItem: SupplementaryItem) -> Void) {
+	open override func findSupplementaryItemOfKind(_ kind: String, at indexPath: IndexPath, using block: (_ dataSource: CollectionDataSource, _ localIndexPath: IndexPath, _ supplementaryItem: SupplementaryItem) -> Void) {
 		let sectionIndex = indexPath.layoutSection
 		var itemIndex = indexPath.itemIndex
 		
@@ -73,16 +73,16 @@ public class ComposedCollectionDataSourceMetricsHelper: CollectionDataSourceMetr
 		itemIndex -= numberOfElements
 		
 		guard let mapping = composedDataSource.mappingForGlobalSection(sectionIndex),
-			localSection = mapping.localSectionForGlobalSection(sectionIndex) else {
+			let localSection = mapping.localSectionForGlobalSection(sectionIndex) else {
 				return
 		}
 		
-		let localIndexPath = NSIndexPath(forItem: itemIndex, inSection: localSection)
+		let localIndexPath = IndexPath(item: itemIndex, section: localSection)
 		let dataSource = mapping.dataSource
 		dataSource.findSupplementaryItemOfKind(kind, at: localIndexPath, using: block)
 	}
 	
-	public override func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
+	open override func snapshotMetricsForSectionAtIndex(_ sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
 		guard var enclosingMetrics = super.snapshotMetricsForSectionAtIndex(sectionIndex) else {
 			return nil
 		}
@@ -92,7 +92,7 @@ public class ComposedCollectionDataSourceMetricsHelper: CollectionDataSourceMetr
 		}
 		let dataSource = mapping.dataSource
 		if let localSection = mapping.localSectionForGlobalSection(sectionIndex),
-			metrics = dataSource.snapshotMetricsForSectionAtIndex(localSection)  {
+			let metrics = dataSource.snapshotMetricsForSectionAtIndex(localSection)  {
 				enclosingMetrics.applyValues(from: metrics)
 		}
 		return enclosingMetrics

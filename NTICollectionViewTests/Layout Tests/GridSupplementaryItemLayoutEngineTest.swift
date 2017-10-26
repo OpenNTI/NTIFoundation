@@ -88,7 +88,7 @@ class GridSupplementaryItemLayoutEngineTest: XCTestCase {
 		}
 	}
 	
-	private func makeItems(of kind: String, count: Int) -> [LayoutSupplementaryItem] {
+	fileprivate func makeItems(of kind: String, count: Int) -> [LayoutSupplementaryItem] {
 		var items: [LayoutSupplementaryItem] = []
 		for _ in 0..<count {
 			var item = GridSupplementaryItem(elementKind: kind)

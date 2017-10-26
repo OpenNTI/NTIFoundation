@@ -19,9 +19,9 @@ public protocol LayoutRowProtocol: LayoutArea {
 	
 	var rowSeparatorDecoration: HorizontalSeparatorDecoration? { get set }
 	
-	mutating func add(item: LayoutItem)
+	mutating func add(_ item: LayoutItem)
 	
-	mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
+	mutating func setFrame(_ frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext?)
 	
 	func columnWidth(forNumberOfColumns columns: Int) -> CGFloat
 	
@@ -43,7 +43,7 @@ public struct LayoutRow: LayoutRowProtocol {
 	
 	public var metrics = GridSectionMetrics()
 	
-	public var frame = CGRectZero
+	public var frame = CGRect.zero
 	
 	public var items: [LayoutItem] = []
 	
@@ -55,11 +55,11 @@ public struct LayoutRow: LayoutRowProtocol {
 	
 	public var rowSeparatorDecoration: HorizontalSeparatorDecoration?
 	
-	public mutating func add(item: LayoutItem) {
+	public mutating func add(_ item: LayoutItem) {
 		items.append(item)
 	}
 	
-	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
+	public mutating func setFrame(_ frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
 		guard frame != self.frame else {
 			return
 		}
@@ -67,7 +67,7 @@ public struct LayoutRow: LayoutRowProtocol {
 		rowSeparatorDecoration?.setContainerFrame(frame, invalidationContext: invalidationContext)
 		
 		
-		for (index, item) in items.enumerate() {
+		for (index, item) in items.enumerated() {
 			var itemInfo = item
 			var itemFrame = itemInfo.frame
 			itemFrame.origin.y = frame.origin.y
@@ -82,7 +82,7 @@ public struct LayoutRow: LayoutRowProtocol {
 		return metrics.fixedColumnWidth ?? maximizedColumnWidth(forNumberOfColumns: columns)
 	}
 	
-	private func maximizedColumnWidth(forNumberOfColumns columns: Int) -> CGFloat {
+	fileprivate func maximizedColumnWidth(forNumberOfColumns columns: Int) -> CGFloat {
 		let layoutWidth = frame.width
 		let spacing = metrics.minimumInteritemSpacing
 		let numberOfColumns = CGFloat(columns)

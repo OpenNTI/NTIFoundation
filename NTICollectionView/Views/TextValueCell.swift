@@ -9,9 +9,9 @@
 import UIKit
 
 /// A simple `CollectionViewCell` that displays a large block of text.
-public class TextValueCell: CollectionViewCell {
+open class TextValueCell: CollectionViewCell {
 	
-	public var numberOfLines: Int = 0 {
+	open var numberOfLines: Int = 0 {
 		didSet {
 			if allowsTruncation {
 				textLabel.numberOfLines = numberOfLines
@@ -19,7 +19,7 @@ public class TextValueCell: CollectionViewCell {
 		}
 	}
 	
-	public var allowsTruncation = false {
+	open var allowsTruncation = false {
 		didSet {
 			if allowsTruncation {
 				textLabel.numberOfLines = numberOfLines
@@ -29,11 +29,11 @@ public class TextValueCell: CollectionViewCell {
 		}
 	}
 	
-	public let titleLabel = UILabel()
+	open let titleLabel = UILabel()
 	
-	public let textLabel = TruncatingLabel()
+	open let textLabel = TruncatingLabel()
 	
-	public func configureWith(title title: String?, text: String?) {
+	open func configureWith(title: String?, text: String?) {
 		titleLabel.text = title
 		textLabel.text = text
 	}
@@ -48,27 +48,27 @@ public class TextValueCell: CollectionViewCell {
 		commonInit()
 	}
 	
-	private func commonInit() {
+	fileprivate func commonInit() {
 		titleLabel.translatesAutoresizingMaskIntoConstraints = false
 		titleLabel.numberOfLines = 1
 		contentView.addSubview(titleLabel)
 		
 		textLabel.translatesAutoresizingMaskIntoConstraints = false
-		textLabel.lineBreakMode = .ByWordWrapping
+		textLabel.lineBreakMode = .byWordWrapping
 		textLabel.numberOfLines = 0
 		contentView.addSubview(textLabel)
 		
 		let views = ["label": textLabel, "title": titleLabel]
 		
-		NSLayoutConstraint.activateConstraints(NSLayoutConstraint.constraintsWithVisualFormat(
-			"H:|-[title]-|", options: [], metrics: nil, views: views))
-		NSLayoutConstraint.activateConstraints(NSLayoutConstraint.constraintsWithVisualFormat(
-			"H:|-[label]-|", options: [], metrics: nil, views: views))
-		NSLayoutConstraint.activateConstraints(NSLayoutConstraint.constraintsWithVisualFormat(
-			"V:|-[title]-[label]-|", options: [], metrics: nil, views: views))
+		NSLayoutConstraint.activate(NSLayoutConstraint.constraints(
+			withVisualFormat: "H:|-[title]-|", options: [], metrics: nil, views: views))
+		NSLayoutConstraint.activate(NSLayoutConstraint.constraints(
+			withVisualFormat: "H:|-[label]-|", options: [], metrics: nil, views: views))
+		NSLayoutConstraint.activate(NSLayoutConstraint.constraints(
+			withVisualFormat: "V:|-[title]-[label]-|", options: [], metrics: nil, views: views))
 	}
 	
-	public override func layoutSubviews() {
+	open override func layoutSubviews() {
 		textLabel.preferredMaxLayoutWidth = bounds.width - 30
 		super.layoutSubviews()
 	}

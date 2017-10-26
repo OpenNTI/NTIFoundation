@@ -25,7 +25,7 @@ public protocol LayoutPlaceholder: LayoutElement {
 	/// The last section index of this placeholder.
 	var endingSectionIndex: Int { get }
 	
-	func wasAddedToSection(section: LayoutSection)
+	mutating func wasAddedToSection(_ section: LayoutSection)
 	
 	func isEqual(to other: LayoutPlaceholder) -> Bool
 	
@@ -33,7 +33,7 @@ public protocol LayoutPlaceholder: LayoutElement {
 
 extension LayoutPlaceholder {
 	
-	public func startsAt(section: LayoutSection) -> Bool {
+	public func startsAt(_ section: LayoutSection) -> Bool {
 		return startingSectionIndex == section.sectionIndex
 	}
 	
@@ -41,29 +41,29 @@ extension LayoutPlaceholder {
 
 public struct BasicLayoutPlaceholder: LayoutPlaceholder {
 	
-	public init(sectionIndexes: NSIndexSet) {
-		self.sectionIndexes = sectionIndexes.mutableCopy() as! NSMutableIndexSet
+	public init(sectionIndexes: IndexSet) {
+		self.sectionIndexes = sectionIndexes
 	}
 	
-	private let sectionIndexes: NSMutableIndexSet
+	fileprivate var sectionIndexes: IndexSet
 	
-	public var frame = CGRectZero
+	public var frame = CGRect.zero
 	
 	public var itemIndex = 0
 	
-	public var indexPath: NSIndexPath {
-		return NSIndexPath(forItem: itemIndex, inSection: startingSectionIndex)
+	public var indexPath: IndexPath {
+		return IndexPath(item: itemIndex, section: startingSectionIndex)
 	}
 	
 	public var layoutAttributes: CollectionViewLayoutAttributes {
-		let attributes = CollectionViewLayoutAttributes(forSupplementaryViewOfKind: collectionElementKindPlaceholder, withIndexPath: indexPath)
+		let attributes = CollectionViewLayoutAttributes(forSupplementaryViewOfKind: collectionElementKindPlaceholder, with: indexPath)
 		
 		attributes.frame = frame
 		attributes.unpinnedOrigin = frame.origin
 		attributes.zIndex = headerZIndex
 		attributes.isPinned = false
 		attributes.backgroundColor = backgroundColor
-		attributes.hidden = false
+		attributes.isHidden = false
 		attributes.shouldCalculateFittingSize = hasEstimatedHeight
 		
 		return attributes
@@ -78,24 +78,24 @@ public struct BasicLayoutPlaceholder: LayoutPlaceholder {
 	public var shouldFillAvailableHeight = true
 	
 	public var startingSectionIndex: Int {
-		return sectionIndexes.firstIndex
+		return sectionIndexes.first ?? NSNotFound
 	}
 	
 	public var endingSectionIndex: Int {
-		return sectionIndexes.lastIndex
+		return sectionIndexes.last ?? NSNotFound
 	}
 	
-	public mutating func setFrame(frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
+	public mutating func setFrame(_ frame: CGRect, invalidationContext: UICollectionViewLayoutInvalidationContext? = nil) {
 		self.frame = frame
 		layoutAttributes.frame = frame
 		
 		if self.frame.height > 0 {
-			invalidationContext?.invalidateSupplementaryElementsOfKind(collectionElementKindPlaceholder, atIndexPaths: [indexPath])
+			invalidationContext?.invalidateSupplementaryElements(ofKind: collectionElementKindPlaceholder, at: [indexPath])
 		}
 	}
 	
-	public func wasAddedToSection(section: LayoutSection) {
-		sectionIndexes.addIndex(section.sectionIndex)
+	public mutating func wasAddedToSection(_ section: LayoutSection) {
+		sectionIndexes.insert(section.sectionIndex)
 	}
 	
 	public mutating func resetLayoutAttributes() {

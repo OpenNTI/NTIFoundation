@@ -9,28 +9,28 @@
 import UIKit
 
 /// A view controller which notifies a delegate of API calls before sending them down its own hierarchy.
-public class DelegatingViewController: UIViewController {
+open class DelegatingViewController: UIViewController {
 	
-	public weak var delegate: ViewControllerDelegate?
+	open weak var delegate: ViewControllerDelegate?
 
-    public override func viewDidLoad() {
+    open override func viewDidLoad() {
 		delegate?.viewControllerViewDidLoad(self)
         super.viewDidLoad()
     }
 	
-	public override func viewWillAppear(animated: Bool) {
+	open override func viewWillAppear(_ animated: Bool) {
 		delegate?.viewControllerViewWillAppear(self)
 		super.viewWillAppear(animated)
 	}
 	
-	public override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+	open override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
 		delegate?.viewController(self, willTransitionTo: newCollection, with: coordinator)
-		super.willTransitionToTraitCollection(newCollection, withTransitionCoordinator: coordinator)
+		super.willTransition(to: newCollection, with: coordinator)
 	}
 	
-	public override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+	open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
 		delegate?.viewController(self, viewWillTransitionTo: size, with: coordinator)
-		super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+		super.viewWillTransition(to: size, with: coordinator)
 	}
 
 }

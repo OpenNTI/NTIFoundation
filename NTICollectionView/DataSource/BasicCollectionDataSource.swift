@@ -11,21 +11,21 @@ import UIKit
 /**
 A `CollectionDataSource` which manages a single section of items backed by an array.
 */
-public class BasicCollectionDataSource<Item : AnyObject> : CollectionDataSource {
+open class BasicCollectionDataSource<Item : AnyObject> : CollectionDataSource {
 
 	/// Allows clients to update loading progress with a specified result if using `waitsForProgressUpdate == true`.
 	///
 	/// Is `nil` until `loadContent(with:)` has been called while `waitsForProgressUpdate == true`, and resets to `nil` once called.
-	private var updateLoadingProgress: ((Result<[Item]>) -> Void)?
+	fileprivate var updateLoadingProgress: ((Result<[Item]>) -> Void)?
 	
 	/// Whether `self` relies on `updateLoadingProgress` to update loading progress.
-	public var waitsForProgressUpdate = false
+	open var waitsForProgressUpdate = false
 	
 	public override init() {
 		super.init()
 	}
 	
-	public var items: [Item] {
+	open var items: [Item] {
 		get {
 			return _items
 		}
@@ -34,17 +34,17 @@ public class BasicCollectionDataSource<Item : AnyObject> : CollectionDataSource 
 		}
 	}
 	
-	private var _items: [Item] = []
+	fileprivate var _items: [Item] = []
 	
-	public func setItems(items: [Item], animated: Bool) {
-		guard !(items as NSArray).isEqualToArray(_items) else {
+	open func setItems(_ items: [Item], animated: Bool) {
+		guard !(items as NSArray).isEqual(to: _items) else {
 			return
 		}
 		
 		guard animated else {
 			_items = items
 			updateLoadingStateFromItems()
-			notifySectionsRefreshed(NSIndexSet(index: 0))
+			notifySectionsRefreshed(IndexSet(integer: 0))
 			return
 		}
 		
@@ -52,27 +52,27 @@ public class BasicCollectionDataSource<Item : AnyObject> : CollectionDataSource 
 		let newItemSet = NSOrderedSet(array: items)
 		
 		let deletedItems = oldItemSet.mutableCopy() as! NSMutableOrderedSet
-		deletedItems.minusOrderedSet(newItemSet)
+		deletedItems.minus(newItemSet)
 		
 		let newItems = newItemSet.mutableCopy() as! NSMutableOrderedSet
-		newItems.minusOrderedSet(oldItemSet)
+		newItems.minus(oldItemSet)
 		
 		let movedItems = newItemSet.mutableCopy() as! NSMutableOrderedSet
-		movedItems.intersectOrderedSet(oldItemSet)
+		movedItems.intersect(oldItemSet)
 		
 		let deletedIndexPaths = deletedItems.map {
-			NSIndexPath(forItem:  oldItemSet.indexOfObject($0), inSection: 0)
+			IndexPath(item:  oldItemSet.index(of: $0), section: 0)
 		}
 		
 		let insertedIndexPaths = newItems.map {
-			NSIndexPath(forItem: newItemSet.indexOfObject($0), inSection: 0)
+			IndexPath(item: newItemSet.index(of: $0), section: 0)
 		}
 		
 		let fromMovedIndexPaths = movedItems.map {
-			NSIndexPath(forItem: oldItemSet.indexOfObject($0), inSection: 0)
+			IndexPath(item: oldItemSet.index(of: $0), section: 0)
 		}
 		let toMovedIndexPaths = movedItems.map {
-			NSIndexPath(forItem: newItemSet.indexOfObject($0), inSection: 0)
+			IndexPath(item: newItemSet.index(of: $0), section: 0)
 		}
 		
 		_items = items
@@ -94,22 +94,22 @@ public class BasicCollectionDataSource<Item : AnyObject> : CollectionDataSource 
 	/// Optionally allows clients to update loading progress using a specified result.
 	///
 	/// This method has no effect unless `waitsForProgressUpdate == true` and `loadingState == .loadingContent`. After its initial invocation, this method does nothing.
-	public func updateLoadingProgress(with result: Result<[Item]>) {
+	open func updateLoadingProgress(with result: Result<[Item]>) {
 		self.updateLoadingProgress?(result)
 	}
 	
-	public override func resetContent() {
+	open override func resetContent() {
 		super.resetContent()
 		performUpdate({
 			self.items = []
 		})
 	}
 	
-	public override func item(at indexPath: NSIndexPath) -> AnyItem? {
+	open override func item(at indexPath: IndexPath) -> AnyItem? {
 		return value(at: indexPath)
 	}
 	
-	public func value(at indexPath: NSIndexPath) -> Item? {
+	open func value(at indexPath: IndexPath) -> Item? {
 		let itemIndex = indexPath.item
 		guard itemIndex < items.count else {
 			return nil
@@ -117,19 +117,19 @@ public class BasicCollectionDataSource<Item : AnyObject> : CollectionDataSource 
 		return items[itemIndex]
 	}
 	
-	public override func indexPath(for item: AnyItem) -> NSIndexPath? {
-		guard let itemIndex = items.indexOf({ $0 === item }) else {
+	open override func indexPath(for item: AnyItem) -> IndexPath? {
+		guard let itemIndex = items.index(where: { $0 === item }) else {
 			return nil
 		}
-		return NSIndexPath(forItem: itemIndex, inSection: 0)
+		return IndexPath(item: itemIndex, section: 0)
 	}
 	
-	public override func removeItem(at indexPath: NSIndexPath) {
-		let removedIndexes = NSIndexSet(index: indexPath.item)
+	open override func removeItem(at indexPath: IndexPath) {
+		let removedIndexes = IndexSet(integer: indexPath.item)
 		removeItems(at: removedIndexes)
 	}
 	
-	private func updateLoadingStateFromItems() {
+	fileprivate func updateLoadingStateFromItems() {
 		let numberOfItems = items.count
 		if numberOfItems > 0 && loadingState == .NoContent {
 			loadingState = .ContentLoaded
@@ -138,14 +138,14 @@ public class BasicCollectionDataSource<Item : AnyObject> : CollectionDataSource 
 		}
 	}
 	
-	public func insertItems(items: [Item], at indexes: NSIndexSet) {
+	open func insertItems(_ items: [Item], at indexes: IndexSet) {
 		var newItems = _items
 		for (item, index) in zip(items, indexes) {
-			newItems.insert(item, atIndex: index)
+			newItems.insert(item, at: index)
 		}
 		
 		let insertedIndexPaths = indexes.map {
-			NSIndexPath(forItem: $0, inSection: 0)
+			IndexPath(item: $0, section: 0)
 		}
 		
 		_items = newItems
@@ -153,7 +153,7 @@ public class BasicCollectionDataSource<Item : AnyObject> : CollectionDataSource 
 		notifyItemsInserted(at: insertedIndexPaths)
 	}
 	
-	public func removeItems(at indexes: NSIndexSet) {
+	open func removeItems(at indexes: IndexSet) {
 		var newItems: [Item] = []
 		let newCount = _items.count - indexes.count
 		newItems.reserveCapacity(newCount)
@@ -161,13 +161,13 @@ public class BasicCollectionDataSource<Item : AnyObject> : CollectionDataSource 
 		// Set up a delayed set of batch update calls for later execution
 		var batchUpdates = {}
 		
-		for (idx, item) in _items.enumerate() {
+		for (idx, item) in _items.enumerated() {
 			let oldUpdates = batchUpdates
-			if indexes.containsIndex(idx) {
+			if indexes.contains(idx) {
 				// We're removing this item
 				batchUpdates = {
 					oldUpdates()
-					self.notifyItemsRemoved(at: [NSIndexPath(forItem: idx, inSection: 0)])
+					self.notifyItemsRemoved(at: [IndexPath(item: idx, section: 0)])
 				}
 			} else {
 				// We're keeping this item
@@ -175,33 +175,33 @@ public class BasicCollectionDataSource<Item : AnyObject> : CollectionDataSource 
 				newItems.append(item)
 				batchUpdates = {
 					oldUpdates()
-					self.notifyItemMoved(from: NSIndexPath(forItem: idx, inSection: 0), to: NSIndexPath(forItem: newIdx, inSection: 0))
+					self.notifyItemMoved(from: IndexPath(item: idx, section: 0), to: IndexPath(item: newIdx, section: 0))
 				}
 			}
 		}
 		
-		_items = newItems ?? []
+		_items = newItems
 		batchUpdates()
 		updateLoadingStateFromItems()
 	}
 	
-	public func replaceItems(at indexes: NSIndexSet, with items: [Item]) {
+	open func replaceItems(at indexes: IndexSet, with items: [Item]) {
 		var newItems = _items
 		for (index, item) in zip(indexes, items) {
 			newItems[index] = item
 		}
 		
-		let replacedIndexPaths = indexes.map { NSIndexPath(forItem: $0, inSection: 0) }
+		let replacedIndexPaths = indexes.map { IndexPath(item: $0, section: 0) }
 			
 		_items = newItems
 		notifyItemsRefreshed(at: replacedIndexPaths)
 	}
 	
-	public override func numberOfItemsInSection(sectionIndex: Int) -> Int {
+	open override func numberOfItemsInSection(_ sectionIndex: Int) -> Int {
 		return items.count
 	}
 	
-	public override func loadContent(with progress: LoadingProgress) {
+	open override func loadContent(with progress: LoadingProgress) {
 		guard waitsForProgressUpdate else {
 			return super.loadContent(with: progress)
 		}
@@ -232,7 +232,7 @@ public class BasicCollectionDataSource<Item : AnyObject> : CollectionDataSource 
 	
 	// MARK: - UICollectionViewDataSource
 	
-	public func collectionView(collectionView: UICollectionView, moveItemAtIndexPath indexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+	open override func collectionView(_ collectionView: UICollectionView, moveItemAt indexPath: IndexPath, to destinationIndexPath: IndexPath) {
 		let fromIndex = indexPath.item
 		var toIndex = destinationIndexPath.item
 		
@@ -253,8 +253,8 @@ public class BasicCollectionDataSource<Item : AnyObject> : CollectionDataSource 
 		
 		let movingObject = items[fromIndex]
 		
-		items.removeAtIndex(fromIndex)
-		items.insert(movingObject, atIndex: toIndex)
+		items.remove(at: fromIndex)
+		items.insert(movingObject, at: toIndex)
 		
 		_items = items
 		notifyItemMoved(from: indexPath, to: destinationIndexPath)

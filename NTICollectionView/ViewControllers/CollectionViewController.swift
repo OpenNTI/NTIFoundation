@@ -11,27 +11,27 @@ import UIKit
 private var kvoDataSourceContext = "DataSourceContext"
 private var updateNumber = 0
 
-public class CollectionViewController: UICollectionViewController, CollectionDataSourceDelegate, CollectionViewSupplementaryViewTracking {
+open class CollectionViewController: UICollectionViewController, CollectionDataSourceDelegate, CollectionViewSupplementaryViewTracking {
 	
-	private var updateCompletionHandler: dispatch_block_t?
-	private let reloadedSections = NSMutableIndexSet()
-	private let deletedSections = NSMutableIndexSet()
-	private let insertedSections = NSMutableIndexSet()
-	private var isPerformingUpdates = false
-	private var isObservingDataSource = false
-	private var visibleSupplementaryViews: [String: [NSIndexPath: UICollectionReusableView]] = [:]
+	fileprivate var updateCompletionHandler: (()->())?
+	fileprivate var reloadedSections = IndexSet()
+	fileprivate var deletedSections = IndexSet()
+	fileprivate var insertedSections = IndexSet()
+	fileprivate var isPerformingUpdates = false
+	fileprivate var isObservingDataSource = false
+	fileprivate var visibleSupplementaryViews: [String: [IndexPath: UICollectionReusableView]] = [:]
 	
-	public var contentInsets: UIEdgeInsets {
+	open var contentInsets: UIEdgeInsets {
 		get {
 			if hasAssignedContentInsets {
 				return _contentInsets
 			}
 			
-			let orientation = UIApplication.sharedApplication().statusBarOrientation
-			let bounds = UIScreen.mainScreen().bounds
+			let orientation = UIApplication.shared.statusBarOrientation
+			let bounds = UIScreen.main.bounds
 			
-			let isNavigationBarHidden = navigationController?.navigationBar.hidden ?? true
-			let isTabBarHidden = tabBarController?.tabBar.hidden ?? true
+			let isNavigationBarHidden = navigationController?.navigationBar.isHidden ?? true
+			let isTabBarHidden = tabBarController?.tabBar.isHidden ?? true
 			
 			// If the content insets were calculated, and the orientation is the same, return calculated value
 			guard !hasCalculatedContentInsets
@@ -43,16 +43,16 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 			}
 			
 			// Grab our frame in window coordinates
-			let rect = view.convertRect(view.bounds, toView: nil)
+			let rect = view.convert(view.bounds, to: nil)
 			
 			// No value has been assigned, so we need to compute it
-			let application = UIApplication.sharedApplication()
+			let application = UIApplication.shared
 			
-			var insets = UIEdgeInsetsZero
+			var insets = UIEdgeInsets.zero
 			
-			if !application.statusBarHidden {
+			if !application.isStatusBarHidden {
 				// The status bar doesn't seem to adjust when rotated
-				let height = orientation == .Portrait ? application.statusBarFrame.height : application.statusBarFrame.width
+				let height = orientation == .portrait ? application.statusBarFrame.height : application.statusBarFrame.width
 				if rect.minY < height {
 					insets.top += 20
 				}
@@ -62,7 +62,7 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 			if !isNavigationBarHidden, let navigationBar = navigationController?.navigationBar {
 				// During rotation, the navigation bar (and possibly tab bar) doesn't resize immediately. Force it to have its new size.
 				navigationBar.sizeToFit()
-				let frame = navigationBar.convertRect(navigationBar.bounds, toView: nil)
+				let frame = navigationBar.convert(navigationBar.bounds, to: nil)
 				
 				if rect.intersects(frame) {
 					insets.top += frame.maxY - frame.minY
@@ -72,7 +72,7 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 			if !isTabBarHidden, let tabBar = tabBarController?.tabBar {
 				// During rotation, the navigation bar (and possibly tab bar) doesn't resize immediately. Force it to have its new size.
 				tabBar.sizeToFit()
-				let frame = tabBar.convertRect(tabBar.bounds, toView: nil)
+				let frame = tabBar.convert(tabBar.bounds, to: nil)
 				
 				if rect.intersects(frame) {
 					insets.bottom += frame.height
@@ -96,17 +96,17 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 			view.setNeedsLayout()
 		}
 	}
-	private var _contentInsets = UIEdgeInsetsZero
-	private var hasAssignedContentInsets = false
-	private var hasCalculatedContentInsets = false
-	private var calculatedTabBarHiddenValue = false
-	private var calculatedNavigationBarHiddenValue = false
-	private var orientationForCalculatedInsets: UIInterfaceOrientation = .Unknown
-	private var applicationFrameForCalculatedInsets = CGRectZero
-	private var keyboardIsShowing = false
-	private var contentInsetsBeforeShowingKeyboard = UIEdgeInsetsZero
+	fileprivate var _contentInsets = UIEdgeInsets.zero
+	fileprivate var hasAssignedContentInsets = false
+	fileprivate var hasCalculatedContentInsets = false
+	fileprivate var calculatedTabBarHiddenValue = false
+	fileprivate var calculatedNavigationBarHiddenValue = false
+	fileprivate var orientationForCalculatedInsets: UIInterfaceOrientation = .unknown
+	fileprivate var applicationFrameForCalculatedInsets = CGRect.zero
+	fileprivate var keyboardIsShowing = false
+	fileprivate var contentInsetsBeforeShowingKeyboard = UIEdgeInsets.zero
 	
-	public override var collectionView: UICollectionView? {
+	open override var collectionView: UICollectionView? {
 		willSet {
 			endObservingDataSource()
 		}
@@ -115,32 +115,32 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		}
 	}
 	
-	public override var editing: Bool {
+	open override var isEditing: Bool {
 		didSet {
-			guard editing != oldValue else {
+			guard isEditing != oldValue else {
 				return
 			}
 			if let layout = collectionView?.collectionViewLayout as? CollectionViewLayout {
-				layout.isEditing = editing
+				layout.isEditing = isEditing
 			}
 		}
 	}
 	
 	deinit {
-		if isViewLoaded() {
+		if isViewLoaded {
 			endObservingDataSource()
 		}
 	}
 	
-	private func beginObservingDataSource() {
+	fileprivate func beginObservingDataSource() {
 		guard !isObservingDataSource else {
 			return
 		}
-		collectionView!.addObserver(self, forKeyPath: "dataSource", options: [.Initial, .New], context: &kvoDataSourceContext)
+		collectionView!.addObserver(self, forKeyPath: "dataSource", options: [.initial, .new], context: &kvoDataSourceContext)
 		isObservingDataSource = true
 	}
 	
-	private func endObservingDataSource() {
+	fileprivate func endObservingDataSource() {
 		guard isObservingDataSource else {
 			return
 		}
@@ -148,9 +148,9 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		isObservingDataSource = false
 	}
 	
-	public override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+	open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
 		guard context == &kvoDataSourceContext else {
-			super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+			super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
 			return
 		}
 		
@@ -164,12 +164,12 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		}
 	}
 	
-	public override func loadView() {
+	open override func loadView() {
 		super.loadView()
 		beginObservingDataSource()
 	}
 	
-	public override func viewDidLoad() {
+	open override func viewDidLoad() {
 		super.viewDidLoad()
 //		automaticallyAdjustsScrollViewInsets = false
 		let insets = contentInsets
@@ -177,7 +177,7 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		collectionView?.scrollIndicatorInsets = insets
 	}
 	
-	public override func viewWillAppear(animated: Bool) {
+	open override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
 		guard let collectionView = self.collectionView else {
@@ -191,12 +191,12 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		}
 	}
 
-	public override func viewDidDisappear(animated: Bool) {
+	open override func viewDidDisappear(_ animated: Bool) {
 		super.viewDidDisappear(animated)
-		editing = false
+		isEditing = false
 	}
 	
-	public override func viewDidLayoutSubviews() {
+	open override func viewDidLayoutSubviews() {
 		super.viewDidLayoutSubviews()
 		let insets = contentInsets
 		let oldInsets = collectionView!.contentInset
@@ -208,46 +208,46 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		}
 	}
 	
-	public override func willTransitionToTraitCollection(newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+	open override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
 		clearCalculatedInsetInfo()
-		super.willTransitionToTraitCollection(newCollection, withTransitionCoordinator: coordinator)
+		super.willTransition(to: newCollection, with: coordinator)
 	}
 	
-	public override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+	open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
 		clearCalculatedInsetInfo()
-		super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+		super.viewWillTransition(to: size, with: coordinator)
 	}
 	
-	private func clearCalculatedInsetInfo() {
+	fileprivate func clearCalculatedInsetInfo() {
 		guard !hasAssignedContentInsets else {
 			return
 		}
-		orientationForCalculatedInsets = .Unknown
-		applicationFrameForCalculatedInsets = CGRectZero
+		orientationForCalculatedInsets = .unknown
+		applicationFrameForCalculatedInsets = CGRect.zero
 	}
 	
-	public func register(supplementaryItem: SupplementaryItem) {
+	open func register(_ supplementaryItem: SupplementaryItem) {
 		guard let collectionView = self.collectionView else {
 			return
 		}
 		let wrapper = WrapperCollectionView(collectionView: collectionView, mapping: nil)
-		wrapper.registerClass(supplementaryItem.supplementaryViewClass, forSupplementaryViewOfKind: supplementaryItem.elementKind, withReuseIdentifier: supplementaryItem.reuseIdentifier)
+		wrapper.register(supplementaryItem.supplementaryViewClass, forSupplementaryViewOfKind: supplementaryItem.elementKind, withReuseIdentifier: supplementaryItem.reuseIdentifier)
 	}
 	
 	// MARK: - UICollectionViewDelegate
 	
-	public override func collectionView(collectionView: UICollectionView, shouldHighlightItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+	open override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
 		return _collectionView(collectionView, shouldSelectItemAtIndexPath: indexPath)
 	}
 	
-	public override func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-		guard !editing else {
+	open override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+		guard !isEditing else {
 			return false
 		}
 		return _collectionView(collectionView, shouldSelectItemAtIndexPath: indexPath)
 	}
 	
-	private func _collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+	fileprivate func _collectionView(_ collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: IndexPath) -> Bool {
 		guard let dataSource = collectionView.dataSource as? CollectionDataSource else {
 			return shouldSelectItemsByDefault
 		}
@@ -255,12 +255,12 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		return sectionDataSource.allowsSelection
 	}
 	
-	private var shouldSelectItemsByDefault: Bool {
+	fileprivate var shouldSelectItemsByDefault: Bool {
 		return false
 	}
 	
-	public override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-		guard let cell = collectionView.cellForItemAtIndexPath(indexPath) else {
+	open override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		guard let cell = collectionView.cellForItem(at: indexPath) else {
 			return
 		}
 		if let selectableCell = cell as? Selectable {
@@ -268,8 +268,8 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		}
 	}
 	
-	public override func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
-		guard let cell = collectionView.cellForItemAtIndexPath(indexPath) else {
+	open override func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+		guard let cell = collectionView.cellForItem(at: indexPath) else {
 			return
 		}
 		if let selectableCell = cell as? Selectable {
@@ -277,19 +277,19 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		}
 	}
 	
-	public override func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+	open override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
 		if let cell = cell as? CollectionViewCell {
 			cell.onWillDisplay?()
 		}
 	}
 	
-	public override func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+	open override func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
 		if let cell = cell as? CollectionViewCell {
 			cell.onDidEndDisplaying?()
 		}
 	}
 	
-	public override func collectionView(collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, atIndexPath indexPath: NSIndexPath) {
+	open override func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
 		if let supplementaryView = view as? CollectionSupplementaryView {
 			supplementaryView.onWillDisplay?()
 		}
@@ -303,7 +303,7 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		visibleSupplementaryViews[elementKind]![indexPath] = view
 	}
 	
-	public override func collectionView(collectionView: UICollectionView, didEndDisplayingSupplementaryView view: UICollectionReusableView, forElementOfKind elementKind: String, atIndexPath indexPath: NSIndexPath) {
+	open override func collectionView(_ collectionView: UICollectionView, didEndDisplayingSupplementaryView view: UICollectionReusableView, forElementOfKind elementKind: String, at indexPath: IndexPath) {
 		if let supplementaryView = view as? CollectionSupplementaryView {
 			supplementaryView.onWillEndDisplaying?()
 		}
@@ -316,72 +316,72 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 	
 	// MARK: - CollectionSupplementaryViewTracking
 	
-	public func collectionView(collectionView: UICollectionView, visibleViewForSupplementaryElementOfKind kind: String, at indexPath: NSIndexPath) -> UICollectionReusableView? {
+	open func collectionView(_ collectionView: UICollectionView, visibleViewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView? {
 		if #available(iOS 9, *) {
-			return collectionView.supplementaryViewForElementKind(kind, atIndexPath: indexPath)
+			return collectionView.supplementaryView(forElementKind: kind, at: indexPath)
 		}
 		return visibleSupplementaryViews[kind]?[indexPath]
 	}
 	
 	// MARK: - CollectionDataSourceDelegate
 	
-	private func clearSectionUpdateInfo() {
-		reloadedSections.removeAllIndexes()
-		deletedSections.removeAllIndexes()
-		insertedSections.removeAllIndexes()
+	fileprivate func clearSectionUpdateInfo() {
+		reloadedSections.removeAll()
+		deletedSections.removeAll()
+		insertedSections.removeAll()
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didInsertItemsAt indexPaths: [NSIndexPath]) {
+	open func dataSource(_ dataSource: CollectionDataSource, didInsertItemsAt indexPaths: [IndexPath]) {
 		updateLog("\(#function) INSERT ITEMS: \(indexPaths)")
-		collectionView!.insertItemsAtIndexPaths(indexPaths)
+		collectionView!.insertItems(at: indexPaths)
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didRemoveItemsAt indexPaths: [NSIndexPath]) {
+	open func dataSource(_ dataSource: CollectionDataSource, didRemoveItemsAt indexPaths: [IndexPath]) {
 		updateLog("\(#function) REMOVE ITEMS: \(indexPaths)")
-		collectionView!.deleteItemsAtIndexPaths(indexPaths)
+		collectionView!.deleteItems(at: indexPaths)
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didRefreshItemsAt indexPaths: [NSIndexPath]) {
+	open func dataSource(_ dataSource: CollectionDataSource, didRefreshItemsAt indexPaths: [IndexPath]) {
 		updateLog("\(#function) REFRESH ITEMS: \(indexPaths)")
-		collectionView!.reloadItemsAtIndexPaths(indexPaths)
+		collectionView!.reloadItems(at: indexPaths)
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didMoveItemAt oldIndexPath: NSIndexPath, to newIndexPath: NSIndexPath) {
+	open func dataSource(_ dataSource: CollectionDataSource, didMoveItemAt oldIndexPath: IndexPath, to newIndexPath: IndexPath) {
 		updateLog("\(#function) MOVE ITEM: \(oldIndexPath.debugLogDescription) TO: \(newIndexPath.debugLogDescription)")
-		collectionView!.moveItemAtIndexPath(oldIndexPath, toIndexPath: newIndexPath)
+		collectionView!.moveItem(at: oldIndexPath, to: newIndexPath)
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didInsertSections sections: NSIndexSet, direction: SectionOperationDirection?) {
+	open func dataSource(_ dataSource: CollectionDataSource, didInsertSections sections: IndexSet, direction: SectionOperationDirection?) {
 		updateLog("\(#function) INSERT SECTIONS: \(sections.debugLogDescription)")
 		let layout = collectionView!.collectionViewLayout
 		if let collectionLayout = layout as? CollectionViewLayout {
 			collectionLayout.dataSource(dataSource, didInsertSections: sections, direction: direction)
 		}
 		collectionView!.insertSections(sections)
-		insertedSections.addIndexes(sections)
+		insertedSections.formUnion(sections)
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didRemoveSections sections: NSIndexSet, direction: SectionOperationDirection?) {
+	open func dataSource(_ dataSource: CollectionDataSource, didRemoveSections sections: IndexSet, direction: SectionOperationDirection?) {
 		updateLog("\(#function) REMOVE SECTIONS: \(sections.debugLogDescription)")
 		let layout = collectionView!.collectionViewLayout
 		if let collectionLayout = layout as? CollectionViewLayout {
 			collectionLayout.dataSource(dataSource, didRemoveSections: sections, direction: direction)
 		}
 		collectionView!.deleteSections(sections)
-		deletedSections.addIndexes(sections)
+		deletedSections.formUnion(sections)
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didRefreshSections sections: NSIndexSet) {
+	open func dataSource(_ dataSource: CollectionDataSource, didRefreshSections sections: IndexSet) {
 		updateLog("\(#function) REFRESH SECTIONS: \(sections.debugLogDescription)")
 		// It's not "legal" to reload a section if you also delete the section later in the same batch update. So we'll just remember that we want to reload these sections when we're performing a batch update and reload them only if they weren't also deleted.
 		if isPerformingUpdates {
-			reloadedSections.addIndexes(sections)
+			reloadedSections.formUnion(sections)
 		} else {
 			collectionView!.reloadSections(sections)
 		}
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didMoveSectionFrom oldSection: Int, to newSection: Int, direction: SectionOperationDirection?) {
+	open func dataSource(_ dataSource: CollectionDataSource, didMoveSectionFrom oldSection: Int, to newSection: Int, direction: SectionOperationDirection?) {
 		updateLog("\(#function) MOVE SECTION: \(oldSection) TO: \(newSection)")
 		let layout = collectionView!.collectionViewLayout
 		if let collectionLayout = layout as? CollectionViewLayout {
@@ -390,26 +390,26 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		collectionView!.moveSection(oldSection, toSection: newSection)
 	}
 	
-	public func dataSourceDidReloadData(dataSource: CollectionDataSource) {
+	open func dataSourceDidReloadData(_ dataSource: CollectionDataSource) {
 		updateLog("\(#function) RELOAD")
 		collectionView!.reloadData()
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, performBatchUpdate update: () -> Void, complete: (() -> Void)?) {
+	open func dataSource(_ dataSource: CollectionDataSource, performBatchUpdate update: @escaping () -> Void, complete: (() -> Void)?) {
 		performBatchUpdates(update, completion: complete)
 	}
 	
-	private func performBatchUpdates(updates: dispatch_block_t, completion: dispatch_block_t? = nil) {
+	fileprivate func performBatchUpdates(_ updates: @escaping ()->(), completion: (()->())? = nil) {
 		requireMainThread()
 		// We're currently updating the collection view, so we can't call -performBatchUpdates:completion: on it
 		guard !isPerformingUpdates else {
 			updateLog("\(#function) PERFORMING UPDATES IMMEDIATELy")
 			// Chain the completion handler if one was given
-			if completion != nil {
+			if let completion = completion {
 				let oldCompletion = updateCompletionHandler
 				updateCompletionHandler = {
 					oldCompletion?()
-					completion?()
+					completion()
 				}
 			}
 			// Now immediately execute the new updates
@@ -424,7 +424,7 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		
 		clearSectionUpdateInfo()
 		
-		var completionHandler: dispatch_block_t?
+		var completionHandler: (()->())?
 		
 		collectionView!.performBatchUpdates({
 			updateLog("\(#function) \(updateNumber): BEGIN UPDATE")
@@ -434,11 +434,11 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 			updates()
 			
 			// Perform delayed reloadSections calls
-			let sectionsToReload = NSMutableIndexSet(indexSet: self.reloadedSections)
+			var sectionsToReload = IndexSet(self.reloadedSections)
 			
 			// UICollectionView doesn't like it if you reload a section that was either inserted or deleted
-			sectionsToReload.removeIndexes(self.deletedSections)
-			sectionsToReload.removeIndexes(self.insertedSections)
+			sectionsToReload.subtract(self.deletedSections)
+			sectionsToReload.subtract(self.insertedSections)
 			
 			self.collectionView!.reloadSections(sectionsToReload)
 			updateLog("\(#function) \(updateNumber): RELOADED SECTIONS: \(sectionsToReload.debugLogDescription)")
@@ -455,45 +455,47 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		}
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didPresentActivityIndicatorForSections sections: NSIndexSet) {
+	open func dataSource(_ dataSource: CollectionDataSource, didPresentActivityIndicatorForSections sections: IndexSet) {
 		updateLog("\(#function) Present activity indicator: sections=\(sections.debugLogDescription)")
-		reloadedSections.addIndexes(sections)
+		reloadedSections.formUnion(sections)
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didPresentPlaceholderForSections sections: NSIndexSet) {
+	open func dataSource(_ dataSource: CollectionDataSource, didPresentPlaceholderForSections sections: IndexSet) {
 		updateLog("\(#function) Present placeholder: sections=\(sections.debugLogDescription)")
-		reloadedSections.addIndexes(sections)
+		reloadedSections.formUnion(sections)
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didDismissPlaceholderForSections sections: NSIndexSet) {
+	open func dataSource(_ dataSource: CollectionDataSource, didDismissPlaceholderForSections sections: IndexSet) {
 		updateLog("\(#function) Dismiss placeholder: sections=\(sections.debugLogDescription)")
-		reloadedSections.addIndexes(sections)
+		reloadedSections.formUnion(sections)
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didUpdate supplementaryItem: SupplementaryItem, at indexPaths: [NSIndexPath]) {
+	open func dataSource(_ dataSource: CollectionDataSource, didUpdate supplementaryItem: SupplementaryItem, at indexPaths: [IndexPath]) {
 		let collectionView = self.collectionView!
 		let kind = supplementaryItem.elementKind
 		
 		performBatchUpdates({
-			let contextClass = collectionView.collectionViewLayout.dynamicType.invalidationContextClass() as! UICollectionViewLayoutInvalidationContext.Type
+			updateLog("\(#function) Batch updates: indexPaths=[\(indexPaths.map({$0.debugLogDescription}).joined(separator: ", "))]")
+			
+			let contextClass = type(of: collectionView.collectionViewLayout).invalidationContextClass as! UICollectionViewLayoutInvalidationContext.Type
 			let context = contextClass.init()
 			
 			for indexPath in indexPaths {
-				let localDataSource = dataSource.dataSourceForSectionAtIndex(indexPath.section)
+				let localDataSource = dataSource.dataSourceForSectionAtIndex(indexPath.layoutSection)
 				guard let view = self.collectionView(collectionView, visibleViewForSupplementaryElementOfKind: kind, at: indexPath),
-					localIndexPath = dataSource.localIndexPathForGlobal(indexPath) else {
+					let localIndexPath = dataSource.localIndexPathForGlobal(indexPath) else {
 						continue
 				}
-				supplementaryItem.configureView?(view: view, dataSource: localDataSource, indexPath: localIndexPath)
+				supplementaryItem.configureView?(view, localDataSource, localIndexPath)
 			}
 			
-			context.invalidateSupplementaryElementsOfKind(kind, atIndexPaths: indexPaths)
+			context.invalidateSupplementaryElements(ofKind: kind, at: indexPaths)
 			
-			collectionView.collectionViewLayout.invalidateLayoutWithContext(context)
+			collectionView.collectionViewLayout.invalidateLayout(with: context)
 		})
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didAddChild childDataSource: CollectionDataSource) {
+	open func dataSource(_ dataSource: CollectionDataSource, didAddChild childDataSource: CollectionDataSource) {
 		guard let collectionView = self.collectionView else {
 			return
 		}
@@ -501,7 +503,7 @@ public class CollectionViewController: UICollectionViewController, CollectionDat
 		childDataSource.registerReusableViews(with: wrapper)
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, perform update: UICollectionView -> Void) {
+	open func dataSource(_ dataSource: CollectionDataSource, perform update: @escaping (UICollectionView) -> Void) {
 		guard let collectionView = self.collectionView else {
 			return
 		}

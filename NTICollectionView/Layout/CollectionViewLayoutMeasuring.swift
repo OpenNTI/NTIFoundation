@@ -10,10 +10,10 @@ import UIKit
 
 public protocol CollectionViewLayoutMeasuring : class {
 	
-	func measuredSizeForSupplementaryItem(supplementaryItem: LayoutSupplementaryItem) -> CGSize
+	func measuredSizeForSupplementaryItem(_ supplementaryItem: LayoutSupplementaryItem) -> CGSize
 	
-	func measuredSizeForItem(item: LayoutItem) -> CGSize
+	func measuredSizeForItem(_ item: LayoutItem) -> CGSize
 	
-	func measuredSizeForPlaceholder(placeholderInfo: LayoutPlaceholder) -> CGSize
+	func measuredSizeForPlaceholder(_ placeholderInfo: LayoutPlaceholder) -> CGSize
 	
 }

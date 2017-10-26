@@ -17,7 +17,7 @@ public struct TableLayoutSectionBuilder: LayoutSectionBuilder {
 		self.metrics = tableMetrics
 	}
 	
-	private let metrics: TableSectionMetricsProviding
+	fileprivate let metrics: TableSectionMetricsProviding
 	
 	public func makeLayoutSection(using description: SectionDescription, in layoutBounds: LayoutAreaBounds) -> LayoutSection {
 		var section = TableLayoutSection()
@@ -44,7 +44,7 @@ public struct TableLayoutSectionBuilder: LayoutSectionBuilder {
 		}
 		
 		// Layout content area
-		if var placeholder = description.placeholder where placeholder.startingSectionIndex == sectionIndex {
+		if var placeholder = description.placeholder, placeholder.startingSectionIndex == sectionIndex {
 			// Layout placeholder
 			placeholder.frame = CGRect(x: origin.x, y: origin.y, width: width, height: placeholder.height)
 			
@@ -146,7 +146,7 @@ public struct TableRowStackBuilder {
 	
 	typealias RowContext = (row: LayoutRow, position: CGPoint, rowHeight: CGFloat, itemHeight: CGFloat, columnIndex: Int)
 	
-	static let hairline = 1 / UIScreen.mainScreen().scale
+	static let hairline = 1 / UIScreen.main.scale
 
 	public func makeLayoutRows(using description: SectionDescription, in layoutBounds: LayoutAreaBounds) -> [LayoutRow] {
 		var rows = [LayoutRow]()
@@ -269,7 +269,7 @@ public struct TableRowStackBuilder {
 		return item
 	}
 	
-	func decorate(inout row: LayoutRow, atIndex index: Int, using metrics: TableRowMetricsProviding) {
+	func decorate(_ row: inout LayoutRow, atIndex index: Int, using metrics: TableRowMetricsProviding) {
 		guard metrics.showsRowSeparator else {
 			return
 		}

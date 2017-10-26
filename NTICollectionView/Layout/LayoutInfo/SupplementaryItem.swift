@@ -15,7 +15,7 @@ public let globalSectionIndex = Int.max
 
 public let automaticLength: CGFloat = -1
 
-public typealias SupplementaryItemConfiguration = (view: UICollectionReusableView, dataSource: CollectionDataSource, indexPath: NSIndexPath) -> Void
+public typealias SupplementaryItemConfiguration = (_ view: UICollectionReusableView, _ dataSource: CollectionDataSource, _ indexPath: IndexPath) -> Void
 
 /// Definition of how supplementary views should be created and presented in a collection view.
 public protocol SupplementaryItem: LayoutMetricsApplicable {
@@ -64,7 +64,7 @@ public protocol SupplementaryItem: LayoutMetricsApplicable {
 	var hasEstimatedHeight: Bool { get }
 	
 	/// Adds a configuration block to the supplementary view. This does not clear existing configuration blocks.
-	mutating func configure(with configuration: SupplementaryItemConfiguration)
+	mutating func configure(with configuration: @escaping SupplementaryItemConfiguration)
 	
 	func configureValues(of attributes: CollectionViewLayoutAttributes)
 	
@@ -212,7 +212,7 @@ extension SupplementaryItemWrapper {
 		return supplementaryItem.hasEstimatedHeight
 	}
 	
-	public mutating func configure(with configuration: SupplementaryItemConfiguration) {
+	public mutating func configure(with configuration: @escaping SupplementaryItemConfiguration) {
 		supplementaryItem.configure(with: configuration)
 	}
 	

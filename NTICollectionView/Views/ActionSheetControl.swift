@@ -12,11 +12,11 @@ public final class ActionSheetControl: SegmentedControlView {
 
 	public init(controlView: UIControl) {
 		self.controlView = controlView
-		controlView.addTarget(self, action: #selector(ActionSheetControl.controlPressed(_:)), forControlEvents: .TouchUpInside)
+		controlView.addTarget(self, action: #selector(ActionSheetControl.controlPressed(_:)), for: .touchUpInside)
 	}
 	
 	deinit {
-		controlView.removeTarget(self, action: #selector(ActionSheetControl.controlPressed(_:)), forControlEvents: .TouchUpInside)
+		controlView.removeTarget(self, action: #selector(ActionSheetControl.controlPressed(_:)), for: .touchUpInside)
 	}
 	
 	public let controlView: UIControl
@@ -27,20 +27,20 @@ public final class ActionSheetControl: SegmentedControlView {
 	
 	public var animatesPresentation = true
 	
-	@objc public func controlPressed(control: UIControl) {
+	@objc public func controlPressed(_ control: UIControl) {
 		isActionSheetPresenting ? dismissActionSheet() : presentActionSheet()
 	}
 	
-	private weak var actionSheetController: UIAlertController?
+	fileprivate weak var actionSheetController: UIAlertController?
 	
-	private var isActionSheetPresenting: Bool {
+	fileprivate var isActionSheetPresenting: Bool {
 		guard let actionSheet = actionSheetController else {
 			return false
 		}
 		return actionSheet.presentingViewController != nil
 	}
 	
-	private func presentActionSheet() {
+	fileprivate func presentActionSheet() {
 		guard let presenter = presentationDelegate else {
 			return
 		}
@@ -49,12 +49,12 @@ public final class ActionSheetControl: SegmentedControlView {
 		presenter.presentActionSheet(actionSheet)
 	}
 	
-	private func dismissActionSheet() {
+	fileprivate func dismissActionSheet() {
 		presentationDelegate?.dismissActionSheet()
 	}
 	
-	private func makeActionSheetController() -> UIAlertController {
-		let sheetController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+	fileprivate func makeActionSheetController() -> UIAlertController {
+		let sheetController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 		
 		configurePresentationController(of: sheetController)
 		configureActions(of: sheetController)
@@ -62,7 +62,7 @@ public final class ActionSheetControl: SegmentedControlView {
 		return sheetController
 	}
 	
-	private func configurePresentationController(of sheetController: UIAlertController) {
+	fileprivate func configurePresentationController(of sheetController: UIAlertController) {
 		guard let presentationController = sheetController.popoverPresentationController else {
 			return
 		}
@@ -70,22 +70,22 @@ public final class ActionSheetControl: SegmentedControlView {
 		presentationController.sourceRect = makeActionSheetSourceRect()
 	}
 	
-	private func makeActionSheetSourceRect() -> CGRect {
+	fileprivate func makeActionSheetSourceRect() -> CGRect {
 		let x = controlView.bounds.midX
 		let y = controlView.bounds.midY
 		return CGRect(x: x, y: y, width: 1, height: 1)
 	}
 	
-	private func configureActions(of sheetController: UIAlertController) {
+	fileprivate func configureActions(of sheetController: UIAlertController) {
 		for index in segments.indices {
 			let action = makeAlertAction(for: index)
 			sheetController.addAction(action)
 		}
 	}
 	
-	private func makeAlertAction(for index: Int) -> UIAlertAction {
+	fileprivate func makeAlertAction(for index: Int) -> UIAlertAction {
 		let title = segments[index]
-		return UIAlertAction(title: title, style: .Default) { [unowned self] alertAction in
+		return UIAlertAction(title: title, style: .default) { [unowned self] alertAction in
 			self.selectedSegmentIndex = index
 			self.segmentedControlDelegate?.segmentedControlDidChangeValue(self)
 		}
@@ -101,28 +101,28 @@ public final class ActionSheetControl: SegmentedControlView {
 	
 	public var userInteractionEnabled: Bool {
 		get {
-			return controlView.userInteractionEnabled
+			return controlView.isUserInteractionEnabled
 		}
 		set {
-			controlView.userInteractionEnabled = newValue
+			controlView.isUserInteractionEnabled = newValue
 		}
 	}
 	
 	public weak var segmentedControlDelegate: SegmentedControlDelegate?
 	
-	public func insertSegmentWithTitle(title: String?, atIndex segment: Int, animated: Bool) {
-		segments.insert(title ?? "", atIndex: segment)
+	public func insertSegmentWithTitle(_ title: String?, atIndex segment: Int, animated: Bool) {
+		segments.insert(title ?? "", at: segment)
 	}
 	
 	public func removeAllSegments() {
-		segments.removeAll(keepCapacity: true)
+		segments.removeAll(keepingCapacity: true)
 	}
 	
 }
 
 public protocol ActionSheetPresentationDelegate: class {
 	
-	func presentActionSheet(actionSheet: UIAlertController)
+	func presentActionSheet(_ actionSheet: UIAlertController)
 	
 	func dismissActionSheet()
 	

@@ -9,16 +9,16 @@
 import UIKit
 
 /// A subclass of UICollectionViewLayoutInvalidationContext that adds invalidation for metrics.
-public class CollectionViewLayoutInvalidationContext: UICollectionViewLayoutInvalidationContext {
+open class CollectionViewLayoutInvalidationContext: UICollectionViewLayoutInvalidationContext {
 	
 	/// Any index paths that have been explicitly invalidated need to be remeasured.
-	public var invalidateMetrics = false
+	open var invalidateMetrics = false
 	
 }
 
-public class CollectionViewSeparatorView: UICollectionReusableView {
+open class CollectionViewSeparatorView: UICollectionReusableView {
 	
-	public override func applyLayoutAttributes(layoutAttributes: UICollectionViewLayoutAttributes) {
+	open override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
 		guard let layoutAttributes = layoutAttributes as? CollectionViewLayoutAttributes else {
 			return
 		}
@@ -42,9 +42,9 @@ private enum AutoScrollDirection: String {
 	
 }
 
-public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutMeasuring, CollectionDataSourceDelegate, ShadowRegistrarVending {
+open class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutMeasuring, CollectionDataSourceDelegate, ShadowRegistrarVending {
 	
-	public var isEditing = false {
+	open var isEditing = false {
 		didSet {
 			guard isEditing != oldValue else {
 				return
@@ -54,31 +54,31 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		}
 	}
 	
-	var layoutSize = CGSizeZero
+	var layoutSize = CGSize.zero
 	
 	/// - note: `nil` until `resetLayoutInfo()` has been called for the first time.
-	private var layoutInfo: LayoutInfo!
-	private var oldLayoutInfo: LayoutInfo?
+	fileprivate var layoutInfo: LayoutInfo!
+	fileprivate var oldLayoutInfo: LayoutInfo?
 	
-	private var updateSectionDirections: [Int: SectionOperationDirection] = [:]
+	fileprivate var updateSectionDirections: [Int: SectionOperationDirection] = [:]
 	
-	private var updateRecorder = CollectionUpdateRecorder()
+	fileprivate var updateRecorder = CollectionUpdateRecorder()
 	
-	private var contentOffsetDelta = CGPointZero
+	fileprivate var contentOffsetDelta = CGPoint.zero
 	
 	/// A duplicate registry of all the cell & supplementary view class/nibs used in this layout. These will be used to create views while measuring the layout instead of dequeueing reusable views, because that causes consternation in UICollectionView.
-	public var shadowRegistrar = ShadowRegistrar()
+	open var shadowRegistrar = ShadowRegistrar()
 	/// Flag used to lock out multiple calls to `buildLayout` which seems to happen when measuring cells and supplementary views.
-	private var isBuildingLayout = false
+	fileprivate var isBuildingLayout = false
 	/// The attributes being currently measured. This allows short-circuiting the lookup in several API methods.
-	private var measuringAttributes: CollectionViewLayoutAttributes?
+	fileprivate var measuringAttributes: CollectionViewLayoutAttributes?
 	/// The collection view wrapper used while measuring views.
-	private var collectionViewWrapper: CollectionViewWrapper?
+	fileprivate var collectionViewWrapper: CollectionViewWrapper?
 	
 	/// Whether the data source has the snapshot metrics method.
-	private var dataSourceHasSnapshotMetrics = true
+	fileprivate var dataSourceHasSnapshotMetrics = true
 	/// Layout data becomes invalid if the data source changes.
-	private var layoutDataIsValid = true
+	fileprivate var layoutDataIsValid = true
 	
 	public override init() {
 		super.init()
@@ -90,33 +90,33 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		setUp()
 	}
 	
-	private func setUp() {
+	fileprivate func setUp() {
 		registerDecorationViews()
 	}
 	
-	public func registerDecorationViews() {
+	open func registerDecorationViews() {
 		// Subclasses should override to register custom decoration views
 		// TODO: Encapsulate elsewhere
-		registerClass(CollectionViewSeparatorView.self, forDecorationViewOfKind: collectionElementKindRowSeparator)
-		registerClass(CollectionViewSeparatorView.self, forDecorationViewOfKind: collectionElementKindColumnSeparator)
-		registerClass(CollectionViewSeparatorView.self, forDecorationViewOfKind: collectionElementKindSectionSeparator)
-		registerClass(CollectionViewSeparatorView.self, forDecorationViewOfKind: collectionElementKindGlobalHeaderBackground)
-		registerClass(CollectionViewSeparatorView.self, forDecorationViewOfKind: collectionElementKindContentBackground)
+		register(CollectionViewSeparatorView.self, forDecorationViewOfKind: collectionElementKindRowSeparator)
+		register(CollectionViewSeparatorView.self, forDecorationViewOfKind: collectionElementKindColumnSeparator)
+		register(CollectionViewSeparatorView.self, forDecorationViewOfKind: collectionElementKindSectionSeparator)
+		register(CollectionViewSeparatorView.self, forDecorationViewOfKind: collectionElementKindGlobalHeaderBackground)
+		register(CollectionViewSeparatorView.self, forDecorationViewOfKind: collectionElementKindContentBackground)
 	}
 	
 	// MARK: - Editing helpers
 	
-	public func canEditItem(at indexPath: NSIndexPath) -> Bool {
+	open func canEditItem(at indexPath: IndexPath) -> Bool {
 		guard let collectionView = self.collectionView,
-			dataSource = collectionView.dataSource as? CollectionDataSource else {
+			let dataSource = collectionView.dataSource as? CollectionDataSource else {
 				return false
 		}
 		return dataSource.collectionView(collectionView, canEditItemAt: indexPath)
 	}
 	
-	public func canMoveItem(at indexPath: NSIndexPath) -> Bool {
+	open func canMoveItem(at indexPath: IndexPath) -> Bool {
 		guard let collectionView = self.collectionView,
-			dataSource = collectionView.dataSource as? CollectionDataSource else {
+			let dataSource = collectionView.dataSource as? CollectionDataSource else {
 				return false
 		}
 		return dataSource.collectionView(collectionView, canMoveItemAt: indexPath)
@@ -124,17 +124,17 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	
 	// MARK: - CollectionViewLayoutMeasuring
 	
-	public func measuredSizeForSupplementaryItem(supplementaryItem: LayoutSupplementaryItem) -> CGSize {
+	open func measuredSizeForSupplementaryItem(_ supplementaryItem: LayoutSupplementaryItem) -> CGSize {
 		guard let collectionView = collectionViewWrapper as? WrapperCollectionView,
-			dataSource = collectionView.dataSource else {
-				return CGSizeZero
+			let dataSource = collectionView.dataSource else {
+				return CGSize.zero
 		}
 		
 		measuringAttributes = supplementaryItem.layoutAttributes.copy() as? CollectionViewLayoutAttributes
-		measuringAttributes!.hidden = true
+		measuringAttributes!.isHidden = true
 		
-		let view = dataSource.collectionView!(collectionView, viewForSupplementaryElementOfKind: supplementaryItem.elementKind, atIndexPath: supplementaryItem.indexPath)
-		let attributes = view.preferredLayoutAttributesFittingAttributes(measuringAttributes!)
+		let view = dataSource.collectionView!(collectionView, viewForSupplementaryElementOfKind: supplementaryItem.elementKind, at: supplementaryItem.indexPath as IndexPath)
+		let attributes = view.preferredLayoutAttributesFitting(measuringAttributes!)
 		view.removeFromSuperview()
 		
 		// Allow regeneration of the layout attributes later
@@ -144,17 +144,17 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return attributes.frame.size
 	}
 	
-	public func measuredSizeForItem(item: LayoutItem) -> CGSize {
+	open func measuredSizeForItem(_ item: LayoutItem) -> CGSize {
 		guard let collectionView = collectionViewWrapper as? WrapperCollectionView,
-			dataSource = collectionView.dataSource else {
-				return CGSizeZero
+			let dataSource = collectionView.dataSource else {
+				return CGSize.zero
 		}
 		
 		measuringAttributes = item.layoutAttributes.copy() as? CollectionViewLayoutAttributes
-		measuringAttributes!.hidden = true
+		measuringAttributes!.isHidden = true
 		
-		let view = dataSource.collectionView(collectionView, cellForItemAtIndexPath: item.indexPath)
-		let attributes = view.preferredLayoutAttributesFittingAttributes(measuringAttributes!)
+		let view = dataSource.collectionView(collectionView, cellForItemAt: item.indexPath as IndexPath)
+		let attributes = view.preferredLayoutAttributesFitting(measuringAttributes!)
 		view.removeFromSuperview()
 		
 		// Allow regeneration of the layout attributes later
@@ -164,17 +164,17 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return attributes.frame.size
 	}
 	
-	public func measuredSizeForPlaceholder(placeholderInfo: LayoutPlaceholder) -> CGSize {
+	open func measuredSizeForPlaceholder(_ placeholderInfo: LayoutPlaceholder) -> CGSize {
 		guard let collectionView = collectionViewWrapper as? WrapperCollectionView,
-			dataSource = collectionView.dataSource else {
-				return CGSizeZero
+			let dataSource = collectionView.dataSource else {
+				return CGSize.zero
 		}
 		
 		measuringAttributes = placeholderInfo.layoutAttributes.copy() as? CollectionViewLayoutAttributes
-		measuringAttributes!.hidden = true
+		measuringAttributes!.isHidden = true
 		
-		let view = dataSource.collectionView!(collectionView, viewForSupplementaryElementOfKind: measuringAttributes!.representedElementKind!, atIndexPath: placeholderInfo.indexPath)
-		let attributes = view.preferredLayoutAttributesFittingAttributes(measuringAttributes!)
+		let view = dataSource.collectionView!(collectionView, viewForSupplementaryElementOfKind: measuringAttributes!.representedElementKind!, at: placeholderInfo.indexPath as IndexPath)
+		let attributes = view.preferredLayoutAttributesFitting(measuringAttributes!)
 		view.removeFromSuperview()
 		
 		// Allow regeneration of the layout attributes later
@@ -186,50 +186,50 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	
 	// MARK: - Drag & Drop
 	
-	private let scrollDirection: UICollectionViewScrollDirection = .Vertical
+	fileprivate let scrollDirection: UICollectionViewScrollDirection = .vertical
 	
-	private var scrollingSpeed: CGFloat = 0
+	fileprivate var scrollingSpeed: CGFloat = 0
 	
-	private var scrollingTriggerEdgeInsets: UIEdgeInsets = .zero
+	fileprivate var scrollingTriggerEdgeInsets: UIEdgeInsets = .zero
 	
-	private var selectedItemIndexPath: NSIndexPath?
+	fileprivate var selectedItemIndexPath: IndexPath?
 	
-	private var sourceItemIndexPath: NSIndexPath?
+	fileprivate var sourceItemIndexPath: IndexPath?
 	
-	private var currentView: UIView!
+	fileprivate var currentView: UIView!
 	
-	private var currentViewCenter: CGPoint = .zero
+	fileprivate var currentViewCenter: CGPoint = .zero
 	
-	private var panTranslationInCollectionView: CGPoint = .zero
+	fileprivate var panTranslationInCollectionView: CGPoint = .zero
 	
-	private var displayLink: CADisplayLink?
+	fileprivate var displayLink: CADisplayLink?
 	
-	private var autoscrollDirection: AutoScrollDirection?
+	fileprivate var autoscrollDirection: AutoScrollDirection?
 	
-	private var autoscrollBounds: CGRect = .zero
+	fileprivate var autoscrollBounds: CGRect = .zero
 	
-	private var dragBounds: CGRect = .zero
+	fileprivate var dragBounds: CGRect = .zero
 	
-	private var dragCellSize: CGSize = .zero
+	fileprivate var dragCellSize: CGSize = .zero
 	
 	
-	public func beginDraggingItem(at indexPath: NSIndexPath) {
+	open func beginDraggingItem(at indexPath: IndexPath) {
 		guard let
 			collectionView = self.collectionView,
-			cell = collectionView.cellForItemAtIndexPath(indexPath) else {
+			let cell = collectionView.cellForItem(at: indexPath) else {
 				return
 		}
 		
 		var dragFrame = cell.frame
 		dragCellSize = dragFrame.size
 		
-		let snapshotView = cell.snapshotViewAfterScreenUpdates(true)
+		let snapshotView = cell.snapshotView(afterScreenUpdates: true)
 		
-		let shadowView = UIImageView(frame: CGRectInset(dragFrame, 0, -dragShadowHeight))
+		let shadowView = UIImageView(frame: dragFrame.insetBy(dx: 0, dy: -dragShadowHeight))
 		if let image = UIImage(named: "DragShadow") {
-			shadowView.image = image.resizableImageWithCapInsets(UIEdgeInsets(top: dragShadowHeight, left: 1, bottom: dragShadowHeight, right: 1))
+			shadowView.image = image.resizableImage(withCapInsets: UIEdgeInsets(top: dragShadowHeight, left: 1, bottom: dragShadowHeight, right: 1))
 		}
-		shadowView.opaque = false
+		shadowView.isOpaque = false
 		
 		dragFrame.origin = CGPoint(x: 0, y: dragShadowHeight)
 		snapshotView!.frame = dragFrame
@@ -248,10 +248,10 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		}
 		
 		let context = CollectionViewLayoutInvalidationContext()
-		context.invalidateItemsAtIndexPaths([indexPath])
-		invalidateLayoutWithContext(context)
+		context.invalidateItems(at: [indexPath])
+		invalidateLayout(with: context)
 		
-		autoscrollBounds = CGRectZero
+		autoscrollBounds = CGRect.zero
 		autoscrollBounds.size = collectionView.bounds.size
 		autoscrollBounds = UIEdgeInsetsInsetRect(autoscrollBounds, scrollingTriggerEdgeInsets)
 		
@@ -262,11 +262,11 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		dragBounds = CGRect(x: dragCellSize.width/2, y: dragCellSize.height/2, width: collectionViewWidth - dragCellSize.width, height: collectionViewHeight - dragCellSize.height)
 	}
 	
-	public func cancelDragging() {
+	open func cancelDragging() {
 		guard let
 			currentView = self.currentView,
-			sourceItemIndexPath = self.sourceItemIndexPath,
-			selectedItemIndexPath = self.selectedItemIndexPath else {
+			let sourceItemIndexPath = self.sourceItemIndexPath,
+			let selectedItemIndexPath = self.selectedItemIndexPath else {
 				return
 		}
 		
@@ -275,7 +275,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		guard var
 			sourceSection = sectionInfoForSectionAtIndex(sourceSectionIndex),
-			destinationSection = sectionInfoForSectionAtIndex(destinationSectionIndex) else {
+			var destinationSection = sectionInfoForSectionAtIndex(destinationSectionIndex) else {
 				return
 		}
 		
@@ -294,13 +294,13 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		// TODO: Layout source and destination sections
 		layoutInfo.setSection(sourceSection, at: sourceSectionIndex)
 		layoutInfo.setSection(destinationSection, at: destinationSectionIndex)
-		invalidateLayoutWithContext(context)
+		invalidateLayout(with: context)
 	}
 	
-	public func endDragging() {
+	open func endDragging() {
 		guard let
 			currentView = self.currentView,
-			fromIndexPath = self.sourceItemIndexPath,
+			let fromIndexPath = self.sourceItemIndexPath,
 			var toIndexPath = self.selectedItemIndexPath else {
 				return
 		}
@@ -312,7 +312,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		guard var
 			sourceSection = sectionInfoForSectionAtIndex(sourceSectionIndex),
-			destinationSection = sectionInfoForSectionAtIndex(destinationSectionIndex) else {
+			var destinationSection = sectionInfoForSectionAtIndex(destinationSectionIndex) else {
 				return
 		}
 		
@@ -334,7 +334,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			}
 			else if fromIndex < toIndex {
 				toIndex -= 1
-				toIndexPath = NSIndexPath(forItem: toIndex, inSection: destinationSectionIndex)
+				toIndexPath = IndexPath(item: toIndex, section: destinationSectionIndex)
 			}
 		}
 		
@@ -345,7 +345,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			UIView.performWithoutAnimation {
 				guard let
 					collectionView = self.collectionView,
-					dataSource = collectionView.dataSource as? CollectionDataSource else {
+					let dataSource = collectionView.dataSource as? CollectionDataSource else {
 						return
 				}
 				
@@ -357,25 +357,25 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		// Layout source and destination sections
 		layoutInfo.setSection(sourceSection, at: sourceSectionIndex)
 		layoutInfo.setSection(destinationSection, at: destinationSectionIndex)
-		invalidateLayoutWithContext(context)
+		invalidateLayout(with: context)
 		
 		selectedItemIndexPath = nil
 	}
 	
-	private func invalidateScrollTimer() {
+	fileprivate func invalidateScrollTimer() {
 		guard let displayLink = self.displayLink else {
 			return
 		}
 		
-		if !displayLink.paused {
+		if !displayLink.isPaused {
 			displayLink.invalidate()
 		}
 		
 		self.displayLink = nil
 	}
 	
-	private func setupScrollTimer(in direction: AutoScrollDirection) {
-		if let displayLink = self.displayLink where !displayLink.paused {
+	fileprivate func setupScrollTimer(in direction: AutoScrollDirection) {
+		if let displayLink = self.displayLink, !displayLink.isPaused {
 			if autoscrollDirection == direction {
 				return
 			}
@@ -386,14 +386,14 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		displayLink = CADisplayLink(target: self, selector: #selector(CollectionViewLayout.handleScroll(_:)))
 		autoscrollDirection = direction
 		
-		displayLink?.addToRunLoop(.mainRunLoop(), forMode: NSRunLoopCommonModes)
+		displayLink?.add(to: .main, forMode: RunLoopMode.commonModes)
 	}
 	
 	// Tight loop, allocate memory sparely, even if they are stack allocation
-	public func handleScroll(displayLink: CADisplayLink) {
+	open func handleScroll(_ displayLink: CADisplayLink) {
 		guard let
 			direction = autoscrollDirection,
-			collectionView = self.collectionView else {
+			let collectionView = self.collectionView else {
 			return
 		}
 		
@@ -458,10 +458,10 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		collectionView.contentOffset = contentOffset + translation
 	}
 	
-	private func pointConstrainedToDragBounds(viewCenter: CGPoint) -> CGPoint {
+	fileprivate func pointConstrainedToDragBounds(_ viewCenter: CGPoint) -> CGPoint {
 		var viewCenter = viewCenter
 		
-		if scrollDirection == .Vertical {
+		if scrollDirection == .vertical {
 			let left = dragBounds.minX
 			let right = dragBounds.maxX
 			if viewCenter.x < left {
@@ -476,7 +476,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	}
 	
 	
-	public func handlePanGesture(gestureRecognizer: UIPanGestureRecognizer) {
+	open func handlePanGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
 		guard let collectionView = self.collectionView else {
 			return
 		}
@@ -484,18 +484,18 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		let contentOffset = collectionView.contentOffset
 		
 		switch gestureRecognizer.state {
-		case .Began:
-			panTranslationInCollectionView = gestureRecognizer.translationInView(collectionView)
+		case .began:
+			panTranslationInCollectionView = gestureRecognizer.translation(in: collectionView)
 			let viewCenter = currentViewCenter + panTranslationInCollectionView
 			
 			currentView.center = pointConstrainedToDragBounds(viewCenter)
 			
 			makeSpaceForDraggedCell()
 			
-			let location = gestureRecognizer.locationInView(collectionView)
+			let location = gestureRecognizer.location(in: collectionView)
 			
 			switch scrollDirection {
-			case .Vertical:
+			case .vertical:
 				let y = location.y - contentOffset.y
 				let top = autoscrollBounds.minY
 				let bottom = autoscrollBounds.maxY
@@ -512,7 +512,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 					invalidateScrollTimer()
 				}
 				
-			case .Horizontal:
+			case .horizontal:
 				let x = location.x - contentOffset.x
 				let left = autoscrollBounds.minX
 				let right = autoscrollBounds.maxX
@@ -530,7 +530,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 				}
 			}
 			
-		case .Cancelled, .Ended:
+		case .cancelled, .ended:
 			invalidateScrollTimer()
 			
 		default:
@@ -538,13 +538,13 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		}
 	}
 	
-	private func makeSpaceForDraggedCell() {
+	fileprivate func makeSpaceForDraggedCell() {
 		guard let
 			collectionView = self.collectionView,
-			dataSource = collectionView.dataSource as? CollectionDataSource,
-			sourceItemIndexPath = self.sourceItemIndexPath,
-			previousIndexPath = selectedItemIndexPath,
-			var newIndexPath = collectionView.indexPathForItemAtPoint(currentView.center) else {
+			let dataSource = collectionView.dataSource as? CollectionDataSource,
+			let sourceItemIndexPath = self.sourceItemIndexPath,
+			let previousIndexPath = selectedItemIndexPath,
+			var newIndexPath = collectionView.indexPathForItem(at: currentView.center) else {
 				return
 		}
 		
@@ -553,7 +553,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		guard var
 			oldSection = sectionInfoForSectionAtIndex(oldSectionIndex),
-			newSection = sectionInfoForSectionAtIndex(newSectionIndex) else {
+			var newSection = sectionInfoForSectionAtIndex(newSectionIndex) else {
 				return
 		}
 		
@@ -561,7 +561,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		if oldSection.phantomCellIndex == previousIndexPath.item
 			&& newSectionIndex == oldSectionIndex
 			&& newIndexPath.item >= oldSection.phantomCellIndex ?? NSNotFound {
-			newIndexPath = NSIndexPath(forItem: newIndexPath.item+1, inSection: newSectionIndex)
+			newIndexPath = IndexPath(item: newIndexPath.item+1, section: newSectionIndex)
 		}
 		
 		guard newIndexPath != previousIndexPath else {
@@ -588,23 +588,23 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		layoutInfo.setSection(oldSection, at: oldSectionIndex)
 		layoutInfo.setSection(newSection, at: newSectionIndex)
 		
-		invalidateLayoutWithContext(context)
+		invalidateLayout(with: context)
 	}
 	
 	// MARK: - UICollectionViewLayout
 	
-	public override class func layoutAttributesClass() -> AnyClass {
+	open override class var layoutAttributesClass : AnyClass {
 		return CollectionViewLayoutAttributes.self
 	}
 	
-	public override class func invalidationContextClass() -> AnyClass {
+	open override class var invalidationContextClass : AnyClass {
 		return CollectionViewLayoutInvalidationContext.self
 	}
 	
 	// This is necessarily called before `resetLayoutInfo` (from `loadView`)
-	public override func invalidateLayoutWithContext(context: UICollectionViewLayoutInvalidationContext) {
+	open override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
 		defer {
-			super.invalidateLayoutWithContext(context)
+			super.invalidateLayout(with: context)
 		}
 		
 		guard let collectionView = self.collectionView else {
@@ -644,21 +644,21 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		if layoutDebugging {
 			for (kind, indexPaths) in context.invalidatedSupplementaryIndexPaths ?? [:] {
 				let result = indexPaths.map { $0.debugLogDescription }
-				let resultStr = result.joinWithSeparator(", ")
+				let resultStr = result.joined(separator: ", ")
 				debugPrint("\(#function) \(kind) invalidated supplementary indexPaths: \(resultStr)")
 			}
 		}
 	}
 	
-	public func invalidateMetricsForItem(at indexPath: NSIndexPath, in context: CollectionViewLayoutInvalidationContext) {
-		guard let cell = collectionView?.cellForItemAtIndexPath(indexPath) else {
+	open func invalidateMetricsForItem(at indexPath: IndexPath, in context: CollectionViewLayoutInvalidationContext) {
+		guard let cell = collectionView?.cellForItem(at: indexPath) else {
 			return
 		}
 		
 		let attributes = layoutInfo.layoutAttributesForCell(at: indexPath)?.copy() as! CollectionViewLayoutAttributes
 		attributes.shouldCalculateFittingSize = true
 		
-		let newAttributes = cell.preferredLayoutAttributesFittingAttributes(attributes)
+		let newAttributes = cell.preferredLayoutAttributesFitting(attributes)
 		let newSize = newAttributes.frame.size
 		
 		guard newSize != attributes.frame.size else {
@@ -668,7 +668,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		layoutInfo.setSize(newSize, forItemAt: indexPath, invalidationContext: context)
 	}
 	
-	private func invalidateMetricsForElement(ofKind kind: String, at indexPath: NSIndexPath, in context: CollectionViewLayoutInvalidationContext) {
+	fileprivate func invalidateMetricsForElement(ofKind kind: String, at indexPath: IndexPath, in context: CollectionViewLayoutInvalidationContext) {
 		guard let view = collectionView?._supplementaryViewOfKind(kind, at: indexPath) else {
 			return
 		}
@@ -676,7 +676,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		let attributes = layoutInfo.layoutAttributesForSupplementaryElementOfKind(kind, at: indexPath)?.copy() as! CollectionViewLayoutAttributes
 		attributes.shouldCalculateFittingSize = true
 		
-		let newAttributes = view.preferredLayoutAttributesFittingAttributes(attributes)
+		let newAttributes = view.preferredLayoutAttributesFitting(attributes)
 		let newSize = newAttributes.frame.size
 		
 		guard newSize != attributes.frame.size else {
@@ -686,21 +686,21 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		layoutInfo.setSize(newSize, forElementOfKind: kind, at: indexPath, invalidationContext: context)
 	}
 	
-	public override func prepareLayout() {
+	open override func prepare() {
 		layoutLog("\(#function) bounds=\(collectionView!.bounds)")
-		if let bounds = collectionView?.bounds where !bounds.isEmpty {
+		if let bounds = collectionView?.bounds, !bounds.isEmpty {
 			buildLayout()
 		}
-		super.prepareLayout()
+		super.prepare()
 	}
 	
-	public override func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+	open override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
 		layoutLog("\(#function) rect=\(rect)")
 		guard layoutInfo != nil, let collectionView = self.collectionView else {
 			return nil
 		}
 		
-		let contentOffset = targetContentOffsetForProposedContentOffset(collectionView.contentOffset)
+		let contentOffset = targetContentOffset(forProposedContentOffset: collectionView.contentOffset)
 		layoutInfo.contentInset = collectionView.contentInset
 		layoutInfo.bounds = collectionView.bounds
 		layoutInfo.updateSpecialItemsWithContentOffset(contentOffset, invalidationContext: nil)
@@ -719,7 +719,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return result
 	}
 	
-	public override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+	open override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
 		let sectionIndex = indexPath.section
 		
 		guard sectionIndex >= 0 && sectionIndex < layoutInfo.numberOfSections else {
@@ -728,8 +728,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		let attributes: CollectionViewLayoutAttributes
 		
-		if let measuringAttributes = self.measuringAttributes
-			where measuringAttributes.indexPath == indexPath {
+		if let measuringAttributes = self.measuringAttributes, measuringAttributes.indexPath == indexPath {
 			attributes = measuringAttributes
 			
 			layoutLog("\(#function) indexPath=\(indexPath.debugLogDescription) measuringAttributes=\(measuringAttributes)")
@@ -748,11 +747,10 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return attributes
 	}
 	
-	public override func layoutAttributesForSupplementaryViewOfKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+	open override func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
 		let attributes: CollectionViewLayoutAttributes
 		
-		if let measuringAttributes = self.measuringAttributes
-			where measuringAttributes.indexPath == indexPath
+		if let measuringAttributes = self.measuringAttributes, measuringAttributes.indexPath == indexPath
 				&& measuringAttributes.representedElementKind == elementKind {
 			attributes = measuringAttributes
 			
@@ -772,15 +770,15 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return attributes
 	}
 	
-	public override func layoutAttributesForDecorationViewOfKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+	open override func layoutAttributesForDecorationView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
 		return layoutInfo.layoutAttributesForDecorationViewOfKind(elementKind, at: indexPath)
 	}
 	
-	private func finalizeConfiguration(of attributes: CollectionViewLayoutAttributes) {
+	fileprivate func finalizeConfiguration(of attributes: CollectionViewLayoutAttributes) {
 		let indexPath = attributes.indexPath
 		
 		switch attributes.representedElementCategory {
-		case .Cell:
+		case .cell:
 			attributes.isEditing = isEditing ? canEditItem(at: indexPath) : false
 			attributes.isMovable = isEditing ? canMoveItem(at: indexPath) : false
 		default:
@@ -788,7 +786,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		}
 	}
 	
-	public override func shouldInvalidateLayoutForPreferredLayoutAttributes(preferredAttributes: UICollectionViewLayoutAttributes, withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> Bool {
+	open override func shouldInvalidateLayout(forPreferredLayoutAttributes preferredAttributes: UICollectionViewLayoutAttributes, withOriginalAttributes originalAttributes: UICollectionViewLayoutAttributes) -> Bool {
 		// Invalidate if the cell changed height
 		return preferredAttributes.frame.height != originalAttributes.frame.height
 	}
@@ -817,12 +815,12 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	}
 */
 	
-	public override func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
+	open override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
 		return true
 	}
 	
-	public override func invalidationContextForBoundsChange(newBounds: CGRect) -> UICollectionViewLayoutInvalidationContext {
-		let context = super.invalidationContextForBoundsChange(newBounds)
+	open override func invalidationContext(forBoundsChange newBounds: CGRect) -> UICollectionViewLayoutInvalidationContext {
+		let context = super.invalidationContext(forBoundsChange: newBounds)
 		
 		guard layoutInfo != nil, let collectionView = self.collectionView else {
 			return context
@@ -855,11 +853,11 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return context
 	}
 	
-	public override func targetContentOffsetForProposedContentOffset(proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
+	open override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
 		return proposedContentOffset
 	}
 	
-	public override func targetContentOffsetForProposedContentOffset(proposedContentOffset: CGPoint) -> CGPoint {
+	open override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
 		guard let collectionView = self.collectionView else {
 			return proposedContentOffset
 		}
@@ -875,9 +873,8 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		targetContentOffset.y = min(targetContentOffset.y, max(0, layoutSize.height - availableHeight))
 		
 		if let firstInsertedIndex = insertedSections.first,
-			sectionInfo = sectionInfoForSectionAtIndex(firstInsertedIndex),
-			globalSection = sectionInfoForSectionAtIndex(globalSectionIndex)
-			where operationDirectionForSectionAtIndex(firstInsertedIndex) != nil {
+			let sectionInfo = sectionInfoForSectionAtIndex(firstInsertedIndex),
+			let globalSection = sectionInfoForSectionAtIndex(globalSectionIndex), operationDirectionForSectionAtIndex(firstInsertedIndex) != nil {
 			
 			let minY = sectionInfo.frame.minY
 			targetContentOffset = globalSection.targetContentOffsetForProposedContentOffset(targetContentOffset, firstInsertedSectionMinY: minY)
@@ -889,31 +886,31 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return targetContentOffset
 	}
 	
-	public override func collectionViewContentSize() -> CGSize {
+	open override var collectionViewContentSize : CGSize {
 		layoutLog("\(#function) \(layoutSize)")
 		return layoutSize
 	}
 	
-	public override func prepareForCollectionViewUpdates(updateItems: [UICollectionViewUpdateItem]) {
+	open override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
 		resetUpdates()
 		updateRecorder.record(updateItems, sectionProvider: layoutInfo, oldSectionProvider: oldLayoutInfo)
 		processGlobalSectionUpdate()
 		adjustContentOffsetDelta()
 		
-		super.prepareForCollectionViewUpdates(updateItems)
+		super.prepare(forCollectionViewUpdates: updateItems)
 	}
 	
-	private func resetUpdates() {
+	fileprivate func resetUpdates() {
 		updateRecorder.reset()
 	}
 	
 	/// Finds any global elements that disappeared during the update and records them for deletion.
 	///
 	/// This becomes necessary when the selected data source of a segmented data source contributes a kind of global element, and then a new data source is selected which does not contribute that kind of global element.
-	private func processGlobalSectionUpdate() {
+	fileprivate func processGlobalSectionUpdate() {
 		guard let globalSection = layoutInfo.sectionAtIndex(globalSectionIndex),
-			oldLayoutInfo = self.oldLayoutInfo,
-			oldGlobalSection = oldLayoutInfo.sectionAtIndex(globalSectionIndex) else {
+			let oldLayoutInfo = self.oldLayoutInfo,
+			let oldGlobalSection = oldLayoutInfo.sectionAtIndex(globalSectionIndex) else {
 				return
 		}
 		
@@ -921,7 +918,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		processGlobalSectionSupplementaryUpdate(from: oldGlobalSection, to: globalSection)
 	}
 	
-	private func processGlobalSectionDecorationUpdate(from oldGlobalSection: LayoutSection, to globalSection: LayoutSection) {
+	fileprivate func processGlobalSectionDecorationUpdate(from oldGlobalSection: LayoutSection, to globalSection: LayoutSection) {
 		let decorationAttributes = globalSection.decorationAttributesByKind
 		let oldDecorationAttributes = oldGlobalSection.decorationAttributesByKind
 		let decorationDiff = decorationAttributes.countDiff(with: oldDecorationAttributes)
@@ -929,17 +926,17 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			let count = (decorationAttributes[kind] ?? []).count
 			let oldCount = (oldDecorationAttributes[kind] ?? []).count
 			if countDiff < 0 {
-				let indexPaths = (count..<oldCount).map { NSIndexPath(index: $0) }
+				let indexPaths = (count..<oldCount).map { IndexPath(index: $0) }
 				updateRecorder.recordAdditionalDeletedIndexPaths(indexPaths, forElementOf: kind)
 			}
 			else if countDiff > 0 {
-				let indexPaths = (oldCount..<count).map { NSIndexPath(index: $0) }
+				let indexPaths = (oldCount..<count).map { IndexPath(index: $0) }
 				updateRecorder.recordAdditionalInsertedIndexPaths(indexPaths, forElementOf: kind)
 			}
 		}
 	}
 	
-	private func processGlobalSectionSupplementaryUpdate(from oldGlobalSection: LayoutSection, to globalSection: LayoutSection) {
+	fileprivate func processGlobalSectionSupplementaryUpdate(from oldGlobalSection: LayoutSection, to globalSection: LayoutSection) {
 		let supplementaryItems = globalSection.supplementaryItemsByKind
 		let oldSupplementaryItems = oldGlobalSection.supplementaryItemsByKind
 		let supplementaryDiff = supplementaryItems.countDiff(with: oldSupplementaryItems)
@@ -947,33 +944,33 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			let count = (supplementaryItems[kind] ?? []).count
 			let oldCount = (oldSupplementaryItems[kind] ?? []).count
 			if countDiff < 0 {
-				let indexPaths = (count..<oldCount).map { NSIndexPath(index: $0) }
+				let indexPaths = (count..<oldCount).map { IndexPath(index: $0) }
 				updateRecorder.recordAdditionalDeletedIndexPaths(indexPaths, forElementOf: kind)
 			}
 			else if countDiff > 0 {
-				let indexPaths = (oldCount..<count).map { NSIndexPath(index: $0) }
+				let indexPaths = (oldCount..<count).map { IndexPath(index: $0) }
 				updateRecorder.recordAdditionalInsertedIndexPaths(indexPaths, forElementOf: kind)
 			}
 		}
 	}
 	
-	private func adjustContentOffsetDelta() {
+	fileprivate func adjustContentOffsetDelta() {
 		guard let collectionView = self.collectionView else {
 			return
 		}
 		let contentOffset = collectionView.contentOffset
-		let newContentOffset = targetContentOffsetForProposedContentOffset(contentOffset)
+		let newContentOffset = targetContentOffset(forProposedContentOffset: contentOffset)
 		contentOffsetDelta = CGPoint(x: newContentOffset.x - contentOffset.x, y: newContentOffset.y - contentOffset.y)
 	}
 	
-	public override func finalizeCollectionViewUpdates() {
+	open override func finalizeCollectionViewUpdates() {
 		super.finalizeCollectionViewUpdates()
 		resetUpdates()
-		updateSectionDirections.removeAll(keepCapacity: true)
+		updateSectionDirections.removeAll(keepingCapacity: true)
 	}
 	
-	public override func indexPathsToDeleteForDecorationViewOfKind(elementKind: String) -> [NSIndexPath] {
-		var superValue = super.indexPathsToDeleteForDecorationViewOfKind(elementKind)
+	open override func indexPathsToDeleteForDecorationView(ofKind elementKind: String) -> [IndexPath] {
+		var superValue = super.indexPathsToDeleteForDecorationView(ofKind: elementKind)
 		if let additionalValues = additionalDeletedIndexPathsByKind[elementKind] {
 			superValue += additionalValues
 		}
@@ -981,7 +978,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return superValue
 	}
 	
-	public override func initialLayoutAttributesForAppearingDecorationElementOfKind(elementKind: String, atIndexPath decorationIndexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+	open override func initialLayoutAttributesForAppearingDecorationElement(ofKind elementKind: String, at decorationIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
 		layoutLog("\(#function) kind=\(elementKind) indexPath=\(decorationIndexPath.debugLogDescription)")
 		
 		guard let result = layoutInfo.layoutAttributesForDecorationViewOfKind(elementKind, at: decorationIndexPath)?.copy() as? UICollectionViewLayoutAttributes else {
@@ -1008,7 +1005,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return initialLayoutAttributesForAttributes(result)
 	}
 	
-	public override func finalLayoutAttributesForDisappearingDecorationElementOfKind(elementKind: String, atIndexPath decorationIndexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+	open override func finalLayoutAttributesForDisappearingDecorationElement(ofKind elementKind: String, at decorationIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
 		layoutLog("\(#function) kind=\(elementKind) indexPath=\(decorationIndexPath.debugLogDescription)")
 		
 		guard let result = oldLayoutInfo?.layoutAttributesForDecorationViewOfKind(elementKind, at: decorationIndexPath)?.copy() as? UICollectionViewLayoutAttributes else {
@@ -1035,7 +1032,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return finalLayoutAttributesForAttributes(result)
 	}
 	
-	public override func initialLayoutAttributesForAppearingSupplementaryElementOfKind(elementKind: String, atIndexPath elementIndexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+	open override func initialLayoutAttributesForAppearingSupplementaryElement(ofKind elementKind: String, at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
 		layoutLog("\(#function) kind=\(elementKind) indexPath=\(elementIndexPath.debugLogDescription)")
 		
 		guard let result = layoutInfo.layoutAttributesForSupplementaryElementOfKind(elementKind, at: elementIndexPath)?.copy() as? UICollectionViewLayoutAttributes else {
@@ -1067,7 +1064,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return attributes
 	}
 	
-	public override func finalLayoutAttributesForDisappearingSupplementaryElementOfKind(elementKind: String, atIndexPath elementIndexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+	open override func finalLayoutAttributesForDisappearingSupplementaryElement(ofKind elementKind: String, at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
 		layoutLog("\(#function) kind=\(elementKind) indexPath=\(elementIndexPath.debugLogDescription)")
 		
 		guard let result = oldLayoutInfo?.layoutAttributesForSupplementaryElementOfKind(elementKind, at: elementIndexPath)?.copy() as? UICollectionViewLayoutAttributes else {
@@ -1094,7 +1091,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return finalLayoutAttributesForAttributes(result)
 	}
 	
-	public override func initialLayoutAttributesForAppearingItemAtIndexPath(itemIndexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+	open override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
 		layoutLog("\(#function) indexPath=\(itemIndexPath.debugLogDescription)")
 		
 		guard var result = layoutInfo.layoutAttributesForCell(at: itemIndexPath)?.copy() as? UICollectionViewLayoutAttributes else {
@@ -1123,7 +1120,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return result
 	}
 	
-	public override func finalLayoutAttributesForDisappearingItemAtIndexPath(itemIndexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+	open override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
 		layoutLog("\(#function) indexPath=\(itemIndexPath.debugLogDescription)")
 		
 		guard let result = oldLayoutInfo?.layoutAttributesForCell(at: itemIndexPath)?.copy() as? UICollectionViewLayoutAttributes else {
@@ -1158,7 +1155,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		dataSourceHasSnapshotMetrics = collectionView?.dataSource is CollectionDataSourceMetrics
 	}
 	
-	func operationDirectionForSectionAtIndex(sectionIndex: Int) -> SectionOperationDirection? {
+	func operationDirectionForSectionAtIndex(_ sectionIndex: Int) -> SectionOperationDirection? {
 		guard !UIAccessibilityIsReduceMotionEnabled() else {
 			return nil
 		}
@@ -1166,7 +1163,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return updateSectionDirections[sectionIndex]
 	}
 	
-	func sectionInfoForSectionAtIndex(sectionIndex: Int) -> LayoutSection? {
+	func sectionInfoForSectionAtIndex(_ sectionIndex: Int) -> LayoutSection? {
 		return layoutInfo.sectionAtIndex(sectionIndex)
 	}
 	
@@ -1177,15 +1174,15 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return (collectionView!.dataSource as! CollectionDataSourceMetrics).snapshotMetrics()
 	}
 	
-	private func registerDecorations(from layoutMetrics: [Int: DataSourceSectionMetricsProviding]) {
+	fileprivate func registerDecorations(from layoutMetrics: [Int: DataSourceSectionMetricsProviding]) {
 		for sectionMetrics in layoutMetrics.values {
 			registerDecorations(from: sectionMetrics.metrics)
 		}
 	}
 	
-	private func registerDecorations(from sectionMetrics: SectionMetrics) {
+	fileprivate func registerDecorations(from sectionMetrics: SectionMetrics) {
 		for kind in sectionMetrics.decorationsByKind.keys {
-			registerClass(CollectionViewSeparatorView.self, forDecorationViewOfKind: kind)
+			register(CollectionViewSeparatorView.self, forDecorationViewOfKind: kind)
 		}
 	}
 	
@@ -1212,7 +1209,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		layoutDataIsValid = true
 		
-		layoutSize = CGSizeZero
+		layoutSize = CGSize.zero
 		
 		let contentInset = collectionView.contentInset
 		var contentOffset = collectionView.contentOffset
@@ -1229,7 +1226,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		layoutInfo.prepareForLayout()
 		
-		var start = CGPointZero
+		var start = CGPoint.zero
 		
 		let layoutEngine = GridLayoutEngine(layoutInfo: layoutInfo)
 		start = layoutEngine.layoutWithOrigin(start, layoutSizing: layoutInfo, invalidationContext: nil)
@@ -1245,7 +1242,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		
 		layoutSize = CGSize(width: width, height: layoutHeight)
 		
-		contentOffset = targetContentOffsetForProposedContentOffset(contentOffset)
+		contentOffset = targetContentOffset(forProposedContentOffset: contentOffset)
 		layoutInfo.updateSpecialItemsWithContentOffset(contentOffset, invalidationContext: nil)
 		
 		layoutInfo.finalizeLayout()
@@ -1265,7 +1262,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		let width = bounds.width - contentInset.width
 		let height = bounds.height - contentInset.height
 		
-		let numberOfSections = collectionView.numberOfSections()
+		let numberOfSections = collectionView.numberOfSections
 		
 		layoutLog("\(#function) numberOfSections = \(numberOfSections)")
 		
@@ -1335,7 +1332,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	}
 	
 	// TODO: Abstract somewhere else
-	public func populate(inout section: LayoutSection, from metrics: DataSourceSectionMetricsProviding) {
+	open func populate(_ section: inout LayoutSection, from metrics: DataSourceSectionMetricsProviding) {
 		guard let collectionView = self.collectionView,
 			let gridMetrics = metrics.metrics as? GridSectionMetricsProviding,
 			var gridSection = section as? GridLayoutSection else {
@@ -1348,7 +1345,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		gridSection.applyValues(from: gridMetrics)
 		gridSection.metrics.resolveMissingValuesFromTheme()
 		
-		func setupSupplementaryMetrics(supplementaryMetrics: SupplementaryItem) {
+		func setupSupplementaryMetrics(_ supplementaryMetrics: SupplementaryItem) {
 			// FIXME: Supplementary item kind shouldn't be decided here
 			var supplementaryItem = GridLayoutSupplementaryItem(supplementaryItem: supplementaryMetrics)
 			supplementaryItem.applyValues(from: gridSection.metrics)
@@ -1360,7 +1357,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		}
 		
 		let isGlobalSection = sectionIndex == globalSectionIndex
-		let numberOfItemsInSection = isGlobalSection ? 0 : collectionView.numberOfItemsInSection(sectionIndex)
+		let numberOfItemsInSection = isGlobalSection ? 0 : collectionView.numberOfItems(inSection: sectionIndex)
 		
 		layoutLog("\(#function) section \(sectionIndex): numberOfItems=\(numberOfItemsInSection) hasPlaceholder=\(metrics.placeholder != nil)")
 		
@@ -1385,19 +1382,18 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		section = gridSection
 	}
 	
-	private func initialLayoutAttributesForAttributes(attributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-		attributes.frame.offsetInPlace(dx: -contentOffsetDelta.x, dy: -contentOffsetDelta.y)
+	fileprivate func initialLayoutAttributesForAttributes(_ attributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+		attributes.frame = attributes.frame.offsetBy(dx: -contentOffsetDelta.x, dy: -contentOffsetDelta.y)
 		return attributes
 	}
 	
-	private func finalLayoutAttributesForAttributes(attributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+	fileprivate func finalLayoutAttributesForAttributes(_ attributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
 		let deltaX = contentOffsetDelta.x
 		let deltaY = contentOffsetDelta.y
 		var frame = attributes.frame
 		
 		// TODO: Abstract away pinning logic
-		if let attributes = attributes as? CollectionViewLayoutAttributes
-			where attributes.isPinned {
+		if let attributes = attributes as? CollectionViewLayoutAttributes, attributes.isPinned {
 				let newX = max(attributes.unpinnedOrigin.x, frame.minX + deltaX)
 				frame.origin.x = newX
 			
@@ -1405,7 +1401,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 				frame.origin.y = newY
 		}
 		else {
-			frame.offsetInPlace(dx: deltaX, dy: deltaY)
+			frame = frame.offsetBy(dx: deltaX, dy: deltaY)
 		}
 		
 		attributes.frame = frame
@@ -1413,9 +1409,9 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return attributes
 	}
 	
-	private func initialLayoutAttributesForAttributes(attributes: UICollectionViewLayoutAttributes, slidingInFrom direction: SectionOperationDirection) -> UICollectionViewLayoutAttributes {
+	fileprivate func initialLayoutAttributesForAttributes(_ attributes: UICollectionViewLayoutAttributes, slidingInFrom direction: SectionOperationDirection) -> UICollectionViewLayoutAttributes {
 		var frame = attributes.frame
-		let cvBounds = collectionView?.bounds ?? CGRectZero
+		let cvBounds = collectionView?.bounds ?? CGRect.zero
 		switch direction {
 		case .Left:
 			frame.origin.x -= cvBounds.size.width
@@ -1426,9 +1422,9 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 		return initialLayoutAttributesForAttributes(attributes)
 	}
 	
-	private func finalLayoutAttributesForAttributes(attributes: UICollectionViewLayoutAttributes, slidingAwayFrom direction: SectionOperationDirection) -> UICollectionViewLayoutAttributes {
+	fileprivate func finalLayoutAttributesForAttributes(_ attributes: UICollectionViewLayoutAttributes, slidingAwayFrom direction: SectionOperationDirection) -> UICollectionViewLayoutAttributes {
 		var frame = attributes.frame
-		let bounds = collectionView?.bounds ?? CGRectZero
+		let bounds = collectionView?.bounds ?? CGRect.zero
 		
 		switch direction {
 		case .Left:
@@ -1437,7 +1433,7 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 			frame.origin.x -= bounds.size.width
 		}
 		
-		frame.offsetInPlace(dx: contentOffsetDelta.x, dy: contentOffsetDelta.y)
+		frame = frame.offsetBy(dx: contentOffsetDelta.x, dy: contentOffsetDelta.y)
 		attributes.frame = frame
 		
 		attributes.alpha = 0
@@ -1446,19 +1442,19 @@ public class CollectionViewLayout: UICollectionViewLayout, CollectionViewLayoutM
 	
 	// MARK: - CollectionDataSourceDelegate
 	
-	public func dataSource(dataSource: CollectionDataSource, didInsertSections sections: NSIndexSet, direction: SectionOperationDirection?) {
+	open func dataSource(_ dataSource: CollectionDataSource, didInsertSections sections: IndexSet, direction: SectionOperationDirection?) {
 		for sectionIndex in sections {
 			updateSectionDirections[sectionIndex] = direction
 		}
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didRemoveSections sections: NSIndexSet, direction: SectionOperationDirection?) {
+	open func dataSource(_ dataSource: CollectionDataSource, didRemoveSections sections: IndexSet, direction: SectionOperationDirection?) {
 		for sectionIndex in sections {
 			updateSectionDirections[sectionIndex] = direction
 		}
 	}
 	
-	public func dataSource(dataSource: CollectionDataSource, didMoveSectionFrom oldSection: Int, to newSection: Int, direction: SectionOperationDirection?) {
+	open func dataSource(_ dataSource: CollectionDataSource, didMoveSectionFrom oldSection: Int, to newSection: Int, direction: SectionOperationDirection?) {
 		updateSectionDirections[oldSection] = direction
 		updateSectionDirections[newSection] = direction
 	}

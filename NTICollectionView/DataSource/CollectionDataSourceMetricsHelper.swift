@@ -8,14 +8,14 @@
 
 import UIKit
 
-public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMetrics {
+open class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMetrics {
 	
 	public init(dataSource: CollectionDataSource) {
 		self.dataSource = dataSource
 		super.init()
 	}
 	
-	public weak var dataSource: CollectionDataSource!
+	open weak var dataSource: CollectionDataSource!
 	
 	var isRootDataSource: Bool {
 		return dataSource.isRootDataSource
@@ -29,13 +29,13 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		return dataSource.placeholder
 	}
 	
-	public var supplementaryItemsByKind: [String: [SupplementaryItem]] {
+	open var supplementaryItemsByKind: [String: [SupplementaryItem]] {
 		return dataSource.supplementaryItemsByKind
 	}
-	public var sectionMetrics: [Int: DataSourceSectionMetricsProviding] {
+	open var sectionMetrics: [Int: DataSourceSectionMetricsProviding] {
 		return dataSource.sectionMetrics
 	}
-	public var defaultMetrics: DataSourceSectionMetricsProviding? {
+	open var defaultMetrics: DataSourceSectionMetricsProviding? {
 		get {
 			return dataSource.defaultMetrics
 		}
@@ -43,7 +43,7 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 			dataSource.defaultMetrics = newValue
 		}
 	}
-	public var globalMetrics: DataSourceSectionMetricsProviding? {
+	open var globalMetrics: DataSourceSectionMetricsProviding? {
 		get {
 			return dataSource.metricsForSectionAtIndex(globalSectionIndex)
 		}
@@ -52,7 +52,7 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		}
 	}
 	
-	public var contributesGlobalMetrics: Bool {
+	open var contributesGlobalMetrics: Bool {
 		get {
 			return dataSource.contributesGlobalMetrics
 		}
@@ -61,21 +61,21 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		}
 	}
 	
-	public func supplementaryItem(for key: String) -> SupplementaryItem? {
+	open func supplementaryItem(for key: String) -> SupplementaryItem? {
 		return dataSource.supplementaryItem(for: key)
 	}
 	
 	/// Retrieve the layout metrics for a specific section within this data source.
-	public func metricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
+	open func metricsForSectionAtIndex(_ sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
 		return dataSource.metricsForSectionAtIndex(sectionIndex)
 	}
 	
 	/// Store customized layout metrics for a section in this data source. The values specified in metrics will override values specified by the data source's `defaultMetrics`.
-	public func setMetrics(metrics: DataSourceSectionMetricsProviding?, forSectionAtIndex sectionIndex: Int) {
+	open func setMetrics(_ metrics: DataSourceSectionMetricsProviding?, forSectionAtIndex sectionIndex: Int) {
 		dataSource.setMetrics(metrics, forSectionAtIndex: sectionIndex)
 	}
 	
-	public func numberOfSupplementaryItemsOfKind(kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChildDataSources: Bool) -> Int {
+	open func numberOfSupplementaryItemsOfKind(_ kind: String, inSectionAtIndex sectionIndex: Int, shouldIncludeChildDataSources: Bool) -> Int {
 		let items = supplementaryItemsOfKind(kind)
 		
 		if isRootDataSource && sectionIndex == globalSectionIndex {
@@ -91,19 +91,19 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		numberOfItems += defaultMetrics?.supplementaryItemsByKind[kind]?.count ?? 0
 		
 		if let sectionMetrics = self.sectionMetrics[sectionIndex],
-			metricsItems = sectionMetrics.supplementaryItemsByKind[kind] {
+			let metricsItems = sectionMetrics.supplementaryItemsByKind[kind] {
 				numberOfItems += metricsItems.count
 		}
 		
 		return numberOfItems
 	}
 	
-	public func indexPaths(for supplementaryItem: SupplementaryItem) -> [NSIndexPath] {
+	open func indexPaths(for supplementaryItem: SupplementaryItem) -> [IndexPath] {
 		let kind = supplementaryItem.elementKind
 		let supplementaryItems = supplementaryItemsOfKind(kind)
 		
-		if let itemIndex = supplementaryItems.indexOf({ $0.isEqual(to: supplementaryItem) }) {
-			let indexPath = isRootDataSource ? NSIndexPath(index: itemIndex) : NSIndexPath(forItem: itemIndex, inSection: 0)
+		if let itemIndex = supplementaryItems.index(where: { $0.isEqual(to: supplementaryItem) }) {
+			let indexPath = isRootDataSource ? IndexPath(index: itemIndex) : IndexPath(item: itemIndex, section: 0)
 			return [indexPath]
 		}
 		
@@ -111,40 +111,40 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		
 		// If the item is in the default metrics, return an index path for each section
 		if let sectionItems = defaultMetrics?.supplementaryItemsByKind[kind],
-			itemIndex = sectionItems.indexOf({ $0.isEqual(to: supplementaryItem) }) {
-				var result: [NSIndexPath] = []
+			let itemIndex = sectionItems.index(where: { $0.isEqual(to: supplementaryItem) }) {
+				var result: [IndexPath] = []
 				for sectionIndex in 0..<numberOfSections {
 					var elementIndex = itemIndex
 					if !isRootDataSource && sectionIndex == 0 {
 						elementIndex += numberOfGlobalItems
 					}
-					let indexPath = NSIndexPath(forItem: elementIndex, inSection: sectionIndex)
+					let indexPath = IndexPath(item: elementIndex, section: sectionIndex)
 					result.append(indexPath)
 				}
 				return result
 		}
 		
 		let numberOfDefaultItems = defaultMetrics?.supplementaryItemsByKind[kind]?.count ?? 0
-		var result: NSIndexPath?
+		var result: IndexPath?
 		
 		// If the supplementary metrics exist, it's in one of the section metrics
 		for (sectionIndex, sectionMetrics) in self.sectionMetrics {
 			guard let sectionItems = sectionMetrics.supplementaryItemsByKind[kind],
-				itemIndex = sectionItems.indexOf({ $0.isEqual(to: supplementaryItem) }) else {
+				let itemIndex = sectionItems.index(where: { $0.isEqual(to: supplementaryItem) }) else {
 					continue
 			}
 			var elementIndex = itemIndex + numberOfDefaultItems
 			if !isRootDataSource && sectionIndex == 0 {
 				elementIndex += numberOfGlobalItems
 			}
-			result = NSIndexPath(forItem: elementIndex, inSection: sectionIndex)
+			result = IndexPath(item: elementIndex, section: sectionIndex)
 			break
 		}
 		
 		return [result].flatMap { $0 }
 	}
 	
-	public func findSupplementaryItemOfKind(kind: String, at indexPath: NSIndexPath, using block: (dataSource: CollectionDataSource, localIndexPath: NSIndexPath, supplementaryItem: SupplementaryItem) -> Void) {
+	open func findSupplementaryItemOfKind(_ kind: String, at indexPath: IndexPath, using block: (_ dataSource: CollectionDataSource, _ localIndexPath: IndexPath, _ supplementaryItem: SupplementaryItem) -> Void) {
 		let sectionIndex = indexPath.layoutSection
 		var itemIndex = indexPath.itemIndex
 		
@@ -155,14 +155,14 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		
 		if isRootDataSource && sectionIndex == globalSectionIndex {
 			if itemIndex < items.count {
-				block(dataSource: dataSource, localIndexPath: indexPath, supplementaryItem: items[itemIndex])
+				block(dataSource, indexPath, items[itemIndex])
 			}
 			return
 		}
 		
 		if !isRootDataSource && sectionIndex == 0 {
 			if itemIndex < items.count {
-				return block(dataSource: dataSource, localIndexPath: indexPath, supplementaryItem: items[itemIndex])
+				return block(dataSource, indexPath, items[itemIndex])
 			}
 			// Need to allow for the items that were added from the "global" data source items
 			itemIndex -= items.count
@@ -172,21 +172,20 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		if let defaultItems = defaultMetrics?.supplementaryItemsByKind[kind] {
 			let defaultItemCount = defaultItems.count
 			if itemIndex < defaultItemCount {
-				let localIndexPath = NSIndexPath(forItem: itemIndex, inSection: sectionIndex)
-				return block(dataSource: dataSource, localIndexPath: localIndexPath, supplementaryItem: defaultItems[itemIndex])
+				let localIndexPath = IndexPath(item: itemIndex, section: sectionIndex)
+				return block(dataSource, localIndexPath, defaultItems[itemIndex])
 			}
 			itemIndex -= defaultItemCount
 		}
 		
 		let sectionMetrics = self.sectionMetrics[sectionIndex]
-		if let metricsItems = sectionMetrics?.supplementaryItemsByKind[kind]
-			where itemIndex < metricsItems.count {
-				let localIndexPath = NSIndexPath(forItem: itemIndex, inSection: sectionIndex)
-				return block(dataSource: dataSource, localIndexPath: localIndexPath, supplementaryItem: metricsItems[itemIndex])
+		if let metricsItems = sectionMetrics?.supplementaryItemsByKind[kind], itemIndex < metricsItems.count {
+				let localIndexPath = IndexPath(item: itemIndex, section: sectionIndex)
+				return block(dataSource, localIndexPath, metricsItems[itemIndex])
 		}
 	}
 	
-	public func snapshotMetrics() -> [Int: DataSourceSectionMetricsProviding] {
+	open func snapshotMetrics() -> [Int: DataSourceSectionMetricsProviding] {
 		var metrics: [Int: DataSourceSectionMetricsProviding] = [:]
 		
 		let globalMetrics = snapshotMetricsForSectionAtIndex(globalSectionIndex)
@@ -200,7 +199,7 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		return metrics
 	}
 	
-	public func snapshotMetricsForSectionAtIndex(sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
+	open func snapshotMetricsForSectionAtIndex(_ sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
 		guard var metrics = appliedMetricsForSection(at: sectionIndex) else {
 			return nil
 		}
@@ -222,7 +221,7 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		return metrics
 	}
 	
-	private func appliedMetricsForSection(at sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
+	fileprivate func appliedMetricsForSection(at sectionIndex: Int) -> DataSourceSectionMetricsProviding? {
 		guard var metrics = defaultMetrics else {
 			return sectionMetrics[sectionIndex]
 		}
@@ -234,47 +233,47 @@ public class CollectionDataSourceMetricsHelper: NSObject, CollectionDataSourceMe
 		return metrics
 	}
 	
-	public func snapshotContributedGlobalMetrics() -> DataSourceSectionMetricsProviding? {
+	open func snapshotContributedGlobalMetrics() -> DataSourceSectionMetricsProviding? {
 		guard contributesGlobalMetrics else {
 			return nil
 		}
 		return sectionMetrics[globalSectionIndex]
 	}
 	
-	public func layoutIndexPathForItemIndex(itemIndex: Int, sectionIndex: Int) -> NSIndexPath {
+	open func layoutIndexPathForItemIndex(_ itemIndex: Int, sectionIndex: Int) -> IndexPath {
 		let isGlobalSection = sectionIndex == globalSectionIndex
 		if isGlobalSection {
-			return NSIndexPath(index: itemIndex)
+			return IndexPath(index: itemIndex)
 		} else {
-			return NSIndexPath(forItem: itemIndex, inSection: sectionIndex)
+			return IndexPath(item: itemIndex, section: sectionIndex)
 		}
 	}
 	
-	public func add(supplementaryItem: SupplementaryItem) {
+	open func add(_ supplementaryItem: SupplementaryItem) {
 		dataSource.add(supplementaryItem)
 	}
 	
-	public func add(supplementaryItem: SupplementaryItem, forSectionAtIndex sectionIndex: Int) {
+	open func add(_ supplementaryItem: SupplementaryItem, forSectionAtIndex sectionIndex: Int) {
 		dataSource.add(supplementaryItem, forSectionAtIndex: sectionIndex)
 	}
 	
-	public func add(supplementaryItem: SupplementaryItem, forKey key: String) {
+	open func add(_ supplementaryItem: SupplementaryItem, forKey key: String) {
 		dataSource.add(supplementaryItem, forKey: key)
 	}
 	
-	public func removeSupplementaryItemForKey(key: String) {
+	open func removeSupplementaryItemForKey(_ key: String) {
 		dataSource.removeSupplementaryItemForKey(key)
 	}
 	
-	public func replaceSupplementaryItemForKey(key: String, with supplementaryItem: SupplementaryItem) {
+	open func replaceSupplementaryItemForKey(_ key: String, with supplementaryItem: SupplementaryItem) {
 		dataSource.replaceSupplementaryItemForKey(key, with: supplementaryItem)
 	}
 	
-	public func supplementaryItemsOfKind(kind: String) -> [SupplementaryItem] {
+	open func supplementaryItemsOfKind(_ kind: String) -> [SupplementaryItem] {
 		return dataSource.supplementaryItemsOfKind(kind)
 	}
 	
-	public func supplementaryItemForKey(key: String) -> SupplementaryItem? {
+	open func supplementaryItemForKey(_ key: String) -> SupplementaryItem? {
 		return dataSource.supplementaryItemForKey(key)
 	}
 	

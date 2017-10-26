@@ -37,7 +37,7 @@ extension DataSourceSectionMetricsProviding {
 		
 		for (kind, items) in dataSourceMetrics.supplementaryItemsByKind {
 			var myItems = supplementaryItemsOfKind(kind)
-			myItems.appendContentsOf(items)
+			myItems.append(contentsOf: items)
 			supplementaryItemsByKind[kind] = myItems
 		}
 		
@@ -84,7 +84,7 @@ public struct DataSourceSectionMetrics<LayoutClassType: LayoutClass> : DataSourc
 		return metrics.isEqual(to: other.metrics)
 	}
 	
-	public func definesMetric(metric: String) -> Bool {
+	public func definesMetric(_ metric: String) -> Bool {
 		return false
 	}
 	

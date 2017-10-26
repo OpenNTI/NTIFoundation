@@ -10,7 +10,7 @@ import UIKit
 
 let layoutDebugging = true
 
-func layoutLog(str: String) {
+func layoutLog(_ str: String) {
 	if layoutDebugging {
 		debugPrint(str)
 	}
@@ -18,7 +18,7 @@ func layoutLog(str: String) {
 
 let dragLogging = true
 
-func dragLog(funcName: String, message: String) {
+func dragLog(_ funcName: String, message: String) {
 	if dragLogging {
 		debugPrint("\(funcName): \(message)")
 	}
@@ -26,7 +26,7 @@ func dragLog(funcName: String, message: String) {
 
 let updateDebugging = true
 
-func updateLog(str: String) {
+func updateLog(_ str: String) {
 	if updateDebugging {
 		debugPrint(str)
 	}
@@ -46,36 +46,43 @@ extension Bool: DebugLoggable {
 	
 }
 
-extension NSIndexPath: DebugLoggable {
+extension IndexPath: DebugLoggable {
 	
 	var debugLogDescription: String {
 		var indexes: [String] = []
-		let numberOfIndexes = length
+		let numberOfIndexes = count
 		for index in 0..<numberOfIndexes {
-			indexes.append("\(indexAtPosition(index))")
+			indexes.append("\(self[index])")
 		}
-		return "(" + indexes.joinWithSeparator(", ") + ")"
+		return "(" + indexes.joined(separator: ", ") + ")"
 	}
 	
 }
 
-extension NSIndexSet: DebugLoggable {
+extension IndexSet: DebugLoggable {
 	
 	var debugLogDescription: String {
 		var result: [String] = []
-		enumerateRangesUsingBlock { (range, stop) in
-			switch range.length {
+		for range in rangeView {
+			switch range.count {
 			case 0:
 				result.append("empty")
 			case 1:
-				result.append("\(range.location)")
+				result.append("\(range.lowerBound)")
 			default:
 				result.append(range.debugLogDescription)
 			}
 		}
-		return "(" + result.joinWithSeparator(", ") + ")"
+		return "(" + result.joined(separator: ", ") + ")"
 	}
 	
+}
+
+extension CountableRange : DebugLoggable {
+	
+	var debugLogDescription: String {
+		return "\(lowerBound)...\(upperBound)"
+	}
 }
 
 extension NSRange: DebugLoggable {
@@ -93,15 +100,15 @@ extension UICollectionViewLayoutAttributes: DebugLoggable {
 	var debugLogDescription: String {
 		let type: String
 		switch representedElementCategory {
-		case .Cell:
+		case .cell:
 			type = "CELL"
-		case .DecorationView:
+		case .decorationView:
 			type = "DECORATION"
-		case .SupplementaryView:
+		case .supplementaryView:
 			type = "SUPPLEMENTARY"
 		}
 		let kind = representedElementKind ?? ""
-		return "\(type) \(kind) indexPath=\(indexPath.debugLogDescription) frame=\(frame) hidden=\(hidden.debugLogDescription)"
+		return "\(type) \(kind) indexPath=\(indexPath.debugLogDescription) frame=\(frame) hidden=\(isHidden.debugLogDescription)"
 	}
 	
 }

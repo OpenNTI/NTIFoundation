@@ -8,26 +8,26 @@
 
 import UIKit
 
-public class CollectionViewCell: UICollectionViewCell, Selectable {
+open class CollectionViewCell: UICollectionViewCell, Selectable {
 	
 	/// May be called by `UICollectionViewDelegate` when this cell becomes selected.
-	public var onDidSelect: (() -> Void)?
+	open var onDidSelect: (() -> Void)?
 	
 	/// May be called by `UICollectionViewDelegate` when this cell becomes deselected.
-	public var onDidDeselect: (() -> Void)?
+	open var onDidDeselect: (() -> Void)?
 	
 	/// May be called by `UICollectionViewDelegate` when this cell will be displayed.
-	public var onWillDisplay: (() -> Void)?
+	open var onWillDisplay: (() -> Void)?
 	
 	/// May be called by `UICollectionViewDelegate` when this cell will end being displayed.
-	public var onDidEndDisplaying: (() -> Void)?
+	open var onDidEndDisplaying: (() -> Void)?
 	
-	public var isEditing = false
+	open var isEditing = false
 	
 	/// Informs the containing collection view that `self` needs to be redrawn.
-	public func invalidateCollectionViewLayout() {
-		NSObject.cancelPreviousPerformRequestsWithTarget(self, selector: #selector(CollectionViewCell._invalidateCollectionViewLayout), object: nil)
-		performSelector(#selector(CollectionViewCell._invalidateCollectionViewLayout), withObject: nil, afterDelay: 0)
+	open func invalidateCollectionViewLayout() {
+		NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(CollectionViewCell._invalidateCollectionViewLayout), object: nil)
+		perform(#selector(CollectionViewCell._invalidateCollectionViewLayout), with: nil, afterDelay: 0)
 	}
 	
 	func _invalidateCollectionViewLayout() {
@@ -36,28 +36,28 @@ public class CollectionViewCell: UICollectionViewCell, Selectable {
 			_collectionView = _collectionView?.superview
 		}
 		guard let collectionView = _collectionView as? UICollectionView,
-			indexPath = collectionView.indexPathForCell(self) else {
+			let indexPath = collectionView.indexPath(for: self) else {
 				return
 		}
 		
 		let layout = collectionView.collectionViewLayout
 		
-		let contextClass = layout.dynamicType.invalidationContextClass() as! UICollectionViewLayoutInvalidationContext.Type
+		let contextClass = type(of: layout).invalidationContextClass as! UICollectionViewLayoutInvalidationContext.Type
 		let context = contextClass.init()
 		(context as? CollectionViewLayoutInvalidationContext)?.invalidateMetrics = true
-		context.invalidateItemsAtIndexPaths([indexPath])
+		context.invalidateItems(at: [indexPath])
 		
-		layout.invalidateLayoutWithContext(context)
+		layout.invalidateLayout(with: context)
 	}
 	
-	public override func prepareForReuse() {
+	open override func prepareForReuse() {
 		super.prepareForReuse()
 		isEditing = false
 	}
 	
-	public override func applyLayoutAttributes(layoutAttributes: UICollectionViewLayoutAttributes) {
-		super.applyLayoutAttributes(layoutAttributes)
-		hidden = layoutAttributes.hidden
+	open override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+		super.apply(layoutAttributes)
+		isHidden = layoutAttributes.isHidden
 		
 		guard let attributes = layoutAttributes as? CollectionViewLayoutAttributes else {
 			return
@@ -72,9 +72,8 @@ public class CollectionViewCell: UICollectionViewCell, Selectable {
 		contentView.layer.cornerRadius = attributes.cornerRadius
 	}
 	
-	public override func preferredLayoutAttributesFittingAttributes(layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-		guard let attributes = layoutAttributes as? CollectionViewLayoutAttributes
-			where attributes.shouldCalculateFittingSize else {
+	open override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+		guard let attributes = layoutAttributes as? CollectionViewLayoutAttributes, attributes.shouldCalculateFittingSize else {
 				return layoutAttributes
 		}
 		
@@ -82,7 +81,7 @@ public class CollectionViewCell: UICollectionViewCell, Selectable {
 		var frame = attributes.frame
 		
 		let fittingSize = CGSize(width: frame.width, height: UILayoutFittingCompressedSize.height)
-		let layoutSize = systemLayoutSizeFittingSize(fittingSize, withHorizontalFittingPriority: UILayoutPriorityDefaultHigh, verticalFittingPriority: UILayoutPriorityFittingSizeLevel)
+		let layoutSize = systemLayoutSizeFitting(fittingSize, withHorizontalFittingPriority: UILayoutPriorityDefaultHigh, verticalFittingPriority: UILayoutPriorityFittingSizeLevel)
 		frame.size = layoutSize
 		
 		let newAttributes = attributes.copy() as! CollectionViewLayoutAttributes
@@ -92,11 +91,11 @@ public class CollectionViewCell: UICollectionViewCell, Selectable {
 	
 	// MARK: - Selectable
 	
-	public func didBecomeSelected() {
+	open func didBecomeSelected() {
 		onDidSelect?()
 	}
 	
-	public func didBecomeDeselected() {
+	open func didBecomeDeselected() {
 		onDidDeselect?()
 	}
     

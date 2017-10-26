@@ -21,9 +21,9 @@ public protocol DataSourcePlaceholder: NSObjectProtocol {
 	
 }
 
-public class BasicDataSourcePlaceholder: NSObject, DataSourcePlaceholder {
+open class BasicDataSourcePlaceholder: NSObject, DataSourcePlaceholder {
 	
-	public class func placeholderWithActivityIndicator() -> BasicDataSourcePlaceholder {
+	open class func placeholderWithActivityIndicator() -> BasicDataSourcePlaceholder {
 		let placeholder = BasicDataSourcePlaceholder()
 		placeholder.isActivityIndicator = true
 		return placeholder
@@ -37,15 +37,15 @@ public class BasicDataSourcePlaceholder: NSObject, DataSourcePlaceholder {
 	}
 	
 	/// The title of the placeholder. This is typically displayed larger than the message.
-	public var title: String?
+	open var title: String?
 	
 	/// The message of the placeholder. This is typically displayed using a smaller body font.
-	public var message: String?
+	open var message: String?
 	
 	/// An image for the placeholder. This is displayed above the title.
-	public var image: UIImage?
+	open var image: UIImage?
 	
 	/// Is this placeholder an activity indicator?
-	public private(set) var isActivityIndicator: Bool = false
+	open fileprivate(set) var isActivityIndicator: Bool = false
 	
 }
