@@ -405,11 +405,11 @@ open class CollectionViewController: UICollectionViewController, CollectionDataS
 		guard !isPerformingUpdates else {
 			updateLog("\(#function) PERFORMING UPDATES IMMEDIATELy")
 			// Chain the completion handler if one was given
-			if completion != nil {
+			if let completion = completion {
 				let oldCompletion = updateCompletionHandler
 				updateCompletionHandler = {
 					oldCompletion?()
-					completion?()
+					completion()
 				}
 			}
 			// Now immediately execute the new updates
